@@ -23,7 +23,7 @@ Create [Github Personal access tokens under Developer Settings](https://github.c
 
 I went with [Token (classic)](https://github.com/settings/apps) and gave it full access to repo section and select: "Full control of private repositories"
 
-*ToDo*: add screenshot here
+<img src="https://storage.googleapis.com/foolcontrol-media/2025/02/e0ae6e03-create-github-personal-access-token.png" alt="How to create Github personal access token" width="800px">
 
 #### Youtube
 
@@ -31,7 +31,7 @@ I went with [Token (classic)](https://github.com/settings/apps) and gave it full
 2. Under "Create credentials", create "Youtube API" key
 3. Click on "Youtube API" to set key restrictions, e.g: "Youtube Data API v3" so only this API can use it (or that it can only be used from your IP).
 
-*ToDo*: add screenshot here
+<img src="https://storage.googleapis.com/foolcontrol-media/2025/02/8a87d09a-restrict-youtube-api-key.png" alt="How to restrict Youtube API key" width="800px">
 
 #### Reddit
 
