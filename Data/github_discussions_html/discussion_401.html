@@ -1,0 +1,49 @@
+
+        <html>
+        <head>
+            <title>Discussion #401: Lenovo 14 iml Thermald</title>
+        </head>
+        <body>
+            <h1>Lenovo 14 iml Thermald</h1>
+            <p><strong>Discussion #401</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I get my laptop shut down because of thermal throttling I am unable to figure out how to resolve it.
+
+`thermald` is preinstalled in kubuntu 22.04 but on getting it's status it says.
+```
+● thermald.service - Thermal Daemon Service
+     Loaded: loaded (/lib/systemd/system/thermald.service; enabled; vendor preset: enabled)
+     Active: active (running) since Thu 2022-06-09 14:29:24 IST; 2min 41s ago
+   Main PID: 849 (thermald)
+      Tasks: 4 (limit: 28119)
+     Memory: 2.8M
+        CPU: 70ms
+     CGroup: /system.slice/thermald.service
+             └─849 /usr/sbin/thermald --systemd --dbus-enable --adaptive
+
+Jun 09 14:29:24 lappy systemd[1]: Starting Thermal Daemon Service...
+Jun 09 14:29:24 lappy thermald[849]: NO RAPL sysfs present
+Jun 09 14:29:24 lappy thermald[849]: 22 CPUID levels; family:model:stepping 0x6:8e:c (6:142:12)
+Jun 09 14:29:24 lappy thermald[849]: 22 CPUID levels; family:model:stepping 0x6:8e:c (6:142:12)
+Jun 09 14:29:24 lappy systemd[1]: Started Thermal Daemon Service.
+Jun 09 14:29:24 lappy thermald[849]: Polling mode is enabled: 4
+Jun 09 14:29:28 lappy thermald[849]: Manufacturer didn't provide adequate support to run in
+Jun 09 14:29:28 lappy thermald[849]: optimized configuration on Linux with open source
+Jun 09 14:29:28 lappy thermald[849]: You may want to disable thermald on this system if you see issue
+```
+
+wanted to know will disabling thermald and only using autocpufreq help in temp??
+
+and what should I use pstate or acpi drivers?
+
+Intel i7-10510U (8) @ 4.9GHz - CPU
+and having AMD ATI Radeon R7 M260/M265 / M340/M360 / M440/M445 / 530/535 / 620/625 Mobile - GPU </p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,264 @@
+
+        <html>
+        <head>
+            <title>Issue #661: Intel CPU: Spamming of 'line 105: echo: write error: Device or resource busy</title>
+        </head>
+        <body>
+            <h1>Intel CPU: Spamming of 'line 105: echo: write error: Device or resource busy</h1>
+            <p><strong>Issue #661</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>> Thank you for the PR, since these changes seem strictly AMD oriented, I've asked [on auto-cpufreq discord channel](https://discord.gg/Sjauxtj6kH) if someone could test these changes.
+> 
+> _Originally posted by @AdnanHodzic in https://github.com/AdnanHodzic/auto-cpufreq/issues/627#issuecomment-1902558770_
+
+### I am still facing the issue but in Intel CPU.
+
+Refer: [[Spamming of 'line 105: echo: write error: Device or resource busy' in journal · Issue #563 · AdnanHodzic/auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/issues/563)](https://github.com/AdnanHodzic/auto-cpufreq/issues/563)
+
+![image](https://github.com/AdnanHodzic/auto-cpufreq/assets/42092626/a2514206-00db-4001-8db3-5dc25bcb377f)
+
+
+```
+$ systemctl status -o short-iso --full  auto-cpufreq
+● auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux
+     Loaded: loaded (/etc/systemd/system/auto-cpufreq.service; disabled; preset: disabled)
+    Drop-In: /usr/lib/systemd/system/service.d
+             └─10-timeout-abort.conf
+     Active: active (running) since Sun 2024-03-03 16:58:52 CET; 2 days ago
+   Main PID: 1526 (python)
+      Tasks: 1 (limit: 38105)
+     Memory: 11.3M
+        CPU: 1h 9min 28.718s
+     CGroup: /system.slice/auto-cpufreq.service
+             └─1526 /opt/auto-cpufreq/venv/bin/python /opt/auto-cpufreq/venv/bin/auto-cpufreq --daemon
+
+2024-03-06T01:01:47+0100 lamyer python[4026913]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+2024-03-06T01:01:47+0100 lamyer python[4026913]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+2024-03-06T01:01:47+0100 lamyer python[4026913]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+2024-03-06T01:01:47+0100 lamyer python[4026913]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+2024-03-06T01:01:47+0100 lamyer python[4026913]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+2024-03-06T01:01:47+0100 lamyer python[4026913]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+2024-03-06T01:01:47+0100 lamyer python[4026913]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+2024-03-06T01:01:47+0100 lamyer python[4026913]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+2024-03-06T01:01:47+0100 lamyer python[4026913]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+2024-03-06T01:01:47+0100 lamyer python[4026913]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+```</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>systemofapwne:</strong></p>
+                    <p>I have the same issue on my Surface Pro 7 on Arch. It tries to write `balance_performance` to `/sys/devices/system/cpu/cpu7/cpufreq/energy_performance_preference` in my case and fails.
+
+I modified line 105 to point stderr to /dev/null. Not a solution though but a workaround to not spam my logs.
+```bash
+function write_value () {
+  if [ -w $FLNM ]; then   
+    echo $VALUE > $FLNM 2> /dev/null 
+  fi
+}
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>mrceperka:</strong></p>
+                    <p>Got same issue on `HP EliteBook 865 G10` with `AMD Ryzen™ 9 PRO 7940HS`
+![image](https://github.com/AdnanHodzic/auto-cpufreq/assets/22822651/9f45d3bc-167a-4fd8-8ed8-76196677b58a)
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I have the same issue on my Surface Pro 7 on Arch. It tries to write `balance_performance` to `/sys/devices/system/cpu/cpu7/cpufreq/energy_performance_preference` in my case and fails.
+> 
+> I modified line 105 to point stderr to /dev/null. Not a solution though but a workaround to not spam my logs.
+> 
+> ```shell
+> function write_value () {
+>   if [ -w $FLNM ]; then   
+>     echo $VALUE > $FLNM 2> /dev/null 
+>   fi
+> }
+> ```
+
+@systemofapwne  if this indeed fixes the problem, could you please [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution)/create PR?  You will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>msmafra:</strong></p>
+                    <p>It's probably a silly thought, sorry if I missed the point.
+
+In search for the "bash script echo write error device or resource busy" to have an idea of what could be, it gave me a bunch of GPIO results, some USB related ones and others, but the answer for this one that made sense to me
+https://unix.stackexchange.com/questions/704080/cant-write-to-sys-devices-system-cpu-cpufreq-energy-performance-preference-w
+
+Would it just that options are limited by mode you choose a **scaling_governor** x **energy_performance_preference** relationship? 
+If it sets the **scaling_governor** to _performance_, _energy_performance_preference_ only accepts performance as an option in the other hand,  if it sets the **scaling_governor** to _powersave_, **energy_performance_preference** will accept _default balance_performance balance_power power_ as possible options, including _performance_. Just not sure if setting performance for powersave works, but it accepts the change.
+
+So it will always have to check which scaling_governor is being used before trying to write, or limit the list to that relationship. Testing on my machine, with an Intel CPU, that "relationship" holds up, meaning, if I set the scaling governor  to _performance_ i can't change the energy preference from performance without changing the scaling governor back to _powersave_
+
+```
+ .601ns fsh ❯ cd /sys/devices/system/cpu/cpufreq/policy0/
+cpu/cpufreq/policy0🔒
+ .472ns fsh ❯ ls
+affected_cpus   cpuinfo_max_freq  cpuinfo_transition_latency                energy_performance_preference  scaling_available_governors  scaling_driver    scaling_max_freq  scaling_setspeed
+base_frequency  cpuinfo_min_freq  energy_performance_available_preferences  related_cpus                   scaling_cur_freq             scaling_governor  scaling_min_freq
+cpu/cpufreq/policy0🔒
+ .930ns fsh ❯ echo power | doas tee energy_performance_preference
+power
+tee: energy_performance_preference: Device or resource busy
+cpu/cpufreq/policy0🔒
+ .514ns [!ERROR] fsh ❯ cat scaling_governor
+performance
+
+.311ns fsh ❯ echo powersave | doas tee scaling_governor
+powersave
+cpu/cpufreq/policy0🔒
+ .873ns fsh ❯ echo power | doas tee energy_performance_preference
+power
+ .623ns fsh ❯ cat energy_performance_available_preferences
+default performance balance_performance balance_power power
+cpu/cpufreq/policy0🔒
+ .875ns fsh ❯ echo default | doas tee energy_performance_preference
+default
+cpu/cpufreq/policy0🔒
+ .658ns fsh ❯ echo performance | doas tee energy_performance_preference
+performance
+cpu/cpufreq/policy0🔒
+ .777ns fsh ❯ echo balance_performance | doas tee energy_performance_preference
+balance_performance
+cpu/cpufreq/policy0🔒
+ .359ns fsh ❯ echo balance_power | doas tee energy_performance_preference
+balance_power
+cpu/cpufreq/policy0🔒
+
+ .092ns fsh ❯ echo performance | doas tee scaling_governor
+performance
+cpu/cpufreq/policy0🔒
+ .158ns fsh ❯ echo balance_power | doas tee energy_performance_preference
+balance_power
+tee: energy_performance_preference: Device or resource busy
+cpu/cpufreq/policy0🔒
+ .120ns [!ERROR] fsh ❯ echo balance_performance | doas tee energy_performance_preference
+balance_performance
+tee: energy_performance_preference: Device or resource busy
+cpu/cpufreq/policy0🔒
+ .577ns [!ERROR] fsh ❯ echo default | doas tee energy_performance_preference
+default
+tee: energy_performance_preference: Device or resource busy
+cpu/cpufreq/policy0🔒
+ .672ns [!ERROR] fsh ❯ echo power | doas tee energy_performance_preference
+power
+tee: energy_performance_preference: Device or resource busy
+```
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>systemofapwne:</strong></p>
+                    <p>> > I have the same issue on my Surface Pro 7 on Arch. It tries to write `balance_performance` to `/sys/devices/system/cpu/cpu7/cpufreq/energy_performance_preference` in my case and fails.
+> > I modified line 105 to point stderr to /dev/null. Not a solution though but a workaround to not spam my logs.
+> > ```shell
+> > function write_value () {
+> >   if [ -w $FLNM ]; then   
+> >     echo $VALUE > $FLNM 2> /dev/null 
+> >   fi
+> > }
+> > ```
+> 
+> @systemofapwne if this indeed fixes the problem, could you please [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution)/create PR? You will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+This would just cure symptoms, not the underlaying issue. So thats why I didn't create a PR.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>jmergy:</strong></p>
+                    <p>Seeing this on my side now recently as well. Lenovo X1 Carbon 
+![image](https://github.com/AdnanHodzic/auto-cpufreq/assets/2380410/ddd88551-edaf-4391-b6e4-88b0651ed714)
+
+Debian 12 Bookworm
+Linux Kernel: 6.1.0-18-amd64
+Processor: 12th gen Intel Cote i7-1280P
+Cores: 20
+Driver: intel_pstate
+
+auto-cpufreq 2.2.0 (git: 166cd06) 
+
+Also see some crashes recently so looking into why and found this - probably not related, but saw this in journalctl today. Thousands and thousands of lines. 
+
+Mar 14 13:10:05 mergcarb python[16970]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>jmergy:</strong></p>
+                    <p>doing the /dev/null redirect for now. See how that goes. Thanks @systemofapwne !</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>MiMillieuh:</strong></p>
+                    <p>If you tries to use the acpi governor the issue will be gone. it only affects pstate. however acpi may not be an option for you as it seems to break nvidia-powerd so no more GPU boosting.
+
+So I'm back using intel-pstate and I've disabled auto-cpufreq as not being able to use dynamic boost is not a suitable solution for me.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>LDprg:</strong></p>
+                    <p>This seems not to be a intel pstate specific problem! AMD pstate with active mode does result in the same problem.
+
+Probaply both pstate driver manage turbo boost them self (no need for auto-cpufreq to interfere) and the error is just because the turbo boost flag doesn't exist. So turbo boost (or dynamic boost) still works, it is just managed completely within the driver.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>LDprg:</strong></p>
+                    <p>I also think that this is linked with #602 </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>khatfull:</strong></p>
+                    <p>> doing the /dev/null redirect for now. See how that goes. Thanks @systemofapwne !
+
+In which file do you make the mod?  Thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>FosRexx:</strong></p>
+                    <p>Same issue on Acer Nitro AN515-58, but only happens when I am charging. Installed from AUR.
+```
+Linux distro: Arch Linux rolling n/a
+Linux kernel: 6.8.6-arch1-1
+Processor: 12th Gen Intel(R) Core(TM) i5-12450H
+Cores: 12
+Architecture: x86_64
+Driver: intel_pstate
+```
+![auto-cpufreq-bug](https://github.com/AdnanHodzic/auto-cpufreq/assets/105154048/0b4ffc62-453c-4c6c-af14-4296421ad6c5)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>FosRexx:</strong></p>
+                    <p>> > doing the /dev/null redirect for now. See how that goes. Thanks @systemofapwne !
+> 
+> In which file do you make the mod? Thanks!
+
+In line `105` in `$(which cpufreqctl.auto-cpufreq)`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>FosRexx:</strong></p>
+                    <p>So, did some testing and I can confirm that when the `scaling_governor` is set to `performance` in my system with a Intel CPU and `intel_pstate` driver, I cannot set the `energy_performance_preference` to anything but `performance`, as already pointed out by the [comment above](https://github.com/AdnanHodzic/auto-cpufreq/issues/661#issuecomment-1987249265). 
+
+Looking into the code in `core.py` in [this](https://github.com/AdnanHodzic/auto-cpufreq/blob/8bb7478e38f3c9ef66b5993721f489c6099d8f68/auto_cpufreq/core.py#L945) line, the problematic `cpufreqctl.auto-cpufreq` is called with the argument  `--epp --set=balance_performance`, this tries to set the `energy_performance_preference` to `balance_performance` but the `intel_pstate` drive does not allow this when the `scaling_governor` is set to `performance` and so we get the spam write error message.
+
+This is resolved when the command is changed to `cpufreqctl.auto-cpufreq --epp --set=performance` but this would change the behavior in all the system and not just the affected ones. I don't know the advantages and disadvantages of setting `energy_performance_preference` to `balance_performance` vs `performance` so I don't know if this is a good solution. 
+
+~~Briefly looking through the [kernel documentation for intel_pstate](https://www.kernel.org/doc/html/latest/admin-guide/pm/intel_pstate.html#energy-vs-performance-hints), their is nothing saying why when setting the `scaling_governor` to `performance` the `energy_performance_preference` cannot be set to `balance_performance` or anything but `performance` but this seems to be happening to most systems, so, this might be an intended behavior.~~ 
+
+This seems to be an intended behavior, since according to the [kernel documentation](https://docs.kernel.org/admin-guide/pm/intel_pstate.html#hwp-performance) when HWP is enabled[(which is enabled by default during boot with supported processors)](https://docs.kernel.org/admin-guide/pm/intel_pstate.html#active-mode-with-hwp)and scaling governor is set to `performance` the processor’s internal P-state selection logic is expected to focus entirely on performance. And this will override the EPP setting and reject any value different from 0 (“performance”).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

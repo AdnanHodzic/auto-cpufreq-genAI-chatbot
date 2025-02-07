@@ -1,0 +1,124 @@
+
+        <html>
+        <head>
+            <title>Issue #298: Daemon service being killed by Fedora</title>
+        </head>
+        <body>
+            <h1>Daemon service being killed by Fedora</h1>
+            <p><strong>Issue #298</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hello, 
+
+after installing auto-cpufreq and its daemon, I am encountering issues with it being killed after working correctly for about 20 minutes. Even after starting the service manually it gets terminated in a few minute by the OS. Is there any idea why this would happen? Is there more information from my side to by provided? The only thing in my mind that I also have `power-profiles-daemon` installed but keeping that on balanced the whole time.
+
+### Error output:
+```text
+systemctl status auto-cpufreq.service                                           
+○ auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux
+     Loaded: loaded (/etc/systemd/system/auto-cpufreq.service; enabled; vendor preset: disabled)
+     Active: inactive (dead) since Sun 2021-12-05 18:10:04 CET; 1h 14min ago
+    Process: 84591 ExecStart=/usr/local/bin/auto-cpufreq --daemon (code=killed, signal=TERM)
+   Main PID: 84591 (code=killed, signal=TERM)
+        CPU: 25.758s
+
+Dec 05 17:50:21 fedora systemd[1]: Started auto-cpufreq - Automatic CPU speed & power optimizer for>
+Dec 05 18:10:04 fedora systemd[1]: Stopping auto-cpufreq - Automatic CPU speed & power optimizer fo>
+Dec 05 18:10:04 fedora systemd[1]: auto-cpufreq.service: Deactivated successfully.
+Dec 05 18:10:04 fedora systemd[1]: Stopped auto-cpufreq - Automatic CPU speed & power optimizer for>
+Dec 05 18:10:04 fedora systemd[1]: auto-cpufreq.service: Consumed 25.758s CPU time.
+```
+---
+
+### System information:
+```text
+Linux distro: Fedora 34 
+Linux kernel: 5.15.5-100.fc34.x86_64
+Processor: Intel(R) Core(TM) i7-8665U CPU @ 1.90GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 800 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	 24.0%     41 °C      800 MHz
+CPU1:	 27.3%     41 °C     2100 MHz
+CPU2:	 39.2%     42 °C     2100 MHz
+CPU3:	 22.2%     43 °C     2100 MHz
+CPU4:	 23.0%     41 °C      800 MHz
+CPU5:	 25.3%     41 °C     2100 MHz
+CPU6:	 27.7%     42 °C      800 MHz
+CPU7:	 21.4%     43 °C      800 MHz
+
+auto-cpufreq version:
+fatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+CalledProcessError(128, ['git', 'describe', '--always'])
+
+Python: 3.9.7
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 7.1.2
+distro package 1.5.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.14 %
+
+Total CPU usage: 12.7 %
+Total system load: 1.52
+Average temp. of all cores: 41.75 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>That's kinda strange. We thought we fixed this issue. Did you use the latest git version, which in this case should be v1.8.0?
+
+I've just reinstalled fresh clone from master on Fedora 35, and it disabled and masked the power-profiles-daemon on installation so that it would not be in conflict with auto-cpufreq. 
+
+I've also tried with the v1.8.0 release tar.gz without any problems.
+
+When installing as a daemon you should see this warning message:
+```
+----------------------------------- Warning -----------------------------------
+
+Detected running GNOME Power Profiles daemon service!
+This daemon might interfere with auto-cpufreq and has been disabled.
+
+Disabled daemon is not automatically disabled in "live" and "monitor" mode and
+will be enabled after auto-cpufreq is removed.
+```
+Running `systemctl status power-profiles-daemon` after installation should return something like this:
+```
+○ power-profiles-daemon.service
+     Loaded: masked (Reason: Unit power-profiles-daemon.service is masked.)
+     Active: inactive (dead)
+```
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>miro-bezak:</strong></p>
+                    <p>The warning message did not appear for me during the first install. However, after reainstalling it has appeared and also the `power-profiles-daemon` service is now masked. Everything now seems to be working correctly, thank you for your help, I will report again if other problems arise.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

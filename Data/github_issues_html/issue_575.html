@@ -1,0 +1,55 @@
+
+        <html>
+        <head>
+            <title>Issue #575: CSS files not being installed in latest AUR build</title>
+        </head>
+        <body>
+            <h1>CSS files not being installed in latest AUR build</h1>
+            <p><strong>Issue #575</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+### Error output:
+```text
+gi.repository.GLib.GError: gtk-css-provider-error-quark: <broken file>:1:0Failed to import: Error opening file /usr/local/share/auto-cpufreq/scripts/style.css: No such file or directory (2)
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+Linux distro: Arch Linux
+Linux kernel: 6.5.5-273-tkg-linux-intel-optimized
+Processor: Intel(R) Core(TM) i7-8565U CPU @ 1.80GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_cpufreq
+```
+
+Attempting to run the gtk app when installed from the AUR does not work, as CSS files (and maybe more) are not installed correctly. This is most likely an issue with the PKGBUILD and not really the tool itself. I'm guessing the PKGBUILD was not updated for the additional files it needs to install after 2.0.0
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Yeah it looks like the maintainer didn't include an install command for the CSS file. I'm not sure how active the maintenance is for the AUR package, but I would leave a comment on there instead. </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

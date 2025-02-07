@@ -1,0 +1,77 @@
+
+        <html>
+        <head>
+            <title>Issue #461: [Question] Should I run auto-cpufreq on my high end desktop?</title>
+        </head>
+        <body>
+            <h1>[Question] Should I run auto-cpufreq on my high end desktop?</h1>
+            <p><strong>Issue #461</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I've seen what `auto-cpufreq` can do on my low end laptop, but would it improve anything on a high end desktop?
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Questions should be asked in [Discussion section](https://github.com/AdnanHodzic/auto-cpufreq/discussions).
+
+Quick answer is yes, and it would lower your electricity consumption, [answered as part of README.]( https://github.com/AdnanHodzic/auto-cpufreq#supported-architectures-and-devices)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>RaptaG:</strong></p>
+                    <p>Um, it failed:
+
+I ran `sudo systemctl enable --now auto-cpufreq`
+
+```
+× auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux
+     Loaded: loaded (/usr/lib/systemd/system/auto-cpufreq.service; enabled; preset: disabled)
+     Active: failed (Result: exit-code) since Thu 2022-11-24 17:49:17 EET; 2s ago
+   Duration: 1.178s
+    Process: 8049 ExecStart=/usr/bin/auto-cpufreq --daemon (code=exited, status=1/FAILURE)
+   Main PID: 8049 (code=exited, status=1/FAILURE)
+        CPU: 177ms
+
+Nov 24 17:49:17 endeavour auto-cpufreq[8049]:     return __callback(*args, **kwargs)
+Nov 24 17:49:17 endeavour auto-cpufreq[8049]:   File "/usr/bin/auto-cpufreq", line 79, in main
+Nov 24 17:49:17 endeavour auto-cpufreq[8049]:     set_autofreq()
+Nov 24 17:49:17 endeavour auto-cpufreq[8049]:   File "/usr/lib/python3.10/site-packages/auto_cpufreq/core.py", line 1002, in set_autofreq
+Nov 24 17:49:17 endeavour auto-cpufreq[8049]:     print("Battery is: charging (" + str(battery_percentage()) + "%)\n")
+Nov 24 17:49:17 endeavour auto-cpufreq[8049]:   File "/usr/lib/python3.10/site-packages/auto_cpufreq/core.py", line 262, in battery_percentage
+Nov 24 17:49:17 endeavour auto-cpufreq[8049]:     return round(psutil.sensors_battery().percent)
+Nov 24 17:49:17 endeavour auto-cpufreq[8049]: AttributeError: 'NoneType' object has no attribute 'percent'
+Nov 24 17:49:17 endeavour systemd[1]: auto-cpufreq.service: Main process exited, code=exited, status=1/FAILURE
+Nov 24 17:49:17 endeavour systemd[1]: auto-cpufreq.service: Failed with result 'exit-code'.
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Please create a new issue and fill out the issue template.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>SunkenHero:</strong></p>
+                    <p>To fix this, install the newest version and not from the release page.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> To fix this, install the newest version and not from the release page.
+
+I'm also planning to make a new release in next few days.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>RaptaG:</strong></p>
+                    <p>Yes, I think it's associated with #456</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

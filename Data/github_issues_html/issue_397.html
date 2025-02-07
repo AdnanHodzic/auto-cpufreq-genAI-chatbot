@@ -1,0 +1,120 @@
+
+        <html>
+        <head>
+            <title>Issue #397: Laptop lagging after installing auto-cpufreq on Ubuntu JammyJellyFish</title>
+        </head>
+        <body>
+            <h1>Laptop lagging after installing auto-cpufreq on Ubuntu JammyJellyFish</h1>
+            <p><strong>Issue #397</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>john@JPengu:~$ sudo auto-cpufreq --install
+[sudo] password for john: 
+
+--------------------- Deploying auto-cpufreq as a daemon ----------------------
+
+* Turn off bluetooth on boot
+
+* Deploy auto-cpufreq install script
+
+* Deploy auto-cpufreq remove script
+
+----------------------------------- Warning -----------------------------------
+
+Detected running GNOME Power Profiles daemon service!
+This daemon might interfere with auto-cpufreq and has been disabled.
+
+This daemon is not automatically disabled in "monitor" mode and
+will be enabled after auto-cpufreq is removed.
+
+Using profile:  balanced
+
+* Disabling GNOME power profiles
+Removed /etc/systemd/system/graphical.target.wants/power-profiles-daemon.service.
+Created symlink /etc/systemd/system/power-profiles-daemon.service → /dev/null.
+
+------------------ Running auto-cpufreq daemon install script ------------------
+
+* Deploy auto-cpufreq systemd unit file
+
+* Reloading systemd manager configuration
+
+* Stopping auto-cpufreq daemon (systemd) service
+
+* Starting auto-cpufreq daemon (systemd) service
+
+* Enabling auto-cpufreq daemon (systemd) service at boot
+Created symlink /etc/systemd/system/multi-user.target.wants/auto-cpufreq.service → /etc/systemd/system/auto-cpufreq.service.
+
+----------------- auto-cpufreq daemon installed and running -----------------
+
+To view live stats, run:
+auto-cpufreq --stats
+
+To disable and remove auto-cpufreq daemon, run:
+sudo auto-cpufreq --remove
+
+-------------------------------------------------------------------------------
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>prazwalayyyyyyyy:</strong></p>
+                    <p>I am currently having the same problem. just before a week the minimum clock speed my cpus ran was 600mHz and currently its on 400. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Please take a look at: [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq) & [Troubleshooting](https://github.com/AdnanHodzic/auto-cpufreq/#troubleshooting)
+
+Also, include information that was requested from you when submitting an issue, i.e:
+
+Add/paste output of:
+
+```
+auto-cpufreq --debug
+auto-cpufreq --stats
+```
+
+Also be more descriptive on what exactly is the issue.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing the issue due to inactivity and issue not answering issue template questions, reference:
+
+### Fill out informtion requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+### Error output:
+```text
+Add/paste error output in case of failed installation or other failing component
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+auto-cpufreq --debug
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+---
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

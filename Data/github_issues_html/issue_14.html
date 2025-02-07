@@ -1,0 +1,369 @@
+
+        <html>
+        <head>
+            <title>Issue #14: KeyError: 'coretemp'</title>
+        </head>
+        <body>
+            <h1>KeyError: 'coretemp'</h1>
+            <p><strong>Issue #14</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>From another directory I got this (file does not exist):
+`cp: no se puede efectuar `stat' sobre 'scripts/cpufreqctl.sh': No existe el fichero o el directorio`
+
+But, executing when pwd is inside the directory auto-cpufreq, then the error mensaje is this:
+
+```
+python3 auto-cpufreq.py --monitor
+
+----------------------------- System information ------------------------------
+
+Linux distro: PCLinuxOS 2020 PCLinuxOS
+Linux kernel: 5.4.8-pclos1
+Driver: intel_pstate
+Architecture: x86_64
+Processor: Intel(R) Core(TM) i5-3230M CPU @ 2.60GHz
+Cores: 4
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 
+3200 MHz
+
+CPU frequency for each core:
+
+CPU0: 1898 MHz
+CPU1: 1702 MHz
+CPU2: 2149 MHz
+CPU3: 1566 MHz
+
+Temperature for each physical core:
+
+Traceback (most recent call last):
+  File "auto-cpufreq.py", line 437, in <module>
+    cli()
+  File "/usr/local/lib64/python3.6/site-packages/click/core.py", line 764, in __call__
+    return self.main(*args, **kwargs)
+  File "/usr/local/lib64/python3.6/site-packages/click/core.py", line 717, in main
+    rv = self.invoke(ctx)
+  File "/usr/local/lib64/python3.6/site-packages/click/core.py", line 956, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/usr/local/lib64/python3.6/site-packages/click/core.py", line 555, in invoke
+    return callback(*args, **kwargs)
+  File "auto-cpufreq.py", line 410, in cli
+    sysinfo()
+  File "auto-cpufreq.py", line 338, in sysinfo
+    print("CPU" + str(core_num) + " temp: {:.0f}".format(core_temp['coretemp'][core_num].current) + "°C")
+KeyError: 'coretemp'
+```</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Lusitaniae:</strong></p>
+                    <p>did you install all dependencies?
+
+`sudo apt install python3 python3-distro python3-psutil python3-click -y`
+
+What system are you using?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>magneticleaves:</strong></p>
+                    <p>I'm also getting this error! I've installed all the listed dependencies.
+
+```
+$ sudo auto-cpufreq --monitor
+----------------------------- System information ------------------------------
+
+Linux distro: Debian GNU/Linux 10 buster
+Linux kernel: 4.19.0-6-amd64
+Driver: acpi-cpufreq
+Architecture: 
+Processor: AMD E-350 Processor
+Cores: 2
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 
+800 MHz
+
+CPU frequency for each core:
+
+CPU0: 798 MHz
+CPU1: 798 MHz
+
+Temperature for each physical core:
+
+Traceback (most recent call last):
+  File "/usr/bin/auto-cpufreq", line 437, in <module>
+    cli()
+  File "/usr/lib/python3/dist-packages/click/core.py", line 764, in __call__
+    return self.main(*args, **kwargs)
+  File "/usr/lib/python3/dist-packages/click/core.py", line 717, in main
+    rv = self.invoke(ctx)
+  File "/usr/lib/python3/dist-packages/click/core.py", line 956, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/usr/lib/python3/dist-packages/click/core.py", line 555, in invoke
+    return callback(*args, **kwargs)
+  File "/usr/bin/auto-cpufreq", line 410, in cli
+    sysinfo()
+  File "/usr/bin/auto-cpufreq", line 338, in sysinfo
+    print("CPU" + str(core_num) + " temp: {:.0f}".format(core_temp['coretemp'][core_num].current) + "°C")
+KeyError: 'coretemp'
+
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I [updated ReadMe file today](https://github.com/AdnanHodzic/auto-cpufreq#requirements-installation-for-debianubuntu-and-their-derivatives) with necessary information.
+
+Since APT packages may contain older version of necessary Python packages, please make sure to have latest version by running: `sudo pip3 install --upgrade psutil click distro`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>racuna:</strong></p>
+                    <p>I will try it today, thanks</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>racuna:</strong></p>
+                    <p>Hi again. Already installed packages:
+
+```
+Requirement already satisfied: psutil in /usr/local/lib64/python3.6/site-packages (5.6.7)
+Requirement already satisfied: click in /usr/lib/python3.6/site-packages (7.0)
+Requirement already satisfied: distro in /usr/local/lib/python3.6/site-packages (1.4.0)
+```
+if I try to update:
+
+```
+Requirement already up-to-date: psutil in /usr/local/lib64/python3.6/site-packages (5.6.7)
+Requirement already up-to-date: click in /usr/lib/python3.6/site-packages (7.0)
+Requirement already up-to-date: distro in /usr/local/lib/python3.6/site-packages (1.4.0)
+
+```
+
+error:
+
+```
+python3 auto-cpufreq.py --monitor
+
+----------------------------- System information ------------------------------
+
+Linux distro: PCLinuxOS 2020 PCLinuxOS
+Linux kernel: 5.4.8-pclos1
+Driver: intel_pstate
+Architecture: x86_64
+Processor: Intel(R) Core(TM) i5-3230M CPU @ 2.60GHz
+Cores: 4
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 
+3200 MHz
+
+CPU frequency for each core:
+
+CPU0: 2507 MHz
+CPU1: 2473 MHz
+CPU2: 2438 MHz
+CPU3: 2745 MHz
+
+Temperature for each physical core:
+
+Traceback (most recent call last):
+  File "auto-cpufreq.py", line 437, in <module>
+    cli()
+  File "/usr/local/lib64/python3.6/site-packages/click/core.py", line 764, in __call__
+    return self.main(*args, **kwargs)
+  File "/usr/local/lib64/python3.6/site-packages/click/core.py", line 717, in main
+    rv = self.invoke(ctx)
+  File "/usr/local/lib64/python3.6/site-packages/click/core.py", line 956, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/usr/local/lib64/python3.6/site-packages/click/core.py", line 555, in invoke
+    return callback(*args, **kwargs)
+  File "auto-cpufreq.py", line 410, in cli
+    sysinfo()
+  File "auto-cpufreq.py", line 338, in sysinfo
+    print("CPU" + str(core_num) + " temp: {:.0f}".format(core_temp['coretemp'][core_num].current) + "°C")
+KeyError: 'coretemp'
+
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Can you confirm that all these packages are up to date for root user? </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>racuna:</strong></p>
+                    <p>I confirm. I installed it as root, even when pip3 give me warnings about not to do it.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Desmo5574:</strong></p>
+                    <p>Hey there!
+I have the same problem as well...updated the packages with pip
+
+----------------------------- System information ------------------------------
+
+Linux distro: Maui 17.06 xenial
+Linux kernel: 5.3.0-23-generic
+Driver: acpi-cpufreq
+Architecture: x86_64
+Processor: AMD Phenom(tm) II X6 1090T Processor
+Cores: 6
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 
+3200 MHz
+
+CPU frequency for each core:
+
+CPU0: 3552 MHz
+CPU1: 3518 MHz
+CPU2: 3543 MHz
+CPU3: 3449 MHz
+CPU4: 3502 MHz
+CPU5: 3592 MHz
+
+Temperature for each physical core:
+
+Traceback (most recent call last):
+  File "/usr/local/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.0', 'auto-cpufreq')
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 658, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 1445, in run_script
+    exec(script_code, namespace, namespace)
+  File "/usr/local/lib/python3.6/dist-packages/auto_cpufreq-1.0-py3.6.egg/EGG-INFO/scripts/auto-cpufreq", line 108, in <module>
+  File "/usr/local/lib/python3.6/dist-packages/click/core.py", line 829, in __call__
+    return self.main(*args, **kwargs)
+  File "/usr/local/lib/python3.6/dist-packages/click/core.py", line 782, in main
+    rv = self.invoke(ctx)
+  File "/usr/local/lib/python3.6/dist-packages/click/core.py", line 1066, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/usr/local/lib/python3.6/dist-packages/click/core.py", line 610, in invoke
+    return callback(*args, **kwargs)
+  File "/usr/local/lib/python3.6/dist-packages/auto_cpufreq-1.0-py3.6.egg/EGG-INFO/scripts/auto-cpufreq", line 63, in main
+  File "/usr/local/lib/python3.6/dist-packages/auto_cpufreq-1.0-py3.6.egg/source/core.py", line 393, in sysinfo
+KeyError: 'coretemp'</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>What happens if you run [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq#installing-auto-cpufreq)?
+
+I also released [ `auto-cpufreq` to Snap store](https://snapcraft.io/auto-cpufreq/) which would definitely fix your problem. But as [I stated for full functionality](https://github.com/AdnanHodzic/auto-cpufreq#snap-store) `auto-cpufreq` needs snapd version 2.4.4 which is currently only available in Ubuntu 20.04.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>fariquelme:</strong></p>
+                    <p>Same issue here, i inspected the values of core_temp and only found two keys in the dictionary ('acpitz' and 'iwlwifi_1' ). The values were 
+```
+acpitz:  [shwtemp(label='', current=69.0, high=120.0, critical=120.0)]
+iwlwifi_1: [shwtemp(label='', current=46.0, high=None, critical=None)]
+```
+coretemp is not showing for some reason</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Could everyone please pull latest changes and see if you still have this problem? @Red-Eyed addressed this issue in his [MR](https://github.com/AdnanHodzic/auto-cpufreq/pull/62) and changes have been merged with `master`.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>I think we can close it, as @fariquelme showed us his values of the `core_temp`, and I use `acpitz` instead of `coretemp`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing the issue, please feel free to re-open it if you're still experiencing this issue.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>fariquelme:</strong></p>
+                    <p>@AdnanHodzic @Red-Eyed thanks for the follow-up. Itried to install it yesterday and had the same issue. I have an AMD ryzen 4900HS, maybe it's an issue with my cpu?. I know it has poor support since it's really new hardware, i upgraded to kernel 5.8 since it gives better support for my CPU. Idk if it is an issue with my CPU in particular, or with auto-cpufreq.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>@fariquelme 
+
+could you try to install it (from the github) now, because many of PR were merged today, thanks</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>fariquelme:</strong></p>
+                    <p>@AdnanHodzic Sure, i'll let you know if the issue persists.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>@fariquelme it should work now as I have AMD that doesn't contain `coretemp` field as well</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>fariquelme:</strong></p>
+                    <p>@Red-Eyed I installed it from git and the issue is solved!, Thanks guys.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@Red-Eyed apparently the original author @racuna has the same issue, do you have any ideas what's going wrong here?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>Hello, so, do we still have  `KeyError: 'coretemp'` on AMD ?
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>racuna:</strong></p>
+                    <p>My laptop is intel based 
+```
+
+Linux distro: PCLinuxOS 2020 PCLinuxOS
+Linux kernel: 5.4.8-pclos1
+Driver: intel_pstate
+Architecture: x86_64
+Processor: Intel(R) Core(TM) i5-3230M CPU @ 2.60GHz
+Cores: 4
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>@racuna so you have such error, can you provide logs? 
+I remember there was like `--debug` argument, that should show us what do we have instead of `coretemp` from `psutil`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>racuna:</strong></p>
+                    <p>Hi again. 
+
+Instead of just git pull to update.
+
+I deleted the old auto-cpufreq folder, I cloned it again. Then removed the old auto-cpufreq script from /usr/bin with --remove option and installed it again from the new cloned cpu.
+
+Now is working. Thank you very much.
+
+My distro doesn't have systemd so I put the auto-cpufreq script with --daemon option in a @reboot line on the crontab. I hope this is ok.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>@AdnanHodzic this should be closed</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

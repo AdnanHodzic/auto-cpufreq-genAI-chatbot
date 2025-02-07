@@ -1,0 +1,33 @@
+
+        <html>
+        <head>
+            <title>Issue #302: Check if lsb_release exists before using it</title>
+        </head>
+        <body>
+            <h1>Check if lsb_release exists before using it</h1>
+            <p><strong>Issue #302</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>When installing auto-cpufreq using the auto-cpufreq-installer on my Fedora 35 system it shows me some errors. 
+
+```
+./auto-cpufreq-installer: line 10: lsb_release: command not found
+./auto-cpufreq-installer: line 11: lsb_release: command not found
+./auto-cpufreq-installer: line 12: lsb_release: command not found
+```
+lsb_release is not installed by default on my system, and that is why it's not found.
+
+This small change will first check if lsb_release is on the system before using it. In the end it behaves the same, but without the command not found messages.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Great catch and thank you for your contribution! </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

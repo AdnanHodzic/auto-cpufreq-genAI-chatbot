@@ -1,0 +1,148 @@
+
+        <html>
+        <head>
+            <title>Issue #514: FileNotFoundError: [Errno 2] No such file or directory: '/usr/local/share/auto-cpufreq/scripts/cpufreqctl.sh'</title>
+        </head>
+        <body>
+            <h1>FileNotFoundError: [Errno 2] No such file or directory: '/usr/local/share/auto-cpufreq/scripts/cpufreqctl.sh'</h1>
+            <p><strong>Issue #514</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+### Error output:
+```
+sudo auto-cpufreq --monitor
+[sudo] password for s0ulr3ap3r:           
+
+Note: You can quit monitor mode by pressing "ctrl+c"
+
+-------------------------------------------------------------------------------
+
+Traceback (most recent call last):
+  File "/usr/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.9.7+3dcf2fd8', 'auto-cpufreq')
+  File "/usr/lib/python3.11/site-packages/pkg_resources/__init__.py", line 720, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/usr/lib/python3.11/site-packages/pkg_resources/__init__.py", line 1570, in run_script
+    exec(script_code, namespace, namespace)
+  File "/usr/lib/python3.11/site-packages/auto_cpufreq-1.9.7+3dcf2fd8-py3.11.egg/EGG-INFO/scripts/auto-cpufreq", line 225, in <module>
+  File "/usr/lib/python3.11/site-packages/click/core.py", line 1130, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/site-packages/click/core.py", line 1055, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/site-packages/click/core.py", line 1404, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/site-packages/click/core.py", line 760, in invoke
+    return __callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/site-packages/auto_cpufreq-1.9.7+3dcf2fd8-py3.11.egg/EGG-INFO/scripts/auto-cpufreq", line 104, in main
+  File "/usr/lib/python3.11/site-packages/auto_cpufreq-1.9.7+3dcf2fd8-py3.11.egg/auto_cpufreq/core.py", line 324, in cpufreqctl
+  File "/usr/lib/python3.11/shutil.py", line 419, in copy
+    copyfile(src, dst, follow_symlinks=follow_symlinks)
+  File "/usr/lib/python3.11/shutil.py", line 256, in copyfile
+    with open(src, 'rb') as fsrc:
+         ^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/usr/local/share/auto-cpufreq/scripts/cpufreqctl.sh'
+
+```
+![image](https://github.com/AdnanHodzic/auto-cpufreq/assets/43526417/c5b12537-ce62-4fdb-8ed1-94057a20f115)
+
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+auto-cpufreq --debug
+```
+```
+❯ sudo auto-cpufreq --debug
+[sudo] password for s0ulr3ap3r:           
+Traceback (most recent call last):
+  File "/usr/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.9.7+3dcf2fd8', 'auto-cpufreq')
+  File "/usr/lib/python3.11/site-packages/pkg_resources/__init__.py", line 720, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/usr/lib/python3.11/site-packages/pkg_resources/__init__.py", line 1570, in run_script
+    exec(script_code, namespace, namespace)
+  File "/usr/lib/python3.11/site-packages/auto_cpufreq-1.9.7+3dcf2fd8-py3.11.egg/EGG-INFO/scripts/auto-cpufreq", line 225, in <module>
+  File "/usr/lib/python3.11/site-packages/click/core.py", line 1130, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/site-packages/click/core.py", line 1055, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/site-packages/click/core.py", line 1404, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/site-packages/click/core.py", line 760, in invoke
+    return __callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/site-packages/auto_cpufreq-1.9.7+3dcf2fd8-py3.11.egg/EGG-INFO/scripts/auto-cpufreq", line 156, in main
+  File "/usr/lib/python3.11/site-packages/auto_cpufreq-1.9.7+3dcf2fd8-py3.11.egg/auto_cpufreq/core.py", line 324, in cpufreqctl
+  File "/usr/lib/python3.11/shutil.py", line 419, in copy
+    copyfile(src, dst, follow_symlinks=follow_symlinks)
+  File "/usr/lib/python3.11/shutil.py", line 256, in copyfile
+    with open(src, 'rb') as fsrc:
+         ^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/usr/local/share/auto-cpufreq/scripts/cpufreqctl.sh'
+
+```
+I've tried installing it by setup.py  and by snap whenever i supply any argument it crashes . 
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Template issue ignored and not filled out, hence making this issue invalid, closing. Feel free to re-open this issue with properly filled out requested fields.
+
+Reference:
+
+### Fill out informtion requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+### Error output:
+```text
+Add/paste error output in case of failed installation or other failing component
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+auto-cpufreq --debug
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behavior.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

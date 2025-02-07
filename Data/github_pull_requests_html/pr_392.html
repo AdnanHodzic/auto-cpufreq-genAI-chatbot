@@ -1,0 +1,67 @@
+
+        <html>
+        <head>
+            <title>Pull Request #392: Fixed where average all core temp is displayed with too many decimals.</title>
+        </head>
+        <body>
+            <h1>Fixed where average all core temp is displayed with too many decimals.</h1>
+            <p><strong>Pull Request #392</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I changed the monitoring display of `Average temp. of all cores:`.
+
+Before:
+
+![image](https://user-images.githubusercontent.com/10132938/166450124-45c4def7-dcce-478a-85b5-ba6f6569e563.png)
+
+After:
+
+![image](https://user-images.githubusercontent.com/10132938/166450170-1835b492-0662-483a-9d9e-25159c589ef4.png)
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Thank you for your contribution! 
+
+For some reason this same field would be outputted with 2 decimals after ., but being explicit about this definitely helps. 
+
+However, although you didn't make any related changes to "Total system load" field, as part of this PR could you also make same type of change for that field as well. As I just noticed my "Total system load" is now outputting the same way "Average temp. of all cores" was for you.
+
+Example:
+
+```
+Battery is: charging
+
+Setting to use: "performance" governor
+
+Total CPU usage: 1.1 %
+Total system load: 0.7265625
+Average temp. of all cores: 53.5 °C
+
+Load optimal
+setting turbo boost: off
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Jeroenvb3:</strong></p>
+                    <p>Hi! No problem! I now improved the display of Total system load too.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>pheiduck:</strong></p>
+                    <p>LGTM!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@Jeroenvb3 thank you for your contribution, you will be credited as part of next release v1.9.4 which I'll release soon when more changes have been added to it.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

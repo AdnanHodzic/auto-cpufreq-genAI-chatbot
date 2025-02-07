@@ -1,0 +1,110 @@
+
+        <html>
+        <head>
+            <title>Issue #155: Newest version broken</title>
+        </head>
+        <body>
+            <h1>Newest version broken</h1>
+            <p><strong>Issue #155</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+```text
+
+Traceback (most recent call last):
+  File "/usr/bin/auto-cpufreq", line 137, in <module>
+    main()
+  File "/usr/lib/python3.9/site-packages/click/core.py", line 829, in __call__
+    return self.main(*args, **kwargs)
+  File "/usr/lib/python3.9/site-packages/click/core.py", line 782, in main
+    rv = self.invoke(ctx)
+  File "/usr/lib/python3.9/site-packages/click/core.py", line 1066, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/usr/lib/python3.9/site-packages/click/core.py", line 610, in invoke
+    return callback(*args, **kwargs)
+  File "/usr/bin/auto-cpufreq", line 50, in main
+    cpufreqctl()
+  File "/usr/lib/python3.9/site-packages/auto_cpufreq/core.py", line 166, in cpufreqctl
+    shutil.copy(SCRIPTS_DIR / "cpufreqctl.sh", "/usr/bin/cpufreqctl.auto-cpufreq")
+  File "/usr/lib/python3.9/shutil.py", line 418, in copy
+    copyfile(src, dst, follow_symlinks=follow_symlinks)
+  File "/usr/lib/python3.9/shutil.py", line 264, in copyfile
+    with open(src, 'rb') as fsrc, open(dst, 'wb') as fdst:
+FileNotFoundError: [Errno 2] No such file or directory: '/usr/local/share/auto-cpufreq/scripts/cpufreqctl.sh'
+```
+---
+
+### System information:
+```text
+-------------------------------------------------------------------------------
+
+Linux distro: Garuda Linux Soaring n/a
+Linux kernel: 5.10.8-xanmod1-1
+Processor: Intel(R) Core(TM) i5-4300M CPU @ 2.60GHz
+Cores: 4
+Architecture: x86_64
+Driver: /bin/sh: line 1: cpufreqctl.auto-cpufreq: command not found
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 3300 MHz
+CPU min frequency: 800 MHz
+
+	Usage  Temperature  Frequency
+CPU0:	14.9%     59 °C     2753 MHz
+CPU1:	 9.9%     59 °C     2923 MHz
+CPU2:	14.3%     61 °C     3085 MHz
+CPU3:	 7.1%     61 °C     3108 MHz
+
+fatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+Snap package: no
+
+Python: 3.9.1
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 7.1.2
+distro package 1.5.0
+
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.2 %
+
+Total CPU usage: 5.0 %
+Total system load: 1.89
+Average temp. of all cores: 60.0 °C 
+
+Currently using: /bin/sh: governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>dr460nf1r3:</strong></p>
+                    <p>Turns out, this was a PKGBUILD issue which just got fixed by the maintainer. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>notyan:</strong></p>
+                    <p>can i know how to fix this issue ? </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Maintainer of AUR package needs to update the package as I voiced in #150
+
+Until this is done, you can install auto-cpufreq using [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq#auto-cpufreq-installer).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

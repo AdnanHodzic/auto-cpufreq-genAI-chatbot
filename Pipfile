@@ -1,0 +1,18 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+requests = "*"
+markdown = "*"
+markdown2 = "*"
+praw = "*"
+youtube-transcript-api = "*"
+beautifulsoup4 = "*"
+google-api-python-client = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.12"

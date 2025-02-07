@@ -1,0 +1,109 @@
+
+        <html>
+        <head>
+            <title>Issue #279: Over heating of CPUs during charging</title>
+        </head>
+        <body>
+            <h1>Over heating of CPUs during charging</h1>
+            <p><strong>Issue #279</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>It works really good when I'm on battery but everytime I plug my laptop { Acer Nitro 7 } it tends to overheat eventually in 4 to 5 minutes { around 65 to 75°C }. Especially when I'm taking my classes on teams. I removed the daemon and used my laptop with auto-cpufreq with charger plugged on. The unnecessary heating problem is not faced there. I even made a config file from the readme and disabled turbo but it still seems to overheat. Is there any configuration where it will disable auto-cpufreq on charging but re-enable it on discharging.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>If that's what you're trying to do you can set [configure auto-cpufreq settings file](https://github.com/AdnanHodzic/auto-cpufreq#configuring-auto-cpufreq) to following be in "powersave" mode while laptop is charging, i.e:
+
+```
+# settings for when connected to a power source
+[charger]
+# see available governors by running: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+# preferred governor.
+governor = powersave
+```
+
+You didn't include `auto-cpufreq --debug` so I don't know anything about your environment, there was one similar issue in past and problem was distro related. Also Teams is a CPU resource hungry app, besides on Linux even my (work) Macbook Pro CPU starts throttling during Team calls.
+
+Also please make sure to have the [latest 1.7.2 release](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.7.2).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>achintya-7:</strong></p>
+                    <p>Yes sir, I cloned the latest 1.7.2 release and did a test again
+
+![Screenshot from 2021-11-14 19-24-54](https://user-images.githubusercontent.com/67036708/141684277-c064b5e0-2150-4a78-9c02-c9100e474e7d.png)
+This is the config file which auto-cpufreq uses. In your README file on the project. It was mentioned to disable intel_pstate. I also have done that. 
+
+![Screenshot from 2021-11-14 19-24-22](https://user-images.githubusercontent.com/67036708/141688261-8fdf5008-0794-41e1-b1eb-8bff775b2215.png)
+In this debug output, my laptop has no program running except the desktop environment and the usual stuff. 
+
+I have also added a debug output of auto-cpufreq on battery.
+
+![Screenshot from 2021-11-14 21-17-00](https://user-images.githubusercontent.com/67036708/141688135-1986d94a-5e2c-4e5f-a678-48fdd9311b90.png)
+Here, I am using firefox with 4 to 5 tabs open along with VS Code and various folders. The temperature never really goes over 40 C. Its working amazing when I'm on battery.
+
+That's why, I wanted to make a script with auto-cpufreq only run when its on Battery mode.  
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Right, what I was suggesting (to give it a try at least and see how it works) is to use `powersave` as governor instead of `ondemand` or `performance` in `[charger]` section of auto-cpufreq config file.
+
+> That's why, I wanted to make a script with auto-cpufreq only run when its on Battery mode.
+
+If you end up doing this, I'd highly encourage you to extend the existing config file to also have this option. If you do this please [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution), as I think it would be great to have one such feature and you would be mentioned for that release of course :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>achintya-7:</strong></p>
+                    <p>Sure I will look into it after my exams in December. Maybe I'll just customize it a bit so it works for me. I'll still make a PR for you to review.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>In meantime, another thing that crossed my mind. Without doing any additional things, can you [disable GNOME power profile](https://github.com/AdnanHodzic/auto-cpufreq/issues/277#issuecomment-967797641) and see if that will fix it? </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>achintya-7:</strong></p>
+                    <p>I had some time on my hands this weekend so I tried to fix my issue. I re-cloned the code and added a check in the def charging() function to set it as false all the time for ac_state. After this, I was able to disable turbo mode and it removed the overheating. I have also changed some conditions in if statements on set_powersave() function for cpuload. I don't want to include those changes because they are tuned to my system which probably don't need the extra clock speed most of the time.
+
+I have added a PR with the functionality of having ac_state as false all of the time. I have also made some changes to the conf file format and provided a screenshot of it in the PR.
+
+If you want, I can close the issue as it's resolved for me. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AnonPol:</strong></p>
+                    <p>> I had some time on my hands this weekend so I tried to fix my issue. I re-cloned the code and added a check in the def charging() function to set it as false all the time for ac_state. After this, I was able to disable turbo mode and it removed the overheating. I have also changed some conditions in if statements on set_powersave() function for cpuload. I don't want to include those changes because they are tuned to my system which probably don't need the extra clock speed most of the time.
+> 
+> I have added a PR with the functionality of having ac_state as false all of the time. I have also made some changes to the conf file format and provided a screenshot of it in the PR.
+> 
+> If you want, I can close the issue as it's resolved for me.
+
+Want to notify you that the "acpi_cpufreq"/"intel_cpufreq" driver's powersave and performance governors always set the CPU frequency to minimum and maximum frequency respectively that it can run at. The Intel_pstate driver powersave and performance governors are different in that they scale CPU frequency up and down depending on CPU load so if you want similar functionality for "acpi_cpufreq" driver use schedutil (more modern replacement for ondemand/conservative governors)/ondemand/conservative governor.
+
+[Source 1](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/power_management_guide/cpufreq_governors),[Source 2](https://www.kernel.org/doc/html/latest/admin-guide/pm/cpufreq.html#generic-scaling-governors).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>We can also continue implementation discussion as part of #286 PR now. < @AnonPol</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Just [released v1.9.2](https://github.com/AdnanHodzic/auto-cpufreq/releases) which adds ability to change power governor used by default with auto-cpufreq from `balanced` to `performance` [using power_helper.py script](https://github.com/AdnanHodzic/auto-cpufreq/#1-power_helperpy-script) which could also resolve this problem.
+
+In meantime closing the issue due to inactivity, if the problem persist please feel free to re-open the issue.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,323 @@
+
+        <html>
+        <head>
+            <title>Pull Request #712: Code refactoring and add some features</title>
+        </head>
+        <body>
+            <h1>Code refactoring and add some features</h1>
+            <p><strong>Pull Request #712</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>## Batteries
+Make battery detection and optimisation compatible with more machines
+
+### Changements
+- Instead of using lsmod to detect the battery type, use the `find` command and look for the `/sys/class/power_supply/BAT*` folders to detect all batteries
+- Move batteries status detection function (remove the current fonction in `core.py`)
+- Replace the conservation mode file `/sys/bus/platform/drivers/ideapad_acpi/VPC2004:00/conservation_mode` with all the files found by `find /sys/devices/ -type f -name conservation_mode`
+- Write valu using `echo value | tee battery_file`, it bypasses the symbolic link problem #713 
+
+### 6 files changed
+- `auto_cpufreq/batteries.py` created
+- `auto_cpufreq/core.py` modified
+- `auto_cpufreq/battery_scripts/` removed (4 files removed)
+
+## Config
+
+### Changements
+- Add `$XDG_CONFIG_HOME/auto-cpufreq.conf` detection
+- Listen the file, not the directory because listen the directory can cause security problem
+- Automatically call `find_config_file` and `config_info_dialog` with `config.set_file`
+- Renamed conf file
+
+### 8 files changed
+- `README.md`, `auto_cpufreq/bin/auto_cpufreq.py` and `auto_cpufreq/core.py` modified
+- `auto_cpufreq/utils/` moved to `auto_cpufreq/config/`
+- - `config.py`, `event_handler.py` modified
+- `auto-cpufreq.conf-example` renamed to `auto-cpufreq.conf`
+- - `nix/module.nix` modified
+
+## Distro detection
+Make distro detection compatible with more system
+
+### Changements
+- Remove `distro` package
+- Use `getoutput('cat /etc/os-release')`, it bypasses the symbolic link problem
+
+### 4 files changed
+- `auto_cpufreq/core.py`, `nix/default.nix`, `poetry.lock`, and `pyproject.toml` modified
+
+## Init system
+Make daemon installation and `power_helpers.py` compatible with more system
+
+### Changements
+- Add Antix, Devuan for runnit
+- Add init system detection and commands
+- Repare dinit service file
+
+### 5 files changed
+- `auto_cpufreq/init_system.py` created
+- `auto_cpufreq/power_helper.py`, `scripts/auto-cpufreq-install.sh`, `scripts/auto-cpufreq-remove.sh` and `scripts/auto-cpufreq-dinit` modified
+
+## Installer
+
+### Changements
+- Add `-i` and `-r` options
+- Add/remove automatically conf file in `/etc/auto-cpufreq.conf`
+- Auto run in root
+- Force `python3` to avoid error for "python command does not exist"
+
+### 1 file changed
+- `auto-cpufreq-installer` modified
+
+## Update
+
+### Changements
+- Git clone into `/tmp/`
+- Move code into a specific file (remove the current fonction in `core.py`)
+- Remove the confirmation question before update
+
+### 4 files changed
+- `auto_cpufreq/update.py` created
+- `auto_cpufreq/bin/auto_cpufreq.py`, `auto_cpufreq/core.py` and `auto_cpufreq/gui/app.py` modified
+
+## Others
+
+### Changements
+- Add global variables, colored output, shorter command (`-m`=`--monitor`, `-l`=`--live`, `-i`=`--install`, `-u`=`--update`, `-r`=`--remove` and `-f`=`--force`)
+- Auto run in root user
+- Auto shell detection 
+- Change bluetooth detection, search if `'/etc/bluetooth/main.conf'` exists, fixes the problem for those who have `bluez` but not `bluez-utils`/`bluetoothctl`
+- Clean code, replace duplicate code with functions
+- Compatible with many arguments #634 
+- Move commands and dialogs into specific files
+- Remove `--log` option
+- Remove "|" in type because it doesn't work for python <= 3.9 #715 
+- Replace " to ' because it is more readable and allows to use "" in a string to indicate something
+- Replace some python command to shell command
+
+### Files changed
+- `auto_cpufreq/commands.py`, `auto_cpufreq/dialogs.py`, `auto_cpufreq/globals.py` and `auto_cpufreq/prints.py` created
+- `auto_cpufreq/bin/auto_cpufreq.py`, `auto_cpufreq/bin/auto_cpufreq_gtk.py`, `auto_cpufreq/core.py`, `auto_cpufreq/gui/app.py`, `auto_cpufreq/gui/objects.py`, `auto_cpufreq/gui/tray.py`, `scripts/auto-cpufreq-venv-wrapper` and `auto_cpufreq/power_helper.py` modified
+- empties  `__init__.py` removed (4 files removed)
+- `auto_cpufreq/tlp_stat_parser.py` removed
+- `scripts/start_app` renamed to `scripts/start_app.sh`</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>This PR is simply too large and all over the place to be reviewed in any meaningful manner. A lot of this stuff to me seems like you're just making changes for the sake of change.
+
+Instead of focusing on this stuff, I think you should look at [this list](https://github.com/AdnanHodzic/auto-cpufreq/discussions/312#discussioncomment-9556465) of issues and requests that Adnan put together
+
+We want everyone who wants to contribute to be able to contribute, but this comes with certain standards that need to be kept. In this case, Adnan and I (or anyone for that matter) do not have time nor want to review a PR that touches 40 different files. `auto-cpufreq` is difficult to test at times because of compatibility with different systems and hardware. You also need to be breaking things up into smaller commits with better commit messages and providing a better overview of the changes you are making and why you made those changes
+
+These are just my thoughts. I'll let @AdnanHodzic decide what to do with this.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> This PR is simply too large and all over the place to be reviewed in any meaningful manner. A lot of this stuff to me seems like you're just making changes for the sake of change.
+> 
+> Instead of focusing on this stuff, I think you should look at [this list](https://github.com/AdnanHodzic/auto-cpufreq/discussions/312#discussioncomment-9556465) of issues and requests that Adnan put together
+> 
+> We want everyone who wants to contribute to be able to contribute, but this comes with certain standards that need to be kept. In this case, Adnan and I (or anyone for that matter) do not have time nor want to review a PR that touches 40 different files. `auto-cpufreq` is difficult to test at times because of compatibility with different systems and hardware. You also need to be breaking things up into smaller commits with better commit messages and providing a better overview of the changes you are making and why you made those changes
+> 
+> These are just my thoughts. I'll let @AdnanHodzic decide what to do with this.
+
+I agree with what @shadeyg56 said. It's a better idea to split this into i.e 5 PR's. One for battery, one for installer and so on. 
+
+Of course refering to the [mentioned list](https://github.com/AdnanHodzic/auto-cpufreq/discussions/312#discussioncomment-9556465) would be ultimate goal. I think #29 (or another similiar issue) is part of installer changes but not sure as this is not mentioned anywhere.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Angel-Karasu:</strong></p>
+                    <p>I understand what you're saying, except when you say "you're just making changes for the sake of change"
+
+But in this PR, I'm changing almost nothing about the way auto-cpufreq works, it's mainly a code overhaul to make it more readable
+
+The only change that could affect the way it works is about the battery , instead of using `lsmod` to detect the battery, I use the `find` command and look for the `/sys/class/power_supply/BAT*` folders and the `conservation_mode` files in `/sys/devices/`, which means there's only one python file to take care of the battery
+
+So I'm going to complete my message explaining my changes and try to find some testers to make sure everything works properly</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Since as @shadeyg56 pointed out, there's too many changes made for 1 PR which are hard to review, so I just jumped into testing things. 
+
+Please note, just to remove any ambiguity. I appreciate what you're doing and I want to you and your changes to be part of the projects, so please don't take this the wrong way but certain procedures and standards will have to be followed. 
+
+From brief view on what's going on, I would've rejected this PR. This is not a code refactor, this PR breaks design/way auto-cpufreq works which should never be the case of "code refactors". As I think you made some major changes without really understanding what's happening or why certain changes are there, which cannot be considered as a code refactor. 
+
+Considering what I've just seen, this seriously erodes my my trust into rest of changes I didn't even get to check.
+
+But instead of rejecting it and closing the PR, you'll need to address following points before we can even start working on reviewing the code. Namely:
+
+Output of `sudo auto-cpufreq --install` looks like this now:
+
+```
+sudo auto-cpufreq --install           
+
+───────────────────────────────────────────────────── auto-cpufreq ─────────────────────────────────────────────────────
+
+Automatic CPU speed & power optimizer for Linux
+auto-cpufreq version: 2.3.0 (git 775cc2b)
+Github: https://github.com/AdnanHodzic/auto-cpufreq
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+─────────────────────────────────────────────────────── Warning ───────────────────────────────────────────────────────
+
+Detected you are running Power Profiles daemon service!
+This daemon might interfere with auto-cpufreq which can lead to unexpected results.
+We strongly encourage you to disable Power Profiles daemon unless you really know what you are doing.
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+────────────────────────────────────────── Deploying auto-cpufreq as a daemon ──────────────────────────────────────────
+
+Info: Turn off bluetooth on boot
+
+* Deploy auto-cpufreq install script
+
+* Deploy auto-cpufreq remove script
+auto-cpufreq snap package not installed
+GNOME Power Profiles Daemon should be enabled. run:
+
+sudo python3 power_helper.py --gnome_power_enable
+
+───────────────────────────────────── Running auto-cpufreq daemon install script ─────────────────────────────────────
+
+* Deploying auto-cpufreq systemd unit file
+
+* Reloading systemd manager configuration
+
+* Starting auto-cpufreq daemon (systemd) service
+
+* Enabling auto-cpufreq daemon (systemd) at boot
+Created symlink /etc/systemd/system/multi-user.target.wants/auto-cpufreq.service → /etc/systemd/system/auto-cpufreq.service.
+
+────────────────────────────────────── auto-cpufreq daemon installed and running ──────────────────────────────────────
+
+To view live stats, run:
+auto-cpufreq --stats
+
+To disable and remove auto-cpufreq daemon, run:
+sudo auto-cpufreq --remove
+
+```
+
+**First** there's few too many lines which I would get rid of, i.e: 
+
+```
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+```
+
+Above `Warning` or `Deploying auto-cpufreq as a daemon` part, this is a minor cosmetic change.
+
+Same is when uninstalling part i,e:
+
+```
+sudo ./auto-cpufreq-installer --remove
+
+───────────────────────────────────────────────────────────── Removing auto-cpufreq daemon ─────────────────────────────────────────────────────────────
+
+Info: Turn on bluetooth on boot
+
+──────────────────────────────────────────────────────────────────────── Warning ────────────────────────────────────────────────────────────────────────
+
+Detected GNOME Power Profiles daemon service is stopped!
+This service will now be enabled and started again.
+
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Info: 
+Info: 
+
+───────────────────────────────────────────────────── Running auto-cpufreq daemon removal script ─────────────────────────────────────────────────────
+
+* Stopping auto-cpufreq daemon (systemd) service
+
+* Disabling auto-cpufreq daemon (systemd) at boot
+Removed "/etc/systemd/system/multi-user.target.wants/auto-cpufreq.service".
+
+* Removing auto-cpufreq daemon (systemd) unit file
+
+* Reloading systemd manager configuration
+reset failed
+auto-cpufreq successfully removed
+
+auto-cpufreq tool and all its supporting files successfully removed
+```
+
+Why are there 2 empty "Info:" lines?
+
+**Second** is a major breaking change which I won't merge as it reverts months/years of work that was done since 1.8.0 release.
+
+```
+Detected you are running Power Profiles daemon service!
+This daemon might interfere with auto-cpufreq which can lead to unexpected results.
+We strongly encourage you to disable Power Profiles daemon unless you really know what you are doing.
+```
+
+Power profiles daemon **will** interfere and why auto-cpufreq disables it as part of auto-cpufreq-installer, this is [explained here as part of Readme](https://github.com/AdnanHodzic/auto-cpufreq#1-power_helperpy-script-snap-package-install-only) and as of [v1.8.0 auto-cpufreq marks this functionality redundant](https://x.com/fooctrl/status/1467469508373884933).
+
+```
+We strongly encourage you to disable Power Profiles daemon unless you really know what you are doing.
+```
+
+We don't even suggest it, code will disable it for you if it detects it's running. So why are you enabling it back? 
+
+This was a suggestion made to folks who installed auto-cpufreq using snap package, as due to it running in confined space with limited permissions and as such auto-cpufreq is running in a container it doesn't have as many permissions to disable Power Profile daemon like  auto-cpufreq-installer can.
+
+That's why users were suggested to disable it manually using ` power_helper.py` script, *only if* it was detected auto-cpufreq was installed using snap package. 
+
+**Third** is the same subject I mentioned in **Second** point, it should be disabled by default, I'm fine with giving users option to enable it back *if they know* what they are doing, which they usually don't. 
+
+```
+* Deploy auto-cpufreq remove script
+auto-cpufreq snap package not installed
+GNOME Power Profiles Daemon should be enabled. run:
+
+sudo python3 power_helper.py --gnome_power_enable
+```
+
+`auto-cpufreq snap package not installed` why even mention this? It's confusing for the user, that might prompt them they need to install snap package if they don't have it installed?
+
+Again, why not just split this PR into few smaller PR's so code can be reviewed easier and changes tested easier? For example PR for "installer", PR for "Init system", PR for "config" as I don't think I'll ever merge it as one such big PR, there's just too many changes and a lot of them don't make sense.
+
+For example just changes for installer part:
+
+> Installer
+>Changements
+>Add -i and -r options
+>Add/remove automatically conf file in /etc/auto-cpufreq.conf
+>Auto run in root
+
+I think you mean "changes" instead of "Changements".
+
+If you could also elaborate more on certain changes like:
+
+> Add -i and -r options
+
+Why did you add these options?
+
+>Add/remove automatically conf file in /etc/auto-cpufreq.conf
+
+Why, as of #663 changes in conf file are automatically picked up?
+
+> Auto run in root
+
+Why did you make this decision? What's its benefit?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Angel-Karasu:</strong></p>
+                    <p>Separate changes in different PR</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

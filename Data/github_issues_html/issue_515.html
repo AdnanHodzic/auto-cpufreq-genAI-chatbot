@@ -1,0 +1,114 @@
+
+        <html>
+        <head>
+            <title>Issue #515:  Issue installing auto-cpufreq on Ubuntu 22.04.2</title>
+        </head>
+        <body>
+            <h1> Issue installing auto-cpufreq on Ubuntu 22.04.2</h1>
+            <p><strong>Issue #515</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+Yes
+
+### Error output:
+```text
+auto-cpufreq --install
+
+--------------------------------- Root check ----------------------------------
+
+ERROR:
+
+Must be run root for this functionality to work, i.e: 
+sudo auto-cpufreq
+
+-------------------------------------------------------------------------------
+
+~$ sudo auto-cpufreq
+auto-cpufreq: wrong invocation. try --help for help.
+
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+:~$ auto-cpufreq --debug
+
+--------------------------------- Root check ----------------------------------
+
+ERROR:
+
+Must be run root for this functionality to work, i.e: 
+sudo auto-cpufreq
+
+-------------------------------------------------------------------------------
+```
+
+
+I'm having trouble installing and using auto-cpufreq on my Ubuntu 22.04.2 system. I followed the instructions on the auto-cpufreq GitHub page.
+
+ I \ tried installing the package manually and from snap using the instructions on the GitHub page, but I'm still encountering issues when trying to run the auto-cpufreq command. Specifically, when I run the command `auto-cpufreq --install`, I get an error message that says "`Must be run root for this functionality to work, i.e: sudo auto-cpufreq`". And When I run `sudo auto-cpufreq` as suggested, I get an error message that says "`auto-cpufreq: wrong invocation.`"
+ 
+ I'm not sure what I'm doing wrong or how to fix this issue. thanks!
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I'm closing this issue as invalid, first you didn't fill out issue template as you should've. Second issue you're encountaring, it clearly states what you need to do:
+
+```
+Must be run root for this functionality to work, i.e: 
+sudo auto-cpufreq
+```
+
+So you need to run `sudo auto-cpufreq --install` to install auto-cpufreq. 
+
+Template issue ignored and not filled out, hence making this issue invalid, closing. Feel free to re-open this issue with properly filled out requested fields.
+
+Reference:
+
+### Fill out informtion requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+### Error output:
+```text
+Add/paste error output in case of failed installation or other failing component
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+auto-cpufreq --debug
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behavior.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

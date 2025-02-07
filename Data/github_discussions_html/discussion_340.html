@@ -1,0 +1,70 @@
+
+        <html>
+        <head>
+            <title>Discussion #340: What's the correct way of updating?</title>
+        </head>
+        <body>
+            <h1>What's the correct way of updating?</h1>
+            <p><strong>Discussion #340</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>In case we installed it using the `auto-cpufreq-installer`, what's the correct way of updating the app? Just download the new release and run the installer again?
+
+Thanks for the amazing work, by the way!</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Thanks for the amazing work, by the way!
+
+Most welcome!
+
+> In case we installed it using the `auto-cpufreq-installer`, what's the correct way of updating the app? Just download the new release and run the installer again?
+
+Click on "Notifications" button as top of auto-cpufreq repo and subscribe to get notifications you're interested in, whether those are only "releases" or something else is up to you.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ariasmn:</strong></p>
+                    <p>Thank's for the heads up!
+
+But what I really meant is: how can I update the application that I already installed in my computer? For example, right now I'm running the v1.7.2 version, and I want to update to the latest release (v1.9.0). What's the correct way to do so? Uninstall the current version before installing the new one? Just run the installer of the new release?
+
+Don't know if I'm explaining myself, sorry!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Right, you can uninstall just to make sure, but 
+
+```
+git pull
+sudo ./auto-cpufreq-installer --install
+sudo auto-cpufreq --install
+```
+
+Should be enough.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ariasmn:</strong></p>
+                    <p>Nice!
+
+Would be possible to implement a command to automatically update? Something like `sudo auto-cpufreq --update`, that checks if the actual version is the latest and, if not, do the whole updating process?
+
+Don't know if that makes sense or even if it's possible at all.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Sure, create an issue and add `[request]` prefix to its title. 
+
+I probably won't have time to look into this right now, but if you want to give it a try I would definitely invite you to [contribute ](https://github.com/AdnanHodzic/auto-cpufreq#code-contribution)this feature yourself and get credit for it :)</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,358 @@
+
+        <html>
+        <head>
+            <title>Issue #636: CPU temperature sensors show low temperature while CPU is cooking</title>
+        </head>
+        <body>
+            <h1>CPU temperature sensors show low temperature while CPU is cooking</h1>
+            <p><strong>Issue #636</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I ran into constant over temperature issues when running high CPU loads. My CPU seems rather sensitive to overheating and I guess my cooling isn't adequate. I get hangs as soon as my temperature creeps over 100C.
+
+I love that auto-cpufreq will mitigate this. However it just doesn't detect the correct CPU temps.
+
+It sees temperatures of around 60C-ish but in reality I'm at 100C already.
+
+I looked at the code, I see no issue. It's really strange.
+
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+Didn't find anything
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+Not relevant in my env
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+No config options to force temp sensors
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+yes
+
+### Error output:
+
+(This wasn't under load, but the temp section is basically the same. I was worried I will have a crash before I can submit this report.)
+```text
+-------------------------------------------------------------------------------
+
+Linux distro: NixOS 24.05 Uakari
+Linux kernel: 6.1.76
+Processor: AMD Ryzen Threadripper 3960X 24-Core Processor
+Cores: 48
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4200 MHz
+CPU min frequency: 2200 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      0.0%        61 °C      4200 MHz
+CPU1      0.0%        61 °C      4200 MHz
+CPU2      0.0%        61 °C      4200 MHz
+CPU3      1.0%        61 °C      4197 MHz
+CPU4      0.0%        61 °C      4200 MHz
+CPU5      0.0%        61 °C      4200 MHz
+CPU6      0.0%        61 °C      4194 MHz
+CPU7      1.0%        61 °C      4200 MHz
+CPU8      2.0%        61 °C      4200 MHz
+CPU9      0.0%        61 °C      4200 MHz
+CPU10      0.0%        61 °C      4193 MHz
+CPU11      0.0%        61 °C      4200 MHz
+CPU12      0.0%        61 °C      4200 MHz
+CPU13      0.0%        61 °C      4192 MHz
+CPU14      0.0%        61 °C      4200 MHz
+CPU15      5.9%        61 °C      4200 MHz
+CPU16      0.0%        61 °C      4200 MHz
+CPU17      0.0%        61 °C      4196 MHz
+CPU18      0.0%        61 °C      4200 MHz
+CPU19      0.0%        61 °C      4199 MHz
+CPU20      0.0%        61 °C      4200 MHz
+CPU21      0.0%        61 °C      4200 MHz
+CPU22      0.0%        61 °C      4200 MHz
+CPU23      0.0%        61 °C      4200 MHz
+CPU24      1.0%        61 °C      4200 MHz
+CPU25      0.0%        61 °C      4200 MHz
+CPU26      0.0%        61 °C      4200 MHz
+CPU27      0.0%        61 °C      4200 MHz
+CPU28      0.0%        61 °C      4271 MHz
+CPU29      0.0%        61 °C      4200 MHz
+CPU30      2.0%        61 °C      4200 MHz
+CPU31      0.0%        61 °C      4200 MHz
+CPU32      0.0%        61 °C      4200 MHz
+CPU33      0.0%        61 °C      4200 MHz
+CPU34      0.0%        61 °C      4200 MHz
+CPU35      1.0%        61 °C      4199 MHz
+CPU36      0.0%        61 °C      4200 MHz
+CPU37      1.0%        61 °C      4200 MHz
+CPU38      0.0%        61 °C      4200 MHz
+CPU39      0.0%        61 °C      4200 MHz
+CPU40      1.0%        61 °C      4207 MHz
+CPU41      0.0%        61 °C      4200 MHz
+CPU42      0.0%        61 °C      4200 MHz
+CPU43      1.0%        61 °C      4211 MHz
+CPU44      0.0%        61 °C      4194 MHz
+CPU45      0.0%        61 °C      4198 MHz
+CPU46      1.0%        61 °C      4194 MHz
+CPU47      1.0%        61 °C      4200 MHz
+
+CPU fan speed: 1203 RPM
+
+CPU fan speed: 2764 RPM
+
+CPU fan speed: 1496 RPM
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+
+Total CPU usage: 0.4 %
+Total system load: 1.03
+Average temp. of all cores: 61.00 °C 
+
+High CPU load (load average: 1.03, 1.51, 2.31)
+setting turbo boost: on
+
+```
+
+k10temp sensors show 100C. There a
+```text
+
+› sensors
+iwlwifi_1-virtual-0
+Adapter: Virtual device
+temp1:        +41.0°C  
+
+nzxtsmart2-hid-3-c
+Adapter: HID adapter
+FAN 1 Voltage:  12.15 V  
+FAN 2 Voltage:  12.16 V  
+FAN 3 Voltage:  12.19 V  
+FAN 1:         1503 RPM
+FAN 2:         1442 RPM
+FAN 3:            0 RPM
+FAN 1 Current:  81.00 mA 
+FAN 2 Current:  92.00 mA 
+FAN 3 Current: 1000.00 uA 
+
+k10temp-pci-00c3
+Adapter: PCI adapter
+Tctl:        +100.0°C  
+Tccd1:        +91.0°C  
+Tccd3:        +90.5°C  
+Tccd5:       +101.2°C  
+Tccd7:        +88.8°C  
+
+amdgpu-pci-2100
+Adapter: PCI adapter
+vddgfx:      975.00 mV 
+fan1:        1482 RPM  (min = 1800 RPM, max = 6000 RPM)
+edge:         +62.0°C  (crit = +97.0°C, hyst = -273.1°C)
+PPT:          11.07 W  (cap =  25.00 W)
+
+nzxtsmart2-hid-3-d
+Adapter: HID adapter
+FAN 1 Voltage:  12.15 V  
+FAN 2 Voltage:   0.00 V  
+FAN 3 Voltage:   0.00 V  
+FAN 1:            0 RPM
+FAN 2:            0 RPM
+FAN 3:            0 RPM
+FAN 1 Current:   0.00 A  
+FAN 2 Current:   0.00 A  
+FAN 3 Current:   0.00 A  
+
+kraken3-hid-3-b
+Adapter: HID adapter
+Pump:        2790 RPM
+Coolant:      +41.4°C  
+
+nvme-pci-0100
+Adapter: PCI adapter
+Composite:    +41.9°C  (low  =  -0.1°C, high = +69.8°C)
+                       (crit = +84.8°C)
+
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+› sudo auto-cpufreq --debug
+
+-------------------------------------------------------------------------------
+
+Linux distro: NixOS 24.05 Uakari
+Linux kernel: 6.1.76
+Processor: AMD Ryzen Threadripper 3960X 24-Core Processor
+Cores: 48
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4200 MHz
+CPU min frequency: 2200 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      2.0%        61 °C      4200 MHz
+CPU1      5.1%        61 °C      4200 MHz
+CPU2      0.0%        61 °C      4200 MHz
+CPU3      1.0%        61 °C      4200 MHz
+CPU4      0.0%        61 °C      4200 MHz
+CPU5      0.0%        61 °C      4200 MHz
+CPU6      0.0%        61 °C      4201 MHz
+CPU7      0.0%        61 °C      4200 MHz
+CPU8      0.0%        61 °C      4200 MHz
+CPU9      0.0%        61 °C      4200 MHz
+CPU10      0.0%        61 °C      4200 MHz
+CPU11      0.0%        61 °C      4200 MHz
+CPU12      1.0%        61 °C      4200 MHz
+CPU13      0.0%        61 °C      4200 MHz
+CPU14      0.0%        61 °C      4186 MHz
+CPU15      0.0%        61 °C      4204 MHz
+CPU16      0.0%        61 °C      4201 MHz
+CPU17      0.0%        61 °C      4200 MHz
+CPU18      0.0%        61 °C      4200 MHz
+CPU19      0.0%        61 °C      4200 MHz
+CPU20      1.0%        61 °C      4200 MHz
+CPU21      0.0%        61 °C      4200 MHz
+CPU22      0.0%        61 °C      4200 MHz
+CPU23      1.0%        61 °C      4200 MHz
+CPU24      1.0%        61 °C      4200 MHz
+CPU25      0.0%        61 °C      4200 MHz
+CPU26      1.0%        61 °C      4200 MHz
+CPU27      0.0%        61 °C      4200 MHz
+CPU28      0.0%        61 °C      4200 MHz
+CPU29      0.0%        61 °C      4200 MHz
+CPU30      0.0%        61 °C      4200 MHz
+CPU31      0.0%        61 °C      4200 MHz
+CPU32      1.0%        61 °C      4200 MHz
+CPU33      0.0%        61 °C      4200 MHz
+CPU34      0.0%        61 °C      4200 MHz
+CPU35      2.0%        61 °C      4200 MHz
+CPU36      0.0%        61 °C      4198 MHz
+CPU37      1.0%        61 °C      4200 MHz
+CPU38      0.0%        61 °C      4196 MHz
+CPU39      0.0%        61 °C      4200 MHz
+CPU40      0.0%        61 °C      4200 MHz
+CPU41      0.0%        61 °C      4200 MHz
+CPU42      0.0%        61 °C      4200 MHz
+CPU43      0.0%        61 °C      4200 MHz
+CPU44      0.0%        61 °C      4200 MHz
+CPU45      0.0%        61 °C      4200 MHz
+CPU46      1.0%        61 °C      4200 MHz
+CPU47      0.0%        61 °C      4200 MHz
+
+CPU fan speed: 1198 RPM
+
+CPU fan speed: 2790 RPM
+
+CPU fan speed: 1492 RPM
+
+auto-cpufreq version: 1.9.9
+Git commit: v1.9.9
+
+Python: 3.11.7
+psutil package: 5.9.6
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.8.0
+
+Computer type: /nix/store/cjbyb45nxiqidj95c4k1mh65azn1x896-bash-5.2-p21/bin/sh: line 1: dmidecode: command not found
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.04 %
+
+Total CPU usage: 0.4 %
+Total system load: 0.46
+Average temp. of all cores: 61.00 °C 
+
+Currently using: performance governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+```
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>tbaumann:</strong></p>
+                    <p>Is the issue perhaps "k10temp" vs "amdgpu-pci-2100" in https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto_cpufreq/core.py#L1281C42-L1281C51 ?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>tbaumann:</strong></p>
+                    <p>The python package used returns this structure
+
+```python
+{'amdgpu': [shwtemp(label='edge', current=62.0, high=97.0, critical=97.0)], 'nvme': [shwtemp(label='Composite', current=40.85, high=69.85, critical=84.85)], 'k10temp': [shwtemp(label='Tctl', current=49.125, high=None, critical=None), shwtemp(label='Tccd1', current=39.5, high=None, critical=None), shwtemp(label='Tccd3', current=41.75, high=None, critical=None), shwtemp(label='Tccd5', current=40.25, high=None, critical=None), shwtemp(label='Tccd7', current=40.5, high=None, critical=None)], 'kraken3': [shwtemp(label='Coolant', current=35.0, high=None, critical=None)], 'iwlwifi_1': [shwtemp(label='', current=41.0, high=None, critical=None)]}
+```
+It contains k10temp</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>tbaumann:</strong></p>
+                    <p>The temperatures loaded by psutil are unsurprisingly accurate
+
+```python
+print(psutil.sensors_temperatures()['k10temp'][0].current )
+90.75
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>tbaumann:</strong></p>
+                    <p>Nevermind. The nixpackages code is just very old
+
+```python
+
+    # temperatures
+    core_temp = psutil.sensors_temperatures()
+    temp_per_cpu = [float("nan")] * online_cpu_count
+    try:
+        if "coretemp" in core_temp:
+            # list labels in 'coretemp'
+            core_temp_labels = [temp.label for temp in core_temp["coretemp"]]
+            for i, cpu in enumerate(cpu_core):
+                # get correct index in core_temp
+                core = cpu_core[cpu]
+                cpu_temp_index = core_temp_labels.index(f"Core {core}")
+                temp_per_cpu[i] = core_temp["coretemp"][cpu_temp_index].current
+        else:
+            # iterate over all sensors
+            for sensor in core_temp:
+                # iterate over all temperatures in the current sensor
+                for temp in core_temp[sensor]:
+                    if temp.label == 'CPU':
+                        temp_per_cpu = [temp.current] * online_cpu_count
+                        break
+                else:
+                    continue
+                break
+            else: # if 'CPU' label not found in any sensor, use first available temperature
+                temp = list(core_temp.keys())[0]
+                temp_per_cpu = [core_temp[temp][0].current] * online_cpu_count
+    except Exception as e:
+        print(repr(e))
+        pass
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>tbaumann:</strong></p>
+                    <p>Works with the flake</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

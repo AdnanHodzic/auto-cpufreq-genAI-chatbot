@@ -1,0 +1,217 @@
+
+        <html>
+        <head>
+            <title>Issue #480: Should --force work or the documentation is not updated?</title>
+        </head>
+        <body>
+            <h1>Should --force work or the documentation is not updated?</h1>
+            <p><strong>Issue #480</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+### Error output:
+```text
+❯ doas auto-cpufreq --force=performance
+Usage: auto-cpufreq [OPTIONS]
+Try 'auto-cpufreq --help' for help.
+
+Error: No such option: --force
+
+❯ doas auto-cpufreq --force="performance"
+Usage: auto-cpufreq [OPTIONS]
+Try 'auto-cpufreq --help' for help.
+
+Error: No such option: --force
+
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+ doas auto-cpufreq --debug
+
+-------------------------------------------------------------------------------
+
+Linux distro: Fedora Linux 37 Workstation Edition
+Linux kernel: 6.1.8-200.fc37.x86_64
+Processor: Intel(R) Core(TM) i3-3217U CPU @ 1.80GHz
+Cores: 4
+Architecture: x86_64
+Driver: intel_cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1800 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  6.1%     52 °C     1796 MHz
+CPU1:	  7.9%     52 °C     1796 MHz
+CPU2:	  8.0%     51 °C     1796 MHz
+CPU3:	  8.1%     51 °C     1796 MHz
+
+auto-cpufreq version: 1.9.7
+
+Python: 3.11.1
+psutil package: 5.9.4
+platform package: 1.0.8
+click package: 8.1.3
+distro package: 1.8.0
+
+Computer type: Laptop
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.73 %
+
+Total CPU usage: 39.8 %
+Total system load: 0.97
+Average temp. of all cores: 51.50 °C 
+
+Currently using: performance governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+
+
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Have you pulled the lastest commits?
+
+Also run `auto-cpufreq --help` and see if it shows the flag as an option</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Have you pulled the lastest commits?
+> 
+> Also run `auto-cpufreq --help` and see if it shows the flag as an option
+
+Yes, please pull latest changes (as I just merged some new changes which might fix your issue few minutes ago).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>msmafra:</strong></p>
+                    <p>```
+❯ doas auto-cpufreq --help
+Usage: auto-cpufreq [OPTIONS]
+
+Options:
+  --monitor              Monitor and see suggestions for CPU optimizations
+  --live                 Monitor and make (temp.) suggested CPU optimizations
+  --install / --remove   Install/remove daemon for (permanent) automatic CPU
+                         optimizations
+  --install_performance  Install daemon in "performance" mode, reference:
+                         https://bit.ly/3bjVZW1
+  --stats                View live stats of CPU optimizations made by daemon
+  --config TEXT          Use config file at defined path
+  --debug                Show debug info (include when submitting bugs)
+  --version              Show currently installed version
+  --donate               Support the project
+  --help                 Show this message and exit.
+
+❯ doas auto-cpufreq --version
+
+-------------------------------------------------------------------------------
+
+Linux distro: Fedora Linux 37 Workstation Edition
+Linux kernel: 6.1.8-200.fc37.x86_64
+auto-cpufreq version: 1.9.7
+
+-------------------------------------------------------------------------------
+
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>It seems like you're not running the latest version. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>msmafra:</strong></p>
+                    <p>Yep. Not the latest beta version. Just installed and there it is --force. Thx
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>r100-stack:</strong></p>
+                    <p>I just downloaded this tool from the snap store (I think version `1.9.7`) and got this same error.
+
+```bash
+$ sudo auto-cpufreq --live --force=powersave
+Usage: auto-cpufreq [OPTIONS]
+Try 'auto-cpufreq --help' for help.
+
+Error: No such option: --force
+```
+
+```bash
+$ auto-cpufreq --help
+Usage: auto-cpufreq [OPTIONS]
+
+Options:
+  --monitor              Monitor and see suggestions for CPU optimizations
+  --live                 Monitor and make (temp.) suggested CPU optimizations
+  --install / --remove   Install/remove daemon for (permanent) automatic CPU
+                         optimizations
+  --install_performance  Install daemon in "performance" mode, reference:
+                         https://bit.ly/3bjVZW1
+  --stats                View live stats of CPU optimizations made by daemon
+  --config TEXT          Use config file at defined path
+  --debug                Show debug info (include when submitting bugs)
+  --version              Show currently installed version
+  --donate               Support the project
+  --help                 Show this message and exit.
+```
+
+Then when I uninstalled the snap version and installed it by cloning this repo, `--force` started working.
+
+```bash
+$ auto-cpufreq --help
+Usage: auto-cpufreq [OPTIONS]
+
+Options:
+  --monitor      Monitor and see suggestions for CPU optimizations
+  --live         Monitor and make (temp.) suggested CPU optimizations
+  --install      Install daemon for (permanent) automatic CPU optimizations
+  --remove       Remove daemon for (permanent) automatic CPU optimizations
+  --stats        View live stats of CPU optimizations made by daemon
+  --force TEXT   Force use of either "powersave" or "performance" governors.
+                 Setting to "reset" will go back to normal mode
+  --config TEXT  Use config file at defined path
+  --debug        Show debug info (include when submitting bugs)
+  --version      Show currently installed version
+  --donate       Support the project
+  --help         Show this message and exit.
+```
+
+Just sharing what I encountered since I noticed this issue was closed one month ago but this issue still exists for the snap version.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

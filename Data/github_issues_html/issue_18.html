@@ -1,0 +1,47 @@
+
+        <html>
+        <head>
+            <title>Issue #18: Traceback when launching</title>
+        </head>
+        <body>
+            <h1>Traceback when launching</h1>
+            <p><strong>Issue #18</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I receive this traceback when running `sudo python3 auto-cpufreq.py`
+
+`Traceback (most recent call last):
+  File "auto-cpufreq.py", line 382, in <module>
+    @click.option("--daemon", is_flag=True, hidden=True)
+  File "/usr/lib/python3/dist-packages/click/decorators.py", line 170, in decorator
+    _param_memo(f, OptionClass(param_decls, **attrs))
+  File "/usr/lib/python3/dist-packages/click/core.py", line 1460, in __init__
+    Parameter.__init__(self, param_decls, type=type, **attrs)
+TypeError: __init__() got an unexpected keyword argument 'hidden'
+`</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Exorust:</strong></p>
+                    <p>You need to update your click version. Please see issue #4 .</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Yes, this is correct, please do what @Exorust suggested.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>marc-vdm:</strong></p>
+                    <p>Thanks, that solved it, as was mentioned in #4 the instructions should indeed be updated, I'm pretty sure its possible to attach library versions to install commands. In conda its something like:
+`conda install PACKAGE -vx.y`
+
+edit: I suck at md</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

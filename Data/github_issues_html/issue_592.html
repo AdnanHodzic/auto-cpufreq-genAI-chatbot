@@ -1,0 +1,158 @@
+
+        <html>
+        <head>
+            <title>Issue #592:  /etc/auto-cpufreq.conf working only in --live mode, not if auto-cpufreq runs as service (OpenSuse)</title>
+        </head>
+        <body>
+            <h1> /etc/auto-cpufreq.conf working only in --live mode, not if auto-cpufreq runs as service (OpenSuse)</h1>
+            <p><strong>Issue #592</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>If I install the tool with --install, my /etc/auto-cpufreq.conf is basically ignored.
+The output says otherwise, but the settings are only applied if I test with --live
+
+```
+localhost:~> sudo auto-cpufreq --debug
+
+Using settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------------------------------------------------------
+
+Linux distro: openSUSE Tumbleweed UNKNOWN version
+Linux kernel: 6.4.12-1-default
+Processor: 12th Gen Intel(R) Core(TM) i5-1240P
+Cores: 16
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2101 MHz
+CPU min frequency: 400 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0      1.0%        47 °C      1538 MHz
+CPU1      3.0%        47 °C      2101 MHz
+CPU2      0.0%        43 °C      1683 MHz
+CPU3      2.0%        43 °C      2101 MHz
+CPU4      3.0%        42 °C      2101 MHz
+CPU5      1.0%        42 °C      2101 MHz
+CPU6      1.0%        44 °C      2101 MHz
+CPU7      0.0%        44 °C      1658 MHz
+CPU8      1.0%        42 °C      2101 MHz
+CPU9      0.0%        42 °C      2101 MHz
+CPU10      0.0%        44 °C      2101 MHz
+CPU11      0.0%        44 °C      2101 MHz
+CPU12      0.0%        43 °C      2101 MHz
+CPU13      0.0%        42 °C      2101 MHz
+CPU14      0.0%        42 °C      2101 MHz
+CPU15      1.0%        42 °C      2101 MHz
+
+auto-cpufreq version: (Snap) 2.0.0
+
+Python: 3.10.12
+psutil package: 5.9.5
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.8.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.04 %
+
+Total CPU usage: 0.6 %
+Total system load: 0.95
+Average temp. of all cores: 43.31 °C 
+
+Currently using: performance governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+
+```</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>dgrat:</strong></p>
+                    <p>```
+# settings for when connected to a power source
+[charger]
+governor = schedutil
+scaling_min_freq = 400000
+scaling_max_freq = 2000000
+turbo = auto
+
+# settings for when using battery power
+[battery]
+governor = powersave
+scaling_min_freq = 400000
+scaling_max_freq = 2000000
+turbo = never
+
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Have you tried restarting after creating the config file? I remember that for changes to be picked up auto-cpufreq process had to be stopped (an improvement could be made regarding this of course).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>dgrat:</strong></p>
+                    <p>Hi there
+Restarting the service is not helping. It applies the config only in live mode.
+I think it would be helpful to add some error output to --debug, regarding if and which settings really have been applied.
+On the first glance everything looks like it should work :D 
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Animeshz:</strong></p>
+                    <p>I recently noticed this, after update to `nixos-23.11` channel at v1.9.9, (prior `nixos-23.05` at v1.7.1 was working fine). I'll bisect and see if I can find anything.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>dgrat:</strong></p>
+                    <p>I tested a little more with current snap image.. When I run 
+sudo auto-cpufreq --live
+sudo auto-cpufreq --install 
+It works till restart.  After reboot, the settings are _not_ applied anymore. 
+
+It will work again with
+sudo auto-cpufreq --remove
+sudo auto-cpufreq --live
+
+I think it is pretty reproducible at least on my system
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Animeshz:</strong></p>
+                    <p>Well it turns out after updating the whole system and everything installing from latest commit last week, it somehow started working. I'm not sure what happened, and what caused it earlier to misbehave. Since I can't reproduce the behavior I'll say this may have been fixed in between the releases and latest commit.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Please make sure to use the [latest version and preferably use auto-cpufreq-installer.](https://github.com/AdnanHodzic/auto-cpufreq/?tab=readme-ov-file#auto-cpufreq-installer)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>dgrat:</strong></p>
+                    <p>I tested 2.1 and installed from git repo (not snap). Seems to work again .. 
+So 2.0 via snap has the issue ..</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Great, closing the issue then.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

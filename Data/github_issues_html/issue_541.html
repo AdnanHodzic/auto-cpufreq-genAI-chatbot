@@ -1,0 +1,104 @@
+
+        <html>
+        <head>
+            <title>Issue #541: Available min freq and used cores count</title>
+        </head>
+        <body>
+            <h1>Available min freq and used cores count</h1>
+            <p><strong>Issue #541</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Saw that typical freq for battery usage is ~800-1000 MHz
+
+So I wanted to try it out on my Ryzen 7 4800h
+### I have tried 
+1)  edit the grub config file as in troubleshooting
+2)  edit the config file
+
+### Info:
+Using settings defined in /etc/auto-cpufreq.conf file
+-------------------------------------------------------------------------------
+
+Linux distro: Fedora Linux 38 Workstation Edition
+Linux kernel: 6.4.9-200.fc38.x86_64
+Processor: AMD Ryzen 7 4800H with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2900 MHz
+CPU min frequency: 1400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      6.1%        40 °C      1400 MHz
+CPU1      0.0%        40 °C      1400 MHz
+CPU2      0.0%        40 °C      1397 MHz
+CPU3      1.0%        40 °C      1400 MHz
+CPU4      1.0%        40 °C      1400 MHz
+CPU5      1.0%        40 °C      1400 MHz
+CPU6      2.0%        40 °C      1400 MHz
+CPU7      0.0%        40 °C      1400 MHz
+CPU8     32.0%        40 °C      1400 MHz
+CPU9      0.0%        40 °C      1400 MHz
+CPU10      3.0%        40 °C      1400 MHz
+CPU11      2.0%        40 °C      1397 MHz
+CPU12      3.1%        40 °C      1400 MHz
+CPU13      1.0%        40 °C      1400 MHz
+CPU14      4.0%        40 °C      1397 MHz
+CPU15      0.0%        40 °C      1400 MHz
+
+CPU fan speed: 2200 RPM
+
+auto-cpufreq version: 1.9.8 (git: 8fbb9480)
+
+Python: 3.11.4
+psutil package: 5.9.5
+platform package: 1.0.8
+click package: 8.1.6
+distro package: 1.8.0
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.22 %
+
+Total CPU usage: 2.9 %
+Total system load: 1.96
+Average temp. of all cores: 40.00 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+
+So, is it available with some hacks set the minimum freq to 900MHz on my CPU? 
+
+And what about disabling some cores? Like if I have 8 of them, then on the battery turn off 2-4 of them.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Hi, can you please share the contents of your config file located at ```/etc/auto-cpufreq.conf```
+Also there is no way to turn off individual CPU cores</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>evertvorster:</strong></p>
+                    <p>The base frequency of your CPU is 2900MHz. This is a hardware limit and it cannot go slower.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing the issue due to inactivity.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

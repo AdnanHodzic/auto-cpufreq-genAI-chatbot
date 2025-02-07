@@ -1,0 +1,284 @@
+
+        <html>
+        <head>
+            <title>Issue #577: Can't install `auto-cpufreq` on Void Linux</title>
+        </head>
+        <body>
+            <h1>Can't install `auto-cpufreq` on Void Linux</h1>
+            <p><strong>Issue #577</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted?
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+### Error output:
+```text
+/usr/local/bin/auto-cpufreq: 42: /opt/auto-cpufreq/venv/bin/activate: OSTYPE: parameter not set
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+$ auto-cpufreq --debug
+/usr/local/bin/auto-cpufreq: 42: /opt/auto-cpufreq/venv/bin/activate: OSTYPE: parameter not set
+```
+Tried to use install script as sudo and then run `auto-cpufreq`, but I keep getting this error despite trying to remove and reinstall.
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ElijaRock:</strong></p>
+                    <p>Sorry, I should include the install details:
+
+```
+────────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+Detected Void Linux distribution
+
+
+────────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+Setting up Python environment
+
+[*] Updating repository `https://mirrors.servercentral.com/voidlinux/current/x86_64-repodata' ...
+[*] Updating repository `https://repo-default.voidlinux.org/current/multilib/nonfree/x86_64-repodata' ...
+[*] Updating repository `https://repo-default.voidlinux.org/current/multilib/x86_64-repodata' ...
+[*] Updating repository `https://repo-default.voidlinux.org/current/nonfree/x86_64-repodata' ...
+Package `python3' already installed.
+Package `python3-pip' already installed.
+Package `python3-devel' already installed.
+Package `python3-setuptools' already installed.
+Package `base-devel' already installed.
+Package `dmidecode' already installed.
+Package `cairo-devel' already installed.
+Package `gobject-introspection' already installed.
+Package `gcc' already installed.
+Package `gtk+3' already installed.
+
+Installing necessary Python packages
+
+DEPRECATION: Loading egg at /opt/auto-cpufreq/venv/lib/python3.12/site-packages/auto_cpufreq-2.0.0+64b11ab0-py3.12.egg is deprecated. pip 23.3 will enforce this behaviour change. A possible replacement is to use pip for package installation..
+Requirement already satisfied: pip in /opt/auto-cpufreq/venv/lib/python3.12/site-packages (23.2.1)
+Requirement already satisfied: wheel in /opt/auto-cpufreq/venv/lib/python3.12/site-packages (0.41.2)
+DEPRECATION: Loading egg at /opt/auto-cpufreq/venv/lib/python3.12/site-packages/auto_cpufreq-2.0.0+64b11ab0-py3.12.egg is deprecated. pip 23.3 will enforce this behaviour change. A possible replacement is to use pip for package installation..
+Requirement already satisfied: setuptools in /opt/auto-cpufreq/venv/lib/python3.12/site-packages (from -r requirements.txt (line 1)) (68.2.2)
+Requirement already satisfied: psutil in /opt/auto-cpufreq/venv/lib/python3.12/site-packages (from -r requirements.txt (line 2)) (5.9.5)
+Requirement already satisfied: click in /opt/auto-cpufreq/venv/lib/python3.12/site-packages (from -r requirements.txt (line 3)) (8.1.7)
+Requirement already satisfied: distro in /opt/auto-cpufreq/venv/lib/python3.12/site-packages (from -r requirements.txt (line 4)) (1.8.0)
+Requirement already satisfied: requests in /opt/auto-cpufreq/venv/lib/python3.12/site-packages (from -r requirements.txt (line 5)) (2.31.0)
+Requirement already satisfied: PyGObject in /opt/auto-cpufreq/venv/lib/python3.12/site-packages (from -r requirements.txt (line 6)) (3.46.0)
+Requirement already satisfied: charset-normalizer<4,>=2 in /opt/auto-cpufreq/venv/lib/python3.12/site-packages (from requests->-r requirements.txt (line 5)) (3.3.0)
+Requirement already satisfied: idna<4,>=2.5 in /opt/auto-cpufreq/venv/lib/python3.12/site-packages (from requests->-r requirements.txt (line 5)) (3.4)
+Requirement already satisfied: urllib3<3,>=1.21.1 in /opt/auto-cpufreq/venv/lib/python3.12/site-packages (from requests->-r requirements.txt (line 5)) (2.0.6)
+Requirement already satisfied: certifi>=2017.4.17 in /opt/auto-cpufreq/venv/lib/python3.12/site-packages (from requests->-r requirements.txt (line 5)) (2023.7.22)
+Requirement already satisfied: pycairo>=1.16.0 in /opt/auto-cpufreq/venv/lib/python3.12/site-packages (from PyGObject->-r requirements.txt (line 6)) (1.25.0)
+
+
+────────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+installing auto-cpufreq tool
+
+/opt/auto-cpufreq/venv/lib/python3.12/site-packages/setuptools/__init__.py:80: _DeprecatedInstaller: setuptools.installer and fetch_build_eggs are deprecated.
+!!
+
+        ********************************************************************************
+        Requirements should be satisfied by a PEP 517 installer.
+        If you are using pip, you can try `pip install --use-pep517`.
+        ********************************************************************************
+
+!!
+  dist.fetch_build_eggs(dist.setup_requires)
+running install
+/opt/auto-cpufreq/venv/lib/python3.12/site-packages/setuptools/_distutils/cmd.py:66: SetuptoolsDeprecationWarning: setup.py install is deprecated.
+!!
+
+        ********************************************************************************
+        Please avoid running ``setup.py`` directly.
+        Instead, use pypa/build, pypa/installer or other
+        standards-based tools.
+
+        See https://blog.ganssle.io/articles/2021/10/setup-py-deprecated.html for details.
+        ********************************************************************************
+
+!!
+  self.initialize_options()
+/opt/auto-cpufreq/venv/lib/python3.12/site-packages/setuptools/_distutils/cmd.py:66: EasyInstallDeprecationWarning: easy_install command is deprecated.
+!!
+
+        ********************************************************************************
+        Please avoid running ``setup.py`` and ``easy_install``.
+        Instead, use pypa/build, pypa/installer or other
+        standards-based tools.
+
+        See https://github.com/pypa/setuptools/issues/917 for details.
+        ********************************************************************************
+
+!!
+  self.initialize_options()
+running bdist_egg
+running egg_info
+writing auto_cpufreq.egg-info/PKG-INFO
+writing dependency_links to auto_cpufreq.egg-info/dependency_links.txt
+writing requirements to auto_cpufreq.egg-info/requires.txt
+writing top-level names to auto_cpufreq.egg-info/top_level.txt
+reading manifest file 'auto_cpufreq.egg-info/SOURCES.txt'
+adding license file 'LICENSE'
+writing manifest file 'auto_cpufreq.egg-info/SOURCES.txt'
+installing library code to build/bdist.linux-x86_64/egg
+running install_lib
+running build_py
+creating build/bdist.linux-x86_64/egg
+creating build/bdist.linux-x86_64/egg/auto_cpufreq
+copying build/lib/auto_cpufreq/__init__.py -> build/bdist.linux-x86_64/egg/auto_cpufreq
+copying build/lib/auto_cpufreq/tlp_stat_parser.py -> build/bdist.linux-x86_64/egg/auto_cpufreq
+copying build/lib/auto_cpufreq/core.py -> build/bdist.linux-x86_64/egg/auto_cpufreq
+copying build/lib/auto_cpufreq/power_helper.py -> build/bdist.linux-x86_64/egg/auto_cpufreq
+creating build/bdist.linux-x86_64/egg/auto_cpufreq/gui
+copying build/lib/auto_cpufreq/gui/objects.py -> build/bdist.linux-x86_64/egg/auto_cpufreq/gui
+copying build/lib/auto_cpufreq/gui/app.py -> build/bdist.linux-x86_64/egg/auto_cpufreq/gui
+copying build/lib/auto_cpufreq/gui/tray.py -> build/bdist.linux-x86_64/egg/auto_cpufreq/gui
+copying build/lib/auto_cpufreq/gui/__init__.py -> build/bdist.linux-x86_64/egg/auto_cpufreq/gui
+byte-compiling build/bdist.linux-x86_64/egg/auto_cpufreq/__init__.py to __init__.cpython-312.pyc
+byte-compiling build/bdist.linux-x86_64/egg/auto_cpufreq/tlp_stat_parser.py to tlp_stat_parser.cpython-312.pyc
+byte-compiling build/bdist.linux-x86_64/egg/auto_cpufreq/core.py to core.cpython-312.pyc
+build/bdist.linux-x86_64/egg/auto_cpufreq/core.py:152: SyntaxWarning: invalid escape sequence '\('
+  print(getoutput("echo \(Snap\) $SNAP_VERSION"))
+byte-compiling build/bdist.linux-x86_64/egg/auto_cpufreq/power_helper.py to power_helper.cpython-312.pyc
+byte-compiling build/bdist.linux-x86_64/egg/auto_cpufreq/gui/objects.py to objects.cpython-312.pyc
+build/bdist.linux-x86_64/egg/auto_cpufreq/gui/objects.py:35: SyntaxWarning: invalid escape sequence '\('
+  return getoutput("echo \(Snap\) $SNAP_VERSION")
+byte-compiling build/bdist.linux-x86_64/egg/auto_cpufreq/gui/app.py to app.cpython-312.pyc
+byte-compiling build/bdist.linux-x86_64/egg/auto_cpufreq/gui/tray.py to tray.cpython-312.pyc
+byte-compiling build/bdist.linux-x86_64/egg/auto_cpufreq/gui/__init__.py to __init__.cpython-312.pyc
+creating build/bdist.linux-x86_64/egg/EGG-INFO
+installing scripts to build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+running install_scripts
+running build_scripts
+creating build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+copying build/scripts-3.12/auto-cpufreq -> build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+copying build/scripts-3.12/auto-cpufreq-gtk -> build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+changing mode of build/bdist.linux-x86_64/egg/EGG-INFO/scripts/auto-cpufreq to 755
+changing mode of build/bdist.linux-x86_64/egg/EGG-INFO/scripts/auto-cpufreq-gtk to 755
+copying auto_cpufreq.egg-info/PKG-INFO -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying auto_cpufreq.egg-info/SOURCES.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying auto_cpufreq.egg-info/dependency_links.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying auto_cpufreq.egg-info/requires.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying auto_cpufreq.egg-info/top_level.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying auto_cpufreq.egg-info/zip-safe -> build/bdist.linux-x86_64/egg/EGG-INFO
+creating 'dist/auto_cpufreq-2.0.0+64b11ab0-py3.12.egg' and adding 'build/bdist.linux-x86_64/egg' to it
+removing 'build/bdist.linux-x86_64/egg' (and everything under it)
+Processing auto_cpufreq-2.0.0+64b11ab0-py3.12.egg
+Removing /opt/auto-cpufreq/venv/lib/python3.12/site-packages/auto_cpufreq-2.0.0+64b11ab0-py3.12.egg
+Copying auto_cpufreq-2.0.0+64b11ab0-py3.12.egg to /opt/auto-cpufreq/venv/lib/python3.12/site-packages
+Adding auto-cpufreq 2.0.0+64b11ab0 to easy-install.pth file
+Installing auto-cpufreq script to /opt/auto-cpufreq/venv/bin
+Installing auto-cpufreq-gtk script to /opt/auto-cpufreq/venv/bin
+
+Installed /opt/auto-cpufreq/venv/lib/python3.12/site-packages/auto_cpufreq-2.0.0+64b11ab0-py3.12.egg
+Processing dependencies for auto-cpufreq==2.0.0+64b11ab0
+Searching for PyGObject==3.46.0
+Best match: PyGObject 3.46.0
+Adding PyGObject 3.46.0 to easy-install.pth file
+
+Using /opt/auto-cpufreq/venv/lib/python3.12/site-packages
+Searching for requests==2.31.0
+Best match: requests 2.31.0
+Adding requests 2.31.0 to easy-install.pth file
+
+Using /opt/auto-cpufreq/venv/lib/python3.12/site-packages
+Searching for distro==1.8.0
+Best match: distro 1.8.0
+Adding distro 1.8.0 to easy-install.pth file
+Installing distro script to /opt/auto-cpufreq/venv/bin
+
+Using /opt/auto-cpufreq/venv/lib/python3.12/site-packages
+Searching for click==8.1.7
+Best match: click 8.1.7
+Adding click 8.1.7 to easy-install.pth file
+
+Using /opt/auto-cpufreq/venv/lib/python3.12/site-packages
+Searching for psutil==5.9.5
+Best match: psutil 5.9.5
+Adding psutil 5.9.5 to easy-install.pth file
+
+Using /opt/auto-cpufreq/venv/lib/python3.12/site-packages
+Searching for setuptools==68.2.2
+Best match: setuptools 68.2.2
+Adding setuptools 68.2.2 to easy-install.pth file
+
+Using /opt/auto-cpufreq/venv/lib/python3.12/site-packages
+Searching for pycairo==1.25.0
+Best match: pycairo 1.25.0
+Adding pycairo 1.25.0 to easy-install.pth file
+
+Using /opt/auto-cpufreq/venv/lib/python3.12/site-packages
+Searching for certifi==2023.7.22
+Best match: certifi 2023.7.22
+Adding certifi 2023.7.22 to easy-install.pth file
+
+Using /opt/auto-cpufreq/venv/lib/python3.12/site-packages
+Searching for urllib3==2.0.6
+Best match: urllib3 2.0.6
+Adding urllib3 2.0.6 to easy-install.pth file
+
+Using /opt/auto-cpufreq/venv/lib/python3.12/site-packages
+Searching for idna==3.4
+Best match: idna 3.4
+Adding idna 3.4 to easy-install.pth file
+
+Using /opt/auto-cpufreq/venv/lib/python3.12/site-packages
+Searching for charset-normalizer==3.3.0
+Best match: charset-normalizer 3.3.0
+Adding charset-normalizer 3.3.0 to easy-install.pth file
+Installing normalizer script to /opt/auto-cpufreq/venv/bin
+
+Using /opt/auto-cpufreq/venv/lib/python3.12/site-packages
+Finished processing dependencies for auto-cpufreq==2.0.0+64b11ab0
+writing list of installed files to 'files.txt'
+
+
+────────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+auto-cpufreq tool successfully installed.
+
+For list of options, run:
+auto-cpufreq --help"
+
+
+────────────────────────────────────────────────────────────────────────────────────────────────────
+
+❯ auto-cpufreq --help
+/usr/local/bin/auto-cpufreq: 42: /opt/auto-cpufreq/venv/bin/activate: OSTYPE: parameter not set
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Fixed with PR #578, thanks for bringing this up.
+
+You might still be receiving a deprecation warning when running commands but this doesn't affect any of the functionality. It is just a warning. This should be fixed after #576 is merged.
+
+Please pull the latest changes and run the installer script.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

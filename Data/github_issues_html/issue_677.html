@@ -1,0 +1,140 @@
+
+        <html>
+        <head>
+            <title>Issue #677: Issue with auto-cpufreq-gtk when packaged as RPM</title>
+        </head>
+        <body>
+            <h1>Issue with auto-cpufreq-gtk when packaged as RPM</h1>
+            <p><strong>Issue #677</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? Yes
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)? N/A
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)? N/A
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)? N/A
+
+### Error output:
+```text
+There aren't any error logs
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+auto-cpufreq --debug
+
+Using settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------------------------------------------------------
+
+Linux distro: Fedora Linux 39 Silverblue
+Linux kernel: 6.8.4-200.fc39.x86_64
+Processor: 11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4200 MHz
+CPU min frequency: 400 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0     10.3%        58 °C      3405 MHz
+CPU1      4.0%        59 °C      3324 MHz
+CPU2      6.1%        57 °C      1071 MHz
+CPU3      4.1%        54 °C      2551 MHz
+CPU4     10.8%        58 °C      3451 MHz
+CPU5      8.0%        59 °C      3788 MHz
+CPU6      4.0%        57 °C      3659 MHz
+CPU7      6.1%        54 °C      2961 MHz
+
+auto-cpufreq version: 1 (git: )
+
+Python: 3.12.2
+psutil package: 5.9.5
+platform package: 1.0.8
+click package: 8.1.3
+distro package: 1.8.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.05 %
+
+Total CPU usage: 6.0 %
+Total system load: 0.61
+Average temp. of all cores: 57.00 °C 
+
+Currently using: performance governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+---
+
+I'm trying to use auto-cpufreq on a Fedora Silverblue 39 setup. I was able to figure out making a spec file to create an RPM: https://copr-dist-git.fedorainfracloud.org/cgit/sweetbeans/cabos/auto-cpufreq.git/tree/auto-cpufreq.spec
+
+And added the compiled package to my COPR repo: https://copr.fedorainfracloud.org/coprs/sweetbeans/cabos/package/auto-cpufreq
+
+auto-cpufreq seems to run perfectly for me, but trying to run `auto-cpufreq-gtk` just crashes silently. I can't find logs or anything anywhere. What can I do to diagnose what is causing the crash?</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Yeah I installed the .rpm in a container and got the same result.
+I'm not very familiar with RPM but is there a reason you don't just use the installer script?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>m0ngr31:</strong></p>
+                    <p>> I'm not very familiar with RPM but is there a reason you don't just use the installer script?
+
+I'm using an immutable OS - and I guess going a step farther, it's a spin of Silverblue with everything customized out of the box (https://github.com/jitcos/cabos), so I wasn't able to use the installer script in my build process unfortunately</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@m0ngr31 auto-cpufreq works fine, it's only auto-cpufreq-gtk that's causing the issue?
+
+Could you give us the output of: `grep auto-cpufreq-gtk /var/log/syslog`? Another option is `strace auto-cpufreq-gtk` but not sure how useful this one will be in this case.
+
+Also, have you seen #601 as it could be relating to the same issue.
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>m0ngr31:</strong></p>
+                    <p>@AdnanHodzic yeah, regular `auto-cpufreq` works fine, it's just gtk that has the issue. I did see #601, but it I'm able to modify the install enough to get it to install. Just not sure why it's not working.
+
+I can't run the first command since `/var/log/syslog` doesn't exist on Silverblue :facepalm:. I'll have to install `strace` and reboot to see what that one gives me</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> @AdnanHodzic yeah, regular `auto-cpufreq` works fine, it's just gtk that has the issue. I did see #601, but it I'm able to modify the install enough to get it to install. Just not sure why it's not working.
+> 
+> I can't run the first command since `/var/log/syslog` doesn't exist on Silverblue 🤦. I'll have to install `strace` and reboot to see what that one gives me
+
+If you manage to figure it out, please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

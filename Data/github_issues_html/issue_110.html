@@ -1,0 +1,290 @@
+
+        <html>
+        <head>
+            <title>Issue #110: Auto-cpufreq increases CPU usage every 5 seconds when the machine is idle</title>
+        </head>
+        <body>
+            <h1>Auto-cpufreq increases CPU usage every 5 seconds when the machine is idle</h1>
+            <p><strong>Issue #110</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I noticed that `python3` was using a lot of CPU power from time to time, and I checked to see what is the application using python3, and surprise, it was auto-cpufreq, so I removed it completely. Why does this application constantly using a lot of CPU resources?! Isn't that against the main purpose of the application?!
+
+**80 minutes of CPU time**
+
+![auto-cpufreq_bug](https://user-images.githubusercontent.com/29783425/92538567-4e600b00-f23f-11ea-94a6-b873e2c8d325.png)
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>By looking at the screenshot, I don't see any "Massive CPU usage!". I see low (total) CPU usage of 5% and `CPU Time` of 80:51 for auto-cpufreq which is nothing out of ordinary for a system daemon. Especially if that daemon is constantly trying to adjust the CPU frequency and scaling. If you look for CPU Time of i.e: Xorg you'll see it'll have the same or even greater `CPU time`. I suggest you read more on what exactly [CPU Time](https://en.wikipedia.org/wiki/CPU_time) measures.
+
+To debunk your claim, please run following commands in 3 different terminals. 
+
+1. Monitor CPU and MEM usage %, and observe what it is for auto-cpufreq
+```
+watch ps -C python3 -o %cpu,%mem,cmd
+```
+
+2. Observe the total CPU usage and system load:
+```
+auto-cpufreq --log
+```
+
+3. Then fully stress CPU for 45 seconds:
+```
+stress --cpu 4 --io 4 --vm 4 --timeout 45
+```
+
+During this time you'll see that total CPU usage and load will go through the roof, while CPU usage for auto-cpufreq shouldn't move from 0-0.1%. auto-cpufreq is a small app/tool which only uses few megabytes of RAM and shouldn't consume more then 0.1% of CPU at any given time. I believe your problem is with some other Python app.
+
+Since this bug report is based on misrepresentation of system resources and misunderstanding of CPU time, I'm rendering is as invalid and closing it as such.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Ahmed-E-86:</strong></p>
+                    <p>`auto-cpufreq` (Python3) uses 25% of my total CPU usage when my machine is idle since I installed it. That what made me to question its behavior. CPU time for Xorg today for my machine is 8 minutes only, and my machine is up for more than 7 hours.
+
+My report is not `based on misrepresentation of system resources and misunderstanding of CPU time`. Anyway, thanks for closing this issue. Now, I don't have to care if it is fixed or not.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> `auto-cpufreq` (Python3) uses 25% of my total CPU usage when my machine is idle since I installed it. That what made me to question its behavior. CPU time for Xorg today for my machine is 8 minutes only, and my machine is up for more than 7 hours.
+
+If you do what I suggested below and `auto-cpufreq` is using 25% then that's a problem.
+
+> 1. Monitor CPU and MEM usage %, and observe what it is for auto-cpufreq
+> 
+> ```
+> watch ps -C python3 -o %cpu,%mem,cmd
+> ```
+> 
+> 1. Observe the total CPU usage and system load:
+> 
+> ```
+> auto-cpufreq --log
+> ```
+> 
+> 1. Then fully stress CPU for 45 seconds:
+> 
+> ```
+> stress --cpu 4 --io 4 --vm 4 --timeout 45
+> ```
+
+Out of sheer curiosity, because I see you installed using the snap. If you delete the snap and then [install auto-cpufreq using the installer](https://github.com/AdnanHodzic/auto-cpufreq#auto-cpufreq-installer). Can you do the same thing I suggested above and verify that auto-cpufreq is using substantial % of CPU.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Ahmed-E-86:</strong></p>
+                    <p>I installed auto-cpufreq using the installer, and now I don't notice it at all (I made sure that it is up and running).
+
+![Screenshot_20200909_233628](https://user-images.githubusercontent.com/29783425/92657542-4d89b080-f2f5-11ea-839d-b20adf7f062e.png)
+
+The issue is mostly related to Snap, but I will keep the application running for a couple of days to be sure.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Okay, good to know. I'm working on some changes in snap which will hopefully fix resolve this issue.
+
+What's distro are you using and could you tell me what running `snap version` in terminal returns?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Ahmed-E-86:</strong></p>
+                    <p>I use `Kubuntu 20.04.1`
+
+The output of `snap version`:
+
+```
+snap    2.45.3.1
+snapd   2.45.3.1
+series  16
+ubuntu  20.04
+kernel  5.8.8-050808-generic
+```
+The application haven't caused any CPU spikes, but my machine froze a lot of times today, and I had to force-restart my machine from a little while, and I had to remove it. I will give it another try later when it is stable enough. Thanks for your help.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>@Ahmed-E-86 why do you think that freezes is due to `auto-cpufreq` ?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> The application haven't caused any CPU spikes, but my machine froze a lot of times today, and I had to force-restart my machine from a little while, and I had to remove it. I will give it another try later when it is stable enough. Thanks for your help.
+
+@Ahmed-E-86 I'm sorry to hear that, as I and many others have been using it for months without every running into issues you mentioned here. 
+
+> @Ahmed-E-86 why do you think that freezes is due to `auto-cpufreq` ?
+
+@Red-Eyed I'm also curious to hear this, as if this is really the case it should have most priority to be resolved. 
+
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>@AdnanHodzic I think we should add loging of cpu/mem usage into file, than analyze it. But logging in debug build
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Ahmed-E-86:</strong></p>
+                    <p>> @Ahmed-E-86 why do you think that freezes is due to `auto-cpufreq` ?
+
+Because they happen after installing auto-cpufeq. If they don't happen after uninstalling it, then it is the cause of these freezes.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@Ahmed-E-86 I just [released 1.3](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.3)(snap stable updated). Hence, could you please install auto-cpufreq's latest version and include output of `sudo auto-cpufreq --debug`.
+
+Thanks</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Ahmed-E-86:</strong></p>
+                    <p>Linux distro: Ubuntu 20.04.1 LTS (Focal Fossa)
+Linux kernel: 5.8.9-050809-generic
+
+Snap package: yes
+
+Python: 3.8.2
+psutil package: 5.7.2
+platform package: 1.0.8
+click package: 7.1.2
+distro package 1.5.0
+
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.25 %
+
+Processor: Intel(R) Core(TM) i5-4200M CPU @ 2.50GHz
+Cores: 4
+Architecture: x86_64
+Driver: intel_cpufreq
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 3100 MHz
+CPU min frequency: 800 MHz
+
+CPU frequency for each core:
+
+CPU0: 2908 MHz
+CPU1: 2870 MHz
+CPU2: 2812 MHz
+CPU3: 2878 MHz
+
+CPU usage per each core:
+
+CPU0: 13.4 %
+CPU1: 3.8 %
+CPU2: 10.9 %
+CPU3: 5.7 %
+
+Temperature for each physical core:
+
+CPU0 temp: 56°C
+CPU1 temp: 53°C
+
+Total CPU usage: 6.3 %
+Total system load: 1.19 
+
+Currently using: performance governor
+Currently turbo boost is: on</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>All those stats look absolutely great to me, especially:
+
+> auto-cpufreq system resource consumption:
+> cpu usage: 0.0 %
+> memory use: 0.25 %
+
+Since here you can see that `auto-cpufreq` is using 0.0% of your CPU.
+
+> Linux distro: Ubuntu 20.04.1 LTS (Focal Fossa)
+> Linux kernel: 5.8.9-050809-generic
+
+Where did you get this 5.8 kernel for 20.04? As that could also be source of your problems. I would suggest you simply wait another month until 20.10 is release and get official >= 5.8 kernel with [Ubuntu HWE](https://ubuntu.com/kernel/lifecycle).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Ahmed-E-86:</strong></p>
+                    <p>> Since here you can see that auto-cpufreq is using 0.0% of your CPU.
+
+It doesn't stay this way, it spikes every few seconds, not as high as before, but it consumes power from CPU, so I don't think it will help me to save power at all.
+
+> Where did you get this 5.8 kernel for 20.04? As that could also be source of your problems. I would suggest you simply wait another month until 20.10 is release and get official >= 5.8 kernel with Ubuntu HWE.
+
+Kernel 5.8 is more stable than the default kernel (5.4) on my machine. That is why I use it.
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>There's are changes which could've resolved this problem as part of [1.3.2 release](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.3.2) which solved similar results in #109 #118 
+
+Could you give it a try and report back?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Ahmed-E-86:</strong></p>
+                    <p>It consumes 7% of CPU usage for 2 seconds each 5 seconds, a little less than it was before, but it is still a lot.
+
+Also, it hung up my machine after running it for a few minutes, and I had to force-restart my machine.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@Ahmed-E-86 I've just released [v1.5.0 which should tackle problem of high CPU temperatures (overheating)](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.5.0).
+
+Could you please try it out and report if you have same problem with these changes?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Ahmed-E-86:</strong></p>
+                    <p>I installed it, and used `sudo auto-cpufreq --monitor` without installing the daemon, and CPU usage spikes from 6 to 8% for 2 seconds every 5 seconds, because of it.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Added [Troubleshooting section to README on how to change CPU management driver](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting).
+
+Could you please give this a try as I believe it will resolve your problem. If it doesn't please feel free to re-open this issue.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Ahmed-E-86:</strong></p>
+                    <p>I almost forgot about this issue, but I like your dedication to fix it.
+
+I installed auto-cpufreq using snap, and the issue is fixed without changing CPU management driver, but I use different Linux distro and different Linux kernel. Anyway, I use the same machine, and the issue is fixed. Thanks.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Ahmed-E-86:</strong></p>
+                    <p>@AdnanHodzic I am sorry! I was wrong.
+
+I tested auto-cpufreq using this command >> `sudo auto-cpufreq --live`, and it was working fine, but after installing it using this command >> `sudo auto-cpufreq --install`, the same issue happened again.
+
+Not only that, but I tried disabling `intel_pstate` from the grub, updating the grub, and restarting my machine, but that did not help at all.
+
+CPU usage increased to more than 7% every 5 secs, it is better than it was when I reported this issue, but it is still high.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

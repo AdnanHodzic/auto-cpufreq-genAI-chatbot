@@ -1,0 +1,46 @@
+
+        <html>
+        <head>
+            <title>Issue #160: Improve domain language around logging and stats</title>
+        </head>
+        <body>
+            <h1>Improve domain language around logging and stats</h1>
+            <p><strong>Issue #160</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>This PR attempts to improve the logging/stats domain names as per #156:
+
+* renames all stdout occurrences of `log` to `stats`
+* update all code references accordingly
+* rename `.log` file to `.stats`
+* move the stats file from `/var/log` to `/var/run`
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Code changes LGTM. 
+
+As I proposed in #156, only change I'd propose/request is to  leave `--log` hidden flag there for awhile, if whoever runs `sudo auto-cpufreq --log` that they should get a message "Logs option is no longer in use, please use `sudo auto-cpufreq --stats` instead." or something along those lines.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>marc0der:</strong></p>
+                    <p>@AdnanHodzic that's done and tested :+1: </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@marc0der great stuff! I think it would be a nice idea to add a "time stamp" at the end of each cycle in `--stats` for better reference when scrolling through these, but for now it's perfect as it is.
+
+Thank you for you contribution and I look forward to any new ideas and/or suggestions you may have in future :)
+
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

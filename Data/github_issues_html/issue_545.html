@@ -1,0 +1,115 @@
+
+        <html>
+        <head>
+            <title>Issue #545: Temperatures reading issue</title>
+        </head>
+        <body>
+            <h1>Temperatures reading issue</h1>
+            <p><strong>Issue #545</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### System information:
+
+Linux distro: EndeavourOS rolling rolling
+Linux kernel: 6.4.12-zen1-1-zen
+Processor: AMD Ryzen 7 5800H with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3200 MHz
+CPU min frequency: 1200 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      1.0%        43 °C      4374 MHz
+CPU1      0.0%        43 °C      2566 MHz
+CPU2     10.1%        43 °C      3901 MHz
+CPU3      1.0%        43 °C      3513 MHz
+CPU4      2.0%        43 °C      1200 MHz
+CPU5      1.0%        43 °C      1790 MHz
+CPU6      2.0%        43 °C      3513 MHz
+CPU7      6.1%        43 °C      2848 MHz
+CPU8      1.0%        43 °C      3503 MHz
+CPU9      0.0%        43 °C      1197 MHz
+CPU10      2.0%        43 °C      1200 MHz
+CPU11      0.0%        43 °C      1200 MHz
+CPU12      5.0%        43 °C      1198 MHz
+CPU13      1.0%        43 °C      1200 MHz
+CPU14      4.0%        43 °C      4374 MHz
+CPU15      2.0%        43 °C      4374 MHz
+
+CPU fan speed: 2331 RPM
+
+auto-cpufreq version: 1.9.9 (git: 71ebc3e8)
+
+Python: 3.11.5
+psutil package: 5.9.5
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.8.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.22 %
+
+Total CPU usage: 4.4 %
+Total system load: 0.90
+Average temp. of all cores: 42.85 °C 
+
+Currently using: schedutil governor
+Currently turbo boost is: on
+
+
+Basically, the CPU temperatures read by auto-cpufreq differ from temperatures read by other software like Psensor (I think the correct ones are the letters) and this leads to high fan speeds in daily usage workload.
+![Screenshot from 2023-09-05 12-58-37](https://github.com/AdnanHodzic/auto-cpufreq/assets/30532436/8490ce30-3b5c-4db5-b571-2ccf2ee86d16)
+
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Hi, I have the same issue on my system because `psutil` doesn't return a sensor labeled `CPU`.
+
+Could you do me a favor and enter the following commands into your terminal and posting the results?
+```
+pip install psutil
+python
+import psutil
+psutil.sensors_temperatures()
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>JosephBoom02:</strong></p>
+                    <p>> Hi, I have the same issue on my system because `psutil` doesn't return a sensor labeled `CPU`.
+> 
+> Could you do me a favor and enter the following commands into your terminal and posting the results?
+> 
+> ```
+> pip install psutil
+> python
+> import psutil
+> psutil.sensors_temperatures()
+> ```
+`psutil`  in my case give me the right CPU temperature:
+{'nvme': [shwtemp(label='Composite', current=43.85, high=82.85, critical=83.85), shwtemp(label='Sensor 1', current=36.85, high=65261.85, critical=65261.85), shwtemp(label='Sensor 2', current=38.85, high=65261.85, critical=65261.85)], 'k10temp': [shwtemp(label='Tctl', current=60.25, high=None, critical=None)], 'legion_hwmon': [shwtemp(label='CPU Temperature', current=61.0, high=None, critical=None), shwtemp(label='GPU Temperature', current=46.0, high=None, critical=None), shwtemp(label='IC Temperature', current=45.0, high=None, critical=None)], 'iwlwifi_1': [shwtemp(label='', current=44.0, high=None, critical=None)]}
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Great, I will work on a fix</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

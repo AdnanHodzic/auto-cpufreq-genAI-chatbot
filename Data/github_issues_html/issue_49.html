@@ -1,0 +1,99 @@
+
+        <html>
+        <head>
+            <title>Issue #49: AUR package not working with python virtualenv</title>
+        </head>
+        <body>
+            <h1>AUR package not working with python virtualenv</h1>
+            <p><strong>Issue #49</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>To bring stability to my system, I use virtualenv to install all python tools through package managers like pip. When installing the `auto-cpufreq-git` package from the AUR, I noticed that it installed the `auto-cpufreq` binary into my user space virtualenv:
+
+    $ which auto-cpufreq
+    /home/marco/.virtualenv/bin/auto-cpufreq
+
+When the `auto-cpufreq` service is started with `systemctl` it borks with the following:
+
+```
+● auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux
+     Loaded: bad-setting (Reason: Unit auto-cpufreq.service has a bad unit file setting.)
+     Active: inactive (dead)
+
+Mar 24 11:09:21 rocinante systemd[1]: /usr/lib/systemd/system/auto-cpufreq.service:9: Executable "auto-cpufreq" not found in path "/usr/local/bin:/usr/bin"
+Mar 24 11:09:21 rocinante systemd[1]: auto-cpufreq.service: Unit configuration has fatal error, unit will not be started.
+Mar 24 11:10:12 rocinante systemd[1]: /usr/lib/systemd/system/auto-cpufreq.service:9: Executable "auto-cpufreq" not found in path "/usr/local/bin:/usr/bin"
+Mar 24 11:10:12 rocinante systemd[1]: auto-cpufreq.service: Unit configuration has fatal error, unit will not be started.
+```</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>It seems to be this issue could be similar to #42, which I resolved as part of as [part of 1.1.2 release](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/1.1.2).
+
+@crian any ideas why this might be an issue with AUR package?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>crian:</strong></p>
+                    <p>He is manipulating the install path, so the daemon can't find the file. 
+It expects the file in `usr/local/bin` or `usr/bin`.
+The AUR pkg installs it to `usr/bin` by default.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>marc0der:</strong></p>
+                    <p>@crian well, to be fair it isn't me manipulating the install path. It is virtualenv. And this will happen to anyone using virtualenv or pyenv would be my guess. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>crian:</strong></p>
+                    <p>@marc0der can you `git clone https://aur.archlinux.org/auto-cpufreq-git.git` and edit `python setup.py install --root="${pkgdir}"` to `python setup.py install --prefix=/usr --root="${pkgdir}"` in the `PKGBUILD` and install it?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>marc0der:</strong></p>
+                    <p>@crian I tried your suggestion but it didn't work either. I've been messing around for over an hour trying various things to get it to work, but to no avail. It seems that many paths are hardcoded in the package and service file itself, that simply don't align with Arch. Then there is a problem of unresolved dependencies too. Calling it a night now...</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>crian:</strong></p>
+                    <p>@marc0der need more details</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@marc0der snapd 2.44 is now [available in AUR](https://aur.archlinux.org/packages/snapd/) please install it and then give [auto-cpufreq snap package](https://snapcraft.io/auto-cpufreq) a try `sudo snap install auto-cpufreq`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>marc0der:</strong></p>
+                    <p>@AdnanHodzic thanks for that, I've just installed it with snap and am now running into some other errors. I'll open a new issue for that.
+
+@crian sorry for not pursuing the AUR package any further, feel free to close this issue if you see fit.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Many new changes have been implemented as part of 1.2 release and there's an improved snap package.
+
+```
+sudo snap install auto-cpufreq
+```
+
+I also asked @crian if he could build a new [AUR package based on 1.2 release](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/1.2).
+
+Hence, I'll close this issue for now. If the problem persists, please feel free to re-open it.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>dausruddin:</strong></p>
+                    <p>Just want to notify that this issue is still happening. I ended up uninstalling pyenv to install auto-cpufreq, then reinstall pyenv back. I installed via AUR.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

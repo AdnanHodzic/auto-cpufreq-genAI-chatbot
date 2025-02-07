@@ -1,0 +1,237 @@
+
+        <html>
+        <head>
+            <title>Issue #164: System is discharging but auto-cpufreq detects charging</title>
+        </head>
+        <body>
+            <h1>System is discharging but auto-cpufreq detects charging</h1>
+            <p><strong>Issue #164</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+```
+Show charging but it's discharging
+```
+---
+
+### System information:
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Manjaro Linux 20.2.1 Nibia
+Linux kernel: 5.10.12-3-MANJARO
+Processor: Intel(R) Core(TM) i5-5350U CPU @ 1.80GHz
+Cores: 4
+Architecture: x86_64
+Driver: intel_cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2900 MHz
+CPU min frequency: 500 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  0.0%     56 °C     2415 MHz
+CPU1:	  4.0%     56 °C     2259 MHz
+CPU2:	  2.0%     56 °C     2124 MHz
+CPU3:	  1.0%     56 °C     1800 MHz
+
+fatal: Kein Git-Repository (oder irgendein Elternverzeichnis bis zum Einhängepunkt /)
+Stoppe bei Dateisystemgrenze (GIT_DISCOVERY_ACROSS_FILESYSTEM nicht gesetzt).
+Snap package: no
+
+Python: 3.9.1
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 7.1.2
+distro package 1.5.0
+
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.21 %
+
+Total CPU usage: 2.0 %
+Total system load: 0.68
+Average temp. of all cores: 56.0 °C 
+
+Currently using: performance governor
+Currently turbo boost is: on
+
+------------------------------------------------------------------------------
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ThePoorPilot:</strong></p>
+                    <p>First, what version of auto-cpufreq are you running?
+The recent update fixed an issue for desktops, but it could come at the detriment of laptops.
+
+If you are running the latest version, what is the output of the command:
+
+dmidecode --string chassis-type</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@pheiduck make sure you're using the latest version, [1.5.4 was released](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.5.4) few hours ago. If AUR package is older, you can also install latest version using [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq#auto-cpufreq-installer).
+
+Could you also return output of `dmidecode --string chassis-type` and please confirm that you're running on a laptop.
+
+@ThePoorPilot this ended up being changed to `dmidecode --string chassis-type` as part of #163 PR. It seems like this is a laptop CPU, but it wasn't detected for some reason. I think it'd be a good idea to have another "if" and explicitly set performance mode if `computer_type == "Desktop"`. 
+
+This way [else in this block](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto_cpufreq/core.py#L122) could be set to default to "powersave" (defaults to laptop) which for some reason wasn't detected by dmidecode. 
+
+FYI: @librewish ^</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ThePoorPilot:</strong></p>
+                    <p>Yeah I read through the change and caught that. There could be a slight issue with dmidecode, though.
+
+On my system I get this output when I run dmidecode --string chassis-type:
+/sys/firmware/dmi/tables/smbios_entry_point: Permission denied
+/dev/mem: Permission denied
+
+I have to run it with sudo for it to output "Desktop"
+
+I would guess that "permission denied" falls under else
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ThePoorPilot:</strong></p>
+                    <p>@AdnanHodzic 
+I also tested a python script that prints out the result of "dmidecode --string chassis-type" and I got the same permissions error.
+
+It looks like we need to find a different command that doesn't require systemd and doesn't require sudo.
+
+Although, it is possible the chassis detection could run successfully if it is done during installation, which would have root permission.
+
+I would hazard to guess, though, that it runs that check while in operation</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Yeah I read through the change and caught that. There could be a slight issue with dmidecode, though.
+> 
+> On my system I get this output when I run dmidecode --string chassis-type:
+> /sys/firmware/dmi/tables/smbios_entry_point: Permission denied
+> /dev/mem: Permission denied
+> 
+> I have to run it with sudo for it to output "Desktop"
+> 
+> I would guess that "permission denied" falls under else
+
+auto-cpufreq runs with root permissions, so always use sudo during debug process to see how things would look like if run as part of the app/tool.
+
+I think we'll have a problem with this implementation where we don't want a missing case. Right off the bat "Desktop" option needs to be explicitly defined as I voiced in [specifically](https://github.com/AdnanHodzic/auto-cpufreq/issues/164#issuecomment-772776212). 
+
+I'm pretty certain that in @pheiduck case "Notebook" wasn't detected for some reason and it immediately switched to "Desktop" since that case isn't explicitly defined. But let's first see what @pheiduck says his `sudo dmidecode --string chassis-type` reports.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ThePoorPilot:</strong></p>
+                    <p>@AdnanHodzic 
+I guess that makes sense as it auto-cpufreq is a system daemon, just didn't know enough about linux internals to be able to tell if it had permissions.
+
+I think it would be smart to use else for the laptop based settings and instead actively look for "Desktop."
+I can make that modification pretty easily, as I believe it is pretty late at night for librewish.
+
+I could also look at all the different chassis types dmidecode could possibly detect and use an if statement for each type. Then, use else to revert to laptop settings.
+
+Another issue I thought of is that while the dmidecode was added to the installer as a dependency, I don't know if it will be automatically added as a dependency to pre-compiled packages on repositories.
+
+We'll wait for his output of sudo dmidecode --string chassis-type
+I'm betting it will be 
+sudo: dmidecode: command not found
+
+I removed dmidecode before installing (it comes by default on Garuda) the update to auto-cpufreq-git on the Chaotic-AUR (Garuda linux pre-compiled repository).
+
+In the install process, it did not install dmidecode as a dependency, and the command outputs "command not found"
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ThePoorPilot:</strong></p>
+                    <p>I checked on my Thinkpad with Manjaro and it does indeed also have dmidecode installed by default, so it may actually be a case where it misidentified the chassis as you said.
+
+Again, I guess I'm just impatient. Let's wait for pheiduck's output.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@ThePoorPilot
+
+> I guess that makes sense as it auto-cpufreq is a system daemon, just didn't know enough about linux internals to be able to tell if it had permissions.
+
+No worries, lesson lived, lesson learned! :)
+
+> I think it would be smart to use else for the laptop based settings and instead actively look for "Desktop."
+> I can make that modification pretty easily, as I believe it is pretty late at night for librewish.
+> 
+> I could also look at all the different chassis types dmidecode could possibly detect and use an if statement for each type. Then, use else to revert to laptop settings.
+
+That would be great! If you could collect as many outputs of `sudo dmidecode --string chassis-type` running on laptops, this way we could make sure that all cases are covered so we don't have this kind of bugs. As this tool is mostly used on laptops and was created with that in mind.
+
+If you did that, and either you or @librewish or both of you created a PR I'd highly appreciate it. 
+
+> We'll wait for his output of sudo dmidecode --string chassis-type
+> I'm betting it will be
+> sudo: dmidecode: command not found
+
+Make sure whoever you ask for this output for them to install `dmidecode` package first.
+
+> In the install process, it did not install dmidecode as a dependency, and the command outputs "command not found"
+
+That's why it's set as a dependency in the [auto-cpufreq-installer ](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto-cpufreq-installer)and [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/snap/snapcraft.yaml#L26) so it's automatically installed with those.
+
+II suggest we start using "[Discussions](https://github.com/AdnanHodzic/auto-cpufreq/discussions)" for this projects so bug reports don't get hijacked with devel discussion like this one :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ThePoorPilot:</strong></p>
+                    <p>@AdnanHodzic 
+
+Alright, I'll move over there when I have more updates
+
+I guess the dependency issue on my side needs to be fixed by the maintainers of Chaotic-AUR and the Arch User Repository, which are unofficial packages</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>pheiduck:</strong></p>
+                    <p>```
+$ sudo dmidecode --string chassis-type
+Laptop
+```
+... still exist after
+```
+systemctl daemon-reload
+systemctl restart auto-cpufreq
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Thank you @pheiduck this is a confirmed issue now, I also confirmed it on one of my own laptops. It was introduced with #162, #163 and since it breaks core functionality of this tool it'll be dealt with upmost urgency. Stay tuned.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@pheiduck problem has been fixed as part of [1.5.5 release](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.5.5). Please get the latest changes and re-open this issue if you're still experiencing the same problem.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>pheiduck:</strong></p>
+                    <p>Yep, works again as expected Thank you @AdnanHodzic :+1: </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

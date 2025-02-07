@@ -1,0 +1,29 @@
+
+        <html>
+        <head>
+            <title>Pull Request #548: Fix #545: additional cpu temp sensors</title>
+        </head>
+        <body>
+            <h1>Fix #545: additional cpu temp sensors</h1>
+            <p><strong>Pull Request #548</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>This resolves #545.
+
+Not sure how I didn't notice this before, as I was experiencing the same on my laptop.
+
+I believe AMD drivers on Linux do not report individual core temps, so the `coretemp` sensor was not found and it was defaulting to the first sensor it could find which was my SSD temperature.
+I added 2 additional sensors to check for. My temp is reported by ACPI, and then k10temp reports the Tctl which is used as a last resort. Now, if it can't find a sensor it will return "nan".</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>LGMT, great catch!</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

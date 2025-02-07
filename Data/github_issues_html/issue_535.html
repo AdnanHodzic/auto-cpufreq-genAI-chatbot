@@ -1,0 +1,84 @@
+
+        <html>
+        <head>
+            <title>Issue #535: update feature</title>
+        </head>
+        <body>
+            <h1>update feature</h1>
+            <p><strong>Issue #535</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>update feature in continuation with closed PR #526  and issue #341 
+
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Looks great, this is what I wanted #526 to look like :slightly_smiling_face: 
+
+Before I merge this there's one minor change that needs to be done. Added as a comment for [snap/snapcraft.yaml](https://github.com/AdnanHodzic/auto-cpufreq/pull/535/files#r1263342097)
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>LGTM! Thank you for your contribution, and your perseverance is admired in this process. :slightly_smiling_face: 
+
+You will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases) and your future contributors are more then welcome!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@cosmos1721 changes are already merged and I didn't want to mention it as part of initial PR. But I already have a few suggestions how to improve this functionality: 
+
+~~It's a good idea to [update README section ](https://github.com/AdnanHodzic/auto-cpufreq#update-using-auto-cpufreq-installer) will info where will auto-cpufreq code be cloned by default as currently your regular user will have no idea about this.~~ **Update:** I just updated the [README with this info](https://github.com/AdnanHodzic/auto-cpufreq/commit/8fbb9480f024168bc364d2af7bc1470c05ed90fb), please add anything you think is missing. 
+
+Related to this instead of using [current working directory of user](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto_cpufreq/core.py#L188C4-L188C4) let's just add this to `/opt/auto-cpufreq/source` so it will always be there and there won't be changes to dir structure. Especially since install location `/opt/auto-cpufreq/venv` is also under `/opt/auto-cpufreq`. 
+
+As this will be run with `sudo` so it'll always end up in in `/root/auto-cpufreq` about which no one will know about. This also relates to [update README section ](https://github.com/AdnanHodzic/auto-cpufreq#update-using-auto-cpufreq-installer) with info about [repository structure](https://github.com/AdnanHodzic/auto-cpufreq/blob/3dffa23e0007e99577fded98eac77c82a3b49eea/auto-cpufreq-installer#L262). 
+
+In next iteration it would also be great idea to give users an option to chose where cloned auto-cpufreq dir wil be placed.
+
+I.e: `sudo auto-cpufreq --update --dir /home/whatever` will place source code to `/home/whatever/auto-cpufreq`
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>cosmos1721:</strong></p>
+                    <p>sure, thats a great option to work on.
+will add the required info to README section</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>cosmos1721:</strong></p>
+                    <p>> LGTM! Thank you for your contribution, and your perseverance is admired in this process. slightly_smiling_face
+> 
+> You will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases) and your future contributors are more then welcome!
+
+thanks a lot
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>cosmos1721:</strong></p>
+                    <p>> Related to this instead of using [current working directory of user](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto_cpufreq/core.py#L188C4-L188C4) let's just add this to `/opt/auto-cpufreq/source` so it will always be there and there won't be changes to dir structure. Especially since install location `/opt/auto-cpufreq/venv` is also under `/opt/auto-cpufreq`.
+
+what I'm thinking is to give the user an option in which
+if the user only uses ```auto-cpufreq --update```, it will save it to the provided location,but if the user adds --dir, it can work too</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> what I'm thinking is to give the user an option in which
+> if the user only uses `auto-cpufreq --update`, it will save it to the provided location,but if the user adds --dir, it can work too
+
+Yes, this is what I also meant [in updated comment above](https://github.com/AdnanHodzic/auto-cpufreq/pull/535#issuecomment-1636877526). But, **if** user doesn't specify anything, let's make it so by **default** it goes to `/opt/auto-cpufreq/source` (and update README with this info) instead of [current working user](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto_cpufreq/core.py#L188C4-L188C4) which in this case will always be `/root/auto-cpufreq` since `--update` flag will have to be run with `sudo`.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

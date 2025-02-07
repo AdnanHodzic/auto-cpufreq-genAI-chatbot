@@ -1,0 +1,253 @@
+
+        <html>
+        <head>
+            <title>Issue #805: Installation failed/incomplete</title>
+        </head>
+        <body>
+            <h1>Installation failed/incomplete</h1>
+            <p><strong>Issue #805</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+Yes
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+I don't wish to use snap
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+There is a missing package issue 
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+Yes
+### Error output:
+```text
+sudo ./auto-cpufreq-installer
+[sudo] password for root: 
+
+─────────────────────────── auto-cpufreq installer ───────────────────────────
+
+Welcome to auto-cpufreq tool installer.
+
+Select a key [I]nstall/[R]emove or press ctrl+c to quit: i 
+
+
+─────────────────────── Detected OpenSUSE distribution ───────────────────────
+
+
+──────────────────────── Setting up Python environment ────────────────────────
+
+Loading repository data...
+Reading installed packages...
+'gtk3' not found in package names. Trying capabilities.
+'libgtk-3-0' providing 'gtk3' is already installed.
+'gcc' is already installed.
+No update candidate for 'gcc-14-2.2.x86_64'. The highest available version is already installed.
+'python3-devel' not found in package names. Trying capabilities.
+'python311-devel' providing 'python3-devel' is already installed.
+'python3-pip' is already installed.
+No update candidate for 'python3-pip-20.0.2-22.9.noarch'. The highest available version is already installed.
+'python38' not found in package names. Trying capabilities.
+No provider of 'python38' found.
+'python3-cairo-devel' not found in package names. Trying capabilities.
+'dmidecode' is already installed.
+No update candidate for 'dmidecode-3.6-2.2.x86_64'. The highest available version is already installed.
+
+──────────────────── Installing necessary Python packages ────────────────────
+
+Requirement already satisfied: pip in /opt/auto-cpufreq/venv/lib64/python3.11/site-packages (24.3.1)
+Requirement already satisfied: wheel in /opt/auto-cpufreq/venv/lib64/python3.11/site-packages (0.45.1)
+
+──────────────────────── Installing auto-cpufreq tool ────────────────────────
+
+Processing /home/saumya/Pictures/auto-cpufreq
+  Installing build dependencies ... done
+  Getting requirements to build wheel ... done
+  Preparing metadata (pyproject.toml) ... done
+Collecting pyinotify@ git+https://github.com/shadeyg56/pyinotify-3.12 (from auto-cpufreq==2.5.0+c0d9ec5)
+  Cloning https://github.com/shadeyg56/pyinotify-3.12 to /tmp/pip-install-88ufeouy/pyinotify_61e8bff66ccb47baa656dcfb6863eeed
+  Running command git clone --filter=blob:none --quiet https://github.com/shadeyg56/pyinotify-3.12 /tmp/pip-install-88ufeouy/pyinotify_61e8bff66ccb47baa656dcfb6863eeed
+  Resolved https://github.com/shadeyg56/pyinotify-3.12 to commit 271b7aba3269116b6c3870355393f47c79bce146
+  Preparing metadata (setup.py) ... done
+Collecting PyGObject<4.0.0,>=3.46.0 (from auto-cpufreq==2.5.0+c0d9ec5)
+  Using cached pygobject-3.50.0.tar.gz (1.1 MB)
+  Installing build dependencies ... done
+  Getting requirements to build wheel ... done
+  Installing backend dependencies ... done
+  Preparing metadata (pyproject.toml) ... error
+  error: subprocess-exited-with-error
+  
+  × Preparing metadata (pyproject.toml) did not run successfully.
+  │ exit code: 1
+  ╰─> [23 lines of output]
+      + meson setup /tmp/pip-install-88ufeouy/pygobject_a90632ecf88844e499fd61914e56840c /tmp/pip-install-88ufeouy/pygobject_a90632ecf88844e499fd61914e56840c/.mesonpy-5qq4xy82 -Dbuildtype=release -Db_ndebug=if-release -Db_vscrt=md -Dtests=false -Dwheel=true --wrap-mode=nofallback --native-file=/tmp/pip-install-88ufeouy/pygobject_a90632ecf88844e499fd61914e56840c/.mesonpy-5qq4xy82/meson-python-native-file.ini
+      The Meson build system
+      Version: 1.6.1
+      Source dir: /tmp/pip-install-88ufeouy/pygobject_a90632ecf88844e499fd61914e56840c
+      Build dir: /tmp/pip-install-88ufeouy/pygobject_a90632ecf88844e499fd61914e56840c/.mesonpy-5qq4xy82
+      Build type: native build
+      Project name: pygobject
+      Project version: 3.50.0
+      C compiler for the host machine: cc (gcc 14.2.1 "cc (SUSE Linux) 14.2.1 20241007 [revision 4af44f2cf7d281f3e4f3957efce10e8b2ccb2ad3]")
+      C linker for the host machine: cc ld.bfd 2.43.1.20241209-4
+      Host machine cpu family: x86_64
+      Host machine cpu: x86_64
+      Program python3 found: YES (/opt/auto-cpufreq/venv/bin/python)
+      Found pkg-config: YES (/usr/bin/pkg-config) 2.2.0
+      Run-time dependency python found: YES 3.11
+      Found CMake: /usr/bin/cmake (3.31.2)
+      Run-time dependency gobject-introspection-1.0 found: NO (tried pkgconfig and cmake)
+      Not looking for a fallback subproject for the dependency gobject-introspection-1.0 because:
+      Use of fallback dependencies is disabled.
+      
+      ../meson.build:31:9: ERROR: Dependency 'gobject-introspection-1.0' is required but not found.
+      
+      A full log can be found at /tmp/pip-install-88ufeouy/pygobject_a90632ecf88844e499fd61914e56840c/.mesonpy-5qq4xy82/meson-logs/meson-log.txt
+      [end of output]
+  
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+error: metadata-generation-failed
+
+× Encountered error while generating package metadata.
+╰─> See above for output.
+
+note: This is an issue with the package mentioned above, not pip.
+hint: See above for details.
+
+────────────────── auto-cpufreq tool successfully installed ──────────────────
+
+For list of options, run:
+auto-cpufreq --help
+
+auto-cpufreq
+/opt/auto-cpufreq/venv/bin/python: can't open file '/opt/auto-cpufreq/venv/bin/auto-cpufreq': [Errno 2] No such file or directory
+
+```
+---
+
+### System information:
+
+![image](https://github.com/user-attachments/assets/dfdf0d24-2f20-432c-9263-a5d740f5466e)
+
+```
+/opt/auto-cpufreq/venv/bin/python: can't open file '/opt/auto-cpufreq/venv/bin/auto-cpufreq': [Errno 2] No such file or directory
+
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+
+Expected it to be installed, not installed 
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>CaffineAddic:</strong></p>
+                    <p>Sorry I don't like snaps at all, just if it's possible 
+Is there a way to fix it</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>nnbyte:</strong></p>
+                    <p>I have the same issue "'python38' not found in package names". I am using openSUSE Tumbleweed and all python libraries are >= v3.10</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Well that's the problem, [in this code block line](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto-cpufreq-installer#L102):
+
+```
+      opensuse-leap)
+        detected_distro "OpenSUSE"
+        zypper install -y python3 python3-pip python3-setuptools python3-devel gcc dmidecode gobject-introspection-devel python3-cairo-devel gtk3 gtk3-devel
+      ;;
+      opensuse-tumbleweed)
+        detected_distro "OpenSUSE"
+        zypper install -y python38 python3-pip python3-setuptools python3-devel gcc dmidecode gobject-introspection-devel python3-cairo-devel gtk3 gtk3-devel
+      ;;
+```
+
+Every mention of `python38` should be updated to latest python version for Suse (*seems like it's just `python3`). As now it's trying to install old Python version that's not even there. 
+
+Update this string and give it a try, make these changes and re-install `sudo auto-cpufreq-installer --install`  followed by `sudo auto-cpufreq --install` and it should all work fine. If it all works as expected please create a PR and ([contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>CaffineAddic:</strong></p>
+                    <p>Updated line changes [in this code block line](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto-cpufreq-installer#L102):
+
+case $ID in
+      opensuse-leap)
+        detected_distro "OpenSUSE"
+        zypper install -y python3 python3-pip python311-setuptools python3-devel gcc dmidecode gobject-introspection-devel python3-cairo-devel gtk3 gtk3-devel
+      ;;
+      opensuse-tumbleweed)
+        detected_distro "OpenSUSE"
+        zypper install -y python3 python3-pip python311-setuptools python3-devel gcc dmidecode gobject-introspection-devel python3-cairo-devel gtk3 gtk3-devel
+      ;;
+      void)
+      
+      
+      The following changes had to be made, in the line opensuse-tumbleweed
+      
+     There was python38 updating it to python3 & also python3-setuptools were being mapped to some older version of the utility causing the install to fail updating it to python311-setuptools fixed it.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@CaffineAddic Good to hear, as I said
+> please create a PR and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+and so we have these changes in auto-cpufreq main branch.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>CaffineAddic:</strong></p>
+                    <p>I have created the PR, awaiting your approval, Thanks for the support @AdnanHodzic 
+
+Love your project 
+
+@nnbyte you can use this repo to install until the changes are reflected in the new version https://github.com/CaffineAddic/auto-cpufreq-fixedInstallerForOpenSUSE.git
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I have created the PR, awaiting your approval, Thanks for the support @AdnanHodzic
+
+@CaffineAddic made a small remark, after which changes can be merged to `master` branch :)
+
+> Love your project
+
+Great to hear and spread the word :) 
+
+> @nnbyte you can use this repo to install until the changes are reflected in the new version https://github.com/CaffineAddic/auto-cpufreq-fixedInstallerForOpenSUSE.git
+
+As soon as the changes I requested in PR are made, you'll be able to get this changes as part of auto-cpufreq :) </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Changes in #808 have been merged and are now part of auto-cpufreq codebase.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>CaffineAddic:</strong></p>
+                    <p>Thank you so much, I will try and see if I can contribute more 
+
+I love your dedication </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>nnbyte:</strong></p>
+                    <p>I can confirm it works! Thanks so much for your quick response/resolution!</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

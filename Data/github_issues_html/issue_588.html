@@ -1,0 +1,125 @@
+
+        <html>
+        <head>
+            <title>Issue #588: Performance of the scripts/cpufreqctl.sh script</title>
+        </head>
+        <body>
+            <h1>Performance of the scripts/cpufreqctl.sh script</h1>
+            <p><strong>Issue #588</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I don't have an issue running auto-cpufreq, I just wanted to share some information with benchmarks and script modification example.
+
+When fiddling with auto-cpufreq, powertop and auditd to locate processes that wake the cpu up, ironically auto-cpufreq stands out on an otherwise completely idle system. Due to heavy usage of "expr" and "cat" the script functions run for a long time, and due to the nature of auto-cpufreq these functions are run periodically.
+
+I made a proof of concept rewrite of scripts/cpufreqctl.sh/get_governor(), and these are the hyperfine benchmark results:
+
+```
+~ 6s ❯ hyperfine './get_governor_old.sh' './get_governor_new.sh'
+Benchmark 1: ./get_governor_old.sh
+  Time (mean ± σ):      12.8 ms ±   0.5 ms    [User: 10.2 ms, System: 2.1 ms]
+  Range (min … max):    11.2 ms …  14.3 ms    226 runs
+
+Benchmark 2: ./get_governor_new.sh
+  Time (mean ± σ):       0.7 ms ±   0.2 ms    [User: 0.6 ms, System: 0.1 ms]
+  Range (min … max):     0.5 ms …   1.8 ms    2653 runs
+
+Summary
+  ./get_governor_new.sh ran
+   18.06 ± 4.08 times faster than ./get_governor_old.sh
+~ ❯
+```
+
+Basically what this says it that on my system (Ubuntu 23.10, ThinkPad X1) just calling the original get_governor() takes 12ms and the new one takes 1ms.
+
+**The cpus are now working a lot less! Sleeping a lot more!**
+
+This is also confirmed just by running them (and we can see they have the same output):
+
+```
+~ ❯ time ./get_governor_old.sh
+performance performance performance performance performance performance performance performance performance performance performance performance
+./get_governor_old.sh  0,01s user 0,00s system 95% cpu 0,015 total
+
+~ ❯ time ./get_governor_new.sh
+performance performance performance performance performance performance performance performance performance performance performance performance
+./get_governor_new.sh  0,00s user 0,00s system 85% cpu 0,001 total
+~ ❯
+```
+
+15ms vs 1ms.
+
+Old vs New implementation:
+
+```
+~ ❯ cat get_governor_old.sh
+#!/bin/bash
+
+function get_governor () {
+  if [ -z $CORE ]
+  then
+    i=0
+    ag=''
+    while [ $i -ne $cpucount ]
+    do
+      if [ $i = 0 ]
+      then
+        ag=`cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor`
+      else
+        ag=$ag' '`cat /sys/devices/system/cpu/cpu$i/cpufreq/scaling_governor`
+      fi
+      i=`expr $i + 1`
+    done
+    echo $ag
+  else
+    cat /sys/devices/system/cpu/cpu$CORE/cpufreq/scaling_governor
+  fi
+}
+
+get_governor
+
+~ ❯ cat get_governor_new.sh
+#!/bin/bash
+function get_governor() {
+  if [ -z "$CORE" ]; then
+    ag=''
+    for ((i=0; i<cpucount; i++)); do
+      read -r current_governor < "/sys/devices/system/cpu/cpu$i/cpufreq/scaling_governor"
+      ag="${ag}${current_governor} "
+    done
+    echo "${ag::-1}"
+  else
+    read -r current_governor < "/sys/devices/system/cpu/cpu$CORE/cpufreq/scaling_governor"
+    echo "$current_governor"
+  fi
+}
+
+get_governor
+
+```
+
+In the old implementation both cat and expr result in fork + exec. Eliminating that makes the scripts super fast. This is just a proof of concept for this particular function, and the sripts/cpufreqctl.sh script has many functions that can be optimized.
+
+Hope you find it entertaining.
+
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ryanabx:</strong></p>
+                    <p>Why not make this a PR?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@apanloco exactly what @ryanabx suggested.
+
+Please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

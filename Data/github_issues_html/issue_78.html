@@ -1,0 +1,111 @@
+
+        <html>
+        <head>
+            <title>Issue #78: added inxi into snap.</title>
+        </head>
+        <body>
+            <h1>added inxi into snap.</h1>
+            <p><strong>Issue #78</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Added inxi into snap build
+
+It reports some annoying error noise at the beginning, but it breaks nothing. 
+```
+-------------------------------------------------------------------------------
+
+/snap/auto-cpufreq/x6/usr/bin/inxi: line 1043: /usr/bin/whoami: Permission denied
+/snap/auto-cpufreq/x6/usr/bin/inxi: line 721: /etc/inxi.conf: Permission denied
+Resuming in non X mode: xrandr not found. For package install advice run: inxi --recommends
+System:    Host: redeyed-pc Kernel: 5.4.0-42-generic x86_64 bits: 64 Desktop: N/A Distro: Ubuntu Core 18
+Machine:   Device: desktop Mobo: ASUSTeK model: ROG STRIX X299-E GAMING v: Rev 1.xx serial: <filter>
+           UEFI: American Megatrends v: 3006 date: 02/07/2020
+Battery    hidpp__3: charge: N/A condition: NA/NA Wh
+           hidpp__3: charge: N/A condition: NA/NA Wh
+CPU:       Governors: performance powersave
+           clock speeds: max: 4400 MHz 1: 3339 MHz 2: 3437 MHz 3: 3717 MHz 4: 3579 MHz 5: 3597 MHz
+           6: 3382 MHz 7: 3785 MHz 8: 3512 MHz 9: 3537 MHz 10: 3465 MHz 11: 2258 MHz 12: 3417 MHz
+           13: 3765 MHz 14: 3601 MHz 15: 3467 MHz 16: 3186 MHz
+Graphics:  Card-1: NVIDIA Device 1dba
+           Card-2: NVIDIA Device 1e07
+           Display Server: N/A drivers: nvidia,nvidia tty size: 177x17
+Audio:     Card-1 NVIDIA Device 10f2 driver: snd_hda_intel
+           Card-2 Intel 200 Series PCH HD Audio driver: snd_hda_intel
+           Card-3 NVIDIA Device 10f7 driver: snd_hda_intel
+Network:   Card-1: Intel Ethernet Connection (2) I219-V driver: e1000e
+           IF: eno1 state: up speed: 1000 Mbps duplex: full mac: <filter>
+           Card-2: Realtek Device b822 driver: rtw_pci
+           IF: wlp2s0 state: down mac: <filter>
+Drives:    HDD Total Size: NA (-)
+           ID-1: /dev/nvme0n1 model: Samsung_SSD_970_EVO_Plus_500GB size: 500.1GB
+           ID-2: /dev/sda model: HGST_HUS726T6TAL size: 6001.2GB
+Sensors:   None detected - is lm-sensors installed and configured?
+Info:      Processes: 513 Uptime: 3 days Memory: 12737.7/31799.2MB Init: systemd
+           Client: Unknown python3.6 client inxi: 2.3.56
+
+-------------------------------------------------------------------------------
+``` </p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>```
+/snap/auto-cpufreq/x1/usr/bin/inxi: line 1043: /usr/bin/whoami: Permission denied
+```
+This can be fixed by using following instead:
+```
+getent passwd $UID | cut -d ':' -f 6
+```
+
+Not sure about:
+
+```
+/snap/auto-cpufreq/x1/usr/bin/inxi: line 721: /etc/inxi.conf: Permission denied
+```
+
+What I'm thinking about is *if*  `sudo auto-cpufreq --debug` is for run inside of snap env, then to omit showing lines which have "Permission denied" in them. It would be a hack but I think it would be bit more elegant solution to our problem.
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>Yeah, I'm filtering it out from python</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>working on it</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Also, when building snap locally and snap has been installed. You might find this command useful for debugging:
+
+```
+sudo snap run --shell auto-cpufreq
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>Oh, thanks!
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>udated</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Perfect!</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

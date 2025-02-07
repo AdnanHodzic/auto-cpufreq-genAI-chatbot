@@ -1,0 +1,152 @@
+
+        <html>
+        <head>
+            <title>Issue #42: ERROR: /etc/systemd/system/auto-cpufreq.service:9: Executable path is not absolute: auto-cpufreq --daemon</title>
+        </head>
+        <body>
+            <h1>ERROR: /etc/systemd/system/auto-cpufreq.service:9: Executable path is not absolute: auto-cpufreq --daemon</h1>
+            <p><strong>Issue #42</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hi,
+firstly thank you for this amazing tool for Linux, in the past days I used the previous version with any issues (except for the log freeze), today I saw the new update and I followed the new installation instructions. 
+With the new installer I encoutered this **pip** warning:
+
+_WARNING: The directory '/home/filip/.cache/pip' or its parent directory is not owned or is not writable by the current user. The cache has been disabled. Check the permissions and owner of that directory. If executing pip with sudo, you may want sudo's -H flag._
+
+After that the installation was completed and fine.
+But when I give the _sudo auto-cpufreq --install_ instruction and after that, I check the _systemctl status auto-cpufreq_ I receive the error in the title:
+_/etc/systemd/system/auto-cpufreq.service:9: Executable path is not absolute: auto-cpufreq --daemon_
+
+My OS is Elementary 5.1.2 (based on Ubuntu 18.04 LTS)
+
+Thank you in advance for your help!</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>What happens if you run [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq#installing-auto-cpufreq)?
+
+I also released [ `auto-cpufreq` to Snap store](https://snapcraft.io/auto-cpufreq/) which would definitely fix your problem. But as [I stated for full functionality](https://github.com/AdnanHodzic/auto-cpufreq#snap-store) `auto-cpufreq` needs snapd version 2.4.4 which is currently only available in Ubuntu 20.04.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>filippofontana:</strong></p>
+                    <p>I got this pip warning: 
+
+WARNING: The directory '/home/filip/.cache/pip' or its parent directory is not owned or is not writable by the current user. The cache has been disabled. Check the permissions and owner of that directory. If executing pip with sudo, you may want sudo's -H flag.
+
+And after that, everything goes fine, but after the _sudo auto-cpufreq --install_ command, I had the error stated in the previous message.
+Maybe I will just wait the snapd 2.4.4 version.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>volnes:</strong></p>
+                    <p>Well now i got same error with systemd daemon (daemon not starting):
+![image](https://user-images.githubusercontent.com/5400851/77509555-f8103300-6e7d-11ea-9208-b06498e7f98d.png)
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Since some changes were pushed in meantime. What happens if you do:
+
+```
+sudo auto-cpufreq --remove
+sudo ./auto-cpufreq-installer --remove
+sudo ./auto-cpufreq-installer --install
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>volnes:</strong></p>
+                    <p>> sudo auto-cpufreq --remove
+sudo ./auto-cpufreq-installer --remove
+sudo ./auto-cpufreq-installer --install
+
+Same error after reinstalling last version.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>What does `whereis auto-cpufreq` return and are you able to run i.e: `auto-cpufreq --live`
+
+Does it make any difference if you run:
+
+```
+sudo su -
+auto-cpufreq --remove
+./auto-cpufreq-installer --remove
+./auto-cpufreq-installer --install
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>volnes:</strong></p>
+                    <p>> What does whereis auto-cpufreq
+
+![image](https://user-images.githubusercontent.com/5400851/77514609-33affa80-6e88-11ea-95f3-e412a1bf0198.png)
+
+> are you able to run i.e: auto-cpufreq --live
+
+Weird  but it works.
+
+
+> sudo su -
+> auto-cpufreq --remove
+> ./auto-cpufreq-installer --remove
+> ./auto-cpufreq-installer --install
+
+No difference</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Right, so problem is that same path `/usr/local/bin/auto-cpufreq` for some weird reason isn't found in your case, when it's run by root user as part of the systemd service.
+
+What I suggest you do as a workaround is:
+
+after `sudo auto-cpufreq --install`
+
+Run: `sudo systemctl stop auto-cpufreq`
+
+Edit `/etc/systemd/system/auto-cpufreq.service` file with editor of your choice, i.e:
+
+`sudo vim /etc/systemd/system/auto-cpufreq.service`
+
+Change line 9: 
+`ExecStart=auto-cpufreq --daemon` to:
+`ExecStart=/usr/local/bin/auto-cpufreq --daemon`
+
+Followed by:
+```
+sudo systemctl daemon-reload
+sudo systemctl start auto-cpufreq
+```
+
+auto-cpufreq daemon should be running now which you can verify by running: `auto-cpufreq --log`
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>volnes:</strong></p>
+                    <p>Thanks, systemd daemon now works fine!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Great. I won't make any changes in code yet, as I want to see if anyone else has this problem and until then will leave this issue open.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>This problem has been permanently fixed as part of [1.1.2 release](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/1.1.2).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

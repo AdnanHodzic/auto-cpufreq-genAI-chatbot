@@ -1,0 +1,399 @@
+<h1>How I replaced myself with a genAI chatbot using Gemini YouTube video transcript</h1>
+<h1>Transcript</h1>
+<p><strong>0.56 - 6.40 seconds:</strong> hey everyone Adnan here and today uh I</p>
+<p><strong>3.32 - 8.88 seconds:</strong> want to talk about how I replace myself</p>
+<p><strong>6.40 - 12.16 seconds:</strong> with a geni chat body using Gemini and</p>
+<p><strong>8.88 - 15.04 seconds:</strong> Google cloud with verx AI agent Builder</p>
+<p><strong>12.16 - 17.04 seconds:</strong> and conversational agents so this we</p>
+<p><strong>15.04 - 19.72 seconds:</strong> video will cover uh three part well</p>
+<p><strong>17.04 - 22.04 seconds:</strong> three parts the idea behind it and why I</p>
+<p><strong>19.72 - 24.96 seconds:</strong> created this chatbot how I built it</p>
+<p><strong>22.04 - 27.04 seconds:</strong> using Google cloud and the chatboard</p>
+<p><strong>24.96 - 30.24 seconds:</strong> architecture that I'm using here and</p>
+<p><strong>27.04 - 33.56 seconds:</strong> finally a demo and Showcase of the Auto</p>
+<p><strong>30.24 - 35.56 seconds:</strong> CPU FR gen chatbot uh there will be time</p>
+<p><strong>33.56 - 38.04 seconds:</strong> stamps in the video description so feel</p>
+<p><strong>35.56 - 41.28 seconds:</strong> free to jump around uh if you're not</p>
+<p><strong>38.04 - 44.16 seconds:</strong> interested in hear the whole story uh so</p>
+<p><strong>41.28 - 46.72 seconds:</strong> first I would like to uh talk about idea</p>
+<p><strong>44.16 - 50.16 seconds:</strong> and why I even created this uh gen</p>
+<p><strong>46.72 - 52.68 seconds:</strong> chatbot so the idea has been on my mind</p>
+<p><strong>50.16 - 55.32 seconds:</strong> for a while now uh but I never got time</p>
+<p><strong>52.68 - 57.60 seconds:</strong> to work around uh to work on it until</p>
+<p><strong>55.32 - 60.52 seconds:</strong> the vacation I just took uh around New</p>
+<p><strong>57.60 - 65.20 seconds:</strong> Year's which gave me time to and a</p>
+<p><strong>60.52 - 67.16 seconds:</strong> chance to finally dive in so um let's uh</p>
+<p><strong>65.20 - 70.16 seconds:</strong> talk about</p>
+<p><strong>67.16 - 73.76 seconds:</strong> it so</p>
+<p><strong>70.16 - 77.60 seconds:</strong> uh it's been uh 5 years since I created</p>
+<p><strong>73.76 - 80.44 seconds:</strong> Auto CPU fre uh the automatic CPU speed</p>
+<p><strong>77.60 - 84.12 seconds:</strong> and power Optimizer for Linux and today</p>
+<p><strong>80.44 - 87.28 seconds:</strong> it has 6,000 uh stars on GitHub</p>
+<p><strong>84.12 - 91.52 seconds:</strong> attracting uh 97 uh</p>
+<p><strong>87.28 - 94.04 seconds:</strong> contributors uh 47 uh releases and</p>
+<p><strong>91.52 - 98.44 seconds:</strong> reaching what I conservatively estimate</p>
+<p><strong>94.04 - 101.76 seconds:</strong> to be around or at least 30,000 uh uh</p>
+<p><strong>98.44 - 104.08 seconds:</strong> users and with such a broad user user</p>
+<p><strong>101.76 - 107.00 seconds:</strong> base comes a significant volume of</p>
+<p><strong>104.08 - 109.08 seconds:</strong> questions in particular support</p>
+<p><strong>107.00 - 112.28 seconds:</strong> questions and most of these questions</p>
+<p><strong>109.08 - 114.28 seconds:</strong> are repetitive questions that uh you</p>
+<p><strong>112.28 - 116.76 seconds:</strong> have over that have already been</p>
+<p><strong>114.28 - 119.04 seconds:</strong> answered and documented somewhere and</p>
+<p><strong>116.76 - 121.12 seconds:</strong> you what you could find an answer to if</p>
+<p><strong>119.04 - 124.20 seconds:</strong> you looked around</p>
+<p><strong>121.12 - 127.40 seconds:</strong> uh and if for example in issues or pool</p>
+<p><strong>124.20 - 130.20 seconds:</strong> requests or this read me itself but</p>
+<p><strong>127.40 - 132.80 seconds:</strong> realistically speaking most people don't</p>
+<p><strong>130.20 - 134.84 seconds:</strong> want to sift through GitHub issues or</p>
+<p><strong>132.80 - 138.20 seconds:</strong> documentation to find the answers they</p>
+<p><strong>134.84 - 141.60 seconds:</strong> need even I sometimes struggle to find</p>
+<p><strong>138.20 - 143.72 seconds:</strong> uh things that I've written and instead</p>
+<p><strong>141.60 - 146.76 seconds:</strong> people want immediate answers like right</p>
+<p><strong>143.72 - 149.12 seconds:</strong> here and now and as creator of this</p>
+<p><strong>146.76 - 152.88 seconds:</strong> project I have the most knowledge about</p>
+<p><strong>149.12 - 155.88 seconds:</strong> it and which has effectively turned me</p>
+<p><strong>152.88 - 159.64 seconds:</strong> into the answering machine so this got</p>
+<p><strong>155.88 - 162.16 seconds:</strong> so tedious that I even created a fact uh</p>
+<p><strong>159.64 - 164.84 seconds:</strong> a frequently asked questions template to</p>
+<p><strong>162.16 - 169.44 seconds:</strong> copy paste the answers and</p>
+<p><strong>164.84 - 171.76 seconds:</strong> responses uh so uh this got me thinking</p>
+<p><strong>169.44 - 174.24 seconds:</strong> how could I remove myself from this</p>
+<p><strong>171.76 - 178.04 seconds:</strong> equation and the answer was clear build</p>
+<p><strong>174.24 - 180.88 seconds:</strong> a gen chatbot uh Auto CPU freck uh</p>
+<p><strong>178.04 - 183.44 seconds:</strong> chatbot capable of uh answering</p>
+<p><strong>180.88 - 187.36 seconds:</strong> questions just as I would and that's</p>
+<p><strong>183.44 - 190.96 seconds:</strong> exactly what I did so now let's dive</p>
+<p><strong>187.36 - 194.92 seconds:</strong> into uh how I created this uh gen</p>
+<p><strong>190.96 - 197.56 seconds:</strong> chatbot and uh it's all on this page and</p>
+<p><strong>194.92 - 199.72 seconds:</strong> I'll refresh the page as soon as I</p>
+<p><strong>197.56 - 204.60 seconds:</strong> opened the how I replaced myself with a</p>
+<p><strong>199.72 - 208.12 seconds:</strong> gen chatbot uh a chat bot will pop pop</p>
+<p><strong>204.60 - 210.96 seconds:</strong> in and on the side and we'll get to that</p>
+<p><strong>208.12 - 216.24 seconds:</strong> in a minute so I'll just minimize it for</p>
+<p><strong>210.96 - 218.48 seconds:</strong> for a second uh but uh so as I said uh</p>
+<p><strong>216.24 - 220.60 seconds:</strong> this chatbot is built using Google Cloud</p>
+<p><strong>218.48 - 223.20 seconds:</strong> uh verx AI agent Builder with</p>
+<p><strong>220.60 - 227.36 seconds:</strong> conversational agents with Gemini as the</p>
+<p><strong>223.20 - 229.52 seconds:</strong> underlying uh llm large language model</p>
+<p><strong>227.36 - 231.32 seconds:</strong> and I'll also walk you through its</p>
+<p><strong>229.52 - 234.08 seconds:</strong> architecture where where it's all</p>
+<p><strong>231.32 - 236.80 seconds:</strong> explained uh in detail how it works so</p>
+<p><strong>234.08 - 240.32 seconds:</strong> basically until this point I just reread</p>
+<p><strong>236.80 - 243.24 seconds:</strong> uh these uh first few paragraphs</p>
+<p><strong>240.32 - 246.76 seconds:</strong> and uh first I would like to explain how</p>
+<p><strong>243.24 - 250.64 seconds:</strong> it works as gen sounds like magic and</p>
+<p><strong>246.76 - 254.32 seconds:</strong> it's not in order to create a chat gen</p>
+<p><strong>250.64 - 256.92 seconds:</strong> chatbot or uh you need documentation or</p>
+<p><strong>254.32 - 260.00 seconds:</strong> other data sources that you can train</p>
+<p><strong>256.92 - 263.08 seconds:</strong> the model on uh on this data in order to</p>
+<p><strong>260.00 - 265.68 seconds:</strong> get the answers as part of the prompts</p>
+<p><strong>263.08 - 267.36 seconds:</strong> so let's take a look at the architecture</p>
+<p><strong>265.68 - 270.36 seconds:</strong> uh diagram I don't know where I'm going</p>
+<p><strong>267.36 - 273.40 seconds:</strong> to uh hide my face here here so I'm just</p>
+<p><strong>270.36 - 278.80 seconds:</strong> going to zoom myself in as little as</p>
+<p><strong>273.40 - 280.92 seconds:</strong> possible so first uh the the most uh so</p>
+<p><strong>278.80 - 283.48 seconds:</strong> the most important thing in this process</p>
+<p><strong>280.92 - 285.76 seconds:</strong> is getting all the necessary information</p>
+<p><strong>283.48 - 289.28 seconds:</strong> and data that could be used as part of</p>
+<p><strong>285.76 - 291.28 seconds:</strong> my uh AI chatbot so data which contains</p>
+<p><strong>289.28 - 295.24 seconds:</strong> information with various uh questions</p>
+<p><strong>291.28 - 298.48 seconds:</strong> and answers so to start off first I have</p>
+<p><strong>295.24 - 300.20 seconds:</strong> a FAA the f I just mentioned the</p>
+<p><strong>298.48 - 304.80 seconds:</strong> frequently Asked question</p>
+<p><strong>300.20 - 310.12 seconds:</strong> and auto CPU FR blog posts uh blog posts</p>
+<p><strong>304.80 - 313.16 seconds:</strong> and uh so uh from full control.org so</p>
+<p><strong>310.12 - 316.76 seconds:</strong> since it's not easy to get all of this</p>
+<p><strong>313.16 - 319.40 seconds:</strong> data I created uh some Python scripts</p>
+<p><strong>316.76 - 322.16 seconds:</strong> which can fetch existing and update the</p>
+<p><strong>319.40 - 326.52 seconds:</strong> same uh data sources when there's new</p>
+<p><strong>322.16 - 327.60 seconds:</strong> data so for example uh I'll get YouTube</p>
+<p><strong>326.52 - 331.36 seconds:</strong> video</p>
+<p><strong>327.60 - 334.72 seconds:</strong> transcripts uh and and comments of all</p>
+<p><strong>331.36 - 337.88 seconds:</strong> the autoc CPU fre videos I uploaded I'll</p>
+<p><strong>334.72 - 340.80 seconds:</strong> also pull all the Reddit posts and it's</p>
+<p><strong>337.88 - 344.16 seconds:</strong> uh comments of the posts that I made of</p>
+<p><strong>340.80 - 349.32 seconds:</strong> course and I'll also pull uh autoc CPU</p>
+<p><strong>344.16 - 354.40 seconds:</strong> FR uh GitHub repo read me I'll pull the</p>
+<p><strong>349.32 - 356.16 seconds:</strong> releases uh and uh issues as and all the</p>
+<p><strong>354.40 - 359.20 seconds:</strong> comments as this is one of the most</p>
+<p><strong>356.16 - 360.72 seconds:</strong> important sources uh discussions and all</p>
+<p><strong>359.20 - 363.36 seconds:</strong> comments said this is another great</p>
+<p><strong>360.72 - 365.52 seconds:</strong> source uh where a lot of questions are</p>
+<p><strong>363.36 - 368.20 seconds:</strong> asked that might not uh be lost in the</p>
+<p><strong>365.52 - 370.48 seconds:</strong> context so the pool requests all in all</p>
+<p><strong>368.20 - 372.88 seconds:</strong> its comments as this also brings</p>
+<p><strong>370.48 - 375.32 seconds:</strong> important uh information on feature</p>
+<p><strong>372.88 - 378.92 seconds:</strong> Improvement improvements history and so</p>
+<p><strong>375.32 - 382.32 seconds:</strong> on and finally I'll get export of all</p>
+<p><strong>378.92 - 385.00 seconds:</strong> content of Auto CPU Frack uh Discord</p>
+<p><strong>382.32 - 387.96 seconds:</strong> Community channels like General support</p>
+<p><strong>385.00 - 391.64 seconds:</strong> and off topic and all of this data will</p>
+<p><strong>387.96 - 393.88 seconds:</strong> be stored as HD ML and the reason I do</p>
+<p><strong>391.64 - 396.16 seconds:</strong> this is that I found it's the best way</p>
+<p><strong>393.88 - 400.12 seconds:</strong> to get links pointing to original</p>
+<p><strong>396.16 - 402.84 seconds:</strong> sources as part of the prompt uh answers</p>
+<p><strong>400.12 - 405.56 seconds:</strong> uh so uh once I have all of this data</p>
+<p><strong>402.84 - 408.92 seconds:</strong> then all of this data will be uploaded</p>
+<p><strong>405.56 - 411.68 seconds:</strong> to uh Google Cloud uh bucket all the CPU</p>
+<p><strong>408.92 - 414.40 seconds:</strong> frag day I can even show this bucket and</p>
+<p><strong>411.68 - 418.32 seconds:</strong> in this bucket everything is in the same</p>
+<p><strong>414.40 - 422.28 seconds:</strong> directory so uh yeah just keep that in</p>
+<p><strong>418.32 - 424.80 seconds:</strong> mind and and uh as part of this then the</p>
+<p><strong>422.28 - 427.28 seconds:</strong> as part of the verx AI agent Builder I</p>
+<p><strong>424.80 - 430.00 seconds:</strong> create a data Store where all of the</p>
+<p><strong>427.28 - 433.32 seconds:</strong> data for a GCS bucket will be imported</p>
+<p><strong>430.00 - 436.48 seconds:</strong> too and this data serves as a backend</p>
+<p><strong>433.32 - 439.72 seconds:</strong> data repository that stores context</p>
+<p><strong>436.48 - 442.56 seconds:</strong> information and data that an AI agent</p>
+<p><strong>439.72 - 446.08 seconds:</strong> needs to perform tasks and respond to</p>
+<p><strong>442.56 - 448.52 seconds:</strong> user uh queries so I can show what uh</p>
+<p><strong>446.08 - 450.88 seconds:</strong> this looks like so basically yeah it's</p>
+<p><strong>448.52 - 453.20 seconds:</strong> just uh you have documents you can</p>
+<p><strong>450.88 - 456.04 seconds:</strong> import data and I import it from that</p>
+<p><strong>453.20 - 459.96 seconds:</strong> bucket uh from the cloud bucket I just</p>
+<p><strong>456.04 - 466.24 seconds:</strong> showed and uh you have activity uh and a</p>
+<p><strong>459.96 - 470.16 seconds:</strong> processing uh config and uh finally I do</p>
+<p><strong>466.24 - 472.76 seconds:</strong> I uh I create the my chatbot with the</p>
+<p><strong>470.16 - 476.44 seconds:</strong> conversational agents app as part of the</p>
+<p><strong>472.76 - 479.64 seconds:</strong> verx uh AI agent Builder which is uh</p>
+<p><strong>476.44 - 482.84 seconds:</strong> where all the magic uh happens and where</p>
+<p><strong>479.64 - 485.64 seconds:</strong> I stct my agent in natural language and</p>
+<p><strong>482.84 - 488.68 seconds:</strong> I can show what this looks like and this</p>
+<p><strong>485.64 - 491.04 seconds:</strong> is the natural language uh how to uh</p>
+<p><strong>488.68 - 495.24 seconds:</strong> handle tasks like answering questions</p>
+<p><strong>491.04 - 499.76 seconds:</strong> based on the provided data and so on and</p>
+<p><strong>495.24 - 502.40 seconds:</strong> basically these two boxes here uh is</p>
+<p><strong>499.76 - 504.68 seconds:</strong> what will form the rag the retrieval</p>
+<p><strong>502.40 - 507.56 seconds:</strong> augmented Generation by enabling</p>
+<p><strong>504.68 - 511.36 seconds:</strong> conversation agents to access external</p>
+<p><strong>507.56 - 516.36 seconds:</strong> data while generating respon es and this</p>
+<p><strong>511.36 - 520.20 seconds:</strong> is what the rag workflow looks like so</p>
+<p><strong>516.36 - 523.32 seconds:</strong> for example uh first the grounded data</p>
+<p><strong>520.20 - 525.88 seconds:</strong> retrieval so when uh a prompt is</p>
+<p><strong>523.32 - 529.48 seconds:</strong> received the system first queries that</p>
+<p><strong>525.88 - 532.36 seconds:</strong> autoc CPU frck data data store to search</p>
+<p><strong>529.48 - 535.40 seconds:</strong> and find a relevant answer and this</p>
+<p><strong>532.36 - 538.04 seconds:</strong> ensures that oh I don't let me make sure</p>
+<p><strong>535.40 - 541.00 seconds:</strong> that you see this and this ensures the</p>
+<p><strong>538.04 - 543.72 seconds:</strong> responses are ground Ed in the most</p>
+<p><strong>541.00 - 547.68 seconds:</strong> accurate and specific data available and</p>
+<p><strong>543.72 - 549.96 seconds:</strong> then uh fall back to generation if no</p>
+<p><strong>547.68 - 552.88 seconds:</strong> suitable answer is found in the grounded</p>
+<p><strong>549.96 - 554.28 seconds:</strong> data the system seamlessly transitions</p>
+<p><strong>552.88 - 558.40 seconds:</strong> to Gemini</p>
+<p><strong>554.28 - 560.92 seconds:</strong> llm uh and this uh generative model</p>
+<p><strong>558.40 - 563.56 seconds:</strong> produces a conceptual relevant answer</p>
+<p><strong>560.92 - 566.76 seconds:</strong> based on the prompt leveraging its</p>
+<p><strong>563.56 - 569.88 seconds:</strong> extensive pre-train trained uh knowledge</p>
+<p><strong>566.76 - 573.36 seconds:</strong> uh please note uh as a quick note uh I'm</p>
+<p><strong>569.88 - 575.44 seconds:</strong> not using Gemini 2 uh here uh the</p>
+<p><strong>573.36 - 578.56 seconds:</strong> recently released llm with many</p>
+<p><strong>575.44 - 581.04 seconds:</strong> improvements over its pre predecessor</p>
+<p><strong>578.56 - 583.96 seconds:</strong> unfortunately it's not available uh yet</p>
+<p><strong>581.04 - 586.12 seconds:</strong> as part of the verx AI agent Builder uh</p>
+<p><strong>583.96 - 588.84 seconds:</strong> even a conversational agents are in</p>
+<p><strong>586.12 - 591.56 seconds:</strong> preview so if anyone from Google is</p>
+<p><strong>588.84 - 594.00 seconds:</strong> watching this please make it happen so</p>
+<p><strong>591.56 - 598.96 seconds:</strong> we have Gemini to was part of the verx</p>
+<p><strong>594.00 - 602.60 seconds:</strong> AI agent Builder but I use uh Gemini 1.2</p>
+<p><strong>598.96 - 605.96 seconds:</strong> 1 .5 flash uh O2 preview which was</p>
+<p><strong>602.60 - 608.92 seconds:</strong> released uh around 20 I think September</p>
+<p><strong>605.96 - 611.16 seconds:</strong> 24th uh and Flash instead of pro because</p>
+<p><strong>608.92 - 613.44 seconds:</strong> it's very fast and it's better way</p>
+<p><strong>611.16 - 617.20 seconds:</strong> better for uh</p>
+<p><strong>613.44 - 620.92 seconds:</strong> agents uh and finally uh I also uh I can</p>
+<p><strong>617.20 - 625.04 seconds:</strong> switch uh once this is done there's also</p>
+<p><strong>620.92 - 627.88 seconds:</strong> integration so uh basically I'm going to</p>
+<p><strong>625.04 - 629.96 seconds:</strong> do this as oh now I need to move my face</p>
+<p><strong>627.88 - 632.88 seconds:</strong> to this side</p>
+<p><strong>629.96 - 636.68 seconds:</strong> uh yeah conversational uh</p>
+<p><strong>632.88 - 639.80 seconds:</strong> messenger so uh under conversational</p>
+<p><strong>636.68 - 642.64 seconds:</strong> messenger I can simply copy paste uh the</p>
+<p><strong>639.80 - 646.32 seconds:</strong> code uh the Integra agent integration</p>
+<p><strong>642.64 - 649.28 seconds:</strong> code uh which code which I ended up uh</p>
+<p><strong>646.32 - 651.88 seconds:</strong> changing quite a lot because I changed</p>
+<p><strong>649.28 - 655.12 seconds:</strong> the size of the chatbot and I set it to</p>
+<p><strong>651.88 - 657.60 seconds:</strong> load a second after the page loads</p>
+<p><strong>655.12 - 659.92 seconds:</strong> otherwise chatbot will just immediately</p>
+<p><strong>657.60 - 662.44 seconds:</strong> cover the whole page if you're viewing</p>
+<p><strong>659.92 - 665.08 seconds:</strong> it on a mobile device for example on</p>
+<p><strong>662.44 - 668.16 seconds:</strong> your phone and I made quite some changes</p>
+<p><strong>665.08 - 671.44 seconds:</strong> to make it work on WordPress uh for</p>
+<p><strong>668.16 - 674.64 seconds:</strong> example to only show up on this single</p>
+<p><strong>671.44 - 678.32 seconds:</strong> page instead of showing up on every page</p>
+<p><strong>674.64 - 681.76 seconds:</strong> on my blog and uh</p>
+<p><strong>678.32 - 684.56 seconds:</strong> in conclusion although it seems like</p>
+<p><strong>681.76 - 686.96 seconds:</strong> there's quite some a lot of work uh</p>
+<p><strong>684.56 - 689.72 seconds:</strong> going on here I still think it's fairly</p>
+<p><strong>686.96 - 692.12 seconds:</strong> simple to set all of this up and uh and</p>
+<p><strong>689.72 - 695.04 seconds:</strong> I think pretty much any project or code</p>
+<p><strong>692.12 - 699.44 seconds:</strong> base could benefit from having one uh</p>
+<p><strong>695.04 - 702.44 seconds:</strong> such uh support chatbot if you will so</p>
+<p><strong>699.44 - 704.68 seconds:</strong> since uh I uh only gave a high level</p>
+<p><strong>702.44 - 707.04 seconds:</strong> overview of what uh what's happening</p>
+<p><strong>704.68 - 709.16 seconds:</strong> under the hood here I was planning to</p>
+<p><strong>707.04 - 712.32 seconds:</strong> create another blog post and YouTube</p>
+<p><strong>709.16 - 714.72 seconds:</strong> video that explains everything in detail</p>
+<p><strong>712.32 - 717.96 seconds:</strong> uh especially since like I'm a tech lead</p>
+<p><strong>714.72 - 721.04 seconds:</strong> with background uh uh as an Sr side</p>
+<p><strong>717.96 - 724.72 seconds:</strong> reliability engineer or devops engineer</p>
+<p><strong>721.04 - 727.68 seconds:</strong> with no data science uh engineering</p>
+<p><strong>724.72 - 730.28 seconds:</strong> background and if I can create a a gen</p>
+<p><strong>727.68 - 732.24 seconds:</strong> chat but I'm confident anyone can do it</p>
+<p><strong>730.28 - 735.84 seconds:</strong> so let me know in the comments uh if you</p>
+<p><strong>732.24 - 737.56 seconds:</strong> would be interested in uh seeing this uh</p>
+<p><strong>735.84 - 741.64 seconds:</strong> video how to do</p>
+<p><strong>737.56 - 745.04 seconds:</strong> this and uh yeah then finally now the</p>
+<p><strong>741.64 - 749.24 seconds:</strong> exciting part which is the auto CPU frag</p>
+<p><strong>745.04 - 752.36 seconds:</strong> gen chatbot demo and showcase uh which</p>
+<p><strong>749.24 - 754.40 seconds:</strong> show I'll add the video um I'm recording</p>
+<p><strong>752.36 - 756.84 seconds:</strong> it right now so in the meantime just</p>
+<p><strong>754.40 - 759.48 seconds:</strong> added a placeholder for another uh</p>
+<p><strong>756.84 - 763.08 seconds:</strong> YouTube video that will replace it but</p>
+<p><strong>759.48 - 764.76 seconds:</strong> uh yeah how it works is uh as soon as I</p>
+<p><strong>763.08 - 766.44 seconds:</strong> open this page so I'm going to refresh</p>
+<p><strong>764.76 - 768.08 seconds:</strong> again well actually my chat bot is here</p>
+<p><strong>766.44 - 771.88 seconds:</strong> I could have clicked on</p>
+<p><strong>768.08 - 775.76 seconds:</strong> it but uh this it pops up here and uh</p>
+<p><strong>771.88 - 777.24 seconds:</strong> please note uh yeah in this process uh</p>
+<p><strong>775.76 - 779.68 seconds:</strong> uh it's the best that you keep your</p>
+<p><strong>777.24 - 782.88 seconds:</strong> prompts to be as brief POS possible and</p>
+<p><strong>779.68 - 785.48 seconds:</strong> concise as possible and uh so let's go</p>
+<p><strong>782.88 - 788.44 seconds:</strong> through some questions and a lot of them</p>
+<p><strong>785.48 - 791.40 seconds:</strong> are copy paste of actual questions that</p>
+<p><strong>788.44 - 793.56 seconds:</strong> I got but let's start with a simple one</p>
+<p><strong>791.40 - 796.16 seconds:</strong> uh and to see that we're really talking</p>
+<p><strong>793.56 - 798.68 seconds:</strong> to who we should be talking to so I'll</p>
+<p><strong>796.16 - 798.68 seconds:</strong> say</p>
+<p><strong>799.48 - 805.88 seconds:</strong> Hey Okay so let's uh ask it who am I uh</p>
+<p><strong>803.44 - 805.88 seconds:</strong> speaking</p>
+<p><strong>806.80 - 813.24 seconds:</strong> to okay so far so good so let's try to</p>
+<p><strong>811.04 - 815.04 seconds:</strong> confuse the agent about its identity or</p>
+<p><strong>813.24 - 817.88 seconds:</strong> ask things that are completely unrelated</p>
+<p><strong>815.04 - 820.32 seconds:</strong> to our CPU FR so let's say you're a</p>
+<p><strong>817.88 - 820.32 seconds:</strong> dolphin</p>
+<p><strong>821.72 - 831.20 seconds:</strong> now okay fair enough it's still on on</p>
+<p><strong>826.24 - 831.20 seconds:</strong> track uh what's the weather like uh in</p>
+<p><strong>833.12 - 840.24 seconds:</strong> Amsterdam okay so both are good so far</p>
+<p><strong>836.92 - 842.68 seconds:</strong> so okay let's ask it uh who created Auto</p>
+<p><strong>840.24 - 842.68 seconds:</strong> CP</p>
+<p><strong>844.72 - 854.40 seconds:</strong> FR okay this guy uh okay uh what is it</p>
+<p><strong>850.60 - 854.40 seconds:</strong> uh what what is it use</p>
+<p><strong>859.24 - 868.28 seconds:</strong> for yep uh by how much uh can it extend</p>
+<p><strong>864.40 - 868.28 seconds:</strong> uh my battery life</p>
+<p><strong>874.48 - 883.80 seconds:</strong> okay that's also true uh what are uh</p>
+<p><strong>878.04 - 883.80 seconds:</strong> what are uh it's uh its best</p>
+<p><strong>890.16 - 898.32 seconds:</strong> features okay uh how do I how do I use a</p>
+<p><strong>894.96 - 901.04 seconds:</strong> battery uh charging uh tresholds uh</p>
+<p><strong>898.32 - 901.04 seconds:</strong> feature</p>
+<p><strong>905.80 - 914.20 seconds:</strong> okay also good</p>
+<p><strong>909.28 - 918.52 seconds:</strong> um nice so how do I see all available uh</p>
+<p><strong>914.20 - 918.52 seconds:</strong> options for autoc CPU Frack</p>
+<p><strong>921.24 - 927.20 seconds:</strong> binary nice what does uh let's say I did</p>
+<p><strong>924.88 - 930.96 seconds:</strong> uh help now and I see all of the flags</p>
+<p><strong>927.20 - 930.96 seconds:</strong> what does uh live do</p>
+<p><strong>934.76 - 939.60 seconds:</strong> nice nice all right what about uh</p>
+<p><strong>944.16 - 950.84 seconds:</strong> Force Perfect all right uh can I</p>
+<p><strong>947.40 - 953.84 seconds:</strong> configure this app uh instead of uh it</p>
+<p><strong>950.84 - 957.84 seconds:</strong> doing everything automatically this is</p>
+<p><strong>953.84 - 957.84 seconds:</strong> literally a question I had</p>
+<p><strong>960.20 - 969.84 seconds:</strong> nice perfect uh okay what's the</p>
+<p><strong>964.64 - 969.84 seconds:</strong> recommended uh way of installing this</p>
+<p><strong>973.40 - 981.36 seconds:</strong> app nice true uh is there uh is there a</p>
+<p><strong>978.80 - 981.36 seconds:</strong> Debian</p>
+<p><strong>986.60 - 993.68 seconds:</strong> package all right uh let me see if it</p>
+<p><strong>990.44 - 998.04 seconds:</strong> makes this one out please uh link me to</p>
+<p><strong>993.68 - 999.56 seconds:</strong> uh please link me to to proposal to</p>
+<p><strong>998.04 - 1002.60 seconds:</strong> create</p>
+<p><strong>999.56 - 1006.68 seconds:</strong> it this is</p>
+<p><strong>1002.60 - 1010.28 seconds:</strong> uh okay fair enough uh all right is</p>
+<p><strong>1006.68 - 1010.28 seconds:</strong> there a flatback</p>
+<p><strong>1014.92 - 1022.00 seconds:</strong> package okay is there a GitHub issue</p>
+<p><strong>1018.96 - 1022.00 seconds:</strong> related to</p>
+<p><strong>1025.52 - 1031.60 seconds:</strong> this all right that's fair uh and</p>
+<p><strong>1029.00 - 1037.88 seconds:</strong> there's a very uh common question here</p>
+<p><strong>1031.60 - 1037.88 seconds:</strong> is there a conflict uh with aome power</p>
+<p><strong>1046.04 - 1051.72 seconds:</strong> profiles okay so I'm not a very uh okay</p>
+<p><strong>1049.32 - 1054.96 seconds:</strong> I'm not it's not very clear so let's uh</p>
+<p><strong>1051.72 - 1057.84 seconds:</strong> Power profiles uh will be uh</p>
+<p><strong>1054.96 - 1060.20 seconds:</strong> automatically disabled by autoc CPU FR</p>
+<p><strong>1057.84 - 1064.20 seconds:</strong> is that what you're</p>
+<p><strong>1060.20 - 1071.24 seconds:</strong> saying all right C clear uh does autoc</p>
+<p><strong>1064.20 - 1071.24 seconds:</strong> CPU FR conflict with a t with a TLP if</p>
+<p><strong>1075.28 - 1082.60 seconds:</strong> detected all right is there a conflict</p>
+<p><strong>1078.96 - 1082.60 seconds:</strong> with uh thermal</p>
+<p><strong>1086.00 - 1094.20 seconds:</strong> D nice okay uh how do I completely</p>
+<p><strong>1090.20 - 1094.20 seconds:</strong> remove auto CPU</p>
+<p><strong>1098.56 - 1107.24 seconds:</strong> frck yep uh how do I upgrade oh I want</p>
+<p><strong>1102.68 - 1107.24 seconds:</strong> uh how do I upgrade</p>
+<p><strong>1110.40 - 1116.16 seconds:</strong> also perfectly clear uh and uh now I'm</p>
+<p><strong>1114.28 - 1119.24 seconds:</strong> going to say I'm going to copy paste</p>
+<p><strong>1116.16 - 1122.32 seconds:</strong> some questions so for example why do I</p>
+<p><strong>1119.24 - 1125.08 seconds:</strong> get uh Auto CPU not found yeah the</p>
+<p><strong>1122.32 - 1127.52 seconds:</strong> problem with the path or here's a really</p>
+<p><strong>1125.08 - 1129.08 seconds:</strong> long one which is not recommended to</p>
+<p><strong>1127.52 - 1132.60 seconds:</strong> have a prompt this long but let's give</p>
+<p><strong>1129.08 - 1137.04 seconds:</strong> it a try anyways so user is asking if</p>
+<p><strong>1132.60 - 1140.12 seconds:</strong> he's running a gay mod run it will uh if</p>
+<p><strong>1137.04 - 1143.12 seconds:</strong> if they can work together with Allo be a</p>
+<p><strong>1140.12 - 1145.60 seconds:</strong> frck yeah they can conflict you can trck</p>
+<p><strong>1143.12 - 1147.28 seconds:</strong> performance this is this is literally</p>
+<p><strong>1145.60 - 1151.48 seconds:</strong> the answer I</p>
+<p><strong>1147.28 - 1154.68 seconds:</strong> gave interpret it perfectly so uh</p>
+<p><strong>1151.48 - 1154.68 seconds:</strong> another question copy</p>
+<p><strong>1156.24 - 1162.24 seconds:</strong> paste yep also true okay what's the yeah</p>
+<p><strong>1160.44 - 1165.48 seconds:</strong> what's the difference between a governor</p>
+<p><strong>1162.24 - 1168.44 seconds:</strong> EP and platform profiles and now he goes</p>
+<p><strong>1165.48 - 1171.48 seconds:</strong> in and gives you oh it didn't give me</p>
+<p><strong>1168.44 - 1175.32 seconds:</strong> anything thing so I'm just going to say</p>
+<p><strong>1171.48 - 1175.32 seconds:</strong> hello oh it did</p>
+<p><strong>1175.36 - 1181.36 seconds:</strong> um well I don't know what happened here</p>
+<p><strong>1178.00 - 1181.36 seconds:</strong> so I'm going to just repaste</p>
+<p><strong>1183.56 - 1190.32 seconds:</strong> this</p>
+<p><strong>1185.40 - 1194.36 seconds:</strong> yep also clear uh can it so another</p>
+<p><strong>1190.32 - 1194.36 seconds:</strong> question that's asked</p>
+<p><strong>1199.88 - 1204.64 seconds:</strong> yep all</p>
+<p><strong>1202.20 - 1209.76 seconds:</strong> right this question was asked the other</p>
+<p><strong>1204.64 - 1212.72 seconds:</strong> day okay also clear and uh let's say</p>
+<p><strong>1209.76 - 1215.76 seconds:</strong> uh we can also challenge the chat but we</p>
+<p><strong>1212.72 - 1215.76 seconds:</strong> can tell them tell me</p>
+<p><strong>1217.56 - 1224.08 seconds:</strong> more yep okay uh</p>
+<p><strong>1221.08 - 1224.08 seconds:</strong> and</p>
+<p><strong>1224.60 - 1230.04 seconds:</strong> yeah all right let's see if it knows</p>
+<p><strong>1227.84 - 1232.20 seconds:</strong> this one is is there a Discord Community</p>
+<p><strong>1230.04 - 1232.20 seconds:</strong> for</p>
+<p><strong>1235.48 - 1241.12 seconds:</strong> example okay that's uh that it is</p>
+<p><strong>1238.36 - 1242.28 seconds:</strong> available on the GitHub page uh how can</p>
+<p><strong>1241.12 - 1246.40 seconds:</strong> I</p>
+<p><strong>1242.28 - 1246.40 seconds:</strong> uh support this project for</p>
+<p><strong>1250.80 - 1259.32 seconds:</strong> example okay um let's say um and how do</p>
+<p><strong>1255.68 - 1259.32 seconds:</strong> I contribute code</p>
+<p><strong>1260.80 - 1267.64 seconds:</strong> okay and uh finally I'll just say please</p>
+<p><strong>1263.64 - 1273.44 seconds:</strong> link me to this page let's see if that</p>
+<p><strong>1267.64 - 1277.04 seconds:</strong> works okay uh also clear so um there you</p>
+<p><strong>1273.44 - 1279.36 seconds:</strong> have it uh you can ask aut CPU FR uh J</p>
+<p><strong>1277.04 - 1282.12 seconds:</strong> chatbot any questions you're looking and</p>
+<p><strong>1279.36 - 1284.40 seconds:</strong> answer to now uh when you're submitting</p>
+<p><strong>1282.12 - 1286.68 seconds:</strong> an issue uh you'll be prompted with a</p>
+<p><strong>1284.40 - 1290.04 seconds:</strong> issue template and besides asking if you</p>
+<p><strong>1286.68 - 1292.20 seconds:</strong> looked through external uh existing uh</p>
+<p><strong>1290.04 - 1296.72 seconds:</strong> uh issues for an answer now I'll also</p>
+<p><strong>1292.20 - 1298.60 seconds:</strong> suggest to first use uh the AI chatbot</p>
+<p><strong>1296.72 - 1300.84 seconds:</strong> uh and please note it's it's uh</p>
+<p><strong>1298.60 - 1302.40 seconds:</strong> definitely still far from perfect and it</p>
+<p><strong>1300.84 - 1306.68 seconds:</strong> definitely doesn't know everything I</p>
+<p><strong>1302.40 - 1308.68 seconds:</strong> know about uh AO CPU Frack but uh also</p>
+<p><strong>1306.68 - 1311.80 seconds:</strong> uh yeah I think there there could be a</p>
+<p><strong>1308.68 - 1314.80 seconds:</strong> lot of improvement once Gemini 2 support</p>
+<p><strong>1311.80 - 1317.12 seconds:</strong> is there and uh let's see what uh</p>
+<p><strong>1314.80 - 1319.76 seconds:</strong> happens in the meantime but uh please</p>
+<p><strong>1317.12 - 1323.56 seconds:</strong> note every conversation and interaction</p>
+<p><strong>1319.76 - 1327.16 seconds:</strong> is logged uh so please uh thumbs up uh</p>
+<p><strong>1323.56 - 1329.40 seconds:</strong> down or up answers you receive as I'll</p>
+<p><strong>1327.16 - 1331.76 seconds:</strong> periodically review the conversation</p>
+<p><strong>1329.40 - 1333.20 seconds:</strong> history and improve things so you can I</p>
+<p><strong>1331.76 - 1336.44 seconds:</strong> don't know you like this one or you</p>
+<p><strong>1333.20 - 1340.68 seconds:</strong> didn't like it why and I'll take a look</p>
+<p><strong>1336.44 - 1345.32 seconds:</strong> but um that's uh pretty much uh it so uh</p>
+<p><strong>1340.68 - 1345.32 seconds:</strong> until next time later</p>

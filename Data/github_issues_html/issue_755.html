@@ -1,0 +1,161 @@
+
+        <html>
+        <head>
+            <title>Issue #755: Immediate crash in dinit service (+ FIX)</title>
+        </head>
+        <body>
+            <h1>Immediate crash in dinit service (+ FIX)</h1>
+            <p><strong>Issue #755</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted?  Y
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)? N
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)? Y
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)? Y
+
+### Error output:
+```text
+Traceback (most recent call last):
+  File "/usr/bin/auto-cpufreq", line 5, in <module>
+    from auto_cpufreq.bin.auto_cpufreq import main
+  File "/usr/lib/python3.12/site-packages/auto_cpufreq/bin/auto_cpufreq.py", line 14, in <module>
+    from auto_cpufreq.core import *
+  File "/usr/lib/python3.12/site-packages/auto_cpufreq/core.py", line 34, in <module>
+    os.environ["PATH"] += ":/usr/bin"
+    ~~~~~~~~~~^^^^^^^^
+  File "<frozen os>", line 714, in __getitem__
+KeyError: 'PATH'
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+auto-cpufreq --debug
+
+Using settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------- Battery Info ---------------------------------
+
+battery count = 0
+
+-------------------------------------------------------------------------------
+
+Linux distro: Artix Linux rolling n/a
+Linux kernel: 6.10.2-artix1-1
+Processor: Intel(R) Core(TM) i7-4700MQ CPU @ 2.40GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2400 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      1.0%        71 °C      1311 MHz
+CPU1      1.0%        71 °C       800 MHz
+CPU2      1.0%        71 °C      2299 MHz
+CPU3      0.0%        71 °C       800 MHz
+CPU4      0.0%        70 °C       800 MHz
+CPU5      0.0%        70 °C       800 MHz
+CPU6      0.0%        72 °C      2395 MHz
+CPU7      1.0%        72 °C       800 MHz
+
+CPU fan speed: 3433 RPM
+
+auto-cpufreq version: 1 (git: )
+
+Python: 3.12.4
+psutil package: 6.0.0
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.22 %
+
+Total CPU usage: 3.9 %
+Total system load: 1.93
+Average temp. of all cores: 71.00 °C 
+
+Currently using: schedutil governor
+Currently turbo boost is: off
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+---
+This is more of a general issue rather than a specific issue I'm encountering. I was going to make a PR that fixes this, but I'm not sure if there's a specific way you might want it done, so I figured I'd open an issue first at least.
+
+The dinit service currently provided in the repo will not work without some work by the user. This is because dinit does not export any environment variables by default, and auto-cpufreq crashes when setting the PATH environment variable, because PATH does not exist at all.
+
+The user can fix this issue without modifying the service by exporting PATH in /usr/lib/dinit/environment (I believe, that path is off the top of my head). Otherwise, there's 2 ways in my mind to go about fixing this:
+
+1. In the actual code, check if PATH is in os.environ at all before accessing it with [], and define it if it does not, so that a KeyError doesn't occur. This is probably the best solution because it's more "general".
+2. Change the dinit service to export PATH. This is the route I went - I'll put the files I created below.
+
+/etc/dinit.d/auto-cpufreq:
+```
+type            = process
+command         = /usr/lib/dinit/auto-cpufreq
+```
+<br>
+
+/usr/lib/dinit/auto-cpufreq: (made executable!)
+
+```shell
+#!/bin/sh
+export PATH=/usr/local/bin
+/usr/local/bin/auto-cpufreq --daemon
+```</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>> In the actual code, check if PATH is in os.environ at all before accessing it with [], and define it if it does not, so that a KeyError doesn't occur. This is probably the best solution because it's more "general".
+
+I agree this is probably the best solution and would better cover future cases of this. If the PATH env var can't be found, it should be set to "/usr/local/bin". It would be great if you could open a PR for this.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>As @shadeyg56 suggested, please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+Update: ah nvm I see you created #756</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>#756 has merged, hence I'm closing this issue. Please feel free to re-open it if problem persists.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>You accidentally reopened it lol. This issue was linked</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> You accidentally reopened it lol. This issue was linked
+
+My bad :) </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

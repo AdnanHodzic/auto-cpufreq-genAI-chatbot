@@ -1,0 +1,152 @@
+
+        <html>
+        <head>
+            <title>Issue #715: Getting TypeError when executing after installation</title>
+        </head>
+        <body>
+            <h1>Getting TypeError when executing after installation</h1>
+            <p><strong>Issue #715</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hi all,
+
+I've used the snap package of auto-cpufreq for some time. Today I uninstalled the snap package and used the recommended installation method:
+
+> git clone https://github.com/AdnanHodzic/auto-cpufreq.git
+> cd auto-cpufreq && sudo ./auto-cpufreq-installer
+
+When running
+
+> auto-cpufreq 
+
+after installation I get the following error:
+
+<pre>Traceback (most recent call last):
+  File &quot;/opt/auto-cpufreq/venv/bin/auto-cpufreq&quot;, line 5, in &lt;module&gt;
+    from auto_cpufreq.bin.auto_cpufreq import main
+  File &quot;/opt/auto-cpufreq/venv/lib/python3.8/site-packages/auto_cpufreq/bin/auto_cpufreq.py&quot;, line 15, in &lt;module&gt;
+    from auto_cpufreq.core import *
+  File &quot;/opt/auto-cpufreq/venv/lib/python3.8/site-packages/auto_cpufreq/core.py&quot;, line 29, in &lt;module&gt;
+    from auto_cpufreq.utils.config import config
+  File &quot;/opt/auto-cpufreq/venv/lib/python3.8/site-packages/auto_cpufreq/utils/config.py&quot;, line 8, in &lt;module&gt;
+    def find_config_file(args_config_file: str | None) -&gt; str:
+TypeError: unsupported operand type(s) for |: &apos;type&apos; and &apos;NoneType&apos;</pre>
+
+Uninstalling, rebooting and reinstalling was not successful. Any hints on how I can fix this issue? Huge thanks in advance.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Angel-Karasu:</strong></p>
+                    <p>What is your python version ?
+To found it run `python --version`
+
+> Hi all,
+> 
+> I've used the snap package of auto-cpufreq for some time. Today I uninstalled the snap package and used the recommended installation method:
+> 
+> > git clone https://github.com/AdnanHodzic/auto-cpufreq.git
+> > cd auto-cpufreq && sudo ./auto-cpufreq-installer
+> 
+> When running
+> 
+> > auto-cpufreq
+> 
+> after installation I get the following error:
+> 
+> Traceback (most recent call last):
+>   File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 5, in <module>
+>     from auto_cpufreq.bin.auto_cpufreq import main
+>   File "/opt/auto-cpufreq/venv/lib/python3.8/site-packages/auto_cpufreq/bin/auto_cpufreq.py", line 15, in <module>
+>     from auto_cpufreq.core import *
+>   File "/opt/auto-cpufreq/venv/lib/python3.8/site-packages/auto_cpufreq/core.py", line 29, in <module>
+>     from auto_cpufreq.utils.config import config
+>   File "/opt/auto-cpufreq/venv/lib/python3.8/site-packages/auto_cpufreq/utils/config.py", line 8, in <module>
+>     def find_config_file(args_config_file: str | None) -> str:
+> TypeError: unsupported operand type(s) for |: 'type' and 'NoneType'
+> 
+> Uninstalling, rebooting and reinstalling was not successful. Any hints on how I can fix this issue? Huge thanks in advance.
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>doehr:</strong></p>
+                    <p>> What is your python version ? To found it run `python --version`
+> 
+
+Thanks for the quick reply. I get the following error:
+<pre>bash: python: command not found</pre>
+
+The following python versions are installed
+<pre>python2           python3           python3.8         python3-config
+python2.7         python3.13        python3.8-config  </pre></p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Angel-Karasu:</strong></p>
+                    <p>> > What is your python version ? To found it run `python --version`
+> 
+> Thanks for the quick reply. I get the following error:
+> 
+> bash: python: command not found
+> 
+> The following python versions are installed
+> 
+> python2           python3           python3.8         python3-config
+> python2.7         python3.13        python3.8-config
+
+Try `python3 --version`
+What is your distribution ?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>doehr:</strong></p>
+                    <p>The Python version is:
+<pre>Python 3.8.10
+</pre>
+
+I use the following distribution:
+<pre>  Operating System: Linux Mint 20
+            Kernel: Linux 5.4.0-182-generic
+      Architecture: x86-64</pre></p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Angel-Karasu:</strong></p>
+                    <p>Try to run `sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.13 1` and retry to run `auto-cpufreq`
+It forces to use python 3.13 instead python 3.8</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>doehr:</strong></p>
+                    <p>I tried. Unfortunately it didn't work...</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Angel-Karasu:</strong></p>
+                    <p>Try to run : `sudo update-alternatives --install $(which python3) python $(which python3.13) 1`
+And show the python version: `python3 --version`
+If the version is still 3.8, the bug will persist, otherwise you can to reinstall and run `auto-cpufreq`.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Angel-Karasu:</strong></p>
+                    <p>The correction has been applied, wait until it is merged with the main branch or if you don't went to wait you can run `git clone -b origin https://github.com/Angel-Karasu/auto-cpufreq.git` and follow the installation</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>doehr:</strong></p>
+                    <p>Hi, I upgraded to the latest Linux Mint version 21.3 and did a reinstall. Everything seems to work now. Thank you for you support!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Angel-Karasu:</strong></p>
+                    <p>PR #716 is merged which should fix the issue, if problem persists, please feel free to re-open it</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

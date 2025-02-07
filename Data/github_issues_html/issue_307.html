@@ -1,0 +1,74 @@
+
+        <html>
+        <head>
+            <title>Issue #307: Doesn’t change to perform when plugged in</title>
+        </head>
+        <body>
+            <h1>Doesn’t change to perform when plugged in</h1>
+            <p><strong>Issue #307</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>So I have a Lenovo laptop which has conservative mode, when I plug in with it on, auto-cpufreq doesn't switch to performance and stays in powersave scaling</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>This issue is probably the same as #299, which fixed itself somehow.
+
+I'm not really sure what is going on, because I don't experience this issue myself. I'm on a Lenovo which uses the ideapad_laptop kernel module. But it stays in charging state when I am on 60% when using conservative mode.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ShabirK21:</strong></p>
+                    <p>Then it should be due my system battery status being read as unknown. Thanks anyway </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Are you comfortable with git and want to test something out?
+It maybe fix your issue.
+
+Be sure no other version of auto-cpufreq are installed before testing this.
+
+I made a change on how we check the charging status. 
+If you could test if this works for you, it would be great!
+If you test this, please also verify if its detecting when you are on battery power only.
+
+```
+git clone https://github.com/bobslept/auto-cpufreq.git
+cd auto-cpufreq
+git checkout fix-charging-state
+sudo ./auto-cpufreq-installer --install
+```
+Now auto-cpufreq is installed. You can now use it in live mode to test the fix like this:
+`sudo auto-cpufreq --live`
+
+to remove all this from your system use the remove function from the installer:
+`sudo ./auto-cpufreq-installer --remove`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ShabirK21:</strong></p>
+                    <p>So i tested out the program, and i'm glad to say it works! when my bat status is unknown, the live status reads it as charging and sets the "performance" & switches to "powersave" when unplugged. Awesome! thanks for the fix</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Thank you so much for testing this. Very happy to hear it solved your problem! 
+We probably need a little bit more users to test this before we actually merge into master.
+Thanks again!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Thanks to @bobslept the proposed changes have now been merged with `master` branch. Changes will be part of the upcoming 1.8.2 release.  
+
+Until the release is made, changes can be installed by either having latest `master` changes and installing them using [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto-cpufreq-installer) or using `beta` channel of Snap package (`sudo snap install auto-cpufreq --beta`). With that said I'm closing this issue, please re-open it if the issue persists.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,203 @@
+
+        <html>
+        <head>
+            <title>Pull Request #680: Fix spam error message when setting energy_performance_preference</title>
+        </head>
+        <body>
+            <h1>Fix spam error message when setting energy_performance_preference</h1>
+            <p><strong>Pull Request #680</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>The 'intel_pstate' driver does not allow the EPP to be set to anything but 'performance' when the scaling governor is set to 'performance', previously auto-cpufreq when the scaling-governor was set to 'performance' tried to set the EPP to 'balance-performance' which caused a spam of write error messages in journalctl in system with 'intel_pstate' drivers. This is an intended behavior, since according to the [kernel documentation](https://docs.kernel.org/admin-guide/pm/intel_pstate.html#hwp-performance) when HWP is enabled[(which is enabled by default during boot with supported processors)](https://docs.kernel.org/admin-guide/pm/intel_pstate.html#active-mode-with-hwp) and scaling governor is set to performance the processor’s internal P-state selection logic is expected to focus entirely on performance. And this will override the EPP setting and reject any value different from 0 (“performance”). This commit just changes the 'balance-performance' EPP preference in set_performance() to 'performance'. Which fixes the spam issue.
+
+Fixes: #661</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>FosRexx:</strong></p>
+                    <p>In the original issue #661 someone commented having the same issue with an AMD CPU with `amd-pstate-epp` driver and again in this closed issue #563 the same exact issue is reported for AMD CPU with `amd-pstate-epp` driver, which leads me to believe that this behavior happens in both AMD and Intel CPU with EPP support. I cannot confirm that this will work for the `amd-pstate-epp` drivers and I could not find anything in the [amd-pstate kernel documentation](https://docs.kernel.org/admin-guide/pm/amd-pstate.html) on this matter. So, I am hesitated to only apply this fix for `intel-pstate` drivers, since this could also fix the issue for `amd-pstate-epp` drivers, and the availability of EPP is already checked in the code before setting the `energy_performance_preference` so we don't have to worry about this applying for non-epp drivers. It would be great if someone using the `amd-pstate-epp` driver could verify this fix.
+
+And yes this does not occur with `set_powersave()`, since in this mode the scaling governor is set to `powersave` and in this case their is no limitation to `energy_performance_perference` as stated [here](https://docs.kernel.org/admin-guide/pm/intel_pstate.html#hwp-powersave). This behavior of not allowing the `energy_performance_preference` to be set to anything but `performance` at-least for the `intel-pstate` driver is intended and [mentioned](https://docs.kernel.org/admin-guide/pm/intel_pstate.html#hwp-performance) in the kernel documentation. The HWP feature is enabled by default for processors supporting it as mentioned [here](https://docs.kernel.org/admin-guide/pm/intel_pstate.html#active-mode-with-hwp).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I absolutely agree with what was said here and share the same opinion:
+
+> Thanks for finding the cause of the write error spam. but I think we want to keep balance_performance as the default EPP, so the solution to this would be to check if the user is running intel_pstate, if they are, set the EPP to performance, otherwise set it to balance_performance
+
+Also, since I'm using  intel_pstate driver am I misunderstanding something because when I'm on powersave governor, EPP will be set to `power` EPP?
+
+> The 'intel_pstate' driver does not allow the EPP to be set to anything but 'performance'
+
+i.e:
+
+```
+Setting to use: "powersave" governor
+Setting to use: "power" EPP
+```
+
+and opposite will be the case when setting performance governor, i.e:
+
+```
+Setting to use: "performance" governor
+Setting to use: "performance" EPP
+```
+
+> It would be great if someone using the amd-pstate-epp driver could verify this fix.
+
+Aren't you running on AMD @shadeyg56 ?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>FosRexx:</strong></p>
+                    <p>First, let me resolve the misunderstanding which was caused due to missing information in the PR comment and the commit message, which I have now hopefully resolved and new people stumbling on this PR will understand this better.
+
+> Also, since I'm using intel_pstate driver am I misunderstanding something because when I'm on powersave governor, EPP will be set to power EPP?
+
+So, [this](https://docs.kernel.org/admin-guide/pm/intel_pstate.html#hwp-performance) is the relevant section of the kernel documentation regarding the why's of the issue. In summary, in system's with Intel CPU and AMD CPU, that support the hardware-managed P-states (HWP) running the `intel_pstate` driver in active mode(which is the default), when the scaling governor is set to `performance`, the driver does not allow the `energy-performance-preference` to be set to any value different than `performance`. If the value is set to any value different than `performance` via `sysfs` interface, that configuration will be rejected.
+
+This behavior causes the error message "write error: Device or resource busy", when auto-cpufreq tries to set the EPP to `balanced-performance` when the scaling governor is set to `performance` i.e. in `set_performance()` function.
+
+This does not happen when the scaling governor is set to `powersave`, since in this case the driver allows the `energy-performance-preference` value to to be set to any value. That's why when you are on `powersave` governor, the EPP is set to `power`(which is weird, might I add, since in the latest commit 8bb7478 in master the EPP should be set to `balance_power` when in `powersave` governor, see function `set_powersave()`)
+
+Hopefully this clears the misunderstanding.
+
+Regarding keeping the default `balance_performance` as the default EPP.
+
+> but I think we want to keep balance_performance as the default EPP, so the solution to this would be to check if the user is running intel_pstate, if they are, set the EPP to performance, otherwise set it to balance_performance
+
+I am hesitated to only apply this fix for `intel_pstate`, because according to [this](https://github.com/AdnanHodzic/auto-cpufreq/issues/661#issuecomment-1986923978s) comment and currently closed issue #563, this issue also occurs in `amd_pstate_epp` driver. I do not have the first hand experience of this issue in AMD and I could not find anything regarding this on the `amd_pstate` [kernel documentation](https://docs.kernel.org/admin-guide/pm/amd-pstate.html), but as you can see from the comment and the Issue this also happens in AMD systems. And so, this PR might also fix the issue for `amd_pstate_epp` users, and thats why I am hesitant(I do not know if this expression makes any sense, as you might have already guessed English is not my first language). And so all the system with EPP are affected and non-EPP users should not be affected by this change in code, since the check for if the system has EPP or not is already been done.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>FosRexx:</strong></p>
+                    <p>If you insist on only applying this fix for `intel_pstate` drivers and keeping the default EPP to `balanced_performance` then I have update the code to your liking in 828db0ef31d13bc299f143472b2e60a57129eb5b commit.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>> I am hesitated to only apply this fix for intel_pstate, because according to this comment and currently closed issue #563, this issue also occurs in amd_pstate_epp driver. I do not have the first hand experience of this issue in AMD and I could not find anything regarding this on the amd_pstate kernel documentation
+
+I've used `amd_pstate_epp` before and can confirm that it supports balance_performance. Also based on  [these benchmarks](https://www.phoronix.com/review/linux-63-amd-epyc-epp), this shows amd can use balance_performance. I believe the issue you linked had a different cause for AMD systems. Currently, I'm not getting any error spam on my AMD system </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>FosRexx:</strong></p>
+                    <p>Well, I look like an idiot now 🥲, I already updated the code to only apply this for `intel_pstate` driver.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>parmjotsinghrobot:</strong></p>
+                    <p>> Also does this not occur with `set_powersave()` as well since that uses `balance_power`? I can't test any of this as I don't have an Intel CPU
+
+Yes it does happen with Intel, I have tested it with the `powersave` governor and the `power` EPP has to be used with it for the error to not be spammed in the logs.
+
+I think before merging, the MR should be changed to also include this case, but I do believe the way that this is done is not the best. I think that instead of just checking if the path exists, we should read the value of said path and set the value accordingly.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I think before merging, the MR should be changed to also include this case, but I do believe the way that this is done is not the best. I think that instead of just checking if the path exists, we should read the value of said path and set the value accordingly.
+
++1</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>FosRexx:</strong></p>
+                    <p>> Yes it does happen with Intel, I have tested it with the powersave governor and the power EPP has to be used with it for the error to not be spammed in the logs.
+
+Cannot reproduce
+![image](https://github.com/AdnanHodzic/auto-cpufreq/assets/105154048/1f6a1886-db68-4027-a613-7473a7e22aac)
+
+OS: Arch Linux x86_64
+Host: Nitro AN515-58 (V2.10)
+Kernel: 6.8.7-arch1-2
+CPU: 12th Gen Intel(R) Core(TM) i5-12450H (12) @ 4.40 GHz</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>parmjotsinghrobot:</strong></p>
+                    <p>> > Yes it does happen with Intel, I have tested it with the powersave governor and the power EPP has to be used with it for the error to not be spammed in the logs.
+> 
+> Cannot reproduce
+
+Strange. After a kernel update I cannot reproduce either. This means that this *might* be an upstream kernel bug but what's the point of waiting for them.
+
+I like your current change regarding checking the state. @AdnanHodzic please review.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>FosRexx:</strong></p>
+                    <p>Updated the code so that user written config energy_performance_preference are also handled.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Updated the code so that user written config energy_performance_preference are also handled.
+
+I started testing the changes on this branch, removed my auto-cpufreq config file and wanted to see what it runs on "default" settings. While laptop is connected to power it all works as expected in terms of EPP and governors.
+
+But then, when pulled out the power cable and ran: `stress --cpu 8 --io 4 --vm 4 --timeout 15`
+
+I noticed that both governor and EPP remained pinned to "powersave", and what's more worrying my CPU cores were also pinned to max 800Mhz. As while auto-cpufreq will switch you to `powersave` when when connected to the charger, it should switch over to `performance` if it detects such high cpu usage/load.
+
+```
+Linux distro: Ubuntu 24.04 Noble Numbat
+Linux kernel: 6.8.0-31-generic
+Processor: Intel(R) Core(TM) i7-8565U CPU @ 1.80GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 800 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      2.1%        48 °C       800 MHz
+CPU1     12.1%        48 °C       800 MHz
+CPU2      8.2%        47 °C       765 MHz
+CPU3     52.0%        49 °C       400 MHz
+CPU4      3.0%        48 °C       400 MHz
+CPU5      4.0%        48 °C       800 MHz
+CPU6      0.0%        47 °C       800 MHz
+CPU7     15.3%        49 °C       400 MHz
+
+CPU fan speed: 0 RPM
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: discharging
+
+Setting to use: "powersave" governor
+Setting to use: "power" EPP
+
+Total CPU usage: 100 %
+Total system load: 3.99
+Average temp. of all cores: 48.00 °C 
+
+Load optimal (load average: 3.99, 1.90, 1.37)
+setting turbo boost: off
+```
+
+But then I noticed this was the case on `master` branch as well. Can anyone else reproduce this (i.e @shadeyg56 & @PurpleWazard), as if this is truly the case we had some kind of regression along the way.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Please disregard my last reply, from code POV, changes look good now, and I've been running auto-cpufreq with them for couple of days and I had 0 problems.
+
+@shadeyg56 I requested re-review of comment I made, as from what I see this request has been fulfilled, if not please raise it.
+
+Otherwise, thank you for your contribution @FosRexx, you will be credited for your work as part of upcoming auto-cpufreq release! </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

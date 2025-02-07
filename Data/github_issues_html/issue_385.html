@@ -1,0 +1,32 @@
+
+        <html>
+        <head>
+            <title>Issue #385: [ Feature Request ] Temporarily change cpu governor </title>
+        </head>
+        <body>
+            <h1>[ Feature Request ] Temporarily change cpu governor </h1>
+            <p><strong>Issue #385</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Is there any way to change cpu governor on the fly without editing /etc/auto-cpufreq.conf ?
+It would be fantastic to be able to change the governor temporarily, such as for current boot, regardless of whether device is running on battery or ac, for example:
+
+```bash
+auto-cpufreq --cpu-governor conservative # effective until next boot or restart of the service
+auto-cpufreq --cpu-governor auto # usual setting respecting battery/ac mode
+```
+
+This can create other opportunities such as changing governor when certain application or a set of applications is found running</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Since I'm very limited with available time to do this myself, if you or anyone else wants to give it a try in implementing this functionality, please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

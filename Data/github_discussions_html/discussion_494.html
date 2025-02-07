@@ -1,0 +1,120 @@
+
+        <html>
+        <head>
+            <title>Discussion #494: How do I cleanly and completely uninstall auto-cpufreq</title>
+        </head>
+        <body>
+            <h1>How do I cleanly and completely uninstall auto-cpufreq</h1>
+            <p><strong>Discussion #494</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I have very low level knowledge on Linux, so please bare with me.
+
+Right now, I want it to completely stop working on my pc. At first, I installed it with my custom config file using the --install command. But now, even when I use the --remove command, the frequency of the cpu is still capped, and no matter what I do, auto-cpufreq is still running. How do I completely wipe it out of my pc? I don't want any trace of it left.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ted-dino:</strong></p>
+                    <p>hi @ponleou , have you found a solution for this? im currently experiencing the same issue. i tried running:
+
+`sudo auto-cpufreq --remove`
+
+but i received this message. however, i can still see the icon on my desktop app.
+
+> auto-cpufreq daemon is not installed.
+
+here is my system info
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Fedora Linux 40 Workstation Edition
+Linux kernel: 6.10.9-200.fc40.x86_64
+Processor: AMD Ryzen 7 PRO 7840U w/ Radeon 780M Graphics
+Cores: 16
+Architecture: x86_64
+Driver: amd-pstate-epp
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 5132 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      2.0%        45 °C      1452 MHz
+CPU1      1.0%        45 °C       400 MHz
+CPU2      2.0%        45 °C      1297 MHz
+CPU3      1.0%        45 °C       400 MHz
+CPU4      3.0%        45 °C      3243 MHz
+CPU5      0.0%        45 °C       400 MHz
+CPU6      8.2%        45 °C      2275 MHz
+CPU7      0.0%        45 °C       400 MHz
+CPU8      2.0%        45 °C      3244 MHz
+CPU9      1.0%        45 °C       400 MHz
+CPU10      7.1%        45 °C      2829 MHz
+CPU11      4.0%        45 °C       400 MHz
+CPU12      4.0%        45 °C      1298 MHz
+CPU13      0.0%        45 °C       400 MHz
+CPU14      5.1%        45 °C      1721 MHz
+CPU15      1.0%        45 °C      3244 MHz
+
+CPU fan speed: 2231 RPM
+
+auto-cpufreq version: 2.2.0 (git: 6ff1b89)
+
+Python: 3.12.6
+psutil package: 5.9.7
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.09 %
+
+Total CPU usage: 2.4 %
+Total system load: 0.86
+Average temp. of all cores: 45.00 °C 
+
+Currently using: powersave governor
+Warning: CPU turbo is not available
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```
+
+CC: @AdnanHodzic 
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>[`sudo ./auto-cpufreq-installer --remove ` ](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#auto-cpufreq-installer)will also delete absolutely everything and will also [remove auto-cpufreq daemon along the way.](https://github.com/AdnanHodzic/auto-cpufreq#remove---auto-cpufreq-daemon)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ted-dino:</strong></p>
+                    <p>thanks @AdnanHodzic , the command worked for me.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>theuser18:</strong></p>
+                    <p>> sudo ./auto-cpufreq-installer --remove
+
+It would be great if this was added to the readme</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@theuser18 please give it a try and update it yourself and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

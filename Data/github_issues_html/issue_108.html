@@ -1,0 +1,482 @@
+
+        <html>
+        <head>
+            <title>Issue #108: Battery mode is "charging" even unplugged</title>
+        </head>
+        <body>
+            <h1>Battery mode is "charging" even unplugged</h1>
+            <p><strong>Issue #108</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hello, I installed auto-cpufreq from snap and by cloning from git. I tried to use the monitor option, but the battery mode rests on "charging" even after unplugging my laptop.
+I'm on Pop!_OS, with the latest updates. The kernel version is 5.4.0-7642-generic.
+
+### System information:
+```text
+System: HP product: HP Pavilion Laptop 15-ck0xx 
+           v: Type1ProductConfigId serial: <filter> 
+           Mobo: HP model: 841C v: 64.14 serial: <filter> UEFI: Insyde v: F.12 
+           date: 12/17/2019 
+Battery:   ID-1: BAT0 charge: 27.5 Wh condition: 30.1/30.1 Wh (100%) 
+CPU:       Governors: performance powersave Topology: Quad Core model: Intel Core i7-8550U bits: 64 type: MT MCP 
+           L2 cache: 8192 KiB 
+           Speed: 700 MHz min/max: 400/4000 MHz Core speeds (MHz): 1: 700 2: 701 3: 700 
+           4: 700 5: 700 6: 700 7: 700 8: 700 
+Graphics:  Device-1: Intel UHD Graphics 620 driver: i915 v: kernel 
+           Device-2: NVIDIA GP108M [GeForce MX150] driver: nvidia v: 440.100 
+           Display: x11 server: X.Org 1.20.8 driver: modesetting,nvidia 
+           unloaded: fbdev,nouveau,vesa resolution: 1920x1080~60Hz 
+           OpenGL: renderer: Mesa Intel UHD Graphics 620 (KBL GT2) v: 4.6 Mesa 20.0.8 
+Audio:     Device-1: Intel Sunrise Point-LP HD Audio driver: snd_hda_intel 
+           Sound Server: ALSA v: k5.4.0-7642-generic 
+Network:   Device-1: Intel Dual Band Wireless-AC 3168NGW [Stone Peak] driver: iwlwifi 
+           IF: wlo1 state: up mac: <filter> 
+           Device-2: Realtek RTL8111/8168/8411 PCI Express Gigabit Ethernet driver: r8169 
+           IF: eno1 state: up speed: 1000 Mbps duplex: full mac: <filter> 
+           IF-ID-1: virbr0 state: down mac: <filter> 
+           IF-ID-2: virbr0-nic state: down mac: <filter> 
+Drives:    Local Storage: total: 1.03 TiB used: 618.86 GiB (58.9%) 
+           ID-1: /dev/sda vendor: Seagate model: ST1000LM035-1RK172 size: 931.51 GiB 
+           ID-2: /dev/sdb vendor: SanDisk model: SD8SN8U-128G-1006 size: 119.24 GiB 
+Partition: ID-1: / size: 33.36 GiB used: 23.55 GiB (70.6%) fs: ext4 dev: /dev/sdb7 
+           ID-2: swap-1 size: 4.00 GiB used: 0 KiB (0.0%) fs: swap dev: /dev/dm-0 
+Sensors:   
+{'battery': None,
+ 'fans': {},
+ 'temperatures:': {'acpitz': [shwtemp(label='', current=45.0, high=None, critical=None)],
+                   'coretemp': [shwtemp(label='Package id 0', current=54.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 0', current=45.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 1', current=54.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 2', current=47.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 3', current=47.0, high=100.0, critical=100.0),
+                                shwtemp(label='Package id 0', current=54.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 0', current=45.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 1', current=54.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 2', current=47.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 3', current=47.0, high=100.0, critical=100.0)],
+                   'iwlwifi_1': [shwtemp(label='', current=31.0, high=None, critical=None)],
+                   'pch_skylake': [shwtemp(label='', current=41.0, high=None, critical=None)]}} System Temperatures: cpu: 45.0 C mobo: N/A 
+           Fan Speeds (RPM): N/A 
+Info:      Processes: 388 Uptime: 1h 06m Memory: 15.53 GiB used: 3.28 GiB (21.1%) 
+           Shell: bash inxi: 3.0.38
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Seems like duplicate of #85 </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>tibert01:</strong></p>
+                    <p>I read what was in the #85 , I tried to install the python3-psutil form my apt repo (version 5.5.1) but nothing has changed, removed it and tried to install the psutil with pip3 (version 5.7.2), but it was already installed. And from what I read, the only thing remaining that I could do is making the modification in core.py, but it isn't very clean.
+
+I don't know if it could change have incompatibilities, I have also undervolt installed (https://github.com/georgewhewell/undervolt) </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I think the problem is that `psutil` from `python3-psutil` is the one that gets picked up and that's the problem. What happens if you `sudo apt purge -y python3-psutil`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>tibert01:</strong></p>
+                    <p>Not much, It was already uninstalled, so I installed it again to purge it instead of only removing it, and it still is on charging. Even tried to remove psutil with pip3 and let the installer install it back, but still the same thing.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>What happens if you install it using a [snap package](https://github.com/AdnanHodzic/auto-cpufreq#snap-store)?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>tibert01:</strong></p>
+                    <p>Same issue. I don't know if the snap package comes with psutil, or with something to install it : I uninstalled psutil with pip3 before installing the snap package and when I ran the auto-cpureq command, it gave me an error saying that psutil isn't installed (I installed it after with pip3). But even before, I tried the snap package before using the command line installer, with the same issue. My snap version is 2.45.3.1.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>coerx:</strong></p>
+                    <p>I have the same issue. I installed auto-cpufreq by auto-cpufreq-installer, and psutil is installed by pip3, not from python3-psutil
+I'm on ubuntu 20.04.1 LTS </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Could both of you share output of `sudo auto-cpufreq --debug`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>coerx:</strong></p>
+                    <p>The laptop isn't actually plugged in, and the output of the command `sudo auto-cpufreq --debug`
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 20.04 focal
+Linux kernel: 5.4.0-47-generic
+
+Snap package: no
+
+Python: 3.8.2
+psutil package: 5.7.2
+platform package: 1.0.8
+click package: 7.0
+distro package 1.4.0
+
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.12 %
+
+Processor: Intel(R) Core(TM) i7-8550U CPU @ 1.80GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 1800 MHz
+CPU min frequency: 400 MHz
+
+CPU frequency for each core:
+
+CPU0: 1800 MHz
+CPU1: 1800 MHz
+CPU2: 1800 MHz
+CPU3: 1800 MHz
+CPU4: 1788 MHz
+CPU5: 1800 MHz
+CPU6: 1800 MHz
+CPU7: 1800 MHz
+
+CPU usage per each core:
+
+CPU0: 5.0 %
+CPU1: 5.0 %
+CPU2: 3.0 %
+CPU3: 4.0 %
+CPU4: 3.0 %
+CPU5: 5.1 %
+CPU6: 1.0 %
+CPU7: 2.0 %
+
+Temperature for each physical core:
+
+CPU0 temp: 39°C
+CPU1 temp: 38°C
+CPU2 temp: 38°C
+CPU3 temp: 38°C
+
+Total CPU usage: 4.4 %
+Total system load: 0.41 
+
+Currently using: performance governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>tibert01:</strong></p>
+                    <p>I may have found a part of what is causing the issue (or maybe it's the only thing don't know), I managed to make it working by enabling in my bios the battery time remaining (the remaining battery time was shown by pop os even without it enabled in bios). (auto-cpufreq installed from snap)
+
+Here is the debug if useful (laptop unplugged and auto-cpufreq status discharging) : 
+```text
+-------------------------------------------------------------------------------
+
+System: HP product: HP Pavilion Laptop 15-ck0xx v: Type1ProductConfigId serial: <filter> 
+           Mobo: HP model: 841C v: 64.14 serial: <filter> UEFI: Insyde v: F.12 date: 12/17/2019 
+Battery:   ID-1: BAT0 charge: 29.7 Wh condition: 31.9/31.9 Wh (100%) 
+CPU:       Governors: performance powersave Topology: Quad Core model: Intel Core i7-8550U bits: 64 type: MT MCP L2 cache: 8192 KiB 
+           Speed: 901 MHz min/max: 400/4000 MHz Core speeds (MHz): 1: 900 2: 900 3: 901 4: 900 5: 900 6: 900 7: 900 8: 900 
+Graphics:  Device-1: Intel UHD Graphics 620 driver: i915 v: kernel 
+           Display: server: X.Org 1.20.8 driver: modesetting unloaded: fbdev,vesa resolution: 1920x1080~60Hz 
+           OpenGL: renderer: Mesa Intel UHD Graphics 620 (KBL GT2) v: 4.6 Mesa 20.0.8 
+Audio:     Device-1: Intel Sunrise Point-LP HD Audio driver: snd_hda_intel 
+           Sound Server: ALSA v: k5.4.0-7642-generic 
+Network:   Device-1: Intel Dual Band Wireless-AC 3168NGW [Stone Peak] driver: iwlwifi 
+           IF: wlo1 state: up mac: <filter> 
+           Device-2: Realtek RTL8111/8168/8411 PCI Express Gigabit Ethernet driver: r8169 
+           IF: eno1 state: down mac: <filter> 
+           IF-ID-1: virbr0 state: down mac: <filter> 
+           IF-ID-2: virbr0-nic state: down mac: <filter> 
+Drives:    Local Storage: total: 1.03 TiB used: 606.56 GiB (57.7%) 
+           ID-1: /dev/sda vendor: Seagate model: ST1000LM035-1RK172 size: 931.51 GiB 
+           ID-2: /dev/sdb vendor: SanDisk model: SD8SN8U-128G-1006 size: 119.24 GiB 
+Partition: ID-1: / size: 33.36 GiB used: 23.49 GiB (70.4%) fs: ext4 dev: /dev/sdb7 
+           ID-2: swap-1 size: 4.00 GiB used: 0 KiB (0.0%) fs: swap dev: /dev/dm-0 
+Sensors:   
+{'battery': sbattery(percent=93.02325581395348, secsleft=17003, power_plugged=False),
+ 'fans': {},
+ 'temperatures:': {'acpitz': [shwtemp(label='', current=46.0, high=None, critical=None)],
+                   'coretemp': [shwtemp(label='Package id 0', current=48.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 0', current=45.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 1', current=45.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 2', current=45.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 3', current=48.0, high=100.0, critical=100.0),
+                                shwtemp(label='Package id 0', current=48.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 0', current=45.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 1', current=45.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 2', current=45.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 3', current=48.0, high=100.0, critical=100.0)],
+                   'iwlwifi_1': [shwtemp(label='', current=44.0, high=None, critical=None)],
+                   'pch_skylake': [shwtemp(label='', current=43.5, high=None, critical=None)]}} System Temperatures: cpu: 46.0 C mobo: N/A 
+           Fan Speeds (RPM): N/A 
+Info:      Processes: 382 Uptime: 4m Memory: 15.53 GiB used: 2.66 GiB (17.1%) Shell: bash inxi: 3.0.38 
+
+-------------------------------------------------------------------------------
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>cyruskarsan:</strong></p>
+                    <p>Same issue, Ubuntu 20.04 installed from snap package. HP Envy 
+
+output of `sudo auto-cpufreq --debug`
+```
+Linux distro: Ubuntu 20.04.1 LTS (Focal Fossa)
+Linux kernel: 5.4.0-47-generic
+
+Snap package: yes
+
+Python: 3.8.2
+psutil package: 5.7.2
+platform package: 1.0.8
+click package: 7.1.2
+distro package 1.5.0
+
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.19 %
+
+Processor: Intel(R) Core(TM) i7-8550U CPU @ 1.80GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 4000 MHz
+CPU min frequency: 400 MHz
+
+CPU frequency for each core:
+
+CPU0: 3674 MHz
+CPU1: 3168 MHz
+CPU2: 2808 MHz
+CPU3: 2812 MHz
+CPU4: 3026 MHz
+CPU5: 2786 MHz
+CPU6: 3172 MHz
+CPU7: 2742 MHz
+
+CPU usage per each core:
+
+CPU0: 4.0 %
+CPU1: 2.9 %
+CPU2: 1.0 %
+CPU3: 0.0 %
+CPU4: 1.0 %
+CPU5: 1.0 %
+CPU6: 0.0 %
+CPU7: 1.0 %
+
+Temperature for each physical core:
+
+CPU0 temp: 48°C
+CPU1 temp: 47°C
+CPU2 temp: 48°C
+CPU3 temp: 46°C
+
+Total CPU usage: 1.3 %
+Total system load: 0.46 
+
+Currently using: performance governor
+Currently turbo boost is: on
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@cyruskarsan @coerx can you check if you have similar settings in BIOS to what @tibert01 [mentioned](https://github.com/AdnanHodzic/auto-cpufreq/issues/108#issuecomment-692816368)?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>coerx:</strong></p>
+                    <p>sry, I didn't find that similar setting in BIOS
+### System info:
+```
+System:
+  Host: coer-hp Kernel: 5.4.0-47-generic x86_64 bits: 64 Desktop: Gnome 3.36.4 
+  Distro: Ubuntu 20.04.1 LTS (Focal Fossa) 
+Machine:
+  Type: Laptop System: HP product: HP ZHAN 66 Pro G1 v: N/A 
+  serial: <superuser/root required> 
+  Mobo: HP model: 83FD v: KBC Version 07.20.00 serial: <superuser/root required> 
+  UEFI: HP v: Q93 Ver. 01.09.01 date: 10/22/2019 
+Battery:
+  ID-1: BAT0 charge: 28.8 Wh condition: 29.5/29.5 Wh (100%) 
+CPU:
+  Topology: Quad Core model: Intel Core i7-8550U bits: 64 type: MT MCP 
+  L2 cache: 8192 KiB 
+  Speed: 1590 MHz min/max: 400/4000 MHz Core speeds (MHz): 1: 1590 2: 1819 3: 1772 
+  4: 1558 5: 1767 6: 1664 7: 1644 8: 1585 
+Graphics:
+  Device-1: Intel UHD Graphics 620 driver: i915 v: kernel 
+  Device-2: NVIDIA GP108M [GeForce MX150] driver: N/A 
+  Display: x11 server: X.Org 1.20.8 driver: modesetting,nvidia 
+  unloaded: fbdev,nouveau,vesa resolution: 1920x1080~60Hz 
+  OpenGL: renderer: Mesa Intel UHD Graphics 620 (KBL GT2) v: 4.6 Mesa 20.0.8 
+Audio:
+  Device-1: Intel Sunrise Point-LP HD Audio driver: snd_hda_intel 
+  Sound Server: ALSA v: k5.4.0-47-generic 
+Network:
+  Device-1: Realtek RTL8111/8168/8411 PCI Express Gigabit Ethernet driver: r8169 
+  IF: enp2s0 state: down mac: 48:ba:4e:50:94:d6 
+  Device-2: Intel Wireless 8265 / 8275 driver: iwlwifi 
+  IF: wlp3s0 state: up mac: bc:a8:a6:82:ef:15 
+Drives:
+  Local Storage: total: 471.36 GiB used: 40.56 GiB (8.6%) 
+  ID-1: /dev/nvme0n1 vendor: Intel model: SSDPEKKF256G7H size: 238.47 GiB 
+  ID-2: /dev/sda vendor: Western Digital model: WDS250G2B0A-00SM50 size: 232.89 GiB 
+Partition:
+  ID-1: / size: 211.33 GiB used: 40.47 GiB (19.1%) fs: ext4 dev: /dev/sda3 
+  ID-2: swap-1 size: 16.21 GiB used: 0 KiB (0.0%) fs: swap dev: /dev/sda2 
+Sensors:
+  System Temperatures: cpu: 46.0 C mobo: 42.0 C 
+  Fan Speeds (RPM): N/A 
+Info:
+  Processes: 320 Uptime: 10h 02m Memory: 15.53 GiB used: 3.11 GiB (20.0%) Shell: bash 
+  inxi: 3.0.38 
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@tibert01 @coerx @cyruskarsan and anybody else who's experiencing this issue.
+
+Changes were made as part of #124 which should resolve this problem, could please verify?
+
+If you're using snap changes can be tested by switching to beta channel, i.e:
+
+```
+sudo snap install auto-cpufreq --beta
+```
+
+Otherwise you can test them by running:
+
+```
+git checkout -b Haptein-master master
+git pull https://github.com/Haptein/auto-cpufreq.git master
+sudo ./auto-cpufreq-installer --install
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>coerx:</strong></p>
+                    <p>Looks like the problem is fixed.
+### the output of `sudo auto-cpufreq --debug`
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 20.04 focal
+Linux kernel: 5.4.0-47-generic
+
+Build git commit: c93aac1
+Snap package: no
+
+Python: 3.8.2
+psutil package: 5.7.2
+platform package: 1.0.8
+click package: 7.0
+distro package 1.4.0
+
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.12 %
+
+Procesor: Intel(R) Core(TM) i7-8550U CPU @ 1.80GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 1800 MHz
+CPU min frequency: 400 MHz
+
+	 Usage  Temperature  Frequency
+CPU0:	 13.3%     47 °C      800 MHz
+CPU1:	 10.5%     47 °C      800 MHz
+CPU2:	 10.9%     46 °C      800 MHz
+CPU3:	  7.1%     48 °C      799 MHz
+CPU4:	  5.1%     47 °C      800 MHz
+CPU5:	  9.0%     47 °C      800 MHz
+CPU6:	  5.1%     46 °C      800 MHz
+CPU7:	 10.1%     48 °C      800 MHz
+
+Total CPU usage: 8.7 %
+Total system load: 0.66 
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>tibert01:</strong></p>
+                    <p>For me it still doesn't work if I don't enable the setting in the bios. If I enable it, it works.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lucacesare:</strong></p>
+                    <p>It works, should I stay on this branch or switch back?
+ @AdnanHodzic  </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> For me it still doesn't work if I don't enable the setting in the bios. If I enable it, it works.
+
+@tibert01 What's the problem with having this setting enabled in BIOS?
+
+@gnunikorn you can switch back to `master` changes are now made as part of [1.3.4 release.](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.3.4) 
+
+If you were using snap beta channel, you can switch back to stable as changes have been propagated there as well.
+
+```
+sudo snap switch --channel=stable auto-cpufreq
+```
+
+Closing the issue.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Haptein:</strong></p>
+                    <p>@tibert01 My guess is that the Linux kernel isn't getting needed info about the battery if the option is disabled in BIOS. Just to be sure, could you please share the result of running the following commands?
+> grep -H . /sys/class/power_supply/\*/status
+> grep -H . /sys/class/power_supply/\*/online</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>tibert01:</strong></p>
+                    <p>For both grep commands, the results are correct, when unplugged status gives "discharging" and online gives "0". With or without the setting enabled in the bios.
+
+For the setting in the bios, I don't mind letting it enabled, I was just reporting what it happened.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

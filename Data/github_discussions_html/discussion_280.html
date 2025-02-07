@@ -1,0 +1,59 @@
+
+        <html>
+        <head>
+            <title>Discussion #280: Do auto-cpufreq, powertop, and thermald conflict?</title>
+        </head>
+        <body>
+            <h1>Do auto-cpufreq, powertop, and thermald conflict?</h1>
+            <p><strong>Discussion #280</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hi,
+I'm working on optimizing power consumption on my laptop.
+I've been using auto-cpufreq for some time now.
+In the README, it's said that it was not meant to run alongside TLP, so I'm not using it.
+However, I'm wondering if I could benefit from using also powertop and thermald.
+
+Could they work in tandem and benefit my battery life?</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> However, I'm wondering if I could benefit from using also powertop and thermald.
+
+I have `thermald` installed (it's installed as default on most distros nowadays). I also don't see why you should't use `powertop` to find ways to further optimize your battery life.
+
+> Could they work in tandem and benefit my battery life?
+
+Sure, you can even use auto-cpufreq and TLP in tandem if you want, it's just that auto-cpufreq now has all the capabilities and it's not necessary to use TLP alongside it as mentioned in README.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AmitGolden:</strong></p>
+                    <p>Cool, thanks!
+So running `powertop --auto-tune` will be alright?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I don't know, for really long time now I only use `auto-cpufreq`, give it a try and report back :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Updated README as part of ["Why do I need auto-cpufreq"](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/README.md#why-do-i-need-auto-cpufreq) about recommended use of `thermald` alongside auto-cpufreq.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>CRAG666:</strong></p>
+                    <p>@AdnanHodzic How long does the battery last just using auto-cpufreq?
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

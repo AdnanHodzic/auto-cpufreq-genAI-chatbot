@@ -1,0 +1,64 @@
+
+        <html>
+        <head>
+            <title>Pull Request #550: Fixes auto-cpufreq --update for Arch based distros for non AUR installations</title>
+        </head>
+        <body>
+            <h1>Fixes auto-cpufreq --update for Arch based distros for non AUR installations</h1>
+            <p><strong>Pull Request #550</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Details:
+-  Updated logic now checks if auto-cpufreq is installed via AUR or not (pacman -Q auto-cpufreq). If found, it recommends using the system package manager to refresh it.
+
+-  Removed the obsolete yay checking as yay is considered a Pacman wrapper. (Need confirmation from @cosmos1721 for intent) 
+
+Fixes:
+Persistant `Arch-based distribution with AUR support detected. Please refresh auto-cpufreq using your AUR helper.` error, even when you haven't installed auto-cpufreq from AUR, on Arch Distro.
+
+References:
+[Arch Wiki - AUR Helpers](https://wiki.archlinux.org/title/AUR_helpers)</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Yeah, `yay` should never have been used in the first place as a lot of Arch systems don't even use it, while `pacman` is available on all Arch systems</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>cosmos1721:</strong></p>
+                    <p>> * Removed the obsolete yay checking as yay is considered a Pacman wrapper.
+
+pls do, can you also look up other configurations that are done for Arch?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Great one @rootCircle! Because I was proposing the same to @cosmos1721 as part of of the comments in original PR. But idea was that we'd wait for a PR like this one coming from Arch user :) </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rootCircle:</strong></p>
+                    <p>> pls do, can you also look up other configurations that are done for Arch?
+
+@cosmos1721 
+I could find references of arch checking in `auto-cpufreq/gui/objects.py`, `auto-cpufreq-installer` and `auto-cpufreq/core.py`. But, all their usage were safe in my opinion.
+
+For now, I will wait for next release to test the update on Arch and will report, if it breaks. Rest all looks good to me ig:-)
+Although, I have tried triggering an update event(editing setup.py) and was successful in installing also, but i need more surety regarding the same.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rootCircle:</strong></p>
+                    <p>Updated to v2.0.0, update seems to work fine on Arch based distros!
+
+Congrats for the v2.x.x feat! :tada: </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,174 @@
+
+        <html>
+        <head>
+            <title>Issue #507: auto-cpufreq(AUR Package) stopped working on Arch Linux</title>
+        </head>
+        <body>
+            <h1>auto-cpufreq(AUR Package) stopped working on Arch Linux</h1>
+            <p><strong>Issue #507</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+### Error output:
+```
+> auto-cpufreq --stats
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.9.7+1c9ff32a', 'auto-cpufreq')
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ModuleNotFoundError: No module named 'pkg_resources'
+```
+---
+
+### System information:
+
+OS: Arch Linux(auto-cpufreq installed via AUR)
+
+Add/paste output of:
+
+```
+> auto-cpufreq --debug
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.9.7+1c9ff32a', 'auto-cpufreq')
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ModuleNotFoundError: No module named 'pkg_resources'
+```
+---
+
+I updated my system today and after rebooting i found out that auto-cpufreq stopped working. Surprisingly there were no errors in journald logs.
+I suspect this happened due to python 3.11 update since i saw a lot of python packages got updated today. I can show the list of all the packages updated if needed. 
+Pls help
+
+Things that i haven't tried yet: Try to install auto-cpufreq using the git-installer </p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ssnailz:</strong></p>
+                    <p>I installed auto-cpufreq via the git installer
+it works perfectly with the git installer
+```
+> sudo auto-cpufreq --stats
+
+Note: You can quit stats mode by pressing "ctrl+c"
+
+                "auto-cpufreq" is about to refresh ...
+                Executed on: May 05 (Friday) - 12:14:16
+
+-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux rolling n/a
+Linux kernel: 6.3.1-arch1-1
+Processor: AMD Ryzen 5 4600H with Radeon Graphics
+Cores: 12
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3000 MHz
+CPU min frequency: 1400 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0:     0.0%     46 °C     3000 MHz
+CPU1:     0.0%     46 °C     2620 MHz
+CPU2:     1.0%     46 °C     1371 MHz
+CPU3:     0.0%     46 °C     3000 MHz
+CPU4:     0.0%     46 °C     3000 MHz
+CPU5:     0.0%     46 °C     3000 MHz
+CPU6:     4.0%     46 °C     2318 MHz
+CPU7:     0.0%     46 °C     3000 MHz
+CPU8:     1.0%     46 °C     1360 MHz
+CPU9:     0.0%     46 °C     3000 MHz
+CPU10:    0.0%     46 °C     3000 MHz
+CPU11:    0.0%     46 °C     3000 MHz
+
+CPU fan speed: 0 RPM
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+
+Total CPU usage: 0.7 %
+Total system load: 0.99
+Average temp. of all cores: 46.00 °C 
+
+Load optimal (load average: 0.99, 1.28, 1.16)
+setting turbo boost: off
+
+-------------------------------------------------------------------------------
+
+                "auto-cpufreq" is about to refresh ...
+                Executed on: May 05 (Friday) - 12:14:21
+
+-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux rolling n/a
+Linux kernel: 6.3.1-arch1-1
+Processor: AMD Ryzen 5 4600H with Radeon Graphics
+Cores: 12
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3000 MHz
+CPU min frequency: 1400 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0:     3.9%     46 °C     3000 MHz
+CPU1:     2.0%     46 °C     2500 MHz
+CPU2:     2.0%     46 °C     3000 MHz
+CPU3:     1.0%     46 °C     3000 MHz
+CPU4:     2.0%     46 °C     3000 MHz
+CPU5:     2.0%     46 °C     3000 MHz
+CPU6:    21.8%     46 °C     3000 MHz
+CPU7:     1.0%     46 °C     3000 MHz
+CPU8:     1.0%     46 °C     1357 MHz
+CPU9:     2.0%     46 °C     3000 MHz
+CPU10:    2.0%     46 °C     2755 MHz
+CPU11:    3.0%     46 °C     2068 MHz
+
+CPU fan speed: 0 RPM
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+
+Total CPU usage: 0.3 %
+Total system load: 0.91
+Average temp. of all cores: 46.00 °C 
+
+Load optimal (load average: 0.91, 1.25, 1.15)
+setting turbo boost: off
+
+-------------------------------------------------------------------------------
+
+                "auto-cpufreq" is about to refresh ...^C
+Aborted!
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing the issue since it was solved.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,400 @@
+
+        <html>
+        <head>
+            <title>Issue #499: ResolutionError after installing auto-cpufreq using auto-cpufreq-installer</title>
+        </head>
+        <body>
+            <h1>ResolutionError after installing auto-cpufreq using auto-cpufreq-installer</h1>
+            <p><strong>Issue #499</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+I have found #444 but I think it makes more sense to open a new issue to include my output neatly and using your template.
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package]
+(https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+No, because I switched from Ubuntu to Linux Mint to avoid snap.
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+No, because auto-cpufreq doesn't start in the first place.
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+Yes, but no proposals apply for my scenario.
+
+### Error output:
+I receive the following error message on every option. This one is from `auto-cpufreq --help`:
+```text
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.9.7+9912f9d8', 'auto-cpufreq')
+  File "/opt/auto-cpufreq/venv/lib/python3.10/site-packages/pkg_resources/__init__.py", line 656, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/opt/auto-cpufreq/venv/lib/python3.10/site-packages/pkg_resources/__init__.py", line 1441, in run_script
+    raise ResolutionError(
+pkg_resources.ResolutionError: Script 'scripts/auto-cpufreq' not found in metadata at '/opt/auto-cpufreq/auto_cpufreq.egg-info'
+```
+---
+
+### System information:
+
+Add/paste output of: `auto-cpufreq --debug`
+
+```
+  $ auto-cpufreq --debug
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.9.7+9912f9d8', 'auto-cpufreq')
+  File "/opt/auto-cpufreq/venv/lib/python3.10/site-packages/pkg_resources/__init__.py", line 656, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/opt/auto-cpufreq/venv/lib/python3.10/site-packages/pkg_resources/__init__.py", line 1441, in run_script
+    raise ResolutionError(
+pkg_resources.ResolutionError: Script 'scripts/auto-cpufreq' not found in metadata at '/opt/auto-cpufreq/auto_cpufreq.egg-info'
+```
+
+Output of `uname -a`:
+```text
+Linux lenovo 5.15.0-69-generic #76-Ubuntu SMP Fri Mar 17 17:19:29 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+I tried removing and reinstalling it without success.
+
+---
+
+# Additional information
+
+- I cloned the repository into `/opt`.
+- There is an error message when removing auto-cpufreq, s. [Removing auto-cpufreq](#removing-auto-cpufreq)
+- After removing auto-cpufreq, I can't uninstall the python packages (I copied `requirements.txt`):
+```text
+  $ pip uninstall -r requirements.txt 
+Found existing installation: setuptools 59.6.0
+Not uninstalling setuptools at /usr/lib/python3/dist-packages, outside environment /usr
+Can't uninstall 'setuptools'. No files were found to uninstall.
+Found existing installation: psutil 5.9.0
+Not uninstalling psutil at /usr/lib/python3/dist-packages, outside environment /usr
+Can't uninstall 'psutil'. No files were found to uninstall.
+Found existing installation: click 8.0.3
+Not uninstalling click at /usr/lib/python3/dist-packages, outside environment /usr
+Can't uninstall 'click'. No files were found to uninstall.
+Found existing installation: distro 1.7.0
+Not uninstalling distro at /usr/lib/python3/dist-packages, outside environment /usr
+Can't uninstall 'distro'. No files were found to uninstall.
+```
+I haven't run into this pip behavior yet. It probably is not related to auto-cpufreq but I wanted to mention it.
+
+## Removing auto-cpufreq
+
+- When removing auto-cpufreq via `sudo ./auto-cpufreq-installer` I receive the following error message:
+
+```text
+  $ sudo ./auto-cpufreq-installer 
+[sudo] Passwort für philipp:    
+───────────────────────────────────────── auto-cpufreq installer ─────────────────────────────────────────
+
+Welcome to auto-cpufreq tool installer.
+  			
+Options:
+
+[I]nstall
+[R]emove
+[Q]uit
+
+Select a key: [i/r/q]: r
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.9.7+9912f9d8', 'auto-cpufreq')
+  File "/opt/auto-cpufreq/venv/lib/python3.10/site-packages/pkg_resources/__init__.py", line 656, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/opt/auto-cpufreq/venv/lib/python3.10/site-packages/pkg_resources/__init__.py", line 1441, in run_script
+    raise ResolutionError(
+pkg_resources.ResolutionError: Script 'scripts/auto-cpufreq' not found in metadata at '/opt/auto-cpufreq/auto_cpufreq.egg-info'
+
+
+───────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+auto-cpufreq tool and all its supporting files successfully removed.
+
+
+───────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+```
+
+## Output of (re)installing auto-cpufreq
+
+```text
+  $ sudo ./auto-cpufreq-installer 
+───────────────────────────────────────── auto-cpufreq installer ─────────────────────────────────────────
+
+Welcome to auto-cpufreq tool installer.
+  			
+Options:
+
+[I]nstall
+[R]emove
+[Q]uit
+
+Select a key: [i/r/q]: i
+
+
+───────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+Detected Debian based distribution
+
+
+───────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+Setting up Python environment
+
+Paketlisten werden gelesen… Fertig
+Abhängigkeitsbaum wird aufgebaut… Fertig
+Statusinformationen werden eingelesen… Fertig
+dmidecode ist schon die neueste Version (3.3-3ubuntu0.1).
+python3-dev ist schon die neueste Version (3.10.6-1~22.04).
+python3-setuptools ist schon die neueste Version (59.6.0-1.2ubuntu0.22.04.1).
+python3-pip ist schon die neueste Version (22.0.2+dfsg-1ubuntu0.2).
+python3-venv ist schon die neueste Version (3.10.6-1~22.04).
+0 aktualisiert, 0 neu installiert, 0 zu entfernen und 1 nicht aktualisiert.
+
+Installing necessary Python packages
+
+Requirement already satisfied: pip in ./venv/lib/python3.10/site-packages (22.0.2)
+Collecting pip
+  Using cached pip-23.1-py3-none-any.whl (2.1 MB)
+Collecting wheel
+  Using cached wheel-0.40.0-py3-none-any.whl (64 kB)
+Installing collected packages: wheel, pip
+  Attempting uninstall: pip
+    Found existing installation: pip 22.0.2
+    Uninstalling pip-22.0.2:
+      Successfully uninstalled pip-22.0.2
+Successfully installed pip-23.1 wheel-0.40.0
+Requirement already satisfied: setuptools in ./venv/lib/python3.10/site-packages (from -r requirements.txt (line 1)) (59.6.0)
+Collecting psutil (from -r requirements.txt (line 2))
+  Using cached psutil-5.9.4-cp36-abi3-manylinux_2_12_x86_64.manylinux2010_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl (280 kB)
+Collecting click (from -r requirements.txt (line 3))
+  Using cached click-8.1.3-py3-none-any.whl (96 kB)
+Collecting distro (from -r requirements.txt (line 4))
+  Using cached distro-1.8.0-py3-none-any.whl (20 kB)
+Installing collected packages: psutil, distro, click
+Successfully installed click-8.1.3 distro-1.8.0 psutil-5.9.4
+
+
+───────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+installing auto-cpufreq tool
+
+/opt/auto-cpufreq/venv/lib/python3.10/site-packages/setuptools/installer.py:27: SetuptoolsDeprecationWarning: setuptools.installer is deprecated. Requirements should be satisfied by a PEP 517 installer.
+  warnings.warn(
+running install
+/opt/auto-cpufreq/venv/lib/python3.10/site-packages/setuptools/command/install.py:34: SetuptoolsDeprecationWarning: setup.py install is deprecated. Use build and pip and other standards-based tools.
+  warnings.warn(
+/opt/auto-cpufreq/venv/lib/python3.10/site-packages/setuptools/command/easy_install.py:158: EasyInstallDeprecationWarning: easy_install command is deprecated. Use build and pip and other standards-based tools.
+  warnings.warn(
+running bdist_egg
+running egg_info
+creating auto_cpufreq.egg-info
+writing auto_cpufreq.egg-info/PKG-INFO
+writing dependency_links to auto_cpufreq.egg-info/dependency_links.txt
+writing requirements to auto_cpufreq.egg-info/requires.txt
+writing top-level names to auto_cpufreq.egg-info/top_level.txt
+writing manifest file 'auto_cpufreq.egg-info/SOURCES.txt'
+reading manifest file 'auto_cpufreq.egg-info/SOURCES.txt'
+adding license file 'LICENSE'
+writing manifest file 'auto_cpufreq.egg-info/SOURCES.txt'
+installing library code to build/bdist.linux-x86_64/egg
+running install_lib
+running build_py
+creating build
+creating build/lib
+creating build/lib/auto_cpufreq
+copying auto_cpufreq/__init__.py -> build/lib/auto_cpufreq
+copying auto_cpufreq/power_helper.py -> build/lib/auto_cpufreq
+copying auto_cpufreq/tlp_stat_parser.py -> build/lib/auto_cpufreq
+copying auto_cpufreq/core.py -> build/lib/auto_cpufreq
+creating build/bdist.linux-x86_64
+creating build/bdist.linux-x86_64/egg
+creating build/bdist.linux-x86_64/egg/auto_cpufreq
+copying build/lib/auto_cpufreq/__init__.py -> build/bdist.linux-x86_64/egg/auto_cpufreq
+copying build/lib/auto_cpufreq/power_helper.py -> build/bdist.linux-x86_64/egg/auto_cpufreq
+copying build/lib/auto_cpufreq/tlp_stat_parser.py -> build/bdist.linux-x86_64/egg/auto_cpufreq
+copying build/lib/auto_cpufreq/core.py -> build/bdist.linux-x86_64/egg/auto_cpufreq
+byte-compiling build/bdist.linux-x86_64/egg/auto_cpufreq/__init__.py to __init__.cpython-310.pyc
+byte-compiling build/bdist.linux-x86_64/egg/auto_cpufreq/power_helper.py to power_helper.cpython-310.pyc
+byte-compiling build/bdist.linux-x86_64/egg/auto_cpufreq/tlp_stat_parser.py to tlp_stat_parser.cpython-310.pyc
+byte-compiling build/bdist.linux-x86_64/egg/auto_cpufreq/core.py to core.cpython-310.pyc
+creating build/bdist.linux-x86_64/egg/EGG-INFO
+installing scripts to build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+running install_scripts
+running build_scripts
+creating build/scripts-3.10
+copying and adjusting bin/auto-cpufreq -> build/scripts-3.10
+changing mode of build/scripts-3.10/auto-cpufreq from 644 to 755
+creating build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+copying build/scripts-3.10/auto-cpufreq -> build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+changing mode of build/bdist.linux-x86_64/egg/EGG-INFO/scripts/auto-cpufreq to 755
+copying auto_cpufreq.egg-info/PKG-INFO -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying auto_cpufreq.egg-info/SOURCES.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying auto_cpufreq.egg-info/dependency_links.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying auto_cpufreq.egg-info/requires.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying auto_cpufreq.egg-info/top_level.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying auto_cpufreq.egg-info/zip-safe -> build/bdist.linux-x86_64/egg/EGG-INFO
+creating dist
+creating 'dist/auto_cpufreq-1.9.7+9912f9d8-py3.10.egg' and adding 'build/bdist.linux-x86_64/egg' to it
+removing 'build/bdist.linux-x86_64/egg' (and everything under it)
+Processing auto_cpufreq-1.9.7+9912f9d8-py3.10.egg
+Copying auto_cpufreq-1.9.7+9912f9d8-py3.10.egg to /opt/auto-cpufreq/venv/lib/python3.10/site-packages
+Adding auto-cpufreq 1.9.7+9912f9d8 to easy-install.pth file
+Installing auto-cpufreq script to /opt/auto-cpufreq/venv/bin
+
+Installed /opt/auto-cpufreq/venv/lib/python3.10/site-packages/auto_cpufreq-1.9.7+9912f9d8-py3.10.egg
+Processing dependencies for auto-cpufreq==1.9.7+9912f9d8
+Searching for setuptools==59.6.0
+Best match: setuptools 59.6.0
+Adding setuptools 59.6.0 to easy-install.pth file
+
+Using /opt/auto-cpufreq/venv/lib/python3.10/site-packages
+Searching for psutil==5.9.4
+Best match: psutil 5.9.4
+Adding psutil 5.9.4 to easy-install.pth file
+
+Using /opt/auto-cpufreq/venv/lib/python3.10/site-packages
+Searching for distro==1.8.0
+Best match: distro 1.8.0
+Adding distro 1.8.0 to easy-install.pth file
+Installing distro script to /opt/auto-cpufreq/venv/bin
+
+Using /opt/auto-cpufreq/venv/lib/python3.10/site-packages
+Searching for click==8.1.3
+Best match: click 8.1.3
+Adding click 8.1.3 to easy-install.pth file
+
+Using /opt/auto-cpufreq/venv/lib/python3.10/site-packages
+Finished processing dependencies for auto-cpufreq==1.9.7+9912f9d8
+writing list of installed files to 'files.txt'
+
+
+───────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+auto-cpufreq tool successfully installed.
+
+For list of options, run:
+auto-cpufreq --help"
+
+
+───────────────────────────────────────────────────────────────────────────────────────────────────────────
+```
+
+---
+
+It's your time you spent for a random guy on the internet, so thank you for reading my long issue!</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rforced:</strong></p>
+                    <p>I'm having the same issue on PopOS 22.04 LTS</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bar-julio:</strong></p>
+                    <p>I'm having the same issue on a fresh Ubuntu install
+
+
+`uname -a`
+
+
+`Linux HP-Laptop-17 6.2.0-20-generic #20-Ubuntu SMP PREEMPT_DYNAMIC Thu Apr  6 07:48:48 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux`
+
+
+Tried it with the snap package and the git clone install script
+
+After rebooting and doing: 
+
+`sudo systemctl status auto-cpufreq.service`
+
+I get:
+
+`Unit auto-cpufreq.service could not be found.`
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@bar-julio 
+
+> Tried it with the snap package and the git clone install script
+
+As stated on [README](https://github.com/AdnanHodzic/auto-cpufreq), if install was performed as part of snap package daemon status can be verified by running: `systemctl status snap.auto-cpufreq.service.service`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing the issue due to inactivity. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PhilippFeO:</strong></p>
+                    <p>> Closing the issue due to inactivity.
+
+My issue is still open. You responded to bar-julio (s. https://github.com/AdnanHodzic/auto-cpufreq/issues/499#issuecomment-1531945568), not my initial post.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>fourteenminusone:</strong></p>
+                    <p>Same issue here on Debian Testing</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>SimpleCookie:</strong></p>
+                    <p>For the record, I have the same issue. I can't even seem to remove it completely. I want to uninstall so I can reinstall it, but the installation seems corrupt.
+
+![image](https://github.com/AdnanHodzic/auto-cpufreq/assets/3315595/eb7413a8-f6e4-4ca5-b6a7-07eb9005d5b9)
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Could you please manually run [lines 42, 45, 48 & 51?](https://github.com/AdnanHodzic/auto-cpufreq/blob/8938cc92d74a97b42cdc079db04cb87c8c90dea3/scripts/auto-cpufreq-remove.sh#L42)
+
+After this try re-running ` sudo ./auto-cpufreq-installer --remove` in location where auto-cpufreq is cloned. If same thing happens again please share so I see what happened. Then run `sudo rm -rf /opt/auto-cpufreq/` and reboot. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>SimpleCookie:</strong></p>
+                    <p>> Could you please manually run [lines 42, 45, 48 & 51?](https://github.com/AdnanHodzic/auto-cpufreq/blob/8938cc92d74a97b42cdc079db04cb87c8c90dea3/scripts/auto-cpufreq-remove.sh#L42)
+> 
+> After this try re-running ` sudo ./auto-cpufreq-installer --remove` in location where auto-cpufreq is cloned. If same thing happens again please share so I see what happened. Then run `sudo rm -rf /opt/auto-cpufreq/` and reboot.
+
+Seems like it works better now.
+Do I just run the install part now?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> > Could you please manually run [lines 42, 45, 48 & 51?](https://github.com/AdnanHodzic/auto-cpufreq/blob/8938cc92d74a97b42cdc079db04cb87c8c90dea3/scripts/auto-cpufreq-remove.sh#L42)
+> > After this try re-running ` sudo ./auto-cpufreq-installer --remove` in location where auto-cpufreq is cloned. If same thing happens again please share so I see what happened. Then run `sudo rm -rf /opt/auto-cpufreq/` and reboot.
+> 
+> Seems like it works better now. Do I just run the install part now?
+
+Yep!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing due to inactivity.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

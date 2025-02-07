@@ -1,0 +1,190 @@
+
+        <html>
+        <head>
+            <title>Issue #141: CPU frequency not scaling down to minimum on battery (AC too)</title>
+        </head>
+        <body>
+            <h1>CPU frequency not scaling down to minimum on battery (AC too)</h1>
+            <p><strong>Issue #141</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hi Adnan, 
+
+I'm not sure if this behavior is considered normal or not.
+Many thanks if you get a chance to get back to me.
+
+If the laptop is disconnected from the power source, the CPU freq stays locked at around 2.4Ghz (even though the minimum possible appears to be 800MHz)
+
+### Laptop on battery:
+```
+Linux distro: Garuda Linux Soaring n/a
+Linux kernel: 5.10.1-103-tkg-bmq
+Processor: Intel(R) Core(TM) i5-9300H CPU @ 2.40GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_cpufreq
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 2400 MHz
+CPU min frequency: 800 MHz
+
+         Usage  Temperature  Frequency
+CPU0:     4.0%     41 °C     2355 MHz
+CPU1:     3.9%     43 °C     2400 MHz
+CPU2:     9.9%     41 °C     2400 MHz
+CPU3:     4.0%     40 °C     2400 MHz
+CPU4:     0.0%     41 °C     2401 MHz
+CPU5:     0.0%     43 °C     2399 MHz
+CPU6:     0.0%     41 °C     2404 MHz
+CPU7:     0.0%     40 °C     2401 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: discharging
+
+Setting to use: "schedutil" governor
+Setting to use: "balance_power" EPP
+
+Total CPU usage: 0.1 %
+Total system load: 1.47
+Average temp. of all cores: 41.25 °C
+
+Load optimal
+setting turbo boost: off
+Warning: Changing CPU turbo is not supported. Skipping.
+```
+---
+
+Same behavior can be observed while connected to AC power.
+
+### Laptop on AC power:
+```
+Linux distro: Garuda Linux Soaring n/a
+Linux kernel: 5.10.1-103-tkg-bmq
+Processor: Intel(R) Core(TM) i5-9300H CPU @ 2.40GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_cpufreq
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 2400 MHz
+CPU min frequency: 800 MHz
+
+         Usage  Temperature  Frequency
+CPU0:     3.0%     44 °C     2087 MHz
+CPU1:     3.0%     45 °C     2354 MHz
+CPU2:     3.0%     42 °C     2265 MHz
+CPU3:     3.0%     42 °C     2400 MHz
+CPU4:     0.0%     44 °C     2401 MHz
+CPU5:     0.0%     45 °C     2401 MHz
+CPU6:     0.0%     42 °C     2401 MHz
+CPU7:     1.0%     42 °C     2400 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+Setting to use: "balance_performance" EPP
+
+Total CPU usage: 2.2 %
+Total system load: 0.45
+Average temp. of all cores: 43.25 °C
+
+Load optimal
+setting turbo boost: on
+Warning: Changing CPU turbo is not supported. Skipping.
+
+```
+---
+
+### System information:
+```text
+Linux distro: Garuda Linux Soaring n/a
+Linux kernel: 5.10.1-103-tkg-bmq
+Processor: Intel(R) Core(TM) i5-9300H CPU @ 2.40GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_cpufreq
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 2400 MHz
+CPU min frequency: 800 MHz
+
+         Usage  Temperature  Frequency
+CPU0:     2.0%     45 °C     2251 MHz
+CPU1:     5.0%     47 °C     2288 MHz
+CPU2:     3.0%     45 °C     2400 MHz
+CPU3:     2.0%     43 °C     2400 MHz
+CPU4:     1.0%     45 °C     2401 MHz
+CPU5:     0.0%     47 °C     2398 MHz
+CPU6:     0.0%     45 °C     2401 MHz
+CPU7:     0.0%     43 °C     2401 MHz
+
+fatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+Snap package: no
+
+Python: 3.9.1
+psutil package: 5.7.3
+platform package: 1.0.8
+click package: 7.1.2
+distro package 1.5.0
+
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.21 %
+
+Total CPU usage: 2.5 %
+Total system load: 0.44
+Average temp. of all cores: 45.0 °C 
+
+Currently using: performance governor
+Currently turbo boost is: off
+
+```
+---
+
+
+What I did notice, is that there is an error that appears each time --log refreshes itself:
+
+### Error output:
+```text
+/usr/bin/cpufreqctl: line 267: echo: write error: Invalid argument
+/usr/bin/cpufreqctl: line 267: echo: write error: Invalid argument
+/usr/bin/cpufreqctl: line 267: echo: write error: Invalid argument
+/usr/bin/cpufreqctl: line 267: echo: write error: Invalid argument
+/usr/bin/cpufreqctl: line 267: echo: write error: Invalid argument
+/usr/bin/cpufreqctl: line 267: echo: write error: Invalid argument
+/usr/bin/cpufreqctl: line 267: echo: write error: Invalid argument
+/usr/bin/cpufreqctl: line 267: echo: write error: Invalid argument
+```
+---</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>OutOfPhase87:</strong></p>
+                    <p>I'll close this issue as I've moved to another Linux distro.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Just to clarify, you moved to another distribution and this problem wasn't present there?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>OutOfPhase87:</strong></p>
+                    <p>I don't have Auto-CPUFreq installed on this new distribution (Using TLP to set the CPU governor)</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

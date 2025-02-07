@@ -1,0 +1,59 @@
+
+        <html>
+        <head>
+            <title>Issue #52: Service started but log not showed</title>
+        </head>
+        <body>
+            <h1>Service started but log not showed</h1>
+            <p><strong>Issue #52</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I installed the last version of your code with manually installation. After installation without errors, I tried monitor and live and perfectly works. I decide to install it with the proper command and all works. The problem born when I try to execute the log command to see the configuration, but nothing showed. I see that service is running but I can't see the current configuration. Can you help me?</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Kwaadpepper:</strong></p>
+                    <p>```tail /var/log/syslog```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>How did you perform the install and which distribution are you using? 
+
+If you're using Ubuntu 20.04 I would advise you to perform the [install using snap package](https://github.com/AdnanHodzic/auto-cpufreq#snap-store).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>andreacocci95:</strong></p>
+                    <p>> How did you perform the install and which distribution are you using? 
+> 
+> If you're using Ubuntu 20.04 I would advise you to perform the [install using snap package](https://github.com/AdnanHodzic/auto-cpufreq#snap-store).
+
+I'm using Elementary OS 5.1.2 based on Ubuntu 18.04 and I compiled auto-cpufreq using the GitHub guide.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Many new changes have been implemented as part of 1.2 release and I believe your problem is solved. 
+
+Install latest version using snap package:
+
+```
+sudo snap install auto-cpufreq
+```
+
+or pull the latest changes and run:
+
+```
+sudo ./auto-cpufreq-installer
+```
+
+In case this doesn't solve your problem, please feel free to re-open this issue.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

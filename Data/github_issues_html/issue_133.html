@@ -1,0 +1,147 @@
+
+        <html>
+        <head>
+            <title>Issue #133: When plugged in auto-cpufreq --log reports write error</title>
+        </head>
+        <body>
+            <h1>When plugged in auto-cpufreq --log reports write error</h1>
+            <p><strong>Issue #133</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I installed auto-cpufreq 1.3.4 under Arch Linux from AUR. I'm able to activate the service, and it looks ok. The only thing I notice is that I get the following error messages when watching the log with `auto-cpufreq --log`. I get those messages only, when my computer is charging. When it's running on battery, I get no errors.
+
+```
+/usr/bin/cpufreqctl: Zeile 267: echo: Schreibfehler: Das Gerät oder die Ressource ist belegt.
+/usr/bin/cpufreqctl: Zeile 267: echo: Schreibfehler: Das Gerät oder die Ressource ist belegt.
+/usr/bin/cpufreqctl: Zeile 267: echo: Schreibfehler: Das Gerät oder die Ressource ist belegt.
+/usr/bin/cpufreqctl: Zeile 267: echo: Schreibfehler: Das Gerät oder die Ressource ist belegt.
+/usr/bin/cpufreqctl: Zeile 267: echo: Schreibfehler: Das Gerät oder die Ressource ist belegt.
+/usr/bin/cpufreqctl: Zeile 267: echo: Schreibfehler: Das Gerät oder die Ressource ist belegt.
+/usr/bin/cpufreqctl: Zeile 267: echo: Schreibfehler: Das Gerät oder die Ressource ist belegt.
+/usr/bin/cpufreqctl: Zeile 267: echo: Schreibfehler: Das Gerät oder die Ressource ist belegt.
+
+-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux rolling n/a
+Linux kernel: 5.9.11-arch2-1
+Procesor: Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 2800 MHz
+CPU min frequency: 800 MHz
+
+	 Usage  Temperature  Frequency
+CPU0:	  2.0%     44 °C     2800 MHz
+CPU1:	  1.0%     45 °C     2800 MHz
+CPU2:	  0.0%     42 °C     2801 MHz
+CPU3:	  2.0%     43 °C     2800 MHz
+CPU4:	  8.1%     44 °C     2800 MHz
+CPU5:	  1.0%     45 °C     2800 MHz
+CPU6:	  1.0%     42 °C     2800 MHz
+CPU7:	  0.0%     43 °C     2801 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+Setting to use: "balance_performance" EPP
+
+Total CPU usage: 1.3 %
+Total system load: 2.46 
+
+Load optimal, setting turbo boost: off
+
+-------------------------------------------------------------------------------
+
+			"auto-cpufreq" refresh in: 3^C
+```
+
+Is there an conflict with /usr/bin/cpufreqctl? I tried to disable everything connected to power saving. TLP is not running.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>No there shouldn't be any conflicts, please refer to [my comment ](https://github.com/AdnanHodzic/auto-cpufreq/issues/87#issuecomment-739472789)in: #87</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@linuxundich problem has been resolved as [part of AUR package](https://github.com/AdnanHodzic/auto-cpufreq/issues/87#issuecomment-739549066). If you still have the same problem please feel free to re-open the issue.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>freshgiammi:</strong></p>
+                    <p>This issue seems to persist on my end, even with the lastest [auto-cpufreq-git](https://aur.archlinux.org/packages/auto-cpufreq-git/) update, and with a clean install too. Same behaviour, this only occurs while charging.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>tajnymag:</strong></p>
+                    <p>I can confirm this issue is still present when installed from the recommended auto-cpufreq-git package.
+
+Same as @linuxundich, this happens only while chargin. The moment I unplug the cord and log refreshes, the errors disappear.
+
+```
+/usr/bin/cpufreqctl: řádek 267: echo: chyba zápisu: Zařízení nebo zdroj jsou používány
+/usr/bin/cpufreqctl: řádek 267: echo: chyba zápisu: Zařízení nebo zdroj jsou používány
+/usr/bin/cpufreqctl: řádek 267: echo: chyba zápisu: Zařízení nebo zdroj jsou používány
+/usr/bin/cpufreqctl: řádek 267: echo: chyba zápisu: Zařízení nebo zdroj jsou používány
+/usr/bin/cpufreqctl: řádek 267: echo: chyba zápisu: Zařízení nebo zdroj jsou používány
+/usr/bin/cpufreqctl: řádek 267: echo: chyba zápisu: Zařízení nebo zdroj jsou používány
+/usr/bin/cpufreqctl: řádek 267: echo: chyba zápisu: Zařízení nebo zdroj jsou používány
+/usr/bin/cpufreqctl: řádek 267: echo: chyba zápisu: Zařízení nebo zdroj jsou používány
+
+-------------------------------------------------------------------------------
+
+Linux distro: EndeavourOS rolling n/a
+Linux kernel: 5.9.14-arch1-1
+Processor: Intel(R) Core(TM) i7-1065G7 CPU @ 1.30GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 1300 MHz
+CPU min frequency: 400 MHz
+
+	 Usage  Temperature  Frequency
+CPU0:	  4.9%     39 °C     1200 MHz
+CPU1:	  2.0%     42 °C     1252 MHz
+CPU2:	  2.9%     43 °C     1296 MHz
+CPU3:	  3.0%     41 °C     1274 MHz
+CPU4:	  2.9%     39 °C     1228 MHz
+CPU5:	  2.0%     42 °C     1282 MHz
+CPU6:	  1.0%     43 °C     1293 MHz
+CPU7:	  1.0%     41 °C     1293 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+Setting to use: "balance_performance" EPP
+
+Total CPU usage: 2.2 %
+Total system load: 1.24
+Average temp. of all cores: 41.25 °C
+
+Load optimal
+setting turbo boost: on
+
+-------------------------------------------------------------------------------
+
+			"auto-cpufreq" refresh in: 4
+```</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

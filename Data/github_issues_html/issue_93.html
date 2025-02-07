@@ -1,0 +1,125 @@
+
+        <html>
+        <head>
+            <title>Issue #93: Hard system lockup</title>
+        </head>
+        <body>
+            <h1>Hard system lockup</h1>
+            <p><strong>Issue #93</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I was not able to retrieve any logs since the system completely locked up. I could not using the magic SysRq key combo and had to hold the power button to turn my laptop off. I also use TLP if that makes a difference.
+
+Another member of the Manjaro team has an AMD Ryzen 7 4800H and experienced the same issue. He said, 
+
+> My laptop just locked up while spewing thousands of lines of hexdump into the kernel log.
+
+I asked him to open an issue since he maybe had a log to share, but since he hasn't I figured I would. I'll let him know I opened the issue and perhaps he'll chime in.
+
+OS: Manjaro 
+DE: GNOME 3.36.5
+Kernel: 5.8.0
+
+### System information:
+```
+-------------------------------------------------------------------------------
+
+System: Dell product: Inspiron 5575 v: 1.3.3 serial: <filter> 
+  Mobo: Dell model: 0M0Y6P v: X01 serial: <filter> UEFI: Dell v: 1.3.3 
+  date: 10/31/2019 
+Battery:
+  ID-1: BAT1 charge: 31.7 Wh condition: 31.7/42.0 Wh (76%) 
+CPU:   Governors: performance schedutil Topology: Quad Core model: AMD Ryzen 5 2500U with Radeon Vega Mobile Gfx bits: 64 
+  type: MT MCP L2 cache: 2048 KiB 
+  Speed: 1713 MHz min/max: 1600/2000 MHz Core speeds (MHz): 1: 1713 2: 1971 3: 2459 
+  4: 1990 5: 2571 6: 2301 7: 1397 8: 1417 
+Graphics:
+  Device-1: AMD Raven Ridge [Radeon Vega Series / Radeon Vega Mobile Series] 
+  driver: amdgpu v: kernel 
+  Device-2: Realtek Integrated Webcam type: USB driver: uvcvideo 
+  Display: x11 server: X.Org 1.20.8 driver: amdgpu unloaded: modesetting 
+  resolution: 1920x1080~60Hz 
+  OpenGL: renderer: AMD RAVEN (DRM 3.38.0 5.8.0-2-MANJARO LLVM 10.0.1) 
+  v: 4.6 Mesa 20.1.5 
+Audio:
+  Device-1: AMD Raven/Raven2/Fenghuang HDMI/DP Audio driver: snd_hda_intel 
+  Device-2: AMD Family 17h HD Audio driver: snd_hda_intel 
+  Sound Server: ALSA v: k5.8.0-2-MANJARO 
+Network:
+  Device-1: Realtek RTL810xE PCI Express Fast Ethernet driver: r8169 
+  IF: eth0 state: down mac: <filter> 
+  Device-2: Qualcomm Atheros QCA9377 802.11ac Wireless Network Adapter 
+  driver: ath10k_pci 
+  IF: wlan0 state: up mac: <filter> 
+  Device-3: Qualcomm Atheros type: USB driver: btusb 
+Drives:
+  Local Storage: total: 1.14 TiB used: 853.25 GiB (73.3%) 
+  ID-1: /dev/nvme0n1 vendor: Samsung model: SSD 970 EVO Plus 250GB size: 232.89 GiB 
+  ID-2: /dev/sda vendor: Western Digital model: WD10SPZX-75Z10T2 size: 931.51 GiB 
+Partition:
+  ID-1: / size: 227.94 GiB used: 147.03 GiB (64.5%) fs: ext4 dev: /dev/nvme0n1p2 
+Swap:
+  ID-1: swap-1 type: file size: 20.00 GiB used: 0 KiB (0.0%) file: /swapfile 
+Sensors:   
+{'battery': sbattery(percent=100.0, secsleft=<BatteryTime.POWER_TIME_UNLIMITED: -2>, power_plugged=True),
+ 'fans': {'dell_smm': [sfan(label='', current=2500)]},
+ 'temperatures:': {'amdgpu': [shwtemp(label='edge', current=64.0, high=80.0, critical=80.0)],
+                   'k10temp': [shwtemp(label='Tctl', current=64.125, high=None, critical=None),
+                               shwtemp(label='Tdie', current=64.125, high=None, critical=None)],
+                   'nvme': [shwtemp(label='Composite', current=39.85, high=84.85, critical=84.85),
+                            shwtemp(label='Sensor 1', current=39.85, high=65261.85, critical=65261.85),
+                            shwtemp(label='Sensor 2', current=39.85, high=65261.85, critical=65261.85)]}} System Temperatures: cpu: 72.5 C mobo: N/A gpu: amdgpu temp: 72 C 
+  Fan Speeds (RPM): fan-1: 2500 
+Info:
+  Processes: 360 Uptime: 21m Memory: 15.35 GiB used: 4.89 GiB (31.9%) Shell: Zsh 
+  inxi: 3.1.05 
+
+-------------------------------------------------------------------------------
+
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Since AMD is in question here, @Red-Eyed do you have any ideas?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>@AdnanHodzic I have no any idea why changing governor and turbo can cause lockup (is that just freezing or kernel panic, because it's not clear for me what does lockup mean)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>That's a very good point @Red-Eyed 
+
+@yochananmarqos could you please further elaborate on what exactly do you mean by "lockup" in this scenario? Thanks</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>yochananmarqos:</strong></p>
+                    <p>Lockup as in frozen solid with no response to input.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I'm closing this issue because I don't think it's related to auto-cpufreq. As I'm not sure under which condition this would happen, I'm more inclined to believe this is related to potential TLP misconfiguration. 
+
+Try disabling it and see if you get this problem when only running with auto-cpufreq. Although from my experience auto-cpufreq works great in conjunction with TLP.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>yochananmarqos:</strong></p>
+                    <p>It is indeed related, but there's no logs I can find. A lockup like that doesn't record anything since it freezes solid. I have to hold the power button to restart. I just reproduced it on the same laptop, a Dell Inspiron 5575 with a Ryzen 5 2500U. 
+
+However, there is good news. I'm having no issues on my new System76 Serval WS with a Ryzen 7 3700X.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

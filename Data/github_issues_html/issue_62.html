@@ -1,0 +1,53 @@
+
+        <html>
+        <head>
+            <title>Issue #62: Refactoring and fix for #14 (AMD issue)</title>
+        </head>
+        <body>
+            <h1>Refactoring and fix for #14 (AMD issue)</h1>
+            <p><strong>Issue #62</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>* A bit of refactoring
+* solves #14 As I didn't find how to get temperature for AMD Ryzen, I just display `acpitz` instead of core temp.
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>This is great, thank you for your contribution!
+
+Since it seems you have an AMD CPU and know your way around it. If you have time to look at #17 that would be great. As resolving this would basically add AMD support for `auto-cpufreq` which would be a huge contribution.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>Yeah, I read about #17. But in my case , I have 2 governors: `performance` and `powersafe`.  
+It seems that some AMD CPUs don't have `powersafe` but `schedutil` instead.
+
+BTW: I increased my bat life from 5h to 9h! it's very nice and helpful project, thank you for this!  
+Also, it's cool that it's written in python, because I'm a python dev and very love thins language, so glad to contribute :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Yeah, I read about #17. But in my case , I have 2 governors: performance and powersafe.
+> It seems that some AMD CPUs don't have powersafe but schedutil instead.
+
+Weird, first thing that comes to mind is to make additional check which governors to use based on which AMD CPU is detected.
+
+> BTW: I increased my bat life from 5h to 9h! it's very nice and helpful project, thank you for this!
+
+Most welcome, thank you as it's always great to hear feedback like this :)
+
+>  Also, it's cool that it's written in python, because I'm a python dev and very love thins language, so glad to contribute :)
+
+Great! In that case I hope I'll see more of your pull requests and I'll make sure to add your contributions in release notes of a new release.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,64 @@
+
+        <html>
+        <head>
+            <title>Issue #70: implemented --debug option</title>
+        </head>
+        <body>
+            <h1>implemented --debug option</h1>
+            <p><strong>Issue #70</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>- Added --debug option that shows sys info
+- Added inxi as dependency
+- Implemented get_sys_info() that returns inxi output
+  with injected governnor information
+- Fixed bug: delete_file was called but this was deleted in prev PR
+- Updated issue template</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>Output looks like this:
+![image](https://user-images.githubusercontent.com/11485451/89466359-5a5a3800-d77c-11ea-9b40-f28ad59913a8.png)
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Looks great, just please change following line:
+
+```
+  --debug               Show debug information in order help users to report
+                        bugs
+```
+to
+
+```
+--debug               Show debug info (include when submitting bugs)
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>> Looks great, just please change following line:
+> 
+> ```
+>   --debug               Show debug information in order help users to report
+>                         bugs
+> ```
+> 
+> to
+> 
+> ```
+> --debug               Show debug info (include when submitting bugs)
+> ```
+
+Done</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

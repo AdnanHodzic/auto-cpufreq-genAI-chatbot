@@ -1,0 +1,255 @@
+
+        <html>
+        <head>
+            <title>Issue #79: Added sensor to --debug</title>
+        </head>
+        <body>
+            <h1>Added sensor to --debug</h1>
+            <p><strong>Issue #79</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p></p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>I think this is the final my PR for today.
+I think you can make a release now :)
+
+BTW, what's your timezone?
+Mine is EEST</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>@AdnanHodzic please, ping me when you push it to snapstore, wanna try it as soon as possible and recommend to my friends</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>You're on fire today with all the PR's! :fist_oncoming: 
+
+But I'm getting in error with latest changes:
+
+```
+sudo auto-cpufreq --debug
+
+-------------------------------------------------------------------------------
+
+/usr/lib/python3/dist-packages/psutil/_pslinux.py:1222: RuntimeWarning: ignoring FileNotFoundError(2, 'No such file or directory') for file '/sys/class/hwmon/hwmon0/temp1_input'
+  warnings.warn("ignoring %r for file %r" % (err, path),
+/usr/lib/python3/dist-packages/psutil/_pslinux.py:1222: RuntimeWarning: ignoring FileNotFoundError(2, 'No such file or directory') for file '/sys/class/hwmon/hwmon0/temp2_input'
+  warnings.warn("ignoring %r for file %r" % (err, path),
+/usr/lib/python3/dist-packages/psutil/_pslinux.py:1222: RuntimeWarning: ignoring FileNotFoundError(2, 'No such file or directory') for file '/sys/class/hwmon/hwmon2/temp1_input'
+  warnings.warn("ignoring %r for file %r" % (err, path),
+/usr/lib/python3/dist-packages/psutil/_pslinux.py:1222: RuntimeWarning: ignoring FileNotFoundError(2, 'No such file or directory') for file '/sys/class/hwmon/hwmon2/temp2_input'
+  warnings.warn("ignoring %r for file %r" % (err, path),
+/usr/lib/python3/dist-packages/psutil/_pslinux.py:1222: RuntimeWarning: ignoring OSError(6, 'No such device or address') for file '/sys/class/hwmon/hwmon4/temp2_input'
+  warnings.warn("ignoring %r for file %r" % (err, path),
+/usr/lib/python3/dist-packages/psutil/_pslinux.py:1222: RuntimeWarning: ignoring OSError(6, 'No such device or address') for file '/sys/class/hwmon/hwmon4/temp8_input'
+  warnings.warn("ignoring %r for file %r" % (err, path),
+System: LENOVO product: 20QD00L1MH v: ThinkPad X1 Carbon 7th serial: <filter> 
+           Mobo: LENOVO model: 20QD00L1MH v: SDK0J40697 WIN serial: <filter> UEFI: LENOVO v: N2HET40W (1.23 ) date: 10/17/2019 
+Battery:   ID-1: BAT0 charge: 51.7 Wh condition: 52.0/51.0 Wh (102%) 
+CPU:       Governors: performance powersaveTopology: Quad Core model: Intel Core i7-8565U bits: 64 type: MT MCP L2 cache: 8192 KiB 
+           Speed: 1801 MHz min/max: 400/1800 MHz Core speeds (MHz): 1: 1762 2: 1502 3: 1747 4: 1800 5: 1800 6: 1752 7: 1716 
+           8: 1800 
+Graphics:  Device-1: Intel UHD Graphics 620 driver: i915 v: kernel 
+           Display: server: X.Org 1.20.8 driver: i915 resolution: 3840x1600~30Hz 
+           OpenGL: renderer: Mesa Intel UHD Graphics 620 (WHL GT2) v: 4.6 Mesa 20.0.8 
+Audio:     Device-1: Intel Cannon Point-LP High Definition Audio driver: sof-audio-pci 
+           Sound Server: ALSA v: k5.4.0-42-generic 
+Network:   Device-1: Intel Cannon Point-LP CNVi [Wireless-AC] driver: iwlwifi 
+           IF: wlp0s20f3 state: up mac: <filter> 
+           Device-2: Intel Ethernet I219-V driver: e1000e 
+           IF: enp0s31f6 state: down mac: <filter> 
+           IF-ID-1: docker0 state: down mac: <filter> 
+           IF-ID-2: mpqemubr0 state: down mac: <filter> 
+           IF-ID-3: mpqemubr0-dummy state: down mac: <filter> 
+           IF-ID-4: tap-13eacaaf421 state: down mac: <filter> 
+           IF-ID-5: tap-9935685a5b8 state: down mac: <filter> 
+Drives:    Local Storage: total: 476.94 GiB used: 370.95 GiB (77.8%) 
+           ID-1: /dev/nvme0n1 vendor: Intel model: SSDPEKKF512G8L size: 476.94 GiB 
+Partition: ID-1: / size: 466.31 GiB used: 370.63 GiB (79.5%) fs: ext4 dev: /dev/dm-1 
+           ID-2: /boot size: 704.5 MiB used: 308.3 MiB (43.8%) fs: ext4 dev: /dev/nvme0n1p2 
+           ID-3: swap-1 size: 980.0 MiB used: 15.2 MiB (1.6%) fs: swap dev: /dev/dm-2 
+Sensors:   
+{'battery': sbattery(percent=99.4422004231583, secsleft=<BatteryTime.POWER_TIME_UNLIMITED: -2>, power_plugged=True),
+ 'fans': {'thinkpad': [sfan(label='', current=0)]},
+ 'temperatures:': {'acpitz': [shwtemp(label='', current=55.0, high=128.0, critical=128.0)],
+                   'coretemp': [shwtemp(label='Package id 0', current=56.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 0', current=55.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 1', current=54.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 2', current=54.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 3', current=56.0, high=100.0, critical=100.0)],
+                   'iwlwifi_1': [shwtemp(label='', current=51.0, high=None, critical=None)],
+                   'pch_cannonlake': [shwtemp(label='', current=52.0, high=None, critical=None)],
+                   'thinkpad': [shwtemp(label='', current=55.0, high=None, critical=None),
+                                shwtemp(label='', current=1.0, high=None, critical=None),
+                                shwtemp(label='', current=66.0, high=None, critical=None),
+                                shwtemp(label='', current=0.0, high=None, critical=None),
+                                shwtemp(label='', current=0.0, high=None, critical=None),
+                                shwtemp(label='', current=0.0, high=None, critical=None),
+                                shwtemp(label='', current=0.0, high=None, critical=None),
+                                shwtemp(label='', current=0.0, high=None, critical=None),
+                                shwtemp(label='', current=0.0, high=None, critical=None),
+                                shwtemp(label='', current=0.0, high=None, critical=None),
+                                shwtemp(label='', current=0.0, high=None, critical=None),
+                                shwtemp(label='', current=0.0, high=None, critical=None),
+                                shwtemp(label='', current=0.0, high=None, critical=None),
+                                shwtemp(label='', current=0.0, high=None, critical=None)]}}System Temperatures: cpu: 56.0 C mobo: N/A 
+           Fan Speeds (RPM): cpu: 0 
+Info:      Processes: 365 Uptime: 10h 14m Memory: 15.33 GiB used: 6.22 GiB (40.6%) Shell: bash inxi: 3.0.38 
+```
+
+I'll make sure to inform you after the release is done. I'm already writing release notes as I also want to share it on social media, as last time it got a lot of attention on Twitter and Reddit. I'm located in Amsterdam (CET).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>regarding errors, so it's psutil Warnings. 
+if you want, I can try to suppress them, but IDK how to check, so only u can check</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>Added warnings suppression </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Doesn't look quite right, i.e:
+
+```
+System: LENOVO product: 20QD00L1MH v: ThinkPad X1 Carbon 7th serial: <filter> 
+           Mobo: LENOVO model: 20QD00L1MH v: SDK0J40697 WIN serial: <filter> UEFI: LENOVO v: N2HET40W (1.23 ) date: 10/17/2019 
+Battery:   ID-1: BAT0 charge: 51.7 Wh condition: 52.0/51.0 Wh (102%) 
+CPU:       Governors: performance powersave Topology: Quad Core model: Intel Core i7-8565U bits: 64 type: MT MCP L2 cache: 8192 KiB 
+           Speed: 1800 MHz min/max: 400/1800 MHz Core speeds (MHz): 1: 1800 2: 1800 3: 1800 4: 1802 5: 1802 6: 1801 7: 1800 
+           8: 1800 
+Graphics:  Device-1: Intel UHD Graphics 620 driver: i915 v: kernel 
+           Display: server: X.Org 1.20.8 driver: i915 resolution: 3840x1600~30Hz 
+           OpenGL: renderer: Mesa Intel UHD Graphics 620 (WHL GT2) v: 4.6 Mesa 20.0.8 
+Audio:     Device-1: Intel Cannon Point-LP High Definition Audio driver: sof-audio-pci 
+           Sound Server: ALSA v: k5.4.0-42-generic 
+Network:   Device-1: Intel Cannon Point-LP CNVi [Wireless-AC] driver: iwlwifi 
+           IF: wlp0s20f3 state: up mac: <filter> 
+           Device-2: Intel Ethernet I219-V driver: e1000e 
+           IF: enp0s31f6 state: down mac: <filter> 
+           IF-ID-1: docker0 state: down mac: <filter> 
+           IF-ID-2: mpqemubr0 state: down mac: <filter> 
+           IF-ID-3: mpqemubr0-dummy state: down mac: <filter> 
+           IF-ID-4: tap-9935685a5b8 state: down mac: <filter> 
+Drives:    Local Storage: total: 476.94 GiB used: 361.62 GiB (75.8%) 
+           ID-1: /dev/nvme0n1 vendor: Intel model: SSDPEKKF512G8L size: 476.94 GiB 
+Partition: ID-1: / size: 466.31 GiB used: 361.30 GiB (77.5%) fs: ext4 dev: /dev/dm-1 
+           ID-2: /boot size: 704.5 MiB used: 308.3 MiB (43.8%) fs: ext4 dev: /dev/nvme0n1p2 
+           ID-3: swap-1 size: 980.0 MiB used: 15.2 MiB (1.6%) fs: swap dev: /dev/dm-2 
+Sensors:   
+{'battery': sbattery(percent=99.36526255049048, secsleft=<BatteryTime.POWER_TIME_UNLIMITED: -2>, power_plugged=True),
+ 'fans': {'thinkpad': [sfan(label='', current=2664)]},
+ 'temperatures:': {'acpitz': [shwtemp(label='', current=68.0, high=128.0, critical=128.0)],
+                   'coretemp': [shwtemp(label='Package id 0', current=62.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 0', current=61.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 1', current=62.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 2', current=61.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 3', current=61.0, high=100.0, critical=100.0)],
+                   'iwlwifi_1': [shwtemp(label='', current=52.0, high=None, critical=None)],
+                   'pch_cannonlake': [shwtemp(label='', current=58.0, high=None, critical=None)],
+                   'thinkpad': [shwtemp(label='', current=68.0, high=None, critical=None),
+                                shwtemp(label='', current=1.0, high=None, critical=None),
+                                shwtemp(label='', current=66.0, high=None, critical=None),
+                                shwtemp(label='', current=0.0, high=None, critical=None),
+                                shwtemp(label='', current=0.0, high=None, critical=None),
+                                shwtemp(label='', current=0.0, high=None, critical=None),
+                                shwtemp(label='', current=0.0, high=None, critical=None),
+                                shwtemp(label='', current=0.0, high=None, critical=None),
+                                shwtemp(label='', current=0.0, high=None, critical=None),
+                                shwtemp(label='', current=0.0, high=None, critical=None),
+                                shwtemp(label='', current=0.0, high=None, critical=None),
+                                shwtemp(label='', current=0.0, high=None, critical=None),
+                                shwtemp(label='', current=0.0, high=None, critical=None),
+                                shwtemp(label='', current=0.0, high=None, critical=None)]}} System Temperatures: cpu: 62.0 C mobo: N/A 
+           Fan Speeds (RPM): cpu: 2664 
+Info:      Processes: 378 Uptime: 10h 58m Memory: 15.33 GiB used: 7.05 GiB (46.0%) Shell: bash inxi: 3.0.38 
+```
+
+I'll proceed with major release (1.2) and then once this is fixed I'll make it as part of new minor release: 1.2.1</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>wait, why?
+It looks like I designed :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>I mean, this is debug, and the main issue was with sensors, so I output them all
+What would you like to change?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I meant, it looks different then what rest of the `inxi` output is formatted. But you're right actually, it's a debug so it doesn't have to be as visually appealing, merging.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>O, I see.
+U don't like the broken indentation :)
+I could try to beautify it someday.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>TBH, I'm regretting a bit I merged it with `master` because I really don't like the way it looks compared to rest of `inxi` output as it looks to verbose. So let's please make it bit more aligned with rest of formatting in future :)
+
+And there's a major problem with stable snap which I just pushed when I run: `sudo auto-cpufreq --install`
+
+```
+  File "/snap/auto-cpufreq/12/bin/auto-cpufreq", line 116, in <module>
+    main()
+  File "/snap/auto-cpufreq/12/lib/python3.6/site-packages/click/core.py", line 829, in __call__
+    return self.main(*args, **kwargs)
+  File "/snap/auto-cpufreq/12/lib/python3.6/site-packages/click/core.py", line 782, in main
+    rv = self.invoke(ctx)
+  File "/snap/auto-cpufreq/12/lib/python3.6/site-packages/click/core.py", line 1066, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/snap/auto-cpufreq/12/lib/python3.6/site-packages/click/core.py", line 610, in invoke
+    return callback(*args, **kwargs)
+  File "/snap/auto-cpufreq/12/bin/auto-cpufreq", line 93, in main
+    s.run("snapctl set daemon=enabled", shell=True)
+NameError: name 's' is not defined
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>Oh, fixed this.
+Usually modules doesn't depend on imports of other modules
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>Can u merge it again?
+I commited fix here</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>Maybe reopen PR?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Please make a new PR and pull changes from master I also made some changes to snapcraft.yaml</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,74 @@
+
+        <html>
+        <head>
+            <title>Issue #569: auto-cpufreq installer</title>
+        </head>
+        <body>
+            <h1>auto-cpufreq installer</h1>
+            <p><strong>Issue #569</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hi, I really like your project, I use it on my laptop and enjoy the hours of battery life, but there are problems with auto-cpufreq-installer during installation. I have figured them out a little and I ask you to add them to the script
+I also attach the output of the commands cat /etc/os-release
+
+NAME="Etersoft Ximper"
+VERSION="0.8.1"
+ID=altlinux
+VERSION_ID=0.8.1
+PRETTY_NAME="Ximper Linux 0.8.1 (Alice)"
+ANSI_COLOR="1;33"
+CPE_NAME="cpe:/o:alt:ximper:0.8.1"
+BUILD_ID="Etersoft Ximper 0.8"
+HOME_URL="https://ximperlinux.ru/"
+BUG_REPORT_URL="https://bugs.altlinux.org/"
+LOGO=ximperlinux
+
+NAME="ALT"
+VERSION="10.2"
+ID=altlinux
+LOGO="basealt"
+VERSION_ID=10.2
+PRETTY_NAME="ALT Workstation K 10.2 (Sorbaronia Mitschurinii)"
+ANSI_COLOR="1;33"
+CPE_NAME="cpe:/o:alt:kworkstation:10"
+BUILD_ID="ALT 10.1"
+ALT_BRANCH_ID="p10"
+HOME_URL="https://www.basealt.ru/"
+BUG_REPORT_URL="https://bugs.altlinux.org/"
+DOCUMENTATION_URL="https://docs.altlinux.org/"
+SUPPORT_URL="https://support.basealt.ru/"
+
+NAME="Sisyphus"
+VERSION="20230819"
+ID=altlinux
+VERSION_ID=20230819
+PRETTY_NAME="ALT Regular"
+ANSI_COLOR="1;33"
+CPE_NAME="cpe:/o:alt:sisyphus:20230819"
+BUILD_ID="Sisyphus 20230819"
+ALT_BRANCH_ID="sisyphus"
+HOME_URL="http://en.altlinux.org"
+BUG_REPORT_URL="https://bugs.altlinux.org/"
+LOGO=altlinux
+
+;;
+	altlinux|basealt|ximperlinux)
+		detected_distro "Alt Linux"
+		epmi libgio-devel libcairo-gobject-devel gobject-introspection python3 python3-devel python3-base python3-module-pip python3-module-pip-wheel python3-module-setuptools python3-module-pycairo-devel dmidecode gcc 
+		completed
+		;;</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I would encourage you to add them yourself to auto-cpufreq-installer, if needed someone will help you during review and you'll be credited for your work, for reference see: https://github.com/AdnanHodzic/auto-cpufreq#code-contribution
+
+Also when reporting an issue please fill out the Issue template (output of `auto-cpufreq --debug`) as I also described here: https://www.youtube.com/watch?v=SPGpkZ0AZVU&t=664s</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

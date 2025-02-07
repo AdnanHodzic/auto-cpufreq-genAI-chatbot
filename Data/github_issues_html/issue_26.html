@@ -1,0 +1,178 @@
+
+        <html>
+        <head>
+            <title>Issue #26: [feature request/enhancement] settings file</title>
+        </head>
+        <body>
+            <h1>[feature request/enhancement] settings file</h1>
+            <p><strong>Issue #26</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Would it be a good idea to have a settings file?
+
+Certain things could be stored here like;
+- minimum CPU load before going to turbo 
+- minimum load factor before going to turbo
+- true/false for allowing turboboost to be switched off when on battery
+And any other items that can be changed.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Exorust:</strong></p>
+                    <p>This is similar to #30.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Duplicate of #30 but let's continue the discussion here.
+
+As I suggested in #30 
+
+> I like this idea. My idea (which I had in plan for one of the future releases) was to allow users to specify these themselves using CLI. Something like having another "advanced" mode which would allow you to easily/interactively tweak these to your own liking.
+
+what you're proposing here would make perfect sense. In meantime I just want to think about what would be simpler option for the end user. Adding these interactively through a CLI or a "settings" file.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>marc-vdm:</strong></p>
+                    <p>I would personally say that a file gives a good overview to users of what settings there are and how they could be changed, and perhaps implementation is easier, but I'm not sure of that.
+ However, there are probably more opinions on this so I`d be happy to hear those.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>poVoq:</strong></p>
+                    <p>Maybe at least some default presets would be good? For example one that stays low as long as possible and only switches to performance when starting a game for something like that?
+Right now it seems quite trigger happy with switching up the CPU speed on regular browser use quite often.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I would personally say that a file gives a good overview to users of what settings there are and how they could be changed, and perhaps implementation is easier, but I'm not sure of that.
+> However, there are probably more opinions on this so I`d be happy to hear those.
+
+Let's no go with what's _easiest_ to implement, let's go with what's _best_ to implement :)
+
+> Maybe at least some default presets would be good? For example one that stays low as long as possible and only switches to performance when starting a game for something like that?
+> Right now it seems quite trigger happy with switching up the CPU speed on regular browser use quite often.
+
+Having various presets is also a good idea. 
+
+I agree that in current implementation it is trigger happy. I'm thinking of different ways to make it less this way, by possibly combining both input from load and CPU usage (and then in future also CPU temperature + fan speeds).
+
+Either way I'll be thinking what's the best way to proceed with this in upcoming period. In meantime if anyone else is interested in having this feature, I'd be very interested in hearing what you have to say.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>I could look at it. And maybe implement first draft when have a time
+python's stdlib has [good config parser](https://docs.python.org/3/library/configparser.html)
+
+So, config should:
+- contain default values
+- where it should be placed?
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>* where it should be placed?
+
+I was about to say in the same directory as `auto-cpufreq`, this way whoever changes the default values can see what was changed with git.
+
+*But*, this won't apply if app was installed using `snap`, `AUR` or any other package. Hence, maybe it would be the best to place to `~/.auto-cpufreq`?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>Yeah, I also inclined to thing that this would be a nice place.
+But, what about other users? as it seems that `auto-cpufreq` is for multi user, isn't it?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>True, but for now we should focus that it works well for 1 user with root access :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>I just thought, that how could we determine user dir, if `auto-cpufreq` is run with root?
+maybe we should place the config like `tlp` is doing this in `/etc` ?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>True, `/etc/auto-cpufreq` sounds good.
+
+Since `auto-cpufreq` snap is running in restricted mode, I'm trying to pick least intrusive location, as I'll need to request access to this location for snap. But in worst case scenario I can even place this in different location for snap in case it turns out to be too much hassle.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>crian:</strong></p>
+                    <p>Please follow the [xdg base directory specification](https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html) when placing a config file into the user home dir.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>whorider:</strong></p>
+                    <p>Another setting to consider, please:
+I am visually impaired and I'd like to slow the refresh rate from default 5 to ~10 seconds in --monitor mode; It's a little too fast for my eyes ;)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>thhart:</strong></p>
+                    <p>Hi, I can see it is not easy to have configuration in caged environments, this is a starting point for snap:
+
+https://snapcraft.io/docs/adding-snap-configuration</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>thhart:</strong></p>
+                    <p>IMHO it is not necessary to have a rich configuration interface. But it would be very helpful to have some options being configurable in general. Personally I would like to be able to configure following threshold:
+Turbo mode on/off depending on load average and temp
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>tamimmahmudkhan:</strong></p>
+                    <p>I would like the minimum amount of configurables to be similar to what the cpupower utility allows. A max/min frequency and governor selection with the addition of a battery toggle.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I'm happy to report that with release of [auto-cpufreq v1.7.0 this feature is implemented](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.7.0)! </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ashwinmahantha:</strong></p>
+                    <p>Hi @AdnanHodzic,
+I just started using this tool. Thanks for all the work you have done!
+A couple of questions:
+1. Has this been addressed? If yes, then, does user need to do anything here?
+> I agree that in current implementation it is trigger happy. I'm thinking of different ways to make it less this way, by possibly combining both input from load and CPU usage (and then in future also CPU temperature + fan speeds).
+
+2. Is the list of options for config file mentioned in github page exhaustive? If no, then, where can I find all the options.
+[Configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/README.md#configuring-auto-cpufreq)
+
+Again, thanks for the awesome tool!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> 1. Has this been addressed? If yes, then, does user need to do anything here?
+
+Yes it has, long time ago.
+
+> 2. Is the list of options for config file mentioned in github page exhaustive? If no, then, where can I find all the options.
+> Configuring auto-cpufreq
+
+At the moment that's the whole list of additional things that can be manually configured. As those were the most wanted settings.
+
+If you wish to extend this list, please [feel free to make a code contribution! ](https://github.com/AdnanHodzic/auto-cpufreq#code-contribution)
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

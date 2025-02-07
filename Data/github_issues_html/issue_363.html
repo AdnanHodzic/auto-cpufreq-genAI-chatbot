@@ -1,0 +1,99 @@
+
+        <html>
+        <head>
+            <title>Issue #363: Failed to start auto-cpufreq - Automatic CPU speed & power optimizer for Linux</title>
+        </head>
+        <body>
+            <h1>Failed to start auto-cpufreq - Automatic CPU speed & power optimizer for Linux</h1>
+            <p><strong>Issue #363</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+× auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux
+     Loaded: loaded (/usr/lib/systemd/system/auto-cpufreq.service; enabled; vendor preset: disabled)
+     Active: failed (Result: exit-code) since Wed 2022-02-16 07:25:55 IST; 12s ago
+    Process: 19331 ExecStart=/opt/auto-cpufreq/venv/bin/python /opt/auto-cpufreq/venv/bin/auto-cpufreq --daemon (code=exited, status=203/E>
+   Main PID: 19331 (code=exited, status=203/EXEC)
+        CPU: 1ms
+
+Feb 16 07:25:55 zenbook systemd[1]: auto-cpufreq.service: Scheduled restart job, restart counter is at 5.
+Feb 16 07:25:55 zenbook systemd[1]: Stopped auto-cpufreq - Automatic CPU speed & power optimizer for Linux.
+Feb 16 07:25:55 zenbook systemd[1]: auto-cpufreq.service: Start request repeated too quickly.
+Feb 16 07:25:55 zenbook systemd[1]: auto-cpufreq.service: Failed with result 'exit-code'.
+Feb 16 07:25:55 zenbook systemd[1]: Failed to start auto-cpufreq - Automatic CPU speed & power optimizer for Linux.
+
+---
+
+### System information:
+OS: Arch Linux x86_64 
+Host: ZenBook UX325EA_UX325EA 1.0 
+Kernel: 5.16.9-arch1-1 
+Shell: bash 5.1.16 
+Resolution: 1920x1080 
+DE: GNOME 41.4 
+WM: Mutter 
+CPU: 11th Gen Intel i5-1135G7 (8) @ 4.200GHz 
+GPU: Intel TigerLake-LP GT2 [Iris Xe Graphics] 
+Memory: 2325MiB / 15697MiB 
+
+```
+auto-cpufreq --debug
+Linux distro: Arch Linux  
+Linux kernel: 5.16.9-arch1-1
+Processor: 11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4200 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  1.0%     42 °C     2400 MHz
+CPU1:	  2.0%     45 °C     2400 MHz
+CPU2:	  0.0%     42 °C     2400 MHz
+CPU3:	  0.0%     43 °C     2400 MHz
+CPU4:	  0.0%     42 °C     2400 MHz
+CPU5:	  1.0%     45 °C     2400 MHz
+CPU6:	  0.0%     42 °C     2400 MHz
+CPU7:	  0.0%     43 °C     1280 MHz
+
+auto-cpufreq version: Version         : 300.r8fb5469.-1
+
+Python: 3.10.2
+psutil package: 5.9.0
+platform package: 1.0.8
+click package: 8.0.3
+distro package: 1.6.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.14 %
+
+Total CPU usage: 0.5 %
+Total system load: 0.38232421875
+Average temp. of all cores: 43.0 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: on
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>encrustace:</strong></p>
+                    <p>I was installing git version which is outdated.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

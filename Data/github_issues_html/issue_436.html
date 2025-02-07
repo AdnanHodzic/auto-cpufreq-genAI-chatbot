@@ -1,0 +1,104 @@
+
+        <html>
+        <head>
+            <title>Issue #436: CPU not scaling up in battery mode & incorrect Max frequency is displayed</title>
+        </head>
+        <body>
+            <h1>CPU not scaling up in battery mode & incorrect Max frequency is displayed</h1>
+            <p><strong>Issue #436</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>While using the laptop on battery , autocpu-freq doesn't scale the CPU's for some reason . It seems always stuck at the minimum frequency . My laptop is a low end dual core system so it causes pretty high performance drop , 1080p 60fps Youtube videos for example start having major framedrops . The CPU's don't scale up beyond the minimum frequency even when their usage reach 99%
+
+Secondly i also noticed that the ```CPU max frequency``` info is incorrect . As you can see in the debug info below , it lists the max CPU frequency as 1.10GHz which is definitely incorrect , its 2.4Ghz as mentioned in the official page [here](https://ark.intel.com/content/www/us/en/ark/products/95598/intel-celeron-processor-n3350-2m-cache-up-to-2-40-ghz.html) , also while charging when performance mode is used it reaches upto that frequency frequently as clear from this stats [here](https://www.klgrth.io/paste/y7uz5) 
+
+I have disabled the ```intel_pstate``` & using the ```acpi-cpufreq``` driver as recommended in the troubleshooting guide . Just to cover the possibility that both of these issues could be related in any way , i have included them together here itself . Also i have installed auto-cpufreq using the [official installer script](https://github.com/AdnanHodzic/auto-cpufreq#auto-cpufreq-installer) just to rule out any rare possible issue exclusive to the arch package
+
+### System information:
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux rolling n/a
+Linux kernel: 5.19.7-arch1-1
+Processor: Intel(R) Celeron(R) CPU N3350 @ 1.10GHz
+Cores: 2
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1101 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	 97.0%     45 °C      796 MHz
+CPU1:	 95.0%     47 °C      796 MHz
+
+CPU fan speed: 0 RPM
+
+auto-cpufreq version: 1.9.5 (git: 1a35c3ca)
+
+Python: 3.10.6
+psutil package: 5.9.2
+platform package: 1.0.8
+click package: 8.1.3
+distro package: 1.7.0
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 1.35 %
+
+Total CPU usage: 96.0 %
+Total system load: 3.58
+Average temp. of all cores: 46.00 °C
+
+Currently using: powersave governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+```</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Do the frequencies scale to their max potential if you install auto-cpufreq daemon using `--install_performance`? Further [reference](https://github.com/AdnanHodzic/auto-cpufreq#configuring-auto-cpufreq).
+
+Although if it has the frequency wrong on both drivers then something else is at hand here ...</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>xd003:</strong></p>
+                    <p>Just tested it after installing with ```--install_performance``` but it didn't seem to scale the CPU just like with the default install </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>xd003:</strong></p>
+                    <p>I think if proper logging is implemented then we can see what really is happening in real time so it could be easier to debug this issue seemingly faced by quite some people</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I do agree that proper logging would be a great help (and a feature). But unfortunately I don't have time to look into this myself at this point, hence why if you (or anyone else)[ wants to give it a try](https://github.com/AdnanHodzic/auto-cpufreq#code-contribution), please do so and I'll gladly review your changes.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>RaptaG:</strong></p>
+                    <p>Is there any progress with this issue?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>If there are any changes that could be made please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+In meantime closing the issue due to inactivity.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

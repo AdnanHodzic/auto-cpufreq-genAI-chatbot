@@ -1,0 +1,296 @@
+
+        <html>
+        <head>
+            <title>Issue #339: My fan was running a lot</title>
+        </head>
+        <body>
+            <h1>My fan was running a lot</h1>
+            <p><strong>Issue #339</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I noticed my fan was running a lot. So I uninstalled `auto-cpufreq` and tried [power-profiles-daemon](https://gitlab.freedesktop.org/hadess/power-profiles-daemon#power-profiles-daemon) instead. That app comes with the command `powerprofilesctl`, which prints:
+
+```
+  performance:
+    Driver:     intel_pstate
+    Degraded:   yes (high-operating-temperature)
+```
+
+If the **performance** option is degraded, I would think it preferable to not run it. Now that it's not running via `auto-cpufreq`, my fan doesn't run so much.
+
+- OS: Arch Linux x86_64
+- Host: Latitude 7480
+- Kernel: 5.15.12-arch1-1
+- CPU: Intel i5-6300U (4) @ 2.4GHz</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Consider making siniliar configuration as part of [auto-cpufreq config file](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq) or even [changing the driver](https://github.com/AdnanHodzic/auto-cpufreq/#troubleshooting).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bound-variable:</strong></p>
+                    <p>I had already tried the alternative driver. I'll try altering the configuration. Thanks.
+
+Alan
+
+Sent with [ProtonMail](https://protonmail.com/) Secure Email.
+
+‐‐‐‐‐‐‐ Original Message ‐‐‐‐‐‐‐
+On Saturday, January 1st, 2022 at 2:27 AM, Adnan Hodzic ***@***.***> wrote:
+
+> Consider making siniliar configuration as part of [auto-cpufreq config file](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq) or even [changing the driver](https://github.com/AdnanHodzic/auto-cpufreq/#troubleshooting).
+>
+> —
+> Reply to this email directly, [view it on GitHub](https://github.com/AdnanHodzic/auto-cpufreq/issues/339#issuecomment-1003538267), or [unsubscribe](https://github.com/notifications/unsubscribe-auth/AMGSQFEDWYVCIRI5JFDCBDLUT3JHNANCNFSM5LB6AN3A).
+> Triage notifications on the go with GitHub Mobile for [iOS](https://apps.apple.com/app/apple-store/id1477376905?ct=notification-email&mt=8&pt=524675) or [Android](https://play.google.com/store/apps/details?id=com.github.android&referrer=utm_campaign%3Dnotification-email%26utm_medium%3Demail%26utm_source%3Dgithub).
+> You are receiving this because you authored the thread.Message ID: ***@***.***></p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>molitona:</strong></p>
+                    <p>@AdnanHodzic 
+My fan was running a lot too also...</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@Pound-Hash changes regarding setting `balanced` mode with `power-profiles-daemon` were merged last night as part of #349, hence can you try pulling latest changes from `master` and see if you still have the same problem? There are some ongoing PR's and after they've been merged I'll make a new release. Also make sure to include `auto-cpufreq --debug`
+
+@molitona I think problem in your case is that your charging states are not detected properly, originally introduced with #308, hence @bobslept could you please take a look at this? Thank you</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I think [v1.9.1 release](https://github.com/AdnanHodzic/auto-cpufreq/releases) should fix this issue.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>molitona:</strong></p>
+                    <p>@Pound-Hash Does the problem is fixed for you with the latest version ?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bound-variable:</strong></p>
+                    <p>> @Pound-Hash Does the problem is fixed for you with the latest version ?
+
+I haven't tried it yet. The problem was resolved a few weeks ago when I simply disabled performance mode. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>molitona:</strong></p>
+                    <p>Are you planning to test it ?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bound-variable:</strong></p>
+                    <p>> Are you planning to test it ?
+
+Sure, but I'm sick and I have a lot of personal issues to tend to. I won't get around to playing with Linux for a couple weeks. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bound-variable:</strong></p>
+                    <p>I misremembered what I did earlier. I didn't actually disable performance mode; instead, I disabled **turbo**. I just installed the latest version. Testing now with turbo reset to auto.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>jeankhawand:</strong></p>
+                    <p>I am facing the same issue fan running at full speed while CPU usage ~2.7%
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 20.04 focal
+Linux kernel: 5.13.0-27-generic
+Processor: Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz
+Cores: 12
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2601 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  2.0%     47 °C     2601 MHz
+CPU1:	  4.0%     47 °C     2601 MHz
+CPU2:	  0.0%     44 °C     2601 MHz
+CPU3:	  0.0%     44 °C     2579 MHz
+CPU4:	  1.0%     44 °C     2601 MHz
+CPU5:	  1.0%     45 °C     2601 MHz
+CPU6:	  3.0%     47 °C     2601 MHz
+CPU7:	  0.0%     47 °C     2601 MHz
+CPU8:	  1.0%     44 °C     2601 MHz
+CPU9:	  1.0%     44 °C     2601 MHz
+CPU10:	  1.0%     44 °C     2601 MHz
+CPU11:	  3.0%     45 °C     2601 MHz
+
+auto-cpufreq version: 1.9.1 (git: 8fb5469a)
+
+Python: 3.8.10
+psutil package: 5.9.0
+platform package: 1.0.8
+click package: 8.0.3
+distro package: 1.6.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.13 %
+
+Total CPU usage: 1.7 %
+Total system load: 0.41
+Average temp. of all cores: 45.166666666666664 °C 
+
+Currently using: performance governor
+Currently turbo boost is: off
+
+------------------------------------------------------------------------------
+```
+
+> P.S: I also managed to change the driver 
+@AdnanHodzic </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>molitona:</strong></p>
+                    <p>@jeankhawand The same issue with me too...</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bound-variable:</strong></p>
+                    <p>After testing for one week, the problem appears resolved - the fan doesn't run so much.
+
+Current config:
+```
+### Modified ###
+
+[charger]
+# cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+governor = performance
+
+# always, auto, never
+turbo = auto
+
+[battery]
+governor = powersave
+turbo = auto
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>jeankhawand:</strong></p>
+                    <p>> After testing for one week, the problem appears resolved - the fan doesn't run so much.
+> 
+> Current config:
+> ```
+> ### Modified ###
+> 
+> [charger]
+> # cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+> governor = performance
+> 
+> # always, auto, never
+> turbo = auto
+> 
+> [battery]
+> governor = powersave
+> turbo = auto
+> ```
+
+@Pound-Hash which driver did you use ?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bound-variable:</strong></p>
+                    <p>> @Pound-Hash which driver did you use ?
+
+`intel_pstate`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Just [released v1.9.2](https://github.com/AdnanHodzic/auto-cpufreq/releases) which adds ability to change power governor used by default with auto-cpufreq from `balanced` to `performance` [using power_helper.py script](https://github.com/AdnanHodzic/auto-cpufreq/#1-power_helperpy-script). Curious to hear if you still have same problem if you switch to `performance` governor?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bound-variable:</strong></p>
+                    <p>My fan accelerates when building from source if performance is allowed. If I enable turbo, it accelerates more; if disabled, it accelerates less. Conversely, if I disable performance and turbo, then the fan will never accelerate even when building from source.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> My fan accelerates when building from source if performance is allowed. If I enable turbo, it accelerates more; if disabled, it accelerates less. Conversely, if I disable performance and turbo, then the fan will never accelerate even when building from source.
+
+What you explained here is exactly how system should act under these circumstances, hence could you please elaborate on what exactly is the problem?
+
+Also make sure you don't have `laptop-mode-tools` installed as mentioned in #365 </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bound-variable:</strong></p>
+                    <p>> > My fan accelerates when building from source if performance is allowed. If I enable turbo, it accelerates more; if disabled, it accelerates less. Conversely, if I disable performance and turbo, then the fan will never accelerate even when building from source.
+> 
+> What you explained here is exactly how system should act under these circumstances, hence could you please elaborate on what exactly is the problem?
+> 
+> Also make sure you don't have `laptop-mode-tools` installed as mentioned in #365
+
+My question was stated in the OP.
+
+`powerprofilesctl` says the performance option is degraded, and seems to also say that it causes high operating temperature. So the question was, should we be running it at all.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>You should and [should instead used "balanced"](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq), closing the issue please feel free to re-open if you're still facing the same issue.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bound-variable:</strong></p>
+                    <p>> You should and [should instead used "balanced"](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq), closing the issue please feel free to re-open if you're still facing the same issue.
+
+I should and should? I'm not sure I understand.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Sorry, made a typo, but I also misunderstood your last statement. You said, this works config for you:
+
+> After testing for one week, the problem appears resolved - the fan doesn't run so much.
+> 
+> Current config:
+> 
+> ```
+> ### Modified ###
+> 
+> [charger]
+> # cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+> governor = performance
+> 
+> # always, auto, never
+> turbo = auto
+> 
+> [battery]
+> governor = powersave
+> turbo = auto
+> ```
+
+Which is good, but then you stated you're facing this issue:
+
+>My fan accelerates when building from source if performance is allowed. If I enable turbo, it accelerates more; if disabled, it >accelerates less. Conversely, if I disable performance and turbo, then the fan will never accelerate even when building from >source.
+
+What I was trying to say is you should [switch to auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq#configuring-auto-cpufreq) `performance` mode. I just updated this section of README to make it more elaborate on how to do so. Namely, I had this same problem as (#361) and I fixed it by introducing this mode.
+
+Hope it's all clear now :)</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,143 @@
+
+        <html>
+        <head>
+            <title>Issue #666: Do not set any Turbo boost flags when using amd_pstate_epp driver</title>
+        </head>
+        <body>
+            <h1>Do not set any Turbo boost flags when using amd_pstate_epp driver</h1>
+            <p><strong>Issue #666</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Description
+
+I have been using auto-cpufreq for quite a while and have been recently investigating into using it with amd_pstate_epp. Everything has been working great except for a error spam of the service. Since everything except turbo boost is working fine I did some investigations.
+
+It seems like amd_pstate_epp is managing its turbo boost in the driver it self and not exposing the `/sys/devices/system/cpu/cpufreq/boost` flag. This probaply results in auto-cpufreq setting this flag and causing alot of error spam (see below).
+
+Another thing is that intel pstate could also have the same error (see #661).
+
+Also #602 seems related to this.
+
+A simple solution (if my assumptions are correct) would be to just not touch any boost related flags like `/sys/devices/system/cpu/cpufreq/boost`. 
+
+Feel free to correct my if I am wrong.
+
+Edit:
+I did some benchmarking using the sysbench cpu benchmark. I get on my system better peformance using amd-pstate-epp than amd-pstate and cpi-cpufreq driver.
+
+### Error output:
+```text
+cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+```
+---
+
+### System information:
+
+```
+-------------------------------------------------------------------------------
+
+Linux distro: NixOS 24.05 Uakari
+Linux kernel: 6.8.1
+Processor: AMD Ryzen 7 5800H with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: amd-pstate-epp
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4463 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      1.0%        52 °C       400 MHz
+CPU1      0.0%        52 °C      3572 MHz
+CPU2      1.0%        52 °C       400 MHz
+CPU3      0.0%        52 °C      3333 MHz
+CPU4      2.0%        52 °C      4330 MHz
+CPU5      4.0%        52 °C       400 MHz
+CPU6      2.0%        52 °C       400 MHz
+CPU7      1.0%        52 °C       400 MHz
+CPU8      1.0%        52 °C       400 MHz
+CPU9      3.0%        52 °C       400 MHz
+CPU10      0.0%        52 °C       400 MHz
+CPU11      0.0%        52 °C       400 MHz
+CPU12      1.0%        52 °C       400 MHz
+CPU13      1.0%        52 °C      3303 MHz
+CPU14      1.0%        52 °C      3140 MHz
+CPU15      0.0%        52 °C      3431 MHz
+
+CPU fan speed: 0 RPM
+
+auto-cpufreq version: 1.9.9
+Git commit: v1.9.9
+
+Python: 3.11.8
+psutil package: 5.9.8
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.07 %
+
+Total CPU usage: 1.7 %
+Total system load: 0.37
+Average temp. of all cores: 52.00 °C 
+
+Currently using: performance governor
+Warning: CPU turbo is not available
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>LDprg:</strong></p>
+                    <p>Another thing is also going on (maybe related) the EPP does not contain the value I specified in the config. Seems like my config is just ignored.
+
+Also the error in the log file does not seem to relate to turbo boost. I seems setting EPP per core doesn't work correctly.
+This command results in the same error:
+```shell
+> echo "power" | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/energy_performance_preference
+power
+tee: /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_preference: Device or resource busy
+tee: /sys/devices/system/cpu/cpu1/cpufreq/energy_performance_preference: Device or resource busy
+tee: /sys/devices/system/cpu/cpu2/cpufreq/energy_performance_preference: Device or resource busy
+tee: /sys/devices/system/cpu/cpu3/cpufreq/energy_performance_preference: Device or resource busy
+tee: /sys/devices/system/cpu/cpu4/cpufreq/energy_performance_preference: Device or resource busy
+tee: /sys/devices/system/cpu/cpu5/cpufreq/energy_performance_preference: Device or resource busy
+tee: /sys/devices/system/cpu/cpu6/cpufreq/energy_performance_preference: Device or resource busy
+tee: /sys/devices/system/cpu/cpu7/cpufreq/energy_performance_preference: Device or resource busy
+tee: /sys/devices/system/cpu/cpu8/cpufreq/energy_performance_preference: Device or resource busy
+tee: /sys/devices/system/cpu/cpu9/cpufreq/energy_performance_preference: Device or resource busy
+tee: /sys/devices/system/cpu/cpu10/cpufreq/energy_performance_preference: Device or resource busy
+tee: /sys/devices/system/cpu/cpu11/cpufreq/energy_performance_preference: Device or resource busy
+tee: /sys/devices/system/cpu/cpu12/cpufreq/energy_performance_preference: Device or resource busy
+tee: /sys/devices/system/cpu/cpu13/cpufreq/energy_performance_preference: Device or resource busy
+tee: /sys/devices/system/cpu/cpu14/cpufreq/energy_performance_preference: Device or resource busy
+tee: /sys/devices/system/cpu/cpu15/cpufreq/energy_performance_preference: Device or resource busy
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>LDprg:</strong></p>
+                    <p>[This](https://unix.stackexchange.com/questions/704080/cant-write-to-sys-devices-system-cpu-cpufreq-energy-performance-preference-w) might also be relevant. On my system the governor mode effects which epp can be selected.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>LDprg:</strong></p>
+                    <p>Updated my auto-cpufreq to 2.2.0 (using nixos flake now) and most stuff is gone.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

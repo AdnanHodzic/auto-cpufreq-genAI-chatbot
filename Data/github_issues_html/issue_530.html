@@ -1,0 +1,70 @@
+
+        <html>
+        <head>
+            <title>Issue #530: autocpufreq --version requires sudo now?</title>
+        </head>
+        <body>
+            <h1>autocpufreq --version requires sudo now?</h1>
+            <p><strong>Issue #530</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>any command with autocpu-freq requires sudo?</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rootCircle:</strong></p>
+                    <p>Looks like a bug from my previous PR #524 . Searching through the code, I got to know that the `set_override` function is always called irrespective of the force flag is called or not. [Check this](https://github.com/AdnanHodzic/auto-cpufreq/blame/486a9a6dc21b742e1a85db681ac1368a5ef59912/bin/auto-cpufreq#L48).
+
+A fix may be either :
+1) To call `set_override` only when force has some value(non-null). Because, calling it for None values increases extra overhead with no added benefits associated with it. 
+2) To prematurely return in `set_override` [function](https://github.com/AdnanHodzic/auto-cpufreq/blob/486a9a6dc21b742e1a85db681ac1368a5ef59912/auto_cpufreq/core.py#L98), if `override` value is None or illegal. 
+
+I will try working on the issue and make an appropriate PR ASAP :-)
+
+Till then you can just add an extra (tab) indent on [this line](https://github.com/AdnanHodzic/auto-cpufreq/blob/486a9a6dc21b742e1a85db681ac1368a5ef59912/bin/auto-cpufreq#L48). (calling `set_override` only if `force` is not None)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>niksingh710:</strong></p>
+                    <p>> Looks like a bug from my previous PR #524 . Searching through the code, I got to know that the `set_override` function is always called irrespective of the force flag is called or not. [Check this](https://github.com/AdnanHodzic/auto-cpufreq/blame/486a9a6dc21b742e1a85db681ac1368a5ef59912/bin/auto-cpufreq#L48).
+> 
+> A fix may be either :
+> 
+>     1. To call `set_override` only when force has some value(non-null). Because, calling it for None values increases extra overhead with no added benefits associated with it.
+> 
+>     2. To prematurely return in `set_override` [function](https://github.com/AdnanHodzic/auto-cpufreq/blob/486a9a6dc21b742e1a85db681ac1368a5ef59912/auto_cpufreq/core.py#L98), if `override` value is None or illegal.
+> 
+> 
+> I will try working on the issue and make an appropriate PR ASAP :-)
+> 
+> Till then you can just add an extra (tab) indent on [this line](https://github.com/AdnanHodzic/auto-cpufreq/blob/486a9a6dc21b742e1a85db681ac1368a5ef59912/bin/auto-cpufreq#L48). (calling `set_override` only if `force` is not None)
+
+Premature return will be the preferred option imo as then it will depend on the `set_override` to handle the values and the core logic have to just call it instead of going over all the checks. Kinda will keep it clean.
+
+More over a check for non-null will also work but not that much what I would like to see.
+
+Btw if you do fix it and create a pr tag me as rn have added sudo's in all of my scripts will refactor them.
+
+@AdnanHodzic opinion will matter more over it I guess. 
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rootCircle:</strong></p>
+                    <p>> Premature return will be the preferred option imo as then it will depend on the `set_override` to handle the values and the core logic have to just call it instead of going over all the checks. Kinda will keep it clean.
+
+I guess it might be a better design, but at cost of an extra function call. But going through the codes and patterns, they preferred to include root_check in the main file, and not with the associated function. (eg: `remove_daemon` etc)
+
+Due, to this I preferred going with 1st approach with a bit of modifications
+
+> @AdnanHodzic opinion will matter more over it I guess.
+
+It certainly would, I had created an PR and will see what he had to comment on this.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

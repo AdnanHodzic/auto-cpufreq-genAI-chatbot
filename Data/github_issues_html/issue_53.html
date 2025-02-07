@@ -1,0 +1,91 @@
+
+        <html>
+        <head>
+            <title>Issue #53: Snap deamon is polluting syslog</title>
+        </head>
+        <body>
+            <h1>Snap deamon is polluting syslog</h1>
+            <p><strong>Issue #53</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>![Capture d’écran de 2020-04-13 13-06-25](https://user-images.githubusercontent.com/6019313/79116022-a75a6e80-7d87-11ea-9c65-6a8bc9d2ec4f.png)
+
+Is there anyway to silent the deamon ?</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Many new changes have been implemented as part of 1.2 release and I believe your problem is solved. 
+
+Install latest version using snap package:
+
+```
+sudo snap install auto-cpufreq
+```
+
+or pull the latest changes and run:
+
+```
+sudo ./auto-cpufreq-installer
+```
+
+In case this doesn't solve your problem, please feel free to re-open this issue.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Kwaadpepper:</strong></p>
+                    <p>Sorry to say that this is not solved.
+#81 
+I have posted my syslog</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Seems like this issue is identical what was reported in #82 </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>Any news about that?
+I had to disable auto-cpufreq as it prints too much to my syslog
+I thin that we should increase the priority of this task</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I'm swamped IRL, but I'll do my best to take a look at this tonight.
+
+Seems like this issue is only present on snap environemnts, as I couldn't replicate the problem when `auto-cpufreq` was installed using `auto-cpufreq-install` installer.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Released a fix as part of 1.2.3 version which is available in beta channel, install it by running:
+
+```
+sudo snap install auto-cpufreq --beta
+```
+
+After you confirm it's working as expected for you I'll promote it to stable channel, merge changes with master and close this issue.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Kwaadpepper:</strong></p>
+                    <p>Thanks I'll check this ASAP.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Fix has already been confirmed in #82. Please feel to re-open if the problem persists. Changes have also been promoted to stable channel, so in case you switched to beta, you can switch back to stable by running:
+
+```
+sudo snap switch --channel=stable auto-cpufreq
+```</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

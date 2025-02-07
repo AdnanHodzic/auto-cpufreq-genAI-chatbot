@@ -1,0 +1,122 @@
+
+        <html>
+        <head>
+            <title>Issue #768: Bump cryptography from 42.0.4 to 43.0.1</title>
+        </head>
+        <body>
+            <h1>Bump cryptography from 42.0.4 to 43.0.1</h1>
+            <p><strong>Issue #768</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Bumps [cryptography](https://github.com/pyca/cryptography) from 42.0.4 to 43.0.1.
+<details>
+<summary>Changelog</summary>
+<p><em>Sourced from <a href="https://github.com/pyca/cryptography/blob/main/CHANGELOG.rst">cryptography's changelog</a>.</em></p>
+<blockquote>
+<p>43.0.1 - 2024-09-03</p>
+<pre><code>
+* Updated Windows, macOS, and Linux wheels to be compiled with OpenSSL 3.3.2.
+<p>.. _v43-0-0:</p>
+<p>43.0.0 - 2024-07-20<br />
+</code></pre></p>
+<ul>
+<li><strong>BACKWARDS INCOMPATIBLE:</strong> Support for OpenSSL less than 1.1.1e has been
+removed.  Users on older version of OpenSSL will need to upgrade.</li>
+<li><strong>BACKWARDS INCOMPATIBLE:</strong> Dropped support for LibreSSL &lt; 3.8.</li>
+<li>Updated Windows, macOS, and Linux wheels to be compiled with OpenSSL 3.3.1.</li>
+<li>Updated the minimum supported Rust version (MSRV) to 1.65.0, from 1.63.0.</li>
+<li>:func:<code>~cryptography.hazmat.primitives.asymmetric.rsa.generate_private_key</code>
+now enforces a minimum RSA key size of 1024-bit. Note that 1024-bit is still
+considered insecure, users should generally use a key size of 2048-bits.</li>
+<li>:func:<code>~cryptography.hazmat.primitives.serialization.pkcs7.serialize_certificates</code>
+now emits ASN.1 that more closely follows the recommendations in :rfc:<code>2315</code>.</li>
+<li>Added new :doc:<code>/hazmat/decrepit/index</code> module which contains outdated and
+insecure cryptographic primitives.
+:class:<code>~cryptography.hazmat.primitives.ciphers.algorithms.CAST5</code>,
+:class:<code>~cryptography.hazmat.primitives.ciphers.algorithms.SEED</code>,
+:class:<code>~cryptography.hazmat.primitives.ciphers.algorithms.IDEA</code>, and
+:class:<code>~cryptography.hazmat.primitives.ciphers.algorithms.Blowfish</code>, which were
+deprecated in 37.0.0, have been added to this module. They will be removed
+from the <code>cipher</code> module in 45.0.0.</li>
+<li>Moved :class:<code>~cryptography.hazmat.primitives.ciphers.algorithms.TripleDES</code>
+and :class:<code>~cryptography.hazmat.primitives.ciphers.algorithms.ARC4</code> into
+:doc:<code>/hazmat/decrepit/index</code> and deprecated them in the <code>cipher</code> module.
+They will be removed from the <code>cipher</code> module in 48.0.0.</li>
+<li>Added support for deterministic
+:class:<code>~cryptography.hazmat.primitives.asymmetric.ec.ECDSA</code> (:rfc:<code>6979</code>)</li>
+<li>Added support for client certificate verification to the
+:mod:<code>X.509 path validation &lt;cryptography.x509.verification&gt;</code> APIs in the
+form of :class:<code>~cryptography.x509.verification.ClientVerifier</code>,
+:class:<code>~cryptography.x509.verification.VerifiedClient</code>, and
+<code>PolicyBuilder</code>
+:meth:<code>~cryptography.x509.verification.PolicyBuilder.build_client_verifier</code>.</li>
+<li>Added Certificate
+:attr:<code>~cryptography.x509.Certificate.public_key_algorithm_oid</code>
+and Certificate Signing Request
+:attr:<code>~cryptography.x509.CertificateSigningRequest.public_key_algorithm_oid</code>
+to determine the :class:<code>~cryptography.hazmat._oid.PublicKeyAlgorithmOID</code>
+Object Identifier of the public key found inside the certificate.</li>
+<li>Added :attr:<code>~cryptography.x509.InvalidityDate.invalidity_date_utc</code>, a
+timezone-aware alternative to the naïve <code>datetime</code> attribute
+:attr:<code>~cryptography.x509.InvalidityDate.invalidity_date</code>.</li>
+<li>Added support for parsing empty DN string in</li>
+</ul>
+<!-- raw HTML omitted -->
+</blockquote>
+<p>... (truncated)</p>
+</details>
+<details>
+<summary>Commits</summary>
+<ul>
+<li><a href="https://github.com/pyca/cryptography/commit/a7733878281ca261c4ada04022fc706ba5de9d8b"><code>a773387</code></a> bump for 43.0.1 (<a href="https://redirect.github.com/pyca/cryptography/issues/11533">#11533</a>)</li>
+<li><a href="https://github.com/pyca/cryptography/commit/0393fef5758e55e3c7b3a3e6e5b77821c594a87f"><code>0393fef</code></a> Backport setuptools version ban (<a href="https://redirect.github.com/pyca/cryptography/issues/11526">#11526</a>)</li>
+<li><a href="https://github.com/pyca/cryptography/commit/6687bab97aef31d6ee6cc94ecc87a972137b5d4a"><code>6687bab</code></a> Bump openssl from 0.10.65 to 0.10.66 in /src/rust (<a href="https://redirect.github.com/pyca/cryptography/issues/11320">#11320</a>) (<a href="https://redirect.github.com/pyca/cryptography/issues/11324">#11324</a>)</li>
+<li><a href="https://github.com/pyca/cryptography/commit/ebf14f2edc8536f36797979cb0e075e766d978c5"><code>ebf14f2</code></a> bump for 43.0.0 and update changelog (<a href="https://redirect.github.com/pyca/cryptography/issues/11311">#11311</a>)</li>
+<li><a href="https://github.com/pyca/cryptography/commit/42788a0353e0ca0d922b6b8b9bde77cbb1c65984"><code>42788a0</code></a> Fix exchange with keys that had Q automatically computed (<a href="https://redirect.github.com/pyca/cryptography/issues/11309">#11309</a>)</li>
+<li><a href="https://github.com/pyca/cryptography/commit/2dbdfb8f3913cb9cef08218fcd48a9b4eaa8b57d"><code>2dbdfb8</code></a> don't assign unused name (<a href="https://redirect.github.com/pyca/cryptography/issues/11310">#11310</a>)</li>
+<li><a href="https://github.com/pyca/cryptography/commit/ccc66e6cdf92f4c29012f86f44ad183161eccaad"><code>ccc66e6</code></a> Bump openssl from 0.10.64 to 0.10.65 in /src/rust (<a href="https://redirect.github.com/pyca/cryptography/issues/11308">#11308</a>)</li>
+<li><a href="https://github.com/pyca/cryptography/commit/4310c8727b50fa5f713a0e863ee3defc0c831921"><code>4310c87</code></a> Bump sphinxcontrib-qthelp from 1.0.7 to 1.0.8 (<a href="https://redirect.github.com/pyca/cryptography/issues/11307">#11307</a>)</li>
+<li><a href="https://github.com/pyca/cryptography/commit/f66a9c4b4fe9b87825872fef7a36c319b823f322"><code>f66a9c4</code></a> Bump sphinxcontrib-htmlhelp from 2.0.5 to 2.0.6 (<a href="https://redirect.github.com/pyca/cryptography/issues/11306">#11306</a>)</li>
+<li><a href="https://github.com/pyca/cryptography/commit/a8fcf18ee0bb0570bd4c9041cf387dc7a9c1968a"><code>a8fcf18</code></a> Bump openssl-sys from 0.9.102 to 0.9.103 in /src/rust (<a href="https://redirect.github.com/pyca/cryptography/issues/11305">#11305</a>)</li>
+<li>Additional commits viewable in <a href="https://github.com/pyca/cryptography/compare/42.0.4...43.0.1">compare view</a></li>
+</ul>
+</details>
+<br />
+
+
+[![Dependabot compatibility score](https://dependabot-badges.githubapp.com/badges/compatibility_score?dependency-name=cryptography&package-manager=pip&previous-version=42.0.4&new-version=43.0.1)](https://docs.github.com/en/github/managing-security-vulnerabilities/about-dependabot-security-updates#about-compatibility-scores)
+
+Dependabot will resolve any conflicts with this PR as long as you don't alter it yourself. You can also trigger a rebase manually by commenting `@dependabot rebase`.
+
+[//]: # (dependabot-automerge-start)
+[//]: # (dependabot-automerge-end)
+
+---
+
+<details>
+<summary>Dependabot commands and options</summary>
+<br />
+
+You can trigger Dependabot actions by commenting on this PR:
+- `@dependabot rebase` will rebase this PR
+- `@dependabot recreate` will recreate this PR, overwriting any edits that have been made to it
+- `@dependabot merge` will merge this PR after your CI passes on it
+- `@dependabot squash and merge` will squash and merge this PR after your CI passes on it
+- `@dependabot cancel merge` will cancel a previously requested merge and block automerging
+- `@dependabot reopen` will reopen this PR if it is closed
+- `@dependabot close` will close this PR and stop Dependabot recreating it. You can achieve the same result by closing it manually
+- `@dependabot show <dependency name> ignore conditions` will show all of the ignore conditions of the specified dependency
+- `@dependabot ignore this major version` will close this PR and stop Dependabot creating any more for this major version (unless you reopen the PR or upgrade to it yourself)
+- `@dependabot ignore this minor version` will close this PR and stop Dependabot creating any more for this minor version (unless you reopen the PR or upgrade to it yourself)
+- `@dependabot ignore this dependency` will close this PR and stop Dependabot creating any more for this dependency (unless you reopen the PR or upgrade to it yourself)
+You can disable automated security fix PRs for this repo from the [Security Alerts page](https://github.com/AdnanHodzic/auto-cpufreq/network/alerts).
+
+</details></p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+            </div>
+        </body>
+        </html>
+        

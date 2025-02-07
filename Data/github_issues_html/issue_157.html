@@ -1,0 +1,59 @@
+
+        <html>
+        <head>
+            <title>Issue #157: [Request] Deb package?</title>
+        </head>
+        <body>
+            <h1>[Request] Deb package?</h1>
+            <p><strong>Issue #157</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Would it be possible to release a deb package, instead of using a shell script?</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>I second this, as I'm currently using Debian, this will also benefit Ubuntu users.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>k-chapin:</strong></p>
+                    <p>I also agree. A deb would be great! Snap, flatpak, and appimage are great technologies but I'd rather avoid them for now. Forgive me for being new to Linux and GitHub. I have been downloading this entire project as a .ZIP, extracting to a folder within my profile, and installing via `sudo ./auto-cpufreq-installer`. I believe it's working as expected but I don't know if this is ideal or optimal.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>@MischievousTomato I believe that Snap works on Debian as well? (I don't know I don't use Debian). Here on Ubuntu, it just works... no configuration.. no installation steps, just one click and you are rolling.
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I suggest to install it using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq#snap-store)? As it runs in a container and isolates its Python env from your env. so you shouldn't experience Python related errors.
+
+It's ironic what I'm saying here since I used to be a Debian package maintainer. I still think it would be cool to have it packaged for Debian and all its derivatives, but I don't have time to do this now. 
+
+If any of you want to take a shot at packing auto-cpufreq, I think your best reference is to follow [Debian Mentors page](https://mentors.debian.net/) and someone will help you along the way. If this happens, the least I can do is to give you credits as part [releases page](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>xtronics:</strong></p>
+                    <p>Snap is a bad idea outside of testing - when everyone uses the same lib- the libs get better.  This is the same reason Windoze software is so buggy.
+
+Also, realize that Debian is what so many other distributions pull from - if you create a Debian package, more eyes on the code - more people to help. 
+
+So please consider a Debian package.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Update: now there's a [RFP to make auto-cpufreq as part of Debian repositories. ](https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1053294)</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

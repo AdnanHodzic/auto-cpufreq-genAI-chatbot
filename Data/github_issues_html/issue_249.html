@@ -1,0 +1,70 @@
+
+        <html>
+        <head>
+            <title>Issue #249: Python error, newbie help...</title>
+        </head>
+        <body>
+            <h1>Python error, newbie help...</h1>
+            <p><strong>Issue #249</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+sudo auto-cpufreq 
+Traceback (most recent call last):
+  File "/usr/local/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.0', 'auto-cpufreq')
+  File "/usr/lib/python3.9/site-packages/pkg_resources/__init__.py", line 651, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/usr/lib/python3.9/site-packages/pkg_resources/__init__.py", line 1455, in run_script
+    exec(script_code, namespace, namespace)
+  File "/usr/local/lib/python3.9/site-packages/auto_cpufreq-1.0-py3.9.egg/EGG-INFO/scripts/auto-cpufreq", line 26, in <module>
+  File "/usr/local/lib/python3.9/site-packages/click/decorators.py", line 170, in decorator
+    _param_memo(f, OptionClass(param_decls, **attrs))
+  File "/usr/local/lib/python3.9/site-packages/click/core.py", line 1460, in __init__
+    Parameter.__init__(self, param_decls, type=type, **attrs)
+TypeError: __init__() got an unexpected keyword argument 'hidden'
+
+Paste here error output
+```
+---
+
+### System information:
+Frame.work laptop
+Fedora 34
+Paste here output of the auto-cpufreq --debug
+```
+sudo auto-cpufreq --debug
+Traceback (most recent call last):
+  File "/usr/local/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.0', 'auto-cpufreq')
+  File "/usr/lib/python3.9/site-packages/pkg_resources/__init__.py", line 651, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/usr/lib/python3.9/site-packages/pkg_resources/__init__.py", line 1455, in run_script
+    exec(script_code, namespace, namespace)
+  File "/usr/local/lib/python3.9/site-packages/auto_cpufreq-1.0-py3.9.egg/EGG-INFO/scripts/auto-cpufreq", line 26, in <module>
+  File "/usr/local/lib/python3.9/site-packages/click/decorators.py", line 170, in decorator
+    _param_memo(f, OptionClass(param_decls, **attrs))
+  File "/usr/local/lib/python3.9/site-packages/click/core.py", line 1460, in __init__
+    Parameter.__init__(self, param_decls, type=type, **attrs)
+TypeError: __init__() got an unexpected keyword argument 'hidden'
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Could you install it using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq#snap-store)? As it runs in a container and isolates its Python env from your env. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing the issue due to inactivity, if the problem persist please feel free to re-open the issue.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

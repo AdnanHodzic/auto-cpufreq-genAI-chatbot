@@ -1,0 +1,561 @@
+
+        <html>
+        <head>
+            <title>Issue #675: Should warn about the threshold feature can not be applied.</title>
+        </head>
+        <body>
+            <h1>Should warn about the threshold feature can not be applied.</h1>
+            <p><strong>Issue #675</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Some Lenovo laptop has the issue with setting the battery threshold.
+https://access.redhat.com/discussions/6195601
+
+![Screenshot from 2024-04-07 23-09-25](https://github.com/AdnanHodzic/auto-cpufreq/assets/5110323/15fd0578-d0ac-4811-8e26-01e70fc46fd5)
+
+
+It would be great if the user could notice that the battery threshold feature is not working.
+By the way.., sigh situation, only conservation_mode  works for my Fedora machine.. :(</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>Battery thresholds should work on your machine if you have the right acpi modules are installed. Also conservation mode will have higher priority than battery thresholds so turn off conservation mode and try again.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p> It would seem that `charge_stop_threshold` is not available for them. You could try using `tee` instead of `echo` in the command you ran.
+
+Also post `auto-cpufreq --debug` to give more info on your system</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>corona10:</strong></p>
+                    <p>> Battery thresholds should work on your machine if you have the right acpi modules are installed. Also conservation mode will have higher priority than battery thresholds so turn off conservation mode and try again.
+> It would seem that charge_stop_threshold is not available for them. You could try using tee instead of echo in the command you ran.
+
+I already tried, they doesn't work, if it was set at BAT0, I think that it would work, but if the battery is configured at BAT1 there looks some issue.
+Please read my original reference, the issue is perfectly the same:  https://access.redhat.com/discussions/6195601
+
+```
+tee: /sys/class/power_supply/BAT1/charge_stop_threshold: Permission denied
+```
+
+## auto-cpu-freq
+Please ignore the custom commit, I am using my own custom version https://github.com/AdnanHodzic/auto-cpufreq/pull/674
+Except that, all implementations are the same.
+
+```
+➜  ~ sudo auto-cpufreq --debug
+
+Using settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------------------------------------------------------
+
+Linux distro: Fedora Linux 39 Workstation Edition
+Linux kernel: 6.8.4-200.fc39.x86_64
+Processor: AMD Ryzen 7 8845HS w/ Radeon 780M Graphics
+Cores: 16
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3800 MHz
+CPU min frequency: 1600 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      2.0%        33 °C      1600 MHz
+CPU1      0.0%        33 °C      1600 MHz
+CPU2      2.0%        33 °C      2954 MHz
+CPU3      0.0%        33 °C      1762 MHz
+CPU4      3.0%        33 °C      1600 MHz
+CPU5      0.0%        33 °C      1497 MHz
+CPU6      5.1%        33 °C      1600 MHz
+CPU7      0.0%        33 °C      2200 MHz
+CPU8      1.0%        33 °C      1375 MHz
+CPU9      0.0%        33 °C      2200 MHz
+CPU10      1.0%        33 °C      1600 MHz
+CPU11      3.9%        33 °C      2200 MHz
+CPU12      2.0%        33 °C      1600 MHz
+CPU13      0.0%        33 °C      1600 MHz
+CPU14      2.0%        33 °C      1600 MHz
+CPU15      0.0%        33 °C      1600 MHz
+
+auto-cpufreq version: 2.2.0 (git: f9e716a)
+
+Python: 3.12.2
+psutil package: 5.9.8
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.11 %
+
+Total CPU usage: 1.5 %
+Total system load: 0.47
+Average temp. of all cores: 33.00 °C 
+
+Currently using: ondemand governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>corona10:</strong></p>
+                    <p>For config file
+```
+# settings for when connected to a power source
+[charger]
+# see available governors by running: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+# preferred governor
+governor = ondemand
+
+# EPP: see available preferences by running: cat /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_available_preferences
+energy_performance_preference = performance
+
+# minimum cpu frequency (in kHz)
+# example: for 800 MHz = 800000 kHz --> scaling_min_freq = 800000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly
+# scaling_min_freq = 800000
+
+# maximum cpu frequency (in kHz)
+# example: for 1GHz = 1000 MHz = 1000000 kHz -> scaling_max_freq = 1000000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly
+# scaling_max_freq = 1000000
+
+# turbo boost setting. possible values: always, auto, never
+turbo = auto
+
+
+# settings for when using battery power
+[battery]
+# see available governors by running: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+# preferred governor
+governor = powersave
+
+# EPP: see available preferences by running: cat /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_available_preferences
+energy_performance_preference = power
+
+# minimum cpu frequency (in kHz)
+# example: for 800 MHz = 800000 kHz --> scaling_min_freq = 800000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly
+# scaling_min_freq = 800000
+
+# maximum cpu frequency (in kHz)
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# example: for 1GHz = 1000 MHz = 1000000 kHz -> scaling_max_freq = 1000000
+# to use this feature, uncomment the following line and set the value accordingly
+# scaling_max_freq = 1000000
+
+# turbo boost setting (always, auto, or never)
+turbo = auto
+
+# battery charging threshold
+# reference: https://github.com/AdnanHodzic/auto-cpufreq/#battery-charging-thresholds
+enable_thresholds = true
+start_threshold = 80
+stop_threshold = 90
+ideapad_laptop_conservation_mode = false
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>to be honest i have no idea what would fix your issue the only things i can think of are:
+
+ you dont have to right acpi modules installed. could you send us the output of lsmod?
+
+try booing off a live Debian on a usb stick and see if you have the correct acpi module running and see if the battery path is available.
+
+can we also have your laptop model? </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>corona10:</strong></p>
+                    <p>## lsmod
+```
+Module                  Size  Used by
+uhid                   20480  2
+uinput                 20480  0
+rfcomm                102400  4
+snd_seq_dummy          12288  0
+snd_hrtimer            12288  1
+nf_conntrack_netbios_ns    12288  1
+nf_conntrack_broadcast    12288  1 nf_conntrack_netbios_ns
+nft_fib_inet           12288  1
+nft_fib_ipv4           12288  1 nft_fib_inet
+nft_fib_ipv6           12288  1 nft_fib_inet
+nft_fib                12288  3 nft_fib_ipv6,nft_fib_ipv4,nft_fib_inet
+nft_reject_inet        12288  10
+nf_reject_ipv4         16384  1 nft_reject_inet
+nf_reject_ipv6         20480  1 nft_reject_inet
+nft_reject             12288  1 nft_reject_inet
+nft_ct                 24576  8
+nft_chain_nat          12288  3
+nf_nat                 65536  1 nft_chain_nat
+nf_conntrack          188416  4 nf_nat,nft_ct,nf_conntrack_netbios_ns,nf_conntrack_broadcast
+nf_defrag_ipv6         24576  1 nf_conntrack
+nf_defrag_ipv4         12288  1 nf_conntrack
+ip_set                 65536  0
+nf_tables             372736  298 nft_ct,nft_reject_inet,nft_fib_ipv6,nft_fib_ipv4,nft_chain_nat,nft_reject,nft_fib,nft_fib_inet
+nfnetlink              20480  3 nf_tables,ip_set
+qrtr                   57344  4
+bnep                   36864  2
+sunrpc                888832  1
+binfmt_misc            28672  1
+snd_sof_amd_acp63      16384  0
+snd_sof_amd_vangogh    16384  0
+snd_sof_amd_rembrandt    16384  0
+snd_sof_amd_renoir     16384  0
+snd_sof_amd_acp        69632  4 snd_sof_amd_rembrandt,snd_sof_amd_vangogh,snd_sof_amd_acp63,snd_sof_amd_renoir
+snd_sof_pci            24576  4 snd_sof_amd_rembrandt,snd_sof_amd_vangogh,snd_sof_amd_acp63,snd_sof_amd_renoir
+rtw89_8852ce           12288  0
+snd_sof_xtensa_dsp     16384  1 snd_sof_amd_acp
+rtw89_8852c           933888  1 rtw89_8852ce
+snd_sof               454656  2 snd_sof_amd_acp,snd_sof_pci
+rtw89_pci              90112  1 rtw89_8852ce
+snd_hda_codec_conexant    32768  1
+intel_rapl_msr         20480  0
+snd_sof_utils          16384  1 snd_sof
+snd_hda_codec_generic   114688  1 snd_hda_codec_conexant
+rtw89_core            610304  2 rtw89_pci,rtw89_8852c
+snd_hda_codec_hdmi     94208  1
+intel_rapl_common      45056  1 intel_rapl_msr
+snd_soc_core          462848  1 snd_sof
+edac_mce_amd           40960  0
+snd_hda_intel          65536  6
+snd_intel_dspcfg       40960  2 snd_hda_intel,snd_sof
+snd_intel_sdw_acpi     16384  1 snd_intel_dspcfg
+kvm_amd               204800  0
+snd_hda_codec         225280  4 snd_hda_codec_generic,snd_hda_codec_conexant,snd_hda_codec_hdmi,snd_hda_intel
+uvcvideo              176128  0
+snd_compress           28672  1 snd_soc_core
+ac97_bus               12288  1 snd_soc_core
+uvc                    12288  1 uvcvideo
+mac80211             1576960  2 rtw89_core,rtw89_pci
+snd_pcm_dmaengine      16384  1 snd_soc_core
+videobuf2_vmalloc      20480  1 uvcvideo
+videobuf2_memops       16384  1 videobuf2_vmalloc
+kvm                  1396736  1 kvm_amd
+snd_pci_ps             28672  0
+snd_hda_core          151552  5 snd_hda_codec_generic,snd_hda_codec_conexant,snd_hda_codec_hdmi,snd_hda_intel,snd_hda_codec
+videobuf2_v4l2         40960  1 uvcvideo
+btusb                  86016  0
+videobuf2_common       94208  4 videobuf2_vmalloc,videobuf2_v4l2,uvcvideo,videobuf2_memops
+snd_rpl_pci_acp6x      16384  0
+btrtl                  32768  1 btusb
+snd_acp_pci            12288  0
+snd_hwdep              20480  1 snd_hda_codec
+btintel                57344  1 btusb
+videodev              393216  2 videobuf2_v4l2,uvcvideo
+snd_acp_legacy_common    16384  1 snd_acp_pci
+snd_seq               126976  7 snd_seq_dummy
+btbcm                  24576  1 btusb
+vfat                   20480  1
+snd_seq_device         16384  1 snd_seq
+snd_pci_acp6x          20480  0
+btmtk                  12288  1 btusb
+snd_pci_acp5x          16384  0
+irqbypass              12288  1 kvm
+libarc4                12288  1 mac80211
+fat                   106496  1 vfat
+mc                     94208  4 videodev,videobuf2_v4l2,uvcvideo,videobuf2_common
+snd_rn_pci_acp3x       24576  0
+bluetooth            1048576  38 btrtl,btmtk,btintel,btbcm,bnep,btusb,rfcomm
+snd_pcm               184320  13 snd_sof_amd_acp,snd_hda_codec_hdmi,snd_pci_acp6x,snd_hda_intel,snd_hda_codec,snd_sof,snd_compress,snd_soc_core,snd_sof_utils,snd_hda_core,snd_pci_ps,snd_pcm_dmaengine
+snd_acp_config         24576  9 snd_rn_pci_acp3x,snd_pci_acp6x,snd_pci_acp5x,snd_sof_amd_rembrandt,snd_sof_amd_vangogh,snd_sof_amd_acp63,snd_acp_pci,snd_pci_ps,snd_sof_amd_renoir
+snd_soc_acpi           16384  2 snd_sof_amd_acp,snd_acp_config
+cfg80211             1347584  3 rtw89_core,mac80211,rtw89_8852c
+pcspkr                 12288  0
+wmi_bmof               12288  0
+acpi_cpufreq           32768  0
+rapl                   20480  0
+ideapad_laptop         57344  0
+snd_timer              53248  3 snd_seq,snd_hrtimer,snd_pcm
+snd                   155648  26 snd_hda_codec_generic,snd_seq,snd_hda_codec_conexant,snd_seq_device,snd_hda_codec_hdmi,snd_hwdep,snd_hda_intel,snd_hda_codec,snd_sof,snd_timer,snd_compress,snd_soc_core,snd_pcm
+snd_pci_acp3x          16384  0
+sparse_keymap          12288  1 ideapad_laptop
+soundcore              16384  1 snd
+platform_profile       12288  1 ideapad_laptop
+rfkill                 40960  8 bluetooth,ideapad_laptop,cfg80211
+i2c_piix4              32768  0
+k10temp                16384  0
+joydev                 24576  0
+amd_pmc                45056  0
+loop                   36864  0
+zram                   32768  2
+amdgpu              13422592  68
+amdxcp                 12288  1 amdgpu
+i2c_algo_bit           20480  1 amdgpu
+drm_ttm_helper         12288  1 amdgpu
+ttm                   110592  2 amdgpu,drm_ttm_helper
+drm_exec               12288  1 amdgpu
+gpu_sched              69632  1 amdgpu
+nvme                   65536  3
+drm_suballoc_helper    12288  1 amdgpu
+drm_buddy              20480  1 amdgpu
+sdhci_pci             102400  0
+crct10dif_pclmul       12288  1
+drm_display_helper    237568  1 amdgpu
+nvme_core             233472  4 nvme
+cqhci                  36864  1 sdhci_pci
+crc32_pclmul           12288  0
+crc32c_intel           16384  3
+sdhci                  98304  1 sdhci_pci
+video                  77824  2 amdgpu,ideapad_laptop
+polyval_clmulni        12288  0
+hid_sensor_hub         32768  0
+ucsi_acpi              12288  0
+polyval_generic        12288  1 polyval_clmulni
+hid_multitouch         32768  0
+ghash_clmulni_intel    16384  0
+sha512_ssse3           53248  0
+sha256_ssse3           32768  0
+sha1_ssse3             32768  0
+typec_ucsi             65536  1 ucsi_acpi
+mmc_core              270336  3 sdhci,cqhci,sdhci_pci
+ccp                   155648  1 kvm_amd
+sp5100_tco             20480  0
+cec                    86016  1 drm_display_helper
+typec                 114688  1 typec_ucsi
+nvme_auth              24576  1 nvme_core
+wmi                    36864  3 video,wmi_bmof,ideapad_laptop
+i2c_hid_acpi           12288  0
+i2c_hid                40960  1 i2c_hid_acpi
+serio_raw              16384  0
+ip6_tables             28672  0
+ip_tables              28672  0
+fuse                  212992  5
+
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>corona10:</strong></p>
+                    <p>Laptop: Lenovo IdeaPad Slim 5 14AHP9</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>corona10:</strong></p>
+                    <p>For Debian, I will try later :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>huffyhenry:</strong></p>
+                    <p>I ran into a similar issue today. The thresholds set in the config file were being ignored. Trying to  `echo` or `tee` a value into `charge_start_threshold` and `charge_stop_threshold` yielded "permission denied" or "I/O error".
+
+I managed to get the battery to charge by writing to `charge_control_start_threshold` and `charge_control_stop_threshold` instead, although this behaviour isn't super consistent, for example now I _can_ write to the original threshold slots. 
+
+I suspect that the kernel or module were updated and something went slightly wrong. Also, I do not recall these `*_control_*` slots being there from when I was looking at them a couple of weeks ago when I got curious about how `auto-cpufreq` sets these thresholds. Maybe it's a new interface to use?
+
+Although this issue isn't with `auto-cpufreq`, I second the request for an error message when setting thresholds fails. It's a fantastic tool BTW, thanks for your work!
+
+
+For completeness, I have the required module:
+```bash
+marek@ulam:~ $ lsmod | grep thinkpad_acpi
+thinkpad_acpi         159744  0
+nvram                  16384  1 thinkpad_acpi
+snd                   143360  31 snd_ctl_led,snd_hda_codec_generic,snd_seq,snd_seq_device,snd_hda_codec_hdmi,snd_hwdep,snd_hda_intel,snd_hda_codec,snd_hda_codec_realtek,snd_sof,snd_hda_scodec_cs35l41,snd_timer,snd_soc_hdac_hdmi,snd_compress,thinkpad_acpi,snd_soc_core,snd_pcm,snd_hda_cs_dsp_ctls,snd_rawmidi
+ledtrig_audio          12288  3 snd_ctl_led,snd_hda_codec_generic,thinkpad_acpi
+platform_profile       12288  1 thinkpad_acpi
+drm                   761856  20 drm_kms_helper,drm_display_helper,evdi,nvidia,drm_buddy,thinkpad_acpi,nvidia_drm,i915,ttm
+video                  73728  3 thinkpad_acpi,i915,nvidia_modeset
+```
+
+`auto-cpufreq` is running fine:
+
+```bash
+marek@ulam:~ $ sudo auto-cpufreq --debug
+[sudo] password for marek: 
+
+Using settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 23.10 Mantic Minotaur
+Linux kernel: 6.5.0-27-generic
+Processor: 13th Gen Intel(R) Core(TM) i9-13900H
+Cores: 20
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 5200 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      0.0%        61 °C       400 MHz
+CPU1      0.0%        61 °C       687 MHz
+CPU2      0.0%        57 °C       400 MHz
+CPU3      0.0%        57 °C       400 MHz
+CPU4      0.0%        55 °C       400 MHz
+CPU5      0.0%        55 °C       400 MHz
+CPU6      1.0%        56 °C       418 MHz
+CPU7      0.0%        56 °C       400 MHz
+CPU8      1.0%        56 °C       597 MHz
+CPU9      0.0%        56 °C       400 MHz
+CPU10      0.0%        52 °C      1046 MHz
+CPU11      0.0%        52 °C       400 MHz
+CPU12      0.0%        57 °C       400 MHz
+CPU13      0.0%        57 °C       400 MHz
+CPU14      0.0%        57 °C       400 MHz
+CPU15      0.0%        57 °C       400 MHz
+CPU16      0.0%        58 °C       400 MHz
+CPU17      0.0%        58 °C       400 MHz
+CPU18      0.0%        58 °C       400 MHz
+CPU19      0.0%        57 °C       400 MHz
+
+CPU fan speed: 2333 RPM
+
+auto-cpufreq version: 2.2.0 (git: 215026a)
+
+Python: 3.11.6
+psutil package: 5.9.8
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.03 %
+
+Total CPU usage: 0.3 %
+Total system load: 0.23
+Average temp. of all cores: 56.65 °C 
+
+Currently using: performance governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+```
+
+And my config file is
+```
+marek@ulam:~ $ cat /etc/auto-cpufreq.conf 
+# MK, 30.03.2024
+# After https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#3-auto-cpufreq-config-file
+
+[charger]
+energy_performance_preference = performance
+turbo = always
+
+[battery]
+governor = powersave
+energy_performance_preference = power
+turbo = never
+enable_thresholds = true
+start_threshold = 100
+stop_threshold = 100
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>from [here](https://askubuntu.com/questions/1431916/what-is-difference-between-charge-start-threshold-and-charge-control-start-th) `charge_start_threshold` is the legacy api from thinkpad_acpi and `charge_control_start_threshold` is the new api.
+
+im currently working on adding warnings like what was suggested and then i will work on changing the api paths.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>corona10:</strong></p>
+                    <p>> m currently working on adding warnings like what was suggested and then i will work on changing the api paths.
+
+Amazing!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>corona10:</strong></p>
+                    <p>So you will work for
+* charge_control_start_threshold
+* charge_control_end_threshold
+
+right?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>yep it should.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>corona10:</strong></p>
+                    <p>Yeah but in my case, it will not work too :(
+
+```
+$> echo "90" | sudo tee /sys/class/power_supply/BAT1/charge_control_end_threshold
+tee: /sys/class/power_supply/BAT1/charge_control_end_threshold: Permission denied
+90
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>corona10:</strong></p>
+                    <p>```
+➜  ~ ls /sys/class/power_supply/BAT1/
+alarm               energy_full_design  power_now           type              
+capacity            energy_now          present             uevent            
+capacity_level      hwmon2/             serial_number       voltage_min_design
+cycle_count         manufacturer        status              voltage_now       
+device@             model_name          subsystem@                            
+energy_full         power/              technology   
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>but bat0 has the paths tho right?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>corona10:</strong></p>
+                    <p>https://linrunner.de/tlp/settings/bc-vendors.html#lenovo-non-thinkpad-series
+
+According to this documentaton, some products have issues.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>corona10:</strong></p>
+                    <p>> but bat0 has the paths tho right?
+
+My product has no bat0, so no way to check :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>igtg rn but ill check in the morrning</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>does your laptop support `ideapad_acpi` or `ideapad_laptop` kernal modules?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing the issue due to inactivity. </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

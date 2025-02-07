@@ -1,0 +1,79 @@
+
+        <html>
+        <head>
+            <title>Issue #451: [Feature request ] How can I stop disabling of bluetooth on boot?</title>
+        </head>
+        <body>
+            <h1>[Feature request ] How can I stop disabling of bluetooth on boot?</h1>
+            <p><strong>Issue #451</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Thank you in advance!</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>This should be in [Discussion](https://github.com/AdnanHodzic/auto-cpufreq/discussions) instead. 
+
+Regardless,  to answer your question:
+
+> can I stop disabling of bluetooth on boot?
+
+Quick answer is no. 
+
+I made a [suggestion how this issue](https://github.com/AdnanHodzic/auto-cpufreq/issues/92#issuecomment-671425807) could be resolved in #92. I'm also open to an idea that bluetooth remains enabled on boot by default, but in this case to also have a parameter to disable it (as it is now).
+
+Since I'm very limited with available time to do this myself, if you or anyone else wants to give it a try in implementing this functionality, please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Mark3xtrm:</strong></p>
+                    <p>Hi! I edited main.conf setting back `AutoEnable=true`, but it seems bluetooth still remains off at boot. Any help?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Mark3xtrm:</strong></p>
+                    <p>> Hi! I edited main.conf setting back `AutoEnable=true`, but it seems bluetooth still remains off at boot. Any help?
+
+Now it seems to work. I rebooted again. Please, add a toggle or an installation option for this. Like
+`let bluetooth continue to start automatically at startup`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Since I'm very limited with available time to do this myself, if you or anyone else wants to give it a try in implementing this functionality, please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Mark3xtrm:</strong></p>
+                    <p>> Since I'm very limited with available time to do this myself, if you or anyone else wants to give it a try in implementing this functionality, please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+Thanks, @AdnanHodzic , I'll see what I can do as soon as I have some time for me! 🔥
+
+Just another curiosity: does auto-cpufreq interfere with other system default settings, like eg brightness steps control? Maybe I'm wrong or it's just an impression, but after I enabled it I wasn't able to fine adjust brightness like before due to reduced number of steps in the slider
+
+(I'm using latest Linux Mint Cinnamon)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Just another curiosity: does auto-cpufreq interfere with other system default settings, like eg brightness steps control? 
+
+No absolutely not, other then disabling bluetooth it won't touch anything else in "user space". 
+
+> Maybe I'm wrong or it's just an impression, but after I enabled it I wasn't able to fine adjust brightness like before due to reduced number of steps in the slider
+
+[As mentioned in Readme, auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#1-power_helperpy-script-snap-package-install-only) will [disable GNOME power profiles](https://twitter.com/fooctrl/status/1467469508373884933) to prevent conflicts and various other issues.
+
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

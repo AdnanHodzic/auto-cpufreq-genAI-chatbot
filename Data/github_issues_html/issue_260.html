@@ -1,0 +1,103 @@
+
+        <html>
+        <head>
+            <title>Issue #260: Allow configuration for CPU `max frequency`</title>
+        </head>
+        <body>
+            <h1>Allow configuration for CPU `max frequency`</h1>
+            <p><strong>Issue #260</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Thanks for this really cool tool!
+
+I did not see any documentation or issue where this, was mentioned. So here I go:
+
+Is there a way to manually set, perhaps under `/etc/auto-cpufreq.conf`, a lower max frequency than the the default one?
+
+For instance, having a `max_frequency=1800` under the `[battery]` setting. 
+
+For context, my max frequency is rather high for me, and I would like to lower it.
+
+
+### System information:
+```text
+distro package 1.6.0
+
+-------------------------------------------------------------------------------
+
+Linux distro: Manjaro Linux 21.1.5 Pahvo
+Linux kernel: 5.9.16-1-MANJARO
+Processor: Intel(R) Core(TM) i7-8750H CPU @ 2.20GHz
+Cores: 12
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2200 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  1.0%     47 °C      903 MHz
+CPU1:	  1.0%     46 °C     1126 MHz
+CPU2:	  3.0%     47 °C     1469 MHz
+CPU3:	  3.0%     46 °C     2101 MHz
+CPU4:	  6.9%     47 °C     1946 MHz
+CPU5:	  2.0%     46 °C     1109 MHz
+CPU6:	  1.0%     47 °C     2081 MHz
+CPU7:	  1.0%     46 °C     1731 MHz
+CPU8:	  0.0%     47 °C     2201 MHz
+CPU9:	  0.0%     46 °C     2203 MHz
+CPU10:	  0.0%     47 °C     2201 MHz
+CPU11:	  0.0%     46 °C     2200 MHz
+
+auto-cpufreq version:
+Version         : 1.6.9.r0.gffc0bf0-1
+
+Python: 3.9.7
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 8.0.1
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.11 %
+
+Total CPU usage: 1.4 %
+Total system load: 0.68
+Average temp. of all cores: 46.5 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Thanks for this really cool tool!
+
+Most welcome!
+
+Regarding rest of your question, similar thing was request in #69. But this seems like a very interesting idea to have as part of config file.
+
+If you feel like making this change yourself, please give it a try! Please make your changes and submit a [pull request](https://github.com/AdnanHodzic/auto-cpufreq/pulls) which I'll be glad to review. If your changes are accepted you'll be credited as part of [releases page](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Just [released v1.9.2](https://github.com/AdnanHodzic/auto-cpufreq/releases) which adds ability to change power governor used by default with auto-cpufreq from `balanced` to `performance` [using power_helper.py script](https://github.com/AdnanHodzic/auto-cpufreq/#1-power_helperpy-script) which could also resolve this problem.
+
+In meantime closing the issue due to inactivity, if the problem persist please feel free to re-open the issue.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

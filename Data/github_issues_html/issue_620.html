@@ -1,0 +1,180 @@
+
+        <html>
+        <head>
+            <title>Issue #620:  No such file or directory: '/opt/auto-cpufreq/override.pickle'</title>
+        </head>
+        <body>
+            <h1> No such file or directory: '/opt/auto-cpufreq/override.pickle'</h1>
+            <p><strong>Issue #620</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+yes
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+No
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+No
+- Have you tried suggestions in [troubleshooting section](P)?
+Yes
+
+### Error output:
+```text
+/nix/store/zj5930834g6jyjn6nr1q3nxnvsvxxal4-python3.11-auto-cpufreq-1.9.9🔒 took 3s 
+❯ sudo auto-cpufreq --force="performance"                                     
+Traceback (most recent call last):
+  File "/nix/store/zj5930834g6jyjn6nr1q3nxnvsvxxal4-python3.11-auto-cpufreq-1.9.9/bin/.auto-cpufreq-wrapped", line 201, in <module>
+    main()
+  File "/nix/store/hzs7ldlnrdi1yl8ma0nqq36fxs1n1a65-python3.11-click-8.1.7/lib/python3.11/site-packages/click/core.py", line 1157, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/nix/store/hzs7ldlnrdi1yl8ma0nqq36fxs1n1a65-python3.11-click-8.1.7/lib/python3.11/site-packages/click/core.py", line 1078, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "/nix/store/hzs7ldlnrdi1yl8ma0nqq36fxs1n1a65-python3.11-click-8.1.7/lib/python3.11/site-packages/click/core.py", line 1434, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/nix/store/hzs7ldlnrdi1yl8ma0nqq36fxs1n1a65-python3.11-click-8.1.7/lib/python3.11/site-packages/click/core.py", line 783, in invoke
+    return __callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/nix/store/zj5930834g6jyjn6nr1q3nxnvsvxxal4-python3.11-auto-cpufreq-1.9.9/bin/.auto-cpufreq-wrapped", line 51, in main
+    set_override(force) # Calling set override, only if force has some values
+    ^^^^^^^^^^^^^^^^^^^
+  File "/nix/store/zj5930834g6jyjn6nr1q3nxnvsvxxal4-python3.11-auto-cpufreq-1.9.9/lib/python3.11/site-packages/auto_cpufreq/core.py", line 101, in set_override
+    with open(governor_override_state, "wb") as store:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/opt/auto-cpufreq/override.pickle'
+```
+---
+
+### System information:
+```
+-------------------------------------------------------------------------------
+
+Linux distro: NixOS 24.05 Uakari
+Linux kernel: 6.1.69
+Processor: Intel(R) Core(TM) i5-8250U CPU @ 1.60GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1600 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      6.2%        38 °C       800 MHz
+CPU1      9.2%        37 °C       800 MHz
+CPU2      9.2%        37 °C       800 MHz
+CPU3     10.1%        37 °C       800 MHz
+CPU4      5.0%        38 °C       800 MHz
+CPU5      5.1%        37 °C       800 MHz
+CPU6      6.9%        37 °C       793 MHz
+CPU7      5.0%        37 °C       800 MHz
+
+auto-cpufreq version: 1.9.9
+Git commit: v1.9.9
+
+Python: 3.11.6
+psutil package: 5.9.6
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.8.0
+
+Computer type: /nix/store/q8qq40xg2grfh9ry1d9x4g7lq4ra7n81-bash-5.2-p21/bin/sh: line 1: dmidecode: command not found
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.39 %
+
+Total CPU usage: 8.2 %
+Total system load: 1.42
+Average temp. of all cores: 37.25 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+
+
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+---
+```sh
+sudo auto-cpufreq --force="performance"
+```
+Running the above command produces the given error instead of changing governor</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Seems to be a problem with Nix @shadeyg56 </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>LamprosPitsillos:</strong></p>
+                    <p>Seems that the nixpkgs  [build](https://github.com/NixOS/nixpkgs/blob/cfc3698c31b1fb9cdcf10f36c9643460264d0ca8/pkgs/tools/system/auto-cpufreq/default.nix#L44)  is missing this line 
+https://github.com/AdnanHodzic/auto-cpufreq/blob/fe296206462f204c3abb9d73e005fccd8c8a6bb6/nix/default.nix#L29</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@LamprosPitsillos [project is looking for contributors](https://github.com/AdnanHodzic/auto-cpufreq#looking-for-developers-and-co-maintainers) if you want to give it a try in implementing a fix for this issue, please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>LamprosPitsillos:</strong></p>
+                    <p>I will give it a try off-cource and notify you on the nixpkgs pr when i do .
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>LamprosPitsillos:</strong></p>
+                    <p>https://github.com/NixOS/nixpkgs/pull/258684
+
+When this pr gets merged it should fix the issues.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>LamprosPitsillos:</strong></p>
+                    <p>```nix
+  nixpkgs.overlays = [
+   ...
+    (final: prev: { auto-cpufreq = prev.auto-cpufreq.overrideAttrs
+     rec {
+        _version = "1.9.9";
+        version =  lib.warnIf (prev.auto-cpufreq.version != _version ) "Seems like auto-cpufreq has been updated!" _version;
+        postInstall = ''
+        # copy script manually
+        cp scripts/cpufreqctl.sh $out/bin/cpufreqctl.auto-cpufreq
+﻿
+        # systemd service
+        mkdir -p $out/lib/systemd/system
+        cp scripts/auto-cpufreq.service $out/lib/systemd/system
+        '';
+        postPatch = ''
+        substituteInPlace auto_cpufreq/core.py --replace '/opt/auto-cpufreq/override.pickle' /var/run/override.pickle
+        '';
+     };
+﻿
+    })
+  ];
+﻿
+﻿
+```
+
+Temporary fix for NixOS</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

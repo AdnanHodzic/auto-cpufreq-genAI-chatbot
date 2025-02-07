@@ -1,0 +1,79 @@
+
+        <html>
+        <head>
+            <title>Issue #785: Autostart is not working on Fedora 41</title>
+        </head>
+        <body>
+            <h1>Autostart is not working on Fedora 41</h1>
+            <p><strong>Issue #785</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>The Daemon is not autostarting. I have to open the program on everyreboot and install it.
+
+-------------------------------------------------------------------------------
+
+Linux distro: Fedora Linux 41 Workstation Edition
+Linux kernel: 6.11.5-300.fc41.x86_64
+Processor: Intel(R) Core(TM) i7-8650U CPU @ 1.90GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1900 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      5.0%        44 °C       900 MHz
+CPU1     14.0%        44 °C       400 MHz
+CPU2      3.0%        44 °C       900 MHz
+CPU3      6.0%        44 °C       899 MHz
+CPU4      3.0%        44 °C       900 MHz
+CPU5      4.0%        44 °C       900 MHz
+CPU6      5.0%        44 °C       400 MHz
+CPU7      6.1%        44 °C       900 MHz
+
+CPU fan speed: 0 RPM
+
+auto-cpufreq version: 2.4.0
+
+Python: 3.13.0
+psutil package: 6.1.0
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.21 %
+
+Total CPU usage: 3.5 %
+Total system load: 1.82
+Average temp. of all cores: 44.00 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>owendor:</strong></p>
+                    <p>I can confirm that this is happening on my Fedora 41 machine as well. Every time I logout or restart I have to reinstall.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Duplicate issue, let's continue discussion as part of #779 </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

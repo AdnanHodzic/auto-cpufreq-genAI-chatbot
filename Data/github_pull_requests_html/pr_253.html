@@ -1,0 +1,55 @@
+
+        <html>
+        <head>
+            <title>Pull Request #253: Remove redundant conditionals in set_performance</title>
+        </head>
+        <body>
+            <h1>Remove redundant conditionals in set_performance</h1>
+            <p><strong>Pull Request #253</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hey, I noticed some conditionals that never get hit.
+
+This PR adds no functionality, just cleans up the code a little in case you want it.
+
+Thanks for making the project
+- Yus</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Hi @Yustynn, 
+
+Thank you for your contribution, but why do you find `cpuload <= 25` part of this particular conditions redundant? </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Yustynn:</strong></p>
+                    <p>Your prior conditional in all the cases was
+```python
+if cpuload >= 20:
+```
+
+So by definition, if it ever gets past that the CPU load is `< 20` and therefore `<=25`
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Your prior conditional in all the cases was
+> 
+> ```python
+> if cpuload >= 20:
+> ```
+> 
+> So by definition, if it ever gets past that the CPU load is `< 20` and therefore `<=25`
+
+Ah, that's the part that I missed. Good catch, thank you for your contribution! </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

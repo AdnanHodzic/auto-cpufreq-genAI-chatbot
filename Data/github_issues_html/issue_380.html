@@ -1,0 +1,44 @@
+
+        <html>
+        <head>
+            <title>Issue #380: Feature Request: Settings relative to the current battery level (like turbo off below 40%)</title>
+        </head>
+        <body>
+            <h1>Feature Request: Settings relative to the current battery level (like turbo off below 40%)</h1>
+            <p><strong>Issue #380</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p></p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Could you be more descriptive in this feature request?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>0x0013:</strong></p>
+                    <p>I think this issue is meant to request similar feature as #315 and #356 .
+
+Currently, via the config file, it is possible to configure 2 different profiles based on the dimension of current power state (charger/battery).
+
+What I see from these requests are similar features but for slightly different use-cases:
+
+#315 use-case (I'm assuming) - powersave governor when discharging and on low battery, but more power when battery is still high. 
+#356 use-case - powersave governor while charging on low battery, for faster battery level replenishment
+this issue use case (I'm assuming) - change other parameters (like turbo boost) based on battery level
+
+What I think would unify this and the above mentioned feature requests, would be to add a second dimension to the selection of battery level as the configured profiles. Currently configurable profiles are already configurable enough (governor, turbo boost, min/max frequercy). If battery level dimension could be added to the selection criteria, I think it would satisfy these requests. Ideally, both dimensions would be optional - some people want specific settings, but only based on charging/plugged status (as it is now), while others might want only based on battery level (i.e. powersave below 50%, performance above, don't care if charging or discharging), while others yet might want both (powersave only under 50%, but always performance when plugged-in). Though this does complicate things a little, as then it's needed to take into account which selection takes priority if two single-dimension states are true (i.e. profile exists for "below 40%" and profile exists for "plugged-in", and laptop is 30% while charging)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Since I'm very limited with available time to do this myself, if you or anyone else wants to give it a try in implementing this functionality, please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

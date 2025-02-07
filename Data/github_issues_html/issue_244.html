@@ -1,0 +1,207 @@
+
+        <html>
+        <head>
+            <title>Issue #244: Doesn't seem to work on Solus - Bluetooth error</title>
+        </head>
+        <body>
+            <h1>Doesn't seem to work on Solus - Bluetooth error</h1>
+            <p><strong>Issue #244</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+```text
+$ sudo auto-cpufreq --install
+
+--------------------- Deploying auto-cpufreq as a daemon ----------------------
+
+* Turn off bluetooth on boot
+
+ERROR:
+Was unable to turn off bluetooth on boot
+FileNotFoundError(2, 'No such file or directory')
+
+* Deploy auto-cpufreq install script
+
+* Deploy auto-cpufreq remove script
+
+------------------ Running auto-cpufreq daemon install script ------------------
+
+* Deploy auto-cpufreq systemd unit file
+
+* Reloading systemd manager configuration
+
+* Stopping auto-cpufreq daemon (systemd) service
+
+* Starting auto-cpufreq daemon (systemd) service
+
+* Enabling auto-cpufreq daemon (systemd) service at boot
+
+----------------- auto-cpufreq daemon installed and running -----------------
+
+To view live stats, run:
+auto-cpufreq --stats
+
+To disable and remove auto-cpufreq daemon, run:
+sudo auto-cpufreq --remove
+
+-------------------------------------------------------------------------------
+
+$ auto-cpufreq --stats
+
+Note: You can quit stats mode by pressing "ctrl+c"
+```
+---
+
+### System information:
+```text
+-------------------------------------------------------------------------------
+
+Linux distro: Solus 4.3 fortitude
+Linux kernel: 5.14.5-197.current
+Processor: Intel(R) Core(TM) i7-1065G7 CPU @ 1.30GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1300 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  6.1%     54 °C     1500 MHz
+CPU1:	 10.0%     52 °C     1280 MHz
+CPU2:	 22.4%     53 °C     1500 MHz
+CPU3:	  9.1%     50 °C     1500 MHz
+CPU4:	  7.1%     54 °C     1286 MHz
+CPU5:	  5.1%     52 °C     1500 MHz
+CPU6:	  7.1%     53 °C     1500 MHz
+CPU7:	  4.3%     50 °C     1300 MHz
+
+auto-cpufreq version:
+Git commit: ffc0bf0
+
+Python: 3.9.7
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 8.0.1
+distro package 1.5.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.14 %
+
+Total CPU usage: 17.8 %
+Total system load: 2.44
+Average temp. of all cores: 52.25 °C 
+
+Currently using: performance governor
+Currently turbo boost is: off
+```
+---
+
+Installed via your install script today.
+The output of --stats remains empty. It remains with showing the exit hint (ctrl-c) and nothing more shows up.
+Also the --monitor output shows, that the suggestions are not executed. Suggestions and current state differ constantly.
+I also noticed that the suggested governor is always "performance", even with nothing to do.
+
+I don't know whether or not the governor is managed by Solus itself and where I could change that, neither do I know what and where I should set the intel_pstate stuff...
+
+I like this project a lot and would really assure it runs as intended on my machine...</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>DasJott:</strong></p>
+                    <p>Some additional information:
+
+$ systemctl status auto-cpufreq
+● auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux
+     Loaded: loaded (/etc/systemd/system/auto-cpufreq.service; enabled; vendor preset: enabled)
+     Active: failed (Result: exit-code) since Mon 2021-09-20 12:50:47 CEST; 40min ago
+   Main PID: 47083 (code=exited, status=203/EXEC)
+        CPU: 2ms
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>DasJott:</strong></p>
+                    <p>Okay... had a look into the `auto-cpufreq.service` file and found out, that the filepath is wrong.
+Changed the line
+`ExecStart=/usr/local/bin/auto-cpufreq --daemon`
+to
+`ExecStart=/usr/bin/auto-cpufreq --daemon`
+
+The path was simply wrong :)
+
+Now the --stats flag does have a decent output and --monitor states that it already runs and to use --stats.
+
+At least it runs now. Can now try how it does on my machine.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Okay... had a look into the `auto-cpufreq.service` file and found out, that the filepath is wrong.
+> Changed the line
+> `ExecStart=/usr/local/bin/auto-cpufreq --daemon`
+> to
+> `ExecStart=/usr/bin/auto-cpufreq --daemon`
+> 
+> The path was simply wrong :)
+> 
+> Now the --stats flag does have a decent output and --monitor states that it already runs and to use --stats.
+> 
+> At least it runs now. Can now try how it does on my machine.
+
+Good to know this had to be done for Solus to work properly. If you're happy with results of auto-cpufreq could you please add this as path for Solus in case that's the distro that's detected and create a PR? The least I could do is credit you for this as part of one of future [releases](https://github.com/AdnanHodzic/auto-cpufreq/releases). Thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>riffer33:</strong></p>
+                    <p>Thanks.  I can confirm this problem and solution on Solus 4.3.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>DasJott:</strong></p>
+                    <p>> Good to know this had to be done for Solus to work properly. If you're happy with results of auto-cpufreq could you please add this as path for Solus in case that's the distro that's detected and create a PR? The least I could do is credit you for this as part of one of future [releases](https://github.com/AdnanHodzic/auto-cpufreq/releases). Thanks!
+
+I'm very satisfied with your software! 
+I am currently in a business trip, but will try to do the change asap.
+Thank you!
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@DasJott great, thanks. Enjoy your trip and looking forward to your PR :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>DasJott:</strong></p>
+                    <p>Hey!
+Can anyone test this please? 
+https://github.com/dasjott/auto-cpufreq
+
+Tried to fix that bluetooth problem as well. Even though I am not that much into python...</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@DasJott once you've established that changes work, I'd like to have them upstream as well. Please make your changes and submit a [pull request](https://github.com/AdnanHodzic/auto-cpufreq/pulls) which I'll be glad to review. If your changes are accepted you'll be credited as part of [releases page](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+Thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing the issue due to inactivity, if the problem persist please feel free to re-open the issue.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

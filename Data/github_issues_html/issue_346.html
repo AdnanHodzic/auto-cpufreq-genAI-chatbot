@@ -1,0 +1,124 @@
+
+        <html>
+        <head>
+            <title>Issue #346: FileNotFoundError for auto-cpufreq --monitor</title>
+        </head>
+        <body>
+            <h1>FileNotFoundError for auto-cpufreq --monitor</h1>
+            <p><strong>Issue #346</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Input:
+```bash
+sudo auto-cpufreq --monitor
+```
+
+---
+
+### Error output:
+```
+Note: You can quit monitor mode by pressing "ctrl+c"
+
+----------------------------------- Warning -----------------------------------
+
+Unable to detect state of GNOME Power Profiles daemon service!
+This daemon might interfere with auto-cpufreq and should be disabled.
+
+Steps to perform this action using auto-cpufreq: power_helper script:
+git clone https://github.com/AdnanHodzic/auto-cpufreq.git
+cd auto-cpufreq/auto_cpufreq
+python3 power_helper.py --gnome_power_disable
+
+----------------------------------- Warning -----------------------------------
+
+Unable to detect if you are using a TLP service!
+This daemon might interfere with auto-cpufreq which can lead to unexpected results.
+We strongly encourage you not to use TLP unless you really know what you are doing.
+
+-------------------------------------------------------------------------------
+
+Traceback (most recent call last):
+  File "/snap/auto-cpufreq/102/bin/auto-cpufreq", line 207, in <module>
+    main()
+  File "/snap/auto-cpufreq/102/lib/python3.8/site-packages/click/core.py", line 1128, in __call__
+    return self.main(*args, **kwargs)
+  File "/snap/auto-cpufreq/102/lib/python3.8/site-packages/click/core.py", line 1053, in main
+    rv = self.invoke(ctx)
+  File "/snap/auto-cpufreq/102/lib/python3.8/site-packages/click/core.py", line 1395, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/snap/auto-cpufreq/102/lib/python3.8/site-packages/click/core.py", line 754, in invoke
+    return __callback(*args, **kwargs)
+  File "/snap/auto-cpufreq/102/bin/auto-cpufreq", line 96, in main
+    gov_check()
+  File "/snap/auto-cpufreq/102/lib/python3.8/site-packages/auto_cpufreq/core.py", line 403, in gov_check
+    for gov in get_avail_gov():
+  File "/snap/auto-cpufreq/102/lib/python3.8/site-packages/auto_cpufreq/core.py", line 254, in get_avail_gov
+    return f.read_text().strip().split(" ")
+  File "/usr/lib/python3.8/pathlib.py", line 1236, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+  File "/usr/lib/python3.8/pathlib.py", line 1222, in open
+    return io.open(self, mode, buffering, encoding, errors, newline,
+  File "/usr/lib/python3.8/pathlib.py", line 1078, in _opener
+    return self._accessor.open(self, flags, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors'
+```
+---
+
+### System information:
+```text
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 20.04.3 LTS (Focal Fossa)
+Linux kernel: 5.4.0-91-generic
+Processor: Common KVM processor
+Cores: 6
+Architecture: x86_64
+Driver: cat: /sys/devices/system/cpu/cpu0/cpufreq/scaling_driver: No such file or directory
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 0 MHz
+CPU min frequency: 0 MHz
+
+Traceback (most recent call last):
+  File "/snap/auto-cpufreq/102/bin/auto-cpufreq", line 207, in <module>
+    main()
+  File "/snap/auto-cpufreq/102/lib/python3.8/site-packages/click/core.py", line 1128, in __call__
+    return self.main(*args, **kwargs)
+  File "/snap/auto-cpufreq/102/lib/python3.8/site-packages/click/core.py", line 1053, in main
+    rv = self.invoke(ctx)
+  File "/snap/auto-cpufreq/102/lib/python3.8/site-packages/click/core.py", line 1395, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/snap/auto-cpufreq/102/lib/python3.8/site-packages/click/core.py", line 754, in invoke
+    return __callback(*args, **kwargs)
+  File "/snap/auto-cpufreq/102/bin/auto-cpufreq", line 141, in main
+    sysinfo()
+  File "/snap/auto-cpufreq/102/lib/python3.8/site-packages/auto_cpufreq/core.py", line 1044, in sysinfo
+    freq_per_cpu.append(float(coreid_info[i + 1].split(":")[-1]))
+ValueError: could not convert string to float: ' Common KVM processor'
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Processor: Common KVM processor
+> Cores: 6
+> Architecture: x86_64
+> Driver: cat: /sys/devices/system/cpu/cpu0/cpufreq/scaling_driver: No such file or directory
+
+Are you running this on a VM? You should run auto-cpufreq on a host of that VM and not on VM as driver on this level won't be visible.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing the issue due to inactivity, if the problem persist please feel free to re-open the issue.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

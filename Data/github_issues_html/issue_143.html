@@ -1,0 +1,248 @@
+
+        <html>
+        <head>
+            <title>Issue #143: The `--log` option attempts to perform write operations</title>
+        </head>
+        <body>
+            <h1>The `--log` option attempts to perform write operations</h1>
+            <p><strong>Issue #143</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>When running `auto-cpufreq --log`, it seems as though `cpufreqctl` is being invoked in such a way that it attempts to set some energy performance preference. The function in `cpufreqctl` that is failing is the following:
+
+```
+function set_energy_performance_preference () {
+  if [ -z $CORE ]
+  then
+    i=0
+    while [ $i -ne $cpucount ]
+    do
+      FLNM="$FLROOT/cpu"$i"/cpufreq/energy_performance_preference"
+      echo $VALUE > $FLNM            <--- FAILS HERE!
+      i=`expr $i + 1`
+    done
+  else
+    echo $VALUE > /sys/devices/system/cpu/cpu$CORE/cpufreq/energy_performance_preference
+  fi
+}
+``` 
+
+On a log command, I would expect to see only read operations being invoked, no write operations. I'm seeing these write errors even when the command is run as the `root` user. ~~The version of `cpufreqctl` on Manjaro is `20`~~.
+_On closer inspection I was surprised to see that the installed version of `cpufreqctl` is moved away to a backup file and replaced by a new one. I really don't think this is a good idea, but that's a separate matter that I'll raise in a new issue later._
+
+I've installed `auto-cpufreq` using the AUR package and running it as a service under `systemctl`.
+
+**Update:** I've discovered that the below error output only occurs when the laptop is plugged in and not when it is running with turbo boost off on battery.
+
+### Error output:
+```text
+/usr/bin/cpufreqctl: line 267: echo: write error: Device or resource busy
+/usr/bin/cpufreqctl: line 267: echo: write error: Device or resource busy
+/usr/bin/cpufreqctl: line 267: echo: write error: Device or resource busy
+/usr/bin/cpufreqctl: line 267: echo: write error: Device or resource busy
+/usr/bin/cpufreqctl: line 267: echo: write error: Device or resource busy
+/usr/bin/cpufreqctl: line 267: echo: write error: Device or resource busy
+/usr/bin/cpufreqctl: line 267: echo: write error: Device or resource busy
+/usr/bin/cpufreqctl: line 267: echo: write error: Device or resource busy
+
+-------------------------------------------------------------------------------
+
+Linux distro: Manjaro Linux 20.2 Nibia
+Linux kernel: 5.9.16-1-MANJARO
+Processor: Intel(R) Core(TM) i7-1065G7 CPU @ 1.30GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU states ------------------------------
+<snip>
+```
+---
+
+### System information:
+```text
+-------------------------------------------------------------------------------
+
+Linux distro: Manjaro Linux 20.2 Nibia
+Linux kernel: 5.9.16-1-MANJARO
+Processor: Intel(R) Core(TM) i7-1065G7 CPU @ 1.30GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 3900 MHz
+CPU min frequency: 400 MHz
+
+         Usage  Temperature  Frequency
+CPU0:    13.7%     60 °C     3469 MHz
+CPU1:    12.7%     60 °C     3475 MHz
+CPU2:    10.8%     64 °C     3508 MHz
+CPU3:    14.6%     57 °C     3469 MHz
+CPU4:    12.0%     60 °C     3472 MHz
+CPU5:    11.1%     60 °C     3470 MHz
+CPU6:    18.0%     64 °C     3521 MHz
+CPU7:    10.0%     57 °C     3464 MHz
+
+fatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+Snap package: no
+
+Python: 3.9.1
+psutil package: 5.7.3
+platform package: 1.0.8
+click package: 7.1.2
+distro package 1.5.0
+
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.05 %
+
+Total CPU usage: 5.6 %
+Total system load: 0.54
+Average temp. of all cores: 60.25 °C
+
+Currently using: performance governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> When running `auto-cpufreq --log`, it seems as though `cpufreqctl` is being invoked in such a way that it attempts to set some energy performance preference. The function in `cpufreqctl` that is failing is the following:
+> 
+> ```
+> function set_energy_performance_preference () {
+>   if [ -z $CORE ]
+>   then
+>     i=0
+>     while [ $i -ne $cpucount ]
+>     do
+>       FLNM="$FLROOT/cpu"$i"/cpufreq/energy_performance_preference"
+>       echo $VALUE > $FLNM            <--- FAILS HERE!
+>       i=`expr $i + 1`
+>     done
+>   else
+>     echo $VALUE > /sys/devices/system/cpu/cpu$CORE/cpufreq/energy_performance_preference
+>   fi
+> }
+> ```
+> 
+> On a log command, I would expect to see only read operations being invoked, no write operations. I'm seeing these write errors even when the command is run as the `root` user. ~The version of `cpufreqctl` on Manjaro is `20`~.
+> _On closer inspection I was surprised to see that the installed version of `cpufreqctl` is moved away to a backup file and replaced by a new one. I really don't think this is a good idea, but that's a separate matter that I'll raise in a new issue later._
+> 
+> I've installed `auto-cpufreq` using the AUR package and running it as a service under `systemctl`.
+
+Reason for this is that some changes were made to [auto-cpufreq's version of cpufreqctl](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/scripts/cpufreqctl.sh), and to make sure we're using this version that's the reason why if present, `cpufreqctl` will be turned into a backup and be restored after auto-cpufreq removal. Decision was made in this #84 to also have same changes in AUR package.
+
+
+
+> **Update:** I've discovered that the below error output only occurs when the laptop is plugged in and not when it is running with turbo boost off on battery.
+> 
+> ### Error output:
+> ```
+> /usr/bin/cpufreqctl: line 267: echo: write error: Device or resource busy
+> /usr/bin/cpufreqctl: line 267: echo: write error: Device or resource busy
+> /usr/bin/cpufreqctl: line 267: echo: write error: Device or resource busy
+> /usr/bin/cpufreqctl: line 267: echo: write error: Device or resource busy
+> /usr/bin/cpufreqctl: line 267: echo: write error: Device or resource busy
+> /usr/bin/cpufreqctl: line 267: echo: write error: Device or resource busy
+> /usr/bin/cpufreqctl: line 267: echo: write error: Device or resource busy
+> /usr/bin/cpufreqctl: line 267: echo: write error: Device or resource busy
+> 
+> -------------------------------------------------------------------------------
+> 
+> Linux distro: Manjaro Linux 20.2 Nibia
+> Linux kernel: 5.9.16-1-MANJARO
+> Processor: Intel(R) Core(TM) i7-1065G7 CPU @ 1.30GHz
+> Cores: 8
+> Architecture: x86_64
+> Driver: intel_pstate
+> 
+> ------------------------------ Current CPU states ------------------------------
+> <snip>
+> ```
+> 
+> ### System information:
+> ```
+> -------------------------------------------------------------------------------
+> 
+> Linux distro: Manjaro Linux 20.2 Nibia
+> Linux kernel: 5.9.16-1-MANJARO
+> Processor: Intel(R) Core(TM) i7-1065G7 CPU @ 1.30GHz
+> Cores: 8
+> Architecture: x86_64
+> Driver: intel_pstate
+> 
+> ------------------------------ Current CPU states ------------------------------
+> 
+> CPU max frequency: 3900 MHz
+> CPU min frequency: 400 MHz
+> 
+>          Usage  Temperature  Frequency
+> CPU0:    13.7%     60 °C     3469 MHz
+> CPU1:    12.7%     60 °C     3475 MHz
+> CPU2:    10.8%     64 °C     3508 MHz
+> CPU3:    14.6%     57 °C     3469 MHz
+> CPU4:    12.0%     60 °C     3472 MHz
+> CPU5:    11.1%     60 °C     3470 MHz
+> CPU6:    18.0%     64 °C     3521 MHz
+> CPU7:    10.0%     57 °C     3464 MHz
+> 
+> fatal: not a git repository (or any parent up to mount point /)
+> Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+> Snap package: no
+> 
+> Python: 3.9.1
+> psutil package: 5.7.3
+> platform package: 1.0.8
+> click package: 7.1.2
+> distro package 1.5.0
+> 
+> Battery is: charging
+> 
+> auto-cpufreq system resource consumption:
+> cpu usage: 0.0 %
+> memory use: 0.05 %
+> 
+> Total CPU usage: 5.6 %
+> Total system load: 0.54
+> Average temp. of all cores: 60.25 °C
+> 
+> Currently using: performance governor
+> Currently turbo boost is: on
+> 
+> -------------------------------------------------------------------------------
+> ```
+
+It seems like this is the same problem as outlined in: #138. Solution [was also proposed](https://github.com/AdnanHodzic/auto-cpufreq/issues/138#issuecomment-753672590), but I haven't had time to look into it and have proposed for someone else to create a PR for this. If you're up for it, give it a try as I would love to review these changes :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Changes which should address this problem are now live as part of [auto-cpufreq 1.5.2 release](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.5.2).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I think this should be fixed with [auto-cpufreq 1.5.3 release](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.5.3) and changes made to improved logging, could you please confirm? </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>marc0der:</strong></p>
+                    <p>I can confirm that this is working as expected now.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,32 @@
+
+        <html>
+        <head>
+            <title>Issue #149: Installation package clobbers system-wide `cpufreqctl`</title>
+        </head>
+        <body>
+            <h1>Installation package clobbers system-wide `cpufreqctl`</h1>
+            <p><strong>Issue #149</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>The installation process in both snap and native package managers moves the existing `cpufreqctl` script out of the way to replace it with the one bundled with `auto-cpufreq`. This violates the integrity of the `cpufreqctl` package, because the system is no longer running the version that the package manager installed.
+
+Two options that can solve this issue:
+* depend on the `cpufreqctl` package in the various distributions
+* place the bundled version so that it doesn't clobber the package manager provided `cpufreqctl`
+
+I've opted for the second approach as this has the least impact, and suggest that the bundled version of this file is placed beside the one provided by the package manager, as say `cpufreqctl.auto-cpufreq`. This way the system integrity is maintained and `auto-cpufreq` can still rely on its own (and potentially modified) version of this script.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Changes have been merged with master, new [1.5.3 release](https://github.com/AdnanHodzic/auto-cpufreq/releases) will be released shorty, after which these changes will also be propagated to AUR and snap packages.
+
+Hence closing this issue.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

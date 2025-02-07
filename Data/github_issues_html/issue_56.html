@@ -1,0 +1,49 @@
+
+        <html>
+        <head>
+            <title>Issue #56: Gamemode compatibility</title>
+        </head>
+        <body>
+            <h1>Gamemode compatibility</h1>
+            <p><strong>Issue #56</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hi there!
+I just installed a fresh ubuntu 20.04 copy. 
+I'm running your app, and i'm liking it so much...i'm not even going to install TLP. 
+So... there's also gamemode in ubuntu. As far as as i know, running gamemode, will change your governor to performance ( and so does your app when plugged to ac). 
+ubuntu's game mode will disable the performance governor when you exit the game. In this case, as i'm still plugged to ac, how will your app respond?
+these 2 won't play well together right? do i need gamemode anyway?
+cheers</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I just installed a fresh ubuntu 20.04 copy.
+> I'm running your app, and i'm liking it so much...i'm not even going to install TLP.
+
+Glad to hear that :)
+
+> So... there's also gamemode in ubuntu. As far as as i know, running gamemode, will change your governor to performance ( and so does your app when plugged to ac).
+> ubuntu's game mode will disable the performance governor when you exit the game. In this case, as i'm still plugged to ac, how will your app respond?
+
+App should respond to stay in `performance` mode, if the conditions are satisfied (plugged in, high system load and etc ...). 
+
+I would suggest you monitor what's happening using `auto-cpufreq --log` in case of auto-cpufreq installation otherwise `auto-cpufreq --live`. Please feel free to report an issue if something unexpected is happening.
+
+> these 2 won't play well together right? do i need gamemode anyway?
+
+They actually should. Basically this app should pick up where `gamemode` drops. As I suggested above it's the best to observe what's happening using the logs.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closed due to inactivity. </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

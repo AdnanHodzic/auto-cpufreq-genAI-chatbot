@@ -1,0 +1,506 @@
+
+        <html>
+        <head>
+            <title>Issue #663: Rework config and reload config on file change/creation/deletion</title>
+        </head>
+        <body>
+            <h1>Rework config and reload config on file change/creation/deletion</h1>
+            <p><strong>Issue #663</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>This PR reworks the config into its own class/file and introduces config reloads when the config file is changed, created, or deleted. This also introduces the utils folder to remove some clutter from `core.py`
+
+The file watching is done using the `pyinotify` package which I've added as a Nix dependency and Poetry dependency. All file watching is done in a separate thread so that the daemon isn't blocked
+
+Rather than using the old `get_config()` function which relied on setting a static attribute to the function, this uses a new `_Config()` class, but the config is actually accessed by importing `config` from the `config.py` file. This allows the config to be accessed from any file, basically as a singleton. `_Config()` should NEVER be accessed directly
+
+
+This change can be tested by running the daemon, running `auto-cpufreq --stats`, then editing your config file. You should see the changes take place live in the stats window without any sort of daemon reload.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Good stuff with a lot of potential! 
+
+Good thing is that it when writing to auto-cpufreq file, changes are immediately reflected and picked up. However if I do `sudo mv /etc/auto-cpufreq.conf /tmp` changes weren't picked up and it was still picking up the last defined values from config file even with file not being there anymore.
+
+Also, after auto-cpufreq-installer auto-cpufreq GUI wasn't there, nor was it available after `auto-cpufreq --install`. Also, after `sudo ./auto-cpufreq-installer --install` I had to do run CTRL+C, as otherwise terminal was still "open" and not available to run new commands, i.e:
+
+```
+sudo auto-cpufreq --install
+
+--------------------- Deploying auto-cpufreq as a daemon ----------------------
+
+* Turn off bluetooth on boot
+
+* Deploy auto-cpufreq install script
+
+* Deploy auto-cpufreq remove script
+
+----------------------------------- Warning -----------------------------------
+
+Detected running GNOME Power Profiles daemon service!
+This daemon might interfere with auto-cpufreq and has been disabled.
+
+This daemon is not automatically disabled in "monitor" mode and
+will be enabled after auto-cpufreq is removed.
+
+auto-cpufreq snap package installed, GNOME Power Profiles Daemon should be disabled.
+
+Using profile:  balanced
+
+* Disabling GNOME power profiles
+Removed "/etc/systemd/system/graphical.target.wants/power-profiles-daemon.service".
+Created symlink /etc/systemd/system/power-profiles-daemon.service → /dev/null.
+
+------------------ Running auto-cpufreq daemon install script ------------------
+
+* Deploy auto-cpufreq systemd unit file
+
+* Reloading systemd manager configuration
+
+* Stopping auto-cpufreq daemon (systemd) service
+
+* Starting auto-cpufreq daemon (systemd) service
+
+* Enabling auto-cpufreq daemon (systemd) service at boot
+Created symlink /etc/systemd/system/multi-user.target.wants/auto-cpufreq.service → /etc/systemd/system/auto-cpufreq.service.
+
+----------------- auto-cpufreq daemon installed and running -----------------
+
+To view live stats, run:
+auto-cpufreq --stats
+
+To disable and remove auto-cpufreq daemon, run:
+sudo auto-cpufreq --remove
+
+-------------------------------------------------------------------------------
+
+
+^CException ignored in: <module 'threading' from '/usr/lib/python3.11/threading.py'>
+Traceback (most recent call last):
+  File "/usr/lib/python3.11/threading.py", line 1590, in _shutdown
+    lock.acquire()
+KeyboardInterrupt: 
+```
+
+and same thing was after remove, i.e:
+
+```
+sudo ./auto-cpufreq-installer --remove
+
+--------------------- Removing auto-cpufreq daemon ----------------------
+
+* Turn on bluetooth on boot
+
+----------------------------------- Warning -----------------------------------
+
+Detected GNOME Power Profiles daemon service is stopped!
+This service will now be enabled and started again.
+* Enabling GNOME power profiles
+
+Removed "/etc/systemd/system/power-profiles-daemon.service".
+Created symlink /etc/systemd/system/graphical.target.wants/power-profiles-daemon.service → /lib/systemd/system/power-profiles-daemon.service.
+
+------------------ Running auto-cpufreq daemon removal script ------------------
+
+* Stopping auto-cpufreq daemon (systemd) service
+
+* Disabling auto-cpufreq daemon (systemd) at boot
+Removed "/etc/systemd/system/multi-user.target.wants/auto-cpufreq.service".
+
+* Removing auto-cpufreq daemon (systemd) unit file
+
+* Reloading systemd manager configuration
+reset failed
+
+------------------------- auto-cpufreq daemon removed -------------------------
+
+auto-cpufreq successfully removed.
+
+-------------------------------------------------------------------------------
+
+^CException ignored in: <module 'threading' from '/usr/lib/python3.11/threading.py'>
+Traceback (most recent call last):
+  File "/usr/lib/python3.11/threading.py", line 1590, in _shutdown
+    lock.acquire()
+KeyboardInterrupt: 
+
+─────────────────────────────────────────────────────────────────────────────
+
+auto-cpufreq tool and all its supporting files successfully removed.
+```
+
+Besides this, I also left couple of minor comments in code.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>> Good thing is that it when writing to auto-cpufreq file, changes are immediately reflected and picked up. However if I do sudo mv /etc/auto-cpufreq.conf /tmp changes weren't picked up and it was still picking up the last defined values from config file even with file not being there anymore.
+
+Fixed with [6cf4a66](https://github.com/AdnanHodzic/auto-cpufreq/pull/663/commits/6cf4a66f3c5a2c2b6c26b6f1aa4cba83acafc199) by adding the IN_MOVED_TO and IN_MOVED_FROM events
+
+> Also, after auto-cpufreq-installer auto-cpufreq GUI wasn't there, nor was it available after auto-cpufreq --install. Also, after sudo ./auto-cpufreq-installer --install I had to do run CTRL+C, as otherwise terminal was still "open" and not available to run new commands, i.e:
+
+All fixed in [81536c8](https://github.com/AdnanHodzic/auto-cpufreq/pull/663/commits/81536c82c7b0f6a30191cb1dfe6a808a4529a45f)
+
+Let me know what you think!
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> > Good thing is that it when writing to auto-cpufreq file, changes are immediately reflected and picked up. However if I do sudo mv /etc/auto-cpufreq.conf /tmp changes weren't picked up and it was still picking up the last defined values from config file even with file not being there anymore.
+> 
+> Fixed with [6cf4a66](https://github.com/AdnanHodzic/auto-cpufreq/pull/663/commits/6cf4a66f3c5a2c2b6c26b6f1aa4cba83acafc199) by adding the IN_MOVED_TO and IN_MOVED_FROM events
+> 
+> > Also, after auto-cpufreq-installer auto-cpufreq GUI wasn't there, nor was it available after auto-cpufreq --install. Also, after sudo ./auto-cpufreq-installer --install I had to do run CTRL+C, as otherwise terminal was still "open" and not available to run new commands, i.e:
+> 
+> All fixed in [81536c8](https://github.com/AdnanHodzic/auto-cpufreq/pull/663/commits/81536c82c7b0f6a30191cb1dfe6a808a4529a45f)
+> 
+> Let me know what you think!
+
+Thanks @shadeyg56 I'm on my way to KubeCon today and will take a look once I'm back. @PurpleWazard if you could take a look and see if it works on your side until then that would be great. Thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> > Good thing is that it when writing to auto-cpufreq file, changes are immediately reflected and picked up. However if I do sudo mv /etc/auto-cpufreq.conf /tmp changes weren't picked up and it was still picking up the last defined values from config file even with file not being there anymore.
+> 
+> Fixed with [6cf4a66](https://github.com/AdnanHodzic/auto-cpufreq/pull/663/commits/6cf4a66f3c5a2c2b6c26b6f1aa4cba83acafc199) by adding the IN_MOVED_TO and IN_MOVED_FROM events
+> 
+> > Also, after auto-cpufreq-installer auto-cpufreq GUI wasn't there, nor was it available after auto-cpufreq --install. Also, after sudo ./auto-cpufreq-installer --install I had to do run CTRL+C, as otherwise terminal was still "open" and not available to run new commands, i.e:
+> 
+> All fixed in [81536c8](https://github.com/AdnanHodzic/auto-cpufreq/pull/663/commits/81536c82c7b0f6a30191cb1dfe6a808a4529a45f)
+> 
+> Let me know what you think!
+
+Unfortunately now it doesn't work for me at all, with or without config file, i.e:
+
+**auto-cpufreq --live is broken**
+
+```
+sudo auto-cpufreq --live
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 5, in <module>
+    from auto_cpufreq.bin.auto_cpufreq import main
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/auto_cpufreq/bin/auto_cpufreq.py", line 16, in <module>
+    from auto_cpufreq.battery_scripts.battery import *
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/auto_cpufreq/battery_scripts/battery.py", line 4, in <module>
+    from auto_cpufreq.battery_scripts.thinkpad import thinkpad_setup, thinkpad_print_thresholds
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/auto_cpufreq/battery_scripts/thinkpad.py", line 4, in <module>
+    from auto_cpufreq.core import get_config
+ImportError: cannot import name 'get_config' from 'auto_cpufreq.core' (/opt/auto-cpufreq/venv/lib/python3.11/site-packages/auto_cpufreq/core.py)
+```
+
+**auto-cpufreq GUI is broken**
+
+```
+auto-cpufreq-gtk 
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 5, in <module>
+    from auto_cpufreq.bin.auto_cpufreq import main
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/auto_cpufreq/bin/auto_cpufreq.py", line 16, in <module>
+    from auto_cpufreq.battery_scripts.battery import *
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/auto_cpufreq/battery_scripts/battery.py", line 4, in <module>
+    from auto_cpufreq.battery_scripts.thinkpad import thinkpad_setup, thinkpad_print_thresholds
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/auto_cpufreq/battery_scripts/thinkpad.py", line 4, in <module>
+    from auto_cpufreq.core import get_config
+ImportError: cannot import name 'get_config' from 'auto_cpufreq.core' (/opt/auto-cpufreq/venv/lib/python3.11/site-packages/auto_cpufreq/core.py)
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq-gtk", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/auto_cpufreq/bin/auto_cpufreq_gtk.py", line 18, in main
+    win.handle_update()
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/auto_cpufreq/gui/app.py", line 84, in handle_update
+    is_new_update = check_for_update()
+                    ^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/auto_cpufreq/core.py", line 188, in check_for_update
+    output = check_output(['auto-cpufreq', '--version']).decode('utf-8')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/subprocess.py", line 466, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['auto-cpufreq', '--version']' returned non-zero exit status 1.
+```
+
+**auto-cpufreq --install is broken**
+
+```
+sudo auto-cpufreq --install
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 5, in <module>
+    from auto_cpufreq.bin.auto_cpufreq import main
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/auto_cpufreq/bin/auto_cpufreq.py", line 16, in <module>
+    from auto_cpufreq.battery_scripts.battery import *
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/auto_cpufreq/battery_scripts/battery.py", line 4, in <module>
+    from auto_cpufreq.battery_scripts.thinkpad import thinkpad_setup, thinkpad_print_thresholds
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/auto_cpufreq/battery_scripts/thinkpad.py", line 4, in <module>
+    from auto_cpufreq.core import get_config
+ImportError: cannot import name 'get_config' from 'auto_cpufreq.core' (/opt/auto-cpufreq/venv/lib/python3.11/site-packages/auto_cpufreq/core.py)
+```
+
+
+**Even installer remove reported errors**
+
+```
+sudo ./auto-cpufreq-installer --remove
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 5, in <module>
+    from auto_cpufreq.bin.auto_cpufreq import main
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/auto_cpufreq/bin/auto_cpufreq.py", line 16, in <module>
+    from auto_cpufreq.battery_scripts.battery import *
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/auto_cpufreq/battery_scripts/battery.py", line 4, in <module>
+    from auto_cpufreq.battery_scripts.thinkpad import thinkpad_setup, thinkpad_print_thresholds
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/auto_cpufreq/battery_scripts/thinkpad.py", line 4, in <module>
+    from auto_cpufreq.core import get_config
+ImportError: cannot import name 'get_config' from 'auto_cpufreq.core' (/opt/auto-cpufreq/venv/lib/python3.11/site-packages/auto_cpufreq/core.py)
+```
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>oh geez, I forgot to pull the merged changes from master and test with those on my system. 
+Apologies, I'll push out changes soon</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Should work as intended now</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Updated with merge from #672 and fixed an issue with sudo (root user) not being able to access $HOME</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>All looking perfect now, except one minor thing. 
+
+While I don't have this problem for i.e [auto-cpufreq --install ](https://github.com/AdnanHodzic/auto-cpufreq/pull/663#issuecomment-1987185145) like I did originally and `auto-cpufreq --stats`, for `auto-cpufreq --live` & `--monitor` I still had to do ctrl + c to stop following the output, and would be getting following error when doing so:
+
+```
+		"auto-cpufreq" is about to refresh ..^C
+^CException ignored in: <module 'threading' from '/usr/lib/python3.11/threading.py'>
+Traceback (most recent call last):
+  File "/usr/lib/python3.11/threading.py", line 1590, in _shutdown
+    lock.acquire()
+KeyboardInterrupt: 
+```
+
+
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>> I still had to do ctrl + c to stop following the output, and would be getting following error when doing so:
+
+Fixed with 00463b3</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> > I still had to do ctrl + c to stop following the output, and would be getting following error when doing so:
+> 
+> Fixed with [00463b3](https://github.com/AdnanHodzic/auto-cpufreq/commit/00463b39d19e308ea16215a229eb2e26b526a17d)
+
+Unfortunately I now have a problem where I can't install auto-cpufreq daemon:
+
+```
+sudo auto-cpufreq --install
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 5, in <module>
+    from auto_cpufreq.bin.auto_cpufreq import main
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/auto_cpufreq/bin/auto_cpufreq.py", line 14, in <module>
+    from auto_cpufreq.core import *
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/auto_cpufreq/core.py", line 29, in <module>
+    from auto_cpufreq.utils.config import config
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/auto_cpufreq/utils/config.py", line 2, in <module>
+    from auto_cpufreq.utils.config_event_handler import ConfigEventHandler
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/auto_cpufreq/utils/config_event_handler.py", line 1, in <module>
+    import pyinotify
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/pyinotify.py", line 71, in <module>
+    import asyncore
+ModuleNotFoundError: No module named 'asyncore'
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Hm... I'm unable to reproduce this in a Debian container. Did you run `sudo ./auto-cpufreq-installer` to install the new dependency?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Hm... I'm unable to reproduce this in a Debian container. Did you run `sudo ./auto-cpufreq-installer` to install the new dependency?
+
+Yup, I uninstalled it first and then:
+
+```
+sudo ./auto-cpufreq-installer --install
+
+
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+Detected Debian based distribution
+
+
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+Setting up Python environment
+
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+python3-dev is already the newest version (3.12.3-0ubuntu1).
+python3-pip is already the newest version (24.0+dfsg-1ubuntu1).
+python3-venv is already the newest version (3.12.3-0ubuntu1).
+python3-setuptools is already the newest version (68.1.2-2ubuntu1).
+dmidecode is already the newest version (3.5-3build1).
+libgirepository1.0-dev is already the newest version (1.80.1-1).
+libcairo2-dev is already the newest version (1.18.0-3build1).
+libgtk-3-dev is already the newest version (3.24.41-4ubuntu1).
+gcc is already the newest version (4:13.2.0-7ubuntu1).
+0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+
+Installing necessary Python packages
+
+Requirement already satisfied: pip in /opt/auto-cpufreq/venv/lib/python3.12/site-packages (24.0)
+Collecting wheel
+  Using cached wheel-0.43.0-py3-none-any.whl.metadata (2.2 kB)
+Using cached wheel-0.43.0-py3-none-any.whl (65 kB)
+Installing collected packages: wheel
+Successfully installed wheel-0.43.0
+
+
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+installing auto-cpufreq tool
+
+Processing /home/ahodzic/code/auto-cpufreq
+  Installing build dependencies ... done
+  Getting requirements to build wheel ... done
+  Preparing metadata (pyproject.toml) ... done
+Collecting psutil@ git+https://github.com/giampaolo/psutil.git@4cf56e08c1bc883ec89758834b50954380759858 (from auto-cpufreq==2.2.0+00463b3)
+  Using cached psutil-5.9.8-cp312-abi3-linux_x86_64.whl
+Collecting PyGObject<4.0.0,>=3.46.0 (from auto-cpufreq==2.2.0+00463b3)
+  Using cached pygobject-3.48.2-cp312-cp312-linux_x86_64.whl
+Collecting click<9.0.0,>=8.1.0 (from auto-cpufreq==2.2.0+00463b3)
+  Using cached click-8.1.7-py3-none-any.whl.metadata (3.0 kB)
+Collecting distro<2.0.0,>=1.8.0 (from auto-cpufreq==2.2.0+00463b3)
+  Using cached distro-1.9.0-py3-none-any.whl.metadata (6.8 kB)
+Collecting pyinotify<0.10.0,>=0.9.6 (from auto-cpufreq==2.2.0+00463b3)
+  Using cached pyinotify-0.9.6-py3-none-any.whl
+Collecting requests<3.0.0,>=2.31.0 (from auto-cpufreq==2.2.0+00463b3)
+  Using cached requests-2.31.0-py3-none-any.whl.metadata (4.6 kB)
+Collecting pycairo>=1.16 (from PyGObject<4.0.0,>=3.46.0->auto-cpufreq==2.2.0+00463b3)
+  Using cached pycairo-1.26.0-cp312-cp312-linux_x86_64.whl
+Collecting charset-normalizer<4,>=2 (from requests<3.0.0,>=2.31.0->auto-cpufreq==2.2.0+00463b3)
+  Using cached charset_normalizer-3.3.2-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (33 kB)
+Collecting idna<4,>=2.5 (from requests<3.0.0,>=2.31.0->auto-cpufreq==2.2.0+00463b3)
+  Using cached idna-3.7-py3-none-any.whl.metadata (9.9 kB)
+Collecting urllib3<3,>=1.21.1 (from requests<3.0.0,>=2.31.0->auto-cpufreq==2.2.0+00463b3)
+  Using cached urllib3-2.2.1-py3-none-any.whl.metadata (6.4 kB)
+Collecting certifi>=2017.4.17 (from requests<3.0.0,>=2.31.0->auto-cpufreq==2.2.0+00463b3)
+  Using cached certifi-2024.2.2-py3-none-any.whl.metadata (2.2 kB)
+Using cached click-8.1.7-py3-none-any.whl (97 kB)
+Using cached distro-1.9.0-py3-none-any.whl (20 kB)
+Using cached requests-2.31.0-py3-none-any.whl (62 kB)
+Using cached certifi-2024.2.2-py3-none-any.whl (163 kB)
+Using cached charset_normalizer-3.3.2-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (141 kB)
+Using cached idna-3.7-py3-none-any.whl (66 kB)
+Using cached urllib3-2.2.1-py3-none-any.whl (121 kB)
+Building wheels for collected packages: auto-cpufreq
+  Building wheel for auto-cpufreq (pyproject.toml) ... done
+  Created wheel for auto-cpufreq: filename=auto_cpufreq-2.2.0+00463b3-py3-none-any.whl size=42031 sha256=31d6f7e2e027b34334c3bbb5653d3f82e17e9537a5669af17463ec15a9fcbbc3
+  Stored in directory: /root/.cache/pip/wheels/4f/9c/1f/b84830db8bc92e812ca5a976867ae95d76c116e76e0516b746
+Successfully built auto-cpufreq
+Installing collected packages: pyinotify, urllib3, pycairo, psutil, idna, distro, click, charset-normalizer, certifi, requests, PyGObject, auto-cpufreq
+Successfully installed PyGObject-3.48.2 auto-cpufreq-2.2.0+00463b3 certifi-2024.2.2 charset-normalizer-3.3.2 click-8.1.7 distro-1.9.0 idna-3.7 psutil-5.9.8 pycairo-1.26.0 pyinotify-0.9.6 requests-2.31.0 urllib3-2.2.1
+
+
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+auto-cpufreq tool successfully installed.
+
+For list of options, run:
+auto-cpufreq --help"
+
+
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+ ahodzic@carbon7  ~/code/auto-cpufreq   config-update2  sudo auto-cpufreq --install            
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 5, in <module>
+    from auto_cpufreq.bin.auto_cpufreq import main
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/auto_cpufreq/bin/auto_cpufreq.py", line 14, in <module>
+    from auto_cpufreq.core import *
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/auto_cpufreq/core.py", line 29, in <module>
+    from auto_cpufreq.utils.config import config
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/auto_cpufreq/utils/config.py", line 2, in <module>
+    from auto_cpufreq.utils.config_event_handler import ConfigEventHandler
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/auto_cpufreq/utils/config_event_handler.py", line 1, in <module>
+    import pyinotify
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/pyinotify.py", line 71, in <module>
+    import asyncore
+ModuleNotFoundError: No module named 'asyncore'
+```
+
+This is happening on Ubuntu 24.04 with Python 3.12.3. Could it also be related with [pyinotify and removal of `asyncore` in 3.12? ](https://github.com/autokey/autokey/issues/916)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>> This is happening on Ubuntu 24.04 with Python 3.12.3. Could it also be related with pyinotify and removal of asyncore in 3.12? 
+
+Ah, yes I had been running on 3.10. I wasn't aware that would happen in 3.12. The `pyinotify` package hasn't been committed to in 9 years, so I took the liberty of making [my own fork](https://github.com/shadeyg56/pyinotify-3.12/) and removing the `asyncore` module so that it will work in 3.12
+
+In e3678c1, I swapped the normal `pyinotify` dependency from PyPi for my git fork.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> > This is happening on Ubuntu 24.04 with Python 3.12.3. Could it also be related with pyinotify and removal of asyncore in 3.12?
+> 
+> Ah, yes I had been running on 3.10. I wasn't aware that would happen in 3.12. The `pyinotify` package hasn't been committed to in 9 years, so I took the liberty of making [my own fork](https://github.com/shadeyg56/pyinotify-3.12/) and removing the `asyncore` module so that it will work in 3.12
+
+Our of sheer curiosity, why did you end up opting to use `pyinotify` in this case considering no one has been committed to it in 9 years? Hoping this doesn't introduce any security vulnerabilities, although it should only be watching for changes in one paritcular path/file `/etc/auto-cpufreq.conf` so it shouldn't be that much of an issue.  
+
+Also maybe a good idea to propose your fork back to upstream? 
+
+> In [e3678c1](https://github.com/AdnanHodzic/auto-cpufreq/commit/e3678c1767d2791a16077b2dbdae0f20214d2141), I swapped the normal `pyinotify` dependency from PyPi for my git fork.
+
+It all works as expected now! This has been a great improvement and will be a big feature as part of upcoming release, hence needless to say thank you for your contribution! 
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>> Our of sheer curiosity, why did you end up opting to use pyinotify in this case considering no one has been committed to it in 9 years
+
+Yeah, when I was looking for the best way to monitor files the two solutions I found were watchdog and inotify. Watchdog seemed more complicated than we needed it for and I saw that inotify was specifically for Linux only and was a part of the kernel itself. I guess pyinotify seemed like the more "Linux" way to do it, which seemed good to me seeing as `auto-cpufreq` is a Linux tool. Since pyinotify is really just a wrapper around Linux's inotify API, it makes sense that there hasn't been a need for any changes
+
+> Also maybe a good idea to propose your fork back to upstream?
+
+I believe somebody already made a PR of what I did (we are not the only ones to run into this issue), but I don't expect it to be merged due to lack of activity on the repo.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

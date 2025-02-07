@@ -1,0 +1,225 @@
+
+        <html>
+        <head>
+            <title>Issue #750: Completely broken on my laptop!</title>
+        </head>
+        <body>
+            <h1>Completely broken on my laptop!</h1>
+            <p><strong>Issue #750</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried? (YES I DO)
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+### Error output:
+```text
+➜  ~ auto-cpufreq --stats                     
+
+Note: You can quit stats mode by pressing "ctrl+c"
+could not get value from conservation mode
+
+-------------------------------- Battery Info ---------------------------------
+
+battery count = 1
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/site-packages/auto_cpufreq/battery_scripts/ideapad_laptop.py", line 92, in ideapad_laptop_print_thresholds
+    with open(f'/sys/class/power_supply/BAT{b}/charge_start_threshold', 'r') as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/sys/class/power_supply/BAT0/charge_start_threshold'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/bin/auto-cpufreq", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/usr/lib/python3.12/site-packages/click/core.py", line 1157, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/site-packages/click/core.py", line 1078, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/site-packages/click/core.py", line 1434, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/site-packages/click/core.py", line 783, in invoke
+    return __callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/site-packages/auto_cpufreq/bin/auto_cpufreq.py", line 157, in main
+    battery_get_thresholds()
+  File "/usr/lib/python3.12/site-packages/auto_cpufreq/battery_scripts/battery.py", line 42, in battery_get_thresholds
+    ideapad_laptop_print_thresholds()
+  File "/usr/lib/python3.12/site-packages/auto_cpufreq/battery_scripts/ideapad_laptop.py", line 101, in ideapad_laptop_print_thresholds
+    print(f"ERROR: failed to read battery thresholds: {e}")
+                                                       ^
+NameError: name 'e' is not defined
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+➜  ~ sudo auto-cpufreq --debug
+could not get value from conservation mode
+
+-------------------------------- Battery Info ---------------------------------
+
+battery count = 1
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/site-packages/auto_cpufreq/battery_scripts/ideapad_laptop.py", line 92, in ideapad_laptop_print_thresholds
+    with open(f'/sys/class/power_supply/BAT{b}/charge_start_threshold', 'r') as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/sys/class/power_supply/BAT0/charge_start_threshold'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/bin/auto-cpufreq", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/usr/lib/python3.12/site-packages/click/core.py", line 1157, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/site-packages/click/core.py", line 1078, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/site-packages/click/core.py", line 1434, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/site-packages/click/core.py", line 783, in invoke
+    return __callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/site-packages/auto_cpufreq/bin/auto_cpufreq.py", line 169, in main
+    battery_get_thresholds()
+  File "/usr/lib/python3.12/site-packages/auto_cpufreq/battery_scripts/battery.py", line 42, in battery_get_thresholds
+    ideapad_laptop_print_thresholds()
+  File "/usr/lib/python3.12/site-packages/auto_cpufreq/battery_scripts/ideapad_laptop.py", line 101, in ideapad_laptop_print_thresholds
+    print(f"ERROR: failed to read battery thresholds: {e}")
+                                                       ^
+NameError: name 'e' is not defined
+```
+
+```
+➜  ~ ls /sys/class/power_supply/BAT0/
+alarm           cycle_count  energy_full_design  manufacturer  power_now      status      type                voltage_now
+capacity        device       energy_now          model_name    present        subsystem   uevent
+capacity_level  energy_full  hwmon1              power         serial_number  technology  voltage_min_design
+```
+
+I'm using Lenovo Legion R9000P2021H laptop,arch linux.
+After I installed it from the AUR,I ran "sudo systemctl enable --now auto-cpufreq.service" to start the service.But it is completely broken and unusable.
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>Try installing with sudo auto-cpufreq --install instead </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>Also in your config file under battery change it to this 
+
+[battery]
+enable_thresholds = false</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>poded:</strong></p>
+                    <p>Have no effect.The same error.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ArtemChandragupta:</strong></p>
+                    <p>I use NixOS unstable on ThinkBook13s g3. I had same error on old install three month before (before that auto-cpufreq --stats worked as intended), and got it now on fresh install.
+
+By the way, seem that auto-cpufreq is working judging by improvement of battery life.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> [battery]
+> enable_thresholds = false
+
+Can you please confirm you're still getting the same error after reboot? As you shouldn't see that output if indeed you did this. Could be worth pulling one of the [AUR package maintainers](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#aur-package-arch-based-distributions), but I don't think this is a package issue.
+
+> After I installed it from the AUR,I ran "sudo systemctl enable --now auto-cpufreq.service" to start the service.But it is completely broken and unusable.
+
+What is exactly completely broken and unstable? </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>poded:</strong></p>
+                    <p>After I ran "sudo systemctl enable --now auto-cpufreq.service",the service started.
+but whatever I ran --stats,--debug or --monitor I got the same python error just like the above one.(Is this a python version issue?)
+As you said,I reboot,and here is what I got:
+
+```
+➜  ~ sudo systemctl status auto-cpufreq.service
+○ auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux
+     Loaded: loaded (/usr/lib/systemd/system/auto-cpufreq.service; enabled; preset: disabled)
+     Active: inactive (dead) since Wed 2024-08-21 19:34:06 CST; 6min ago
+   Duration: 43.602s
+ Invocation: 0f6a5d8df3cb451fa188bb70b0c63df2
+    Process: 813 ExecStart=auto-cpufreq --daemon (code=killed, signal=TERM)
+   Main PID: 813 (code=killed, signal=TERM)
+   Mem peak: 55M
+        CPU: 890ms
+
+8月 21 19:33:22 pod systemd[1]: Started auto-cpufreq - Automatic CPU speed & power optimizer for Linux.
+8月 21 19:34:06 pod systemd[1]: Stopping auto-cpufreq - Automatic CPU speed & power optimizer for Linux...
+8月 21 19:34:06 pod systemd[1]: auto-cpufreq.service: Deactivated successfully.
+8月 21 19:34:06 pod systemd[1]: Stopped auto-cpufreq - Automatic CPU speed & power optimizer for Linux.
+```
+It seems that the service failed to start,then I use journalctl to check what happened:
+```
+8月 21 19:32:09 pod auto-cpufreq[4795]: /usr/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+8月 21 19:32:09 pod auto-cpufreq[4795]: /usr/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+8月 21 19:32:09 pod auto-cpufreq[4795]: /usr/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+8月 21 19:32:09 pod auto-cpufreq[4795]: /usr/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+8月 21 19:32:27 pod systemd[1]: Stopping auto-cpufreq - Automatic CPU speed & power optimizer for Linux...
+8月 21 19:32:27 pod systemd[1]: auto-cpufreq.service: Deactivated successfully.
+8月 21 19:32:27 pod systemd[1]: Stopped auto-cpufreq - Automatic CPU speed & power optimizer for Linux.
+8月 21 19:32:27 pod systemd[1]: auto-cpufreq.service: Consumed 2.562s CPU time, 26M memory peak.
+```
+This is the journal before I reboot,it throws this error every seconds "echo: write error: Device or resource busy"
+Sorry for the poor English.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Geffo029:</strong></p>
+                    <p>Personally i solved both
+```
+could not get value from conservation mode
+```
+and 
+```
+File "/usr/lib/python3.12/site-packages/auto_cpufreq/battery_scripts/ideapad_laptop.py", line 101, in ideapad_laptop_print_thresholds
+    print(f"ERROR: failed to read battery thresholds: {e}")
+```
+by tweaking the file '/usr/lib/python3.12/site-packages/auto_cpufreq/battery_scripts/ideapad_laptop.py':
+1) in my case the function `subprocess.check_output("cat /sys/bus/platform/drivers/ideapad_acpi/VPC2004:00/conservation_mode", shell=True, text=True)` at line 41 was returning '0\n' so have added `value = value.rstrip()` after that;
+2) i have changed line 100 to `except Exception as e:` as mentioned in #765 </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>@Geffo029 it would be great if you could make a PR. im sorry i didnt get to it. with school starting, it been tight on time so id appreciate it.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

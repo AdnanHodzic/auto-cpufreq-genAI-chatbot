@@ -1,0 +1,81 @@
+
+        <html>
+        <head>
+            <title>Discussion #221: How to display temperatures for individual CPU cores</title>
+        </head>
+        <body>
+            <h1>How to display temperatures for individual CPU cores</h1>
+            <p><strong>Discussion #221</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hi there,
+
+I've been using auto-cpufreq for a couple of weeks now and really like it so far. Many of the pastes of `auto-cpufreq` have individualized core temps; mind don't. Maybe it's an AMD issue? Anyway, wondering if there's a workaround. This isn't at all urgent, as I can check out core temps elsewise; I just like having `auto-cpufreq --stats` running in my system monitoring setup.
+
+Thanks for all of your work on this fantastic utility.
+
+`-------------------------------------------------------------------------------
+
+Linux distro: Pop!_OS 21.04 hirsute
+Linux kernel: 5.11.0-7620-generic
+Processor: AMD Ryzen 7 PRO 4750U with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1700 MHz
+CPU min frequency: 1400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  1.0%     41 °C     1400 MHz
+CPU1:	  3.0%     41 °C     1400 MHz
+CPU2:	  0.0%     41 °C     1400 MHz
+CPU3:	  0.0%     41 °C     1400 MHz
+CPU4:	  0.0%     41 °C     1400 MHz
+CPU5:	  0.0%     41 °C     1400 MHz
+CPU6:	  1.0%     41 °C     1400 MHz
+CPU7:	  2.0%     41 °C     1400 MHz
+CPU8:	  1.0%     41 °C     1400 MHz
+CPU9:	  1.0%     41 °C     1400 MHz
+CPU10:	  3.0%     41 °C     1400 MHz
+CPU11:	  0.0%     41 °C     1400 MHz
+CPU12:	  1.0%     41 °C     1397 MHz
+CPU13:	  0.0%     41 °C     1400 MHz
+CPU14:	  2.0%     41 °C     1400 MHz
+CPU15:	  1.0%     41 °C     1400 MHz
+
+auto-cpufreq version:
+fatal: not a git repository (or any of the parent directories): .git
+CalledProcessError(128, ['git', 'describe', '--always'])
+
+Python: 3.9.5
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 7.1.2
+distro package 1.5.0
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.14 %
+
+Total CPU usage: 1.1 %
+Total system load: 0.39
+Average temp. of all cores: 41.0 °C
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------`</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+            </div>
+        </body>
+        </html>
+        

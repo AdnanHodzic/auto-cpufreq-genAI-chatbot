@@ -1,0 +1,461 @@
+
+        <html>
+        <head>
+            <title>Issue #277: after auto start on system boot, daemon has stopped by new gnome41 power managment feature </title>
+        </head>
+        <body>
+            <h1>after auto start on system boot, daemon has stopped by new gnome41 power managment feature </h1>
+            <p><strong>Issue #277</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+```Nov 12 16:55:09 arch dbus-daemon[405]: [system] Activating via systemd: service name='net.hadess.PowerProfiles' unit='power-profiles-daemon.service' requested by ':1.18' (u>
+Nov 12 16:55:09 arch systemd[1]: Starting Daemon for power management...
+Nov 12 16:55:09 arch systemd[1]: Stopping auto-cpufreq - Automatic CPU speed & power optimizer for Linux...
+Nov 12 16:55:09 arch systemd[1]: Starting Power Profiles daemon...
+Nov 12 16:55:09 arch systemd[1]: auto-cpufreq.service: Deactivated successfully.
+Nov 12 16:55:09 arch systemd[1]: Stopped auto-cpufreq - Automatic CPU speed & power optimizer for Linux.
+Nov 12 16:55:09 arch audit[1]: SERVICE_STOP pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=auto-cpufreq comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=>
+```
+---
+Maybe for resolve this situation disable gnome power managment feature deamon is enough.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>A4Alpha:</strong></p>
+                    <p>Yeah, stopping & masking the gnome power profile daemon should fix your problem.
+```
+systemctl stop power-profiles-daemon
+```
+Followed by
+```
+systemctl mask power-profiles-daemon
+```
+Then either reboot or start auto-cpufreq
+```
+systemctl start auto-cpufreq
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Error output:
+Nov 12 16:55:09 arch systemd[1]: Starting Daemon for power management...
+Nov 12 16:55:09 arch systemd[1]: Stopping auto-cpufreq - Automatic CPU speed & power optimizer for Linux...
+Nov 12 16:55:09 arch systemd[1]: Starting Power Profiles daemon...
+Nov 12 16:55:09 arch systemd[1]: auto-cpufreq.service: Deactivated successfully.
+Nov 12 16:55:09 arch systemd[1]: Stopped auto-cpufreq - Automatic CPU speed & power optimizer for Linux.
+Nov 12 16:55:09 arch audit[1]: SERVICE_STOP pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=auto-cpufreq comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=>
+Maybe for resolve this situation disable gnome power managment feature deamon is enough.
+
+@hayer969 can you add output of `sudo auto-cpufreq --debug`. 
+
+> Yeah, stopping & masking the gnome power profile daemon should fix your problem.
+> 
+> ```
+> systemctl stop power-profiles-daemon
+> ```
+> 
+> Followed by
+> 
+> ```
+> systemctl mask power-profiles-daemon
+> ```
+> 
+> Then either reboot or start auto-cpufreq
+> 
+> ```
+> systemctl start auto-cpufreq
+> ```
+
+@A4Alpha
+
+I'm running on GNOME 40, but I still didn't run into this problem for some reason. What I was thinking of doing regarding this (as it was already in my ToDo list) is to add something like what you described above to be [part of auto-cpufreq config](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq) file (easy fix).
+
+Ideal solution would be to have auto-cpufreq automatically detect this and either disable or sync with it and make changes as part of auto-cpufreq depending on what user selected as their power settings in GNOME.
+
+I haven't had time to implement this so far, if anyone of you would like to [contribute to auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq), please give it a try and I'll be glad to review your PR and potentially assist you in the process.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I made some changes as part of [gnome-power branch](https://github.com/AdnanHodzic/auto-cpufreq/tree/gnome-power) which fix this problem if you're using [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto-cpufreq-installer) (currently working on figuring out how to propagate these changes as part of snap package).
+
+While I'm working on that, if @A4Alpha, @hayer969 and @KnightKrusty help by testing using changes in this branch that would be great.
+
+Thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>hayer969:</strong></p>
+                    <p>Test failed.
+What I did:
+1. git clone https://github.com/AdnanHodzic/auto-cpufreq.git
+cd auto-cpufreq
+git checkout gnome-power
+sudo ./auto-cpufreq-installer
+Still had gnome power service running
+2. sudo auto-cpufreq --install
+gnome power service was replaced with auto-cpufreq
+3. reboot system
+sudo systemctl status auto-cpufreq.service
+Output:
+○ auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power
+optimizer for Linux
+     Loaded: loaded (/etc/systemd/system/auto-cpufreq.service; enabled;
+vendor preset: disabled)
+     Active: inactive (dead) since Mon 2021-11-22 16:53:54 MSK; 41s ago
+    Process: 432 ExecStart=/usr/bin/auto-cpufreq --daemon (code=killed,
+signal=TERM)
+   Main PID: 432 (code=killed, signal=TERM)
+        CPU: 514ms
+
+Nov 22 16:53:52 arch systemd[1]: Started auto-cpufreq - Automatic CPU speed
+& power optimizer for Linux.
+Nov 22 16:53:54 arch systemd[1]: Stopping auto-cpufreq - Automatic CPU
+speed & power optimizer for Linux...
+Nov 22 16:53:54 arch systemd[1]: auto-cpufreq.service: Deactivated
+successfully.
+Nov 22 16:53:54 arch systemd[1]: Stopped auto-cpufreq - Automatic CPU speed
+& power optimizer for Linux.
+
+And gnome still running
+My system configuration from neofetch:
+***@***.***
+----------
+OS: Arch Linux x86_64
+Host: Aspire A515-44 V1.09
+Kernel: 5.15.2-arch1-1
+Uptime: 9 mins
+Packages: 1338 (pacman)
+Shell: fish 3.2.2
+Resolution: 1920x1080
+DE: GNOME 41.1
+WM: Mutter
+WM Theme: Adwaita
+Theme: Adwaita [GTK2/3]
+Icons: Adwaita [GTK2/3]
+Terminal: alacritty
+CPU: AMD Ryzen 3 4300U with Radeon Graphics (4) @ 2.700GHz
+GPU: AMD ATI 05:00.0 Renoir
+Memory: 1994MiB / 7377MiB
+
+вс, 21 нояб. 2021 г. в 11:41, Adnan Hodzic ***@***.***>:
+
+> I made some changes as part of gnome-power branch
+> <https://github.com/AdnanHodzic/auto-cpufreq/tree/gnome-power> which fix
+> this problem if you're using auto-cpufreq-installer
+> <https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto-cpufreq-installer>
+> (currently working on figuring out how to propagate these changes as part
+> of snap package).
+>
+> While I'm working on that, if @A4Alpha <https://github.com/A4Alpha>,
+> @hayer969 <https://github.com/hayer969> and @KnightKrusty
+> <https://github.com/KnightKrusty> help by testing using changes in this
+> branch that would be great.
+>
+> Thanks!
+>
+> —
+> You are receiving this because you were mentioned.
+> Reply to this email directly, view it on GitHub
+> <https://github.com/AdnanHodzic/auto-cpufreq/issues/277#issuecomment-974776642>,
+> or unsubscribe
+> <https://github.com/notifications/unsubscribe-auth/ARWNGVWSRT2KA7LMJ263UATUNCWDZANCNFSM5H46LH7Q>
+> .
+> Triage notifications on the go with GitHub Mobile for iOS
+> <https://apps.apple.com/app/apple-store/id1477376905?ct=notification-email&mt=8&pt=524675>
+> or Android
+> <https://play.google.com/store/apps/details?id=com.github.android&referrer=utm_campaign%3Dnotification-email%26utm_medium%3Demail%26utm_source%3Dgithub>.
+>
+>
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> git checkout gnome-power 
+> sudo ./auto-cpufreq-installer 
+> Still had gnome power service running 
+
+Yes, after `sudo ./auto-cpufreq-installer --install`, gnome power profiles daemons will still be active. (`sudo systemctl status power-profiles-daemon`.
+
+>2. sudo auto-cpufreq --install 
+>gnome power service was replaced with auto-cpufreq 
+
+Correct, gnome power profiles daemons will now be inactive (dead).
+
+>3. reboot system sudo systemctl status auto-cpufreq.service 
+> Output: ○ auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux Loaded: loaded
+>(/etc/systemd/system/auto-cpufreq.service; enabled; vendor preset: disabled) Active: inactive (dead) since Mon 2021-11-22
+
+auto-cpufreq service shouldn't become dead/inactive after reboot. I performed numerous reboots since I'm running on these changes and everything is working as expected on my side. 
+
+On `gnome-power` branch, could you run `sudo ./auto-cpufreq-installer --remove`, then `sudo ./auto-cpufreq-installer --install`, followed by `sudo auto-cpufreq --install` and can you verify everything is working as expected and persists across reboots.
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Alright I had the same problem. 
+
+> On gnome-power branch, could you run sudo ./auto-cpufreq-installer --remove, then sudo ./auto-cpufreq-installer --install, followed by sudo auto-cpufreq --install and can you verify everything is working as expected and persists across reboots.
+
+Followed all the steps above, and it didn't fix it.
+
+After the reboot power-profiles-daemon is started again, even with the disabled systemctl.
+When I launch systemctl start auto-cpufreq in a terminal after login it shutsdown the power-profiles-daemon and it seems to  work. Then when I open Settings->power window from gnome it will start power-profiles-daemon and stops auto-cpufreq again.
+So some other process will activate the power-profiles-daemon, also at the boot.
+
+I then uninstalled the power-profiles-daemon via package manager and rebooted. And everything works as intended.
+
+I'm testing on Fedora 35. I hope this helped a littlebit. 
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@bobslept it definitely helped. I think I know what's going on, could you please test with latest changes I just pushed on `gnome-power` branch? Thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>The new gnome-power branch works perfectly now. It survives a reboot. When going to the power panel in settings from gnome it doesn't start the power-profile-daemon. Awesome! </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>farhan10ansari:</strong></p>
+                    <p>i also faced same issue 
+ran these commands
+https://github.com/AdnanHodzic/auto-cpufreq/issues/277#issuecomment-968246100
+it worked</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Hi @bobslept and everyone else, could you please test final changes before I merge them with `master` and make them part of 1.8.0 release.
+
+Latest changes are available on `gnome-power-v2` branch, which you test by running:
+
+```
+git fetch
+git checkout gnome-power-v2
+sudo ./auto-cpufreq-installer --install
+```
+
+For those using Snap package changes are available as part of beta channel which can be installed by running:
+
+```
+sudo snap install auto-cpufreq --beta
+```
+
+Thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Too bad. I did a ./auto-cpufreq-installer --remove on my old folder first.
+Then:
+```
+git fetch
+git checkout gnome-power-v2
+sudo ./auto-cpufreq-installer --install
+sudo auto-cpufreq --install
+```
+power-profiles-daemon is starting up on boot again. And auto-cpufreq is killed on boot again. Exactly the same behavior as before you updated gnome-power branch. So when manually starting it after boot, it works. Going to the power config panel from gnome starts up power-profiles-daemon again. 
+
+Alright I now see the message about gnome_power.py script.
+I re-did all the steps. And launched gnome_power.py manually as noted in the warning. (some typo's there - used but you need _) it recognises that power-profiles-daemon is already disabled. This is just after `auto-freq --install`. So `gnome_power_stats == 0` is not true at this stage because power-profiles-daemon is not active at this moment.
+
+When I do systemctl start power-profiles-daemon and then run the gnome_power.py script it succesfully masked the power-profiles-daemon.
+
+I hope i'm clear enough. Please ask for more info to clarify myself.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@bobslept first of all thank you for your feedback! 
+
+What changed compared to `gnome-power` branch is that auto-cpufreq won't automatically disable gnome-power-profiles once it detects it's running. Now it'll show a message if it's running and how to disable it, thought this might be a more sensible approach as disabling gnome power manager might be too aggressive of an approach. Although this still an option.
+
+>  (some typo's there - used but you need _)
+
+I didn't understand this part, what exactly is the typo?
+
+>When I do systemctrl start power-profiles-daemon and then run the gnome_power.py script it succesfully masked the power-profiles-daemon.
+
+So does everything work as expected after you do as instructed and run `python3 power_helper.py --gnome-power-disable`?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>I've edit my post alot. maybe you need to read it one more time, sorry for that.  
+about the typo:
+`print("python3 power_helper.py --gnome-power-disable") `
+it should be --gnome_power_disabled.
+
+I will be more clear and try one more time. one moment.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@bobslept
+
+> I've edit my post alot. maybe you need to read it one more time.
+
+I think we were both writing at the same time :)
+
+> about the typo:
+> `print("python3 power_helper.py --gnome-power-disable") `
+> it should be --gnome_power_disabled.
+
+That's not a typo, I wanted the argument to be called like that.
+
+Okay, I see what you mean, everything is working as expected after running `python3 power_helper.py --gnome-power-disable`, but then when you go to Gnome settings "Power" it re-enables it. It does that for me as well I missed it during testing. I managed to fix this problem by uninstalling the package, on Ubuntu/Debian this can be done by running: `sudo apt remove power-profiles-daemon`.
+
+So I could do this for every distro (something similar as it's done for installing dependencies as part of [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto-cpufreq-installer)). Could you tell me what's the equivalent name of this package for distro you're using and I'll make the code changes.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Oke. auto-cpufreq remove from system. Fresh boot. I'm currently at gnome-power-v2
+`systemctl status power-profiles-daemon -> running`
+`sudo ./auto-cpufreq-installer --install`
+`systemctl status power-profiles-daemon -> running`
+`sudo auto-cpufreq --install`
+Got a warning about power-profiles-daemon.
+`systemctl status power-profiles-daemon -> inactive (dead)`
+`cd auto_cpufreq`
+`sudo python3 power_helper.py --gnome_power_disable`
+Got a message: * GNOME power profiles already disabled
+`systemctl status power-profiles-daemon -> inactive (dead) & loaded: loaded`
+`systemctl start power-profiles-daemon`
+`sudo python3 power_helper.py --gnome_power_disable`
+Got a message: * Disabling GNOME power profiles
+`systemctl status power-profiles-daemon -> inactive (dead) & loaded: masked`
+
+So at the stage you advise to run power_helper.py the power-profiles-daemon is inactive, which lead to false branche on is-active check. When I manually start the service and run the power_helper.py again it leads to the true branch on is-active check and it disables and masks the service as intended.  This is-active check: https://github.com/AdnanHodzic/auto-cpufreq/blob/fc5ac16fd6de6f8ba35d1f253aed22ed79c65044/auto_cpufreq/power_helper.py#L24
+
+which is used here:
+https://github.com/AdnanHodzic/auto-cpufreq/blob/fc5ac16fd6de6f8ba35d1f253aed22ed79c65044/auto_cpufreq/power_helper.py#L57
+
+When it's correctly masked it doesn't fire up via gnome-settings power panel, or a reboot.
+
+about power_helper.py arguments in code used gnome_power-disable while print says --gnome-power-disable:
+https://github.com/AdnanHodzic/auto-cpufreq/blob/fc5ac16fd6de6f8ba35d1f253aed22ed79c65044/auto_cpufreq/power_helper.py#L168
+
+I hope this makes sense.
+
+
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>JFYI, if it makes it any easier can also check power-profile-daemon status by running `sudo python3 power_helper.py --gnome_power_status`.
+
+I'm not sure I understand how is it not properly masked or how the check is not valid. If you want, please feel free to make a PR out of changes you're proposing or just paste the block of code you changed. I'll glad you give you credits as part of upcoming v1.8.0 release :)
+
+> When it's correctly masked it doesn't fire up via gnome-settings power panel, or a reboot.
+
+I would def prefer having it properly masked then uninstalling any packages.
+
+In meantime, I'll make changes where it'll automatically be disabled and masked right after auto-cpufreq is installed, as giving user this choice only makes things more complicated.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>> I would def prefer having it properly masked then uninstalling any packages.
+
+The `sudo auto-cpufreq --install` somehow stops the power-profiles-daemon. Which then is not running anymore, and then the is-active check is only working when power-profiles-daemon is actually running, not stopped.
+
+So when I start power-profiles-daemon before I run the python script it actually works.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> The `sudo auto-cpufreq --install` somehow stops the power-profiles-daemon. Which then is not running anymore, and then the is-active check is only working when power-profiles-daemon is actually running, not stopped.
+
+I noticed this today, and could not figure why this is happening, but exact line that causes this is: [65 of auto-cpufreq-install.sh](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/scripts/auto-cpufreq-install.sh#L65)
+
+Either way, I pushed changes in which GNOME Power profiles will be automatically disabled during install and they won't be started again if GNOME Power settings are run. I also made changes so if `python3 power_helper.py --gnome-power-disable` is run it'll properly mask the service.
+
+@bobslept please pull the latest changes and verify everything is as it should be on your end</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Alright it works correctly now with your latest changes, in automatic mode.
+
+In the meantime I was testing a fix for the power_gnome.py script. Which would also work in manual mode.
+https://github.com/AdnanHodzic/auto-cpufreq/blob/fc5ac16fd6de6f8ba35d1f253aed22ed79c65044/auto_cpufreq/power_helper.py#L24
+Switching that to 
+` gnome_power_stats = call(["systemctl", "is-enabled", "--quiet", "power-profiles-daemon"]) `
+
+will make it work in manual mode. As you first intended. 
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Alright it works correctly now with your latest changes, in automatic mode.
+
+Good to hear!
+
+> In the meantime I was testing a fix for the power_gnome.py script. Which would also work in manual mode.
+> 
+> https://github.com/AdnanHodzic/auto-cpufreq/blob/fc5ac16fd6de6f8ba35d1f253aed22ed79c65044/auto_cpufreq/power_helper.py#L24
+> 
+> 
+> Switching that to
+> `gnome_power_stats = call(["systemctl", "is-enabled", "--quiet", "power-profiles-daemon"])`
+> will make it work in manual mode. As you first intended.
+
+Thanks, but in latest changes I left out the `iif(gnome_power_stats == 0):` condition in `gnome_power_svc_disable` and `gnome_power_svc_enable` functions, so masking will be done regardless.
+
+I tested this on auto-cpufreq 1.8.0 beta snap install (which requires `sudo python3 power_helper.py --gnome_power_disable` to be run) and it works as intended. That is even after GNOME Power settings are run GNOME profile service remains masked, dead and inactive.
+
+Is this not the case for you with manual disable with latest changes?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Yes it works with the latest changes. That change was only intended if you would prefer the manual mode fc5ac16fd6de6f8ba35d1f253aed22ed79c65044  before you comitted the automatic mode.  db68390ec33e1c3f6d02a6811dc60d3b2080d7dd
+
+And ofcourse in this way manual mode works, because there is no check. Sorry for the misunderstanding.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Yes it works with the latest changes. That change was only intended if you would prefer the manual mode [fc5ac16](https://github.com/AdnanHodzic/auto-cpufreq/commit/fc5ac16fd6de6f8ba35d1f253aed22ed79c65044) before you comitted the automatic mode. [db68390](https://github.com/AdnanHodzic/auto-cpufreq/commit/db68390ec33e1c3f6d02a6811dc60d3b2080d7dd)
+> 
+> And ofcourse in this way manual mode works, because there is no check. Sorry for the misunderstanding.
+
+No worries, I perfectly understood what you meant. But now I like this flow where changes are automatically disabled much better. As although originally I went with manually disabling GNOME power profiles, having these changes done automatically is the final goal, if it seems to work as expected why not go with it from getgo. User is informed about this and if they don't like something they can re-enable the disabled daemon.
+
+In meantime I made some minor changes and will be making a new release with these changes in couple of hours. I'll also make sure to give you contributor credits as your debug efforts were very valuable during the development process :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Functionality which addresses this problem has now been released as part of [1.8.0 release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+@explosion-mental, @jpnt please note that I'm not sure how well changes introduced in 1.8.0 will work with other init systems then `systemd`, so please create PR's in case additional changes are necessary.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>explosion-mental:</strong></p>
+                    <p>Hey @AdnanHodzic I don't think I can maintain the _runit_ support that I commited while back.
+
+Sorry for my late response, I've been working on my own version of your tool at https://github.com/explosion-mental/sacf, since for some reason python breaks a lot in my system and I didn't really like this gnome change.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

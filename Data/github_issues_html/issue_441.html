@@ -1,0 +1,433 @@
+
+        <html>
+        <head>
+            <title>Issue #441: AttributeError: 'NoneType' object has no attribute 'percent'</title>
+        </head>
+        <body>
+            <h1>AttributeError: 'NoneType' object has no attribute 'percent'</h1>
+            <p><strong>Issue #441</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>~]# auto-cpufreq --monitor
+
+Note: You can quit monitor mode by pressing "ctrl+c"
+
+-------------------------------------------------------------------------------
+
+Linux distro: CentOS Linux 7 Core
+Linux kernel: 3.10.0-1160.66.1.el7.x86_64
+Processor: Intel(R) Xeon(R) Gold 6230R CPU @ 2.10GHz
+Cores: 52
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4000 MHz
+CPU min frequency: 1000 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0:    98.0%     72 °C     2728 MHz
+CPU1:   100.0%     72 °C     2728 MHz
+CPU2:   100.0%     78 °C     2727 MHz
+CPU3:   100.0%     76 °C     2728 MHz
+CPU4:   100.0%     79 °C     2728 MHz
+CPU5:   100.0%     75 °C     2728 MHz
+CPU6:   100.0%     74 °C     2720 MHz
+CPU7:   100.0%     73 °C     2728 MHz
+CPU8:   100.0%     71 °C     2720 MHz
+CPU9:   100.0%     80 °C     2720 MHz
+CPU10:   99.0%     79 °C     2721 MHz
+CPU11:  100.0%     81 °C     2728 MHz
+CPU12:  100.0%     79 °C     2728 MHz
+CPU13:  100.0%     70 °C     2728 MHz
+CPU14:  100.0%     73 °C     2728 MHz
+CPU15:  100.0%     74 °C     2728 MHz
+CPU16:   99.0%     79 °C     2728 MHz
+CPU17:   98.0%     79 °C     2727 MHz
+CPU18:  100.0%     82 °C     2728 MHz
+CPU19:  100.0%     78 °C     2728 MHz
+CPU20:  100.0%     70 °C     2728 MHz
+CPU21:  100.0%     74 °C     2729 MHz
+CPU22:   99.0%     74 °C     2728 MHz
+CPU23:  100.0%     78 °C     2728 MHz
+CPU24:  100.0%     77 °C     2728 MHz
+CPU25:   98.0%     81 °C     2728 MHz
+CPU26:  100.0%     72 °C     2728 MHz
+CPU27:  100.0%     72 °C     2728 MHz
+CPU28:  100.0%     78 °C     2728 MHz
+CPU29:  100.0%     76 °C     2728 MHz
+CPU30:  100.0%     79 °C     2728 MHz
+CPU31:  100.0%     75 °C     2720 MHz
+CPU32:  100.0%     74 °C     2722 MHz
+CPU33:   99.0%     73 °C     2720 MHz
+CPU34:  100.0%     71 °C     2730 MHz
+CPU35:   99.0%     80 °C     2728 MHz
+CPU36:  100.0%     79 °C     2727 MHz
+CPU37:   98.0%     81 °C     2728 MHz
+CPU38:   99.0%     79 °C     2728 MHz
+CPU39:  100.0%     70 °C     2720 MHz
+CPU40:  100.0%     73 °C     2729 MHz
+CPU41:  100.0%     74 °C     2720 MHz
+CPU42:  100.0%     79 °C     2731 MHz
+CPU43:   99.0%     79 °C     2720 MHz
+CPU44:  100.0%     82 °C     2729 MHz
+CPU45:  100.0%     78 °C     2720 MHz
+CPU46:  100.0%     70 °C     2720 MHz
+CPU47:  100.0%     74 °C     2728 MHz
+CPU48:   97.0%     74 °C     2730 MHz
+CPU49:   99.0%     78 °C     2720 MHz
+CPU50:  100.0%     77 °C     2729 MHz
+CPU51:  100.0%     81 °C     2720 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.9.6', 'auto-cpufreq')
+  File "/opt/auto-cpufreq/venv/lib/python3.7/site-packages/pkg_resources/__init__.py", line 667, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/opt/auto-cpufreq/venv/lib/python3.7/site-packages/pkg_resources/__init__.py", line 1471, in run_script
+    exec(script_code, namespace, namespace)
+  File "/opt/auto-cpufreq/venv/lib/python3.7/site-packages/auto_cpufreq-1.9.6-py3.7.egg/EGG-INFO/scripts/auto-cpufreq", line 226, in <module>
+  File "/opt/auto-cpufreq/venv/lib/python3.7/site-packages/click/core.py", line 1130, in __call__
+    return self.main(*args, **kwargs)
+  File "/opt/auto-cpufreq/venv/lib/python3.7/site-packages/click/core.py", line 1055, in main
+    rv = self.invoke(ctx)
+  File "/opt/auto-cpufreq/venv/lib/python3.7/site-packages/click/core.py", line 1404, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/opt/auto-cpufreq/venv/lib/python3.7/site-packages/click/core.py", line 760, in invoke
+    return __callback(*args, **kwargs)
+  File "/opt/auto-cpufreq/venv/lib/python3.7/site-packages/auto_cpufreq-1.9.6-py3.7.egg/EGG-INFO/scripts/auto-cpufreq", line 101, in main
+  File "/opt/auto-cpufreq/venv/lib/python3.7/site-packages/auto_cpufreq-1.9.6-py3.7.egg/auto_cpufreq/core.py", line 1018, in mon_autofreq
+  File "/opt/auto-cpufreq/venv/lib/python3.7/site-packages/auto_cpufreq-1.9.6-py3.7.egg/auto_cpufreq/core.py", line 262, in battery_percentage
+** AttributeError: 'NoneType' object has no attribute 'percent'**
+
+
+================================================================================
+```
+gcc (GCC) 4.8.5 20150623 (Red Hat 4.8.5-44)
+Python 3.7.14
+CentOS Linux release 7.9.2009 (Core)
+Kernel: 3.10.0-1160.66.1.el7.x86_64
+pip 22.0.4
+
+```
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Since you were working on percentage changes, do you have any idea what's going wrong here? @BowDown097 @SunkenHero</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>SunkenHero:</strong></p>
+                    <p>I will take a look over it, since its my fault...</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>SunkenHero:</strong></p>
+                    <p>Try installing my [fork](https://github.com/SunkenHero/auto-cpufreq)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>vinograd-cyber:</strong></p>
+                    <p>> Try installing my [fork](https://github.com/SunkenHero/auto-cpufreq)
+Thank you for your help.When I used your fork, installed it and make it running, the percentage problem is solved. It looks fine.
+```
+-------------------------------------------------------------------------------
+
+                "auto-cpufreq" is about to refresh ...
+                Executed on: October 10 (Monday) - 22:42:42
+
+-------------------------------------------------------------------------------
+
+Linux distro: CentOS Linux 7 Core
+Linux kernel: 3.10.0-1160.76.1.el7.x86_64
+Processor: Intel(R) Xeon(R) Gold 6230R CPU @ 2.10GHz
+Cores: 52
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2100 MHz
+CPU min frequency: 1000 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0:     1.0%     47 °C     1557 MHz
+CPU1:     0.0%     45 °C     2100 MHz
+CPU2:     1.0%     49 °C     2100 MHz
+CPU3:     0.0%     45 °C     2100 MHz
+CPU4:     5.0%     48 °C     2100 MHz
+CPU5:     1.0%     43 °C     2100 MHz
+CPU6:     0.0%     43 °C     2100 MHz
+CPU7:     0.0%     50 °C     1628 MHz
+CPU8:     0.0%     43 °C     2100 MHz
+CPU9:     1.0%     48 °C     2100 MHz
+CPU10:    2.0%     48 °C     2100 MHz
+CPU11:    2.0%     48 °C     2100 MHz
+CPU12:    0.0%     47 °C     2100 MHz
+CPU13:    0.0%     41 °C     1681 MHz
+CPU14:    1.0%     44 °C     1545 MHz
+CPU15:    0.0%     44 °C     1542 MHz
+CPU16:    0.0%     47 °C     2100 MHz
+CPU17:    9.2%     50 °C     1995 MHz
+CPU18:    0.0%     49 °C     2100 MHz
+CPU19:    0.0%     50 °C     2100 MHz
+CPU20:    0.0%     42 °C     2100 MHz
+CPU21:    0.0%     47 °C     2100 MHz
+CPU22:    0.0%     42 °C     2100 MHz
+CPU23:    0.0%     46 °C     1258 MHz
+CPU24:    2.0%     46 °C     1935 MHz
+CPU25:    0.0%     48 °C     2100 MHz
+CPU26:    0.0%     47 °C     1987 MHz
+CPU27:    0.0%     45 °C     1259 MHz
+CPU28:    0.0%     49 °C     1955 MHz
+CPU29:    0.0%     45 °C     1945 MHz
+CPU30:    0.0%     48 °C     1672 MHz
+CPU31:    1.0%     43 °C     2100 MHz
+CPU32:    2.0%     43 °C     2100 MHz
+CPU33:    9.1%     50 °C     2100 MHz
+CPU34:    1.0%     43 °C     2100 MHz
+CPU35:    0.0%     48 °C     2100 MHz
+CPU36:    0.0%     48 °C     2022 MHz
+CPU37:    0.0%     48 °C     1359 MHz
+CPU38:    0.0%     47 °C     1992 MHz
+CPU39:    0.0%     41 °C     2099 MHz
+CPU40:    0.0%     44 °C     1747 MHz
+CPU41:    0.0%     44 °C     1473 MHz
+CPU42:    0.0%     47 °C     1997 MHz
+CPU43:    3.0%     50 °C     2100 MHz
+CPU44:    0.0%     49 °C     2101 MHz
+CPU45:    0.0%     50 °C     1900 MHz
+CPU46:    0.0%     42 °C     2050 MHz
+CPU47:    0.0%     47 °C     2100 MHz
+CPU48:    0.0%     42 °C     2100 MHz
+CPU49:    0.0%     46 °C     1902 MHz
+CPU50:    0.0%     46 °C     2090 MHz
+CPU51:    0.0%     48 °C     1670 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Setting to use: "performance" governor
+
+Total CPU usage: 1.5 %
+Total system load: 0.55
+Average temp. of all cores: 46.15 °C 
+
+High CPU load
+setting turbo boost: on
+
+-------------------------------------------------------------------------------
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Try installing my [fork](https://github.com/SunkenHero/auto-cpufreq)
+> Thank you for your help.When I used your fork, installed it and make it running, the percentage problem is solved. It looks fine.
+
+Since @vinograd-cyber confirmed these changes work, could you please make a PR to merge them with `master` @SunkenHero ?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>SunkenHero:</strong></p>
+                    <p>Yes</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Thanks! Changes are now merged with auto-cpufreq `master` branch @vinograd-cyber </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>Still getting issues. I'm on AUR build.
+```
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2901 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  1.0%     34 °C     2000 MHz
+CPU1:	  0.0%     34 °C     2776 MHz
+CPU2:	  0.0%     31 °C      800 MHz
+CPU3:	  0.0%     32 °C     2000 MHz
+CPU4:	  1.0%     34 °C     2000 MHz
+CPU5:	  0.0%     32 °C     2000 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Traceback (most recent call last):
+  File "/usr/bin/auto-cpufreq", line 226, in <module>
+    main()
+  File "/usr/lib/python3.10/site-packages/click/core.py", line 1130, in __call__
+    return self.main(*args, **kwargs)
+  File "/usr/lib/python3.10/site-packages/click/core.py", line 1055, in main
+    rv = self.invoke(ctx)
+  File "/usr/lib/python3.10/site-packages/click/core.py", line 1404, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/usr/lib/python3.10/site-packages/click/core.py", line 760, in invoke
+    return __callback(*args, **kwargs)
+  File "/usr/bin/auto-cpufreq", line 101, in main
+    mon_autofreq()
+  File "/usr/lib/python3.10/site-packages/auto_cpufreq/core.py", line 1018, in mon_autofreq
+    print("Battery is: charging (" + str(battery_percentage()) + "%)\n")
+  File "/usr/lib/python3.10/site-packages/auto_cpufreq/core.py", line 262, in battery_percentage
+    return round(psutil.sensors_battery().percent)
+AttributeError: 'NoneType' object has no attribute 'percent'
+```
+No issues manually installing. I think AUR pkgbuild doesn't grab the following python pip packages.
+`pip`, `click`, `psutil` & `distro`.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>SunkenHero:</strong></p>
+                    <p>That could be right, without psutil the program cant call psutil.sensors_battery() and returns instead an NoneType object and than it cant get the percentage from it. I dont know if thats a package building problem or if the battery percentage doesnt work, but i can look into it.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shashanknimje:</strong></p>
+                    <p>Currently on 1.9.6-1 AUR Build.
+
+```
+❯ sudo systemctl status auto-cpufreq.service
+× auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux
+     Loaded: loaded (/usr/lib/systemd/system/auto-cpufreq.service; enabled; preset: disabled)
+     Active: failed (Result: exit-code) since Tue 2022-11-01 11:41:20 IST; 6s ago
+   Duration: 1.385s
+    Process: 9668 ExecStart=/usr/bin/auto-cpufreq --daemon (code=exited, status=1/FAILURE)
+   Main PID: 9668 (code=exited, status=1/FAILURE)
+        CPU: 243ms
+
+Nov 01 11:41:20 pc auto-cpufreq[9668]:     return __callback(*args, **kwargs)
+Nov 01 11:41:20 pc auto-cpufreq[9668]:   File "/usr/bin/auto-cpufreq", line 79, in main
+Nov 01 11:41:20 pc auto-cpufreq[9668]:     set_autofreq()
+Nov 01 11:41:20 pc auto-cpufreq[9668]:   File "/usr/lib/python3.10/site-packages/auto_cpufreq/core.py", line 1002, in set_autofreq
+Nov 01 11:41:20 pc auto-cpufreq[9668]:     print("Battery is: charging (" + str(battery_percentage()) + "%)\n")
+Nov 01 11:41:20 pc auto-cpufreq[9668]:   File "/usr/lib/python3.10/site-packages/auto_cpufreq/core.py", line 262, in battery_percentage
+Nov 01 11:41:20 pc auto-cpufreq[9668]:     return round(psutil.sensors_battery().percent)
+Nov 01 11:41:20 pc auto-cpufreq[9668]: AttributeError: 'NoneType' object has no attribute 'percent'
+Nov 01 11:41:20 pc systemd[1]: auto-cpufreq.service: Main process exited, code=exited, status=1/FAILURE
+Nov 01 11:41:20 pc systemd[1]: auto-cpufreq.service: Failed with result 'exit-code'.
+```
+
+I also get the AttributeError: 'NoneType' object has no attribute 'percent' using the below AUR package.
+
+[](https://aur.archlinux.org/packages/auto-cpufreq)
+
+As @pc00per mentioned above, I made sure that pip, click, psutil and distro packages are installed, yet the error message.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>SunkenHero:</strong></p>
+                    <p>ok than its a problem with the battery percentage. I quickly create a fork, so you can use it, while i try to fix the bug.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>SunkenHero:</strong></p>
+                    <p>[ My Fork](https://github.com/SunkenHero/auto-cpufreq), You can use my fork while i am working on a fix. The percentage should always be 100%.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shashanknimje:</strong></p>
+                    <p>@SunkenHero, thanks much for the quick fix! I will be on the lookout for a final fix release. Thank you!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> [ My Fork](https://github.com/SunkenHero/auto-cpufreq), You can use my fork while i am working on a fix. The percentage should always be 100%.
+
+@SunkenHero are these changes part of `master`?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>SunkenHero:</strong></p>
+                    <p> > @SunkenHero are these changes part of `master`?
+
+i dont understand what you mean with that.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> > @SunkenHero are these changes part of `master`?
+> 
+> i dont understand what you mean with that.
+
+I meant to ask are all changes that are part of [your fork](https://github.com/SunkenHero/auto-cpufreq) merged with auto-cpufreq `master` branch?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>SunkenHero:</strong></p>
+                    <p>> I meant to ask are all changes that are part of [your fork](https://github.com/SunkenHero/auto-cpufreq) merged with auto-cpufreq `master` branch?
+
+No. my Fork was only a quick fix, it just shows 100% all the time to prevent crashes. I cant figure out the problem, and maybe we should remove the Percentage display temporarily as i don't have much time to fix it for the next few weeks. With that it would be more stable.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shashanknimje:</strong></p>
+                    <p>There’s a downstream version of this release in Arch Linux AUR that seems to have a fix for the battery percentage issue.
+
+[auto-cpufreq-git 1.9.6.r3.gff72e1e-2](https://aur.archlinux.org/packages/auto-cpufreq-git) 
+
+I’m using that version and the battery percentage indicator appears to be working fine. No problems.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@SunkenHero 
+
+> > I meant to ask are all changes that are part of [your fork](https://github.com/SunkenHero/auto-cpufreq) merged with auto-cpufreq `master` branch?
+> 
+> No. my Fork was only a quick fix, it just shows 100% all the time to prevent crashes. I cant figure out the problem, and maybe we should remove the Percentage display temporarily as i don't have much time to fix it for the next few weeks. With that it would be more stable.
+
+Let's not remove it, it has quite grown on me in the meantime :) 
+
+Unrelated: I just [pushed changes](https://github.com/AdnanHodzic/auto-cpufreq/commit/2ae8ed4be23c452c2dc0b3d87da9928f75e59bf2) which should fix the percentage fix display (round the numbers) as it would display battery percentage i.e: `95.232932029302`
+
+@shashanknimje 
+
+> There’s a downstream version of this release in Arch Linux AUR that seems to have a fix for the battery percentage issue.
+> 
+> [auto-cpufreq-git 1.9.6.r3.gff72e1e-2](https://aur.archlinux.org/packages/auto-cpufreq-git)
+> 
+> I’m using that version and the battery percentage indicator appears to be working fine. No problems.
+
+If there are any changes that could be made/merged please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>In last commit I removed the buggy battery percentage monitor, so there's no need to used forked version anymore (you were missing on latest features with it).
+
+Please pull and install latest changes and verify that everything is working as expected.
+
+@SunkenHero feel free to create a PR to add back battery percentage monitor once you fixed the problem with it.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shashanknimje:</strong></p>
+                    <p>Thanks for clarifying that @AdnanHodzic . I am now using the master branch, and as you mentioned, the program is now working as expected (minus the battery percentage). Thanks much!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@shashanknimje awesome, thank you for the confirmation. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shashanknimje:</strong></p>
+                    <p>> @shashanknimje awesome, thank you for the confirmation. 
+
+Thank you! 👍</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,152 @@
+
+        <html>
+        <head>
+            <title>Issue #167: WIP: More extensive chassis detection for laptops</title>
+        </head>
+        <body>
+            <h1>WIP: More extensive chassis detection for laptops</h1>
+            <p><strong>Issue #167</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I think this should work. This should address issue #164 
+
+Once again, I don't have a way to fully test it. I tried compiling from the AUR and replacing the github link in the PKGBUILD to my fork, but I couldn't get it to work. I don't have access to the pkgbuild used on the Chaotic-AUR, unfortunately, because that would likely work.
+
+Anyways, this sets the SMBIOS Chassis types that don't have batteries to ac_state=true
+This switches the if else order from pull request #163.
+In the new order, the default state if a desktop is not detected is a laptop.
+
+I also added computer type to the  auto-cpufreq --stats command. It is up to your discretion whether or not that is a worthwhile addition. I think it could be useful, but it is not necessary. 
+
+Update to core.py fixes variable not found for computer_type in the --stats
+I managed to get it to kind of run, but auto-cpufreq --stats doesn't work. Only sudo auto-cpufreq --monitor works, but that's enough to see that the issue is fixed
+
+Links to: #166, #164</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>No, I will not accept it like this. If we are going to go this way this should be placed in a map/dictionary/list. Furthermore, let's please focus that this tool is primarily made to be running on portable devices with battery (laptops). So we shouldn't have cases where it's running on "Pizza Box" (whatever that is). That should go in "other/else" case. 
+
+Changes that were introduced here broke one of the core auto-cpufreq functionalities, which I take very seriously. In my lack of time, I was very tempted to revert all changes, but instead to mitigate this problem I just made[ simple changes](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto_cpufreq/core.py#L122) and [released "hot-fix"](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.5.5) that should encompass "laptop" cases which I got by testing this on 3 different (Intel) laptops. 
+
+**So let's please focus on finding all different cases there are of what `dmidecode --string chassis-type` when it's run on different laptops and extend this list.** Example of [how I asked to get this info](https://twitter.com/fooctrl/status/1357230198857564160), I suggest you find a similar way :) Interesting problems that could arise from this is that [some laptops are reported as "Desktop",](https://twitter.com/LokiC3b/status/1357234945765367809) so we'll need to figure out a new way how to weed these cases out. As I'm particularly interested what will be returned for AMD or ARM laptops. On this topic @Red-Eyed could you please tell me what you get for mentioned dmidecode output? Thank you.
+
+> I also added computer type to the auto-cpufreq --stats command. It is up to your discretion whether or not that is a worthwhile addition. I think it could be useful, but it is not necessary.
+
+I added this to `--debug` as it could only be useful there.
+
+I also tagged this PR as "WIP" (work in progress). I would suggest you rebase changes from master, or simply start a new PR with reference to this one.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>https://morecomputerstuff.net/2017/06/27/smbios-chassis-type-table/
+
+here there are other cases in which its laptop
+
+chasis types
+
+Portable
+Laptop
+Notebook
+Hand Held
+Sub Notebook
+Tablet
+Convertible
+Detachable</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>also here
+https://gist.github.com/Spartan-196/e637a67ede6e1c99f0607feceb2de87c</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Thanks @librewish! Can one of you 2 start a PR to extend this list? We should give it some time to hear what everybody says as [part of my Tweet](https://twitter.com/fooctrl/status/1357230198857564160). As I said, there are also interesting [edge cases](https://twitter.com/LokiC3b/status/1357234945765367809) which should also be dealt with, and there might be more. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>how about detecting battery also in the else part
+if its present 
+then do the charging detection
+else
+set charging = true</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>@AdnanHodzic 
+what do you think of using psutil
+https://stackoverflow.com/a/41988627</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>```
+has_battery = psutil.sensors_battery() is not None
+    
+    if has_battery == True:
+        power_pluggedin = psutil.sensors_battery().power_plugged
+        if power_pluggedin == True:
+            ac_state = True
+        else:
+            ac_state = False
+    else:
+        ac_state = True
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ThePoorPilot:</strong></p>
+                    <p>This may be getting more complicated than I initially thought.
+
+I do want to apologize for how haphazardly the first solution was put together.
+
+ Chassis type is not as a perfect metric as it seemed
+
+The reason I did it to check for desktops, was because I figured everything else would fall under the "else" category. I did consider add elif statements for "Notebook" and "Laptop," but I considered it redundant.
+
+Also I apologize for it being such a long list of elifs, I just figured it was more important than to have something than for me to give up trying to figure out how to check for multiple conditions in an if statement(looks like I could have just used "or" as you did, ooof).
+
+As Librewish says, maybe something close to his initial approach, but detecting for battery could be more optimal. We'd just have to get that to actually work. edit: Seems like that is our only option as some devices that are laptops report as "desktops" for some reason(as shown on your twitter)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> This may be getting more complicated than I initially thought.
+> 
+> I do want to apologize for how haphazardly the first solution was put together.
+
+@ThePoorPilot 
+
+Hey, don't sweat it! It's hard to predict all use cases since there's so many of them. I also overlooked some things, these things happen, but what we do with this information is what matters.
+
+> ```
+> has_battery = psutil.sensors_battery() is not None
+>     
+>     if has_battery == True:
+>         power_pluggedin = psutil.sensors_battery().power_plugged
+>         if power_pluggedin == True:
+>             ac_state = True
+>         else:
+>             ac_state = False
+>     else:
+>         ac_state = True
+> ```
+
+@librewish 
+
+I like it! Let's close this MR and continue this in #168 
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

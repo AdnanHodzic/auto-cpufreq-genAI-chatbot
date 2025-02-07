@@ -1,0 +1,113 @@
+
+        <html>
+        <head>
+            <title>Issue #181: Can't deploy auto-cpufreq daemon running on Opensuse leap 15.2</title>
+        </head>
+        <body>
+            <h1>Can't deploy auto-cpufreq daemon running on Opensuse leap 15.2</h1>
+            <p><strong>Issue #181</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+```text
+Hello, I can't activate auto-cpufreq systemd daemon on opensuse. I never had this issue on other distros. The service is failing with the following status:
+
+● auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux
+   Loaded: loaded (/etc/systemd/system/auto-cpufreq.service; enabled; vendor preset: disabled)
+   Active: failed (Result: exit-code) since Tue 2021-02-16 10:00:56 IST; 6min ago
+ Main PID: 3703 (code=exited, status=203/EXEC)
+
+Feb 16 10:00:56 user-pc systemd[1]: Started auto-cpufreq - Automatic CPU speed & power optimizer for Linux.
+Feb 16 10:00:56 user-pc systemd[3703]: auto-cpufreq.service: Failed to execute command: No such file or directory
+Feb 16 10:00:56 user-pc systemd[3703]: auto-cpufreq.service: Failed at step EXEC spawning /usr/local/bin/auto-cpufreq: No such file or directory
+Feb 16 10:00:56 user-pc systemd[1]: auto-cpufreq.service: Main process exited, code=exited, status=203/EXEC
+Feb 16 10:00:56 user-pc systemd[1]: auto-cpufreq.service: Unit entered failed state.
+Feb 16 10:00:56 user-pc systemd[1]: auto-cpufreq.service: Failed with result 'exit-code'.
+
+```
+---
+
+### System information:
+```
+-------------------------------------------------------------------------------
+
+Linux distro: openSUSE Leap 15.2 n/a
+Linux kernel: 5.3.18-lp152.63-default
+Processor: Intel(R) Core(TM) i5-1035G4 CPU @ 1.10GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3700 MHz
+CPU min frequency: 400 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0:     3.0%     50 °C     1100 MHz
+CPU1:     5.8%     50 °C     1087 MHz
+CPU2:     0.0%     49 °C     1098 MHz
+CPU3:     0.0%     50 °C     1100 MHz
+CPU4:     0.0%     50 °C     1096 MHz
+CPU5:     2.0%     50 °C     1100 MHz
+CPU6:     3.0%     49 °C     1100 MHz
+CPU7:     1.0%     50 °C     1100 MHz
+
+auto-cpufreq version:
+Git commit: ae86bbb
+
+Python: 3.6.12
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 7.1.2
+You are using pip version 10.0.1, however version 21.0.1 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+distro package 1.5.0
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.29 %
+
+Total CPU usage: 1.2 %
+Total system load: 0.53
+Average temp. of all cores: 49.75 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Since @NJOYSoftware did OpenSuse implementation, do you have any clue what's the problem in this case?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>asperan:</strong></p>
+                    <p>As per:
+
+> Feb 16 10:00:56 user-pc systemd[3703]: auto-cpufreq.service: Failed to execute command: No such file or directory
+Feb 16 10:00:56 user-pc systemd[3703]: auto-cpufreq.service: Failed at step EXEC spawning /usr/local/bin/auto-cpufreq: No such file or directory
+
+@koushikkhan seems to not have the auto-cpufreq binary in the /usr/local/bin folder, so I guess setup.py has not copied correctly the file. 
+One thing you @koushikkhan can try to fix your problem is searching for `auto-cpufreq` with `find / -iname 'auto-cpufreq'` and see whether and where that file is, and then modify the service file accordingly</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>In meantime I'm closing the issue due to inactivity, please re-open it if the problem persists or if you have any updates.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

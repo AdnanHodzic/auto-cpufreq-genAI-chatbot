@@ -1,0 +1,245 @@
+
+        <html>
+        <head>
+            <title>Issue #186: AC Power Forces turbo-boost ON</title>
+        </head>
+        <body>
+            <h1>AC Power Forces turbo-boost ON</h1>
+            <p><strong>Issue #186</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>When working on AC Power, the `turbo-boost` is forced `on` even when CPU load is low. When I remove AC power, the boost
+
+### Error output:
+on AC Power:
+```text
+
+Note: You can quit stats mode by pressing "ctrl+c"
+
+		Executed on: February 28 (Sunday) - 10:34:35
+
+-------------------------------------------------------------------------------
+
+Linux distro: Fedora 33 
+Linux kernel: 5.10.17-200.fc33.x86_64
+Processor: Intel(R) Core(TM) i7-6820HQ CPU @ 2.70GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3600 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	 10.0%     55 °C     3320 MHz
+CPU1:	  6.0%     55 °C     3303 MHz
+CPU2:	  8.0%     53 °C     3337 MHz
+CPU3:	  7.0%     54 °C     3299 MHz
+CPU4:	  7.9%     55 °C     3300 MHz
+CPU5:	  5.9%     55 °C     3299 MHz
+CPU6:	  6.1%     53 °C     3351 MHz
+CPU7:	  6.9%     54 °C     3289 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+
+Total CPU usage: 8.2 %
+Total system load: 0.99
+Average temp. of all cores: 54.25 °C
+
+Load optimal
+setting turbo boost: on
+
+-------------------------------------------------------------------------------
+
+			"auto-cpufreq" refresh in: 2^C
+Aborted!
+
+```
+The moment I pull the plug out.
+```text
+
+		Executed on: February 28 (Sunday) - 10:39:08
+
+-------------------------------------------------------------------------------
+
+Linux distro: Fedora 33 
+Linux kernel: 5.10.17-200.fc33.x86_64
+Processor: Intel(R) Core(TM) i7-6820HQ CPU @ 2.70GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3600 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	 11.8%     52 °C     3371 MHz
+CPU1:	  9.9%     56 °C     3345 MHz
+CPU2:	  6.1%     53 °C     3335 MHz
+CPU3:	  4.0%     52 °C     3306 MHz
+CPU4:	  8.9%     52 °C     3300 MHz
+CPU5:	  4.0%     56 °C     3204 MHz
+CPU6:	  5.9%     53 °C     3280 MHz
+CPU7:	  5.0%     52 °C     3259 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: discharging
+
+Setting to use: "powersave" governor
+
+Total CPU usage: 11.8 %
+Total system load: 0.61
+Average temp. of all cores: 53.25 °C
+
+Load optimal
+setting turbo boost: off
+
+-------------------------------------------------------------------------------
+
+```
+---
+
+### System information:
+on AC power
+```text
+-------------------------------------------------------------------------------
+
+Linux distro: Fedora 33 
+Linux kernel: 5.10.17-200.fc33.x86_64
+Processor: Intel(R) Core(TM) i7-6820HQ CPU @ 2.70GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3600 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  9.2%     54 °C     3360 MHz
+CPU1:	  8.8%     54 °C     3296 MHz
+CPU2:	  5.1%     51 °C     3319 MHz
+CPU3:	  6.9%     54 °C     3317 MHz
+CPU4:	  5.1%     54 °C     3294 MHz
+CPU5:	  5.0%     54 °C     3305 MHz
+CPU6:	  4.1%     51 °C     3271 MHz
+CPU7:	  6.0%     54 °C     3242 MHz
+
+auto-cpufreq version:
+fatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+
+Python: 3.9.1
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 7.1.2
+distro package 1.5.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.14 %
+
+Total CPU usage: 7.7 %
+Total system load: 1.31
+Average temp. of all cores: 53.25 °C 
+
+Currently using: performance governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+
+```
+on Battery Power
+```text
+-------------------------------------------------------------------------------
+
+Linux distro: Fedora 33 
+Linux kernel: 5.10.17-200.fc33.x86_64
+Processor: Intel(R) Core(TM) i7-6820HQ CPU @ 2.70GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2700 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	 17.3%     43 °C      900 MHz
+CPU1:	 11.2%     44 °C      900 MHz
+CPU2:	 14.0%     44 °C      900 MHz
+CPU3:	 12.9%     43 °C      900 MHz
+CPU4:	 15.2%     43 °C      900 MHz
+CPU5:	 12.0%     44 °C      900 MHz
+CPU6:	 16.0%     44 °C      900 MHz
+CPU7:	 12.9%     43 °C      900 MHz
+
+auto-cpufreq version:
+fatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+
+Python: 3.9.1
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 7.1.2
+distro package 1.5.0
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.14 %
+
+Total CPU usage: 13.7 %
+Total system load: 0.94
+Average temp. of all cores: 43.5 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>frankiexyz:</strong></p>
+                    <p>Yes, I observe the same thing and I am manually changing this to off (https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto_cpufreq/core.py#L564)
+It appears if the function will enable turbo when you are charging by default unless the CPU temperature is more than 60 degree.
+
+I will test my change a few days. If it works well , I will raise a PR.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Yes, I observe the same thing and I am manually changing this to off (https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto_cpufreq/core.py#L564)
+> It appears if the function will enable turbo when you are charging by default unless the CPU temperature is more than 60 degree.
+> 
+> I will test my change a few days. If it works well , I will raise a PR.
+
+Great, good luck and looking forward to the PR!</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

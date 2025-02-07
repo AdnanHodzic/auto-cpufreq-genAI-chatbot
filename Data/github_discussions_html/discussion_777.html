@@ -1,0 +1,124 @@
+
+        <html>
+        <head>
+            <title>Discussion #777: How to setup the development environment for auto-cpufreq?</title>
+        </head>
+        <body>
+            <h1>How to setup the development environment for auto-cpufreq?</h1>
+            <p><strong>Discussion #777</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>How do i setup the development environment for testing and debugging feature and issues to contribute to autocpu-freq? There seems to be no requirement.py for setting up virtualenv and testing autocpu freq inside the host machine seems non-intuitive to me so should i run this in a container like docker?
+
+Thanks </p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> so should i run this in a container like docker?
+
+That was my whole idea and why I pushed for development of Snap package, as in essence it is running as part of a container. However, due to its strict confinement, it's making some things hard.
+
+But, it's interesting that you mentioned this topic, but just this weekend I was doing something this topic and I just published a blog post that could help you: [Effortless Linux backups: Power of OpenZFS Snapshots on Ubuntu 24.04 ](https://foolcontrol.org/?p=4781)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>HarshalRathore:</strong></p>
+                    <p>@AdnanHodzic That is a great simple article, but I use ext4 file system so I don't have the feature to roll-back the entire file system. Have you tried developing it in a docker container and if there are any side effects of running auto-cpufreq inside a container( side effect being unexpected behavior compared to when run in a live environment).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>HarshalRathore:</strong></p>
+                    <p>Hi @AdnanHodzic can you give a run down on how you have implemented the [battery charging threshold](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#battery-charging-thresholds) for the thinkpad and ideapad i wish to implement them for my laptop which is 
+
+<details>
+  <summary># dmidecode -t system</summary>
+
+   ```bash
+ # dmidecode 3.6
+Getting SMBIOS data from sysfs.
+SMBIOS 3.2.0 present.
+
+Handle 0x0001, DMI type 1, 27 bytes
+System Information
+	Manufacturer: ASUSTeK COMPUTER INC.
+	Product Name: ROG Zephyrus G14 GA401IHR_GA401IHR
+	Version: 1.0       
+	Serial Number: MANRKD017667415
+	UUID: 54bc6fdf-3d4a-3247-999a-826e64f26875
+	Wake-up Type: Unknown
+	SKU Number:  
+	Family: ROG Zephyrus G14
+
+Handle 0x0007, DMI type 32, 20 bytes
+System Boot Information
+	Status: No errors detected
+
+Handle 0x002A, DMI type 12, 5 bytes
+System Configuration Options
+	Option 1: SMI:00B26C
+	Option 2: DSN:                                
+	Option 3: DSN:                                
+	Option 4: DSN:                                
+  ```
+</details>
+
+my laptop model supports the battery charging threshold by just writing the value to `/sys/class/power_supply/BAT*/charge_control_end_threshold`. so i think i can implement the support for my model.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Have you tried developing it in a docker container and if there are any side effects of running auto-cpufreq inside a container( side effect being unexpected behavior compared to when run in a live environment).
+
+@HarshalRathore I think you're missing the point of auto-cpufreq, if you isolate it in a container all the changes you make won't benefit your system. As it needs to communicate with the "host" system governors. Same thing is if you ran it in a VM, it wouldn't work because necessary drivers wouldn't be available.
+
+>can you give a run down on how you have implemented the [battery charging threshold](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#battery-charging-thresholds) for the thinkpad and ideapad i wish to implement them for my laptop which is
+>
+>my laptop model supports the battery charging threshold by just writing the value to `/sys/class/power_supply/BAT*/charge_control_end_threshold`. so i think i can implement the support for my model.
+
+You need to look into the source code yourself, but I'll help you out in this process. This feature was introduced by @PurpleWazard as part of [2.2.0 release](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v2.2.0) and here you can see the PR #637 that made it possible and all the files that were involved in this process.
+
+Hence, if you look [through source code](https://github.com/search?q=repo%3AAdnanHodzic%2Fauto-cpufreq+%2Fsys%2Fclass%2Fpower_supply&type=code), you'll get some [hints what might need to be changed](https://github.com/search?q=repo%3AAdnanHodzic%2Fauto-cpufreq+POWER_SUPPLY_DIR&type=code).
+
+I'm really happy you want to look into this as @PurpleWazard doesn't[ have time anymore to maintain it.](https://discord.com/channels/1158239366251020361/1158239367337349164/1279512025952944200).
+
+So please please give it a try to extend functionality to your laptop and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>HarshalRathore:</strong></p>
+                    <p>> @HarshalRathore I think you're missing the point of auto-cpufreq. If you isolate it in a container, any changes you make won’t affect your system since it needs to communicate with the system's "host" governors. The same applies to running it in a VM—it wouldn't work as the necessary drivers wouldn't be available.
+
+@AdnanHodzic I understand your point now. I wasn’t aware of how auto-cpufreq operates under the hood, but after browsing through the codebase, I can see that it heavily relies on kernel-level modules and features. So, it’s clear that it wouldn't function properly within Docker.
+
+> You need to look into the source code yourself, but I'll help you through this process. This feature was introduced by @PurpleWazard in the 2.2.0 release, and you can find the relevant pull request (#637) that made it possible, along with the files involved.
+
+Thanks for guiding me! I’ve already looked into the code and now understand the file structure and how the scripts are written for specific laptop models, such as ThinkPads and IdeaPads. However, I’m still unsure about the `start_threshold=0` value. I understand that `stop_threshold=60` stops charging at 60%, but what exactly does the `start_threshold` control?
+
+Additionally, I noticed checks in the code to verify if the necessary kernel modules for battery control are loaded, using something like `lsmod | grep thinkpad_acpi`. Obviously, I won’t have the `thinkpad_acpi` module since my laptop is an Asus ROG. Below is a list of kernel modules on my system that reference Asus I couldn't find which one is equivalent of `thinkpad_acpi` or `ideapad_acpi` :
+
+```
+❯ lsmod | rg asus
+asus_wireless          16384  0
+asus_nb_wmi            32768  0
+hid_asus               36864  0
+asus_wmi              102400  2 asus_nb_wmi,hid_asus
+sparse_keymap          12288  1 asus_wmi
+i8042                  57344  1 asus_wmi
+platform_profile       12288  1 asus_wmi
+rfkill                 40960  8 asus_wmi,bluetooth,cfg80211
+usbhid                 86016  1 hid_asus
+video                  81920  4 asus_wmi,amdgpu,asus_nb_wmi,nvidia_modeset
+wmi                    32768  3 video,asus_wmi,wmi_bmof
+```
+
+I also noticed in the code that [this file path](https://github.com/AdnanHodzic/auto-cpufreq/blob/7b03630a5e094fc2ef58492d6be35bf64c387815/auto_cpufreq/battery_scripts/thinkpad.py#L9) is used to set the threshold value, but in my laptop, the corresponding file is `cat /sys/class/power_supply/BAT*/charge_control_end_threshold`, which doesn’t quite match the naming conventions for ThinkPad and IdeaPad models.
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

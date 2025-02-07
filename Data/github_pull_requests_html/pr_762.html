@@ -1,0 +1,55 @@
+
+        <html>
+        <head>
+            <title>Pull Request #762: Resolve permission errors for --install, --remove, and cpufreqctl.auto-cpufreq on Ubuntu 24.04</title>
+        </head>
+        <body>
+            <h1>Resolve permission errors for --install, --remove, and cpufreqctl.auto-cpufreq on Ubuntu 24.04</h1>
+            <p><strong>Pull Request #762</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>
+Add execution permissions to auto-cpufreq-install, auto-cpufreq-remove, and cpufreqctl.auto-cpufreq to enable installation and removal of daemon, as well as statistics (--stats).
+The install shell does display **Permission denied**, but goes on as though it was something unimportant. However, the program is not installed properly and cannot be used effectively.
+
+![Screenshot from 2024-08-10 22-38-36](https://github.com/user-attachments/assets/2e833334-a016-42d3-bcfc-1a28c83110c8)
+[debug.log](https://github.com/user-attachments/files/16570969/debug.log)
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I nor anyone [else has ever ran into this issue](https://discord.com/channels/1158239366251020361/1158239367337349164/1274670952570945556). So I'm not too eager to merge changes to files which auto-cpufreq doesn't edit and simply relies on.
+
+I'm not sure what changed or your system that you needed these changes. Hence, instead of accepting the changes or closing the PR, I'll simply leave it be for some time, until I see someone else report that they had the same problem.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Uyonoh:</strong></p>
+                    <p>Alright, thanks </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Tuxman2:</strong></p>
+                    <p>Hello,
+
+same problem on Fedora 41 with tuned. Permission denied on auto-cpufreq-install. :-(
+
+See my post.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>In that case let's merge this :) 
+
+@Uyonoh Thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+@Tuxman2 let's continue the discussion in #797</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

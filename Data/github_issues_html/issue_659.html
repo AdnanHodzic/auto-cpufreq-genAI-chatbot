@@ -1,0 +1,41 @@
+
+        <html>
+        <head>
+            <title>Issue #659: Create workflows for Linux builds and Nix flake builds</title>
+        </head>
+        <body>
+            <h1>Create workflows for Linux builds and Nix flake builds</h1>
+            <p><strong>Issue #659</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>This was briefly discussed in the Discord
+
+2 new files are added in `.github/workflows`
+
+`build-linux.yml` contains a workflow that installs Python and runs `sudo ./auto-cpufreq-installer` to make sure it installs correctly.
+
+`build-nix.yml` contains a workflow that installs Nix and runs `nix build` to ensure that the Flake builds on every push/PR
+
+Lastly, I added status badges to the top of the README file that show whether or not the builds are passing or failing. This is useful in-case a failed build makes it to master, as seen below
+![20240227_14h24m34s_grim](https://github.com/AdnanHodzic/auto-cpufreq/assets/31134255/24a608bd-960e-43be-b823-37e67b7e5cda)
+
+We could also probably add one for the Snap package, but I wasn't sure if this would be wanted due to the ambiguity over the support of the Snap package as of late
+
+Let me know what you think!</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>LGTM! 
+
+> We could also probably add one for the Snap package, but I wasn't sure if this would be wanted due to the ambiguity over the support of the Snap package as of late
+
+Think this would be a great idea, especially since I wanted to do the same thing but never got to.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,61 @@
+
+        <html>
+        <head>
+            <title>Pull Request #238: 'Readability' script changes</title>
+        </head>
+        <body>
+            <h1>'Readability' script changes</h1>
+            <p><strong>Pull Request #238</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p># auto-cpufreq-installer
+Some of the changes:
+- Intead of a lot of elif use one case statement for the `tool_install` function.
+- Merged the repeating pip_pkg_install, separator, complete_msg, etc. into `completed` function which is used by everything but manual install steps, which I add it to a function `manual_install` (more like manual_steps).
+# auto-cpufreq-{install,remove}.sh
+Before looking at the distro, we look if pid 1 corresponds to `runit`, else we assume systemd as the init. This, hopefully, makes it easier to add 'support' (rather steps) to more inits.
+
+
+Please take a look at the changes and take your time to review them. 
+Hopefully I didn't miss anything, cheers!</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Hi @explosion-mental I'm sorry for such a delayed reply, finally got time to look into this. 
+
+Could you please resolve conflicts on `auto-cpufreq-installer` and `scripts/auto-cpufreq-install.sh` files created as part of this pull request? It will result in a cleaner PR and allow me to more easily look into the changes that were made.
+
+Thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>explosion-mental:</strong></p>
+                    <p>@AdnanHodzic done. I have one question, does `lsb_release -is` (distro variable) works on most of the Linux distros? I can't recall seeing that command before, it may simplify the 'distro identification'.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> @AdnanHodzic done. 
+
+Awesome thanks, this is great stuff. Thank you for your contribution and I'm looking forward to any new ideas/PR you may have! 
+
+> I have one question, does `lsb_release -is` (distro variable) works on most of the Linux distros? I can't recall seeing that command before, it may simplify the 'distro identification'.
+
+Yes it is, as long as you have the necessary package that provides it, i.e on Debian based distros it's available as part of: `lsb-core`. From my experience on most of the distros it comes pre-installed unless you working with stripped down distros used for container base images. Hence, for this kind of detection I use in most of my projects, i.e: [displaylink-debian](https://github.com/AdnanHodzic/displaylink-debian/blob/master/displaylink-debian.sh#L29)
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>explosion-mental:</strong></p>
+                    <p>@AdnanHodzic apparently [neofetch](https://github.com/dylanaraps/neofetch) uses os-release detection as well, maybe it's a good idea to keep it if the goal is to function on unix like systems?
+
+Anyway, thanks for the proyect!</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

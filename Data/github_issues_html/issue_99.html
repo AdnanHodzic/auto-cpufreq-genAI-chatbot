@@ -1,0 +1,356 @@
+
+        <html>
+        <head>
+            <title>Issue #99: Modified fixed cpu usage percentage </title>
+        </head>
+        <body>
+            <h1>Modified fixed cpu usage percentage </h1>
+            <p><strong>Issue #99</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Turbo should be enabled when one thread reach 100% of usage, in original version there was a fixed value of 25%, but this only works when there're 4 threads, in CPUs with more threads 
+
+Reference: #98 </p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rrodriguez81:</strong></p>
+                    <p>Wait a bit please, I've detected that on charging state could be improved aswell. I'll do another pr in a few minutes.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rrodriguez81:</strong></p>
+                    <p>The commit has joined to previous PR.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>No worries, take your time, I'll thoroughly look into this in the morning.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>@AdnanHodzic I checked this PR:
+I just loaded my single core on 100% by command: `python -c "while True: pass"` and it switches to turbo</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rrodriguez81:</strong></p>
+                    <p>@Red-Eyed how many threads can handle your CPU? is your laptop in charging state? If there are only 4 is normal, but if the CPU can handle more than 4 CPUs is normal that the CPU load doesn't reach 25% (at least on an AMD Ryzen 3700U, because I haven't tested with an Intel CPU).
+
+In new portable AMD CPUs with more than 4C/8T, with an only 25% usage the problem will more noticeable.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>Hello @rrodriguez81 
+> how many threads can handle your CPU? 
+
+Updated
+8
+
+> is your laptop in charging state?
+
+Discharging
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rrodriguez81:</strong></p>
+                    <p>Hello @Red-Eyed :) ,
+
+Not sure if because the CPU model, but in my case it didn't launch turbo. I used the stress tool for generate a 100% load:
+
+ sudo stress --cpu 1 --timeout 120                
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>Just tried `sudo stress --cpu 1 --timeout 20` and it works like a charm: 20 secs with `turbo boost: on` than it switched to `turbo boost: off`
+I have CPU: ` AMD Ryzen 5 3500U with Radeon Vega Mobile Gfx`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>BTW, are you able to switch to turbo anyway?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rrodriguez81:</strong></p>
+                    <p>@Red-Eyed with my modified version works fine, with original version the turbo doesn't get activated unless I use two threads, for example:
+ sudo stress --cpu 2 --timeout 20</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>@AdnanHodzic it seems that this PR should use this `psutil.cpu_percent(percpu=True)`
+`psutil.cpu_percent(percpu=True)` will return list with cpu load per core</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>> @Red-Eyed with my modified version works fine, with original version the turbo doesn't get activated unless I use two threads, for example:
+> sudo stress --cpu 2 --timeout 20
+
+Yeah, it seems that I got what u are trying to say...</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>@AdnanHodzic 
+I think that this code example should work correct:
+```python
+if psutil.cpu_percent(percpu=False) >= 25.0 or isclose(max(psutil.cpu_percent(percpu=True)), 100):
+    turbo(True)
+```
+My apologise, @rrodriguez81 this is your PR. Try the above code snippet 
+before using `isclose`
+you need to add
+`from math import isclose`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I can also confirm it works as expected on Intel. I.e `sudo stress --cpu 1 --timeout 15` works like a charm on i7-8565U.
+
+> @AdnanHodzic
+> I think that this code example should work correct:
+> 
+> ```python
+> if psutil.cpu_percent(percpu=False) >= 25.0 or isclose(max(psutil.cpu_percent(percpu=True)), 100):
+>     turbo(True)
+> ```
+
+Are you saying to replace (current) i.e:
+
+```
+cpuload > 100 / CPUS
+```
+with:
+
+```
+psutil.cpu_percent(percpu=False) >= 25.0
+```
+
+and same result will be achieved?
+
+
+
+
+
+
+
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>@AdnanHodzic actually, could you please remind me at what conditions turbo should be enabled?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rrodriguez81:</strong></p>
+                    <p>@AdnanHodzic , this is just for launch turbo faster when the power supply is connected.
+
+@Red-Eyed don't worry, all constructive ideas are welcomed :) .</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rrodriguez81:</strong></p>
+                    <p>@Red-Eyed I think that there is a problem with you piece of code, it returns this error:
+`Traceback (most recent call last):
+  File "/usr/bin/auto-cpufreq", line 115, in <module>
+    main()
+  File "/usr/lib/python3.8/site-packages/click/core.py", line 829, in __call__
+    return self.main(*args, **kwargs)
+  File "/usr/lib/python3.8/site-packages/click/core.py", line 782, in main
+    rv = self.invoke(ctx)
+  File "/usr/lib/python3.8/site-packages/click/core.py", line 1066, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/usr/lib/python3.8/site-packages/click/core.py", line 610, in invoke
+    return callback(*args, **kwargs)
+  File "/usr/bin/auto-cpufreq", line 51, in main
+    set_autofreq()
+  File "/usr/lib/python3.8/site-packages/source/core.py", line 411, in set_autofreq
+    set_powersave()
+  File "/usr/lib/python3.8/site-packages/source/core.py", line 308, in set_powersave
+    elif psutil.cpu_percent(percpu=False) >= 25.0 or isclose(max(psutil.cpu_percent(percpu=True), 100)):
+TypeError: '>' not supported between instances of 'int' and 'list'
+`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>Yep, just a typo
+```python
+if psutil.cpu_percent(percpu=False) >= 25.0 or isclose(max(psutil.cpu_percent(percpu=True)), 100):
+    turbo(True)
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> @AdnanHodzic actually, could you please remind me at what conditions turbo should be enabled?
+
+Before this PR (and I think those values were good and we should keep them):
+
+power-save/battery:
+
+```
+load1m > CPUS / 7
+cpuload > 25
+```
+
+performance:
+
+```
+load1m >= CPUS / 5
+cpuload > 20
+```
+
+And I quite like what @rrodriguez81 did, as it's very simple yet powerful solution. But I'm also interested in outcome of:
+
+```
+if psutil.cpu_percent(percpu=False) >= 25.0 or isclose(max(psutil.cpu_percent(percpu=True)), 100):
+    turbo(True)
+```
+
+I'm thinking that maybe we should make turbo more "trigger happy" when in performance mode, i.e:
+
+```
+load1m >= CPUS / 4
+cpuload > 15
+```
+
+Although this might be too aggressive. 
+
+> @AdnanHodzic , this is just for launch turbo faster when the power supply is connected.
+
+No worries, I deleted my commented in meantime since I figured what you did :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rrodriguez81:</strong></p>
+                    <p>@Red-Eyed your solution works aswell, not sure why but it takes a few seconds to launch turbo.
+
+![capture](https://user-images.githubusercontent.com/70445358/91757300-60520600-ebce-11ea-9c89-c18702627c6d.png)
+![capture2](https://user-images.githubusercontent.com/70445358/91757304-621bc980-ebce-11ea-8b04-4d3edcd7fe30.png)
+
+@AdnanHodzic regarding your idea about performance mode, if you set a static value, could be difficult to trigger turbo with CPUs with more than 8 threads.
+
+For example: For 8 threads CPUS: 100 / 8 = the turbo is triggered with 12.5 CPU load, but if there is a Ryzen 4800H, with 8 cores and 16 threads, 100 / 16 , 100%  CPU usage of one thread is 6,25% total of total CPU load.
+
+Not sure if I'm explaining correctly (English is not my native language)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>> @Red-Eyed your solution works aswell, not sure why but it takes a few seconds to launch turbo.
+> 
+> ![capture](https://user-images.githubusercontent.com/70445358/91757300-60520600-ebce-11ea-9c89-c18702627c6d.png)
+> ![capture2](https://user-images.githubusercontent.com/70445358/91757304-621bc980-ebce-11ea-8b04-4d3edcd7fe30.png)
+> 
+> @AdnanHodzic regarding your idea about performance mode, if you set a static value, could be difficult to trigger turbo with CPUs with more than 8 threads.
+> 
+> For example: For 8 threads CPUS: 100 / 8 = the turbo is triggered with 12.5 CPU load, but if there is a Ryzen 4800H, with 8 cores and 16 threads, 100 / 16 , 100% CPU usage of one thread is 6,25% total of total CPU load.
+> 
+> Not sure if I'm explaining correctly (English is not my native language)
+
+That's why I proposed that code snippet that is not hardcoded to num of threads</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> > @Red-Eyed your solution works aswell, not sure why but it takes a few seconds to launch turbo.
+> > ![capture](https://user-images.githubusercontent.com/70445358/91757300-60520600-ebce-11ea-9c89-c18702627c6d.png)
+> > ![capture2](https://user-images.githubusercontent.com/70445358/91757304-621bc980-ebce-11ea-8b04-4d3edcd7fe30.png)
+> > @AdnanHodzic regarding your idea about performance mode, if you set a static value, could be difficult to trigger turbo with CPUs with more than 8 threads.
+> > For example: For 8 threads CPUS: 100 / 8 = the turbo is triggered with 12.5 CPU load, but if there is a Ryzen 4800H, with 8 cores and 16 threads, 100 / 16 , 100% CPU usage of one thread is 6,25% total of total CPU load.
+> > Not sure if I'm explaining correctly (English is not my native language)
+> 
+> That's why I proposed that code snippet that is not hardcoded to num of threads
+
+Agreed, having it hard coded is terrible. If it's fine with you @rrodriguez81 let's go with @Red-Eyed eye proposal as it's very clear what's happening. But since this your PR I'd like you to commit these changes, let's just figure out this first:
+
+> @Red-Eyed your solution works aswell, not sure why but it takes a few seconds to launch turbo.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rrodriguez81:</strong></p>
+                    <p>@AdnanHodzic @Red-Eyed not sure why, but with 100 / CPUS the turbo get triggered faster than with @Red-Eyed ' s provided solution.
+
+With my solution the turbo is triggered instantly, and with @Red-Eyed sometimes takes a few seconds (3 or 4 seconds not too much). Maybe because the isclose()  is an approximation or only needs an higher value.
+
+But I'm agree using @Red-Eyed if is more clear for the code.
+ </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>> @AdnanHodzic @Red-Eyed not sure why, but with 100 / CPUS the turbo get triggered faster than with @Red-Eyed ' s provided solution.
+> 
+> With my solution the turbo is triggered instantly, and with @Red-Eyed sometimes takes a few seconds (3 or 4 seconds not too much). Maybe because the isclose() is an approximation or only needs an higher value.
+> 
+> But I'm agree using @Red-Eyed if is more clear for the code.
+
+Maybe `psutil` takes such a delay
+regarding `isclose` it's just approximation as you [cannot strongly compare floats](https://floating-point-gui.de/errors/comparison/)
+instead of `isclose`, u can try
+```python
+if psutil.cpu_percent(percpu=False) >= 25.0 or max(psutil.cpu_percent(percpu=True)) > 99:
+    turbo(True)
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rrodriguez81:</strong></p>
+                    <p>@Red-Eyed the same problem, it trigger turbo slower than the 100 / CPUS solution. It takes to me a few seconds aswell.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>> @Red-Eyed the same problem, it trigger turbo slower than the 100 / CPUS solution. It takes to me a few seconds aswell.
+
+imho, i don't think that a few seconds is a problem..</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>measured the time, and it's okay
+![image](https://user-images.githubusercontent.com/11485451/91761456-99de3d80-ebdd-11ea-8a72-882c26263b9d.png)
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>so it seems that `psutil` takes some average that requires some time </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rrodriguez81:</strong></p>
+                    <p>A few seconds modifying a core speed to 2.3Ghz o 3.7Ghz for example, could be the duration of the process that get the 100% of a CPU thread. The more dynamic the turbo is launched, the more agile is the notebook.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> it seems fine.
+
+Also seems fine on Intel. 
+
+> so it seems that `psutil` takes some average that requires some time
+
+This is also fine as I also want to switch so snap using latest Python and Ubuntu 20.04 as base in near future which might also fix things + one of the future psutil lib updates might also address this.
+
+Either way, thank you both and especially to @rrodriguez81 for your first contribution :partying_face: </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

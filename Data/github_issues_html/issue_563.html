@@ -1,0 +1,303 @@
+
+        <html>
+        <head>
+            <title>Issue #563: Spamming of 'line 105: echo: write error: Device or resource busy' in journal</title>
+        </head>
+        <body>
+            <h1>Spamming of 'line 105: echo: write error: Device or resource busy' in journal</h1>
+            <p><strong>Issue #563</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? **Yes**
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)? **No**
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)? **Yes**
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)? **Yes**
+
+### Error output:
+```text
+line 105: echo: write error: Device or resource busy
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux  
+Linux kernel: 6.5.5-arch1-1
+Processor: AMD Ryzen 5 PRO 7530U with Radeon Graphics
+Cores: 12
+Architecture: x86_64
+Driver: amd-pstate-epp
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4546 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      0.0%        59 °C       400 MHz
+CPU1      2.9%        59 °C      2665 MHz
+CPU2      4.0%        59 °C      2298 MHz
+CPU3      0.0%        59 °C       400 MHz
+CPU4      2.0%        59 °C       400 MHz
+CPU5      0.0%        59 °C      2507 MHz
+CPU6      1.0%        59 °C      2327 MHz
+CPU7      0.0%        59 °C      1916 MHz
+CPU8      0.0%        59 °C       400 MHz
+CPU9      1.0%        59 °C      2762 MHz
+CPU10      1.0%        59 °C      3576 MHz
+CPU11      1.0%        59 °C      2096 MHz
+
+CPU fan speed: 0 RPM
+
+auto-cpufreq version: 1.9.9 (git: fdb20f5e)
+
+Python: 3.11.5
+psutil package: 5.9.5
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.8.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.24 %
+
+Total CPU usage: 0.7 %
+Total system load: 0.72
+Average temp. of all cores: 59.00 °C 
+
+Currently using: performance governor
+Warning: CPU turbo is not available
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+---
+
+I have tried both the normal and -git packages on the AUR. I have also tried using the installer however both lead to the same issue. In output `journalctl -xb` there are a ton of errors with this same comment.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Terrahop:</strong></p>
+                    <p>I'm getting the same thing on my end as well.
+
+```
+➜ sudo systemctl status auto-cpufreq.service
+● auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux
+     Loaded: loaded (/etc/systemd/system/auto-cpufreq.service; enabled; preset: disabled)
+     Active: active (running) since Fri 2023-09-29 12:10:21 XXXX; 6min ago
+   Main PID: 47353 (python)
+      Tasks: 1 (limit: 18444)
+     Memory: 24.9M
+        CPU: 7.611s
+     CGroup: /system.slice/auto-cpufreq.service
+             └─47353 /opt/auto-cpufreq/venv/bin/python /opt/auto-cpufreq/venv/bin/auto-cpufreq --daemon
+
+Sep 29 12:17:14 XXX python[217983]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+Sep 29 12:17:14 XXX python[217983]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+Sep 29 12:17:14 XXX python[217983]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+Sep 29 12:17:14 XXX python[217983]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+Sep 29 12:17:14 XXX python[217983]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+Sep 29 12:17:14 XXX python[217983]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+Sep 29 12:17:14 XXX python[217983]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+Sep 29 12:17:14 XXX python[217983]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+Sep 29 12:17:14 XXX python[217983]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+Sep 29 12:17:14 XXX python[217983]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+```
+
+Interestingly the reason I discovered this is I was trying to debug why this tool wasn't able to set the cpu turboboost option anymore even though it seemed to have worked fine in the past? I noticed @Fxzzi has the same line in their output as I do
+`Warning: CPU turbo is not available`
+
+I've never seen this error show up until a recently, and it worked in the past, might have been an update?
+
+Both mine and @Fxzzi amd cpu's do support turboboost/core, could it be related to this at all?
+
+my output from `auto-cpufreq --debug`:
+
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux rolling n/a
+Linux kernel: 6.5.5-arch1-1
+Processor: AMD Ryzen 9 5900HS with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: amd-pstate-epp
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4650 MHz
+CPU min frequency: 1650 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0     11.7%        70 °C      3995 MHz
+CPU1      0.0%        70 °C       400 MHz
+CPU2      8.9%        70 °C      4245 MHz
+CPU3      1.0%        70 °C       400 MHz
+CPU4     13.3%        70 °C      3573 MHz
+CPU5      7.1%        70 °C      3877 MHz
+CPU6     19.4%        70 °C      4030 MHz
+CPU7      3.0%        70 °C       400 MHz
+CPU8     12.9%        70 °C      3555 MHz
+CPU9      7.0%        70 °C       400 MHz
+CPU10      0.0%        70 °C      3572 MHz
+CPU11     11.9%        70 °C      3993 MHz
+CPU12      5.0%        70 °C      3929 MHz
+CPU13      5.1%        70 °C      3928 MHz
+CPU14     10.4%        70 °C      4468 MHz
+CPU15      7.1%        70 °C      4415 MHz
+
+CPU fan speed: 2200 RPM
+
+auto-cpufreq version: 1.9.9 (git: fdb20f5e)
+
+Python: 3.11.5
+psutil package: 5.9.5
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.8.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.22 %
+
+Total CPU usage: 7.6 %
+Total system load: 0.90
+Average temp. of all cores: 70.00 °C
+
+Currently using: performance governor
+Warning: CPU turbo is not available
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>I have an AMD cpu as well. I will look into this</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Vyacheslav-S:</strong></p>
+                    <p>I have a similar problem:
+
+
+```
+/usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+/usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+```
+sudo auto-cpufreq --debug:
+
+```
+Linux distro: Arch Linux rolling n/a
+Linux kernel: 6.5.5-zen1-1-zen
+Processor: AMD Ryzen 5 5600H with Radeon Graphics
+Cores: 12
+Architecture: x86_64
+Driver: amd-pstate-epp
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4280 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      2.0%        41 °C      4242 MHz
+CPU1      0.0%        41 °C       400 MHz
+CPU2      1.0%        41 °C       400 MHz
+CPU3      0.0%        41 °C       400 MHz
+CPU4      2.0%        41 °C       400 MHz
+CPU5      1.0%        41 °C      3929 MHz
+CPU6      1.0%        41 °C       400 MHz
+CPU7      1.0%        41 °C      3358 MHz
+CPU8      0.0%        41 °C      3473 MHz
+CPU9      2.0%        41 °C       400 MHz
+CPU10      1.0%        41 °C      3389 MHz
+CPU11      0.0%        41 °C      3284 MHz
+
+auto-cpufreq version: 
+
+Python: 3.11.5
+psutil package: 5.9.5
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.8.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.21 %
+
+Total CPU usage: 1.4 %
+Total system load: 0.46
+Average temp. of all cores: 41.00 °C 
+
+Currently using: performance governor
+Warning: CPU turbo is not available
+Currently turbo boost is: off
+`
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>I've noticed all of us are using the `amd-pstate-epp` driver. Seems like it is linked to that. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>so I would recommend you guys switch over to using `acpi-cpufreq` driver as that is most compatible with auto-cpufreq. Information on this can be found in the [Troubleshooting](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting) section of the README.
+both `amd-pstate` and `amd-pstate-epp` provide their own sort of scaling and also disables turbo for some reason? not really sure why. 
+
+If you still feel that `amd-pstate` works better then continue to use that, but just know that is why journal is being spammed and seems to be the reason turbo is "disabled".  you can still use `auto-cpufreq` for switching governors. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>A more in depth look on the `amd-pstate` driver can be found [here](https://docs.kernel.org/admin-guide/pm/amd-pstate.html) on the kernel website for those interested</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>hingen:</strong></p>
+                    <p>I am aware that the recommendation is to switch to the "acpi-cpufreq" driver. However, the "amd-pstate-epp" driver seems to make my desktop slightly more responsive when running on battery with little impact on the battery life.
+
+Wondering if it would be possible to ignore the "line 105: echo: write error: Device or resource busy" error message? I can make a PR which does that, however, I'm unsure if it would have any adverse consequences.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Wondering if it would be possible to ignore the "line 105: echo: write error: Device or resource busy" error message? I can make a PR which does that, however, I'm unsure if it would have any adverse consequences.
+
+Always feel free to create a PR (especially for something that could be an improvement), and then things can be further tested during its review process. 
+
+Hence, give it a try and if PR is merged and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+Update: sorry I just see now you already did this as part of #627</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

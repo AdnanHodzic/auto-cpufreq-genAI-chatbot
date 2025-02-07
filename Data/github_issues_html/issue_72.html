@@ -1,0 +1,153 @@
+
+        <html>
+        <head>
+            <title>Issue #72: Fails when core temperatures are not found</title>
+        </head>
+        <body>
+            <h1>Fails when core temperatures are not found</h1>
+            <p><strong>Issue #72</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>My APU does not report temps for each core so it fails.
+
+Output of:
+```
+import psutil
+
+print(psutil.sensors_temperatures())
+```
+
+```
+{'nvme': [shwtemp(label='Composite', current=37.85, high=84.85, critical=84.85), shwtemp(label='Sensor 1', current=37.85, high=65261.85, critical=65261.85), shwtemp(label='Sensor 2', current=37.85, high=65261.85, critical=65261.85)], 'k10temp': [shwtemp(label='Tctl', current=62.375, high=None, critical=None), shwtemp(label='Tdie', current=62.375, high=None, critical=None)], 'amdgpu': [shwtemp(label='edge', current=62.0, high=80.0, critical=80.0)]}
+```
+
+### Error output:
+```
+❯ sudo auto-cpufreq --monitor
+
+----------------------------- System information ------------------------------
+
+Linux distro: Manjaro Linux 20.0.3 Lysia
+Linux kernel: 5.8.0-1-MANJARO
+Driver: acpi-cpufreq
+Architecture: x86_64
+Processor: AMD Ryzen 5 2500U with Radeon Vega Mobile Gfx
+Cores: 8
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 2000MHz
+CPU min frequency: 1600MHz
+CPU frequency for each core:
+
+CPU0: 2112 MHz
+CPU1: 2154 MHz
+CPU2: 2179 MHz
+CPU3: 1861 MHz
+CPU4: 1668 MHz
+CPU5: 1556 MHz
+CPU6: 2032 MHz
+CPU7: 1867 MHz
+
+Temperature for each physical core:
+
+Traceback (most recent call last):
+  File "/usr/sbin/auto-cpufreq", line 116, in <module>
+    main()
+  File "/usr/lib/python3.8/site-packages/click/core.py", line 829, in __call__
+    return self.main(*args, **kwargs)
+  File "/usr/lib/python3.8/site-packages/click/core.py", line 782, in main
+    rv = self.invoke(ctx)
+  File "/usr/lib/python3.8/site-packages/click/core.py", line 1066, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/usr/lib/python3.8/site-packages/click/core.py", line 610, in invoke
+    return callback(*args, **kwargs)
+  File "/usr/sbin/auto-cpufreq", line 67, in main
+    sysinfo()
+  File "/usr/lib/python3.8/site-packages/source/core.py", line 483, in sysinfo
+    temp = core_temp['acpitz'][0].current
+KeyError: 'acpitz'
+```
+---
+
+### System information:
+```
+-------------------------------------------------------------------------------
+
+System:
+  Kernel: 5.8.0-1-MANJARO x86_64 bits: 64 Desktop: GNOME 3.36.4 Distro: Manjaro Linux 
+Machine:
+  Type: Laptop System: Dell product: Inspiron 5575 v: 1.3.3 serial: <filter> 
+  Mobo: Dell model: 0M0Y6P v: X01 serial: <filter> UEFI: Dell v: 1.3.3 
+  date: 10/31/2019 
+Battery:
+  ID-1: BAT1 charge: 31.7 Wh condition: 31.7/42.0 Wh (76%) 
+CPU:   Governors: performance schedutil
+  type: MT MCP L2 cache: 2048 KiB 
+  Speed: 2781 MHz min/max: 1600/2000 MHz Core speeds (MHz): 1: 1776 2: 1814 3: 1513 
+  4: 1466 5: 1528 6: 1495 7: 2365 8: 1969 
+Graphics:
+  Device-1: AMD Raven Ridge [Radeon Vega Series / Radeon Vega Mobile Series] 
+  driver: amdgpu v: kernel 
+  Device-2: Realtek Integrated Webcam type: USB driver: uvcvideo 
+  Display: x11 server: X.Org 1.20.8 driver: amdgpu unloaded: modesetting 
+  resolution: 1920x1080~60Hz 
+  OpenGL: renderer: AMD RAVEN (DRM 3.38.0 5.8.0-1-MANJARO LLVM 10.0.1) 
+  v: 4.6 Mesa 20.1.4 
+Audio:
+  Device-1: AMD Raven/Raven2/Fenghuang HDMI/DP Audio driver: snd_hda_intel 
+  Device-2: AMD Family 17h HD Audio driver: snd_hda_intel 
+  Sound Server: ALSA v: k5.8.0-1-MANJARO 
+Network:
+  Device-1: Realtek RTL810xE PCI Express Fast Ethernet driver: r8169 
+  IF: eth0 state: down mac: <filter> 
+  Device-2: Qualcomm Atheros QCA9377 802.11ac Wireless Network Adapter 
+  driver: ath10k_pci 
+  IF: wlan0 state: up mac: <filter> 
+  Device-3: Qualcomm Atheros type: USB driver: btusb 
+Drives:
+  Local Storage: total: 1.14 TiB used: 803.28 GiB (69.0%) 
+  ID-1: /dev/nvme0n1 vendor: Samsung model: SSD 970 EVO Plus 250GB size: 232.89 GiB 
+  ID-2: /dev/sda vendor: Western Digital model: WD10SPZX-75Z10T2 size: 931.51 GiB 
+Partition:
+  ID-1: / size: 227.94 GiB used: 184.70 GiB (81.0%) fs: ext4 dev: /dev/nvme0n1p2 
+Swap:
+  ID-1: swap-1 type: file size: 20.00 GiB used: 83.2 MiB (0.4%) file: /swapfile 
+Sensors:
+  System Temperatures: cpu: 67.2 C mobo: N/A gpu: amdgpu temp: 67 C 
+  Fan Speeds (RPM): cpu: 6200 fan-1: 
+Info:
+  Processes: 399 Uptime: 8h 21m Memory: 15.35 GiB used: 8.14 GiB (53.0%) Shell: Zsh 
+  inxi: 3.1.05 
+
+-------------------------------------------------------------------------------
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@Red-Eyed any idea about this?
+
+After this problem is fixed, I'm going make a new release.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>@AdnanHodzic yeah, I have some one. Working on it
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>@AdnanHodzic since  `psutil.sensors_temperature()` doesn't contain `acpitz` it fails.
+Fixed it in #73 and made it more stable since it seems that sensors set are very different across machines.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

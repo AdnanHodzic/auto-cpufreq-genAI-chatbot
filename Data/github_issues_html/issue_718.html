@@ -1,0 +1,48 @@
+
+        <html>
+        <head>
+            <title>Issue #718: nix: add overlay; use best practices</title>
+        </head>
+        <body>
+            <h1>nix: add overlay; use best practices</h1>
+            <p><strong>Issue #718</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hey 👋 , been a while since I last checked up on this project.
+
+Changes made:
+
+- Remove deprecated [`lib.mdDoc`](https://github.com/NixOS/nixpkgs/blob/316b65cb7d266e3126314f566bd660decf6268af/lib/options.nix#L407)
+- Add package overlay
+- removed all instances of `with lib;` they are advised against, see https://github.com/NixOS/nixpkgs/issues/208242.
+- `--replace` -> `--replace-fail`, using `--replace` will warn you that its being removed and the safe choice is `--replace-fail` since if something ever changes the build will fail.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>isabelroses:</strong></p>
+                    <p>Due to the ci failing I updated the flake, seems you were running a pretty outdated nixpkgs input.
+> Updated input 'nixpkgs':
+    'github:NixOS/nixpkgs/068bacb9b6fbee6a603d1b1f68d7cf032c4feed1' (2023-11-24)
+  → 'github:NixOS/nixpkgs/6132b0f6e344ce2fe34fc051b72fb46e34f668e0' (2024-05-30)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Awesome, I wasn't aware of most of that stuff so I appreciate this,
+
+> Due to the ci failing I updated the flake, seems you were running a pretty outdated nixpkgs input.
+
+Yeah I mean I expect most people to just use `nixpkgs.follows` so we don't really ever update our input unless there's a CI failure or we need a pin or whatever</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>cig0:</strong></p>
+                    <p>Btw thanks a ton to you both for maintaining this flake! <3</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

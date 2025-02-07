@@ -1,0 +1,113 @@
+
+        <html>
+        <head>
+            <title>Issue #645: rebuilt battery scripts</title>
+        </head>
+        <body>
+            <h1>rebuilt battery scripts</h1>
+            <p><strong>Issue #645</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>for some reason python is having a hard time writing to a system file with root permissions so i had to change how the battery scripts write to system files.
+
+also updated the .conf example.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Code LGTM, but when I started testing it, I ran into few issues, i.e:
+
+when there's no config file present, `auto-cpufreq --live` returns following:
+
+```
+sudo auto-cpufreq --live
+
+Note: You can quit live mode by pressing "ctrl+c"
+
+----------------------------------- Warning -----------------------------------
+
+Detected running GNOME Power Profiles daemon service!
+This daemon might interfere with auto-cpufreq and has been disabled.
+
+This daemon is not automatically disabled in "monitor" mode and
+will be enabled after auto-cpufreq is removed.
+
+
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 23.10 Mantic Minotaur
+Linux kernel: 6.5.0-17-generic
+Processor: Intel(R) Core(TM) i7-8565U CPU @ 1.80GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4600 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      0.0%        46 °C      4559 MHz
+CPU1      0.0%        42 °C      4474 MHz
+CPU2      1.0%        43 °C       400 MHz
+CPU3      0.0%        45 °C      4450 MHz
+CPU4      0.0%        46 °C      4531 MHz
+CPU5      0.0%        42 °C       400 MHz
+CPU6      3.0%        43 °C      4430 MHz
+CPU7      0.0%        45 °C       400 MHz
+
+CPU fan speed: 0 RPM
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+/usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+/usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+/usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+/usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+/usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+/usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+/usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+/usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+Setting to use: "balance_performance" EPP
+
+Total CPU usage: 0.9 %
+Total system load: 0.49
+Average temp. of all cores: 44.00 °C 
+
+Load optimal (load average: 0.49, 0.62, 1.00)
+setting turbo boost: off
+
+-------------------------------------------------------------------------------
+
+		"auto-cpufreq" is about to refresh ..
+```
+but it works fine with config file present. 
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>I not getting any errors with --live even without a conf file 
+Also note --live doesn't have the battery function in it only --monitor and --daemon </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Also note --live doesn't have the battery function in it only --monitor and --daemon
+
+Let's make sure this is mentioned as part of #644 as there could be many questions about this.
+
+Other then, that thank you for your contribution! Will make sure this one is also mentioned as part of 2.2.0 release.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

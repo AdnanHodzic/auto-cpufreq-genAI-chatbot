@@ -1,0 +1,83 @@
+
+        <html>
+        <head>
+            <title>Pull Request #67: Refactroring and amd support</title>
+        </head>
+        <body>
+            <h1>Refactroring and amd support</h1>
+            <p><strong>Pull Request #67</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>fixes #17
+
+- Added get_avail_powersave() (and performance).
+  This function returns the most energy(and performance) efficient governor.
+  This should fix AMD issue when powersave is not available
+  but "ondemand" or "schedutil" are present
+
+- Cleaned up and refactored.
+  Added more convenient util functions.
+  Also made it more pythonic, reduced subprocess calls, made it more modular
+
+- Added support for setting turbo boost for AMD and Intel (intel_pstate and cpufreq driver)
+
+- Tested on Intel and AMD machines and it works fine
+    - It at least doesn't  fail
+    - performance/powersave is switching correct
+    - turbo is switching correct on high CPU load.
+
+- It needs more testing</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>On first look changes look good but I want to give it a more throughout review.
+
+While everything works great with `auto-cpufreq-installer` and `auto-cpufreq` works as expected on Intel. When I create a snap out of these changes I run into following error:
+
+```
+Traceback (most recent call last):
+  File "/snap/auto-cpufreq/x1/bin/auto-cpufreq", line 111, in <module>
+    main()
+  File "/snap/auto-cpufreq/x1/lib/python3.6/site-packages/click/core.py", line 829, in __call__
+    return self.main(*args, **kwargs)
+  File "/snap/auto-cpufreq/x1/lib/python3.6/site-packages/click/core.py", line 782, in main
+    rv = self.invoke(ctx)
+  File "/snap/auto-cpufreq/x1/lib/python3.6/site-packages/click/core.py", line 1066, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/snap/auto-cpufreq/x1/lib/python3.6/site-packages/click/core.py", line 610, in invoke
+    return callback(*args, **kwargs)
+  File "/snap/auto-cpufreq/x1/bin/auto-cpufreq", line 76, in main
+    sysinfo()
+  File "/snap/auto-cpufreq/x1/lib/python3.6/site-packages/source/core.py", line 395, in sysinfo
+    searchfile = open("/var/lib/snapd/hostfs/etc/os-release", "r")
+PermissionError: [Errno 13] Permission denied: '/var/lib/snapd/hostfs/etc/os-release'
+```
+
+Hence, I'm trying to figure out what this is about exactly before I merge this with master.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>Yeah, this is exact problem happens on POP OS
+Didn't u have such a problem on a master?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>Yeah, want to get it merged, than want to start implementing config file</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Let's get this merged, this stuff is to good not to be part of master :) 
+
+In meantime I'll deal with snap build problem, seems like something changed in snapd which I wasn't aware of.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

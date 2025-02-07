@@ -1,0 +1,27 @@
+
+        <html>
+        <head>
+            <title>Pull Request #294: Correcting charge status in multi-battery setup</title>
+        </head>
+        <body>
+            <h1>Correcting charge status in multi-battery setup</h1>
+            <p><strong>Pull Request #294</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Currently on a Thinkpad T480 which utilizes a multiple battery setup.
+While not on AC power, auto-cpufreq would incorrectly report that the battery state is charging and set the CPU governor to "performance".
+
+Simple fix below should make sure if any battery is currently in discharging state, the AC state is correctly flagged as discharging.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Good stuff, thank you for your contribution! </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

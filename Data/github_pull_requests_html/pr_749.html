@@ -1,0 +1,98 @@
+
+        <html>
+        <head>
+            <title>Pull Request #749: Add some features for config</title>
+        </head>
+        <body>
+            <h1>Add some features for config</h1>
+            <p><strong>Pull Request #749</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>- Add detection of `$HOME/.config/auto-cpufreq.conf` file
+- Add `--config-reload` option, the user chooses to enable or not the auto-reload when the configuration has been modified
+- Auto install and remove `/etc/auto-cpufreq.conf` file
+- Clean code
+  - Add `has_option` and `get_option` functions
+  - Remove `get_config` function because it's more cumbersome to call it</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Add detection of $HOME/.config/auto-cpufreq.conf file
+
+This is interesting to have, since there's an issue where user wants to use it from this location. Will most likely not work on Snap package installation, but regardless it could be feature that could only be used on non Snap installs.
+
+I find `--reload` flag confusing, would rename it to `--config-reload` 
+
+Also it's description should be updated from `Reload when the configuration has been modified` to something more descriptive, i.e: `Reload auto-cpufreq daemon to pick up changes made in auto-cpufreq config file` or something like that if that's what it's supposed to do?
+
+Looking at changes, I also don't get how is this any different from approach @shadeyg56 did when he first implemented these changes? I made a comment on Discord, where I could only apply certain changes to [auto-cpufreq.conf file by restarting auto-cpufreq daemon with systemd.](https://discord.com/channels/1158239366251020361/1158239367337349164/1262381875952091136)
+
+Also, currently this is what I get when I try to use reload flag, it appears nothing happens and terminal never clears out until I ctrl+c:
+```
+sudo auto-cpufreq --reload
+Info: Using settings defined in /etc/auto-cpufreq.conf file
+```
+
+> Auto install and remove /etc/auto-cpufreq.conf file
+
+How is this supposed to work, as I don't see it in code nor I see it explained anywhere?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Angel-Karasu:</strong></p>
+                    <p>- `--reload` flag
+  - Add an error message when used alone
+  - Improves the description
+  - Renames to `--config-reload`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Angel-Karasu:</strong></p>
+                    <p>Auto install auto-cpufreq.conf with `cp "$(basename $CONFIG_FILE)-example" $CONFIG_FILE`
+Auto remove auto-cpufreq.conf with `remove_file $CONFIG_FILE`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Don't really agree with most of the changes here. I don't really see the need for a --config-reload flag, and if there was one, I think it should be the default and not have to be enabled explicitly (especially for every command that uses config)
+
+As usual, you seem to remove stuff for seemingly no reason. For example, you removed an entire doc-string in the config class file. This sort of stuff is there for a reason. I'm not trying to be rude, just want to understand your reasoning behind this sort of stuff. Less lines != better code.
+
+> Remove get_config function because it's more cumbersome to call it
+
+Perhaps this is true. In retrospect, the config class probably should've been more like a ConfigManager class that was responsible for managing a single instance of some Config rather than having a Config class that is intended to be used as a singleton that maintains its own state. I did wrestle with the design of this for some time and still never decided on something I really liked
+
+> Add detection of $HOME/.config/auto-cpufreq.conf file
+
+The reason this wasn't done in the first place is because most `auto_cpufreq` commands require elevation (i.e sudo), so they won't have the $HOME var available to them, hence why we use $USER or $SUDO_USER to get the home directory</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Angel-Karasu:</strong></p>
+                    <p>I think `--config-reload` is useful because a lot of people change their config file once, it shouldn't be the default action because disabling it can increase security, reduce resource usage because there's no need to check the folder and as I said, in the majority of cases people don't touch the config file.
+
+I removed the docstring because I found `find_config_file` very clear about what it does and I added a few comments to clarify the check order.
+
+I didn't think of transforming the Config class into a ConfigManager child class, I think it's a great idea.
+
+I said `$HOME` to be more concise but I didn't change the file detection method, it continues to use `getent passwd ${SUDO_USER:-$USER} | cut -d: -f6`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@Angel-Karasu as it was mentioned in another of your PR's, please create smaller PR's which are easier to review and test. I'm still [facing issues](https://discord.com/channels/1158239366251020361/1158239367337349164/1276809779003789342) from refactor introduced in #695 because there were so many changes which were hard to test individually. 
+
+Since @shadeyg56 a person who introduced original "config reload" functionality doesn't understand the logic behind these changes (and neither do, my questions above has still not be answered).
+
+As I mentioned in "[looking for maintainers and contributors](https://github.com/AdnanHodzic/auto-cpufreq/discussions/312#discussioncomment-9557496)" there's bunch of things that could be picked up to make auto-cpufreq better.
+
+However, I don't see how these changes will make it better so I'm simply closing this PR.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

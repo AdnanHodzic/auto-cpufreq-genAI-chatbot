@@ -1,0 +1,127 @@
+
+        <html>
+        <head>
+            <title>Issue #362: Python runtime errors </title>
+        </head>
+        <body>
+            <h1>Python runtime errors </h1>
+            <p><strong>Issue #362</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I installed the AUR version as suggested in the readme and it gave me this error 
+
+### Error output:
+```text
+(base) [smoke@ArchViper ~]$ auto-cpufreq
+Traceback (most recent call last):
+  File "/home/smoke/Apps/miniconda3/bin/auto-cpufreq", line 10, in <module>
+    import click
+ModuleNotFoundError: No module named 'click'
+```
+i manually installed click now it runs fine but I also received another error
+
+```
+(base) [smoke@ArchViper ~]$ sudo auto-cpufreq --install
+
+--------------------- Deploying auto-cpufreq as a daemon ----------------------
+
+* Turn off bluetooth on boot
+
+* Deploy auto-cpufreq install script
+Traceback (most recent call last):
+  File "/home/smoke/Apps/miniconda3/bin/auto-cpufreq", line 214, in <module>
+    main()
+  File "/home/smoke/Apps/miniconda3/lib/python3.9/site-packages/click/core.py", line 1128, in __call__
+    return self.main(*args, **kwargs)
+  File "/home/smoke/Apps/miniconda3/lib/python3.9/site-packages/click/core.py", line 1053, in main
+    rv = self.invoke(ctx)
+  File "/home/smoke/Apps/miniconda3/lib/python3.9/site-packages/click/core.py", line 1395, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/home/smoke/Apps/miniconda3/lib/python3.9/site-packages/click/core.py", line 754, in invoke
+    return __callback(*args, **kwargs)
+  File "/home/smoke/Apps/miniconda3/bin/auto-cpufreq", line 191, in main
+    deploy_daemon()
+  File "/home/smoke/Apps/miniconda3/lib/python3.9/site-packages/auto_cpufreq/core.py", line 358, in deploy_daemon
+    shutil.copy(SCRIPTS_DIR / "auto-cpufreq-install.sh", "/usr/bin/auto-cpufreq-install")
+  File "/home/smoke/Apps/miniconda3/lib/python3.9/shutil.py", line 426, in copy
+    copyfile(src, dst, follow_symlinks=follow_symlinks)
+  File "/home/smoke/Apps/miniconda3/lib/python3.9/shutil.py", line 265, in copyfile
+    with open(src, 'rb') as fsrc, open(dst, 'wb') as fdst:
+FileNotFoundError: [Errno 2] No such file or directory: '/usr/share/auto-cpufreq/scripts/auto-cpufreq-install.sh'
+```
+
+---
+
+### System information:
+
+```
+
+-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux
+Linux kernel: 5.15.15-1-lts
+Processor: AMD Ryzen 7 5700U with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1800 MHz
+CPU min frequency: 1400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  0.0%     50 °C     1400 MHz
+CPU1:	  1.0%     50 °C     1400 MHz
+CPU2:	  1.0%     50 °C     1604 MHz
+CPU3:	  0.0%     50 °C     1400 MHz
+CPU4:	  0.0%     50 °C     1400 MHz
+CPU5:	  1.0%     50 °C     1400 MHz
+CPU6:	  0.0%     50 °C     1400 MHz
+CPU7:	  1.0%     50 °C     1400 MHz
+CPU8:	  0.0%     50 °C     1400 MHz
+CPU9:	  0.0%     50 °C     1400 MHz
+CPU10:	  0.0%     50 °C     1400 MHz
+CPU11:	  1.0%     50 °C     1400 MHz
+CPU12:	  0.0%     50 °C     1400 MHz
+CPU13:	  0.0%     50 °C     1400 MHz
+CPU14:	  0.0%     50 °C     1400 MHz
+CPU15:	  0.0%     50 °C     1400 MHz
+
+auto-cpufreq version: Version         : 300.r8fb5469.-1
+
+Python: 3.9.7
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 8.0.3
+distro package: 1.6.0
+
+Computer type: Convertible
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.14 %
+
+Total CPU usage: 0.6 %
+Total system load: 0.45
+Average temp. of all cores: 50.375 °C
+
+Currently using: schedutil governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+```
+
+#### Without providing requested information your issue might be ignored!
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+            </div>
+        </body>
+        </html>
+        

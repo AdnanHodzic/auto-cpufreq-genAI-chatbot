@@ -1,0 +1,117 @@
+
+        <html>
+        <head>
+            <title>Issue #189: Pop OS Snap install error</title>
+        </head>
+        <body>
+            <h1>Pop OS Snap install error</h1>
+            <p><strong>Issue #189</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+Traceback (most recent call last):
+  File "/snap/auto-cpufreq/70/bin/auto-cpufreq", line 14, in <module>
+    from auto_cpufreq.core import *
+  File "/snap/auto-cpufreq/70/lib/python3.8/site-packages/auto_cpufreq/core.py", line 66, in <module>
+    dist_name = distro.id()
+  File "/snap/auto-cpufreq/70/lib/python3.8/site-packages/distro.py", line 204, in id
+    return _distro.id()
+  File "/snap/auto-cpufreq/70/lib/python3.8/site-packages/distro.py", line 694, in id
+    distro_id = self.os_release_attr('id')
+  File "/snap/auto-cpufreq/70/lib/python3.8/site-packages/distro.py", line 894, in os_release_attr
+    return self._os_release_info.get(attribute, '')
+  File "/snap/auto-cpufreq/70/lib/python3.8/site-packages/distro.py", line 556, in __get__
+    ret = obj.__dict__[self._fname] = self._f(obj)
+  File "/snap/auto-cpufreq/70/lib/python3.8/site-packages/distro.py", line 932, in _os_release_info
+    with open(self.os_release_file) as release_file:
+PermissionError: [Errno 13] Permission denied: '/etc/os-release'
+
+
+### System information:
+OS: Pop!_OS 20.10 x86_64 
+Host: 20UDCTO1WW ThinkPad T14 Gen 1 
+Kernel: 5.8.0-7642-generic 
+Uptime: 31 mins 
+Packages: 1804 (dpkg), 33 (flatpak), 12 (snap) 
+Shell: bash 5.0.17 
+Resolution: 1920x1080 
+DE: GNOME 3.38.3 
+WM: Mutter 
+Theme: Pop 
+Theme: Pop-dark [GTK2/3] 
+Icons: Pop [GTK2/3] 
+Terminal: gnome-terminal 
+CPU: AMD Ryzen 7 PRO 4750U with Radeon Graphics (16) @ 1.700GHz 
+GPU: AMD ATI 07:00.0 Renoir 
+Memory: 3201MiB / 15289MiB
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Casao:</strong></p>
+                    <p>Pop has a link for `/etc/os-release` to `/etc/pop-os/os-release` which breaks this. Removing the link and manually copying the file fixes this, but that's not gonna be a great solution. Would be wonderful to see a real fix.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Ronkn:</strong></p>
+                    <p>> Pop has a link for `/etc/os-release` to `/etc/pop-os/os-release` which breaks this. Removing the link and manually copying the file fixes this, but that's not gonna be a great solution. Would be wonderful to see a real fix.
+
+how do I make this change exactly, for this manual workaround?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Casao:</strong></p>
+                    <p>> > Pop has a link for `/etc/os-release` to `/etc/pop-os/os-release` which breaks this. Removing the link and manually copying the file fixes this, but that's not gonna be a great solution. Would be wonderful to see a real fix.
+> 
+> how do I make this change exactly, for this manual workaround?
+
+```sh
+sudo rm /etc/os-release
+sudo cp /etc/pop-os/os-release /etc/os-release
+```
+
+That'll do it, though there might be a better way with a hard link.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>whiskeyvans:</strong></p>
+                    <p>> > > Pop has a link for `/etc/os-release` to `/etc/pop-os/os-release` which breaks this. Removing the link and manually copying the file fixes this, but that's not gonna be a great solution. Would be wonderful to see a real fix.
+> > 
+> > 
+> > how do I make this change exactly, for this manual workaround?
+> 
+> ```shell
+> sudo rm /etc/os-release
+> sudo cp /etc/pop-os/os-release /etc/os-release
+> ```
+> 
+> That'll do it, though there might be a better way with a hard link.
+
+Can confirm that a hard link works, but agree that an automatic fix would be preferred.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>tunix:</strong></p>
+                    <p>The snap is strictly confined so it shouldn't be able to reach Pop!_OS's `/etc/os-release` file? The whole point of snap is actually that as well. I looked at core.py and the only line it tries to read is [L855](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto_cpufreq/core.py#L855) but I still can't understand whether that's possible or not.
+
+Edit 1: OK, [looks like](https://forum.snapcraft.io/t/show-actual-distro-info-instead-of-ubuntu-core-18/15381) this can be done by using system-observe plug.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>@AdnanHodzic I believe this issue is resolved. Pop OS is the odd one out. It's not auto-cpufreq's fault.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@utk-dev thanks for the heads up, in that case I'm closing the issue.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

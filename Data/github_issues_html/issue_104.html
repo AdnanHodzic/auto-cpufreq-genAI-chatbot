@@ -1,0 +1,88 @@
+
+        <html>
+        <head>
+            <title>Issue #104: No full performance when running benchmarks</title>
+        </head>
+        <body>
+            <h1>No full performance when running benchmarks</h1>
+            <p><strong>Issue #104</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I'm running Arch with the latest kernel. I tried to run som benchmarks with ryzedadj (set to low tdp) and I forgot that I had auto-cpufreq enabled when I run the benchs. But in my mind it should not matter since auto-cpufreq allows full performance when needed.
+Anyhow, here's geekbench with the only difference being auto-cpufreq:
+https://i.imgur.com/3AGytJr.jpg
+https://i.imgur.com/wCW0uBK.jpg
+
+Is it expected that auto-cpufreq limits the performance, or is this a bug?</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> It should not matter since auto-cpufreq allows full performance when needed.
+
+That's correct.
+
+But I don't understand what's the problem. Are you saying you're getting lower performance while auto-cpufreq is enabled? Which one of these are you getting with auto-cpufreq running? https://i.imgur.com/wCW0uBK.jpg or https://i.imgur.com/wCW0uBK.jpg</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rittet:</strong></p>
+                    <p>The image with lower single-core is auto-cpufreq enabled. 
+The problem is that this is not expected behavior, if auto-cpufreq allows for full performance (if needed). 
+
+The singe core,performance should be the same?
+
+I found this about by forgetting to disable auto-coufreq, and the finding made me curious if this is expected behavior.  </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Right, which version of auto-cpufreq are you using? 
+
+@crian are AUR package changes made automatically based on git changes, or you have to trigger then each time based on release?
+
+Because as part of 1.2.2 release some changes were made to address single core performance: #99 | @Red-Eyed @rrodriguez81 could this be related to that single core turbo trigger delay?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rrodriguez81:</strong></p>
+                    <p>@AdnanHodzic is posible that in a benchmark, the delay of 3-4s of triggering turbo can be very bad for benchmarks.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>crian:</strong></p>
+                    <p>The AUR package is always build from the latest git commit.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rrodriguez81:</strong></p>
+                    <p>@crian the versión os 1.2.1 or 1.2.2?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>crian:</strong></p>
+                    <p>> @crian the versión os 1.2.1 or 1.2.2?
+
+If you build it now the pkg will be based on commit 4c2670cae52bc7118450dc90f9c9f7a3e3568761</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rittet:</strong></p>
+                    <p>I built the pkg about 12h ago. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@Ritte88 this problem should be fixed in #105 
+
+Not sure how long it takes for AUR package build to be triggered.
+
+For the time being I'll also close this issue, please re-open it if you're still experiencing this problem once you're running on latest changes.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

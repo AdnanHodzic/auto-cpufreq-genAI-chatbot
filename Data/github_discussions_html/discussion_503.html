@@ -1,0 +1,144 @@
+
+        <html>
+        <head>
+            <title>Discussion #503: auto-cpufreq on Pop-os</title>
+        </head>
+        <body>
+            <h1>auto-cpufreq on Pop-os</h1>
+            <p><strong>Discussion #503</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Pop-OS have system76 scheduler and system76-power (if i not wrong) , if  i using auto-freq will there be a conflict ? and its good practice or bad practice to install auto-cpufreq on Pop-os ?</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I'm not sure since I don't use Pop-OS, but I guess the only way would be to give it a try and see if it does. As tools auto-cpufreq has problems/conflicts with i,e TLP or GNOME Power profiles, it'll remove in code and will inform you about it or will be mentioned as part of [README](https://github.com/AdnanHodzic/auto-cpufreq#why-do-i-need-auto-cpufreq).
+
+Hence, would like to know if this is the case with system76 scheduled/power.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Fauzanmhr:</strong></p>
+                    <p>thank you, i have try and it only conflict with gnome power profiles, and it seems work controling cpu freq (plugins-plugout power test)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>jothi-prasath:</strong></p>
+                    <p>uninstall the gnome power profile 
+then run
+
+```bash
+git clone https://github.com/AdnanHodzic/auto-cpufreq.git
+```
+```bash
+cd auto-cpufreq && sudo ./auto-cpufreq-installer
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Flashwalker:</strong></p>
+                    <p>All i have from this auto-cpufreq script on Pop_Os is:
+<details>
+<summary>Details</summary>
+
+```
+-------------------------------------------------------------------------------
+
+		"auto-cpufreq" is about to refresh ...
+		Executed on: February 20 (Tuesday) - 00:53:39
+
+-------------------------------------------------------------------------------
+
+Linux distro: Pop!_OS 22.04 jammy
+Linux kernel: 6.5.0-17-generic
+Processor: AMD Ryzen 9 7945HX with Radeon Graphics
+Cores: 32
+Architecture: x86_64
+Driver: amd-pstate-epp
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 5461 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      1.0%        46 °C       400 MHz
+CPU1      0.0%        46 °C       400 MHz
+CPU2      0.0%        46 °C       400 MHz
+CPU3      0.0%        46 °C       400 MHz
+CPU4      0.0%        46 °C       400 MHz
+CPU5      0.0%        46 °C       400 MHz
+CPU6      0.0%        46 °C      3152 MHz
+CPU7      0.0%        46 °C       400 MHz
+CPU8      0.0%        46 °C       400 MHz
+CPU9      0.0%        46 °C       400 MHz
+CPU10      0.0%        46 °C       400 MHz
+CPU11      0.0%        46 °C       400 MHz
+CPU12      0.0%        46 °C       400 MHz
+CPU13      0.0%        46 °C       400 MHz
+CPU14      0.0%        46 °C       400 MHz
+CPU15      0.0%        46 °C       400 MHz
+CPU16      1.0%        46 °C       400 MHz
+CPU17      0.0%        46 °C       400 MHz
+CPU18      1.0%        46 °C       400 MHz
+CPU19      0.0%        46 °C       400 MHz
+CPU20      0.0%        46 °C       400 MHz
+CPU21      0.0%        46 °C       400 MHz
+CPU22      0.0%        46 °C       400 MHz
+CPU23      2.0%        46 °C       400 MHz
+CPU24      0.0%        46 °C       400 MHz
+CPU25      2.0%        46 °C      3428 MHz
+CPU26      1.0%        46 °C      3436 MHz
+CPU27      0.0%        46 °C       400 MHz
+CPU28      2.0%        46 °C       400 MHz
+CPU29      1.0%        46 °C       400 MHz
+CPU30      0.0%        46 °C       400 MHz
+CPU31      0.0%        46 °C       400 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Currently using: powersave governor
+Suggesting use of "performance" governor
+
+Total CPU usage: 0.3 %
+Total system load: 0.18
+Average temp. of all cores: 45.62 °C 
+
+Load optimal (load average: 0.18, 0.20, 0.24)
+suggesting to set turbo boost: on
+Warning: CPU turbo is not available
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+
+```
+</details>
+... So it suggesting use of "performance" governor...  
+Em... It doesn't looks like it wants to save the  battery.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> ... So it suggesting use of "performance" governor... Em... It doesn't looks like it wants to save the battery.
+
+Is it it plugged into power, why would it want to save battery?
+
+If you want to override this behavior you can use [auto-cpufreq config file](https://github.com/AdnanHodzic/auto-cpufreq/?tab=readme-ov-file#3-auto-cpufreq-config-file).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Flashwalker:</strong></p>
+                    <p>> Is it it plugged into power, why would it want to save battery?
+
+Yes, power cable is plugged. Well, I thought it always wanted</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

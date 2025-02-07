@@ -1,0 +1,183 @@
+
+        <html>
+        <head>
+            <title>Issue #807: No module named 'auto_cpufreq'</title>
+        </head>
+        <body>
+            <h1>No module named 'auto_cpufreq'</h1>
+            <p><strong>Issue #807</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+
+Yes. I have not seen this error.
+
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+
+I installed from the AUR using paru. Installation is successful.
+
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+
+auto-cpufreq does not start because of the issue.
+
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+Suggestions assume program runs, mine does not.
+
+### Error output:
+```
+Traceback (most recent call last):
+  File "/usr/bin/auto-cpufreq", line 5, in <module>
+    from auto_cpufreq.bin.auto_cpufreq import main
+ModuleNotFoundError: No module named 'auto_cpufreq'
+```
+---
+
+### System information:
+
+```
+OS: Arch Linux x86_64
+Host: NG-AN515-54-744V V1.23
+Kernel: 6.12.9-arch1-1
+Uptime: 1 day, 11 hours, 15 mins
+Packages: 1404 (pacman)
+Shell: bash 5.2.37
+Resolution: 1920x1080
+WM: sway
+Theme: Adwaita [GTK2/3]
+Icons: Adwaita [GTK2/3]
+Terminal: alacritty
+CPU: Intel i7-9750H (12) @ 4.500GHz
+GPU: NVIDIA GeForce GTX 1050 3 GB Max-Q
+GPU: Intel CoffeeLake-H GT2 [UHD Graphics 63
+Memory: 5661MiB / 15832MiB
+```
+
+Add/paste output of:
+
+```
+$ auto-cpufreq --debug
+Traceback (most recent call last):
+  File "/usr/bin/auto-cpufreq", line 5, in <module>
+    from auto_cpufreq.bin.auto_cpufreq import main
+ModuleNotFoundError: No module named 'auto_cpufreq'
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+I currently have auto-cpufreq version 2.4.0-1. It has been working since a few months back, but now it fails to start.
+
+```
+× auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Lin>
+     Loaded: loaded (/usr/lib/systemd/system/auto-cpufreq.service; enabled; preset: d>
+     Active: failed (Result: exit-code) since Mon 2025-01-13 22:33:44 CET; 22h ago
+   Duration: 139ms
+ Invocation: 7b15f5b5102f4cc49e056eed6272f476
+   Main PID: 57529 (code=exited, status=1/FAILURE)
+
+ene 13 22:33:44 arch systemd[1]: auto-cpufreq.service: Scheduled restart job, restart>
+ene 13 22:33:44 arch systemd[1]: auto-cpufreq.service: Start request repeated too qui>
+ene 13 22:33:44 arch systemd[1]: auto-cpufreq.service: Failed with result 'exit-code'.
+ene 13 22:33:44 arch systemd[1]: Failed to start auto-cpufreq - Automatic CPU speed &>
+lines 1-11/11 (END)
+```
+
+In journalctl I get:
+
+```
+ene 13 22:33:44 arch auto-cpufreq[57529]: Traceback (most recent call last):
+ene 13 22:33:44 arch auto-cpufreq[57529]:   File "/usr/bin/auto-cpufreq", line 5, in >
+ene 13 22:33:44 arch auto-cpufreq[57529]:     from auto_cpufreq.bin.auto_cpufreq impo>
+ene 13 22:33:44 arch auto-cpufreq[57529]: ModuleNotFoundError: No module named 'auto_>
+ene 13 22:33:44 arch systemd[1]: auto-cpufreq.service: Main process exited, code=exit>
+ene 13 22:33:44 arch systemd[1]: auto-cpufreq.service: Failed with result 'exit-code'.
+ene 13 22:33:44 arch systemd[1]: auto-cpufreq.service: Scheduled restart job, restart>
+ene 13 22:33:44 arch systemd[1]: auto-cpufreq.service: Start request repeated too qui>
+ene 13 22:33:44 arch systemd[1]: auto-cpufreq.service: Failed with result 'exit-code'.
+ene 13 22:33:44 arch systemd[1]: Failed to start auto-cpufreq - Automatic CPU speed &>
+lines 376-418/418 (END)
+```
+
+The auto_cpufreq daemon has been down since the 26th of december, but I do not see any update in my logs, so it could be an environment/pyhton issue. I am using python 3.13.1.  Many python packages where updated the 22nd, so I see no issue here. Then the 25th and 26th I updated these python packages:
+
+```
+[2024-12-25T12:36:45+0100] [ALPM] upgraded python-zstandard (0.23.0-1 -> 0.23.0-2)
+[2024-12-26T22:16:37+0100] [ALPM] upgraded python-cleo (2.2.1-2 -> 1:2.1.0-1)
+[2024-12-26T22:16:37+0100] [ALPM] upgraded python-poetry-core (1.9.0-6 -> 1.9.1-1)
+[2024-12-26T22:16:37+0100] [ALPM] upgraded python-poetry (1.8.4-2 -> 1.8.5-1)
+[2024-12-26T22:16:37+0100] [ALPM] upgraded python-termcolor (2.4.0-3 -> 2.5.0-1)
+```
+
+I have tried to reinstall with no success. Installation through the AUR seems successful but the issue persists.
+
+I have tried to install the package manually, although I believe this should never work
+
+```
+$ sudo pipx install auto_cpufreq
+Fatal error from pip prevented installation. Full pip output in file:
+    /root/.local/state/pipx/log/cmd_2025-01-14_21.10.58_pip_errors.log
+
+Some possibly relevant errors from pip install:
+    ERROR: Could not find a version that satisfies the requirement auto-cpufreq (from versions: none)
+    ERROR: No matching distribution found for auto-cpufreq
+
+Error installing auto-cpufreq.
+```
+
+Also, auto_cpufreq is of course not in the packages list. `$ pip list | grep auto_cpufreq` shows no output.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>yam-1111:</strong></p>
+                    <p>Hello following up this issue, I also experience this after upgrading my python from 3.12 to 3.13.1, I tried to reinstall but this happens
+
+## Error logs
+```
+==> Starting build()...
+* Getting build dependencies for wheel...
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/site-packages/pyproject_hooks/_impl.py", line 402, in _call_hook
+    raise BackendUnavailable(
+    ...<4 lines>...
+    )
+pyproject_hooks._impl.BackendUnavailable: Cannot import 'poetry_dynamic_versioning.backend'
+
+ERROR Backend 'poetry_dynamic_versioning.backend' is not available.
+==> ERROR: A failure occurred in build().
+    Aborting...
+ -> error making: auto-cpufreq-exit status 4
+ -> Failed to install the following packages. Manual intervention is required:
+auto-cpufreq - exit status 4
+```
+## System information
+- 20FMS2292K (ThinkPad T460)
+- Intel(R) Core(TM) i5-6300U (4) @ 3.00 GHz
+- Arch Linux x86_64 6.11.6
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Make sure you're using the latest release (v2.5.0) (`git pull` ) and  re-install, i.e:
+
+ `sudo ./auto-cpufreq-installer --remove` followed by `sudo ./auto-cpufreq-installer --install` and `sudo auto-cpufreq --install`
+ 
+[ Similar issue happened](https://github.com/AdnanHodzic/auto-cpufreq/issues/801#issuecomment-2585925723) in #801 and pulling latest code fixed the problem.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>MiguelVeganzones:</strong></p>
+                    <p>Hi, thanks for the fast response. That fixed the issue, thanks :)</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

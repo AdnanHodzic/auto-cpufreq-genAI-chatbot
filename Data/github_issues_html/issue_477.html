@@ -1,0 +1,86 @@
+
+        <html>
+        <head>
+            <title>Issue #477: [AUR] Maintained?</title>
+        </head>
+        <body>
+            <h1>[AUR] Maintained?</h1>
+            <p><strong>Issue #477</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>is the AUR version of the tool is maintained?</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Yes, it was already mentioned [on README](https://github.com/AdnanHodzic/auto-cpufreq/#aur-package-archmanjaro-linux). But I just pushed another change to make it even more explicit that it's not maintained.
+
+Closing the issue ... </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>niksingh710:</strong></p>
+                    <p>@AdnanHodzic I was planning to maintain the Aur then I noticed that `auto-cpufreq-git` is working as expected and fine.
+There are a few things the user has to keep in mind if installing from aur.
+
+If facing `psutil` error: 
+> Make sure pip version of psutil is not installed in system. Either install it via aur `python-psutil` or let the `auto-cpufreq-git` install it.
+
+The user does not require to use the command `auto-cpufreq install` as the aur version installs it already.
+The user just need to enable the system service. `sudo systemctl enable --now auto-cpufreq`.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@niksingh710 
+
+> I was planning to maintain the Aur 
+
+Awesome! I also re-opened the issue if that's the case :slightly_smiling_face: 
+
+> I noticed that auto-cpufreq-git is working as expected and fine.
+
+:+1: 
+
+> If facing `psutil` error:
+> 
+> > Make sure pip version of psutil is not installed in system. Either install it via aur `python-psutil` or let the `auto-cpufreq-git` install it.
+>  
+Can't you just install `python-psutil` as part of dependencies for AUR?
+
+> The user does not require to use the command `auto-cpufreq install` as the aur version installs it already. The user just need to enable the system service. `sudo systemctl enable --now auto-cpufreq`.
+
+Yea, I remember that being part of discussion #84, which is fine then we just note that as part of Readme? </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>niksingh710:</strong></p>
+                    <p>> Can't you just install python-psutil as part of dependencies for AUR?
+
+`python-psutil` is a part of dependencies in the AUR.
+The installation throws error if user have already installed `psutils` from pip.
+
+> then we just note that as part of Readme?
+
+Yep, should add it in Readme.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> `python-psutil` is a part of dependencies in the AUR.
+> The installation throws error if user have already installed `psutils` from pip.
+
+Ah, not sure in AUR packaging, but if possible as it is for Debian i,e as part of `Pre-Depends` to do some kind of custom bash logic to check if pip version is installed and if it is to remove it. As auto-cpufreq-installer will install it to a Python virtual env and system wide, so it won't be coming from here.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Since AUR is nowadays fully maintained, if you have any questions please feel free to contact one of the AUR maintainers: https://github.com/AdnanHodzic/auto-cpufreq/?tab=readme-ov-file#aur-package-arch-based-distributions</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

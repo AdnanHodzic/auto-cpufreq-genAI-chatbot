@@ -1,0 +1,131 @@
+
+        <html>
+        <head>
+            <title>Issue #342: Can't install auto-cpufreq</title>
+        </head>
+        <body>
+            <h1>Can't install auto-cpufreq</h1>
+            <p><strong>Issue #342</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+```text
+‣ sudo auto-cpufreq --install
+
+--------------------- Deploying auto-cpufreq as a daemon ----------------------
+
+* Turn off bluetooth on boot
+
+* Deploy auto-cpufreq install script
+Traceback (most recent call last):
+  File "/usr/bin/auto-cpufreq", line 207, in <module>
+    main()
+  File "/usr/lib/python3.10/site-packages/click/core.py", line 1128, in __call__
+    return self.main(*args, **kwargs)
+  File "/usr/lib/python3.10/site-packages/click/core.py", line 1053, in main
+    rv = self.invoke(ctx)
+  File "/usr/lib/python3.10/site-packages/click/core.py", line 1395, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/usr/lib/python3.10/site-packages/click/core.py", line 754, in invoke
+    return __callback(*args, **kwargs)
+  File "/usr/bin/auto-cpufreq", line 184, in main
+    deploy_daemon()
+  File "/usr/lib/python3.10/site-packages/auto_cpufreq/core.py", line 353, in deploy_daemon
+    shutil.copy(SCRIPTS_DIR / "auto-cpufreq-install.sh", "/usr/bin/auto-cpufreq-install")
+  File "/usr/lib/python3.10/shutil.py", line 417, in copy
+    copyfile(src, dst, follow_symlinks=follow_symlinks)
+  File "/usr/lib/python3.10/shutil.py", line 254, in copyfile
+    with open(src, 'rb') as fsrc:
+FileNotFoundError: [Errno 2] No such file or directory: '/usr/share/auto-cpufreq/scripts/auto-cpufreq-install.sh' 
+```
+---
+
+### System information:
+```text
+
+‣ sudo auto-cpufreq --debug
+[sudo] password for jwdev: 
+
+-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux rolling n/a
+Linux kernel: 5.15.12-arch1-1
+Processor: AMD Ryzen 5 4600H with Radeon Graphics
+Cores: 12
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3000 MHz
+CPU min frequency: 1400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	 5.0%     35 °C     1681 MHz
+CPU1:	 3.0%     35 °C     1700 MHz
+CPU2:	 2.0%     35 °C     1700 MHz
+CPU3:	 0.0%     35 °C     1400 MHz
+CPU4:	 0.0%     35 °C     3000 MHz
+CPU5:	 7.9%     35 °C     1700 MHz
+CPU6:	 2.0%     35 °C     1400 MHz
+CPU7:	 9.0%     35 °C     1400 MHz
+CPU8:	 0.0%     35 °C     1474 MHz
+CPU9:	 2.0%     35 °C     1400 MHz
+CPU10:	 0.0%     35 °C     2420 MHz
+CPU11:	 0.0%     35 °C     1400 MHz
+
+auto-cpufreq version:
+Version         : 1.9.0-1
+
+Python: 3.10.1
+psutil package: 5.9.0
+platform package: 1.0.8
+click package: 8.0.3
+distro package 1.6.0
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.22 %
+
+Total CPU usage: 1.7 %
+Total system load: 1.72
+Average temp. of all cores: 34.875 °C 
+
+Currently using: ondemand governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Did you install it via AUR?
+
+As the first pinned comment by liljaylj says:
+> You don't need to --install daemon manually, this package contains systemd service already. instead, you need to start and enable service using: systemctl enable --now auto-cpufreq.service
+
+
+And if you read the readme from auto-cpufreq under Archlinux:
+
+> Please note: If you want to install auto-cpufreq daemon, do not run auto-cpufreq --install otherwise you'll run into an issue: #91, #96.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>jwdevelab:</strong></p>
+                    <p>I've got the same error when I tried to install via ./auto-cpufreq-installer, so I didn't think that I should look for the aur page. But it worked, thank you.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

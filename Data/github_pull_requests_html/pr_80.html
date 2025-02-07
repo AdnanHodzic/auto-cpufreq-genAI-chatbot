@@ -1,0 +1,84 @@
+
+        <html>
+        <head>
+            <title>Pull Request #80: fixed imports</title>
+        </head>
+        <body>
+            <h1>fixed imports</h1>
+            <p><strong>Pull Request #80</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p></p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>tested with `--monitor`, `--install` and `--debug` opts</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Hm, seems to also be happening on `remove`
+```
+sudo auto-cpufreq --remove
+Traceback (most recent call last):
+  File "/snap/auto-cpufreq/x2/bin/auto-cpufreq", line 114, in <module>
+    main()
+  File "/snap/auto-cpufreq/x2/lib/python3.6/site-packages/click/core.py", line 829, in __call__
+    return self.main(*args, **kwargs)
+  File "/snap/auto-cpufreq/x2/lib/python3.6/site-packages/click/core.py", line 782, in main
+    rv = self.invoke(ctx)
+  File "/snap/auto-cpufreq/x2/lib/python3.6/site-packages/click/core.py", line 1066, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/snap/auto-cpufreq/x2/lib/python3.6/site-packages/click/core.py", line 610, in invoke
+    return callback(*args, **kwargs)
+  File "/snap/auto-cpufreq/x2/bin/auto-cpufreq", line 105, in main
+    auto_cpufreq_log_file.unlink(missing_ok=True)
+TypeError: unlink() got an unexpected keyword argument 'missing_ok'
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>@AdnanHodzic oh I see, it's because core18 uses python 3.6
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>Updated</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>btw, can we use python 3.7 in snapcraft.yaml?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Great!
+
+> @AdnanHodzic oh I see, it's because core18 uses python 3.6
+
+Yes, I experimented with upgrading to `core20` which is 3.8, but then as part of `snapcraft.yaml` this line can't be like this:
+
+```
+command: bin/auto-cpufreq --daemon 2>&1 | tee -a $SNAP_DATA/auto-cpufreq.log
+```
+
+But I'll add this to my ToDo list to address it in future.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Release [1.2 is live](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/1.2)!
+
+I also announced this on Twitter](https://twitter.com/fooctrl/status/1291465857118478339) and [Reddit](https://www.reddit.com/r/linux/comments/i4zemd/new_release_autocpufreq_automatic_cpu_speed_power/). Please feel to share and again thank you for your help with this release :)</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

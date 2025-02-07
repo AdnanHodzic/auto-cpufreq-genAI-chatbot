@@ -1,0 +1,45 @@
+
+        <html>
+        <head>
+            <title>Issue #74: [Feature] add more info into --debug</title>
+        </head>
+        <body>
+            <h1>[Feature] add more info into --debug</h1>
+            <p><strong>Issue #74</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Since sensors are very different across the machines I think that it would be nice to add output of `psutil.sensors_temperature()` into `get_sys_info()` function
+also, we need to know the version and the way user start it (snap or directly from the git)
+
+in general, we should add:
+* sensors info
+* app version info
+* Is it snap or git?
+* If snap -> snap version output
+
+maybe more</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>@AdnanHodzic do you have any idea how to get snpad version from inside the snap package?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>FWIK, you can't do that. Because basically snap is running inside of a container, hence all the reasons snap environment has all these exceptions within auto-cpufreq, [perfect example](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/source/core.py#L440). 
+
+But since I'm pretty sure there could be a file that could have this information stored, maybe ask this same question on [snapcraft forum](forum.snapcraft.io/)?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Fixed as part of [1.6.0 release](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.6.0).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

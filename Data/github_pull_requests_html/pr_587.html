@@ -1,0 +1,34 @@
+
+        <html>
+        <head>
+            <title>Pull Request #587: Feature: Allow GUI to detect available update and install it</title>
+        </head>
+        <body>
+            <h1>Feature: Allow GUI to detect available update and install it</h1>
+            <p><strong>Pull Request #587</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>![20231025_15h35m12s_grim](https://github.com/AdnanHodzic/auto-cpufreq/assets/31134255/2ab68043-8c0c-43ff-99c7-63be8f20e132)
+
+
+I brought this up in the Discord and started working on it. 
+
+Changes
+- renamed `verify_update` to `check_for_update` and will now return True if an update was found
+- GUI will prompt for an update if `check_for_update()` returns True
+- Calls `auto-cpufreq --update` in the background
+
+In order to test this, you need to edit the version to something less than 2.0.0 in `pyproject.toml` and reinstall or update what the version function returns in `core.py`</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Code LGTM, and I've verified that it works as expected. Amazing work and as always thank you for your contribution! </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

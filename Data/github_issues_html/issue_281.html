@@ -1,0 +1,263 @@
+
+        <html>
+        <head>
+            <title>Issue #281: Battery charging state is not recognized</title>
+        </head>
+        <body>
+            <h1>Battery charging state is not recognized</h1>
+            <p><strong>Issue #281</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hi,
+
+since some days, auto-cpufreq acts like it is not able to identify if the Battery is in charging or discharging mode.
+
+I recognized this by slow CPU speed, the system was set to the "powersave" governor and  auto-cpufreq always showed "Battery is: discharging", but the power adapter was plugged in and the notebook power led reacted to the power cord status. Also the battery task bar symbol of the window manager mate switched between "charging" and "discharging". 
+
+```
+andre@andre-ThinkPad-T431s:~$ cat /sys/class/power_supply/AC/online     <--power cord plugged in 
+1
+andre@andre-ThinkPad-T431s:~$ cat /sys/class/power_supply/AC/online     <--power cord removed
+0
+```
+
+Of course I did the regular packet updates of the system, but I tried to go back from the fresh 5.11.0-40 to 5.11.0-38, installed auto-cpufreq via the Installer  and then again via Snap, did some reboots, nothing changed.
+
+I have helped myself with the config file and set the  governor for [battery] to "schedutil", thats fine for me. 
+
+I can not rule out that something is wrong with my system, but I did no changes affecting the acpi / battery stuff lately as far as I remember.
+
+---
+
+### System information:
+andre@andre-ThinkPad-T431s:~$ sudo auto-cpufreq --debug
+[sudo] Passwort für andre:          
+
+Using settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------------------------------------------------------
+
+Linux distro: Linux Mint 20.2 uma
+Linux kernel: 5.11.0-38-generic
+Processor: Intel(R) Core(TM) i5-3337U CPU @ 1.80GHz
+Cores: 4
+Architecture: x86_64
+Driver: intel_cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1700 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  1.0%     43 °C      800 MHz
+CPU1:	  1.0%     43 °C     1700 MHz
+CPU2:	  1.0%     42 °C     1620 MHz
+CPU3:	  1.0%     42 °C      800 MHz
+
+auto-cpufreq version:
+fatal: Kein Git-Repository (oder irgendeines der Elternverzeichnisse): .git
+CalledProcessError(128, ['git', 'describe', '--always'])
+
+Python: 3.8.10
+psutil package: 5.5.1
+platform package: 1.0.8
+click package: 7.0
+distro package 1.4.0
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.26 %
+
+Total CPU usage: 4.3 %
+Total system load: 0.41
+Average temp. of all cores: 42.5 °C 
+
+Currently using: schedutil governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>This co-relates with [release of 1.7.2](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.7.2) and merge of #274 with `master`. @AmitGolden any ideas why this is happening? What makes it even weirder is it's happening on ThinkPad's ...</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AmitGolden:</strong></p>
+                    <p>Hmm... That's peculiar.
+Could you post the result of
+`tree -L 2 /sys/class/power-supply/`?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Angelman81:</strong></p>
+                    <p>Hi, 
+
+/power-supply/ is not existing, but I found /power_supply/
+
+`andre@andre-ThinkPad-T431s:/$ tree -L 2 /sys/class/power_supply/
+/sys/class/power_supply/
+├── AC -> ../../devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/device:08/PNP0C09:00/ACPI0003:00/power_supply/AC
+└── BAT0 -> ../../devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/device:08/PNP0C09:00/PNP0C0A:00/power_supply/BAT0
+
+2 directories, 0 files
+andre@andre-ThinkPad-T431s:/$ 
+`
+
+
+-------------------------------------
+
+By the way, I can tell you why I started using auto-cpufreq with my Thinkpad.
+
+After the upgrade to Linux Mint 20.0 I noticed that the system uses the powersafe governor with ~800 Mhz under the following condition:
+-resume from standby with power cord unplugged 
+Then, even with power cord plugged in again, the system was stuck to the powersafe governor. 
+
+As a workaround I send the system to standby and resumed it with plugged in power cord, but this was annoying. 
+I installed the old 5.8.0-XX Kernel and everything worked again, but then 5.8.0-XX reached end of life.
+
+After some research I tested auto-cpufreq with 5.11-XX and everything was fine in every condition until now. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AmitGolden:</strong></p>
+                    <p>Ok,
+Could you post now `cat /sys/class/power_supply/BAT0/status` when your laptop is changing and when it's discharging?
+
+What I did in my commit was to change the way auto-cpufreq reads battery charging state.
+My laptop did not have a /sys/class/power_supply/AC/, so I changed the `charging()` function to read the state of the battery instead of the power adapter.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Angelman81:</strong></p>
+                    <p>Sry, I unintentionally closed the topic    >:(
+ 
+
+88% Battery power left:
+
+```
+andre@andre-ThinkPad-T431s:~$ cat /sys/class/power_supply/BAT0/status      <-- charging with cord 
+Charging
+
+andre@andre-ThinkPad-T431s:~$ cat /sys/class/power_supply/BAT0/status     <-- cord removed
+Discharging
+```
+
+After that I have checked auto-cpufreq --stats  with 88% battery (cinnamon task bar symbol) and the charging / discharging  state suddenly worked! 
+
+Now I wait what will happen if the battery reaches "full" state...</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Angelman81:</strong></p>
+                    <p>Ok, the problem reappears after reaching 100% battery. 
+
+- --stats shows  correctly "charging"
+- I remove power cord -> Battery state drops to 99% ; --stats shows correctly "discharging"
+- I plug power cord back in -> Battery state in taskbar shows charging / full  but stays at 99% ; --stats is stuck with "discharging" again and the governor configured for [battery]
+
+Something interesting is happening now with /sys/class/power_supply/BAT0/status:
+
+```
+andre@andre-ThinkPad-T431s:~$ cat /sys/class/power_supply/BAT0/status     <-- charging with cord
+Unknown
+
+andre@andre-ThinkPad-T431s:~$ cat /sys/class/power_supply/BAT0/status    <-- cord removed
+Discharging
+
+andre@andre-ThinkPad-T431s:~$ cat /sys/class/power_supply/BAT0/status    <-- charging with cord
+Unknown
+```
+
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>MahendraSinghChelak:</strong></p>
+                    <p>I also suck with that problem</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Ralim:</strong></p>
+                    <p>Not to +1 this; but I can confirm that if the battery is setup to stop charging at a certain threshold, sometimes auto-cpufreq is now deciding that the battery is stuck "discharging".
+
+Could the presence of `/sys/class/power_supply/AC/online` being set to `1` be used as a workaround to always enable AC mode when the ac power is present?
+
+This is showing up on my Lenovo P14 AMD Gen1 model whenever I connect the charge while battery is > 95% as the controller wont bother to charge the battery the last few percent for battery life (but will restart if it goes lower or its connected at a lower SOC)
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AmitGolden:</strong></p>
+                    <p>I think I know what the problem is.
+In my experience too, the status is Unknown sometimes when charging.
+The solution would be to set the state to charging when it's unknown, or using both the battery status and the AC adapter status.
+I'll get to work on that soon.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Changes from #285 have just been merged, please install latest changes using [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq#auto-cpufreq-installer) as I would like to have couple of more changes before making a whole new release (for snap, AUR and rest of package managers).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Angelman81:</strong></p>
+                    <p>OK, I am testing the release today
+
+auto-cpufreq version:
+Git commit: 897664a
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>pega2k:</strong></p>
+                    <p>Hi,
+Before the fix in #285 I was having the same problem, all the time is showing discharging and using powersave mode (with AC or on battery), now is using all the time performance (with AC or on battery), my laptop is a Fujitsu Live Book E756, and by changing the line in the code from core.py
+`battery_status = getoutput(f"grep . {power_dir}B*/status").splitlines()`
+to 
+`battery_status = getoutput(f"grep . {power_dir}C*/status").splitlines()`
+the program now works as intended, in battery it is discharging with online 0 and status in Discharging, in AC is online in 1 and status in Unknown.
+The entries in my laptop for /sys/class/power_supply are AC and CMB1.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Angelman81:</strong></p>
+                    <p>With my old Thinkpad T431s and it's 
+/sys/class/power_supply/AC and  BAT0 
+
+everything works now @ 897664a as intended.
+
+Seems like there are some other cases to cover (AC might appear as ADP1?). 
+The htop guys experienced similar problems:
+[https://github.com/hishamhm/htop/issues/638](url)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Hi, Before the fix in #285 I was having the same problem, all the time is showing discharging and using powersave mode (with AC or on battery), now is using all the time performance (with AC or on battery), my laptop is a Fujitsu Live Book E756, and by changing the line in the code from core.py `battery_status = getoutput(f"grep . {power_dir}B*/status").splitlines()` to `battery_status = getoutput(f"grep . {power_dir}C*/status").splitlines()` the program now works as intended, in battery it is discharging with online 0 and status in Discharging, in AC is online in 1 and status in Unknown. The entries in my laptop for /sys/class/power_supply are AC and CMB1.
+
+@pega2k feel free to [make a contribution](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) with additional case where that line is added in case nothing is matched. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Functionality which addresses this problem has now been released as part of [1.8.0 release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,90 @@
+
+        <html>
+        <head>
+            <title>Pull Request #34: fix low performance when charging</title>
+        </head>
+        <body>
+            <h1>fix low performance when charging</h1>
+            <p><strong>Pull Request #34</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I think there isn't any necessity for limiting the performance of CPU when the PC on charging status. In case of config file improvement, the if-else block isn't touched.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I introduced this change recently, as at the beginning I was of same opinion as you.
+
+This was [initially suggested](https://www.reddit.com/r/linux/comments/ejxx9f/github_autocpufreq_automatic_cpu_speed_power/fd5nodm/) on Reddit, and thinking about it made a lot sense. Hence I made this changes as first step towards this goal. 
+
+Because if you have a really low load, why do you need CPU running at its absolute max. All it'll do in this case is save power/electricity used which isn't much on a single computer. But image how much power could be saved if `auto-cpufreq` was running in a datacenter on thousands of servers, in that case that energy save could be very valuable.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>validatedev:</strong></p>
+                    <p>I'll test some changes and inform you. With that type of change that has been introduced by you, I haven't a good relationship with GNOME, it stutters and lags.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>validatedev:</strong></p>
+                    <p>Continuing the test of that PR, and will make some changes when necessary. If you have a better idea, share with me. There is a really performance drop when using that DE with your changes.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Continuing the test of that PR, and will make some changes when necessary. If you have a better idea, share with me. There is a really performance drop when using that DE with your changes.
+
+This is good, exactly what I was also thinking at this point. I'll also do some testing using these change and will give you my feedback.
+
+I also use GNOME, and I have 0 performance issues with existing implementation in GNOME or anywhere else.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>validatedev:</strong></p>
+                    <p>`load1m` cannot exceed `cpus` any time, so I did some adjustments for accurate switching mechanism.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Sorry for delayed response from my side, been very busy last couple of days. I'll thoroughly review this tomorrow.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>validatedev:</strong></p>
+                    <p>Take your time, I’m also experimenting the variables. Also thinking to implement the governor-turbo boost changing based on temperature, but, well I think this should not be belong there, I mean this PR.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>validatedev:</strong></p>
+                    <p>About the comment that you did, sorry for the late reply. I have been very busy recently and as soon as I am free, I’ll be back there.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> About the comment that you did, sorry for the late reply. I have been very busy recently and as soon as I am free, I’ll be back there.
+
+No worries, take your time.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@validatedev maybe changes we agree on from this PR should also go as part of [snap branch](https://github.com/AdnanHodzic/auto-cpufreq/tree/snap), just as it was the case with #40 
+
+I would really like to see the ["calculations" part](https://github.com/AdnanHodzic/auto-cpufreq/pull/34/files#diff-1dc7576a864b4767103cb92b6df3f9c9R148) to also be merged, as they make the tool less "trigger friendly". 
+
+Basically it's all good, except changing the governor to `performance` while in `powersave` mode. And as I mentioned, even these changes can be made but let's do it at later stage.
+
+Think about it and if you have time please feel free to make a new MR, there's still time as I'm waiting for some interface related [changes to be made from Ubuntu side](https://github.com/snapcore/snapd/pull/8127).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>validatedev:</strong></p>
+                    <p>@AdnanHodzic OK, I'll make these changes that you're referring today. Closing this PR.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

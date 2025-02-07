@@ -1,0 +1,30 @@
+
+        <html>
+        <head>
+            <title>Discussion #399: Error install Zorin</title>
+        </head>
+        <body>
+            <h1>Error install Zorin</h1>
+            <p><strong>Discussion #399</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Traceback (most recent call last):
+File  "/usr/lib/ubiquity/bin/ubiquity", line 660, in <module>
+main(oem_config)
+File  "/usr/lib/ubiquity/bin/ubiquity", line 646, in main 
+install(query=options.query)
+File  "/usr/lib/ubiquity/bin/ubiquity", line 274, in install
+ret = wizard.run()
+File  "/usr/lib/ubiquity/ubiquity/frontend/gtk_ui.py", line 922, in run
+self.start_slideshow()
+File  "/usr/lib/ubiquity/ubiquity/frontend/gtk_ui.py", line 1005, in start_slideshow
+context = WebKit2.WebContext.get_default()
+gi.repository.GLib.GError: g-invoke-error-quark: Could not locate webkit_web_context_get_default: 'webkit_web_context_get_default': /lib/x86_64-linux-gnu/libjavascriptcoregtk-4.0.so.18': undefined symbol: webkit_web_context_get_default (1)</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+            </div>
+        </body>
+        </html>
+        

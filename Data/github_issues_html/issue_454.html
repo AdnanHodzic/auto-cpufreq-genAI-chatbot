@@ -1,0 +1,138 @@
+
+        <html>
+        <head>
+            <title>Issue #454: auto-cpufreq is running in daemon mode</title>
+        </head>
+        <body>
+            <h1>auto-cpufreq is running in daemon mode</h1>
+            <p><strong>Issue #454</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried? yes
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? yes
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)? it installed perfectly  with  git
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)? yes
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)? yes
+
+### Error output: ERROR: auto-cpufreq is running in daemon mode.
+```text
+Add/paste error output in case of failed installation or other failing component
+```ERROR: auto-cpufreq is running in daemon mode.
+
+Make sure to stop the daemon before running with --live or --monitor mode
+---
+
+### System information:
+
+Add/paste output of:
+System:
+  Kernel: 5.15.0-52-generic x86_64 bits: 64 compiler: gcc v: 11.2.0 Desktop: Cinnamon 5.4.12
+    tk: GTK 3.24.33 wm: Mutter dm: LightDM Distro: Linux Mint 21 Vanessa base: Ubuntu 22.04 jammy
+Machine:
+  Type: Laptop System: Dell product: Inspiron 5577 v: 1.1.3 serial: <superuser required> Chassis:
+    type: 10 serial: <superuser required>
+  Mobo: Dell model: 090HMC v: A00 serial: <superuser required> UEFI: Dell v: 1.1.3
+    date: 12/02/2018
+Battery:
+  ID-1: BAT0 charge: 55.0 Wh (69.6%) condition: 79.0/79.0 Wh (100.0%) volts: 11.8 min: 11.4
+    model: SDI Dell serial: <filter> status: Discharging
+CPU:
+  Info: quad core model: Intel Core i5-7300HQ bits: 64 type: MCP arch: Kaby Lake rev: 9 cache:
+    L1: 256 KiB L2: 1024 KiB L3: 6 MiB
+  Speed (MHz): avg: 808 high: 819 min/max: 800/3500 cores: 1: 814 2: 819 3: 801 4: 800
+    bogomips: 19999
+  Flags: avx avx2 ht lm nx pae sse sse2 sse3 sse4_1 sse4_2 ssse3 vmx
+Graphics:
+  Device-1: Intel HD Graphics 630 vendor: Dell driver: i915 v: kernel ports: active: eDP-1
+    empty: HDMI-A-1 bus-ID: 00:02.0 chip-ID: 8086:591b
+  Device-2: NVIDIA GP107M [GeForce GTX 1050 Mobile] vendor: Dell driver: N/A pcie: speed: 8 GT/s
+    lanes: 8 bus-ID: 01:00.0 chip-ID: 10de:1c8d
+  Device-3: Sunplus Innovation Integrated_Webcam_HD type: USB driver: uvcvideo bus-ID: 1-4:4
+    chip-ID: 1bcf:2b8a
+  Display: x11 server: X.Org v: 1.21.1.3 driver: X: loaded: modesetting unloaded: fbdev,vesa
+    gpu: i915 display-ID: :0 screens: 1
+  Screen-1: 0 s-res: 1920x1080 s-dpi: 96
+  Monitor-1: eDP-1 model: Chi Mei Innolux res: 1920x1080 dpi: 142 diag: 394mm (15.5")
+  OpenGL: renderer: Mesa Intel HD Graphics 630 (KBL GT2) v: 4.6 Mesa 22.0.5 direct render: Yes
+Audio:
+  Device-1: Intel CM238 HD Audio vendor: Dell driver: snd_hda_intel v: kernel bus-ID: 00:1f.3
+    chip-ID: 8086:a171
+  Sound Server-1: ALSA v: k5.15.0-52-generic running: yes
+  Sound Server-2: PulseAudio v: 15.99.1 running: yes
+  Sound Server-3: PipeWire v: 0.3.48 running: yes
+Network:
+  Device-1: Realtek RTL8111/8168/8411 PCI Express Gigabit Ethernet vendor: Dell driver: r8169
+    v: kernel pcie: speed: 2.5 GT/s lanes: 1 port: d000 bus-ID: 02:00.0 chip-ID: 10ec:8168
+  IF: enp2s0 state: down mac: <filter>
+  Device-2: Intel Wireless 3165 driver: iwlwifi v: kernel pcie: speed: 2.5 GT/s lanes: 1
+    bus-ID: 03:00.0 chip-ID: 8086:3165
+  IF: wlp3s0 state: up mac: <filter>
+Bluetooth:
+  Device-1: Intel Bluetooth wireless interface type: USB driver: btusb v: 0.8 bus-ID: 1-5:5
+    chip-ID: 8087:0a2a
+  Report: hciconfig ID: hci0 rfk-id: 0 state: up address: <filter> bt-v: 2.1 lmp-v: 4.2
+    sub-v: 1000
+Drives:
+  Local Storage: total: 585 GiB used: 14.17 GiB (2.4%)
+  ID-1: /dev/sda vendor: SK Hynix model: SC311 SATA 128GB size: 119.24 GiB speed: 6.0 Gb/s
+    serial: <filter>
+  ID-2: /dev/sdb vendor: Samsung model: SSD 870 EVO 500GB size: 465.76 GiB speed: 6.0 Gb/s
+    serial: <filter>
+Partition:
+  ID-1: / size: 456.89 GiB used: 14.17 GiB (3.1%) fs: ext4 dev: /dev/sdb2
+  ID-2: /boot/efi size: 511 MiB used: 5.2 MiB (1.0%) fs: vfat dev: /dev/sdb1
+Swap:
+  ID-1: swap-1 type: file size: 2 GiB used: 0 KiB (0.0%) priority: -2 file: /swapfile
+Sensors:
+  System Temperatures: cpu: 49.0 C mobo: N/A sodimm: SODIMM C
+  Fan Speeds (RPM): cpu: 0
+Repos:
+  Packages: 2253 apt: 2244 flatpak: 9
+  No active apt repos in: /etc/apt/sources.list
+  Active apt repos in: /etc/apt/sources.list.d/google-chrome.list
+    1: deb [arch=amd64] https: //dl.google.com/linux/chrome/deb/ stable main
+  Active apt repos in: /etc/apt/sources.list.d/official-package-repositories.list
+    1: deb https: //mirrors.piconets.webwerks.in/linuxmint-mirror/packages vanessa main upstream import backport
+    2: deb http: //mirrors.piconets.webwerks.in/ubuntu-mirror/ubuntu jammy main restricted universe multiverse
+    3: deb http: //mirrors.piconets.webwerks.in/ubuntu-mirror/ubuntu jammy-updates main restricted universe multiverse
+    4: deb http: //mirrors.piconets.webwerks.in/ubuntu-mirror/ubuntu jammy-backports main restricted universe multiverse
+    5: deb http: //security.ubuntu.com/ubuntu/ jammy-security main restricted universe multiverse
+  No active dnf repos in: /etc/dnf/dnf.conf
+Info:
+  Processes: 224 Uptime: 8m Memory: 7.54 GiB used: 1.65 GiB (21.9%) Init: systemd v: 249
+  runlevel: 5 Compilers: gcc: 11.3.0 alt: 11 Client: Cinnamon v: 5.4.12 inxi: 3.3.13
+
+```
+auto-cpufreq --debug
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+i have  tried {systemctl mask power-profiles-daemon.service}
+url https://reddit.com/r/archlinux/comments/r41ax3/uninstall_or_disable_gnome_powerprofiledaemon/
+---  THERE SHOULD BE  BETTER POWER MANAGER FOR  LAPTOP USERS
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I genuinely don't understand what's the problem here, could you elaborate?
+
+Tool tells you the problem, just follow the instructions. 
+
+```ERROR: auto-cpufreq is running in daemon mode.
+
+Make sure to stop the daemon before running with --live or --monitor mode
+```
+
+Closing due to what seems to be invalid request, if not feel free to re-open it.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

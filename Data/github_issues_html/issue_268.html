@@ -1,0 +1,70 @@
+
+        <html>
+        <head>
+            <title>Issue #268: Uninstall Error syntax</title>
+        </head>
+        <body>
+            <h1>Uninstall Error syntax</h1>
+            <p><strong>Issue #268</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I cannot install, uninstall or use any of the functions described in the repository.
+
+### Error output:
+emerson@Ubuntu-EMC:~$ sudo auto-cpufreq --remove
+Traceback (most recent call last):
+  File "/usr/local/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.0', 'auto-cpufreq')
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 719, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 1511, in run_script
+    exec(script_code, namespace, namespace)
+  File "/usr/local/lib/python3.5/dist-packages/auto_cpufreq-1.0-py3.5.egg/EGG-INFO/scripts/auto-cpufreq", line 10, in <module>
+  File "/usr/local/lib/python3.5/dist-packages/click/__init__.py", line 7, in <module>
+    from .core import Argument as Argument
+  File "/usr/local/lib/python3.5/dist-packages/click/core.py", line 84
+    f"{hint}. Command {base_command.name!r} is set to chain and"
+                                                               ^
+SyntaxError: invalid syntax
+
+```
+---
+
+### System information:
+emerson@Ubuntu-EMC:~$ auto-cpufreq --debug
+Traceback (most recent call last):
+  File "/usr/local/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.0', 'auto-cpufreq')
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 719, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 1511, in run_script
+    exec(script_code, namespace, namespace)
+  File "/usr/local/lib/python3.5/dist-packages/auto_cpufreq-1.0-py3.5.egg/EGG-INFO/scripts/auto-cpufreq", line 10, in <module>
+  File "/usr/local/lib/python3.5/dist-packages/click/__init__.py", line 7, in <module>
+    from .core import Argument as Argument
+  File "/usr/local/lib/python3.5/dist-packages/click/core.py", line 84
+    f"{hint}. Command {base_command.name!r} is set to chain and"
+                                                               ^
+SyntaxError: invalid syntax
+
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Can you do the same after you installed auto-cpufreq as a Snap package? And include input of `auto-cpufreq --debug`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>In meantime closing the issue due to inactivity, if the problem persist please feel free to re-open the issue.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

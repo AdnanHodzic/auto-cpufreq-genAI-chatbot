@@ -1,0 +1,91 @@
+
+        <html>
+        <head>
+            <title>Issue #395: Auto-cpufreq not respecting config file</title>
+        </head>
+        <body>
+            <h1>Auto-cpufreq not respecting config file</h1>
+            <p><strong>Issue #395</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+```text
+Add/paste error output
+When i run the monitor for auto-cpufreq, it reccommends using performance governer, but is using schedutil eventhough, i specified performance in the config
+
+### System information:
+
+Add/paste output of:
+OpenSuse Tumbleweed
+auto-cpufreq --debug
+Using settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------------------------------------------------------
+
+Linux distro: openSUSE Tumbleweed 20220517 n/a
+Linux kernel: 5.17.7-1-default
+Processor: AMD Ryzen 7 5800H with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: amd-pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4463 MHz
+CPU min frequency: 400 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0:     1.0%     45 °C      400 MHz
+CPU1:     0.0%     45 °C      400 MHz
+CPU2:     0.0%     45 °C      400 MHz
+CPU3:     0.0%     45 °C      400 MHz
+CPU4:     0.0%     45 °C      400 MHz
+CPU5:     0.0%     45 °C      400 MHz
+CPU6:     0.0%     45 °C      400 MHz
+CPU7:     0.0%     45 °C      400 MHz
+CPU8:     0.0%     45 °C      400 MHz
+CPU9:     0.0%     45 °C      400 MHz
+CPU10:    1.0%     45 °C      400 MHz
+CPU11:    0.0%     45 °C      400 MHz
+CPU12:    0.0%     45 °C      400 MHz
+CPU13:    0.0%     45 °C      400 MHz
+CPU14:    0.0%     45 °C     3786 MHz
+CPU15:    0.0%     45 °C      400 MHz
+
+auto-cpufreq version: 1.9.3
+
+Python: 3.8.13
+psutil package: 5.9.0
+platform package: 1.0.8
+click package: 8.1.3
+distro package: 1.7.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.15 %
+
+Total CPU usage: 0.4 %
+Total system load: 0.2041015625
+Average temp. of all cores: 45.25 °C 
+
+Currently using: schedutil governor
+Currently turbo boost is: on
+
+
+
+#### Without providing requested information your issue might be ignored!
+
+---
+
+If installation failed with [auto-cpufreq-installer ](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer)have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+            </div>
+        </body>
+        </html>
+        

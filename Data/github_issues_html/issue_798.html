@@ -1,0 +1,149 @@
+
+        <html>
+        <head>
+            <title>Issue #798: Nix Build failed</title>
+        </head>
+        <body>
+            <h1>Nix Build failed</h1>
+            <p><strong>Issue #798</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+```text
+building the system configuration...
+error: builder for '/nix/store/1flplz2y5naq1r9z4kcmjpmy4rf45kfw-python3.12-auto-cpufreq-2.4.0.drv' failed with exit code 1;
+       last 24 log lines:
+       > Sourcing python-remove-tests-dir-hook
+       > Sourcing python-catch-conflicts-hook.sh
+       > Sourcing python-remove-bin-bytecode-hook.sh
+       > Sourcing pypa-build-hook
+       > Using pypaBuildPhase
+       > Sourcing python-runtime-deps-check-hook
+       > Using pythonRuntimeDepsCheckHook
+       > Sourcing pypa-install-hook
+       > Using pypaInstallPhase
+       > Sourcing python-imports-check-hook.sh
+       > Using pythonImportsCheckPhase
+       > Sourcing python-namespaces-hook
+       > Sourcing python-catch-conflicts-hook.sh
+       > Running phase: unpackPhase
+       > unpacking source archive /nix/store/n341m5phszgg8s33842shpgra521j716-y4qaahfji7sz3krc3ai85dcjw7bwqrqq-source
+       > source root is y4qaahfji7sz3krc3ai85dcjw7bwqrqq-source
+       > setting SOURCE_DATE_EPOCH to timestamp 315619200 of file y4qaahfji7sz3krc3ai85dcjw7bwqrqq-source/snap/snapcraft.yaml
+       > Running phase: patchPhase
+       > applying patch /nix/store/2wydwf02nj29yrx90x2a3kg2j8q7fkcl-prevent-install-and-copy.patch
+       > patching file auto_cpufreq/core.py
+       > Hunk #1 FAILED at 277.
+       > Hunk #2 FAILED at 306.
+       > Hunk #3 succeeded at 363 (offset 3 lines).
+       > 2 out of 3 hunks FAILED -- saving rejects to file auto_cpufreq/core.py.rej
+       For full logs, run 'nix log /nix/store/1flplz2y5naq1r9z4kcmjpmy4rf45kfw-python3.12-auto-cpufreq-2.4.0.drv'.
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+auto-cpufreq --debug
+
+-------------------------------------------------------------------------------
+
+Linux distro: NixOS 25.05 Warbler
+Linux kernel: 6.12.1
+Processor: AMD Ryzen 7 7840HS w/ Radeon 780M Graphics
+Cores: 16
+Architecture: x86_64
+Driver: amd-pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3801 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      5.0%        37 °C       553 MHz
+CPU1      4.0%        37 °C       400 MHz
+CPU2     15.3%        37 °C       554 MHz
+CPU3      9.0%        37 °C       400 MHz
+CPU4      6.1%        37 °C       553 MHz
+CPU5      5.0%        37 °C       400 MHz
+CPU6     10.1%        37 °C       553 MHz
+CPU7     31.3%        37 °C       553 MHz
+CPU8      5.1%        37 °C       553 MHz
+CPU9      5.1%        37 °C       400 MHz
+CPU10      6.1%        37 °C       400 MHz
+CPU11      1.0%        37 °C       400 MHz
+CPU12     10.1%        37 °C       554 MHz
+CPU13      6.0%        37 °C       400 MHz
+CPU14      9.1%        37 °C       553 MHz
+CPU15      2.0%        37 °C       400 MHz
+
+CPU fan speed: 0 RPM
+
+CPU fan speed: 1045 RPM
+
+CPU fan speed: 1045 RPM
+
+auto-cpufreq version: 2.4.0
+
+Python: 3.12.7
+psutil package: 6.0.0
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: /nix/store/0irlcqx2n3qm6b1pc9rsd2i8qpvcccaj-bash-5.2p37/bin/sh: line 1: dmidecode: command not found
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.12 %
+
+Total CPU usage: 14.9 %
+Total system load: 1.84
+Average temp. of all cores: 36.62 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+---
+I updated my Nix-Flake with `nix flake update` and then tried to rebuild my system.
+My Flake: https://github.com/Svenum/holynix
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>8bitbuddhist:</strong></p>
+                    <p>As a workaround, you can fix this by pinning auto-cpufreq to the latest version. IMO this is also safer than following the master branch.
+
+```
+auto-cpufreq = {
+  url = "github:AdnanHodzic/auto-cpufreq/v2.4.0";
+  inputs.nixpkgs.follows = "nixpkgs";
+};
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Fixed with the latest commit, sorry about that</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Svenum:</strong></p>
+                    <p>No problem. I use the master branch, because I love this project and will submit those kinds of issues. And help as much as I can. :) </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

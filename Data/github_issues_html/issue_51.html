@@ -1,0 +1,92 @@
+
+        <html>
+        <head>
+            <title>Issue #51: Daemon cannot start on Manjaro</title>
+        </head>
+        <body>
+            <h1>Daemon cannot start on Manjaro</h1>
+            <p><strong>Issue #51</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I've installed auto-cpufreq on my up-to-date Manjaro machine with snap:
+
+```
+snap     2.44.1-1
+snapd    2.44-1
+series   16
+manjaro  -
+kernel   4.19.112-1-MANJARO
+```
+
+Installation goes well, but things go wrong when I try to start the daemon. This is from system logs:
+
+```
+Mar 29 14:56:22 rocinante auto-cpufreq.service[1881264]: ----------------------------- System information ------------------------------
+Mar 29 14:56:22 rocinante auto-cpufreq.service[1881264]: Traceback (most recent call last):
+Mar 29 14:56:22 rocinante auto-cpufreq.service[1881264]:   File "/snap/auto-cpufreq/5/bin/auto-cpufreq", line 108, in <module>
+Mar 29 14:56:22 rocinante auto-cpufreq.service[1881264]:     main()
+Mar 29 14:56:22 rocinante auto-cpufreq.service[1881264]:   File "/snap/auto-cpufreq/5/lib/python3.6/site-packages/click/core.py", line 829, in __call__
+Mar 29 14:56:22 rocinante auto-cpufreq.service[1881264]:     return self.main(*args, **kwargs)
+Mar 29 14:56:22 rocinante auto-cpufreq.service[1881264]:   File "/snap/auto-cpufreq/5/lib/python3.6/site-packages/click/core.py", line 782, in main
+Mar 29 14:56:22 rocinante auto-cpufreq.service[1881264]:     rv = self.invoke(ctx)
+Mar 29 14:56:22 rocinante auto-cpufreq.service[1881264]:   File "/snap/auto-cpufreq/5/lib/python3.6/site-packages/click/core.py", line 1066, in invoke
+Mar 29 14:56:22 rocinante auto-cpufreq.service[1881264]:     return ctx.invoke(self.callback, **ctx.params)
+Mar 29 14:56:22 rocinante auto-cpufreq.service[1881264]:   File "/snap/auto-cpufreq/5/lib/python3.6/site-packages/click/core.py", line 610, in invoke
+Mar 29 14:56:22 rocinante auto-cpufreq.service[1881264]:     return callback(*args, **kwargs)
+Mar 29 14:56:22 rocinante auto-cpufreq.service[1881264]:   File "/snap/auto-cpufreq/5/bin/auto-cpufreq", line 39, in main
+Mar 29 14:56:22 rocinante auto-cpufreq.service[1881264]:     sysinfo()
+Mar 29 14:56:22 rocinante auto-cpufreq.service[1881264]:   File "/snap/auto-cpufreq/5/lib/python3.6/site-packages/source/core.py", line 360, in sysinfo
+Mar 29 14:56:22 rocinante auto-cpufreq.service[1881264]:     dist = distro + " " + version
+Mar 29 14:56:22 rocinante auto-cpufreq.service[1881264]: UnboundLocalError: local variable 'version' referenced before assignment
+```
+
+I did a bit of digging and found that the _core.py_ script is failing due to not being able to locate the `searchfile` at `/var/lib/snapd/hostfs/etc/os-release`. The bug here seems that it assumes the file is always present (which it seems not on my system), and if the file is not present then the `version` and `distro` variables go uninitialised. Looking at that path on my machine, I have an empty directory at `/var/lib/snapd/hostfs`.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>I fixed this in #63  PR, waiting for the merge</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>Now it should work fine. 
+@AdnanHodzic I suggest to close it as I defined `version = ""` even if it cannot be determined.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I want to first fix `snap` package and make a new release. I want to make sure it's working for @marc0der as he waited long enough for this :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>Yeah, IMHO: snap is mandatory for now, as most of people use ubuntu and they don't want to install it manually (from github)
+I could help to test it for POP OS!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Will let you know once the problem is fixed and release has been made. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@marc0der could you please try new (unreleased version) in beta, and confirm if you still have the same problem? 
+
+```
+sudo snap install auto-cpufreq --beta
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>marc0der:</strong></p>
+                    <p>Just tested and seems to be working fine now! :tada: Thanks @Red-Eyed!</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

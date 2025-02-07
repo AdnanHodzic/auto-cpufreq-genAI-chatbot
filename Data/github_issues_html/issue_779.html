@@ -1,0 +1,278 @@
+
+        <html>
+        <head>
+            <title>Issue #779: Service stops after reboot - Fedora 41 tuned conflicts</title>
+        </head>
+        <body>
+            <h1>Service stops after reboot - Fedora 41 tuned conflicts</h1>
+            <p><strong>Issue #779</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Regardless if I install auto-cpufreq using the terminal command or the GUI, after reboot I have to do it again from the start.
+
+###  auto-cpufreq --install output:
+```text
+--------------------- Deploying auto-cpufreq as a daemon ----------------------
+
+* Turn off bluetooth on boot (can be turned on any time later on!)
+
+* Deploy auto-cpufreq install script
+
+* Deploy auto-cpufreq remove script
+There was a problem, couldn't determine GNOME Power Profiles Daemon
+
+────────────────────────── Running auto-cpufreq daemon install script ──────────────────────────
+
+Deploying auto-cpufreq systemd unit file
+
+* Reloading systemd manager configuration
+
+* Starting auto-cpufreq daemon (systemd) service
+
+* Enabling auto-cpufreq daemon (systemd) at boot
+
+----------------- auto-cpufreq daemon installed and running -----------------
+
+To view live stats, run:
+auto-cpufreq --stats
+
+auto-cpufreq makes all decisions automatically, if you would like to
+configure certain setting to your own liking, please refer to:
+https://github.com/AdnanHodzic/auto-cpufreq#configuring-auto-cpufreq
+
+To disable and remove auto-cpufreq daemon, run:
+sudo auto-cpufreq --remove
+
+-------------------------------------------------------------------------------
+
+```
+---
+
+### System information:
+
+```text
+❯ sudo auto-cpufreq --debug
+
+-------------------------------------------------------------------------------
+
+Linux distro: Fedora Linux 41 KDE Plasma Prerelease
+Linux kernel: 6.11.2-300.fc41.x86_64
+Processor: Intel(R) Core(TM) Ultra 9 185H
+Cores: 22
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2300 MHz
+CPU min frequency: 400 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0      2.0%        40 °C      1999 MHz
+CPU1     12.1%        41 °C      2300 MHz
+CPU2      3.0%        41 °C       400 MHz
+CPU3     10.0%        40 °C       400 MHz
+CPU4      3.0%        40 °C      2081 MHz
+CPU5      7.1%        40 °C      1762 MHz
+CPU6      1.0%        40 °C      1885 MHz
+CPU7      0.0%        40 °C       400 MHz
+CPU8     10.1%        40 °C      1809 MHz
+CPU9      0.0%        40 °C       400 MHz
+CPU10      3.0%        39 °C      1786 MHz
+CPU11      5.9%        39 °C       400 MHz
+CPU12      3.0%        41 °C       400 MHz
+CPU13      4.9%        42 °C       400 MHz
+CPU14      4.0%        42 °C      1552 MHz
+CPU15      3.0%        41 °C       400 MHz
+CPU16      5.9%        41 °C      1801 MHz
+CPU17      2.0%        41 °C       400 MHz
+CPU18      6.9%        41 °C       400 MHz
+CPU19      3.0%        41 °C       400 MHz
+CPU20      0.0%        46 °C       400 MHz
+CPU21      1.0%        46 °C       400 MHz
+
+CPU fan speed: 1700 RPM
+
+auto-cpufreq version: 2.4.0
+
+Python: 3.13.0
+psutil package: 6.0.0
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.1 %
+
+Total CPU usage: 1.5 %
+Total system load: 0.89
+Average temp. of all cores: 41.00 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+```
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Goopher97:</strong></p>
+                    <p>me too，i use Ubuntu24.04.1lts gnome46</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Do you have latest changes, because I too had this problem and fixed it as part of [this commit](https://github.com/AdnanHodzic/auto-cpufreq/commit/1c11ca3139028e8a487cb277e2f375f0f8acaabc), awhile back.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>trips2007:</strong></p>
+                    <p>I also have that problem and it still doesn't work with those changes. Is it possible that it has to do with the fact that fedora 41 has replaced the service with tuned and that fedora upgrade python version  and for that does not support auto-cpufreq?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>danee940:</strong></p>
+                    <p>> Do you have latest changes, because I too had this problem and fixed it as part of [this commit](https://github.com/AdnanHodzic/auto-cpufreq/commit/1c11ca3139028e8a487cb277e2f375f0f8acaabc), awhile back.
+
+The commit has a 2.4.0 tag, and the `--debug` command shows `auto-cpufreq version: 2.4.0`, so I suppose yes.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>trips2007:</strong></p>
+                    <p>> I also have that problem and it still doesn't work with those changes. Is it possible that it has to do with the fact that fedora 41 has replaced the service with tuned and that fedora upgrade python version and for that does not support auto-cpufreq?
+
+I solved uninstalling tuned. Now start the service in boot.  </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>geragio:</strong></p>
+                    <p>I have the same issue after upgrading my workstation to Fedora 41, with Fedora 40 I've never observed such behavior.
+
+The service does not longer start automatically after the reboot, even if the service is enabled:
+
+```
+$ systemctl status -l auto-cpufreq.service 
+○ auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux
+     Loaded: loaded (/etc/systemd/system/auto-cpufreq.service; enabled; preset: disabled)
+    Drop-In: /usr/lib/systemd/system/service.d
+             └─10-timeout-abort.conf
+     Active: inactive (dead)
+```
+
+The service has to be started manually, not sure why.
+```
+$ sudo systemctl start auto-cpufreq.service
+```
+
+Perhaps the service is conflicting with some other service? 
+
+From Fedora 41 [release notes](https://docs.fedoraproject.org/en-US/fedora/latest/release-notes/sysadmin/#tuned-def-pwr-mgmt-daemon), I see that TuneD replaced power-profiles-daemon as a default power profile management daemon, it might be related</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>clemenceaus:</strong></p>
+                    <p>> > I also have that problem and it still doesn't work with those changes. Is it possible that it has to do with the fact that fedora 41 has replaced the service with tuned and that fedora upgrade python version and for that does not support auto-cpufreq?
+> 
+> I solved uninstalling tuned. Now start the service in boot.
+
+This also worked for me on fedora 41. Thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>danee940:</strong></p>
+                    <p>Oh, I didn’t get the memo that Fedora switched to tuned.
+
+However, completely removing tuned isn’t necessarily required, disabling the service is enough to let auto-cpufreq do its thing.
+
+Perhaps power_helper.py could be adjusted to check for tuned and disable it as well? Additionally, it would be helpful to mention this in the README.
+
+Many Fedora users would likely appreciate this addition.
+
+I also changed the title of this issue so that if someone searches for the problem, it will be easier to identify the root cause and solution for them.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>clemenceaus:</strong></p>
+                    <p>Is there any specific reason I would want to keep it? If its disabled all the time I can remove it aswell.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Perhaps power_helper.py could be adjusted to check for tuned and disable it as well? 
+
+This would be the ideal solution, where new function would be created to stop tuned, [just as it is for GNOME Power Profiles.](https://github.com/AdnanHodzic/auto-cpufreq/blob/7b03630a5e094fc2ef58492d6be35bf64c387815/auto_cpufreq/power_helper.py#L96)
+
+```
+# stops gnome >= 40 power profiles (live)
+def gnome_power_stop_live():
+    if systemctl_exists and not bool(gnome_power_status) and powerprofilesctl_exists:
+        call(["powerprofilesctl", "set", "balanced"])
+        call(["systemctl", "stop", "power-profiles-daemon"])
+```
+
+and then this function would be called [when auto-cpufreq is installed.](https://github.com/AdnanHodzic/auto-cpufreq/blob/7b03630a5e094fc2ef58492d6be35bf64c387815/auto_cpufreq/bin/auto_cpufreq.py#L96)
+
+```
+gnome_power_detect_install()
+gnome_power_stop_live()
+tlp_service_detect()
+```
+
+> Additionally, it would be helpful to mention this in the README.
+
+After this was implemented I would definitely mention it in README, just as it is for [GNOME Power Profiles ](https://github.com/AdnanHodzic/auto-cpufreq#installing-auto-cpufreq) or [TLP and etc](https://github.com/AdnanHodzic/auto-cpufreq#why-do-i-need-auto-cpufreq).
+
+Since I'm not experiencing problem because I'm not using Fedora, @danee940 or **anyone else** would like to give it a try and implement this feature by simply making small code changes. I encourage you to [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+Of course as part of this PR, [create function to enable tuned back](https://github.com/AdnanHodzic/auto-cpufreq/blob/7b03630a5e094fc2ef58492d6be35bf64c387815/auto_cpufreq/power_helper.py#L106) in case [auto-cpufreq daemon is removed](https://github.com/AdnanHodzic/auto-cpufreq/blob/7b03630a5e094fc2ef58492d6be35bf64c387815/auto_cpufreq/core.py#L373C5-L373C27), just as it is for GNOME Power Profiles.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>geragio:</strong></p>
+                    <p>I submitted a PR that should fix the issue, I did a couple of tests on my workstation and it works as expected.
+
+Any feedback is more than welcome!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I submitted a PR that should fix the issue, I did a couple of tests on my workstation and it works as expected.
+> 
+> Any feedback is more than welcome!
+
+Great stuff, thanks! #786 PR has been merged, hence everyone experiencing this problem please make sure you have the latest changes and your issue should be resolved. 
+
+If the issue persist, feel free to re-open the issue and leave a comment.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Tuxman2:</strong></p>
+                    <p>Hello,
+
+I installed auto-cpufreq with the last source code on Fedora 41. The installation is working but I can"t enable the daemon through the gui or via cli. Can you help me ? is there a way to have a flatpak package ?
+
+Thanks.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@Tuxman2 flatpak was already asked in https://github.com/AdnanHodzic/auto-cpufreq/issues/125 & https://github.com/AdnanHodzic/auto-cpufreq/issues/71. Having a Flatpak is not possible due to its limitations as explained in that issue.
+
+Changes which address this issue for Fedora were merged as [mentioned above,](https://github.com/AdnanHodzic/auto-cpufreq/issues/779#issuecomment-2453041930).
+
+If you have latest changes from source, make sure to follow instructions [how to install auto-cpufreq daemon](https://github.com/AdnanHodzic/auto-cpufreq/?tab=readme-ov-file#install---auto-cpufreq-daemon), and if problem persists please submit a new issue with more info.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

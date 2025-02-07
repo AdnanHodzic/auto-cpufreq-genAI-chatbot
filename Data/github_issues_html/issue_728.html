@@ -1,0 +1,125 @@
+
+        <html>
+        <head>
+            <title>Issue #728: "--update" parameter doesn't exist anymore</title>
+        </head>
+        <body>
+            <h1>"--update" parameter doesn't exist anymore</h1>
+            <p><strong>Issue #728</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Description
+
+https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#update---auto-cpufreq-update
+![image](https://github.com/AdnanHodzic/auto-cpufreq/assets/7001058/21cc8271-af31-48b7-8346-cbe49b23e06e)
+
+### Error output:
+```shell
+╰─ sudo auto-cpufreq --version
+
+-------------------------------------------------------------------------------
+
+Linux distro: Debian GNU/Linux 11 bullseye
+Linux kernel: 5.10.0-30-amd64
+auto-cpufreq version:
+Git commit: v2.2-606-gec1f1cd3d
+
+-------------------------------------------------------------------------------
+
+╰─ sudo auto-cpufreq --update
+Usage: auto-cpufreq [OPTIONS]
+Try 'auto-cpufreq --help' for help.
+
+Error: No such option: --update Did you mean --daemon?
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Wasn't able to replicate this problem:
+
+```
+sudo auto-cpufreq --update
+auto-cpufreq is up to date
+```
+
+Will also ask on [Discord community](https://discord.gg/Sjauxtj6kH) if anyone else was able to replicate it.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>yoyonel:</strong></p>
+                    <p>> Wasn't able to replicate this problem:
+> 
+> ```
+> sudo auto-cpufreq --update
+> auto-cpufreq is up to date
+> ```
+> 
+> Will also ask on [Discord community](https://discord.gg/Sjauxtj6kH) if anyone else was able to replicate it.
+
+Thx, can you provide the result of `sudo auto-cpufreq --version` please ?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Angel-Karasu:</strong></p>
+                    <p>```shell
+╰─ auto-cpufreq --version
+
+-------------------------------------------------------------------------------
+
+Linux distro: Artix Linux  
+Linux kernel: 6.9.7-artix1-1
+auto-cpufreq version: 2.3.0 (git: f300d31)
+
+-------------------------------------------------------------------------------
+
+╰─ sudo auto-cpufreq --update
+auto-cpufreq is up to date
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> > Wasn't able to replicate this problem:
+> > ```
+> > sudo auto-cpufreq --update
+> > auto-cpufreq is up to date
+> > ```
+> > 
+> > 
+> >     
+> >       
+> >     
+> > 
+> >       
+> >     
+> > 
+> >     
+> >   
+> > Will also ask on [Discord community](https://discord.gg/Sjauxtj6kH) if anyone else was able to replicate it.
+> 
+> Thx, can you provide the result of `sudo auto-cpufreq --version` please ?
+
+```
+auto-cpufreq --version 
+
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 24.04 Noble Numbat
+Linux kernel: 6.8.0-38-generic
+auto-cpufreq version: 2.3.0 (git: f300d31)
+
+-------------------------------------------------------------------------------
+```</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,56 @@
+
+        <html>
+        <head>
+            <title>Issue #449: [Request] Separate the package management part from `core.py`, use an independent installer and the correct location (`/usr/local/bin`)</title>
+        </head>
+        <body>
+            <h1>[Request] Separate the package management part from `core.py`, use an independent installer and the correct location (`/usr/local/bin`)</h1>
+            <p><strong>Issue #449</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>According to [file-hierarchy(7)](https://man.archlinux.org/man/file-hierarchy.7.en), `/usr` (except for `/usr/local`) should contain _Vendor-supplied operating system resources_ i.e. shall be managed by the package manager and the package manager only. Runtime-generated files like `cpufreqctl.auto-cpufreq` should be installed to `/usr/local/bin`.
+
+https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto_cpufreq/core.py#L309</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Since I'm very limited with available time to do this myself, if you or anyone else wants to give it a try in implementing this functionality, please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>YHNdnzj:</strong></p>
+                    <p>> Since I'm very limited with available time to do this myself, if you or anyone else wants to give it a try in implementing this functionality, please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+After some investigation, I think the biggest problem is that a part of the installing/removing logic is in `core.py`, which makes little sense as those should mostly be handled by the package manager. I think the best approach is to make `core.py` only contain the real _core_ functionalities. And files like `cpufreqctl.auto-cpufreq` can just be left to downstream packagers instead of being generated at runtime. If manual installation is required, an _independent_ installation script could be used. But such change is huge and would take some time. If this is desired, I'd like to take part in as well :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> After some investigation, I think the biggest problem is that a part of the installing/removing logic is in core.py, which makes little sense as those should mostly be handled by the package manager. I think the best approach is to make core.py only contain the real core functionalities. 
+
+Agreed, this was my idea with `core.py` but then development went too fast with too little time to refactor things and here we are now :)
+
+> If this is desired, I'd like to take part in as well :)
+
+@YHNdnzj sure sounds good, please give it a try :) </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>Auto-cpufreq now uses /usr/local/bin with my PR.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Auto-cpufreq now uses /usr/local/bin with my PR.
+
+Good point, I'll make sure to include this issue besides #460 for v1.9.7 release notes</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

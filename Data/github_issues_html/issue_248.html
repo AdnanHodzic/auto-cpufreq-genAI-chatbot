@@ -1,0 +1,81 @@
+
+        <html>
+        <head>
+            <title>Issue #248: Amd Ryzen5 laptop randomly freezing while using auto-cpufreq</title>
+        </head>
+        <body>
+            <h1>Amd Ryzen5 laptop randomly freezing while using auto-cpufreq</h1>
+            <p><strong>Issue #248</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### System information:
+```text
+-------------------------------------------------------------------------------
+
+Linux distro: Manjaro Linux 21.1.4 Pahvo
+Linux kernel: 5.14.7-2-MANJARO
+Processor: AMD Ryzen 5 2500U with Radeon Vega Mobile Gfx
+Cores: 8
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2000 MHz
+CPU min frequency: 1600 MHz
+
+Core  Usage  Temperature  Frequency
+CPU0:   13.1%     62 °C     2592 MHz
+CPU1:    1.0%     62 °C     2000 MHz
+CPU2:   18.4%     62 °C     2000 MHz
+CPU3:    2.0%     62 °C     2000 MHz
+CPU4:   11.9%     62 °C     2000 MHz
+CPU5:    4.0%     62 °C     2000 MHz
+CPU6:   16.0%     62 °C     2000 MHz
+CPU7:    3.0%     62 °C     2000 MHz
+
+auto-cpufreq version:
+Version         : 1.6.9.r0.gffc0bf0-1
+
+Python: 3.9.7
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 8.0.1
+distro package 1.6.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.23 %
+
+Total CPU usage: 7.4 %
+Total system load: 1.01
+Average temp. of all cores: 62.375 °C 
+
+Currently using: performance governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>With [v1.7.0 release](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.7.0) it's now possible to manually define some of the settings instead of leaving everything to be picked up automatically. Could you try tweaking some of the [available options](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq) and report back on how that worked for you? Thanks</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing due to inactivity. </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

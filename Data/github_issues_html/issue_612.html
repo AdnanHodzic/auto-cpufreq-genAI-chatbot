@@ -1,0 +1,131 @@
+
+        <html>
+        <head>
+            <title>Issue #612: Missing `override.pickle` on Arch</title>
+        </head>
+        <body>
+            <h1>Missing `override.pickle` on Arch</h1>
+            <p><strong>Issue #612</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>2.1.0-4 installed from AUR and working well. Only issue is when setting the governor manually. 
+
+Tagging @MusicalArtist12 as maintainer.
+
+### Error output:
+```text
+$ sudo auto-cpufreq --force=performance
+Traceback (most recent call last):
+  File "/usr/bin/auto-cpufreq", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/usr/lib/python3.11/site-packages/click/core.py", line 1157, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/site-packages/click/core.py", line 1078, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/site-packages/click/core.py", line 1434, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/site-packages/click/core.py", line 783, in invoke
+    return __callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/site-packages/auto_cpufreq/bin/auto_cpufreq.py", line 51, in main
+    set_override(force) # Calling set override, only if force has some values
+    ^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/site-packages/auto_cpufreq/core.py", line 106, in set_override
+    with open(governor_override_state, "wb") as store:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/opt/auto-cpufreq/override.pickle'```
+---
+```
+
+### System information:
+
+```text
+-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux
+Linux kernel: 6.6.2-zen1-1-zen
+Processor: 12th Gen Intel(R) Core(TM) i7-1260P
+Cores: 16
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2100 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0     10.1%        41 °C      1155 MHz
+CPU1      4.0%        41 °C       399 MHz
+CPU2     11.1%        41 °C       489 MHz
+CPU3      0.0%        41 °C       400 MHz
+CPU4     10.1%        42 °C       400 MHz
+CPU5      1.0%        42 °C       400 MHz
+CPU6      6.1%        37 °C      1040 MHz
+CPU7      0.0%        37 °C       400 MHz
+CPU8      1.0%        40 °C       636 MHz
+CPU9      4.0%        41 °C       802 MHz
+CPU10      3.0%        41 °C       800 MHz
+CPU11      0.0%        41 °C       400 MHz
+CPU12      0.0%        40 °C      1503 MHz
+CPU13      3.1%        40 °C      1500 MHz
+CPU14      1.0%        40 °C       400 MHz
+CPU15      0.0%        40 °C       400 MHz
+
+auto-cpufreq version: Version         : 2.1.0-4
+
+Python: 3.11.6
+psutil package: 5.9.6
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.8.0
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.05 %
+
+Total CPU usage: 3.5 %
+Total system load: 0.76
+Average temp. of all cores: 40.31 °C
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```
+
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>MusicalArtist12:</strong></p>
+                    <p>Ah, it looks like I missed a file needed in `/opt/auto-cpufreq`
+
+Will get back to you with a fix later</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>MusicalArtist12:</strong></p>
+                    <p>this has been fixed on the aur build. 
+
+in case you're interested in what the problem was: the package was missing the empty folder `/opt/auto-cpufreq/`. override.pickle is made by the core program, but it needs the folder to store it in... </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bard:</strong></p>
+                    <p>Thanks @MusicalArtist12 ! Confirmed as working (though, strangely enough, I had to remove the old package and reinstall to bring in the change, maybe because the package version stayed the same), will close this issue.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

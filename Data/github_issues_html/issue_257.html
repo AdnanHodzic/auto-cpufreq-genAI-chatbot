@@ -1,0 +1,199 @@
+
+        <html>
+        <head>
+            <title>Issue #257: Error when starting auto-cpufreq --monitor using snap package</title>
+        </head>
+        <body>
+            <h1>Error when starting auto-cpufreq --monitor using snap package</h1>
+            <p><strong>Issue #257</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+```text
+Paste here error output
+```Traceback (most recent call last):
+  File "/snap/auto-cpufreq/76/bin/auto-cpufreq", line 169, in <module>
+    main()
+  File "/snap/auto-cpufreq/76/lib/python3.8/site-packages/click/core.py", line 1128, in __call__
+    return self.main(*args, **kwargs)
+  File "/snap/auto-cpufreq/76/lib/python3.8/site-packages/click/core.py", line 1053, in main
+    rv = self.invoke(ctx)
+  File "/snap/auto-cpufreq/76/lib/python3.8/site-packages/click/core.py", line 1395, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/snap/auto-cpufreq/76/lib/python3.8/site-packages/click/core.py", line 754, in invoke
+    return __callback(*args, **kwargs)
+  File "/snap/auto-cpufreq/76/bin/auto-cpufreq", line 77, in main
+    gov_check()
+  File "/snap/auto-cpufreq/76/lib/python3.8/site-packages/auto_cpufreq/core.py", line 363, in gov_check
+    for gov in get_avail_gov():
+  File "/snap/auto-cpufreq/76/lib/python3.8/site-packages/auto_cpufreq/core.py", line 191, in get_avail_gov
+    return f.read_text().strip().split(" ")
+  File "/usr/lib/python3.8/pathlib.py", line 1236, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+  File "/usr/lib/python3.8/pathlib.py", line 1222, in open
+    return io.open(self, mode, buffering, encoding, errors, newline,
+  File "/usr/lib/python3.8/pathlib.py", line 1078, in _opener
+    return self._accessor.open(self, flags, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors'
+
+---
+
+### System informat
+zorin 16 
+Paste here output of the auto-cpufreq --debug
+Linux distro: Zorin OS 16
+Linux kernel: 5.11.0-37-generic
+Processor: AMD Ryzen 3 3200G with Radeon Vega Graphics
+Cores: 4
+Architecture: x86_64
+Driver: cat: /sys/devices/system/cpu/cpu0/cpufreq/scaling_driver: No such file or directory
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 0 MHz
+CPU min frequency: 0 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  0.0%     40 °C     3600 MHz
+CPU1:	  0.0%     40 °C     2575 MHz
+CPU2:	  1.0%     40 °C     3600 MHz
+CPU3:	  0.0%     40 °C     3600 MHz
+
+auto-cpufreq version:
+Snap: 1.7.0
+
+Python: 3.8.10
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 8.0.3
+Traceback (most recent call last):
+  File "/snap/auto-cpufreq/76/bin/pip3", line 5, in <module>
+    from pip._internal.cli.main import main
+  File "/snap/auto-cpufreq/76/lib/python3.8/site-packages/pip/_internal/cli/main.py", line 10, in <module>
+    from pip._internal.cli.autocompletion import autocomplete
+  File "/snap/auto-cpufreq/76/lib/python3.8/site-packages/pip/_internal/cli/autocompletion.py", line 9, in <module>
+    from pip._internal.cli.main_parser import create_main_parser
+  File "/snap/auto-cpufreq/76/lib/python3.8/site-packages/pip/_internal/cli/main_parser.py", line 7, in <module>
+    from pip._internal.cli import cmdoptions
+  File "/snap/auto-cpufreq/76/lib/python3.8/site-packages/pip/_internal/cli/cmdoptions.py", line 24, in <module>
+    from pip._internal.exceptions import CommandError
+  File "/snap/auto-cpufreq/76/lib/python3.8/site-packages/pip/_internal/exceptions.py", line 10, in <module>
+    from pip._vendor.six import iteritems
+ModuleNotFoundError: No module named 'pip._vendor.six'
+distro package
+
+Computer type: Desktop
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.19 %
+
+Total CPU usage: 0.5 %
+Total system load: 0.35
+Average temp. of all cores: 39.625 °C 
+
+Currently using: cat: governor
+Warning: CPU turbo is not available
+Currently turbo boost is: off
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Is there any difference if you install auto-cpufreq using the [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer) instead of snap package?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>djsedaw:</strong></p>
+                    <p>Hi, just using the auto installer and I think I get a different error message:
+
+Linux distro: Zorin OS 16 focal
+Linux kernel: 5.11.0-37-generic
+Processor: AMD Ryzen 3 3200G with Radeon Vega Graphics
+Cores: 4
+Architecture: x86_64
+Driver: /bin/sh: 1: cpufreqctl.auto-cpufreq: not found
+Traceback (most recent call last):
+  File "/usr/local/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.0', 'auto-cpufreq')
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 667, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 1470, in run_script
+    exec(script_code, namespace, namespace)
+  File "/usr/local/lib/python3.8/dist-packages/auto_cpufreq-1.0-py3.8.egg/EGG-INFO/scripts/auto-cpufreq", line 169, in <module>
+  File "/usr/lib/python3/dist-packages/click/core.py", line 764, in __call__
+    return self.main(*args, **kwargs)
+  File "/usr/lib/python3/dist-packages/click/core.py", line 717, in main
+    rv = self.invoke(ctx)
+  File "/usr/lib/python3/dist-packages/click/core.py", line 956, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/usr/lib/python3/dist-packages/click/core.py", line 555, in invoke
+    return callback(*args, **kwargs)
+  File "/usr/local/lib/python3.8/dist-packages/auto_cpufreq-1.0-py3.8.egg/EGG-INFO/scripts/auto-cpufreq", line 109, in main
+  File "/usr/local/lib/python3.8/dist-packages/auto_cpufreq-1.0-py3.8.egg/auto_cpufreq/core.py", line 960, in sysinfo
+ValueError: max() arg is an empty sequence</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Seems like same thing happened in #203, could you replicate what was done there?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>djsedaw:</strong></p>
+                    <p>hi just tried that method in 203 but get the error below:
+
+sudo auto-cpufreq --monitor
+
+Note: You can quit monitor mode by pressing "ctrl+c"
+
+-------------------------------------------------------------------------------
+
+Traceback (most recent call last):
+  File "/usr/local/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.0', 'auto-cpufreq')
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 667, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 1470, in run_script
+    exec(script_code, namespace, namespace)
+  File "/usr/local/lib/python3.8/dist-packages/auto_cpufreq-1.0-py3.8.egg/EGG-INFO/scripts/auto-cpufreq", line 169, in <module>
+  File "/usr/local/lib/python3.8/dist-packages/click/core.py", line 1128, in __call__
+    return self.main(*args, **kwargs)
+  File "/usr/local/lib/python3.8/dist-packages/click/core.py", line 1053, in main
+    rv = self.invoke(ctx)
+  File "/usr/local/lib/python3.8/dist-packages/click/core.py", line 1395, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/usr/local/lib/python3.8/dist-packages/click/core.py", line 754, in invoke
+    return __callback(*args, **kwargs)
+  File "/usr/local/lib/python3.8/dist-packages/auto_cpufreq-1.0-py3.8.egg/EGG-INFO/scripts/auto-cpufreq", line 77, in main
+  File "/usr/local/lib/python3.8/dist-packages/auto_cpufreq-1.0-py3.8.egg/auto_cpufreq/core.py", line 363, in gov_check
+  File "/usr/local/lib/python3.8/dist-packages/auto_cpufreq-1.0-py3.8.egg/auto_cpufreq/core.py", line 191, in get_avail_gov
+  File "/usr/lib/python3.8/pathlib.py", line 1236, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+  File "/usr/lib/python3.8/pathlib.py", line 1222, in open
+    return io.open(self, mode, buffering, encoding, errors, newline,
+  File "/usr/lib/python3.8/pathlib.py", line 1078, in _opener
+    return self._accessor.open(self, flags, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors'
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Sarath9087:</strong></p>
+                    <p>It works by using this command: sudo snap run auto-cpufreq --monitor if the package is installed as a snap.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing the issue due to inactivity, if the problem persist please feel free to re-open the issue.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

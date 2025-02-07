@@ -1,0 +1,107 @@
+
+        <html>
+        <head>
+            <title>Issue #301: 1.8.0 not working with gnome_power_stats error 1.7.2 working</title>
+        </head>
+        <body>
+            <h1>1.8.0 not working with gnome_power_stats error 1.7.2 working</h1>
+            <p><strong>Issue #301</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+```text
+ $ sudo auto-cpufreq --daemon
+
+Unable to determine init system
+If this causes any problems, please submit an issue:
+https://github.com/AdnanHodzic/auto-cpufreq/issues
+
+Using settings defined in /etc/auto-cpufreq.conf file
+Traceback (most recent call last):
+  File "/usr/bin/auto-cpufreq", line 189, in <module>
+    main()
+  File "/usr/lib/python3.9/site-packages/click/core.py", line 1128, in __call__
+    return self.main(*args, **kwargs)
+  File "/usr/lib/python3.9/site-packages/click/core.py", line 1053, in main
+    rv = self.invoke(ctx)
+  File "/usr/lib/python3.9/site-packages/click/core.py", line 1395, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/usr/lib/python3.9/site-packages/click/core.py", line 754, in invoke
+    return __callback(*args, **kwargs)
+  File "/usr/bin/auto-cpufreq", line 60, in main
+    gnome_power_detect()
+  File "/usr/lib/python3.9/site-packages/auto_cpufreq/power_helper.py", line 33, in gnome_power_detect
+    if gnome_power_stats == 0:
+NameError: name 'gnome_power_stats' is not defined
+```
+---
+
+### System information:
+```text
+Unable to determine init system
+If this causes any problems, please submit an issue:
+https://github.com/AdnanHodzic/auto-cpufreq/issues
+
+Using settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------------------------------------------------------
+
+Linux distro: Artix Linux rolling n/a
+Linux kernel: 5.15.6-lqx2-1-lqx
+Processor: Intel(R) Core(TM) i5-3320M CPU @ 2.60GHz
+Cores: 4
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2601 MHz
+CPU min frequency: 1200 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  0.0%     45 °C     2549 MHz
+CPU1:	  0.0%     45 °C     2601 MHz
+CPU2:	  1.0%     46 °C     2601 MHz
+CPU3:	  1.0%     46 °C     2601 MHz
+
+auto-cpufreq version:
+fatal: (현재 폴더 또는 상위 폴더 부터 마운트 위치 /mnt 까지 일부가) 깃 저장소가 아닙니다
+파일 시스템 경계에서 중지합니다. (GIT_DISCOVERY_ACROSS_FILESYSTEM 설정되지 않음)
+CalledProcessError(128, ['git', 'describe', '--always'])
+
+Python: 3.9.9
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 8.0.3
+/bin/sh: 줄 1: pip3: 명령어를 찾을 수 없음
+distro package
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.1 %
+
+Total CPU usage: 0.7 %
+Total system load: 0.2
+Average temp. of all cores: 45.5 °C 
+
+Currently using: performance governor
+Currently turbo boost is: off
+```
+---
+1.7.2 is working</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Same thing as in #300 </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

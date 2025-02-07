@@ -1,0 +1,443 @@
+
+        <html>
+        <head>
+            <title>Pull Request #476: [Feature] Force use of powersave or performance governors</title>
+        </head>
+        <body>
+            <h1>[Feature] Force use of powersave or performance governors</h1>
+            <p><strong>Pull Request #476</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I noticed a couple of people had requested this and I wanted the feature myself, so I took the initiative. I threw this together, but I tested it well and it works flawlessly so far.
+
+This adds two new options.
+
+`--force TEXT` allows the user to force a governor into use until the user disables it.
+For example, if I do `sudo auto-cpufreq --force=powersave` this will force the use of the powersave governor under any circumstance. If you plug in your laptop it will still use powersave mode, and changing the config file will not do anything. This will even persist after a reboot because it's stored to disk. 
+
+Using `sudo auto-cpufreq --force=reset` will reset the override and return to using the config file or default governors
+
+the `--state` options returns the status of the override. if there's no override it simply returns `default`
+
+Hopefully, this is a welcome change. You're welcome to change any of the help messages or updates I made to the README as I made them on the fly and didn't put a ton of thought into the wording.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I noticed a couple of people had requested this and I wanted the feature myself, so I took the initiative. 
+
+Awesome, always glad to hear this. I love it but I also have few remarks:
+
+1. I can't get it to work, or am I not using the flag properly? 
+
+```
+sudo auto-cpufreq --force performance
+auto-cpufreq: wrong invocation. try --help for help.
+sudo auto-cpufreq --force "performance"
+auto-cpufreq: wrong invocation. try --help for help.
+sudo auto-cpufreq --force powersave    
+auto-cpufreq: wrong invocation. try --help for help.
+```
+
+2. Also, I suggest to first have a check to see if daemon is running before this flag can be run. Take a [look in code](https://github.com/AdnanHodzic/auto-cpufreq/blob/122dd0f96c387fccb0555080bd84ccd7e0b796a0/auto_cpufreq/core.py#L1191). As you'll get this output, if you try to run `sudo auto-cpufreq --install` after you already ran `sudo auto-cpufreq --install`.
+
+So in case flag was used and daemon is not running (--install) not run first, it would say something like: "Make sure auto-cpufreq --install  is run first (running as daemon) before this flag can be used"
+
+3. Also as part of the flag description:
+
+```
+  --force TEXT           Force use of either powersave or performance
+                         governors. Setting to 'reset' will go back to normal
+                         mode
+```
+
+Could you please add "performance" and "powersave" in double quotes and "reset" in double quotes? Think it helps visually and is consistent with "--install_performance" flag description.
+
+4. Also could we make it to be more verbose when `auto-cpufreq --state` is run, for example:
+
+```
+sudo auto-cpufreq --state
+governor override set to "performance"
+```
+
+Thanks and looking forward to your reply</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Hi, thanks for your reply
+
+The option should be used as follows
+`sudo auto-cpufreq --force=performance`
+Maybe this should be made more clear in the README?
+
+Also I think checking for the daemon running is a good idea. I'll update this PR as soon as I can with that change, as well as updating the flag description
+
+as far as the output of `--state` goes,  in issue #467, the user wanted the `--state` flag to output something that could be used in a bar which is why I had it simply output the state with no verbosity. Maybe there could be a verbose option?
+
+Thanks again.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> The option should be used as follows
+> `sudo auto-cpufreq --force=performance`
+> Maybe this should be made more clear in the README?
+
+Yes, I was about to mention this as part of my original comment, let's [update this section of README](https://github.com/AdnanHodzic/auto-cpufreq/#how-to-run-auto-cpufreq).
+
+> Also I think checking for the daemon running is a good idea. I'll update this PR as soon as I can with that change, 
+> as well as updating the flag description
+
+Awesome, looking forward to the change and take your time :)
+
+> as far as the output of --state goes, in issue https://github.com/AdnanHodzic/auto-cpufreq/issues/467, 
+> the user wanted the --state flag to output something that could be used in a bar which is why I had it 
+> simply output the state with no verbosity. Maybe there could be a verbose option?
+
+Ack, well now that this PR is here I would love to hear from @niksingh710 what he meant by:
+> auto-cpufreq --state # (should return powersave,performance,reseted) So that the user can create a indicator in it's bar config.
+
+In particular: 
+> So that the user can create a indicator in it's bar config.
+
+In #312 I mentioned that it would be great if auto-cpufreq had indicator/gnome-extension type of thing in the future, so would love to hear what user had in mind exactly here. 
+
+Adding another "state-verbose" flag might be too much, so we might as well just explain it as part of README ...</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>niksingh710:</strong></p>
+                    <p>I was saying that indicator one just because of some users who use window managers and some kind of bar to show status and all.
+
+
+E.g I use waybar so having a cli way to get the current state of autocpu-freq will be very easy to display there.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Maybe I'll change `--state` to something like `--bar`? And explain its function in readme and the `--help` flag</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>niksingh710:</strong></p>
+                    <p>Imo `--get-info` displaying information will be nice.
+But `--bar` will do the job too.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@niksingh710 
+
+> E.g I use waybar so having a cli way to get the current state of autocpu-freq will be very easy to display there.
+
+Let me know what you end up with, full fledged auto-cpufreq running in tray or gnome extension would be great, but this could be a great beginning as well. Might even be worthy mentioning/showcasing on Readme?
+
+> Imo --get-info displaying information will be nice.
+> But --bar will do the job too.
+
+I have an even better proposal: `--get-state`. To also avoid having too many flags you can set it to not be shown when you run `--help` @shadeyg56 [reference `--daemon`](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/bin/auto-cpufreq#L38), but should be mentioned and explained as part of Readme. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>niksingh710:</strong></p>
+                    <p>
+> > E.g I use waybar so having a cli way to get the current state of autocpu-freq will be very easy to display there.
+> 
+> Let me know what you end up with, full fledged auto-cpufreq running in tray or gnome extension would be great, but this could be a great beginning as well. Might even be worthy mentioning/showcasing on Readme?
+> 
+
+In tray will be a better option as this will enable it for KDE or other DE those used system tray in their panel.
+
+> I have an even better proposal: `--get-state`. To also avoid having too many flags you can set it to not be shown when you run `--help` @shadeyg56 [reference `--daemon`](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/bin/auto-cpufreq#L38), but should be mentioned and explained as part of Readme. 
+
+I do agree with `--get-state` and also less flags means easy to understand.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>I think tray should he handled in a separate PR to keep this one from having too much, but it's a good idea. I'll focus on the flag for now </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> In tray will be a better option as this will enable it for KDE or other DE those used system tray in their panel.
+...
+> I think tray should he handled in a separate PR to keep this one from having too much, but it's a good idea. I'll focus on the flag > for now
+
+Sounds good!
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Ok new commits have been pushed.
+
+FIrst off, in commit 573452a69615d8fc8e9ebcd905e188c8ed975449, I added two functions for sending a message when a user tries to use `--force` before running `--install`. Also if an override is set and a user calls `--remove`, it will now remove the override. I also renamed `remove()` to `remove_daemon()`. I will come back to this
+
+Now in 08e5a2bd78f67456925442d0d5826f5fa475d6c9, you can see I changed the `--install/--remove` decorator. This is because this is not the intended use of boolean flags which can be found in the [Click docs](https://click.palletsprojects.com/en/8.1.x/options/#boolean-flags). Now there was also a function named `remove()` in core.py. This was conflicting with the `remove` variable so I had to change the name. This improves overall readability anyways. I also renamed `--state` to `--get-state` for now.
+
+Finally, the last commit is just the README update. I made it a little clearer and also added a dedicated section for overriding governors and hyperlinked to it.
+
+I'd love to hear your feedback. On another note, I'm willing to do another PR for the tray menu. Just know I've never done that before, so it will be a learning experience, but I am down to do it.
+
+Sorry for the long message haha
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I'd love to hear your feedback. On another note, I'm willing to do another PR for the tray menu. 
+> Just know I've never done that before, so it will be a learning experience, but I am down to do it.
+
+That that would be great!
+
+> Sorry for the long message haha
+
+No worries, I actually prefer when folks are more verbose in their PR's as it reduces chances of having any ambiguity. Especially since my reply won't be any shorter :D 
+
+Everything works as expected now, but I do have few remarks.
+
+**Observations no: 1:** 
+
+If I run `auto-cpufreq --get-state` without running `auto-cpufreq --install` it will still just return "default", where I think it'd be better to return output of `no_stats_msg` func, i.e:
+
+`ERROR: auto-cpufreq stats are missing.\n\nMake sure to run: "auto-cpufreq --install" first'`
+
+Because, it's already outputting state, and yet auto-cpufreq daemon hasn't even been installed yet.
+
+I also noticed, that although `daemon` flag is hidden, if you run `sudo auto-cpufreq --daemon` it'll start executing:
+
+```
+sudo auto-cpufreq --daemon
+
+Using settings defined in /etc/auto-cpufreq.conf file
+```
+
+Where it would also be good idea to return similar message, i.e: 
+
+```
+ 'ERROR: auto-cpufreq daemon is missing.\n\nMake sure to run: "auto-cpufreq --install" first'
+```
+
+So I think it would be a good idea to rename `no_stats_msg` func to `no_daemon_msg` and return its contents in more generic fashion: 
+
+` 'ERROR: auto-cpufreq daemon is missing.\n\nMake sure to run: "auto-cpufreq --install" first'` 
+
+Then this way, it could be use for both cases of `--state` and `--daemon` if it's run without --install first?
+
+**Observation no 2:**
+
+Could you still do this as I mentioned in my initial comment:
+
+```
+Also as part of the flag description:
+  --force TEXT           Force use of either powersave or performance
+                         governors. Setting to 'reset' will go back to normal
+                         mode
+```
+
+Could you please add "performance" and "powersave" in double quotes and "reset" in double quotes? Think it helps visually and is consistent with "--install_performance" flag description.
+
+Also let's add description of this flag you used here as part of Readme as well, as it's bit more descriptive here, then it is in Readme.
+
+**Observation no 3:** 
+
+I just realized now, it would be good if overwrite state (output of `auto-cpufreq --get-state`) would be displayed in ``auto-cpufreq --stats`. For example bottom portion looks like:
+
+```
+---------------------------- CPU frequency scaling ----------------------------
+
+Setting to use: "performance" governor
+
+Total CPU usage: 1.8 %
+Total system load: 0.77
+Average temp. of all cores: 48.25 °C 
+```
+
+I think it would be a good idea to be like:
+
+````
+---------------------------- CPU frequency scaling ----------------------------
+
+Setting to use: "performance" governor
+Warning: governor overwritten using `--force` flag.
+
+Total CPU usage: 1.8 %
+Total system load: 0.77
+Average temp. of all cores: 48.25 °C 
+````
+
+This way we could even hide `--get-state` by default, and yet it could still be used as part of tray icon.
+
+Looking forward to hearing your thoughts on this.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>1. Sounds good to me. Cuts down on some functions
+
+2. Ah I knew I was missing something in the last commits. Thanks for reminding me.
+
+3. Sure sounds like a good idea.
+
+I'll update this PR once again when I've made the changes</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Alright, commits have been merged.  Just a few quick comments
+
+1. 
+> So I think it would be a good idea to rename no_stats_msg func to no_daemon_msg and return its contents in more generic fashion:
+ 'ERROR: auto-cpufreq daemon is missing.\n\nMake sure to run: "auto-cpufreq --install" first'
+Then this way, it could be use for both cases of --state and --daemon if it's run without --install first?
+
+So I did make this the case for both `--get-state` and `--stats`. The error messages have been cut down in commit a339b82. I did not make this true for `--daemon` because using `sudo auto-cpufreq --daemon` is technically running the daemon so you cannot check for it here without checking that the service files have been installed. 
+In my opinion, if you do not want the user to be able to run this flag themselves, then the `--daemon` flag should be removed altogether, and a separate file should be created for running the daemon. Then the service files should be updated to run that separate daemon script. This should probably be handled in a different PR.
+
+2. README should be updated with new changes
+
+3. `--stats` will now show a governor override warning
+
+That should be all. Let me know what you think :)
+
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>1. Sounds good! 
+
+2. Small thing, I still see double quotes missing around "powersave", "performance" in Readme as they are now in flag description :) 
+
+3. Perfect
+
+> That should be all. Let me know what you think :)
+
+One final thing before I merge this with `master` branch. I noticed that if I I use `sudo auto-cpufreq --force=performance`, I'll get this (as expected):
+
+```
+Setting to use: "powersave" governor
+Warning: governor overwritten using `--force` flag.
+```
+
+After which if I do `sudo auto-cpufreq --force=reset `, and no matter how low the load goes, `Setting to use: "performance" governor` never changes, unless I switch it to `sudo auto-cpufreq --force=powersave`, then it'll switch it back to `powersave`.
+
+While overwriting governor with `powersave`, if I run i.e: `stress --cpu 8 --io 4 --vm 4 --timeout 15` it'll switch back to `performance` to do the heavy lifting (as it should) and go back to `powersave` once done. But I just never see it go back to other governor when overwritten with `performance`.  I'll keep testing, but do you have this on your side?
+
+Because, same thing will happen with `--config` where governor changes won't be updated whatever was changed in config file, until auto-cpufreq process was manually restarted (it was never implemented for this to happen automatically).
+
+Sidenote, after these changes are removed, and I make sure it all works great as part of snap package as well I'll probably proceed to remove `--install_performance` flag and all its functionality  as this flag is lot more elegant way to go about this. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Oh my goodness I could've swore I put the quotes in the README 😂. I guess I only did it for the dedicated section. 
+
+> While overwriting governor with powersave, if I run i.e: stress --cpu 8 --io 4 --vm 4 --timeout 15 it'll switch back to performance to do the heavy lifting (as it should) and go back to powersave once done. But I just never see it go back to other governor when overwritten with performance. I'll keep testing, but do you have this on your side?
+
+This shouldn't be happening. The whole point of the `--force` flag is to use a governor of your choice all the time so it should never switch itself if an override is active. I'll check this out later and see if I can reproduce/fix this. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>> After which if I do sudo auto-cpufreq --force=reset , and no matter how low the load goes, Setting to use: "performance" governor never changes, unless I switch it to sudo auto-cpufreq --force=powersave, then it'll switch it back to powersave.
+While overwriting governor with powersave, if I run i.e: stress --cpu 8 --io 4 --vm 4 --timeout 15 it'll switch back to performance to do the heavy lifting (as it should) and go back to powersave once done. But I just never see it go back to other governor when overwritten with performance. I'll keep testing, but do you have this on your side?
+
+I was unable to reproduce this. On my system, it works as intended. Using `--force` sets auto-cpufreq to use that governor all the time until `--force=reset` is called
+
+In the meantime, I have updated the README... hopefully for the final time lol</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>tpongo-afk:</strong></p>
+                    <p>Hello everyone, I was reading through this PR and noticed that you only mention powersave and performance mode. Due to having the amd_pstate driver and issue #398 I use the conservative governor when on battery. Do you have in mind including the other [governors](https://wiki.archlinux.org/title/CPU_frequency_scaling#Scaling_governors)?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Hey @tpongo-afk. This is actually already the case. The governor override will use your config file as well
+
+So if I do `sudo auto-cpufreq --force=powersave` and I have my config file set to use conservative on battery, then it will override to use conservative. This is bad naming on my part. Perhaps the force flag should be changed to `sudo auto-cpufreq --force=battery` and  `sudo auto-cpufreq --force=charger`?
+
+I'm not sure what the best way to do it is as I feel "battery" and "charger" are also a little confusing as to what the flag is supposed to do. Maybe it should just be up to the user to be able to use any of the available governors? Let me know what you think.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@shadeyg56 
+
+> I was unable to reproduce this. On my system, it works as intended. Using `--force` sets auto-cpufreq to use that governor all the time until `--force=reset` is called
+
+Good, and what about: 
+
+> if I I use sudo auto-cpufreq --force=performance, I'll get this (as expected):
+```
+Setting to use: "powersave" governor
+Warning: governor overwritten using `--force` flag.
+```
+> After which if I do sudo auto-cpufreq --force=reset , and no matter how low the load goes, Setting to use: "performance" governor never changes to i.e "powersave", unless I switch it to `sudo auto-cpufreq --force=powersave`, then it'll switch it back to powersave.
+
+Can you reproduce this? As this is more of a potential issue.
+
+> In the meantime, I have updated the README... hopefully for the final time lol
+
+No worries, that's why we have these code reviews :) 
+
+> So if I do sudo auto-cpufreq --force=powersave and I have my config file set to use conservative on battery, then it will override to use conservative. This is bad naming on my part. Perhaps the force flag should be changed to sudo auto-cpufreq --force=battery and sudo auto-cpufreq --force=charger?
+
+I suggest to simply mention this as part of a Readme, using `--force=charger/battery` is just not right.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>> After which if I do sudo auto-cpufreq --force=reset , and no matter how low the load goes, Setting to use: "performance" governor never changes to i.e "powersave", unless I switch it to sudo auto-cpufreq --force=powersave, then it'll switch it back to powersave.
+
+Hm I guess I was confused by what you meant initially. I believe I tested this when I initially submitted the PR but I will double check</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>I am unable to reproduce it. I'd like to explain exactly what is happening on my system so there is no confusion.
+
+I am running my laptop off of battery, so the "powersave" governor is in use.
+I run `sudo auto-cpufreq --force=performance`
+Now the "performance" governor is always in use.
+I do whatever performance stuff I want to do
+Then I run `sudo auto-cpufreq --force=reset` and it goes back to using "powersave" because my laptop is running off battery still
+
+\he override runs all the time, until `--force=reset` is used. After it is used, auto-cpufreq goes back to using the governor it should be using based on the config file.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@shadeyg56 it's all good, I just realized what the problem was and it was on my side.
+
+Regardless, merging changes with `master` branch thank you for your contribution for which you'll be credited as part of [next release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+Regarding next release, if you create a new PR for the tray icon, let's aim for this to be the big v2.0 release, as I think that would be a big one. If you're about to do this, let's also add an icon for auto-cpufreq as part of i.e: `/usr/share/applications/auto-cpufreq.desktop` something I also had on ToDo) as part of these changes.
+
+In meantime, I'll request Ubuntu Snap team to approve the access to `/opt/auto-cpufreq/venv/override.pickle`  file outside of auto-cpufreq container, as with current changes Snap package will not be able to execute `sudo auto-cpufreq --force=performance`. But I'll take care of this so it's all working with next release. 
+
+I'll also look if we can get rid of `--install_performance` flag now ...
+
+Again, thanks and I hope I'll see more PR's from you :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Awesome. Thanks for your correspondence. 
+
+As far as the tray goes, I might open up a discussion or you can reach me on Discord at shadeyg56#2429 so we can discuss the details of the tray menu so I can know exactly what you have in mind :)</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

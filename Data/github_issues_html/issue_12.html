@@ -1,0 +1,278 @@
+
+        <html>
+        <head>
+            <title>Issue #12: sudo python3 auto-cpufreq.py --install cant copy file to path "/usr/lib/systemd/system/"</title>
+        </head>
+        <body>
+            <h1>sudo python3 auto-cpufreq.py --install cant copy file to path "/usr/lib/systemd/system/"</h1>
+            <p><strong>Issue #12</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>When i trying to install daemon:
+`sudo python3 auto-cpufreq.py --install`
+there no path "/usr/lib/systemd/system/" on Ubuntu 18.04
+![image](https://user-images.githubusercontent.com/5400851/71784792-88ba3e00-3008-11ea-8f36-5541024a538b.png)
+
+![image](https://user-images.githubusercontent.com/5400851/71784779-60cada80-3008-11ea-8d18-927d098e8aab.png)
+
+
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Exorust:</strong></p>
+                    <p>This issue can be fixed through copying the .service file to /lib/systemd/system instead of /usr/lib/systemd/system
+
+`cp -f scripts/auto-cpufreq.service /lib/systemd/system/auto-cpufreq.service`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I also believe this issue has been fixed in one of the latest commits, could you please try pulling latest changes and inform me if this is the case? 
+
+Thanks</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>volnes:</strong></p>
+                    <p>nope still trying put file auto-cpufreq.service to /usr/lib/systemd/system/</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>marc-vdm:</strong></p>
+                    <p>I`m also experiencing this issue and pulled less than 15m ago.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>juliangaal:</strong></p>
+                    <p>> `cp -f scripts/auto-cpufreq.service /lib/systemd/system/auto-cpufreq.service`
+
+Applied this, so `auto-cpufreq-install` worked just fine! However, I am stuck with this:
+
+```bash
+$ auto-cpufreq --log
+Traceback (most recent call last):
+  File "/usr/bin/auto-cpufreq", line 382, in <module>
+    @click.option("--daemon", is_flag=True, hidden=True)
+  File "/usr/lib/python3/dist-packages/click/decorators.py", line 170, in decorator
+    _param_memo(f, OptionClass(param_decls, **attrs))
+  File "/usr/lib/python3/dist-packages/click/core.py", line 1460, in __init__
+    Parameter.__init__(self, param_decls, type=type, **attrs)
+TypeError: __init__() got an unexpected keyword argument 'hidden'
+```
+
+```bash
+$ sudo systemctl status auto-cpufreq.service
+● auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux
+   Loaded: loaded (/lib/systemd/system/auto-cpufreq.service; enabled; vendor preset: enabled)
+   Active: failed (Result: exit-code) since Tue 2020-01-07 12:48:03 CET; 10s ago
+  Process: 25814 ExecStart=/usr/bin/python3 /usr/bin/auto-cpufreq --daemon (code=exited, status=1/FAILURE)
+ Main PID: 25814 (code=exited, status=1/FAILURE)
+
+Jan 07 12:48:03 pop-os systemd[1]: Started auto-cpufreq - Automatic CPU speed & power optimizer for Linux.
+Jan 07 12:48:03 pop-os systemd[1]: auto-cpufreq.service: Main process exited, code=exited, status=1/FAILURE
+Jan 07 12:48:03 pop-os systemd[1]: auto-cpufreq.service: Failed with result 'exit-code'.
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>marc-vdm:</strong></p>
+                    <p>>  However, I am stuck with this:
+
+See the fix at #4, it is also in the readme now</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>juliangaal:</strong></p>
+                    <p>> This issue can be fixed through copying the .service file to /lib/systemd/system instead of /usr/lib/systemd/system
+
+Does this path vary from distro to distro? 
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@juliangaal yes. Problem was that change was made that only makes systemd file work on RedHat based distros.
+
+@Everyone, if you have daemon installed, could you please run: `sudo auto-cpufreq --remove`
+
+* Pull latest changes (`git pull`)
+* Re-install (`sudo python3 auto-cpufreq.py --install`)
+
+In last commit I made a change which should unify sytemd service across all distributions.
+
+Please let me know if it works for you so I can close this issue, thanks.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>volnes:</strong></p>
+                    <p>@AdnanHodzic well now install works correctly, but systemd unit in Failed status:
+![image](https://user-images.githubusercontent.com/5400851/71921077-2b092b80-3199-11ea-85a3-8c51629fe114.png)
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>That's weird, you ran `sudo auto-cpufreq --remove` before fetching latest code and re-running `sudo python3 auto-cpufreq.py --install` right?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>volnes:</strong></p>
+                    <p>> That's weird, you ran sudo auto-cpufreq --remove before fetching latest code and re-running sudo python3 auto-cpufreq.py --install right?
+
+yes</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Maybe you have leftover files somewhere, could you do:
+
+```
+sudo auto-cpufreq --remove
+sudo systemctl stop auto-cpufreq
+sudo systemctl disable auto-cpufreq
+sudo rm /etc/systemd/system/auto-cpufreq.service
+sudo rm /usr/systemd/system/auto-cpufreq.service
+sudo rm /lib/systemd/system/auto-cpufreq.service
+sudo systemctl daemon-reload
+sudo systemctl reset-failed
+sudo python3 auto-cpufreq.py --install
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>volnes:</strong></p>
+                    <p>> sudo auto-cpufreq --remove
+sudo systemctl stop auto-cpufreq
+sudo systemctl disable auto-cpufreq
+sudo rm /etc/systemd/system/auto-cpufreq.service
+sudo rm /usr/systemd/system/auto-cpufreq.service
+sudo rm /lib/systemd/system/auto-cpufreq.service
+sudo systemctl daemon-reload
+sudo systemctl reset-failed
+sudo python3 auto-cpufreq.py --install
+
+same...unit in failed status</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>```
+● auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux
+   Loaded: loaded (/etc/systemd/system/auto-cpufreq.service; enabled; vendor preset: enabled)
+   Active: active (running) since Tue 2020-01-07 20:10:23 CET; 11min ago
+ Main PID: 8835 (python3)
+    Tasks: 1 (limit: 4915)
+   Memory: 14.0M
+   CGroup: /system.slice/auto-cpufreq.service
+           └─8835 /usr/bin/python3 /usr/bin/auto-cpufreq --daemon
+
+jan 07 20:10:23 carbon7 systemd[1]: Started auto-cpufreq - Automatic CPU speed & power optimizer for Linux.
+```
+
+This is what my output looks like, which is identical to yours, except your fails.
+
+What are the contents of your: `/etc/systemd/system/auto-cpufreq.service` file?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>volnes:</strong></p>
+                    <p>```
+[Unit]
+Description=auto-cpufreq - Automatic CPU speed & power optimizer for Linux
+After=network.target network-online.target
+ConditionPathExists=/var/log/auto-cpufreq.log
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/bin/python3 /usr/bin/auto-cpufreq --daemon
+StandardOutput=file:/var/log/auto-cpufreq.log
+[Install]
+WantedBy=multi-user.target
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>```
+[Unit]
+Description=auto-cpufreq - Automatic CPU speed & power optimizer for Linux
+After=network.target network-online.target
+ConditionPathExists=/var/log/auto-cpufreq.log
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/bin/python3 /usr/bin/auto-cpufreq --daemon
+StandardOutput=file:/var/log/auto-cpufreq.log
+[Install]
+WantedBy=multi-user.target
+```
+
+Compared to contents of mine it also looks identical.
+
+If you run it in `sudo python3 auto-cpufreq.py --live` and it works fine, then I would suggest restart the computer, maybe something's not right with your systemd at the moment and then retry with "--install" again.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>volnes:</strong></p>
+                    <p>> If you run it in sudo python3 auto-cpufreq.py --live and it works fine
+
+Works fine
+
+> maybe something's not right with your systemd at the moment and then retry with "--install" again.
+
+rebooted, same issue here unit in failed status.
+
+btw with `--log`
+i've got this:
+```
+Traceback (most recent call last):
+  File "/usr/bin/auto-cpufreq", line 379, in <module>
+    @click.option("--daemon", is_flag=True, hidden=True)
+  File "/usr/lib/python3/dist-packages/click/decorators.py", line 170, in decorator
+    _param_memo(f, OptionClass(param_decls, **attrs))
+  File "/usr/lib/python3/dist-packages/click/core.py", line 1460, in __init__
+    Parameter.__init__(self, param_decls, type=type, **attrs)
+TypeError: __init__() got an unexpected keyword argument 'hidden'
+```
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Okay, your problem has nothing to do with systemd, your problem is old version of click package, which can be fixed by running: `sudo pip3 install --upgrade psutil click distro`
+
+I [updated the ReadMe](https://github.com/AdnanHodzic/auto-cpufreq#requirements-installation-for-debianubuntu-and-their-derivatives) with this information today.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>volnes:</strong></p>
+                    <p>@AdnanHodzic  well thx for your help issue was in not correct rights on home directory
+`sudo -H` will fix that issue when install latest packages of psutil and click 
+![image](https://user-images.githubusercontent.com/5400851/71958621-ccc46300-3201-11ea-8703-d904b4a08664.png)
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>juliangaal:</strong></p>
+                    <p>@AdnanHodzic can confirm 
+> cp -f scripts/auto-cpufreq.service /lib/systemd/system/auto-cpufreq.service
+
+is not necessary anymore! Installation works (Ubuntu 18.04) flawlessly now, Thanks for the fix!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@juliangaal most welcome :)</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

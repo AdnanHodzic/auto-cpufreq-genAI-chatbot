@@ -1,0 +1,31 @@
+
+        <html>
+        <head>
+            <title>Issue #77: [Installation] shouldn't it remove old version when u install new one?</title>
+        </head>
+        <body>
+            <h1>[Installation] shouldn't it remove old version when u install new one?</h1>
+            <p><strong>Issue #77</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>just built snapcraft, installed it
+tried to look at `--monitor`, but it said that I should use `--log` instead
+
+It means that installing new version doesn't remove old one.
+
+@AdnanHodzic could you confirm?</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>This happened because there was a daemon running which `auto-cpufreq --install` sets up. This was made as a preventive measure, for 2 instances of auto-cpufreq not to be running at the same time and thus giving you wrong results.
+
+Hence, as the message says in this case either use log or install (for re-installation) or remove it.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

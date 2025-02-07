@@ -1,0 +1,125 @@
+
+        <html>
+        <head>
+            <title>Issue #624: Incorrect CPU Core Usage Measurement</title>
+        </head>
+        <body>
+            <h1>Incorrect CPU Core Usage Measurement</h1>
+            <p><strong>Issue #624</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hi, thanks for making `auto-cpufreq`! 😁
+
+I have encountered a bug where one of the CPU cores, specifically core 2, consistently reports incorrect usage during measurement. While cores 0, 1, and 3 appear to provide accurate measurements, core 2 consistently shows around 75-80% usage, even when the system is in an idle state.
+
+### Steps to Reproduce:
+
+1. Run `auto-cpufreq-installer`
+1. Run `auto-cpufreq --install`
+1. Reboot
+1. Observe the reported CPU core usage using `auto-cpufreq --stats`
+1. Compare `auto-cpufreq` CPU usage with GNOME System Monitor (screenshot attached)
+
+### Expected Behavior:
+
+All CPU cores should accurately reflect their usage.
+
+### Actual Behavior:
+
+Core 2 consistently reports higher than expected usage, typically around 75-80%, even when the system is idle.
+
+### `auto-cpufreq --debug` output
+
+```bash
+-------------------------------------------------------------------------------
+
+Linux distro: Fedora Linux 39 Sway
+Linux kernel: 6.6.11-200.fc39.x86_64
+Processor: Intel(R) N100
+Cores: 4
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3400 MHz
+CPU min frequency: 700 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      2.0%        48 °C      3091 MHz
+CPU1      1.0%        48 °C      3026 MHz
+CPU2     76.0%        48 °C      3100 MHz
+CPU3     11.0%        48 °C      3092 MHz
+
+auto-cpufreq version: 2.1.0 (git: fe29620)
+
+Python: 3.12.1
+psutil package: 5.9.7
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.38 %
+
+Total CPU usage: 24.2 %
+Total system load: 0.29
+Average temp. of all cores: 48.00 °C 
+
+Currently using: performance governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+```
+### GNOME System Monitor Screenshot
+
+![image](https://github.com/AdnanHodzic/auto-cpufreq/assets/6841936/f9e15322-2683-4053-b386-438c9d0b8572)
+
+
+### Environment
+
+Notebook: Chuwi Gemibook XPro
+CPU: Intel N100
+Operating System: Fresh install of Fedora 39 Sway
+auto-cpufreq Version: 2.1.0</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Hi, thanks for making auto-cpufreq! 😁
+
+You're most welcome and please consider [donating or contributing to the project](https://github.com/AdnanHodzic/auto-cpufreq/#donate).
+
+Regarding rest of the issue, I've never observed something like this myself. But let's leave the issue open and see if anyone else reports the same.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>msmafra:</strong></p>
+                    <p>Mine, despite being in performance mode which I did not set it to, seems normal
+![Captura de tela de 2024-01-21 10-22-23](https://github.com/AdnanHodzic/auto-cpufreq/assets/1005457/1d69e5ec-33b1-42be-8caf-39a7c64fee90)
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>MattiaVerticchio:</strong></p>
+                    <p>I took a look at the source code in `core.py` and tried to replicate the call:
+```python
+psutil.cpu_percent(interval=1, percpu=True)
+```
+
+![image](https://github.com/AdnanHodzic/auto-cpufreq/assets/6841936/e0af7831-73aa-430e-b9e0-95170c809dd3)
+
+
+It seems to be a `psutil` bug, I’ll close this issue and open one in the project repository, thanks everyone!</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

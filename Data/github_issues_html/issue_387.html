@@ -1,0 +1,230 @@
+
+        <html>
+        <head>
+            <title>Issue #387: FileNotFoundError: [Errno 2] No such file or directory: '/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors'</title>
+        </head>
+        <body>
+            <h1>FileNotFoundError: [Errno 2] No such file or directory: '/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors'</h1>
+            <p><strong>Issue #387</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I tried to install auto-cpufreq in both ways, using `auto-cpufreq-installer` and `snap`. Neither of ways work out for me.
+
+First I try using `snap` package, and it gives me this error : 
+
+### Error output:
+
+```
+sudo snap run auto-cpufreq --monitor
+
+Note: You can quit monitor mode by pressing "ctrl+c"
+
+----------------------------------- Warning -----------------------------------
+
+Unable to detect state of GNOME Power Profiles daemon service!
+This daemon might interfere with auto-cpufreq and should be disabled.
+
+Steps to perform this action using auto-cpufreq: power_helper script:
+git clone https://github.com/AdnanHodzic/auto-cpufreq.git
+cd auto-cpufreq/auto_cpufreq
+python3 power_helper.py --gnome_power_disable
+
+----------------------------------- Warning -----------------------------------
+
+Unable to detect if you are using a TLP service!
+This daemon might interfere with auto-cpufreq which can lead to unexpected results.
+We strongly encourage you not to use TLP unless you really know what you are doing.
+
+-------------------------------------------------------------------------------
+
+Traceback (most recent call last):
+  File "/snap/auto-cpufreq/112/bin/auto-cpufreq", line 226, in <module>
+    main()
+  File "/snap/auto-cpufreq/112/lib/python3.8/site-packages/click/core.py", line 1128, in __call__
+    return self.main(*args, **kwargs)
+  File "/snap/auto-cpufreq/112/lib/python3.8/site-packages/click/core.py", line 1053, in main
+    rv = self.invoke(ctx)
+  File "/snap/auto-cpufreq/112/lib/python3.8/site-packages/click/core.py", line 1395, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/snap/auto-cpufreq/112/lib/python3.8/site-packages/click/core.py", line 754, in invoke
+    return __callback(*args, **kwargs)
+  File "/snap/auto-cpufreq/112/bin/auto-cpufreq", line 97, in main
+    gov_check()
+  File "/snap/auto-cpufreq/112/lib/python3.8/site-packages/auto_cpufreq/core.py", line 442, in gov_check
+    for gov in get_avail_gov():
+  File "/snap/auto-cpufreq/112/lib/python3.8/site-packages/auto_cpufreq/core.py", line 259, in get_avail_gov
+    return f.read_text().strip().split(" ")
+  File "/usr/lib/python3.8/pathlib.py", line 1236, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+  File "/usr/lib/python3.8/pathlib.py", line 1222, in open
+    return io.open(self, mode, buffering, encoding, errors, newline,
+  File "/usr/lib/python3.8/pathlib.py", line 1078, in _opener
+    return self._accessor.open(self, flags, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors'
+```
+
+So I use `sudo snap run auto-cpufreq --debug` : 
+
+```
+mint@mintPC:~$ sudo snap run auto-cpufreq --debug
+
+-------------------------------------------------------------------------------
+
+Linux distro: Linux Mint 20.3 (Una)
+Linux kernel: 5.4.0-91-generic
+Processor: Intel(R) Core(TM) i5-5200U CPU @ 2.20GHz
+Cores: 4
+Architecture: x86_64
+Driver: cat: /sys/devices/system/cpu/cpu0/cpufreq/scaling_driver: No such file or directory
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 0 MHz
+CPU min frequency: 0 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  0.0%    nan °C     2195 MHz
+CPU1:	  1.0%    nan °C     2195 MHz
+CPU2:	  1.0%    nan °C     2195 MHz
+CPU3:	  0.0%    nan °C     2195 MHz
+
+auto-cpufreq version: (Snap) 1.9.3
+
+Python: 3.8.10
+psutil package: 5.9.0
+platform package: 1.0.8
+click package: 8.0.4
+distro package: 1.7.0
+
+Computer type: Other
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 1.03 %
+
+Total CPU usage: 0.5 %
+Total system load: 0.25
+Average temp. of all cores: nan °C 
+
+Currently using: cat: governor
+Warning: CPU turbo is not available
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```
+
+Then I give it a try with `auto-cpufreq-installer`. After running this `sudo auto-cpufreq --monitor`, it gives me this : 
+
+```
+mint@mintPC:~$ sudo auto-cpufreq --monitor
+
+Note: You can quit monitor mode by pressing "ctrl+c"
+
+-------------------------------------------------------------------------------
+
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.9.3', 'auto-cpufreq')
+  File "/opt/auto-cpufreq/venv/lib/python3.8/site-packages/pkg_resources/__init__.py", line 666, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/opt/auto-cpufreq/venv/lib/python3.8/site-packages/pkg_resources/__init__.py", line 1469, in run_script
+    exec(script_code, namespace, namespace)
+  File "/opt/auto-cpufreq/venv/lib/python3.8/site-packages/auto_cpufreq-1.9.3-py3.8.egg/EGG-INFO/scripts/auto-cpufreq", line 226, in <module>
+  File "/opt/auto-cpufreq/venv/lib/python3.8/site-packages/click/core.py", line 1130, in __call__
+    return self.main(*args, **kwargs)
+  File "/opt/auto-cpufreq/venv/lib/python3.8/site-packages/click/core.py", line 1055, in main
+    rv = self.invoke(ctx)
+  File "/opt/auto-cpufreq/venv/lib/python3.8/site-packages/click/core.py", line 1404, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/opt/auto-cpufreq/venv/lib/python3.8/site-packages/click/core.py", line 760, in invoke
+    return __callback(*args, **kwargs)
+  File "/opt/auto-cpufreq/venv/lib/python3.8/site-packages/auto_cpufreq-1.9.3-py3.8.egg/EGG-INFO/scripts/auto-cpufreq", line 97, in main
+  File "/opt/auto-cpufreq/venv/lib/python3.8/site-packages/auto_cpufreq-1.9.3-py3.8.egg/auto_cpufreq/core.py", line 442, in gov_check
+  File "/opt/auto-cpufreq/venv/lib/python3.8/site-packages/auto_cpufreq-1.9.3-py3.8.egg/auto_cpufreq/core.py", line 259, in get_avail_gov
+  File "/usr/lib/python3.8/pathlib.py", line 1236, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+  File "/usr/lib/python3.8/pathlib.py", line 1222, in open
+    return io.open(self, mode, buffering, encoding, errors, newline,
+  File "/usr/lib/python3.8/pathlib.py", line 1078, in _opener
+    return self._accessor.open(self, flags, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors'
+```
+
+So I use `--debug`, it gives me this : 
+
+```
+mint@mintPC:~$ sudo auto-cpufreq --debug
+
+-------------------------------------------------------------------------------
+
+Linux distro: Linux Mint 20.3 Una
+Linux kernel: 5.4.0-91-generic
+Processor: Intel(R) Core(TM) i5-5200U CPU @ 2.20GHz
+Cores: 4
+Architecture: x86_64
+Driver: cat: /sys/devices/system/cpu/cpu0/cpufreq/scaling_driver: No such file or directory
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 0 MHz
+CPU min frequency: 0 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  0.0%    nan °C     2195 MHz
+CPU1:	  0.0%    nan °C     2195 MHz
+CPU2:	  1.0%    nan °C     2195 MHz
+CPU3:	  0.0%    nan °C     2195 MHz
+
+auto-cpufreq version: 1.9.3
+
+Python: 3.8.10
+psutil package: 5.9.0
+platform package: 1.0.8
+click package: 8.1.2
+distro package: 1.7.0
+
+Computer type: Other
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 1.06 %
+
+Total CPU usage: 0.5 %
+Total system load: 0.44
+Average temp. of all cores: nan °C 
+
+Currently using: cat: governor
+Warning: CPU turbo is not available
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```
+
+I don't know what I did wrong, I just follow the steps which is mentioned in `README.md`. It's used to work on my main machine, which I used the`auto-cpufreq-installer` past 2 months ago. Today I try to install it on my 2nd machine and I didn't work. So I thought of give it try again on the VM. It also give me the same error.
+
+Is there any way to solve this bcoz I really love this.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Running auto-cpufreq on a VM doesn't make sense and will not work, instead run auto-cpufreq on host where VM's are running.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ACNAryan5498:</strong></p>
+                    <p>OK I wll give it a try on actual machine again</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closed due to inactivity. </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,159 @@
+
+        <html>
+        <head>
+            <title>Issue #464: System incredibly slow after kernel update</title>
+        </head>
+        <body>
+            <h1>System incredibly slow after kernel update</h1>
+            <p><strong>Issue #464</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>After the latest kernel update, my laptop has become incredibly slow.
+OS: Arch Linux
+Kernel Version: 6.0.11-arch1-1
+
+While auto-cpufreq is running, my cpu frequency on all cores seems to go down as far as 409 Hz.
+
+I did stumble upon [this reddit post](https://www.reddit.com/r/archlinux/comments/zccknj/the_latest_kernel_6011arch11_has_made_my_laptop/) which identified the issue as the new AMD p-state driver. But I didn't see the error reported here, so just passing it along.
+
+As of now, I've had to disable auto-cpufreq to get a usable system.
+
+### System information:
+
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux
+Linux kernel: 6.0.11-arch1-1
+Processor: AMD Ryzen 5 5500U with Radeon Graphics
+Cores: 12
+Architecture: x86_64
+Driver: amd-pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2100 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	 10.6%     31 °C      409 MHz
+CPU1:	  0.0%     31 °C      400 MHz
+CPU2:	  8.1%     31 °C      409 MHz
+CPU3:	  2.1%     31 °C      409 MHz
+CPU4:	  8.2%     31 °C      409 MHz
+CPU5:	  8.4%     31 °C      409 MHz
+CPU6:	  5.2%     31 °C      409 MHz
+CPU7:	  2.0%     31 °C      409 MHz
+CPU8:	  6.1%     31 °C      409 MHz
+CPU9:	  6.9%     31 °C      409 MHz
+CPU10:	  6.9%     31 °C      409 MHz
+CPU11:	  1.0%     31 °C      400 MHz
+
+CPU fan speed: 0 RPM
+
+auto-cpufreq version: Version         : 1.9.7-1
+
+Python: 3.10.8
+psutil package: 5.9.4
+platform package: 1.0.8
+click package: 8.1.3
+distro package: 1.8.0
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.36 %
+
+Total CPU usage: 7.7 %
+Total system load: 1.69
+Average temp. of all cores: 30.85 °C
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>If I understand correctly from [reddit post](https://www.reddit.com/r/archlinux/comments/zccknj/the_latest_kernel_6011arch11_has_made_my_laptop/), you changed the kernel to "xen" and then everything worked fine?
+
+If this is correct [Readme Troubleshooting](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting) section should probably be updated with this ...</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>boehs:</strong></p>
+                    <p>My computer has been soooo laggy for the past couple days, this explains it! Thank you!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>clifordjoshy:</strong></p>
+                    <p>> If I understand correctly from [reddit post](https://www.reddit.com/r/archlinux/comments/zccknj/the_latest_kernel_6011arch11_has_made_my_laptop/), you changed the kernel to "xen" and then everything worked fine?
+> 
+> If this is correct [Readme Troubleshooting](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting) section should probably be updated with this ...
+
+The person in the reddit post isn't me, but as I understand it, they switched to the 6.0.11 zen kernel and the issue was solved. I believe 6.0.11-arch1-1 uses the new amd p-state driver and that's what is causing the issue. I'm not entirely sure if this is something that needs to be reported to the driver folks or here.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>abdullahsabbir:</strong></p>
+                    <p>Hi, I am the person who posted the issue on Reddit. I had no problem with the Arch Linux 6.0.10 kernel. The issue is present with any type of 6.0.11 kernel (I tested with the mainline and zen kernel). Disabling auto-cpufreq in 6.0.11 fixes the problem. And as OP and one of the commenters pointed out in the reddit post, it's probably happening because of the newly added AMD P-State driver to 6.0.11 kernel. Maybe disabling AMD P-State and using acpi-cpufreq will fix the issue, like it's described in the troubleshooting portion of Readme for Intel CPUs?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>biggus-dickus:</strong></p>
+                    <p>I was too affected by this misfortune, but disabling `auto-cpufreq` is definitely not an option for me. With it, I'm able to squeeze up to 6 hours from the battery!
+
+Disabling `amd-pstate` did help, but there's no precise info on how to do this in the Readme (only an Intel related issue).
+
+Setting `GRUB_CMDLINE_LINUX_DEFAULT="initcall_blacklist=amd_pstate_init amd_pstate.enable=0"` in `/etc/default/grub` worked for me, and I am again using the `acpi-cpufreq` driver.
+
+I believe, the Readme Troubleshooting should be updated with this, and if you agree, I can create a PR.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>boehs:</strong></p>
+                    <p>I'm curious now... How does battery differ between auto-cpufreq and p-state?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@biggus-dickus 
+
+> I believe, the Readme Troubleshooting should be updated with this, and if you agree, I can create a PR.
+
+Please go for it, and I'll make sure to note your contribution in [next release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+ 
+@abdullahsabbir that seems to be case as confirmde by @biggus-dickus. Let's go with this as a workaround for now, although it seems like a problem on Arch/kernel/driver side instead of auto-cpufreq, as it allows kernel to do the heavy lifting and auto-cpufreq simply pulls the necessary hooks to make system better optimized. Hence I'm bit baffled by what's happening here exactly.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Thanks to @biggus-dickus and his changes in #466, in Troubleshooting session it's now explained how to resolve (workaround) this issue.
+
+I'll leave this issue open for the time being for the reference and in case someone comes up with a better solution.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>jarebear6expepjozn6rakjq5iczi3irqwphcvb:</strong></p>
+                    <p>@AdnanHodzic would a good solution to this be adding a check for `amd-pstate` and giving the option to disable in the install script (auto-cpufreq-installer)?  If so I can push a PR.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> @AdnanHodzic would a good solution to this be adding a check for `amd-pstate` and giving the option to disable in the install script (auto-cpufreq-installer)? If so I can push a PR.
+
+@jarebear6expepjozn6rakjq5iczi3irqwphcvb Sounds good to me, please go ahead! </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

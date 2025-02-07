@@ -1,0 +1,119 @@
+
+        <html>
+        <head>
+            <title>Issue #669: [FEATURE] Add battery threshold option for HP Victus 16</title>
+        </head>
+        <body>
+            <h1>[FEATURE] Add battery threshold option for HP Victus 16</h1>
+            <p><strong>Issue #669</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Actually i dont know what information needed to add this option on my laptop
+
+`-------------------------------------------------------------------------------
+
+Linux distro: EndeavourOS rolling rolling
+Linux kernel: 6.8.2-arch2-1
+Processor: AMD Ryzen 5 5600H with Radeon Graphics
+Cores: 12
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3300 MHz
+CPU min frequency: 1200 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      3.0%        45 °C      2631 MHz
+CPU1      3.0%        45 °C      2627 MHz
+CPU2      4.0%        45 °C      2948 MHz
+CPU3      1.0%        45 °C      2634 MHz
+CPU4      3.1%        45 °C      2625 MHz
+CPU5      1.0%        45 °C      3080 MHz
+CPU6      6.0%        45 °C      2606 MHz
+CPU7      3.0%        45 °C      2620 MHz
+CPU8      3.1%        45 °C      3172 MHz
+CPU9      1.0%        45 °C      2337 MHz
+CPU10      3.0%        45 °C      2638 MHz
+CPU11      1.0%        45 °C      2870 MHz
+
+CPU fan speed: 2182 RPM
+
+auto-cpufreq version: 2.2.0 (git: 215026a)
+
+Python: 3.11.8
+psutil package: 5.9.8
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.19 %
+
+Total CPU usage: 4.5 %
+Total system load: 1.14
+Average temp. of all cores: 45.00 °C
+
+Currently using: performance governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------`
+
+Here's my system information (fastfetch)
+
+`                    ./o.                   hyprland@hyprland
+                   ./sssso-                 -----------------
+                 `:osssssss+-               OS: EndeavourOS x86_64
+               `:+sssssssssso/.             Host: Victus by HP Laptop 16-e0xxx
+             `-/ossssssssssssso/.           Kernel: 6.8.2-arch2-1
+           `-/+sssssssssssssssso+:`         Uptime: 3 hours, 34 mins
+         `-:/+sssssssssssssssssso+/.        Packages: 1294 (pacman), 13 (flatpak)
+       `.://osssssssssssssssssssso++-       Shell: bash 5.2.26
+      .://+ssssssssssssssssssssssso++:      Display (BOE09F2): 1920x1080 @ 144Hz [Built-]
+    .:///ossssssssssssssssssssssssso++:     WM: Hyprland (Wayland)
+  `:////ssssssssssssssssssssssssssso+++.    Theme: Adwaita [GTK2/3]
+`-////+ssssssssssssssssssssssssssso++++-    Icons: Papirus-Dark [GTK2/3]
+ `..-+oosssssssssssssssssssssssso+++++/`    Font: Cantarell (11pt) [GTK2/3]
+   ./++++++++++++++++++++++++++++++/:.      Cursor: Bibata-Modern-Ice (24px)
+  `:::::::::::::::::::::::::------``        Terminal: alacritty 0.13.2
+                                            Terminal Font: FiraCode Nerd Font (12.0pt)
+                                            CPU: AMD Ryzen 5 5600H (12) @ 4.28 GHz
+                                            GPU 1: NVIDIA GeForce RTX 3050 Ti Mobile
+                                            GPU 2: AMD Radeon Vega Series / Radeon Vega s
+                                            Memory: 5.58 GiB / 14.96 GiB (37%)
+                                            Swap: 0 B / 16.46 GiB (0%)
+                                            Disk (/): 66.23 GiB / 201.95 GiB (33%) - btrs
+                                            Disk (/run/media/hyprland/8808d92c-3866-4ed8s
+                                            Local IP (wlan0): 192.168.100.184/24 *
+                                            Battery: 100% [AC Connected]
+                                            Locale: en_PH.UTF-8
+
+                                            ████████████████████████
+                                            ████████████████████████`</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>Hello, thank you for the feature request and provided info. how auto-cpufreqs battery management works is uses kernels modules ( code for linux that is added on demand to allow linux to access certain things eg setting battery charge thresholds ) different laptops require different kernel modules to access battery functions. 
+
+ive done some research [arch wiki](https://wiki.archlinux.org/title/Laptop/HP) and [tlp docs](https://linrunner.de/tlp/settings/bc-vendors.html) and unfortunately i haven't found any evidence leading to hp having a kernel module.
+
+however you should try installing [TLP](https://github.com/linrunner/TLP) and see if that has support if it does reply back with tlp-stat output.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing the issue due to inactivity. </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

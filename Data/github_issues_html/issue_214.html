@@ -1,0 +1,161 @@
+
+        <html>
+        <head>
+            <title>Issue #214: CPU frequency is fixed at min speed under battery mode (AMD Ryzen 7 5800H)</title>
+        </head>
+        <body>
+            <h1>CPU frequency is fixed at min speed under battery mode (AMD Ryzen 7 5800H)</h1>
+            <p><strong>Issue #214</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+```text
+The CPU speed is fixed at 1.2GHz (min. speed) under battery mode 
+```
+---
+
+### System information:
+```text
+-------------------------------------------------------------------------------
+
+Linux distro: Pop!_OS 21.04 hirsute
+Linux kernel: 5.11.0-7620-generic
+Processor: AMD Ryzen 7 5800H with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4462 MHz
+CPU min frequency: 1200 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  2.0%    nan °C     1200 MHz
+CPU1:	  0.0%    nan °C     1198 MHz
+CPU2:	  5.0%    nan °C     1200 MHz
+CPU3:	  0.0%    nan °C     1200 MHz
+CPU4:	  2.0%    nan °C     1200 MHz
+CPU5:	  0.0%    nan °C     1200 MHz
+CPU6:	  1.0%    nan °C     1200 MHz
+CPU7:	  0.0%    nan °C     1200 MHz
+CPU8:	  3.0%    nan °C     1200 MHz
+CPU9:	  0.0%    nan °C     1200 MHz
+CPU10:	  1.0%    nan °C     1200 MHz
+CPU11:	  0.0%    nan °C     1200 MHz
+CPU12:	  1.0%    nan °C     1200 MHz
+CPU13:	  0.0%    nan °C     1200 MHz
+CPU14:	  1.0%    nan °C     1200 MHz
+CPU15:	  2.0%    nan °C     1200 MHz
+
+auto-cpufreq version:
+Git commit: 92e9940
+
+Python: 3.9.5
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 7.1.2
+distro package 1.5.0
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.15 %
+
+Total CPU usage: 4.9 %
+Total system load: 0.81
+Average temp. of all cores: nan °C 
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>tamimmahmudkhan:</strong></p>
+                    <p>This problem exists in reverse as well. I use my laptop plugged in and it always sticks to the performance governor without question. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>MariusSp:</strong></p>
+                    <p>I can confirm these findings on my 5800H.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>joenye:</strong></p>
+                    <p>I'm seeing the same behavior with a 4750U.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ArchitektRadim:</strong></p>
+                    <p>Same on Ryzen 5 5600H</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>4JX:</strong></p>
+                    <p>Going to leave the obligatory "does not work over here either" (5800H) although I feel thats kind of clear by now. If [that one reddit comment](https://libredd.it/r/linuxquestions/comments/mrwxc6/temperature_sensor_on_amd_ryzen_7_5800h/) (see responses) still holds true then I guess we are playing the waiting game here.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>With [v1.7.0 release](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.7.0) it's now possible to manually define some of the settings instead of leaving everything to be picked up automatically. Could you try tweaking some of the [available options](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq) and report back on how that worked for you? Thanks</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing due to inactivity. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>usern98:</strong></p>
+                    <p>This is still an issue</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Can you confirm if this is related to: #398? </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>usern98:</strong></p>
+                    <p>> Can you confirm if this is related to: #398? 
+
+Probably, on the 5800h it doesn't change the freq, and for some reason is unable to put freq below 1.2ghz.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Mokcheh:</strong></p>
+                    <p>`
+2.2 Powersave
+-------------
+
+The CPUfreq governor "powersave" sets the CPU statically to the
+lowest frequency within the borders of scaling_min_freq and
+scaling_max_freq.
+`
+this isn't surprising as powersave is a static governor. So I guess it's better to use ondemand/conservative governors and specify scaling_min_freq and scaling_max_freq.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing the issue due to inactivity.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing the issue due to inactivity.
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

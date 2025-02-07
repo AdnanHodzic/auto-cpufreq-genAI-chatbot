@@ -1,0 +1,43 @@
+
+        <html>
+        <head>
+            <title>Pull Request #524: [BUG-FIX] Adding root_check before set_override method execution</title>
+        </head>
+        <body>
+            <h1>[BUG-FIX] Adding root_check before set_override method execution</h1>
+            <p><strong>Pull Request #524</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Fixes permission issue prompt when calling `--force` flag in non root mode.
+
+This PR, basically calls pre-defined `root_check()` function before accessing `set_override` method aimed at implementing the force feature.
+And hence ensuring `set_override` calls are always in su mode. 
+So, in effect all override using 'force' can clearly access the `governer_override_state` path file, and write changes to it, without externally tinkering the environment.
+
+
+<details open>
+    <summary>Current output</summary>
+<img src="https://github.com/AdnanHodzic/auto-cpufreq/assets/35325046/57402a46-6205-43ac-a520-6ea46fed0b3d" alt="Now">
+</details>
+
+<details>
+    <summary>Past output</summary>
+<img src="https://github.com/AdnanHodzic/auto-cpufreq/assets/35325046/073dfb12-8919-457c-b71c-8b0d709c444d" alt="Past">
+</details>
+
+
+
+Fixes #523 </p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Great catch! Thank you for your contribution, you'll be given credit for your work as part of upcoming release.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

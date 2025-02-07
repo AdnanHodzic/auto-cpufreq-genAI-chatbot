@@ -1,0 +1,112 @@
+
+        <html>
+        <head>
+            <title>Discussion #223: on power save it still using higher frequency</title>
+        </head>
+        <body>
+            <h1>on power save it still using higher frequency</h1>
+            <p><strong>Discussion #223</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>#### Hello, 
+I installed auto-cpufreq on my pop os yesterday, but even though it's on powersave, it's still utilising a higher frequency. I'm not doing anything demanding, just browsing.
+![SS](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/0dzz1efchb1soi2n4cva.png)</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>goranq:</strong></p>
+                    <p>I have the same issue, also running Pop_OS (21.04). Installed auto-cpufreq using [installer](https://github.com/AdnanHodzic/auto-cpufreq#auto-cpufreq-installer).
+![auto-cpufreq](https://user-images.githubusercontent.com/12167507/136657266-e0337f97-0fb8-470f-8007-957b63f2a0cd.png)
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>stutzzzz:</strong></p>
+                    <p>I sometimes see a couple cores go to 800 on mine but for the most part sticks to 2600Mhz
+Linux distro: Pop!_OS 21.04 hirsute
+Linux kernel: 5.13.0-7614-generic
+Processor: Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2600 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	 21.0%     44 °C     2600 MHz
+CPU1:	 14.9%     43 °C     2600 MHz
+CPU2:	 34.7%     54 °C     2600 MHz
+CPU3:	 11.9%     42 °C     2600 MHz
+CPU4:	  8.1%     44 °C     2600 MHz
+CPU5:	  7.8%     43 °C     2600 MHz
+CPU6:	 10.2%     54 °C     2600 MHz
+CPU7:	  9.0%     42 °C     2600 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: discharging
+
+Setting to use: "powersave" governor
+
+Total CPU usage: 4.7 %
+Total system load: 1.21
+Average temp. of all cores: 45.75 °C
+
+Load optimal
+setting turbo boost: off
+
+I wonder if there is something pop power conflicting
+https://github.com/pop-os/system76-power</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>With [v1.7.0 release](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.7.0) it's now possible to manually define some of the settings instead of leaving everything to be picked up automatically. Could you try tweaking some of the [available options](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq) and report back on how that worked for you? Thanks</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>cnske:</strong></p>
+                    <p>I had similar experience as @MikeStutzzzz. After disabling `intel_pstat` I get better results. However, not my system feels a bit laggy. Is there an option to prevent this?
+
+
+CPU max frequency: 2901 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  1.0%     52 °C      800 MHz
+CPU1:	 48.0%     52 °C      800 MHz
+CPU2:	  3.2%     51 °C      800 MHz
+CPU3:	  6.1%     50 °C      800 MHz
+CPU4:	  2.0%     51 °C      800 MHz
+CPU5:	 10.9%     51 °C      800 MHz
+CPU6:	  5.0%     52 °C      800 MHz
+CPU7:	  2.0%     52 °C      800 MHz
+CPU8:	  3.0%     51 °C      800 MHz
+CPU9:	  0.0%     50 °C      800 MHz
+CPU10:	  0.0%     51 °C      800 MHz
+CPU11:	  6.0%     51 °C      800 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: discharging
+
+Setting to use: "powersave" governor
+
+Total CPU usage: 6.6 %
+Total system load: 2.11
+Average temp. of all cores: 51.166666666666664 °C
+
+Load optimal
+setting turbo boost: off
+  </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

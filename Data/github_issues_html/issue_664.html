@@ -1,0 +1,94 @@
+
+        <html>
+        <head>
+            <title>Issue #664: Not setting EPP (not supported by the system)</title>
+        </head>
+        <body>
+            <h1>Not setting EPP (not supported by the system)</h1>
+            <p><strong>Issue #664</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+![Screenshot from 2024-03-23 21-44-12](https://github.com/AdnanHodzic/auto-cpufreq/assets/96811600/63274eb6-cad8-4be0-8d4f-c501d436998b)
+
+---
+
+### System information:
+
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 23.10 Mantic Minotaur
+Linux kernel: 6.7.10-x64v3-xanmod1
+Processor: AMD Ryzen 9 5900HX with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3300 MHz
+CPU min frequency: 1200 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      4.9%        47 °C      2697 MHz
+CPU1      0.0%        47 °C      3300 MHz
+CPU2      1.1%        47 °C      2989 MHz
+CPU3      0.0%        47 °C      3300 MHz
+CPU4     13.0%        47 °C      3300 MHz
+CPU5      1.0%        47 °C      3300 MHz
+CPU6     11.0%        47 °C      1992 MHz
+CPU7      0.0%        47 °C      2723 MHz
+CPU8      1.0%        47 °C      1628 MHz
+CPU9      5.8%        47 °C      2691 MHz
+CPU10      3.0%        47 °C      3300 MHz
+CPU11      0.0%        47 °C      2635 MHz
+CPU12      2.0%        47 °C      2855 MHz
+CPU13      0.0%        47 °C      3300 MHz
+CPU14      2.0%        47 °C      2635 MHz
+CPU15      1.0%        47 °C      3300 MHz
+
+CPU fan speed: 0 RPM
+
+auto-cpufreq version: 2.2.0 (git: b4c5276)
+
+Python: 3.11.6
+psutil package: 5.9.5
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.8.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.18 %
+
+Total CPU usage: 2.5 %
+Total system load: 0.67
+Average temp. of all cores: 47.00 °C 
+
+Currently using: performance governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+
+
+It shows that EPP is not supported by the system but i think my cpu (ryzen 9 5900hx laptop) supports it
+ Is there any way to resolve this
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>It's because you're using `acpi-cpufreq` as your scaling driver which doesn't make use of EPP. To learn more about the differences between `acpi-cpufreq`, `amd-pstate`, and `amd-pstate-epp`, visit the kernel docs [here](https://docs.kernel.org/admin-guide/pm/amd-pstate.html#amd-pstate-vs-acpi-cpufreq)</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

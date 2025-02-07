@@ -1,0 +1,132 @@
+
+        <html>
+        <head>
+            <title>Issue #192: Cannot deploy on Raspberry Pi 4B with Ubuntu 20.04</title>
+        </head>
+        <body>
+            <h1>Cannot deploy on Raspberry Pi 4B with Ubuntu 20.04</h1>
+            <p><strong>Issue #192</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+```
+Traceback (most recent call last):
+  File "/usr/local/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.0', 'auto-cpufreq')
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 667, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 1470, in run_script
+    exec(script_code, namespace, namespace)
+  File "/usr/local/lib/python3.8/dist-packages/auto_cpufreq-1.0-py3.8.egg/EGG-INFO/scripts/auto-cpufreq", line 151, in <module>
+  File "/usr/lib/python3/dist-packages/click/core.py", line 764, in __call__
+    return self.main(*args, **kwargs)
+  File "/usr/lib/python3/dist-packages/click/core.py", line 717, in main
+    rv = self.invoke(ctx)
+  File "/usr/lib/python3/dist-packages/click/core.py", line 956, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/usr/lib/python3/dist-packages/click/core.py", line 555, in invoke
+    return callback(*args, **kwargs)
+  File "/usr/local/lib/python3.8/dist-packages/auto_cpufreq-1.0-py3.8.egg/EGG-INFO/scripts/auto-cpufreq", line 97, in main
+  File "/usr/local/lib/python3.8/dist-packages/auto_cpufreq-1.0-py3.8.egg/auto_cpufreq/core.py", line 917, in sysinfo
+IndexError: list index out of range
+```
+---
+
+### System information:
+```
+Linux distro: Ubuntu 20.04 focal
+Linux kernel: 5.4.0-1032-raspi
+Processor:
+Cores: 4
+Architecture: aarch64
+Driver: cpufreq-dt
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>How have you installed auto-cpufreq? If you installed it using [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer) have you tried installing it using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Acsigen:</strong></p>
+                    <p>I installed it using auto-cpufreq-installer. I did not try to install it using the snap package because I do not use snap packages.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Dakad:</strong></p>
+                    <p>@Acsigen  I got the same error message and I just forgot to run it with `sudo`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Acsigen:</strong></p>
+                    <p>@Dakad I ran it as root at the time</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>4bitFox:</strong></p>
+                    <p>Same exact problem here on Raspberry Pi OS / Raspian:
+
+```
+pi@FengCam:~ $ sudo auto-cpufreq --monitor
+
+Note: You can quit monitor mode by pressing "ctrl+c"
+
+-------------------------------------------------------------------------------
+
+Linux distro: Raspbian GNU/Linux 10 buster
+Linux kernel: 5.10.52-v7l+
+Processor: ARMv7 Processor rev 3 (v7l)
+Cores: 4
+Architecture: armv7l
+Driver: cpufreq-dt
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1500 MHz
+CPU min frequency: 600 MHz
+
+Traceback (most recent call last):
+  File "/usr/local/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.0', 'auto-cpufreq')
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 666, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 1453, in run_script
+    exec(script_code, namespace, namespace)
+  File "/usr/local/lib/python3.7/dist-packages/auto_cpufreq-1.0-py3.7.egg/EGG-INFO/scripts/auto-cpufreq", line 151, in <module>
+  File "/usr/lib/python3/dist-packages/click/core.py", line 764, in __call__
+    return self.main(*args, **kwargs)
+  File "/usr/lib/python3/dist-packages/click/core.py", line 717, in main
+    rv = self.invoke(ctx)
+  File "/usr/lib/python3/dist-packages/click/core.py", line 956, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/usr/lib/python3/dist-packages/click/core.py", line 555, in invoke
+    return callback(*args, **kwargs)
+  File "/usr/local/lib/python3.7/dist-packages/auto_cpufreq-1.0-py3.7.egg/EGG-INFO/scripts/auto-cpufreq", line 71, in main
+  File "/usr/local/lib/python3.7/dist-packages/auto_cpufreq-1.0-py3.7.egg/auto_cpufreq/core.py", line 917, in sysinfo
+IndexError: list index out of range
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I suggest to install auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq#snap-store). As it runs in a container and isolates its Python env from your env. so you shouldn't experience Python related errors.
+
+> I installed it using auto-cpufreq-installer. I did not try to install it using the snap package because I do not use snap packages.
+
+But since you're refusing to do this, I'm not sure how to help you as this seems to be a problem related to your local Python environment. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Acsigen:</strong></p>
+                    <p>I will set the problem as closed since it seems that the problem occurs only with autoinstaller on arm</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

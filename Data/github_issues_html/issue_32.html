@@ -1,0 +1,44 @@
+
+        <html>
+        <head>
+            <title>Issue #32: After latest commit "auto-cpufreq.py --remove" doens't work</title>
+        </head>
+        <body>
+            <h1>After latest commit "auto-cpufreq.py --remove" doens't work</h1>
+            <p><strong>Issue #32</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>```
+sudo python3 auto-cpufreq.py --remove
+Traceback (most recent call last):
+  File "auto-cpufreq.py", line 14, in <module>
+    import power
+ModuleNotFoundError: No module named 'power'
+
+```</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I just merged PR #25 which requires "power" package.
+
+The problem is that you're missing "power" package? If you've [followed README instructions](https://github.com/AdnanHodzic/auto-cpufreq#install-requirements), this should not be the case.
+
+What's the output of:
+
+```
+pip3 show power
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>volnes:</strong></p>
+                    <p>my bad...was missing that, sorry!</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

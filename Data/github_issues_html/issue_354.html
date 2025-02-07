@@ -1,0 +1,88 @@
+
+        <html>
+        <head>
+            <title>Issue #354: CPU boost is not supported. Skipping (Desktop Computer Opensuse Tumbleweed)</title>
+        </head>
+        <body>
+            <h1>CPU boost is not supported. Skipping (Desktop Computer Opensuse Tumbleweed)</h1>
+            <p><strong>Issue #354</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+```text
+Battery is: charging
+
+Setting to use: "performance" governor
+
+Total CPU usage: 2.0 %
+Total system load: 0.5
+Average temp. of all cores: 36.5 °C
+
+High CPU load
+setting turbo boost: on
+Warning: Changing CPU turbo is not supported. Skipping.
+
+```
+---
+
+### System information:
+
+Linux distro: openSUSE Tumbleweed 20220114 n/a
+Linux kernel: 5.16.0-1-default
+Processor: Intel(R) Pentium(R) CPU G3240 @ 3.10GHz
+Cores: 2
+Architecture: x86_64
+Driver: intel_cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3100 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  1.0%     33 °C     3093 MHz
+CPU1:	  2.0%     37 °C     3100 MHz
+
+auto-cpufreq version: 1.9.1 (git: 8fb5469a)
+
+Python: 3.8.12
+psutil package: 5.9.0
+platform package: 1.0.8
+click package: 8.0.3
+distro package: 1.6.0
+
+Computer type: Space-saving
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.54 %
+
+Total CPU usage: 2.0 %
+Total system load: 0.33
+Average temp. of all cores: 35.0 °C 
+
+Currently using: performance governor
+Currently turbo boost is: off
+
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>amethystgosling163:</strong></p>
+                    <p>My microcode may be outdated  as I get error TSC_DEADLINE disabled due to Errata during boot up</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>According to the [specs](https://www.intel.com/content/www/us/en/products/sku/80796/intel-pentium-processor-g3240-3m-cache-3-10-ghz/specifications.html) from intel for your cpu doesn't support intel turbo boost. </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

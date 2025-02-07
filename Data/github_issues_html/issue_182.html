@@ -1,0 +1,178 @@
+
+        <html>
+        <head>
+            <title>Issue #182: Introduce initial logging infrastructure</title>
+        </head>
+        <body>
+            <h1>Introduce initial logging infrastructure</h1>
+            <p><strong>Issue #182</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>This PR is part of #156 and performs the following:
+
+* Install `python-systemd` at system level (not installed by `pip`, as the `systemd` package is borked)
+* Set up and configure `logger` and journald logging handler
+* Introduce first snippets of logging when turbo mode is set, or can't be set</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I apologize for such delayed review, as always great stuff, but there's one problem with it. 
+
+It doesn't seem like it'll work as a snap, once snap is built with these changes and installed it'll fail due to following reason:
+
+```
+Traceback (most recent call last):
+  File "/snap/auto-cpufreq/x1/bin/auto-cpufreq", line 14, in <module>
+    from auto_cpufreq.core import *
+  File "/snap/auto-cpufreq/x1/lib/python3.8/site-packages/auto_cpufreq/core.py", line 21, in <module>
+    from systemd.journal import JournalHandler
+ModuleNotFoundError: No module named 'systemd'
+```
+
+I tried building it by placing `python3-systemd` to `python/build/stage-packages` as part of `snap/snapcraft.yaml` but problem persists. Of course, this seems to be due to the fact that within Snap container `systemd` won't be available in traditional sense, so we need to figure out how we are going to work around this.
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>marc0der:</strong></p>
+                    <p>Thanks, @AdnanHodzic, my bad for not testing this well enough. Let me see if I can find a workaround for this problem.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Thanks, @AdnanHodzic, my bad for not testing this well enough. Let me see if I can find a workaround for this problem.
+
+No worries, let me know if I can help with anything.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>marc0der:</strong></p>
+                    <p>I had a look into this and it doesn't seem to be related to `systemd` not being present in the snap itself. The problem seems to be that the `python3-systemd` module is not available to python, hence the error message while importing:
+
+```
+from systemd.journal import JournalHandler
+
+ModuleNotFoundError: No module named 'systemd'
+```
+
+Looking at the `snapcraft.yaml`, I see that the `PYTHONPATH` is set to:
+```
+$SNAP/usr/lib/python3/site-packages:$SNAP/usr/lib/python3/dist-packages:$PYTHONPATH
+```
+
+Assuming that `$SNAP` is set to `/snap`, I'm not seeing any such thing as `/snap/usr/lib/python3` on my system. Am I missing something?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I had a look into this and it doesn't seem to be related to `systemd` not being present in the snap itself. The problem seems to be that the `python3-systemd` module is not available to python, hence the error message while importing:
+> 
+> ```
+> from systemd.journal import JournalHandler
+> 
+> ModuleNotFoundError: No module named 'systemd'
+> ```
+
+It will be installed if I place `python3-systemd` to one of the stages in snapcraft,yaml.
+
+> Looking at the `snapcraft.yaml`, I see that the `PYTHONPATH` is set to:
+> 
+> ```
+> $SNAP/usr/lib/python3/site-packages:$SNAP/usr/lib/python3/dist-packages:$PYTHONPATH
+> ```
+> 
+> Assuming that `$SNAP` is set to `/snap`, I'm not seeing any such thing as `/snap/usr/lib/python3` on my system. Am I missing something?
+
+When running `echo $SNAP` inside a snap I get:
+```
+/snap/auto-cpufreq/x1
+```
+
+and inside that location I see the following:
+
+```
+drwxr-xr-x 11 root root  267 Mar  9 20:19 .
+drwxr-xr-x  3 root root 4096 Mar  9 20:19 ..
+-rwxrwxr-x  1 root root  815 Feb 14 10:50 auto-cpufreq-install.sh
+-rwxrwxr-x  1 root root  725 Feb 14 10:50 auto-cpufreq-remove.sh
+-rw-rw-r--  1 root root  242 Mar  9 20:03 auto-cpufreq.service
+drwxr-xr-x  2 root root  540 Mar  9 20:18 bin
+drwxr-xr-x  3 root root   53 Mar  9 20:18 etc
+drwxr-xr-x  2 root root    3 Mar  9 20:18 include
+drwxr-xr-x  4 root root   56 Mar  9 20:18 lib
+drwxr-xr-x  2 root root   43 Mar  9 20:18 lib64
+drwxr-xr-x  2 root root   32 Mar  9 20:19 meta
+-rw-r--r--  1 root root   69 Mar  9 20:18 pyvenv.cfg
+drwxr-xr-x  3 root root   36 Mar  9 20:18 share
+drwxr-xr-x  3 root root   36 Mar  9 20:19 snap
+drwxr-xr-x  6 root root   86 Mar  9 20:18 usr
+```
+
+I also see `/usr/lib/python3` location inside of Snap environment with following contents:
+```
+dist-packages
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>marc0der:</strong></p>
+                    <p>@AdnanHodzic So we might have a problem here with snaps:
+
+I resorted to installing `python3-systemd` using the package manager because the `pip` installation of `systemd` that provides the python bindings seemed to be borked when I tried it. Installing it with `pacman`, `apt`, `zypper` etc solved the problem for me with a standard install using the installer script.
+
+I can't find any docs in the repo for building the snap package. Would you be able to share the commands you run to build it so I can try to get it working on my side?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@marc0der 
+
+> I resorted to installing `python3-systemd` using the package manager because the `pip` installation of `systemd` that provides the python bindings seemed to be borked when I tried it. Installing it with `pacman`, `apt`, `zypper` etc solved the problem for me with a standard install using the installer script.
+
+It might be worth looking at http://forum.snapcraft.io/ for help. In past I asked questions regarding Snap's and they were incredibly attentive and helpful. Only mention of `python3-systemd` I can [find is this one ](https://forum.snapcraft.io/t/change-in-logging-behaviour-on-ubuntu-core/591/31)few years ago, so it might be worth starting a new thread.
+
+> I can't find any docs in the repo for building the snap package. Would you be able to share the commands you run to build it so I can try to get it working on my side?
+
+In auto-cpufreq source root dir, run following to build a snap:
+
+```
+snapcraft clean
+snapcraft
+```
+
+After it's done result will be i.e: `auto-cpufreq_1.6.2_amd64.snap`
+
+Install it by running:
+```
+sudo snap install auto-cpufreq_1.6.2_amd64.snap --devmode
+```
+
+`--devmode` will give you full rights in what is normally a confined environment. 
+
+Regardless, after that auto-cpufreq will be installed and usable, to run shell inside snap environemnt run:
+
+```
+snap run --shell auto-cpufreq
+```
+
+I guess this will be enough to get you going so you can explore around it. In meantime if you get stuck with anything or have any questions please let me know.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>marc0der:</strong></p>
+                    <p>Great, thanks for your help @AdnanHodzic </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closed due to inactivity.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,146 @@
+
+        <html>
+        <head>
+            <title>Issue #96: Error on sudo auto-cpufreq --install</title>
+        </head>
+        <body>
+            <h1>Error on sudo auto-cpufreq --install</h1>
+            <p><strong>Issue #96</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Installed the program from AUR. I can run `sudo auto-cpufreq --live` without errors.
+I got an error on `sudo auto-cpufreq --install`
+I run Manjaro Linux with Cinnamon with all the updates as of 2020/08/13
+
+### Error output:
+```text
+alex:$ sudo auto-cpufreq --install
+
+--------------------- Deploying auto-cpufreq as a daemon ----------------------
+
+* Turn off bluetooth on boot
+
+* Deploy auto-cpufreq install script
+Traceback (most recent call last):
+  File "/usr/bin/auto-cpufreq", line 115, in <module>
+    main()
+  File "/usr/lib/python3.8/site-packages/click/core.py", line 829, in __call__
+    return self.main(*args, **kwargs)
+  File "/usr/lib/python3.8/site-packages/click/core.py", line 782, in main
+    rv = self.invoke(ctx)
+  File "/usr/lib/python3.8/site-packages/click/core.py", line 1066, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/usr/lib/python3.8/site-packages/click/core.py", line 610, in invoke
+    return callback(*args, **kwargs)
+  File "/usr/bin/auto-cpufreq", line 98, in main
+    deploy_daemon()
+  File "/usr/lib/python3.8/site-packages/source/core.py", line 219, in deploy_daemon
+    shutil.copy(SCRIPTS_DIR / "auto-cpufreq-install.sh", "/usr/bin/auto-cpufreq-install")
+  File "/usr/lib/python3.8/shutil.py", line 415, in copy
+    copyfile(src, dst, follow_symlinks=follow_symlinks)
+  File "/usr/lib/python3.8/shutil.py", line 261, in copyfile
+    with open(src, 'rb') as fsrc, open(dst, 'wb') as fdst:
+FileNotFoundError: [Errno 2] No such file or directory: '/usr/share/auto-cpufreq/scripts/auto-cpufreq-install.sh'
+[~]
+alex:$ 
+
+```
+---
+
+### System information:
+```text
+Paste here output of the auto-cpufreq --debug
+alex:$ auto-cpufreq --debug
+
+-------------------------------------------------------------------------------
+
+System: Micro-Star product: MS-7A38 v: 8.0 serial: <filter> 
+           Mobo: Micro-Star model: B450M PRO-VDH MAX (MS-7A38) v: 8.0 serial: <filter> 
+           UEFI: American Megatrends v: B.40 date: 11/07/2019 
+CPU:       Governors: performance schedutil Topology: 8-Core model: AMD Ryzen 7 3700X bits: 64 type: MT MCP L2 cache: 4096 KiB 
+           Speed: 3600 MHz min/max: 2200/3600 MHz Core speeds (MHz): 1: 3599 2: 3600 3: 3600 4: 3600 5: 3600 
+           6: 3600 7: 3599 8: 3599 9: 3600 10: 3596 11: 3598 12: 3600 13: 3599 14: 3598 15: 3599 16: 3599 
+Graphics:  Device-1: NVIDIA GP106 [GeForce GTX 1060 6GB] driver: nvidia v: 440.100 
+           Display: x11 server: X.Org 1.20.8 driver: nvidia resolution: 3840x2160~60Hz 
+           OpenGL: renderer: GeForce GTX 1060 6GB/PCIe/SSE2 v: 4.6.0 NVIDIA 440.100 
+Audio:     Device-1: NVIDIA GP106 High Definition Audio driver: snd_hda_intel 
+           Device-2: Advanced Micro Devices [AMD] Starship/Matisse HD Audio driver: snd_hda_intel 
+           Sound Server: ALSA v: k5.6.19-2-MANJARO 
+Network:   Device-1: Realtek RTL8111/8168/8411 PCI Express Gigabit Ethernet driver: r8169 
+           IF: enp37s0 state: up speed: 1000 Mbps duplex: full mac: <filter> 
+           IF-ID-1: vmnet1 state: unknown speed: N/A duplex: N/A mac: <filter> 
+           IF-ID-2: vmnet8 state: unknown speed: N/A duplex: N/A mac: <filter> 
+Drives:    Local Storage: total: 16.87 TiB used: 820.41 GiB (4.7%) 
+           ID-1: /dev/nvme0n1 vendor: Silicon Power model: SPCC M.2 PCIe SSD size: 1.86 TiB 
+           ID-2: /dev/sda model: TRO-SSD7-1TB-PRO size: 931.51 GiB 
+           ID-3: /dev/sdb vendor: Samsung model: SSD 860 QVO 2TB size: 1.82 TiB 
+           ID-4: /dev/sdc vendor: Seagate model: ST31500541AS size: 1.36 TiB 
+           ID-5: /dev/sdd vendor: Toshiba model: HDWG21C size: 10.91 TiB 
+Partition: ID-1: / size: 118.25 GiB used: 44.59 GiB (37.7%) fs: btrfs dev: /dev/nvme0n1p2 
+           ID-2: /home size: 798.46 GiB used: 532.97 GiB (66.8%) fs: ext4 dev: /dev/nvme0n1p3 
+           ID-3: swap-1 size: 34.45 GiB used: 1.17 GiB (3.4%) fs: swap dev: /dev/nvme0n1p5 
+Sensors:   
+{'battery': None,
+ 'fans': {},
+ 'temperatures:': {'k10temp': [shwtemp(label='Tdie', current=54.375, high=None, critical=None),
+                               shwtemp(label='Tctl', current=54.375, high=None, critical=None),
+                               shwtemp(label='Tccd1', current=55.75, high=None, critical=None)],
+                   'nvme': [shwtemp(label='Composite', current=53.85, high=74.85, critical=79.85)]}} System Temperatures: cpu: 54.4 C mobo: N/A gpu: nvidia temp: 58 C 
+           Fan Speeds (RPM): N/A gpu: nvidia fan: 29% 
+Info:      Processes: 444 Uptime: 4h 20m Memory: 31.37 GiB used: 6.29 GiB (20.1%) Shell: auto-cpufreq 
+           inxi: 3.0.37 
+
+-------------------------------------------------------------------------------
+
+[~]
+alex:$ 
+
+```
+---
+
+Edited: I also installed auto-cpufreq from snap and got the same error on `sudo auto-cpufreq --install`
+```
+alex:$ snap --version
+snap     2.45.2-1
+snapd    2.45.2-1
+series   16
+manjaro  -
+kernel   5.6.19-2-MANJARO
+```
+
+
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>related #91 
+Currently, AFAIK you don't need to run `--install` on AUR</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>olexandrch:</strong></p>
+                    <p>Thank you, Red-Eyed.
+After installing from AUR, we need to start the systemd service.
+`systemctl enable auto-cpufreq`
+`systemctl start auto-cpufreq`
+
+and check if it `enabled` and `running` with 
+`systemctl status auto-cpufreq`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I've updated [Arch section of README once again](https://github.com/AdnanHodzic/auto-cpufreq#aur-package-archmanjaro-linux). 
+
+I think only way to permanently resolve this issue is to add a check (similar to what is done for i.e: [snap package in various places](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/source/core.py#L151)) when running `install`. In case Arch or Manjaro or other Arch based distributions are detected to output the message in "please note" section. 
+
+Regardless, if someone creates an [Improvement] task regarding this I can potentially look into implementing this feature at some point. Altough it seems as bit of an overkill.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

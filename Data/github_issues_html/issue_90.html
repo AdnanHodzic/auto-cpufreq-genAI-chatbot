@@ -1,0 +1,75 @@
+
+        <html>
+        <head>
+            <title>Issue #90: Reorganize README.md</title>
+        </head>
+        <body>
+            <h1>Reorganize README.md</h1>
+            <p><strong>Issue #90</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Install, *then* use. Not the other way around. Now it's clearer for folks using the AUR package they can just start using it. The AUR package install file notifies the user there is a service. Keep It Simple.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>What about help message?
+```
+auto-cpufreq --help
+Usage: auto-cpufreq [OPTIONS]
+
+Options:
+  --monitor             Monitor and suggest CPU optimizations
+  --live                Monitor and make suggested CPU optimizations
+  --install / --remove  Install/remove daemon for automatic CPU optimizations
+  --log                 View live CPU optimization log made by daemon
+  --debug               Show debug info (include when submitting bugs)
+  --help                Show this message and exit.
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>yochananmarqos:</strong></p>
+                    <p>The help message is another issue. This at least makes the README clearer.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I reverted changes made with this PR.
+
+@yochananmarqos with this change we catered whole README to those who installed `auto-cpufreq` using AUR. 
+
+What is described here, doesn't apply to people who used `snap` or `auto-cpufreq-installer`. What is *simple* to you, doesn't mean it applies and is simple in every other use case. 
+
+I think it would be a better idea to extend "[Arch Linux](https://github.com/AdnanHodzic/auto-cpufreq#arch-linux)" section, and say after "AUR package installation ____" fill in the blanks. As from what I see #84 and #91 after AUR installation, `auto-cpufreq --install` will be automatically run and just the `systemctl` needs to be enabled?
+
+If this is true, I didn't know that was the case with AUR package. In my opinion and to keep things consistent as they are with `snap` and `auto-cpufreq-installer`. It would be the best if after AUR package installation, `auto-cpufreq` would be available as a binary, and then you have an option to run it `live` or `install` or whatever you want to do with it.
+
+Let's discuss discuss some more. 
+
+@Red-Eyed for the time being, could you please leave merging PR's to `master` to me? Thanks</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>crian:</strong></p>
+                    <p>@AdnanHodzic there is no point in making such a AUR package, where you have manually install things. Then you can build the whole thing from source. 
+
+The AUR package installs things into its path so the package manager (pacman) keeps track of these files. For example: if you remove the package all files will also be removed without manual intervention.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@crian right, okay. In that case as I suggested in #84, let's simply extend README to have what needs to be done when AUR package is installed and that's it.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>[README ](https://github.com/AdnanHodzic/auto-cpufreq)updated, I hope this clarifies any confusion. Please submit a new PR if you think otherwise. </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

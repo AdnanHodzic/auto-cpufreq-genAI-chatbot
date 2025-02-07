@@ -1,0 +1,34 @@
+
+        <html>
+        <head>
+            <title>Discussion #375: auto-cpufreq + undervolt = true?</title>
+        </head>
+        <body>
+            <h1>auto-cpufreq + undervolt = true?</h1>
+            <p><strong>Discussion #375</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hello, I already have auto-cpufreq installed. I have a laptop that are used for school so battery life is king of course, will an undervolt result in longer battery life? Does it conflict with the package? Is there a program like PCmark for linux to test battery life?
+
+Thank you for the awesome work with this package</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Thanks, I don't know, as I never used undervolt. auto-cpufreq by itself should greatly extend your better battery life, I suggest you play with different [configuration options ](https://github.com/AdnanHodzic/auto-cpufreq#configuring-auto-cpufreq)to extend it even more. As using other tools can only potentially conflict with it and lead to negative results.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>pavelskipenes:</strong></p>
+                    <p>Power consumption is linearly dependent on the frequency and squared dependent (if that's correct way of phrasing it) on voltage. In other words cutting voltage in 2 results in 4 times lower power consumption while cutting frequency in 2 will cut the power consumption in 2.
+```
+power_consumption = some_random_constant * frequency * voltage * voltage;
+```</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

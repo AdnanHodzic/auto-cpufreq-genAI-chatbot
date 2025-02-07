@@ -1,0 +1,144 @@
+
+        <html>
+        <head>
+            <title>Issue #640: Frequencies are not respected from config-file?</title>
+        </head>
+        <body>
+            <h1>Frequencies are not respected from config-file?</h1>
+            <p><strong>Issue #640</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+### Error output:
+```text
+Add/paste error output in case of failed installation or other failing component
+```
+---
+
+### System information:
+
+Lenovo Thinkpad E14 gen 4
+
+Add/paste output of:
+
+```
+Using settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------------------------------------------------------
+
+Linux distro: Linux Mint 21.3 Virginia
+Linux kernel: 5.15.0-92-generic
+Processor: 12th Gen Intel(R) Core(TM) i5-1235U
+Cores: 12
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1300 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      1.0%        42 °C      2500 MHz
+CPU1      0.0%        42 °C      2500 MHz
+CPU2      1.0%        43 °C      1063 MHz
+CPU3      0.0%        43 °C      2500 MHz
+CPU4      3.0%        41 °C      2500 MHz
+CPU5      0.0%        41 °C      2500 MHz
+CPU6      2.0%        41 °C      2500 MHz
+CPU7      0.0%        40 °C      2500 MHz
+CPU8      1.0%        39 °C      2500 MHz
+CPU9      2.0%        39 °C      2500 MHz
+CPU10      0.0%        38 °C      2500 MHz
+CPU11      0.0%        38 °C      2500 MHz
+
+CPU fan speed: 1800 RPM
+
+auto-cpufreq version: 2.1.0 (git: 68dec52)
+
+Python: 3.10.12
+psutil package: 5.9.8
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.07 %
+
+Total CPU usage: 1.5 %
+Total system load: 1.83
+Average temp. of all cores: 40.58 °C 
+
+Currently using: performance governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+
+
+
+```
+I configured the configuration-file and set the max frequencies
+![Schermafdruk van 2024-02-06 12-12-22](https://github.com/AdnanHodzic/auto-cpufreq/assets/58733661/7fdfba37-a560-454a-a972-d7d292de51d4)
+
+But if i look in GUI, it doesn't seem like max frequency are respected? Do i see this correct?
+Turboboost setting is respected. 
+
+![Schermafdruk van 2024-02-06 12-12-40](https://github.com/AdnanHodzic/auto-cpufreq/assets/58733661/a597147a-2e05-4c74-8eaf-be3402d956ef)
+
+Thanks for help!
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>what method did you use to install auto-cpufreq? mabye you should try to use the auto-cpufreq driver found [here](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#troubleshooting)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lavendercolor:</strong></p>
+                    <p>any potential downsides on replacing intel pstate with auto-cpufreq driver? </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lavendercolor:</strong></p>
+                    <p>update: config file settings worked after restarting the computer, `auto-cpufreq --config` by itself had no effect.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> update: config file settings worked after restarting the computer, `auto-cpufreq --config` by itself had no effect.
+
+[I've mentioned this same thing on Discord,](https://discord.com/channels/1158239366251020361/1158239367337349164/1211952577432916008). 
+
+I think it would be great if auto-cpufreq Readme (config part) would be updated with "For best results, please restart after making changes to config file".
+
+Same type of message should also be outputted after auto-cpufreq daemon is installed.  
+
+I've added it to my (long) ToDo, but if you or anyone else wants to give it a try in implementing this functionality, please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>With latest release changes to config file will be automatically picked up, closing the issue due to inactivity.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

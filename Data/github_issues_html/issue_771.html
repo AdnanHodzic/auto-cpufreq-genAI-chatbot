@@ -1,0 +1,64 @@
+
+        <html>
+        <head>
+            <title>Issue #771: Add EPB (Energy Performance Bias) settings support</title>
+        </head>
+        <body>
+            <h1>Add EPB (Energy Performance Bias) settings support</h1>
+            <p><strong>Issue #771</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>This PR adds support for the `energy_perf_bias` setting, giving users more control over how their Intel CPU (`intel_pstate` driver) balances performance and power efficiency
+
+What's Changed:
+- Introduced a new `energy_perf_bias` option, which can be set as a number (0-15) or using predefined strings like "performance", "balance_performance", "default", "balance_power" and "power" (made their names the same as EPP's)
+- Integrated the `energy_perf_bias` setting into the existing power management logic, dynamically adjusting it based on the selected profile or user preferences
+- Updated the documentation to explain how to configure and use the new `energy_perf_bias` setting
+
+Closes: #522 
+
+Looking forward to any feedback or suggestions!</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>LGTM & this is great stuff! Making my experience much smoother.
+
+It would be great if it could be enabled by default (automatically) without having to explicitly specify it as part of config file.
+
+Setting i.e `energy_perf_bias = balance_power` when on powersavings governor & `energy_perf_bias = balance_performance` when on performance? 
+
+Either way, thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>snyypi:</strong></p>
+                    <p>@AdnanHodzic Thank you for the amazing project! Regarding the configuration, if the parameter is missing in the configuration file, `balance_performance` (on charge) and `balance_power` (on battery) will be used if the hardware supports it. My mistake, I forgot to specify this in both the PR description and the documentation</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Regarding the configuration, if the parameter is missing in the configuration file, balance_performance (on charge) and balance_power (on battery) will be used if the hardware supports it. 
+
+Yes I saw that in lines like
+
+```
+    if Path("/sys/devices/system/cpu/intel_pstate").exists() is False:
+        print('Not setting EPB (not supported by system)')
+        return
+    epb = "balance_performance" if profile == "charger" else "balance_power"
+```
+
+But I misinterpreted it that it would be used only as part of config file if you didn't explicitly define other settings.
+
+> My mistake, I forgot to specify this in both the PR description and the documentation
+
+Could you please create a PR to update ReadMe with this info, just to avoid any confusion? Thanks!</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

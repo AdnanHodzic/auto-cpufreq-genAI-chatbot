@@ -1,0 +1,301 @@
+
+        <html>
+        <head>
+            <title>Issue #234: Always reads battery state as discharging, thus stuck on "powersave" governor on Lenovo laptop</title>
+        </head>
+        <body>
+            <h1>Always reads battery state as discharging, thus stuck on "powersave" governor on Lenovo laptop</h1>
+            <p><strong>Issue #234</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>###  Problem:
+I'm using auto-cpufreq on a Lenovo ideapad 330s.
+My laptop is charged, and full, but auto-cpufreq stays on "powersave" governor.
+I updated my BIOS recently.
+My battery state:
+```text
+$ cat /sys/class/power_supply/BAT0/status
+Full
+```
+---
+
+### System information:
+```text
+-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux rolling n/a
+Linux kernel: 5.13.10-zen1-1-zen
+Processor: Intel(R) Core(TM) i5-8250U CPU @ 1.60GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1600 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	13.0%     50 °C      752 MHz
+CPU1:	11.0%     49 °C      771 MHz
+CPU2:	10.0%     48 °C     1800 MHz
+CPU3:	12.7%     48 °C     1800 MHz
+CPU4:	 6.9%     50 °C     1800 MHz
+CPU5:	 9.0%     49 °C     1800 MHz
+CPU6:	 6.0%     48 °C     1800 MHz
+CPU7:	 9.1%     48 °C      777 MHz
+
+auto-cpufreq version:
+Version         : 1.6.4.r225.3807d6d-1
+
+Python: 3.9.6
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 8.0.1
+distro package 1.5.0
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.21 %
+
+Total CPU usage: 9.8 %
+Total system load: 1.74
+Average temp. of all cores: 48.75 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>dura0ok:</strong></p>
+                    <p>Same bug</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Haptein:</strong></p>
+                    <p>grep . /sys/class/power_supply/A*/online
+ls /sys/class/power_supply/
+
+What's the output of these when that happens? I kinda already know the fix but I'm curious about what your ac adapter state is.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AmitGolden:</strong></p>
+                    <p>```
+$ ls /sys/class/power_supply/
+BAT0
+```
+
+`/sys/class/power_supply/A*/online` does not exist (neither does `/sys/class/power_supply/BAT0/online`)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Haptein:</strong></p>
+                    <p>Batteries don't have an online file.  What's indeed weird is your ac adapter not showing up, which is what's triggering this behaviour. That and a regression introduced somewhere down the line, this odd case should have been covered.
+
+Just for the sake of knowledge, what's your output of:
+dmidecode --type 39
+(you might have to run this with sudo)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AmitGolden:</strong></p>
+                    <p>```bash
+$ sudo dmidecode --type 39
+# dmidecode 3.3
+Getting SMBIOS data from sysfs.
+SMBIOS 3.0.0 present.
+
+Handle 0x0032, DMI type 39, 22 bytes
+System Power Supply
+	Location: OEM Define 0
+	Name: OEM Define 1
+	Manufacturer: OEM Define 2
+	Serial Number: OEM Define 3
+	Asset Tag: OEM Define 4
+	Model Part Number: OEM Define 5
+	Revision: OEM Define 6
+	Max Power Capacity: 75 W
+	Status: Not Present
+	Type: Regulator
+	Input Voltage Range Switching: Auto-switch
+	Plugged: No
+	Hot Replaceable: No
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AmitGolden:</strong></p>
+                    <p>Maybe there's a problem with my ac adapter's driver, it doesn't show up and my battery state is often `unknown`, and battery percentage is also often wrong (by roughly 1%-2%).
+
+Maybe fixing this issue will fix auto-cpufreq too?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Haptein:</strong></p>
+                    <p>> Maybe there's a problem with my ac adapter's driver
+
+Yeah there's a firmware issue.
+
+> Maybe fixing this issue will fix auto-cpufreq too?
+
+It would definitely fix it. But at the same time the charging detection (auto-cpufreq) could be improved and imo should fallback to using the available battery info so even if your ac adapter isn't detected auto-cpufreq could work correctly, but if your battery state is often unknown then it couldn't work reliably either.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AmitGolden:</strong></p>
+                    <p>Thanks!
+I've already tried to find drivers and did a BIOS update.
+Do you have any other idea where could I look for a fix for this issue?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Haptein:</strong></p>
+                    <p>I really wanna be sure about something, are the unknown values thrown by your battery really random? For example, I know some newer machines show unkown values when fully charged and system has switched to using ac power instead, specially batteries on laptops where you can config charging limits, if that's the case then I think there's a possible solution for auto-cpufreq for these edge cases.
+
+I did a quick search and what I found suggested that it could be a kernel version problem. Here's the link to a [working solution for someone with a laptop from Lenovo](https://archived.forum.manjaro.org/t/no-batteries-detected-on-manjaro/77357/15). It's not precisely the same model (330 instead of 330s) but maybe they have this in common. I hope this helps. 🤞</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AmitGolden:</strong></p>
+                    <p>The battery percentage values are not really random, they're just a little bit off.
+It mainly happens when the battery is fully charged, but the percentage gets stuck at 99% or 98%.
+Also battery state is unknown when that happens.
+Referring to your suggested solution, I would prefer not to use an old kernel...
+Thank you!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AmitGolden:</strong></p>
+                    <p>Now when I think about it, I've used GNOME for a long time and haven't had any issues like this.
+I've switched to a tiling window manager (Qtile) recently, and just then this problem started.
+Maybe there's a package in the GNOME group that's required for my ac adapter to work correctly?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Haptein:</strong></p>
+                    <p>Maybe you Linux kernel got updated along the installation of Qtile? Hardware detection and reporting is handled by the kernel.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AmitGolden:</strong></p>
+                    <p>That's unlikely, I uninstalled GNOME a long time after I installed Qtile, and it kept working.
+
+Strange thing I noticed, was that the built-in Qtile battery widget is somehow not reflecting this problem:
+Sometimes in `/sys/class/power_supply/BAT0/` the battery percentage will be a bit off, and the state will be unknown, but the widget will display it correctly.
+
+Maybe there's another way to read the battery state?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Haptein:</strong></p>
+                    <p>> Maybe there's another way to read the battery state?
+
+Yes there is, and it's similar to what auto-cpufreq already does. The problem (although we could read also from this other place) is a logic regression introduced a while ago. Part of the pr involved in the regression introduced functionality that detects the chassis type of the pc. My take is that we could do without it (it also comes with it's own problems) but I'm still waiting for some clarification about it before I submit a pr.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AmitGolden:</strong></p>
+                    <p>Cool, thanks a lot!
+
+BTW, what's the other way to do it? (so I can use it in my Qtile config)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Haptein:</strong></p>
+                    <p>Just read from /sys/class/power_supply/BATX/current_now, if it's 0 you can assume it's charging.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AmitGolden:</strong></p>
+                    <p>Cool, thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Haptein:</strong></p>
+                    <p>I'm sorry, I just noticed what I said was very misleading. With my last comment I meant "charging" in the context of auto-cpufreq, ie. fed through the ac adapter. If current 0 is reported that means the battery is neither charging nor discharging, so one could assume the battery is full and the pc is being fed power through the ac adapter only.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>KiralyCraft:</strong></p>
+                    <p>I came across the same issue. The "else" branch of the code that checks the charging works reliably for me on a Dell XPS 15 running kernel 5.14, so I just added a "not" in the initial check. 
+
+Here's the one: https://github.com/AdnanHodzic/auto-cpufreq/blob/ffc0bf0ca34060533bd263f1eaf3abeb36cc29a2/auto_cpufreq/core.py#L162
+
+This is a very quick and dirty fix for my particular use case, although it does prove that psutil works in this odd instance</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Haptein:</strong></p>
+                    <p>Yep, that's the logic regression I was talking about. If chassis type is of the portable variety auto-cpufreq doesn't bother to check the battery, it just checks the ac adapter state. Problems could arise if either the detected chassis type is not correct or the ac adapter isn't properly detected by the kernel, which seems is a fairly common occurrence. What you did was bypass the ac reading and go for the battery one, but in reality there's no reason we shouldn't just check both (the previous behaviour).
+
+@AdnanHodzic This is the gist of the discussion over in #168. I don't really want to spam both places so I'll ask here, do you remember the advantage of reading chassis type over assuming pc was of desktop type if no AC or BAT was found? I've wanted to submit a pr but still don't get what I would be messing up if I forwent the dmidecode chassis type detection.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@KiralyCraft 
+
+> I came across the same issue. The "else" branch of the code that checks the charging works reliably for me on a Dell XPS 15 running kernel 5.14, so I just added a "not" in the initial check.
+> 
+> Here's the one:
+> 
+> https://github.com/AdnanHodzic/auto-cpufreq/blob/ffc0bf0ca34060533bd263f1eaf3abeb36cc29a2/auto_cpufreq/core.py#L162
+> 
+> This is a very quick and dirty fix for my particular use case, although it does prove that psutil works in this odd instance
+
+If this truly fixes the issue consider creating a PR for it.
+
+> @AdnanHodzic This is the gist of the discussion over in #168. I don't really want to spam both places so I'll ask here, do you remember the advantage of reading chassis type over assuming pc was of desktop type if no AC or BAT was found? I've wanted to submit a pr but still don't get what I would be messing up if I forwent the dmidecode chassis type detection.
+
+@Haptein because `dmidecode --string chassis-type` is something which should be present on every computer, and because checking for BAT/AC would lead to have too many cases and would affect code readability. 
+
+Hence what I would propose is that you nest the logic, where after chassis-type check (or in case it's not detected) it goes to do another check if AC or BAT are found. Looking forward to your PR :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>With [v1.7.0 release](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.7.0) it's now possible to manually define some of the settings instead of leaving everything to be picked up automatically. Could you try tweaking some of the [available options](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq) and report back on how that worked for you? Thanks</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AmitGolden:</strong></p>
+                    <p>It didn't really make a difference, because auto-cpufreq thinks my battery is always discharging, even when I'm charging.
+
+I tried to make a config file but it didn't help.
+I also tried falling back to the acpi-cpufreq (instead of intel_pstate) but it also didn't help</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AmitGolden:</strong></p>
+                    <p>Thinking about this, will writing a simple script that changes the governor when the charger is connected or disconnected be more efficient than my current situation?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Thinking about this, will writing a simple script that changes the governor when the charger is connected or disconnected be more efficient than my current situation?
+
+What's the point of doing this when auto-cpufreq does this among other things. Except it doesn't seem to work for you in some case. Hence if you go down this path I would encourage you to add extend this part, create a PR and get credit as one of the [next releases](https://github.com/AdnanHodzic/auto-cpufreq/releases) :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Changes to this problem are now [part of 1.7.2 release](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.7.2), this release also included @AmitGolden changes as part of #274 which will resolve this issue. With that said, I'm closing the issue, if the problem persists feel free to re-open it.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

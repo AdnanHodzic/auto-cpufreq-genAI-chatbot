@@ -1,0 +1,71 @@
+
+        <html>
+        <head>
+            <title>Issue #358: Scaling not working on my device</title>
+        </head>
+        <body>
+            <h1>Scaling not working on my device</h1>
+            <p><strong>Issue #358</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>i have asus laptop rog g531gu 
+Operating System: Arch Linux
+KDE Plasma Version: 5.23.5
+KDE Frameworks Version: 5.90.0
+Qt Version: 5.15.2
+Kernel Version: 5.15.18-1-lts (64-bit)
+Graphics Platform: X11
+Processors: 8 × Intel® Core™ i5-9300H CPU @ 2.40GHz
+Memory: 15.5 GiB of RAM
+Graphics Processor: Mesa Intel® UHD Graphics 630
+
+i put custome config  and i do this [sloution](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)   and the output
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1400 MHz
+CPU min frequency: 800 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0:     9.6%     49 °C     2400 MHz
+CPU1:     4.0%     51 °C     2400 MHz
+CPU2:     5.9%     49 °C     2400 MHz
+CPU3:    18.1%     47 °C     2400 MHz
+CPU4:     8.7%     49 °C     1084 MHz
+CPU5:     6.1%     51 °C     2400 MHz
+CPU6:     5.9%     49 °C     2400 MHz
+CPU7:    11.5%     47 °C     2400 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: discharging
+
+Setting to use: "powersave" governor
+
+Total CPU usage: 2.9 %
+Total system load: 0.88
+Average temp. of all cores: 49.0 °C
+Configuration file disables turbo boost
+setting turbo boost: off
+
+-------------------------------------------------------------------------------
+what is the problem and how can i slove it </p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Seems related to #364. 
+
+I also just [released v1.9.2](https://github.com/AdnanHodzic/auto-cpufreq/releases) which adds ability to change power governor used by default with auto-cpufreq from `balanced` to `performance` [using power_helper.py script](https://github.com/AdnanHodzic/auto-cpufreq/#1-power_helperpy-script). Curious to hear if you still have same problem if you switch to `performance` governor?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing due to inactivity. </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,36 @@
+
+        <html>
+        <head>
+            <title>Issue #501: updated the systemd service to update the script</title>
+        </head>
+        <body>
+            <h1>updated the systemd service to update the script</h1>
+            <p><strong>Issue #501</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I guess this is not the perfect solution, also I am not sure if the environment interrupts the process. But in theory it should check for an update, and if there is one reinstall the program, then start it.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>meator:</strong></p>
+                    <p>Services shouldn't be responsible for this; see https://github.com/AdnanHodzic/auto-cpufreq/pull/500#pullrequestreview-1891195465</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Services shouldn't be responsible for this; see [#500 (review)](https://github.com/AdnanHodzic/auto-cpufreq/pull/500#pullrequestreview-1891195465)
+
+I agree with what was said here, which leads me to a question why not extend the `--update` and improve this process?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closed due to inactivity.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

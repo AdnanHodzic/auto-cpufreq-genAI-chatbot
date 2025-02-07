@@ -1,0 +1,32 @@
+
+        <html>
+        <head>
+            <title>Discussion #166: dmidecode, chassis types, and other shenanigans to set ac_state to true on desktops</title>
+        </head>
+        <body>
+            <h1>dmidecode, chassis types, and other shenanigans to set ac_state to true on desktops</h1>
+            <p><strong>Discussion #166</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>@AdnanHodzic 
+It took a while figure out, but eventually I searched SMBIOS chassis types and I came across this specification document:
+https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_3.2.0.pdf
+
+On page 39, there is a list of possible chassis types. One example that I found odd is called "pizza box" and "lunch box." I have no idea how a computer chassis could be a "pizza box."
+
+I'm trying to figure out which potential outputs are important and relevant and which are just weird things in the spec.
+If we can determine which outputs need ac_state set manually to true, we can put everything else to "else." 
+
+It's probably good to be thorough here as people have varying setups, and this piece of code could make our brake this daemon on each machine.
+
+The solution me and Librewish created was a little quick and dirty. I foresaw this issue, but wanted to see if it would actually become an issue.
+
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+            </div>
+        </body>
+        </html>
+        

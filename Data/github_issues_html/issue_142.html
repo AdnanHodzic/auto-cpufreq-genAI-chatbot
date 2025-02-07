@@ -1,0 +1,138 @@
+
+        <html>
+        <head>
+            <title>Issue #142: Error while installing</title>
+        </head>
+        <body>
+            <h1>Error while installing</h1>
+            <p><strong>Issue #142</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+```text
+sudo auto-cpufreq --install
+
+--------------------- Deploying auto-cpufreq as a daemon ----------------------
+
+* Turn off bluetooth on boot
+
+* Deploy auto-cpufreq install script
+Traceback (most recent call last):
+  File "/usr/bin/auto-cpufreq", line 137, in <module>
+    main()
+  File "/usr/lib/python3.9/site-packages/click/core.py", line 829, in __call__
+    return self.main(*args, **kwargs)
+  File "/usr/lib/python3.9/site-packages/click/core.py", line 782, in main
+    rv = self.invoke(ctx)
+  File "/usr/lib/python3.9/site-packages/click/core.py", line 1066, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/usr/lib/python3.9/site-packages/click/core.py", line 610, in invoke
+    return callback(*args, **kwargs)
+  File "/usr/bin/auto-cpufreq", line 120, in main
+    deploy_daemon()
+  File "/usr/lib/python3.9/site-packages/source/core.py", line 233, in deploy_daemon
+    shutil.copy(SCRIPTS_DIR / "auto-cpufreq-install.sh", "/usr/bin/auto-cpufreq-install")
+  File "/usr/lib/python3.9/shutil.py", line 418, in copy
+    copyfile(src, dst, follow_symlinks=follow_symlinks)
+  File "/usr/lib/python3.9/shutil.py", line 264, in copyfile
+    with open(src, 'rb') as fsrc, open(dst, 'wb') as fdst:
+FileNotFoundError: [Errno 2] No such file or directory: '/usr/share/auto-cpufreq/scripts/auto-cpufreq-install.sh'
+
+```
+---
+
+### System information:
+```text
+sudo auto-cpufreq --debug
+[sudo] password for radu: 
+
+-------------------------------------------------------------------------------
+
+Linux distro: Manjaro Linux 20.2 Nibia
+Linux kernel: 5.10.2-2-MANJARO
+Processor: Intel(R) Core(TM) i5-7300HQ CPU @ 2.50GHz
+Cores: 4
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 3500 MHz
+CPU min frequency: 800 MHz
+
+	 Usage  Temperature  Frequency
+CPU0:	  1.0%     50 °C     3459 MHz
+CPU1:	  1.0%     48 °C     3387 MHz
+CPU2:	  3.0%     45 °C     3232 MHz
+CPU3:	  1.0%     46 °C     3350 MHz
+
+fatal: not a git repository (or any of the parent directories): .git
+Snap package: no
+
+Python: 3.9.1
+psutil package: 5.7.3
+platform package: 1.0.8
+click package: 7.1.2
+/bin/sh: line 1: pip3: command not found
+distro package
+
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.1 %
+
+Total CPU usage: 1.7 %
+Total system load: 0.46
+Average temp. of all cores: 47.25 °C 
+
+Currently using: performance governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+
+
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>You're missing `pip3`, not sure how that's the case, but installing it should fix this issue.
+
+Otherwise I would just suggest [AUR package for Manjaro](https://github.com/AdnanHodzic/auto-cpufreq/#aur-package-archmanjaro-linux).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ErikReider:</strong></p>
+                    <p>@AdnanHodzic I have the same issue and I 100% have pip3 installed. The file `auto-cpufreq-install.sh` is not found in the `/usr/share/auto-cpufreq/scripts` dir</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@crian @yochananmarqos do you know if this is related to AUR package or it's something else? Thanks</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>yochananmarqos:</strong></p>
+                    <p>@AdnanHodzic Pip (`python-pip`) is not necessary for the AUR package.
+
+@radumitrescu: Check the [README](https://github.com/AdnanHodzic/auto-cpufreq#aur-package-archmanjaro-linux):
+
+> Please note: If you want to install auto-cpufreq daemon, do not run auto-cpufeq --install otherwise you'll run into an issue: [#91](https://github.com/AdnanHodzic/auto-cpufreq/issues/91), [#96](https://github.com/AdnanHodzic/auto-cpufreq/issues/96).
+>
+>Instead run `systemctl start auto-cpufreq` to start the service. Run `systemctl status auto-cpufreq` to see the status of service, and `systemctl enable auto-cpufreq` for service to persist running across reboots.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I'm closing this issue, as part of [1.5.3 release](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.5.3), besides AUR auto-cpufreq can also be installed using [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

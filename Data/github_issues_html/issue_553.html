@@ -1,0 +1,33 @@
+
+        <html>
+        <head>
+            <title>Issue #553: add Nix flake and better Nix support</title>
+        </head>
+        <body>
+            <h1>add Nix flake and better Nix support</h1>
+            <p><strong>Issue #553</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>As a fairly new user of NixOS, I found that the [current nixpkg](https://github.com/NixOS/nixpkgs/blob/nixos-23.05/pkgs/tools/system/auto-cpufreq/default.nix) is very outdated.
+
+After discovering this, I decided to package auto-cpufreq myself so I could enjoy it from the latest releases. Also as someone who has been helping develop parts of auto-cpufreq, I wanted to setup a Nix dev environment through a `flake.nix` file. I also rewrote my Nix package to work with the flake and created a NixOS module that any NixOS user can take advantage of. This will allow us to keep up with the latest changes of `auto-cpufreq` without worrying that the nixpkg is outdated.
+
+Note that the `flake.lock` file will need to be updated every once in a while to keep up with changes to Python, packages, etc... This is super easy and I can take care of this as needed. It could even be setup automatically through a GitHub action if we so wish
+
+In addition to the flake, I have updated the README to include info about how to install on NixOS and have updated `auto-cpufreq-installer` to exit and give the user a message upon detection of NixOS
+
+In the meantime, I do plan on writing a PR to update the nixpkg to the latest release, but I still think this is a good change for the minority of Nix users :)
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>This is amazing! Great job.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

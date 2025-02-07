@@ -1,0 +1,178 @@
+
+        <html>
+        <head>
+            <title>Issue #472: CPU governor changes incorrectly bacause of Controller over Bluetooth</title>
+        </head>
+        <body>
+            <h1>CPU governor changes incorrectly bacause of Controller over Bluetooth</h1>
+            <p><strong>Issue #472</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>It looks like auto-cpufreq is incorrectly changing the CPU scaling governor when I have a Sony controller connected over Bluetooth on my Desktop PC. This doesn't happen on my Laptop when charging connected to the wall and it's noticeable as it affects FPS when gaming. 
+
+As an example: having my controller connected over Bluetooth and wired is the difference between 45 FPS and 60 FPS on God Of War HD in RPCS3.
+
+As soon as the controller is connected auto-cpufreq changes my CPU scaling governor from `Performance` to `Powersave` and reports the battery as `discharging`, this happens with both the Dualsense and the Dualshock 4 controllers. If I turn the controllers off or connect them through cable to the PC, either while still over Bluetooth or turned off, then the CPU scaling is then correctly set to `Performance`.
+
+I use Nobara 37, which ships auto-cpufreq by default, and another user have also confirmed this same behavior on the distro's Discord server/channel with their Dualsense and Dualshock 4 controllers. Another person with a Xbox controller couldn't reproduce the issue over Bluetooth.
+
+From the looks of it, auto-cpufreq is incorrectly using the controllers battery status as an indicator to change the scaling governor.
+
+I can also confirm this doesn't happen with power-profiles-daemon, neither does it happen with no power optimizers.
+
+Modifying `/etc/auto-cpufreq.conf` so it uses `Performance` when on battery works, but it feels like a workaround instead of a solution.
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? `Yes`
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)? `No`
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)? `Yes`
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)? `No`
+
+---
+
+### System information:
+
+**Dualsense off:** 
+```
+Using settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------------------------------------------------------
+
+Linux distro: Nobara Linux 37 KDE Plasma
+Linux kernel: 6.1.6-201.fsync.fc37.x86_64
+Processor: AMD Ryzen 5 5600X 6-Core Processor
+Cores: 12
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3700 MHz
+CPU min frequency: 2200 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0:     4.0%     17 °C     3243 MHz
+CPU1:     3.0%     17 °C     2975 MHz
+CPU2:     3.0%     17 °C     3690 MHz
+CPU3:     5.1%     17 °C     3197 MHz
+CPU4:     5.1%     17 °C     2951 MHz
+CPU5:    49.5%     17 °C     2957 MHz
+CPU6:     5.0%     17 °C     3079 MHz
+CPU7:     6.1%     17 °C     3602 MHz
+CPU8:     4.0%     17 °C     3698 MHz
+CPU9:     2.0%     17 °C     3476 MHz
+CPU10:    4.0%     17 °C     3633 MHz
+CPU11:    2.0%     17 °C     3490 MHz
+
+CPU fan speed: 0 RPM
+
+CPU fan speed: 0 RPM
+
+auto-cpufreq version: 1.9.7
+
+Python: 3.11.1
+psutil package: 5.9.1
+platform package: 1.0.8
+click package: 8.1.3
+distro package: 1.7.0
+
+Computer type: Desktop
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.16 %
+
+Total CPU usage: 13.6 %
+Total system load: 1.64
+Average temp. of all cores: 16.80 °C 
+
+Currently using: performance governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```
+
+**Dualsense on (Bluetooth):**
+```
+Using settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------------------------------------------------------
+
+Linux distro: Nobara Linux 37 KDE Plasma
+Linux kernel: 6.1.6-201.fsync.fc37.x86_64
+Processor: AMD Ryzen 5 5600X 6-Core Processor
+Cores: 12
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3700 MHz
+CPU min frequency: 2200 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0:     6.1%     17 °C     2196 MHz
+CPU1:    12.2%     17 °C     2197 MHz
+CPU2:     7.1%     17 °C     2164 MHz
+CPU3:    11.0%     17 °C     2199 MHz
+CPU4:     8.2%     17 °C     2195 MHz
+CPU5:    15.2%     17 °C     2199 MHz
+CPU6:     6.1%     17 °C     2181 MHz
+CPU7:     5.9%     17 °C     2198 MHz
+CPU8:     5.1%     17 °C     2198 MHz
+CPU9:     5.1%     17 °C     2193 MHz
+CPU10:    4.0%     17 °C     2199 MHz
+CPU11:    3.0%     17 °C     2187 MHz
+
+CPU fan speed: 0 RPM
+
+CPU fan speed: 0 RPM
+
+auto-cpufreq version: 1.9.7
+
+Python: 3.11.1
+psutil package: 5.9.1
+platform package: 1.0.8
+click package: 8.1.3
+distro package: 1.7.0
+
+Computer type: Desktop
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.16 %
+
+Total CPU usage: 5.2 %
+Total system load: 1.65
+Average temp. of all cores: 16.80 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```
+
+---</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>krasmazov483:</strong></p>
+                    <p>Sorry to bother, but is there any update on this? I'd rather be able to use auto-cpufreq since it performs a lot better than power-profiles-daemon on my laptop, but it have been removed from Nobara's repos because of this issue.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>No updates, I guess no had time to look into this. Since auto-cpufreq is a big project, [it's looking for contributors](https://github.com/AdnanHodzic/auto-cpufreq#looking-for-developers-and-co-maintainers).
+
+If you or anyone else wants to give it a try in implementing this functionality, please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

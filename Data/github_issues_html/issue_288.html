@@ -1,0 +1,183 @@
+
+        <html>
+        <head>
+            <title>Issue #288: Showing incorrect frequencies</title>
+        </head>
+        <body>
+            <h1>Showing incorrect frequencies</h1>
+            <p><strong>Issue #288</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I'm seeing incorrect CPU frequencies when I run `sudo auto-cpufreq --stats` after setting up the auto-cpuqfreq.service in systemd.
+---
+
+### System information:
+```text
+-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux
+Linux kernel: 5.15.2-arch1-1
+Processor: Intel(R) Core(TM) i7-10875H CPU @ 2.30GHz
+Cores: 16
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2300 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  0.0%     41 °C     2300 MHz
+CPU1:	  2.0%     41 °C     2300 MHz
+CPU2:	  5.9%     42 °C     2300 MHz
+CPU3:	  1.0%     41 °C     2300 MHz
+CPU4:	  1.0%     40 °C     2300 MHz
+CPU5:	  0.0%     40 °C     2300 MHz
+CPU6:	  1.0%     41 °C     2300 MHz
+CPU7:	  2.0%     40 °C     2300 MHz
+CPU8:	  0.0%     41 °C     2300 MHz
+CPU9:	  1.0%     41 °C     2300 MHz
+CPU10:	  3.0%     42 °C      800 MHz
+CPU11:	 13.2%     41 °C     2300 MHz
+CPU12:	  2.0%     40 °C      800 MHz
+CPU13:	  1.0%     40 °C     2300 MHz
+CPU14:	  2.0%     41 °C     2300 MHz
+CPU15:	  2.0%     40 °C     2300 MHz
+
+auto-cpufreq version:
+Version         : 1.7.2-1
+
+Python: 3.9.7
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 8.0.3
+distro package 1.6.0
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.03 %
+
+Total CPU usage: 2.1 %
+Total system load: 0.96
+Average temp. of all cores: 40.75 °C
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```
+---
+
+however, here is what `sudo cpupower monitor` is showing me:
+
+```
+    | Nehalem                   || Mperf              || Idle_Stats
+ CPU| C3   | C6   | PC3  | PC6   || C0   | Cx   | Freq  || POLL | C1_A | C2_A | C3_A
+   0|  0.00|  0.00| 59.87|  0.00||  1.19| 98.81|   824||  0.00|  0.15|  3.59| 95.11
+   8|  0.00|  0.00| 59.87|  0.00||  1.21| 98.79|   815||  0.00|  0.10|  0.50| 98.25
+   1|  0.00|  0.00| 59.87|  0.00||  2.72| 97.28|   840||  0.00|  1.61|  2.55| 93.14
+   9|  0.00|  0.00| 59.87|  0.00||  1.13| 98.87|   813||  0.00|  0.00|  0.04| 98.88
+   2|  0.00|  0.00| 59.87|  0.00||  1.28| 98.72|   805||  0.00|  0.12|  3.16| 95.47
+  10|  0.00|  0.00| 59.87|  0.00||  0.37| 99.63|   828||  0.00|  0.01|  0.34| 99.30
+   3|  0.00|  0.00| 59.87|  0.00||  3.64| 96.36|   831||  0.00|  0.27|  3.15| 93.01
+  11|  0.00|  0.00| 59.87|  0.00||  1.52| 98.48|   819||  0.00|  8.37|  4.01| 86.22
+   4|  0.00|  0.00| 59.87|  0.00||  0.55| 99.45|   813||  0.00|  0.07|  0.82| 98.58
+  12|  0.00|  0.00| 59.87|  0.00||  7.89| 92.11|   828||  0.00|  0.07|  2.71| 89.40
+   5|  0.00|  0.00| 59.87|  0.00||  2.69| 97.31|   825||  0.00|  0.01|  1.92| 95.49
+  13|  0.00|  0.00| 59.87|  0.00||  0.29| 99.71|   824||  0.00|  0.00|  0.18| 99.54
+   6|  0.00|  0.00| 59.87|  0.00||  1.70| 98.30|   825||  0.00|  0.00|  0.11| 98.24
+  14|  0.00|  0.00| 59.87|  0.00||  0.42| 99.58|   821||  0.00|  0.00|  0.00| 99.59
+   7|  0.00|  0.00| 59.87|  0.00||  2.33| 97.67|   810||  0.00|  0.00|  0.63| 97.06
+  15|  0.00|  0.00| 59.87|  0.00||  0.03| 99.97|  1014||  0.00|  0.00|  0.00| 99.97
+```
+
+While this is totally no big deal and this awesome software is working exactly as expected. I'd hate for you to get contact from people thinking it isn't work because of this incorrect readout. So I figured I'd at least bring it up in case it was not known.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>mhalano:</strong></p>
+                    <p>I have a same-but-worse case. It shows 2.3Ghz but my processor just support 1.8GHz
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 21.10 (Impish Indri)
+Linux kernel: 5.15.4-051504-generic
+Processor: Intel(R) Core(TM) i7-10510U CPU @ 1.80GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1800 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	 11.2%     46 °C     2300 MHz
+CPU1:	  6.1%     47 °C     2300 MHz
+CPU2:	  2.1%     47 °C     2300 MHz
+CPU3:	  8.1%     47 °C     2300 MHz
+CPU4:	  5.1%     46 °C     2300 MHz
+CPU5:	  9.2%     47 °C     2300 MHz
+CPU6:	 10.2%     47 °C     1800 MHz
+CPU7:	  7.0%     47 °C     2300 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+
+Total CPU usage: 5.7 %
+Total system load: 0.77
+Average temp. of all cores: 46.75 °C
+
+Load optimal
+setting turbo boost: off
+
+-------------------------------------------------------------------------------
+```
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@SYGINT thanks. I'm also having hard time making out what `cpupower` outputs. Can you help me out, and what exactly is the problem?
+
+@mhalano I think you're looking at this wrong, and that's the beauty of auto-cpufreq. Your CPU base frequency is 1.8GHz, while your CPU can go up to 4.90GHz on turbo. 
+
+If you refer to my demo of auto-cpufreq on Youtube, you'll see that while my CPU base frequency is 1.8GHz, auto-cpufreq helps it go all the way up to 4.6GHz: https://www.youtube.com/watch?v=QkYRpVEEIlg</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>mhalano:</strong></p>
+                    <p>@AdnanHodzic So I don't know what is wrong. I disabled Turbo Boost (which, I think, is responsible for increase frequency beyond max limit) via config file /etc/auto-cpufreq.conf (set the option as "never" as showed below) and via system with `echo 1 |sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo`. But `auto-cpufreq --stats` keep showing the turbo boost active sometimes. The idea is not pass 1.8GHz.
+![image](https://user-images.githubusercontent.com/6025031/143145600-67dad2a5-20fc-4ee8-9c21-4f25b5efb011.png)
+I also think even with low load the turbo boost is actived and high load is indicated. Can I set how much load is too much load, like a fine grain control?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>woolmonkey:</strong></p>
+                    <p>I get the same it always shows 2800 all cores even at no load.  But cpupower shows lower frequencies.  And considering my labtop isn't overly hot I think the 2800 from auto-cpufreq --stats is wrong.  I have had this happen on fedora and Pop_os but from what I can remember Arch showed correctly.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Just [released v1.9.2](https://github.com/AdnanHodzic/auto-cpufreq/releases) which adds ability to change power governor used by default with auto-cpufreq from `balanced` to `performance` [using power_helper.py script](https://github.com/AdnanHodzic/auto-cpufreq/#1-power_helperpy-script). Curious to hear if you still have same problem if you switch to `performance` governor?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing the issue due to inactivity. </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

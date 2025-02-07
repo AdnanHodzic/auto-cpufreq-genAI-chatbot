@@ -1,0 +1,270 @@
+
+        <html>
+        <head>
+            <title>Issue #634: /usr/local/bin/auto-cpufreq wrapper drops parameters</title>
+        </head>
+        <body>
+            <h1>/usr/local/bin/auto-cpufreq wrapper drops parameters</h1>
+            <p><strong>Issue #634</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>The wrapper script /usr/local/bin/auto-cpufreq does not correctly handle multiple parameters on the command line. Single or zero parameters are correctly passed to the python environment.
+### Error output:
+```
+Script started on 2024-01-31 09:44:52-05:00 [TERM="xterm-256color" TTY="/dev/pts/8" COLUMNS="147" LINES="37"]
+root@rocoto:/tmp# bash -x /usr/local/bin/auto-cpufreq
+
+++ basename /usr/local/bin/auto-cpufreq
++ PROGNAME=auto-cpufreq
++ venv_dir=/opt/auto-cpufreq/venv
++ . /opt/auto-cpufreq/venv/bin/activate
+++ deactivate nondestructive
+++ '[' -n '' ']'
+++ '[' -n '' ']'
+++ hash -r
+++ '[' -n '' ']'
+++ unset VIRTUAL_ENV
+++ unset VIRTUAL_ENV_PROMPT
+++ '[' '!' nondestructive = nondestructive ']'
+++ '[' linux-gnu = cygwin ']'
+++ '[' linux-gnu = msys ']'
+++ export VIRTUAL_ENV=/opt/auto-cpufreq/venv
+++ VIRTUAL_ENV=/opt/auto-cpufreq/venv
+++ _OLD_VIRTUAL_PATH=/root/.local/bin:/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin
+++ PATH=/opt/auto-cpufreq/venv/bin:/root/.local/bin:/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin
+++ export PATH
+++ '[' -n '' ']'
+++ '[' -z '' ']'
+++ _OLD_VIRTUAL_PS1=
+++ PS1='(venv) '
+++ export PS1
+++ VIRTUAL_ENV_PROMPT='(venv) '
+++ export VIRTUAL_ENV_PROMPT
+++ hash -r
++ [[ 0 -ne 1 ]]
++ PYTHONPATH=/opt/auto-cpufreq
++ /opt/auto-cpufreq/venv/bin/python /opt/auto-cpufreq/venv/bin/auto-cpufreq
+
+-------------------------------- auto-cpufreq ---------------------------------
+
+Automatic CPU speed & power optimizer for Linux
+
+Example usage:
+auto-cpufreq --monitor
+
+-----
+
+Usage: auto-cpufreq [OPTIONS]
+
+Options:
+--monitor           Monitor and see suggestions for CPU optimizations
+--live              Monitor and make (temp.) suggested CPU optimizations
+--install           Install daemon for (permanent) automatic CPU
+optimizations
+--update TEXT       Update daemon and package for (permanent) automatic CPU
+optimizations
+--remove            Remove daemon for (permanent) automatic CPU
+optimizations
+--stats             View live stats of CPU optimizations made by daemon
+--force TEXT        Force use of either "powersave" or "performance"
+governors. Setting to "reset" will go back to normal
+mode
+--config TEXT       Use config file at defined path
+--debug             Show debug info (include when submitting bugs)
+--version           Show currently installed version
+--donate            Support the project
+--completions TEXT  Enables shell completions for bash, zsh and fish.
+Possible values bash|zsh|fish
+--help              Show this message and exit.
+
+-------------------------------------------------------------------------------
+
+root@rocoto:/tmp# bash -x /usr/local/bin/auto-cpufreq --version
+
+++ basename /usr/local/bin/auto-cpufreq
++ PROGNAME=auto-cpufreq
++ venv_dir=/opt/auto-cpufreq/venv
++ . /opt/auto-cpufreq/venv/bin/activate
+++ deactivate nondestructive
+++ '[' -n '' ']'
+++ '[' -n '' ']'
+++ hash -r
+++ '[' -n '' ']'
+++ unset VIRTUAL_ENV
+++ unset VIRTUAL_ENV_PROMPT
+++ '[' '!' nondestructive = nondestructive ']'
+++ '[' linux-gnu = cygwin ']'
+++ '[' linux-gnu = msys ']'
+++ export VIRTUAL_ENV=/opt/auto-cpufreq/venv
+++ VIRTUAL_ENV=/opt/auto-cpufreq/venv
+++ _OLD_VIRTUAL_PATH=/root/.local/bin:/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin
+++ PATH=/opt/auto-cpufreq/venv/bin:/root/.local/bin:/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin
+++ export PATH
+++ '[' -n '' ']'
+++ '[' -z '' ']'
+++ _OLD_VIRTUAL_PS1=
+++ PS1='(venv) '
+++ export PS1
+++ VIRTUAL_ENV_PROMPT='(venv) '
+++ export VIRTUAL_ENV_PROMPT
+++ hash -r
++ [[ 1 -ne 1 ]]
++ params=--version
++ PYTHONPATH=/opt/auto-cpufreq
++ /opt/auto-cpufreq/venv/bin/python /opt/auto-cpufreq/venv/bin/auto-cpufreq --version
+
+-------------------------------------------------------------------------------
+
+Linux distro: Fedora Linux 39 Workstation Edition
+Linux kernel: 6.6.12-200.fc39.x86_64
+auto-cpufreq version: 2.1.0 (git: 68dec52)
+
+-------------------------------------------------------------------------------
+
+root@rocoto:/tmp# bash -x /usr/local/bin/auto-cpufreq --force powersave
+
+++ basename /usr/local/bin/auto-cpufreq
++ PROGNAME=auto-cpufreq
++ venv_dir=/opt/auto-cpufreq/venv
++ . /opt/auto-cpufreq/venv/bin/activate
+++ deactivate nondestructive
+++ '[' -n '' ']'
+++ '[' -n '' ']'
+++ hash -r
+++ '[' -n '' ']'
+++ unset VIRTUAL_ENV
+++ unset VIRTUAL_ENV_PROMPT
+++ '[' '!' nondestructive = nondestructive ']'
+++ '[' linux-gnu = cygwin ']'
+++ '[' linux-gnu = msys ']'
+++ export VIRTUAL_ENV=/opt/auto-cpufreq/venv
+++ VIRTUAL_ENV=/opt/auto-cpufreq/venv
+++ _OLD_VIRTUAL_PATH=/root/.local/bin:/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin
+++ PATH=/opt/auto-cpufreq/venv/bin:/root/.local/bin:/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin
+++ export PATH
+++ '[' -n '' ']'
+++ '[' -z '' ']'
+++ _OLD_VIRTUAL_PS1=
+++ PS1='(venv) '
+++ export PS1
+++ VIRTUAL_ENV_PROMPT='(venv) '
+++ export VIRTUAL_ENV_PROMPT
+++ hash -r
++ [[ 2 -ne 1 ]]
++ PYTHONPATH=/opt/auto-cpufreq
++ /opt/auto-cpufreq/venv/bin/python /opt/auto-cpufreq/venv/bin/auto-cpufreq
+
+-------------------------------- auto-cpufreq ---------------------------------
+
+Automatic CPU speed & power optimizer for Linux
+
+Example usage:
+auto-cpufreq --monitor
+
+-----
+
+Usage: auto-cpufreq [OPTIONS]
+
+Options:
+--monitor           Monitor and see suggestions for CPU optimizations
+--live              Monitor and make (temp.) suggested CPU optimizations
+--install           Install daemon for (permanent) automatic CPU
+optimizations
+--update TEXT       Update daemon and package for (permanent) automatic CPU
+optimizations
+--remove            Remove daemon for (permanent) automatic CPU
+optimizations
+--stats             View live stats of CPU optimizations made by daemon
+--force TEXT        Force use of either "powersave" or "performance"
+governors. Setting to "reset" will go back to normal
+mode
+--config TEXT       Use config file at defined path
+--debug             Show debug info (include when submitting bugs)
+--version           Show currently installed version
+--donate            Support the project
+--completions TEXT  Enables shell completions for bash, zsh and fish.
+Possible values bash|zsh|fish
+--help              Show this message and exit.
+
+-------------------------------------------------------------------------------
+
+root@rocoto:/tmp# exit
+
+
+Script done on 2024-01-31 09:45:19-05:00 [COMMAND_EXIT_CODE="0"]
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+/usr/local/bin/auto-cpufreq --debug
+
+-------------------------------------------------------------------------------
+
+Linux distro: Fedora Linux 39 Workstation Edition
+Linux kernel: 6.6.12-200.fc39.x86_64
+Processor: 13th Gen Intel(R) Core(TM) i7-1365U
+Cores: 12
+Architecture: x86_64
+Driver: intel_pstate
+```
+
+### Suggested fix
+
+Pass all parameters from the BASH wrapper script to the python script in the venv.
+
+```
+root@rocoto:/usr/local/bin# diff -p  auto-cpufreq auto-cpufreq.fixed
+*** auto-cpufreq        2024-01-31 09:53:25.805143238 -0500
+--- auto-cpufreq.fixed  2024-01-31 09:53:52.040854147 -0500
+*************** venv_dir=/opt/auto-cpufreq/venv
+*** 22,35 ****
+. "${venv_dir}/bin/activate"
+
+# run python code with venv loaded
+! if [[ "${#}" -ne 1 ]]; then
+!    PYTHONPATH=/opt/auto-cpufreq \
+/opt/auto-cpufreq/venv/bin/python \
+!             /opt/auto-cpufreq/venv/bin/auto-cpufreq
+! else
+!     params="${1}"
+!     PYTHONPATH=/opt/auto-cpufreq \
+!             /opt/auto-cpufreq/venv/bin/python \
+!             /opt/auto-cpufreq/venv/bin/auto-cpufreq \
+!             "${params}"
+! fi
+--- 22,27 ----
+. "${venv_dir}/bin/activate"
+
+# run python code with venv loaded
+!  PYTHONPATH=/opt/auto-cpufreq \
+/opt/auto-cpufreq/venv/bin/python \
+!             /opt/auto-cpufreq/venv/bin/auto-cpufreq  $*
+```</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Hi, since you made a suggested fix, I would encourage you to please give it a try and [create a PR/contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Angel-Karasu:</strong></p>
+                    <p>I've pushed a solution, you can wait for it to be validated or install manually with `git clone -b origin https://github.com/Angel-Karasu/auto-cpufreq.git` and follow the installation guide</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Angel-Karasu:</strong></p>
+                    <p>PR #716 is merged which should fix the issue, if problem persists, please feel free to re-open it</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

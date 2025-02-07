@@ -1,0 +1,159 @@
+
+        <html>
+        <head>
+            <title>Issue #604: [FEATURE] Please allow to turn turbo on and off via override</title>
+        </head>
+        <body>
+            <h1>[FEATURE] Please allow to turn turbo on and off via override</h1>
+            <p><strong>Issue #604</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>- Searched open issues, this one does not seam to exist yet
+
+Please, add the following commands:
+```
+sudo auto-cpufreq --force=turbo-boost on
+sudo auto-cpufreq --force=turbo-boost off
+sudo auto-cpufreq --force=turbo-boost auto
+``` 
+For me, normally I want turbo-boost to be on, but if the battery is below 40% or I go on  a long trip it shall be off.
+
+### System information:
+```
+Using settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 22.04 Jammy Jellyfish
+Linux kernel: 6.1.0-1025-oem
+Processor: AMD Ryzen 7 7840U w/ Radeon  780M Graphics
+Cores: 16
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3300 MHz
+CPU min frequency: 1600 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      1.0%        35 °C      1600 MHz
+CPU1      0.0%        35 °C      1600 MHz
+CPU2      1.0%        35 °C      1600 MHz
+CPU3      1.0%        35 °C      1313 MHz
+CPU4      1.0%        35 °C      1600 MHz
+CPU5      0.0%        35 °C      1600 MHz
+CPU6      2.0%        35 °C      1280 MHz
+CPU7      0.0%        35 °C      1600 MHz
+CPU8      0.0%        35 °C      1600 MHz
+CPU9      0.0%        35 °C      1600 MHz
+CPU10      4.0%        35 °C      2152 MHz
+CPU11      0.0%        35 °C      1600 MHz
+CPU12      0.0%        35 °C      1495 MHz
+CPU13      1.0%        35 °C      1600 MHz
+CPU14      0.0%        35 °C      1600 MHz
+CPU15      1.0%        35 °C      1600 MHz
+
+auto-cpufreq version: 2.0.0 (git: 15c17fc)
+
+Python: 3.10.12
+psutil package: 5.9.6
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.8.0
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.08 %
+
+Total CPU usage: 0.4 %
+Total system load: 0.28
+Average temp. of all cores: 34.80 °C 
+
+Currently using: ondemand governor
+Currently turbo boost is: on
+```
+
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Yes, having this option/flag could be of great value. @shadeyg56 in GUI on/off/auto could maybe be selected using drop down menu.
+
+Until I or someone else has time to look into developing this feature, if you want to give it a try please feel free to [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+Please note that this is already possible to set by using [auto-cpufreq config file](https://github.com/AdnanHodzic/auto-cpufreq#3-auto-cpufreq-config-file).
+
+```
+# turbo boost setting. possible values: always, auto, never
+turbo = auto
+```
+
+Besides Readme I also cover its functionality as part of [auto-cpufreq v2 video](https://www.youtube.com/watch?v=SPGpkZ0AZVU&t=608s).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>>  GUI on/off/auto could maybe be selected using drop down menu.
+
+Works for me, but needs to be implemented in the CLI first.
+
+I also think it would be better to have it as its own flag instead of using the force flag so something like
+`sudo auto-cpufreq --turbo=on`,`sudo auto-cpufreq --turbo=off`, `sudo auto-cpufreq --turbo=auto`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Yes, it should def be its own/new flag.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>gelbing:</strong></p>
+                    <p>Do you have any idea why it reports that the Ryzen 7 7840U only supports a max frequency of 3300 MHz? I noticed that if using the amd-pstate-epp driver it does report 6600 MHz which is also not correct from my understanding. But it is matching the output of 
+
+## lscpu
+```
+Architecture:            x86_64
+  CPU op-mode(s):        32-bit, 64-bit
+  Address sizes:         48 bits physical, 48 bits virtual
+  Byte Order:            Little Endian
+CPU(s):                  16
+  On-line CPU(s) list:   0-15
+Vendor ID:               AuthenticAMD
+  Model name:            AMD Ryzen 7 PRO 7840U w/ Radeon 780M Graphics
+    CPU family:          25
+    Model:               116
+    Thread(s) per core:  2
+    Core(s) per socket:  8
+    Socket(s):           1
+    Stepping:            1
+    Frequency boost:     disabled
+    CPU(s) scaling MHz:  38%
+    CPU max MHz:         6677.3428
+    CPU min MHz:         1600.0000
+    BogoMIPS:            6590.08
+```
+    
+Maybe there is something wrong with my understanding</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@gelbing please try going thru [Troubleshooting](https://github.com/AdnanHodzic/auto-cpufreq/#troubleshooting) section first, if this doesn't help please open a new issue as it doesn't relate to this feature request.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing the issue due to inactivity.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

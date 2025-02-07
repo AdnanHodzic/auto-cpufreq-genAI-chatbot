@@ -1,0 +1,223 @@
+
+        <html>
+        <head>
+            <title>Issue #765: I think there's a syntax bug in original code regarding ideapad?</title>
+        </head>
+        <body>
+            <h1>I think there's a syntax bug in original code regarding ideapad?</h1>
+            <p><strong>Issue #765</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? **Yes**
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?**Yes**
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?**Yes**
+
+### Error output:
+```text
+Traceback (most recent call last):
+  File "/usr/bin/auto-cpufreq", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/usr/lib/python3.12/site-packages/click/core.py", line 1157, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/site-packages/click/core.py", line 1078, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/site-packages/click/core.py", line 1434, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/site-packages/click/core.py", line 783, in invoke
+    return __callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/site-packages/auto_cpufreq/bin/auto_cpufreq.py", line 95, in main
+    battery_get_thresholds()
+  File "/usr/lib/python3.12/site-packages/auto_cpufreq/battery_scripts/battery.py", line 42, in battery_get_thresholds
+    ideapad_laptop_print_thresholds()
+  File "/usr/lib/python3.12/site-packages/auto_cpufreq/battery_scripts/ideapad_laptop.py", line 101, in ideapad_laptop_print_thresholds
+    print(f"ERROR: failed to read battery thresholds: {e}")
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+-------------------------------- Battery Info ---------------------------------
+
+battery count = 1
+ERROR: failed to read battery thresholds: [Errno 2] No such file or directory: '/sys/class/power_supply/BAT0/charge_start_threshold'
+
+-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux rolling n/a
+Linux kernel: 6.6.45-1-lts
+Processor: 12th Gen Intel(R) Core(TM) i5-12500H
+Cores: 16
+Architecture: x86_64
+Driver: acpi-cpufreq
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+I'using ThinkBook. It's more or less rebranded IdeaPad but not exactly, so it uses idea_pad module but doesn't support threshold. Thus, it triggered auto_cpufreq/battery_scripts/ideapad_laptop.py but failed at:
+```text
+ try:
+            with open(f'/sys/class/power_supply/BAT{b}/charge_start_threshold', 'r') as f:
+```
+It should work nonetheless as there is exception catch. However, the original code:
+```text
+except Exception:
+            print(f"ERROR: failed to read battery thresholds: {e}")
+```
+doesn't seem quite right and should be changed to:
+```text
+except Exception as e:
+            print(f"ERROR: failed to read battery thresholds: {e}")
+```
+---
+I install auto-cpufreq from AUR, but I do see other thinkbook users have the same error in issues. I think this just a small syntax bug?</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@PurpleWazard ^</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>@Qianxilihulu What's your laptop model and can I have the output of 
+lsmod.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Qianxilihulu:</strong></p>
+                    <p>> @Qianxilihulu What's your laptop model and can I have the output of lsmod.
+
+sure, my laptop is ThinkBook 16 G4+ IAP.
+Here's my lsmod output:
+```text
+intel_ishtp_hid        28672  0
+snd_soc_intel_hda_dsp_common    16384  1 snd_soc_skl_hda_dsp
+snd_sof_pci_intel_tgl    12288  2
+snd_sof_intel_hda_common   241664  1 snd_sof_pci_intel_tgl
+soundwire_intel        81920  1 snd_sof_intel_hda_common
+snd_sof_intel_hda_mlink    36864  2 soundwire_intel,snd_sof_intel_hda_common
+soundwire_cadence      45056  1 soundwire_intel
+snd_sof_intel_hda      20480  1 snd_sof_intel_hda_common
+intel_uncore_frequency    12288  0
+snd_sof_pci            24576  2 snd_sof_intel_hda_common,snd_sof_pci_intel_tgl
+snd_sof_xtensa_dsp     16384  1 snd_sof_intel_hda_common
+intel_uncore_frequency_common    16384  1 intel_uncore_frequency
+intel_tcc_cooling      12288  0
+snd_sof               421888  4 snd_sof_pci,snd_sof_intel_hda_common,snd_sof_probes,snd_sof_intel_hda
+snd_soc_hdac_hda       28672  1 snd_sof_intel_hda_common
+intel_powerclamp       20480  0
+snd_hda_ext_core       36864  5 snd_sof_intel_hda_common,snd_soc_hdac_hdmi,snd_soc_hdac_hda,snd_sof_intel_hda_mlink,snd_sof_intel_hda
+snd_soc_acpi_intel_match    94208  2 snd_sof_intel_hda_common,snd_sof_pci_intel_tgl
+snd_soc_acpi           16384  2 snd_soc_acpi_intel_match,snd_sof_intel_hda_common
+soundwire_generic_allocation    12288  1 soundwire_intel
+kvm_intel             425984  0
+soundwire_bus         139264  3 soundwire_intel,soundwire_generic_allocation,soundwire_cadence
+kvm                  1355776  1 kvm_intel
+ghash_clmulni_intel    16384  0
+snd_soc_core          446464  8 soundwire_intel,snd_sof,snd_sof_intel_hda_common,snd_soc_hdac_hdmi,snd_soc_hdac_hda,snd_sof_probes,snd_soc_dmic,snd_soc_skl_hda_dsp
+aesni_intel           360448  6
+crypto_simd            16384  1 aesni_intel
+cryptd                 28672  3 crypto_simd,ghash_clmulni_intel
+snd_hda_intel          65536  0
+snd_intel_dspcfg       36864  3 snd_hda_intel,snd_sof,snd_sof_intel_hda_common
+snd_intel_sdw_acpi     16384  2 snd_sof_intel_hda_common,snd_intel_dspcfg
+snd_hda_codec         212992  8 snd_hda_codec_generic,snd_hda_codec_hdmi,snd_hda_intel,snd_hda_codec_realtek,snd_soc_intel_hda_dsp_common,snd_soc_hdac_hda,snd_sof_intel_hda,snd_soc_skl_hda_dsp
+btintel                57344  1 btusb
+snd_hda_core          139264  11 snd_hda_codec_generic,snd_hda_codec_hdmi,snd_hda_intel,snd_hda_ext_core,snd_hda_codec,snd_hda_codec_realtek,snd_soc_intel_hda_dsp_common,snd_sof_intel_hda_common,snd_soc_hdac_hdmi,snd_soc_hdac_hda,snd_sof_intel_hda
+ucsi_acpi              12288  0
+intel_pmc_bxt          16384  1 iTCO_wdt
+snd_pcm               200704  13 snd_hda_codec_hdmi,snd_hda_intel,snd_hda_codec,soundwire_intel,snd_sof,snd_sof_intel_hda_common,snd_soc_hdac_hdmi,snd_compress,snd_soc_core,snd_sof_utils,snd_hda_core,snd_pcm_dmaengine
+intel_rapl_msr         20480  0
+typec_ucsi             65536  1 ucsi_acpi
+intel_cstate           20480  0
+bluetooth            1089536  44 btrtl,btmtk,btintel,btbcm,bnep,btusb,rfcomm
+intel_lpss_pci         24576  0
+intel_lpss             12288  1 intel_lpss_pci
+snd                   151552  26 snd_ctl_led,snd_hda_codec_generic,snd_seq,snd_seq_device,snd_hda_codec_hdmi,snd_hwdep,snd_hda_intel,snd_hda_codec,snd_hda_codec_realtek,snd_sof,snd_timer,snd_soc_hdac_hdmi,snd_compress,snd_soc_core,snd_pcm
+intel_ish_ipc          40960  0
+think_lmi              36864  0
+intel_uncore          262144  0
+firmware_attributes_class    12288  1 think_lmi
+intel_rapl_common      40960  2 intel_rapl_msr,processor_thermal_rapl
+intel_ishtp            77824  2 intel_ishtp_hid,intel_ish_ipc
+intel_vsec             20480  0
+ideapad_laptop         57344  0
+platform_profile       12288  1 ideapad_laptop
+i2c_hid_acpi           12288  0
+i2c_hid                40960  1 i2c_hid_acpi
+rfkill                 40960  9 iwlmvm,bluetooth,ideapad_laptop,cfg80211
+intel_hid              28672  0
+acpi_pad               24576  0
+sparse_keymap          12288  2 intel_hid,ideapad_laptop
+acpi_tad               20480  0
+acpi_thermal_rel       20480  1 int3400_thermal
+intel_gtt              24576  1 i915
+crc32c_intel           16384  4
+spi_intel_pci          12288  0
+spi_intel              36864  1 spi_intel_pci
+i8042                  57344  1 ideapad_laptop
+video                  77824  3 ideapad_laptop,i915,nvidia_modeset
+wmi                    45056  4 video,wmi_bmof,ideapad_laptop,think_lmi
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Is this the same issue which was fixed in #750 as part of #766 @Geffo029?
+
+If yes, then simply git pull the latest changes and run --install with auto-cpufreq-installer followed by `auto-cpufreq --install`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Geffo029:</strong></p>
+                    <p>No, the error 
+```
+except Exception:
+            print(f"ERROR: failed to read battery thresholds: {e}")
+``` 
+(forgot to add `as e` to `except Exception`) was fixed in #696 (i manually checked from file history, i don't know if there is a better way to check).
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> (forgot to add `as e` to `except Exception`) was fixed in #696 (i manually checked from file history, i don't know if there is a better way to check).
+
+Could you please create a new PR regarding this, since you're also using Ideapad? </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Geffo029:</strong></p>
+                    <p>> Could you please create a new PR regarding this, since you're also using Ideapad?
+
+I'm new to this things so maybe there is something i'm not understanding.
+The issue shown was already fixed, but after the release 2.3.0 in May 9. So if you install auto-cpufreq from AUR, where the PKGBUILD refers to v2.3.0, you miss the fixes</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>In that case I'll tag @MusicalArtist12, @liljaylj and @parmjotsinghrobot</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Qianxilihulu:</strong></p>
+                    <p>AUR 2.4.0-1 seems to fix this problem so I'll close this issue</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

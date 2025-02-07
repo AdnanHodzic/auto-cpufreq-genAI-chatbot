@@ -1,0 +1,120 @@
+
+        <html>
+        <head>
+            <title>Issue #20: Doesn't report Architecture</title>
+        </head>
+        <body>
+            <h1>Doesn't report Architecture</h1>
+            <p><strong>Issue #20</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Probably minor, but when running it doesn't report the architecture, i.e. it is empty:
+
+```
+                                                                                                                                                                                                              [30/30]
+----------------------------- System information ------------------------------
+               
+Linux distro: Debian GNU/Linux 10 buster
+Linux kernel: 4.19.0-6-amd64
+Driver: intel_pstate
+Architecture:  
+Processor: Intel(R) Core(TM) i9-8950HK CPU @ 2.90GHz
+Cores: 12
+                                                                               
+------------------------------ Current CPU states ------------------------------
+```</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>As I said in the other bug report, I think these problems could be related to using older package version for "psuti"l which were installed from apt repos:
+
+`sudo pip3 show psutil | grep -i version`
+
+Recommended version should be >= 5.5.1
+
+Hence, could you please try upgrading both using pip3 by running:
+
+`sudo pip3 install --upgrade psutil`
+
+And let me know if the problem still persits after this?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>zshamrock:</strong></p>
+                    <p>Still the same. The current version indeed was `5.5.1`, I upgraded it to `5.6.7`, and still it doesn't report the architecture.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Could you please run the following and past back the output:
+
+```
+python3
+import platform
+platform.processor()
+```
+
+Off topic: that's a nice CPU you have there :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>zshamrock:</strong></p>
+                    <p>```
+(base) alex@precision:~$ sudo python3
+[sudo] password for alex: 
+Python 3.7.3 (default, Apr  3 2019, 05:39:12) 
+[GCC 8.3.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import platform
+>>> platform.processor()
+''
+```
+Same if running as the normal user.
+
+Thank you ;) Upgraded my laptop this year as well.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>zshamrock:</strong></p>
+                    <p>This is what other `platform` methods report:
+
+```
+>>> platform.architecture()
+('64bit', 'ELF')
+>>> platform.linux_distribution()
+__main__:1: DeprecationWarning: dist() and linux_distribution() functions are deprecated in Python 3.5
+('debian', '10.2', '')
+>>> platform.machine()
+'x86_64'
+>>> platform.platform()
+'Linux-4.19.0-6-amd64-x86_64-with-debian-10.2'
+>>> platform.processor()
+''
+>>> platform.release()
+'4.19.0-6-amd64'
+>>> platform.system()
+'Linux'
+>>> platform.version()
+'#1 SMP Debian 4.19.67-2+deb10u2 (2019-11-11)'
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Okay, please pull the latest changes and re-run `auto-cpufreq`, your problem should be fixed. Please confirm,</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>zshamrock:</strong></p>
+                    <p>Yes, confirm, it reports correct architecture line now:
+
+`Architecture: x86_64`.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

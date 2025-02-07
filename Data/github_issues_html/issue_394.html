@@ -1,0 +1,242 @@
+
+        <html>
+        <head>
+            <title>Issue #394: Not installable on Fedora Silverblue 36 (35 too)</title>
+        </head>
+        <body>
+            <h1>Not installable on Fedora Silverblue 36 (35 too)</h1>
+            <p><strong>Issue #394</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hello, 
+I know this issue was fixed in the past but it seems to happen again. (see #129)
+I was used to install it on Fedora workstation and it was working fine but since silverblue is on a read only system it seems to be unable to install it...
+
+Also snap package doesn't seem to work
+
+By the way keep going your software is super useful ^^ 
+
+Thanks
+
+### Error output:
+```
+[mimillie@fedora ~]$ sudo auto-cpufreq --install
+[sudo] Mot de passe de mimillie : 
+
+--------------------- Deploying auto-cpufreq as a daemon ----------------------
+
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.9.3', 'auto-cpufreq')
+  File "/opt/auto-cpufreq/venv/lib64/python3.10/site-packages/pkg_resources/__init__.py", line 656, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/opt/auto-cpufreq/venv/lib64/python3.10/site-packages/pkg_resources/__init__.py", line 1460, in run_script
+    exec(script_code, namespace, namespace)
+  File "/opt/auto-cpufreq/venv/lib64/python3.10/site-packages/auto_cpufreq-1.9.3-py3.10.egg/EGG-INFO/scripts/auto-cpufreq", line 226, in <module>
+  File "/opt/auto-cpufreq/venv/lib64/python3.10/site-packages/click/core.py", line 1130, in __call__
+    return self.main(*args, **kwargs)
+  File "/opt/auto-cpufreq/venv/lib64/python3.10/site-packages/click/core.py", line 1055, in main
+    rv = self.invoke(ctx)
+  File "/opt/auto-cpufreq/venv/lib64/python3.10/site-packages/click/core.py", line 1404, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/opt/auto-cpufreq/venv/lib64/python3.10/site-packages/click/core.py", line 760, in invoke
+    return __callback(*args, **kwargs)
+  File "/opt/auto-cpufreq/venv/lib64/python3.10/site-packages/auto_cpufreq-1.9.3-py3.10.egg/EGG-INFO/scripts/auto-cpufreq", line 203, in main
+  File "/opt/auto-cpufreq/venv/lib64/python3.10/site-packages/auto_cpufreq-1.9.3-py3.10.egg/auto_cpufreq/core.py", line 350, in deploy_daemon
+  File "/opt/auto-cpufreq/venv/lib64/python3.10/site-packages/auto_cpufreq-1.9.3-py3.10.egg/auto_cpufreq/core.py", line 299, in cpufreqctl
+  File "/usr/lib64/python3.10/shutil.py", line 417, in copy
+    copyfile(src, dst, follow_symlinks=follow_symlinks)
+  File "/usr/lib64/python3.10/shutil.py", line 256, in copyfile
+    with open(dst, 'wb') as fdst:
+OSError: [Errno 30] Read-only file system: '/usr/bin/cpufreqctl.auto-cpufreq'
+
+```
+---
+
+### System information:
+
+OS: Fedora Linux 36.20220510.0 (Silverblue) x86_64
+Kernel: 5.17.5-300.fc36.x86_64 
+CPU: AMD Ryzen 7 4700U with Radeon Graphics (8) @ 2.000GHz
+GPU: AMD ATI 04:00.0 Renoir
+
+Add/paste output of:
+
+```
+[mimillie@fedora bin]$ sudo auto-cpufreq --debug
+[sudo] Mot de passe de mimillie : 
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.9.3', 'auto-cpufreq')
+  File "/opt/auto-cpufreq/venv/lib64/python3.10/site-packages/pkg_resources/__init__.py", line 656, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/opt/auto-cpufreq/venv/lib64/python3.10/site-packages/pkg_resources/__init__.py", line 1460, in run_script
+    exec(script_code, namespace, namespace)
+  File "/opt/auto-cpufreq/venv/lib64/python3.10/site-packages/auto_cpufreq-1.9.3-py3.10.egg/EGG-INFO/scripts/auto-cpufreq", line 226, in <module>
+  File "/opt/auto-cpufreq/venv/lib64/python3.10/site-packages/click/core.py", line 1130, in __call__
+    return self.main(*args, **kwargs)
+  File "/opt/auto-cpufreq/venv/lib64/python3.10/site-packages/click/core.py", line 1055, in main
+    rv = self.invoke(ctx)
+  File "/opt/auto-cpufreq/venv/lib64/python3.10/site-packages/click/core.py", line 1404, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/opt/auto-cpufreq/venv/lib64/python3.10/site-packages/click/core.py", line 760, in invoke
+    return __callback(*args, **kwargs)
+  File "/opt/auto-cpufreq/venv/lib64/python3.10/site-packages/auto_cpufreq-1.9.3-py3.10.egg/EGG-INFO/scripts/auto-cpufreq", line 146, in main
+  File "/opt/auto-cpufreq/venv/lib64/python3.10/site-packages/auto_cpufreq-1.9.3-py3.10.egg/auto_cpufreq/core.py", line 299, in cpufreqctl
+  File "/usr/lib64/python3.10/shutil.py", line 417, in copy
+    copyfile(src, dst, follow_symlinks=follow_symlinks)
+  File "/usr/lib64/python3.10/shutil.py", line 256, in copyfile
+    with open(dst, 'wb') as fdst:
+OSError: [Errno 30] Read-only file system: '/usr/bin/cpufreqctl.auto-cpufreq'
+
+```
+
+#### Without providing requested information your issue might be ignored!
+
+---
+
+If installation failed with [auto-cpufreq-installer ](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer)have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Not sure how you installed auto-cpufreq (git or snap package), but I see references to [read-only problems with Silveblue on Snap for Fedora](https://snapcraft.io/docs/installing-snap-on-fedora) and [github issue](https://github.com/coreos/rpm-ostree/issues/1711), seems to be Silveblue specific issue and nothing related to auto-cpufreq.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>It is a silverblue specific issue since it's built around a read only base system. @AdnanHodzic 
+
+There are ways that auto-cpufreq could work around this, by 
+
+- /usr/**local**/bin IIRC is writable on Silverblue.
+- install in the *home* directory of the user. (has an added benefit that auto-cpufreq will no longer require root to be installed)
+
+cc @MiMillieuh Mind confirming if auto-cpufreq works in a toolbox? I also intend to switch to silverblue later</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> There are ways that auto-cpufreq could work around this, by
+> 
+> * /usr/**local**/bin IIRC is writable on Silverblue.
+> * install in the _home_ directory of the user. (has an added benefit that auto-cpufreq will no longer require root to be installed)
+
+While I would definitely like for auto-cpufreq to work properly on Fedora Silveblue. Since I don't use it and I don't have much time  to look into it, if one of you would like to give it a go, I always [encourage code contributions](https://github.com/AdnanHodzic/auto-cpufreq#code-contribution)! 
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>Installed Silverblue, I seem to have got it working with modifications. Although I worry that these silverblue specific modifications might interfere with other distributions, which wouldn't be preferred. 
+
+Due to this, I am going to make a fork of the repository specifically for silverblue, hope you understand 👍🏻 </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>https://github.com/gimbles/auto-cpufreq-silverblue
+
+@MiMillieuh Enjoy! Remember to install it outside of a toolbox. 
+@AdnanHodzic I think it makes sense to include this in the README for Silverblue users.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> https://github.com/gimbles/auto-cpufreq-silverblue
+> 
+> @MiMillieuh Enjoy! Remember to install it outside of a toolbox. @AdnanHodzic I think it makes sense to include this in the README for Silverblue users.
+
+@gimbles good stuff. But I would rather have this code as part of auto-cpufreq instead of auto-cpufreq README pointing to a fork. Especially since from beginning auto-cpufreq was made to work and works great with some many different distributions. 
+
+Hence, as I pointed out before, please feel free to [make these changes as part of auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq#code-contribution).  </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>MiMillieuh:</strong></p>
+                    <p>> It is a silverblue specific issue since it's built around a read only base system. @AdnanHodzic 
+> 
+> There are ways that auto-cpufreq could work around this, by 
+> 
+> - /usr/**local**/bin IIRC is writable on Silverblue.
+> - install in the *home* directory of the user. (has an added benefit that auto-cpufreq will no longer require root to be installed)
+> 
+> cc @MiMillieuh Mind confirming if auto-cpufreq works in a toolbox? I also intend to switch to silverblue later
+
+Installing in toolbox would be pointless since its not system </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>Hi @AdnanHodzic 
+
+While I understand why you want to merge this into the main repository, my edits might cause issues on non-silverblue distributions.
+
+Unfortunately, I don't particularly have the time to write a proper solution, I just did a quick grep replace in the source code and that was pretty much it.
+
+However, you may look into the commit diff and figure out how to implement this into the main project.
+
+Hope you understand :wave:</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>MiMillieuh:</strong></p>
+                    <p>> Hi @AdnanHodzic
+> 
+> While I understand why you want to merge this into the main repository, my edits might cause issues on non-silverblue distributions.
+> 
+> Unfortunately, I don't particularly have the time to write a proper solution, I just did a quick grep replace in the source code and that was pretty much it.
+> 
+> However, you may look into the commit diff and figure out how to implement this into the main project.
+> 
+> Hope you understand 👋
+
+At least it works like a charm ^^ 
+
+Thanks </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Feinzer:</strong></p>
+                    <p>Were the changes eventually merged?
+
+The fork is gone :(</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Were the changes eventually merged?
+
+No, PR was never created ...
+
+> https://github.com/gimbles/auto-cpufreq-silverblue
+
+@gimbles @MiMillieuh do you happen to have those changes on one of your branches? It would really be great if a PR could be created for auto-cpufreq to have these changes in its `master` branch.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>MiMillieuh:</strong></p>
+                    <p>I don't have them anymore,  
+
+The fork got deleted so I guess no more autocpufreq for silverblue.
+
+Maybe ask the original owner of that fork, he might have it somewhere on his computer or on a private branch I don't know.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>@MiMillieuh @AdnanHodzic #460 </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Great work @gimbles, changes merged with auto-cpufreq `master` branch.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,172 @@
+
+        <html>
+        <head>
+            <title>Issue #751: Spamming of `line 98: echo: write error: Device or resource busy`</title>
+        </head>
+        <body>
+            <h1>Spamming of `line 98: echo: write error: Device or resource busy`</h1>
+            <p><strong>Issue #751</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+
+Yes, I have found multiple issues but they claim that it has been resolved.
+
+**EDIT**: I have possibly duplicated https://github.com/AdnanHodzic/auto-cpufreq/issues/724, I'm sorry if that's the case, I should have been more careful. Specifically:
+
+> When the governor is set to performance, only performance EPP is available as you can see in the screenshot below. By default auto-cpufreq tries to set balance-performance which might be causing this issue because such an EPP is not available.
+
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+
+Not failed.
+
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+
+Yes.
+
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+I checked, but the issue is not listed.
+
+### Error output:
+
+Lenovo Thinkpad P16s AMD gpu, more hardware info below. Ubuntu - installed with installer script.
+
+```text
+● auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux
+     Loaded: loaded (/etc/systemd/system/auto-cpufreq.service; enabled; vendor preset: enabled)
+     Active: active (running) since Wed 2024-07-24 17:56:20 EEST; 4min 55s ago
+   Main PID: 29827 (python)
+      Tasks: 2 (limit: 71724)
+     Memory: 18.1M
+        CPU: 5.700s
+     CGroup: /system.slice/auto-cpufreq.service
+             └─29827 /opt/auto-cpufreq/venv/bin/python /opt/auto-cpufreq/venv/bin/auto-cpufreq --daemon
+
+Jul 24 18:01:14  python[35039]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 98: echo: write error: Device or resource busy
+Jul 24 18:01:14  python[35039]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 98: echo: write error: Device or resource busy
+Jul 24 18:01:14  python[35039]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 98: echo: write error: Device or resource busy
+Jul 24 18:01:14  python[35039]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 98: echo: write error: Device or resource busy
+Jul 24 18:01:14  python[35039]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 98: echo: write error: Device or resource busy
+Jul 24 18:01:14  python[35039]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 98: echo: write error: Device or resource busy
+Jul 24 18:01:14  python[35039]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 98: echo: write error: Device or resource busy
+Jul 24 18:01:14  python[35039]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 98: echo: write error: Device or resource busy
+Jul 24 18:01:14  python[35039]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 98: echo: write error: Device or resource busy
+Jul 24 18:01:14  python[35039]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 98: echo: write error: Device or resource busy
+
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```text
+-------------------------------- Battery Info ---------------------------------
+
+battery count = 1
+BAT0 start threshold = 0
+BAT0 start threshold = 100
+
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 22.04 Jammy Jellyfish
+Linux kernel: 6.5.0-1025-oem
+Processor: AMD Ryzen 7 PRO 7840U w/ Radeon 780M Graphics
+Cores: 16
+Architecture: x86_64
+Driver: amd-pstate-epp
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 6076 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      1.0%        46 °C       400 MHz
+CPU1      0.0%        46 °C       400 MHz
+CPU2      1.0%        46 °C       400 MHz
+CPU3      1.0%        46 °C       400 MHz
+CPU4      2.0%        46 °C      3267 MHz
+CPU5      0.0%        46 °C       400 MHz
+CPU6      0.0%        46 °C       400 MHz
+CPU7      0.0%        46 °C      2972 MHz
+CPU8      1.0%        46 °C      3116 MHz
+CPU9      0.0%        46 °C      3268 MHz
+CPU10      0.0%        46 °C       400 MHz
+CPU11      0.0%        46 °C      3269 MHz
+CPU12      1.0%        46 °C      3191 MHz
+CPU13      0.0%        46 °C       400 MHz
+CPU14      0.0%        46 °C      3268 MHz
+CPU15      0.0%        46 °C       400 MHz
+
+CPU fan speed: 1990 RPM
+
+auto-cpufreq version: 2.3.0 (git: a7df94d)
+
+Python: 3.10.12
+psutil package: 5.9.8
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.05 %
+
+Total CPU usage: 3.2 %
+Total system load: 0.04
+Average temp. of all cores: 46.00 °C 
+
+Currently using: performance governor
+CPU turbo is controlled by amd-pstate-epp driver
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+Line 98 is:
+
+```shell
+function write_value () {
+  if [ -w $FLNM ]; then echo $VALUE > $FLNM; fi
+}
+```
+
+This only happens with performance governor. Switching to powersave doesn't give any error. Charger plugged in or not makes no difference.
+
+**EDIT**: I have possibly duplicated https://github.com/AdnanHodzic/auto-cpufreq/issues/724, I'm sorry if that's the case, I should have been more careful. Specifically:
+
+> When the governor is set to performance, only performance EPP is available as you can see in the screenshot below. By default auto-cpufreq tries to set balance-performance which might be causing this issue because such an EPP is not available.
+
+```text
+❯ cat /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_available_preferences
+performance
+```</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>dotfrag:</strong></p>
+                    <p>I have updated to 24.04 LTS and the issue is gone. It seems that auto-cpufreq is no longer trying to load `balanced_performance`.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I'm also on 24.04 for awhile and also don't have this problem, hence will close the issue. Please feel free to re-open if issue persist.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

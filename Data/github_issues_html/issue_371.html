@@ -1,0 +1,40 @@
+
+        <html>
+        <head>
+            <title>Issue #371: Correct scaling? </title>
+        </head>
+        <body>
+            <h1>Correct scaling? </h1>
+            <p><strong>Issue #371</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I have tried both intel_pstate and acpi-cpufreq drivers.  In both cases I cannot go below 800 MHz. 
+
+Is this normal?  The machine is a Thinkpad X1 Carbon 6th, Intel i7 8550u.
+
+Minimum frequency proposted fron auto-cpufreq is 400 MHz.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Minimum frequency proposted fron auto-cpufreq is 400 MHz.
+
+Since you didn't include `auto-cpufreq --debug`, this issue should've been ignored as I don't know what auto-cpufeq proposed.
+
+> I have tried both intel_pstate and acpi-cpufreq drivers. In both cases I cannot go below 800 MHz.
+
+Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)? As you can always configure it yourself if you're not happy how auto-cpufreq does things automatically.
+
+> Is this normal? The machine is a Thinkpad X1 Carbon 6th, Intel i7 8550u.
+
+Why wouldn't it be "normal"? For my CPU auto-cpufreq also proposes `CPU min frequency: 400 MHz` but I rarely/never see it go under 800Mhz, do I see that as a problem? No.
+
+I'm closing this as this is not an issue and is more of a question which should be in [Discussions](https://github.com/AdnanHodzic/auto-cpufreq/discussions).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

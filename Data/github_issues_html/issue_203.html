@@ -1,0 +1,988 @@
+
+        <html>
+        <head>
+            <title>Issue #203: [Bug - ToDo] I am using Zorin OS 15.3. Got this error when I try to run auto-cpufreq --any option.</title>
+        </head>
+        <body>
+            <h1>[Bug - ToDo] I am using Zorin OS 15.3. Got this error when I try to run auto-cpufreq --any option.</h1>
+            <p><strong>Issue #203</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+
+Traceback (most recent call last):
+  File "/usr/local/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.0', 'auto-cpufreq')
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 658, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 1445, in run_script
+    exec(script_code, namespace, namespace)
+  File "/usr/local/lib/python3.6/dist-packages/auto_cpufreq-1.0-py3.6.egg/EGG-INFO/scripts/auto-cpufreq", line 25, in <module>
+  File "/usr/lib/python3/dist-packages/click/decorators.py", line 170, in decorator
+    _param_memo(f, OptionClass(param_decls, **attrs))
+  File "/usr/lib/python3/dist-packages/click/core.py", line 1460, in __init__
+    Parameter.__init__(self, param_decls, type=type, **attrs)
+TypeError: __init__() got an unexpected keyword argument 'hidden'
+---
+
+### System information:
+```text
+Paste here output of the auto-cpufreq --debug
+```
+---Traceback (most recent call last):
+  File "/usr/local/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.0', 'auto-cpufreq')
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 658, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 1445, in run_script
+    exec(script_code, namespace, namespace)
+  File "/usr/local/lib/python3.6/dist-packages/auto_cpufreq-1.0-py3.6.egg/EGG-INFO/scripts/auto-cpufreq", line 25, in <module>
+  File "/usr/lib/python3/dist-packages/click/decorators.py", line 170, in decorator
+    _param_memo(f, OptionClass(param_decls, **attrs))
+  File "/usr/lib/python3/dist-packages/click/core.py", line 1460, in __init__
+    Parameter.__init__(self, param_decls, type=type, **attrs)
+TypeError: __init__() got an unexpected keyword argument 'hidden'
+[Error.txt](https://github.com/AdnanHodzic/auto-cpufreq/files/6571869/Error.txt)
+
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I guess you installed it using [auto-cpufreq-installer,](https://github.com/AdnanHodzic/auto-cpufreq#auto-cpufreq-installer) what happens if you install it using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq#snap-store)?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>veerabag:</strong></p>
+                    <p>Thanks for your response.
+I got the same error when I install using snap too. 
+When I do  "systemctl status snap.auto-cpufreq.service.service" got the below message.
+
+● snap.auto-cpufreq.service.service - Service for snap application auto-cpufreq.
+   Loaded: loaded (/etc/systemd/system/snap.auto-cpufreq.service.service; enable
+   Active: inactive (dead) since Mon 2021-05-31 14:47:28 EDT; 13min ago
+  Process: 1611 ExecStart=/usr/bin/snap run auto-cpufreq.service (code=exited, s
+ Main PID: 1611 (code=exited, status=0/SUCCESS)
+
+May 31 14:47:27 veerasZorin systemd[1]: Started Service for snap application aut
+lines 1-7/7 (END)...skipping...
+● snap.auto-cpufreq.service.service - Service for snap application auto-cpufreq.service
+   Loaded: loaded (/etc/systemd/system/snap.auto-cpufreq.service.service; enabled; vendor preset: enabled)
+   Active: inactive (dead) since Mon 2021-05-31 14:47:28 EDT; 13min ago
+  Process: 1611 ExecStart=/usr/bin/snap run auto-cpufreq.service (code=exited, status=0/SUCCESS)
+ Main PID: 1611 (code=exited, status=0/SUCCESS)
+
+May 31 14:47:27 veerasZorin systemd[1]: Started Service for snap application auto-cpufreq.service.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rscm:</strong></p>
+                    <p>Duplicate of https://github.com/AdnanHodzic/auto-cpufreq/issues/201</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>I am running Zorin as well, and I am facing exact same issue! </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>But do you get any errors during installation with `auto-cpufreq-installer` or with Snap? Or it goes clean (no errors, warnings) and when you run auto-cpufreq you run into this?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>veerabag:</strong></p>
+                    <p>No errors at all. It was clean both on CLI & snap.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Note to myself: verify if it's potentially related to: #196</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>gageracer:</strong></p>
+                    <p>Did you try this? I had the same issue and this fixed it.
+```
+Please note: If you want to install auto-cpufreq daemon, do not run auto-cpufreq --install otherwise you'll run into an issue: #91, #96.
+
+Instead run systemctl start auto-cpufreq to start the service. Run systemctl status auto-cpufreq to see the status of service, and systemctl enable auto-cpufreq for service to persist running accross reboots.
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@veerabag  @AnetVinci can you try what @gageracer suggested?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>veerabag:</strong></p>
+                    <p>When I run systemctl start auto-cpufreq to start the service as suggested by @gageracer, encountered the below error.
+
+Failed to start auto-cpufreq.service: Unit auto-cpufreq.service not found.
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rscm:</strong></p>
+                    <p>> @veerabag @AnetVinci can you try what @gageracer suggested?
+
+```
+$ systemctl status auto-cpufreq
+Unit auto-cpufreq.service could not be found.
+```
+They used Arch and installed it through the AUR<br />
+Reading the script named `auto-cpufreq-installer`, found the `.service` file under `/usr/local/share/auto-cpufreq/scripts/`
+
+```python
+echo -e "\ninstalling auto-cpufreq tool\n"
+    install
+    update_service_file
+    separator
+    complete_msg
+```
+
+```python
+function update_service_file {
+  sed -i 's|ExecStart=/usr/local/bin/auto-cpufreq|ExecStart=/usr/bin/auto-cpufreq|' /usr/local/share/auto-cpufreq/scripts/auto-cpufreq.service
+}
+```
+
+Then I tried creating a softlink to the systemd dir
+
+```Bash
+$ sudo ln -s /usr/local/share/auto-cpufreq/scripts/auto-cpufreq.service /etc/systemd/system/auto-cpufreq.service
+```
+
+Status after it
+
+```Bash
+$ systemctl status auto-cpufreq
+● auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux
+   Loaded: loaded (/usr/local/share/auto-cpufreq/scripts/auto-cpufreq.service; linked; vendor preset: enabled)
+   Active: inactive (dead)
+```
+
+Starting it (trying) and the final status (failure)
+
+```Bash
+$ sudo systemctl start auto-cpufreq
+```
+
+```Bash
+$ systemctl status auto-cpufreq
+● auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux
+   Loaded: loaded (/usr/local/share/auto-cpufreq/scripts/auto-cpufreq.service; linked; vendor preset: enabled)
+   Active: failed (Result: exit-code) since Sat 2021-06-05 23:09:52 -04; 2s ago
+  Process: 7140 ExecStart=/usr/local/bin/auto-cpufreq --daemon (code=exited, status=1/FAILURE)
+ Main PID: 7140 (code=exited, status=1/FAILURE)
+
+jun 05 23:09:52 legion auto-cpufreq[7140]:   File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 1445, in run_script
+jun 05 23:09:52 legion auto-cpufreq[7140]:     exec(script_code, namespace, namespace)
+jun 05 23:09:52 legion auto-cpufreq[7140]:   File "/usr/local/lib/python3.6/dist-packages/auto_cpufreq-1.0-py3.6.egg/EGG-INFO/scripts/auto-cpufreq", line 25, in <module>
+jun 05 23:09:52 legion auto-cpufreq[7140]:   File "/usr/lib/python3/dist-packages/click/decorators.py", line 170, in decorator
+jun 05 23:09:52 legion auto-cpufreq[7140]:     _param_memo(f, OptionClass(param_decls, **attrs))
+jun 05 23:09:52 legion auto-cpufreq[7140]:   File "/usr/lib/python3/dist-packages/click/core.py", line 1460, in __init__
+jun 05 23:09:52 legion auto-cpufreq[7140]:     Parameter.__init__(self, param_decls, type=type, **attrs)
+jun 05 23:09:52 legion auto-cpufreq[7140]: TypeError: __init__() got an unexpected keyword argument 'hidden'
+jun 05 23:09:52 legion systemd[1]: auto-cpufreq.service: Main process exited, code=exited, status=1/FAILURE
+jun 05 23:09:52 legion systemd[1]: auto-cpufreq.service: Failed with result 'exit-code'.
+```
+
+---
+And about  #196
+```Bash
+$ pip3 completion --bash
+
+# pip bash completion start
+_pip_completion()
+{
+    COMPREPLY=( $( COMP_WORDS="${COMP_WORDS[*]}" \
+                   COMP_CWORD=$COMP_CWORD \
+                   PIP_AUTO_COMPLETE=1 $1 ) )
+}
+complete -o default -F _pip_completion pip
+# pip bash completion end
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>Anything on this issue yet? </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Can you do the following to see if it makes any difference:
+
+Run following in auto-cpufreq dir assuming you first ran and installed [auto-cpufreq using the installer](https://github.com/AdnanHodzic/auto-cpufreq#auto-cpufreq-installer), 
+i.e:  `sudo ./auto-cpufreq-installer`
+
+**Option 1:**
+
+```
+sudo apt install -y python3-setuptools python3-psutil python3-click python3-distro
+````
+
+After this run: `sudo auto-cpufreq --live`
+
+Does it run successfully? If yes, run `sudo auto-cpufreq --remove` and then `sudo auto-cpufreq --install`
+
+**Option 2:**
+
+```
+# make sure to delete all pip packages with command below
+sudo python3 -m pip uninstall -r requirements.txt
+sudo apt install -y python3-setuptools python3-psutil python3-click python3-distro
+```
+
+After this run: `sudo auto-cpufreq --live`
+
+Does it run successfully? If yes, run `sudo auto-cpufreq --remove` and then `sudo auto-cpufreq --install`
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rscm:</strong></p>
+                    <p> ####  Option 1
+
+```
+$ sudo apt install -y python3-setuptools python3-psutil python3-click python3-distro
+[sudo] contraseña para rscm:            
+Leyendo lista de paquetes... Hecho
+Creando árbol de dependencias       
+Leyendo la información de estado... Hecho
+python3-click ya está en su versión más reciente (6.7-3).
+fijado python3-click como instalado manualmente.
+python3-setuptools ya está en su versión más reciente (39.0.1-2).
+Paquetes sugeridos:
+  python-psutil-doc
+Se instalarán los siguientes paquetes NUEVOS:
+  python3-distro python3-psutil
+0 actualizados, 2 nuevos se instalarán, 0 para eliminar y 0 no actualizados.
+Se necesita descargar 147 kB de archivos.
+Se utilizarán 915 kB de espacio de disco adicional después de esta operación.
+Des:1 http://cl.archive.ubuntu.com/ubuntu bionic-updates/main amd64 python3-psutil amd64 5.4.2-1ubuntu0.1 [136 kB]
+Des:2 http://cl.archive.ubuntu.com/ubuntu bionic/universe amd64 python3-distro all 1.0.1-2 [11,2 kB]
+Descargados 147 kB en 2s (94,8 kB/s)       
+Seleccionando el paquete python3-psutil previamente no seleccionado.
+(Leyendo la base de datos ... 232382 ficheros o directorios instalados actualmente.)
+Preparando para desempaquetar .../python3-psutil_5.4.2-1ubuntu0.1_amd64.deb ...
+Desempaquetando python3-psutil (5.4.2-1ubuntu0.1) ...
+Seleccionando el paquete python3-distro previamente no seleccionado.
+Preparando para desempaquetar .../python3-distro_1.0.1-2_all.deb ...
+Desempaquetando python3-distro (1.0.1-2) ...
+Configurando python3-psutil (5.4.2-1ubuntu0.1) ...
+Configurando python3-distro (1.0.1-2) ...
+```
+
+```
+$ sudo auto-cpufreq --live
+Traceback (most recent call last):
+  File "/usr/local/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.0', 'auto-cpufreq')
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 658, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 1445, in run_script
+    exec(script_code, namespace, namespace)
+  File "/usr/local/lib/python3.6/dist-packages/auto_cpufreq-1.0-py3.6.egg/EGG-INFO/scripts/auto-cpufreq", line 25, in <module>
+  File "/usr/lib/python3/dist-packages/click/decorators.py", line 170, in decorator
+    _param_memo(f, OptionClass(param_decls, **attrs))
+  File "/usr/lib/python3/dist-packages/click/core.py", line 1460, in __init__
+    Parameter.__init__(self, param_decls, type=type, **attrs)
+TypeError: __init__() got an unexpected keyword argument 'hidden'
+```
+
+#### Option 2
+
+```
+$ sudo python3 -m pip uninstall -r requirements.txt
+The directory '/home/rscm/.cache/pip/http' or its parent directory is not owned by the current user and the cache has been disabled. Please check the permissions and owner of that directory. If executing pip with sudo, you may want sudo's -H flag.
+Not uninstalling setuptools at /usr/lib/python3/dist-packages, outside environment /usr
+Uninstalling psutil-5.8.0:
+  /usr/local/lib/python3.6/dist-packages/psutil-5.8.0.egg-info
+  /usr/local/lib/python3.6/dist-packages/psutil/__init__.py
+  /usr/local/lib/python3.6/dist-packages/psutil/__pycache__/__init__.cpython-36.pyc
+  /usr/local/lib/python3.6/dist-packages/psutil/__pycache__/_common.cpython-36.pyc
+  /usr/local/lib/python3.6/dist-packages/psutil/__pycache__/_compat.cpython-36.pyc
+  /usr/local/lib/python3.6/dist-packages/psutil/__pycache__/_psaix.cpython-36.pyc
+  /usr/local/lib/python3.6/dist-packages/psutil/__pycache__/_psbsd.cpython-36.pyc
+  /usr/local/lib/python3.6/dist-packages/psutil/__pycache__/_pslinux.cpython-36.pyc
+  /usr/local/lib/python3.6/dist-packages/psutil/__pycache__/_psosx.cpython-36.pyc
+  /usr/local/lib/python3.6/dist-packages/psutil/__pycache__/_psposix.cpython-36.pyc
+  /usr/local/lib/python3.6/dist-packages/psutil/__pycache__/_pssunos.cpython-36.pyc
+  /usr/local/lib/python3.6/dist-packages/psutil/__pycache__/_pswindows.cpython-36.pyc
+  /usr/local/lib/python3.6/dist-packages/psutil/_common.py
+  /usr/local/lib/python3.6/dist-packages/psutil/_compat.py
+  /usr/local/lib/python3.6/dist-packages/psutil/_psaix.py
+  /usr/local/lib/python3.6/dist-packages/psutil/_psbsd.py
+  /usr/local/lib/python3.6/dist-packages/psutil/_pslinux.py
+  /usr/local/lib/python3.6/dist-packages/psutil/_psosx.py
+  /usr/local/lib/python3.6/dist-packages/psutil/_psposix.py
+  /usr/local/lib/python3.6/dist-packages/psutil/_pssunos.py
+  /usr/local/lib/python3.6/dist-packages/psutil/_psutil_linux.cpython-36m-x86_64-linux-gnu.so
+  /usr/local/lib/python3.6/dist-packages/psutil/_psutil_posix.cpython-36m-x86_64-linux-gnu.so
+  /usr/local/lib/python3.6/dist-packages/psutil/_pswindows.py
+  /usr/local/lib/python3.6/dist-packages/psutil/tests/__init__.py
+  /usr/local/lib/python3.6/dist-packages/psutil/tests/__main__.py
+  /usr/local/lib/python3.6/dist-packages/psutil/tests/__pycache__/__init__.cpython-36.pyc
+  /usr/local/lib/python3.6/dist-packages/psutil/tests/__pycache__/__main__.cpython-36.pyc
+  /usr/local/lib/python3.6/dist-packages/psutil/tests/__pycache__/runner.cpython-36.pyc
+  /usr/local/lib/python3.6/dist-packages/psutil/tests/__pycache__/test_aix.cpython-36.pyc
+  /usr/local/lib/python3.6/dist-packages/psutil/tests/__pycache__/test_bsd.cpython-36.pyc
+  /usr/local/lib/python3.6/dist-packages/psutil/tests/__pycache__/test_connections.cpython-36.pyc
+  /usr/local/lib/python3.6/dist-packages/psutil/tests/__pycache__/test_contracts.cpython-36.pyc
+  /usr/local/lib/python3.6/dist-packages/psutil/tests/__pycache__/test_linux.cpython-36.pyc
+  /usr/local/lib/python3.6/dist-packages/psutil/tests/__pycache__/test_memleaks.cpython-36.pyc
+  /usr/local/lib/python3.6/dist-packages/psutil/tests/__pycache__/test_misc.cpython-36.pyc
+  /usr/local/lib/python3.6/dist-packages/psutil/tests/__pycache__/test_osx.cpython-36.pyc
+  /usr/local/lib/python3.6/dist-packages/psutil/tests/__pycache__/test_posix.cpython-36.pyc
+  /usr/local/lib/python3.6/dist-packages/psutil/tests/__pycache__/test_process.cpython-36.pyc
+  /usr/local/lib/python3.6/dist-packages/psutil/tests/__pycache__/test_sunos.cpython-36.pyc
+  /usr/local/lib/python3.6/dist-packages/psutil/tests/__pycache__/test_system.cpython-36.pyc
+  /usr/local/lib/python3.6/dist-packages/psutil/tests/__pycache__/test_testutils.cpython-36.pyc
+  /usr/local/lib/python3.6/dist-packages/psutil/tests/__pycache__/test_unicode.cpython-36.pyc
+  /usr/local/lib/python3.6/dist-packages/psutil/tests/__pycache__/test_windows.cpython-36.pyc
+  /usr/local/lib/python3.6/dist-packages/psutil/tests/runner.py
+  /usr/local/lib/python3.6/dist-packages/psutil/tests/test_aix.py
+  /usr/local/lib/python3.6/dist-packages/psutil/tests/test_bsd.py
+  /usr/local/lib/python3.6/dist-packages/psutil/tests/test_connections.py
+  /usr/local/lib/python3.6/dist-packages/psutil/tests/test_contracts.py
+  /usr/local/lib/python3.6/dist-packages/psutil/tests/test_linux.py
+  /usr/local/lib/python3.6/dist-packages/psutil/tests/test_memleaks.py
+  /usr/local/lib/python3.6/dist-packages/psutil/tests/test_misc.py
+  /usr/local/lib/python3.6/dist-packages/psutil/tests/test_osx.py
+  /usr/local/lib/python3.6/dist-packages/psutil/tests/test_posix.py
+  /usr/local/lib/python3.6/dist-packages/psutil/tests/test_process.py
+  /usr/local/lib/python3.6/dist-packages/psutil/tests/test_sunos.py
+  /usr/local/lib/python3.6/dist-packages/psutil/tests/test_system.py
+  /usr/local/lib/python3.6/dist-packages/psutil/tests/test_testutils.py
+  /usr/local/lib/python3.6/dist-packages/psutil/tests/test_unicode.py
+  /usr/local/lib/python3.6/dist-packages/psutil/tests/test_windows.py
+Proceed (y/n)? y
+  Successfully uninstalled psutil-5.8.0
+Not uninstalling click at /usr/lib/python3/dist-packages, outside environment /usr
+Uninstalling distro-1.5.0:
+  /usr/local/bin/distro
+  /usr/local/lib/python3.6/dist-packages/__pycache__/distro.cpython-36.pyc
+  /usr/local/lib/python3.6/dist-packages/distro-1.5.0.dist-info/INSTALLER
+  /usr/local/lib/python3.6/dist-packages/distro-1.5.0.dist-info/LICENSE
+  /usr/local/lib/python3.6/dist-packages/distro-1.5.0.dist-info/METADATA
+  /usr/local/lib/python3.6/dist-packages/distro-1.5.0.dist-info/RECORD
+  /usr/local/lib/python3.6/dist-packages/distro-1.5.0.dist-info/WHEEL
+  /usr/local/lib/python3.6/dist-packages/distro-1.5.0.dist-info/entry_points.txt
+  /usr/local/lib/python3.6/dist-packages/distro-1.5.0.dist-info/top_level.txt
+  /usr/local/lib/python3.6/dist-packages/distro.py
+Proceed (y/n)? y
+  Successfully uninstalled distro-1.5.0
+```
+
+```
+$ sudo apt install -y python3-setuptools python3-psutil python3-click python3-distro
+Leyendo lista de paquetes... Hecho
+Creando árbol de dependencias       
+Leyendo la información de estado... Hecho
+python3-click ya está en su versión más reciente (6.7-3).
+python3-setuptools ya está en su versión más reciente (39.0.1-2).
+python3-distro ya está en su versión más reciente (1.0.1-2).
+python3-psutil ya está en su versión más reciente (5.4.2-1ubuntu0.1).
+0 actualizados, 0 nuevos se instalarán, 0 para eliminar y 0 no actualizados.
+```
+
+```
+$ sudo auto-cpufreq --live
+Traceback (most recent call last):
+  File "/usr/local/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.0', 'auto-cpufreq')
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 658, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 1445, in run_script
+    exec(script_code, namespace, namespace)
+  File "/usr/local/lib/python3.6/dist-packages/auto_cpufreq-1.0-py3.6.egg/EGG-INFO/scripts/auto-cpufreq", line 25, in <module>
+  File "/usr/lib/python3/dist-packages/click/decorators.py", line 170, in decorator
+    _param_memo(f, OptionClass(param_decls, **attrs))
+  File "/usr/lib/python3/dist-packages/click/core.py", line 1460, in __init__
+    Parameter.__init__(self, param_decls, type=type, **attrs)
+TypeError: __init__() got an unexpected keyword argument 'hidden'
+```
+
+#### Option 3 (Reinstalling it with all requirements from apt)
+
+```
+$ sudo ./auto-cpufreq-installer 
+
+-------------------------- auto-cpufreq installer -----------------------------
+
+Welcome to auto-cpufreq tool installer.
+
+Options:
+
+[I]nstall
+[R]emove
+[Q]uit
+
+Select a key: [i/r/q]: r
+
+-------------------------------------------------------------------------------
+
+auto-cpufreq tool and all its supporting files successfully removed.
+
+-------------------------------------------------------------------------------
+```
+
+```
+$ sudo ./auto-cpufreq-installer 
+
+-------------------------- auto-cpufreq installer -----------------------------
+
+Welcome to auto-cpufreq tool installer.
+
+Options:
+
+[I]nstall
+[R]emove
+[Q]uit
+
+Select a key: [i/r/q]: i
+
+-------------------------------------------------------------------------------
+
+Detected Debian based distribution
+
+-------------------------------------------------------------------------------
+
+Setting up Python environment
+
+Leyendo lista de paquetes... Hecho
+Creando árbol de dependencias       
+Leyendo la información de estado... Hecho
+python3-setuptools ya está en su versión más reciente (39.0.1-2).
+dmidecode ya está en su versión más reciente (3.1-1ubuntu0.1).
+python3-dev ya está en su versión más reciente (3.6.7-1~18.04).
+python3-pip ya está en su versión más reciente (9.0.1-2.3~ubuntu1.18.04.5).
+0 actualizados, 0 nuevos se instalarán, 0 para eliminar y 0 no actualizados.
+
+-------------------------------------------------------------------------------
+
+Installing necessary Python packages
+
+The directory '/home/rscm/.cache/pip/http' or its parent directory is not owned by the current user and the cache has been disabled. Please check the permissions and owner of that directory. If executing pip with sudo, you may want sudo's -H flag.
+The directory '/home/rscm/.cache/pip' or its parent directory is not owned by the current user and caching wheels has been disabled. check the permissions and owner of that directory. If executing pip with sudo, you may want sudo's -H flag.
+Requirement already satisfied: setuptools in /usr/lib/python3/dist-packages (from -r requirements.txt (line 1))
+Requirement already satisfied: psutil in /usr/lib/python3/dist-packages (from -r requirements.txt (line 2))
+Requirement already satisfied: click in /usr/lib/python3/dist-packages (from -r requirements.txt (line 3))
+Requirement already satisfied: distro in /usr/lib/python3/dist-packages (from -r requirements.txt (line 4))
+
+-------------------------------------------------------------------------------
+
+installing auto-cpufreq tool
+
+running install
+running bdist_egg
+running egg_info
+writing auto_cpufreq.egg-info/PKG-INFO
+writing dependency_links to auto_cpufreq.egg-info/dependency_links.txt
+writing requirements to auto_cpufreq.egg-info/requires.txt
+writing top-level names to auto_cpufreq.egg-info/top_level.txt
+reading manifest file 'auto_cpufreq.egg-info/SOURCES.txt'
+writing manifest file 'auto_cpufreq.egg-info/SOURCES.txt'
+installing library code to build/bdist.linux-x86_64/egg
+running install_lib
+running build_py
+creating build/bdist.linux-x86_64/egg
+creating build/bdist.linux-x86_64/egg/auto_cpufreq
+copying build/lib/auto_cpufreq/__init__.py -> build/bdist.linux-x86_64/egg/auto_cpufreq
+copying build/lib/auto_cpufreq/core.py -> build/bdist.linux-x86_64/egg/auto_cpufreq
+byte-compiling build/bdist.linux-x86_64/egg/auto_cpufreq/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/auto_cpufreq/core.py to core.cpython-36.pyc
+creating build/bdist.linux-x86_64/egg/EGG-INFO
+installing scripts to build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+running install_scripts
+running build_scripts
+creating build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+copying build/scripts-3.6/auto-cpufreq -> build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+changing mode of build/bdist.linux-x86_64/egg/EGG-INFO/scripts/auto-cpufreq to 755
+copying auto_cpufreq.egg-info/PKG-INFO -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying auto_cpufreq.egg-info/SOURCES.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying auto_cpufreq.egg-info/dependency_links.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying auto_cpufreq.egg-info/requires.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying auto_cpufreq.egg-info/top_level.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying auto_cpufreq.egg-info/zip-safe -> build/bdist.linux-x86_64/egg/EGG-INFO
+creating 'dist/auto_cpufreq-1.0-py3.6.egg' and adding 'build/bdist.linux-x86_64/egg' to it
+removing 'build/bdist.linux-x86_64/egg' (and everything under it)
+Processing auto_cpufreq-1.0-py3.6.egg
+Copying auto_cpufreq-1.0-py3.6.egg to /usr/local/lib/python3.6/dist-packages
+Adding auto-cpufreq 1.0 to easy-install.pth file
+Installing auto-cpufreq script to /usr/local/bin
+
+Installed /usr/local/lib/python3.6/dist-packages/auto_cpufreq-1.0-py3.6.egg
+Processing dependencies for auto-cpufreq==1.0
+Searching for setuptools==39.0.1
+Best match: setuptools 39.0.1
+Adding setuptools 39.0.1 to easy-install.pth file
+Installing easy_install script to /usr/local/bin
+
+Using /usr/lib/python3/dist-packages
+Searching for psutil==5.4.2
+Best match: psutil 5.4.2
+Adding psutil 5.4.2 to easy-install.pth file
+
+Using /usr/lib/python3/dist-packages
+Searching for distro==1.0.1
+Best match: distro 1.0.1
+Adding distro 1.0.1 to easy-install.pth file
+Installing distro script to /usr/local/bin
+
+Using /usr/lib/python3/dist-packages
+Searching for click==6.7
+Best match: click 6.7
+Adding click 6.7 to easy-install.pth file
+
+Using /usr/lib/python3/dist-packages
+Finished processing dependencies for auto-cpufreq==1.0
+writing list of installed files to 'files.txt'
+
+-------------------------------------------------------------------------------
+
+auto-cpufreq tool successfully installed.
+
+For list of options, run:
+auto-cpufreq
+
+-------------------------------------------------------------------------------
+```
+
+```
+$ sudo auto-cpufreq --live
+Traceback (most recent call last):
+  File "/usr/local/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.0', 'auto-cpufreq')
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 658, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 1445, in run_script
+    exec(script_code, namespace, namespace)
+  File "/usr/local/lib/python3.6/dist-packages/auto_cpufreq-1.0-py3.6.egg/EGG-INFO/scripts/auto-cpufreq", line 25, in <module>
+  File "/usr/lib/python3/dist-packages/click/decorators.py", line 170, in decorator
+    _param_memo(f, OptionClass(param_decls, **attrs))
+  File "/usr/lib/python3/dist-packages/click/core.py", line 1460, in __init__
+    Parameter.__init__(self, param_decls, type=type, **attrs)
+TypeError: __init__() got an unexpected keyword argument 'hidden'
+```
+
+---
+
+#### Option 4
+
+I tried removing python3 packages installed by apt to use only requirements installed by pip, but one of them ( `python3-click`) is needed by some system packages (`elementary-desktop`, `ubuntu-drivers-common`)
+
+elementary-desktop is a meta package, but ubuntu-drivers-common isn't
+
+I went for it anyway to test
+
+```
+$ sudo apt remove -y python3-setuptools python3-psutil python3-click python3-distro
+Leyendo lista de paquetes... Hecho
+Creando árbol de dependencias       
+Leyendo la información de estado... Hecho
+El paquete «python3-distro» no está instalado, no se eliminará
+El paquete «python3-psutil» no está instalado, no se eliminará
+El paquete indicado a continuación se instaló de forma automática y ya no es necesario.
+  python3-colorama
+Utilice «sudo apt autoremove» para eliminarlo.
+Los siguientes paquetes se ELIMINARÁN:
+  elementary-desktop python3-click python3-setuptools ubuntu-drivers-common
+0 actualizados, 0 nuevos se instalarán, 4 para eliminar y 0 no actualizados.
+Se liberarán 1.906 kB después de esta operación.
+(Leyendo la base de datos ... 232381 ficheros o directorios instalados actualmente.)
+Desinstalando elementary-desktop (1.468+r534~ubuntu5.0.1) ...
+Desinstalando ubuntu-drivers-common (1:0.8.6.3~0.18.04.1) ...
+Desinstalando python3-click (6.7-3) ...
+Desinstalando python3-setuptools (39.0.1-2) ...
+```
+
+Now to use the installer again
+
+```
+$ sudo ./auto-cpufreq-installer 
+
+-------------------------- auto-cpufreq installer -----------------------------
+
+Welcome to auto-cpufreq tool installer.
+
+Options:
+
+[I]nstall
+[R]emove
+[Q]uit
+
+Select a key: [i/r/q]: r
+
+-------------------------------------------------------------------------------
+
+auto-cpufreq tool and all its supporting files successfully removed.
+
+-------------------------------------------------------------------------------
+```
+
+```
+$ sudo ./auto-cpufreq-installer 
+
+-------------------------- auto-cpufreq installer -----------------------------
+
+Welcome to auto-cpufreq tool installer.
+
+Options:
+
+[I]nstall
+[R]emove
+[Q]uit
+
+Select a key: [i/r/q]: i
+
+-------------------------------------------------------------------------------
+
+Detected Debian based distribution
+
+-------------------------------------------------------------------------------
+
+Setting up Python environment
+
+Leyendo lista de paquetes... Hecho
+Creando árbol de dependencias       
+Leyendo la información de estado... Hecho
+dmidecode ya está en su versión más reciente (3.1-1ubuntu0.1).
+python3-dev ya está en su versión más reciente (3.6.7-1~18.04).
+python3-pip ya está en su versión más reciente (9.0.1-2.3~ubuntu1.18.04.5).
+El paquete indicado a continuación se instaló de forma automática y ya no es necesario.
+  python3-colorama
+Utilice «sudo apt autoremove» para eliminarlo.
+Paquetes sugeridos:
+  python-setuptools-doc
+Se instalarán los siguientes paquetes NUEVOS:
+  python3-setuptools
+0 actualizados, 1 nuevos se instalarán, 0 para eliminar y 0 no actualizados.
+Se necesita descargar 248 kB de archivos.
+Se utilizarán 1.319 kB de espacio de disco adicional después de esta operación.
+Des:1 http://cl.archive.ubuntu.com/ubuntu bionic/main amd64 python3-setuptools all 39.0.1-2 [248 kB]
+Descargados 248 kB en 1s (172 kB/s)         
+Seleccionando el paquete python3-setuptools previamente no seleccionado.
+(Leyendo la base de datos ... 232221 ficheros o directorios instalados actualmente.)
+Preparando para desempaquetar .../python3-setuptools_39.0.1-2_all.deb ...
+Desempaquetando python3-setuptools (39.0.1-2) ...
+Configurando python3-setuptools (39.0.1-2) ...
+
+-------------------------------------------------------------------------------
+
+Installing necessary Python packages
+
+The directory '/home/rscm/.cache/pip/http' or its parent directory is not owned by the current user and the cache has been disabled. Please check the permissions and owner of that directory. If executing pip with sudo, you may want sudo's -H flag.
+The directory '/home/rscm/.cache/pip' or its parent directory is not owned by the current user and caching wheels has been disabled. check the permissions and owner of that directory. If executing pip with sudo, you may want sudo's -H flag.
+Requirement already satisfied: setuptools in /usr/lib/python3/dist-packages (from -r requirements.txt (line 1))
+Collecting psutil (from -r requirements.txt (line 2))
+  Downloading https://files.pythonhosted.org/packages/e1/b0/7276de53321c12981717490516b7e612364f2cb372ee8901bd4a66a000d7/psutil-5.8.0.tar.gz (470kB)
+    100% |████████████████████████████████| 471kB 4.2MB/s 
+Collecting click (from -r requirements.txt (line 3))
+  Downloading https://files.pythonhosted.org/packages/76/0a/b6c5f311e32aeb3b406e03c079ade51e905ea630fc19d1262a46249c1c86/click-8.0.1-py3-none-any.whl (97kB)
+    100% |████████████████████████████████| 102kB 12.5MB/s 
+Collecting distro (from -r requirements.txt (line 4))
+  Downloading https://files.pythonhosted.org/packages/25/b7/b3c4270a11414cb22c6352ebc7a83aaa3712043be29daa05018fd5a5c956/distro-1.5.0-py2.py3-none-any.whl
+Requirement already satisfied: importlib-metadata; python_version < "3.8" in /usr/local/lib/python3.6/dist-packages (from click->-r requirements.txt (line 3))
+Requirement already satisfied: typing-extensions>=3.6.4; python_version < "3.8" in /usr/local/lib/python3.6/dist-packages (from importlib-metadata; python_version < "3.8"->click->-r requirements.txt (line 3))
+Requirement already satisfied: zipp>=0.5 in /usr/local/lib/python3.6/dist-packages (from importlib-metadata; python_version < "3.8"->click->-r requirements.txt (line 3))
+Installing collected packages: psutil, click, distro
+  Running setup.py install for psutil ... done
+Successfully installed click-8.0.1 distro-1.5.0 psutil-5.8.0
+
+-------------------------------------------------------------------------------
+
+installing auto-cpufreq tool
+
+running install
+running bdist_egg
+running egg_info
+writing auto_cpufreq.egg-info/PKG-INFO
+writing dependency_links to auto_cpufreq.egg-info/dependency_links.txt
+writing requirements to auto_cpufreq.egg-info/requires.txt
+writing top-level names to auto_cpufreq.egg-info/top_level.txt
+reading manifest file 'auto_cpufreq.egg-info/SOURCES.txt'
+writing manifest file 'auto_cpufreq.egg-info/SOURCES.txt'
+installing library code to build/bdist.linux-x86_64/egg
+running install_lib
+running build_py
+creating build/bdist.linux-x86_64/egg
+creating build/bdist.linux-x86_64/egg/auto_cpufreq
+copying build/lib/auto_cpufreq/__init__.py -> build/bdist.linux-x86_64/egg/auto_cpufreq
+copying build/lib/auto_cpufreq/core.py -> build/bdist.linux-x86_64/egg/auto_cpufreq
+byte-compiling build/bdist.linux-x86_64/egg/auto_cpufreq/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/auto_cpufreq/core.py to core.cpython-36.pyc
+creating build/bdist.linux-x86_64/egg/EGG-INFO
+installing scripts to build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+running install_scripts
+running build_scripts
+creating build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+copying build/scripts-3.6/auto-cpufreq -> build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+changing mode of build/bdist.linux-x86_64/egg/EGG-INFO/scripts/auto-cpufreq to 755
+copying auto_cpufreq.egg-info/PKG-INFO -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying auto_cpufreq.egg-info/SOURCES.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying auto_cpufreq.egg-info/dependency_links.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying auto_cpufreq.egg-info/requires.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying auto_cpufreq.egg-info/top_level.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying auto_cpufreq.egg-info/zip-safe -> build/bdist.linux-x86_64/egg/EGG-INFO
+creating 'dist/auto_cpufreq-1.0-py3.6.egg' and adding 'build/bdist.linux-x86_64/egg' to it
+removing 'build/bdist.linux-x86_64/egg' (and everything under it)
+Processing auto_cpufreq-1.0-py3.6.egg
+Copying auto_cpufreq-1.0-py3.6.egg to /usr/local/lib/python3.6/dist-packages
+Adding auto-cpufreq 1.0 to easy-install.pth file
+Installing auto-cpufreq script to /usr/local/bin
+
+Installed /usr/local/lib/python3.6/dist-packages/auto_cpufreq-1.0-py3.6.egg
+Processing dependencies for auto-cpufreq==1.0
+Searching for setuptools==39.0.1
+Best match: setuptools 39.0.1
+Adding setuptools 39.0.1 to easy-install.pth file
+Installing easy_install script to /usr/local/bin
+
+Using /usr/lib/python3/dist-packages
+Searching for psutil==5.8.0
+Best match: psutil 5.8.0
+Adding psutil 5.8.0 to easy-install.pth file
+
+Using /usr/local/lib/python3.6/dist-packages
+Searching for distro==1.5.0
+Best match: distro 1.5.0
+Adding distro 1.5.0 to easy-install.pth file
+Installing distro script to /usr/local/bin
+
+Using /usr/local/lib/python3.6/dist-packages
+Searching for click==8.0.1
+Best match: click 8.0.1
+Adding click 8.0.1 to easy-install.pth file
+
+Using /usr/local/lib/python3.6/dist-packages
+Searching for importlib-metadata==4.5.0
+Best match: importlib-metadata 4.5.0
+Adding importlib-metadata 4.5.0 to easy-install.pth file
+
+Using /usr/local/lib/python3.6/dist-packages
+Searching for zipp==3.4.1
+Best match: zipp 3.4.1
+Adding zipp 3.4.1 to easy-install.pth file
+
+Using /usr/local/lib/python3.6/dist-packages
+Searching for typing-extensions==3.10.0.0
+Best match: typing-extensions 3.10.0.0
+Adding typing-extensions 3.10.0.0 to easy-install.pth file
+
+Using /usr/local/lib/python3.6/dist-packages
+Finished processing dependencies for auto-cpufreq==1.0
+writing list of installed files to 'files.txt'
+
+-------------------------------------------------------------------------------
+
+auto-cpufreq tool successfully installed.
+
+For list of options, run:
+auto-cpufreq
+
+-------------------------------------------------------------------------------
+```
+
+And now it runs
+```
+Linux distro: elementary OS 5.1.7 hera
+Linux kernel: 5.11.7-051107-generic
+Processor: AMD Ryzen 7 4800H with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2900 MHz
+CPU min frequency: 1400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  0.0%     43 °C     2900 MHz
+CPU1:	  0.0%     43 °C     2900 MHz
+CPU2:	  0.0%     43 °C     2900 MHz
+CPU3:	  0.0%     43 °C     2900 MHz
+CPU4:	  0.0%     43 °C     1916 MHz
+CPU5:	  0.0%     43 °C     2900 MHz
+CPU6:	  0.0%     43 °C     2900 MHz
+CPU7:	  0.0%     43 °C     2900 MHz
+CPU8:	  0.0%     43 °C     2900 MHz
+CPU9:	  1.0%     43 °C     2900 MHz
+CPU10:	  0.0%     43 °C     2900 MHz
+CPU11:	  0.0%     43 °C     2900 MHz
+CPU12:	  2.0%     43 °C     2900 MHz
+CPU13:	  0.0%     43 °C     2900 MHz
+CPU14:	  2.0%     43 °C     2900 MHz
+CPU15:	  0.0%     43 °C     2900 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+
+Total CPU usage: 0.4 %
+Total system load: 0.98
+Average temp. of all cores: 43.0 °C
+
+Load optimal
+setting turbo boost: off
+
+-------------------------------------------------------------------------------
+
+			"auto-cpufreq" refresh in: 1
+
+-------------------------------------------------------------------------------
+
+Linux distro: elementary OS 5.1.7 hera
+Linux kernel: 5.11.7-051107-generic
+Processor: AMD Ryzen 7 4800H with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: acpi-cpufreq
+^C
+Aborted!
+```
+
+Then I thought, why don't try and install the meta package again
+
+```
+$ sudo apt install elementary-desktop 
+Leyendo lista de paquetes... Hecho
+Creando árbol de dependencias       
+Leyendo la información de estado... Hecho
+Se instalarán los siguientes paquetes adicionales:
+  python3-click ubuntu-drivers-common
+Paquetes sugeridos:
+  python3-aptdaemon.pkcompat
+Paquetes recomendados:
+  elementary-os-prerelease evolution-data-server-outlook evolution-data-server-pantheon-online-accounts
+Se instalarán los siguientes paquetes NUEVOS:
+  elementary-desktop python3-click ubuntu-drivers-common
+0 actualizados, 3 nuevos se instalarán, 0 para eliminar y 0 no actualizados.
+Se necesita descargar 156 kB de archivos.
+Se utilizarán 587 kB de espacio de disco adicional después de esta operación.
+¿Desea continuar? [S/n] s
+Des:1 http://ppa.launchpad.net/elementary-os/stable/ubuntu bionic/main amd64 elementary-desktop amd64 1.468+r534~ubuntu5.0.1 [47,4 kB]
+Des:2 http://cl.archive.ubuntu.com/ubuntu bionic/main amd64 python3-click all 6.7-3 [56,5 kB]
+Des:3 http://cl.archive.ubuntu.com/ubuntu bionic-updates/main amd64 ubuntu-drivers-common amd64 1:0.8.6.3~0.18.04.1 [52,7 kB]
+Descargados 156 kB en 1s (124 kB/s)             
+Preconfigurando paquetes ...
+Seleccionando el paquete python3-click previamente no seleccionado.
+(Leyendo la base de datos ... 232311 ficheros o directorios instalados actualmente.)
+Preparando para desempaquetar .../python3-click_6.7-3_all.deb ...
+Desempaquetando python3-click (6.7-3) ...
+Seleccionando el paquete ubuntu-drivers-common previamente no seleccionado.
+Preparando para desempaquetar .../ubuntu-drivers-common_1%3a0.8.6.3~0.18.04.1_amd64.deb ...
+Desempaquetando ubuntu-drivers-common (1:0.8.6.3~0.18.04.1) ...
+Seleccionando el paquete elementary-desktop previamente no seleccionado.
+Preparando para desempaquetar .../elementary-desktop_1.468+r534~ubuntu5.0.1_amd64.deb ...
+Desempaquetando elementary-desktop (1.468+r534~ubuntu5.0.1) ...
+Configurando python3-click (6.7-3) ...
+Configurando ubuntu-drivers-common (1:0.8.6.3~0.18.04.1) ...
+Configurando elementary-desktop (1.468+r534~ubuntu5.0.1) ...
+```
+
+And after it ran without any issue
+```
+$ sudo auto-cpufreq --live
+
+Note: You can quit live mode by pressing "ctrl+c"
+
+-------------------------------------------------------------------------------
+
+Linux distro: elementary OS 5.1.7 hera
+Linux kernel: 5.11.7-051107-generic
+Processor: AMD Ryzen 7 4800H with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2900 MHz
+CPU min frequency: 1400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  0.0%     35 °C     2900 MHz
+CPU1:	  2.9%     35 °C     2900 MHz
+CPU2:	  0.0%     35 °C     2900 MHz
+CPU3:	  0.0%     35 °C     2900 MHz
+CPU4:	  0.0%     35 °C     1393 MHz
+CPU5:	  1.0%     35 °C     2900 MHz
+CPU6:	  0.0%     35 °C     2900 MHz
+CPU7:	  2.0%     35 °C     2900 MHz
+CPU8:	  0.0%     35 °C     2900 MHz
+CPU9:	  2.0%     35 °C     2900 MHz
+CPU10:	  0.0%     35 °C     1904 MHz
+CPU11:	  0.0%     35 °C     2900 MHz
+CPU12:	  1.0%     35 °C     2900 MHz
+CPU13:	  0.0%     35 °C     2900 MHz
+CPU14:	  0.0%     35 °C     2900 MHz
+CPU15:	  0.0%     35 °C     2900 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+
+Total CPU usage: 0.3 %
+Total system load: 0.45
+Average temp. of all cores: 35.125 °C
+
+Load optimal
+setting turbo boost: off
+
+-------------------------------------------------------------------------------
+
+			"auto-cpufreq" refresh in: 4^C
+Aborted!
+```
+
+---
+
+### Conclusion
+
+To sum it up
+
+To install auto-cpufreq in elementary OS (at least)
+ + `sudo apt remove -y python3-psutil python3-click python3-distro`
+  * Probably just  `sudo apt remove -y python3-click`
+ + `sudo ./auto-cpufreq-installer`
+ + `sudo apt install -y elementary-desktop`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>veerabag:</strong></p>
+                    <p>Extremely sorry guys as hell of a busy and was in a hectic situation. Thanks a million but I couldn't test the above steps as one of my coworker has changed the OS on the laptop which I tested Zorin.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>gallowglass:</strong></p>
+                    <p>`auto-cpufreq` would not work for me as a snap or with the installer.  
+
+Inspired by @rscm above, I removed `python3-click`, and whatever needed that, installed `auto-cpufreq`, then reinstalled `python3-click` and its dependents and things seem to be working.
+
+FWIW, I am on Pop!_OS 18.04.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>It seems in certain scenarios following packages will need to be removed and then reinstalled. It seems to be more of an environment/distro specific issue then auto-cpufreq itself. Hence I'll close this issue for the time being.
+
+If any of you are still experiencing these problems, feel free to re-open the issue.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

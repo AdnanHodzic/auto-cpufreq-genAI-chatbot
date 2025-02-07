@@ -1,0 +1,126 @@
+
+        <html>
+        <head>
+            <title>Issue #471: AUR version not working properly on Manjaro 22.0</title>
+        </head>
+        <body>
+            <h1>AUR version not working properly on Manjaro 22.0</h1>
+            <p><strong>Issue #471</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I had no problem installing the auto-cpufreq via AUR, but the command `sudo auto-cpufreq --install` did not work properly. It seems that '/usr/share/auto-cpufreq/scripts/auto-cpufreq-install.sh' is not found.
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? yes
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer), have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)? not applicable
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)? not applicable
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)? not applicable
+
+### Error output:
+```
+--------------------- Deploying auto-cpufreq as a daemon ----------------------
+
+* Turn off bluetooth on boot [skipping] (package providing bluetooth access is not present)
+
+* Deploy auto-cpufreq install script
+Traceback (most recent call last):
+  File "/usr/bin/auto-cpufreq", line 226, in <module>
+    main()
+  File "/usr/lib/python3.10/site-packages/click/core.py", line 1130, in __call__
+    return self.main(*args, **kwargs)
+  File "/usr/lib/python3.10/site-packages/click/core.py", line 1055, in main
+    rv = self.invoke(ctx)
+  File "/usr/lib/python3.10/site-packages/click/core.py", line 1404, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/usr/lib/python3.10/site-packages/click/core.py", line 760, in invoke
+    return __callback(*args, **kwargs)
+  File "/usr/bin/auto-cpufreq", line 203, in main
+    deploy_daemon()
+  File "/usr/lib/python3.10/site-packages/auto_cpufreq/core.py", line 357, in deploy_daemon
+    shutil.copy(SCRIPTS_DIR / "auto-cpufreq-install.sh", "/usr/bin/auto-cpufreq-install")
+  File "/usr/lib/python3.10/shutil.py", line 417, in copy
+    copyfile(src, dst, follow_symlinks=follow_symlinks)
+  File "/usr/lib/python3.10/shutil.py", line 254, in copyfile
+    with open(src, 'rb') as fsrc:
+FileNotFoundError: [Errno 2] No such file or directory: '/usr/share/auto-cpufreq/scripts/auto-cpufreq-install.sh'
+`````
+---
+
+### System information:
+
+```
+Linux distro: Manjaro Linux 22.0.0 Sikaris
+Linux kernel: 5.15.85-1-MANJARO
+Processor: Intel(R) Core(TM) i5-1035G1 CPU @ 1.00GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1000 MHz
+CPU min frequency: 400 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0:     1.0%     41 °C     1200 MHz
+CPU1:     1.0%     42 °C     1200 MHz
+CPU2:     2.9%     42 °C     1200 MHz
+CPU3:     0.0%     42 °C     1000 MHz
+CPU4:     3.0%     41 °C     1200 MHz
+CPU5:     1.0%     42 °C     1200 MHz
+CPU6:     0.0%     42 °C     1200 MHz
+CPU7:     0.0%     42 °C     1200 MHz
+
+auto-cpufreq version: 1.9.7 (git: 1c9ff32a)
+
+Python: 3.10.8
+psutil package: 5.9.4
+platform package: 1.0.8
+click package: 8.1.3
+distro package: 1.8.0
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.33 %
+
+Total CPU usage: 1.4 %
+Total system load: 0.36
+Average temp. of all cores: 41.75 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: off
+```
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>javimarsal:</strong></p>
+                    <p>### Quick Solution:
+Follow the [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer) section from this repository. Clone the repo:
+```
+git clone https://github.com/AdnanHodzic/auto-cpufreq.git
+```
+
+And instal the package:
+```
+cd auto-cpufreq && sudo ./auto-cpufreq-installer
+```
+
+After that, the `sudo auto-cpufreq --install` command works for me and the systemd service is running. This is a quick solution for the AUR package issue, but this does not solve the actual problem. The AUR package ("auto-cpufreq 1.9.7-1") should receive a fix.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Although [Readme already stated AUR is not maintained](https://github.com/AdnanHodzic/auto-cpufreq/#aur-package-archmanjaro-linux), now I also explicitly stated and linked to this issue, so I hope folks will avoid using it in the future. </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,77 @@
+
+        <html>
+        <head>
+            <title>Issue #622: Auto-cpufreq doesn't check the state of `hwp_dynamic_boost`, and so wrongly reports that EPP is not supported</title>
+        </head>
+        <body>
+            <h1>Auto-cpufreq doesn't check the state of `hwp_dynamic_boost`, and so wrongly reports that EPP is not supported</h1>
+            <p><strong>Issue #622</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>When I run `auto-cpufreq --stats` or use the GUI, it reports to me “Not setting EPP (not supported by system)”. I, of course, had no doubt that my system supported this feature, so I went to check the source code.
+
+Apparently, in [this line](https://github.com/AdnanHodzic/auto-cpufreq/blob/fe296206462f204c3abb9d73e005fccd8c8a6bb6/auto_cpufreq/core.py#L677C19-L677C73), it checks whether the file `intel_pstate/hwp_dynamic_boost` exists — and if it does, reports this error message. That happened to be the case, but just checking whether the file exists isn't enough to accurately determine if dynamic boosting is enabled. The code should, in fact, check the contents of the file (whether a `0` or a `1`), and proceed from there.
+
+```
+$ cat /sys/devices/system/cpu/intel_pstate/hwp_dynamic_boost
+0
+```
+
+```
+$ auto-cpufreq --stats
+Linux distro: Fedora Linux 39 Workstation Edition
+Linux kernel: 6.6.10-cb1.0.fc39.x86_64
+Processor: 11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2400 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      9.1%        44 °C       400 MHz
+CPU1      3.1%        44 °C      2242 MHz
+CPU2      5.0%        43 °C       400 MHz
+CPU3      9.2%        51 °C       400 MHz
+CPU4      4.0%        44 °C       400 MHz
+CPU5      5.1%        44 °C      2175 MHz
+CPU6     10.5%        43 °C      2114 MHz
+CPU7     26.5%        51 °C      2320 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+Not setting EPP (not supported by system) <---------------
+
+Total CPU usage: 6.0 %
+Total system load: 0.44
+Average temp. of all cores: 45.50 °C 
+
+High CPU load (load average: 0.44, 0.49, 0.61)
+setting turbo boost: on
+```</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>You're right, and in #619 I even mentioned seeing EPP just fine.
+
+Since I'm very limited with available time to do this myself and [project is looking for contributors](https://github.com/AdnanHodzic/auto-cpufreq#looking-for-developers-and-co-maintainers) if you or anyone else wants to give it a try in implementing this functionality, please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PhoenixCausesOof:</strong></p>
+                    <p>I've created a PR (https://github.com/AdnanHodzic/auto-cpufreq/pull/631)</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

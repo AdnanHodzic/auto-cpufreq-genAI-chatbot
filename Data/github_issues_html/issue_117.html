@@ -1,0 +1,102 @@
+
+        <html>
+        <head>
+            <title>Issue #117: Turbo boost always on</title>
+        </head>
+        <body>
+            <h1>Turbo boost always on</h1>
+            <p><strong>Issue #117</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+
+When running `auto-cpufreq --live`, I always see something akin to the below. Specifically, it always says "High load, setting turbo boost: on". I'm not sure if it's supposed to do that, so feel free to close if it's normal, but to a novice like me it looks like it's not doing anything:
+
+```text
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 3500 MHz
+CPU min frequency: 400 MHz
+
+Core	 Usage     Frequency    Temperature
+CPU0:	  5.0%     3500 MHz     70 °C
+CPU1:	  7.8%     3500 MHz     70 °C
+CPU2:	  7.8%     3402 MHz     63 °C
+CPU3:	  5.1%     3500 MHz     63 °C
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+Setting to use: "balance_performance" EPP
+
+Total CPU usage: 4.8 %
+Total system load: 2.3 
+
+High load, setting turbo boost: on
+
+-------------------------------------------------------------------------------
+```
+---
+
+### System information:
+```text
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 20.04.1 LTS (Focal Fossa)
+Linux kernel: 5.4.0-47-generic
+
+Snap package: yes
+
+Python: 3.8.2
+psutil package: 5.7.2
+platform package: 1.0.8
+click package: 7.1.2
+distro package 1.5.0
+
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.19 %
+
+Processor: Intel(R) Core(TM) i7-7500U CPU @ 2.70GHz
+Cores: 4
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 3500 MHz
+CPU min frequency: 400 MHz
+
+Core	 Usage     Frequency    Temperature
+CPU0:	  3.1%     3500 MHz     72 °C
+CPU1:	 10.5%     3500 MHz     72 °C
+CPU2:	  6.9%     3500 MHz     65 °C
+CPU3:	  6.1%     3500 MHz     65 °C
+
+Total CPU usage: 8.5 %
+Total system load: 1.15 
+
+Currently using: performance governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Vinnl:</strong></p>
+                    <p>Never mind - I guess the `governor` and `EPP` are relevant as well, and I see those changing if I unplug my charger, for example. Thanks for the tool!</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

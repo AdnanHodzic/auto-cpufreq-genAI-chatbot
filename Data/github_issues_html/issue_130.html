@@ -1,0 +1,97 @@
+
+        <html>
+        <head>
+            <title>Issue #130: [request] NixOS support</title>
+        </head>
+        <body>
+            <h1>[request] NixOS support</h1>
+            <p><strong>Issue #130</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Please add support for NixOS </p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Technical27:</strong></p>
+                    <p>I'm working on a package, but I get this error: #138. Other than that it appears to be mostly functional.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@Technical27 great, looking forward to your PR regarding this then.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@Technical27 was going through open issues, are there any updates on this?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Technical27:</strong></p>
+                    <p>The package is now in nixos-unstable, but the module isn't. So instead of `services.auto-cpufreq.enable = true`
+you need to put
+```
+environment.systemPackages = [ pkgs.auto-cpufreq ];
+systemd.packages = [ ckgs.auto-cpufreq ];
+systemd.services.auto-cpufreq.path = with pkgs; [ bash coreutils ];
+```
+for now. Someone should be reviewing the module now, that hopefully should get merged soon. When that gets merged, I'll close this.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Nice, glad to hear this! Please keep me updated on progress of this, as in the end it would be nice to have instractions on how to install auto-cpufreq on NixOS as part of [ReadMe](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/README.md). 
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Technical27:</strong></p>
+                    <p>More news, the module has been merged, and is now in NixOS unstable. A PR to update the package to 1.6.1 is also open, and I will review that soon.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> More news, the module has been merged, and is now in NixOS unstable. A PR to update the package to 1.6.1 is also open, and I will review that soon.
+
+Great news, keep them coming!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Are there any updates on this?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Creator54:</strong></p>
+                    <p>> Are there any updates on this?
+
+thanks @AdnanHodzic @Technical27 
+It has been merged on [NixOS 21.05](https://search.nixos.org/packages?channel=21.05&show=auto-cpufreq&from=0&size=50&sort=relevance&type=packages&query=auto-cpufreq) and does work as intended, except the `--stats` and `--debug` flag
+I just needed to add `services.auto-cpufreq.enable = true;` in my configuration.nix
+
+![image](https://user-images.githubusercontent.com/34543609/137775370-d9d98821-c508-438e-b656-01488e523a73.png)
+
+`sudo auto-cpufreq --debug` `v 1.6.1`
+![image](https://user-images.githubusercontent.com/34543609/137774686-2161e0d8-2686-4fc2-b0e2-6f30056e2cfe.png)
+
+`v 1.6.9`
+here too `dmidecode ` and `pip3` error exits
+Fixed  `dmidecode` with `propagatedBuildInputs = with python3Packages; [ py-dmidecode ];`, but idk how to supress the `pip3` msg ig its of no use here.
+![image](https://user-images.githubusercontent.com/34543609/137776992-8e735211-5303-4a99-b3ec-567750ba43a4.png)
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Technical27:</strong></p>
+                    <p>> Are there any updates on this?
+
+Currently 1.7.1 just got merged into master, this issue should probably be closed @AdnanHodzic.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

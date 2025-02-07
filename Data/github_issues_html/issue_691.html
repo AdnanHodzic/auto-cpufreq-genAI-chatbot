@@ -1,0 +1,75 @@
+
+        <html>
+        <head>
+            <title>Issue #691: More compatible for Arch based distributions</title>
+        </head>
+        <body>
+            <h1>More compatible for Arch based distributions</h1>
+            <p><strong>Issue #691</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Change the method to detect if it's an Arch based distribution</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Since I don't use Arch would like to hear what [auto-cpufreq AUR package maintainers](https://github.com/AdnanHodzic/auto-cpufreq/?tab=readme-ov-file#aur-package-archmanjaro-linux) thing about these changes.
+
+@MusicalArtist12  @liljaylj and @Parmjot-Singh</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Angel-Karasu:</strong></p>
+                    <p>All Arch based distributions use Arch repos (except Manjaro, but it's the same packages with a bit of a delay for better stability) so there shouldn't be any problem. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>MusicalArtist12:</strong></p>
+                    <p>I mean, I don't see how it really changes, the original installer *does* work on arch linux, and it doesn't change the installer's logic in terms of what packages it installs to the system via `pacman`. I don't see anything wrong with it, I just think its superfluous. I also think the dinit support should be added through a separate pull request, since arch uses systemd anyways. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>MusicalArtist12:</strong></p>
+                    <p>to contradict myself, The one change moving arch detection out of /etc/os-release does make sense. Its fine, as long as the readme changes make sense.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>MusicalArtist12:</strong></p>
+                    <p>should also be mentioned that the AUR build uses `python -m build --wheel --no-isolation` and `python -m installer --destdir="$pkgdir" dist/*.whl` instead of the installer script to create a package that is then natively installed, So the changes to this don't affect that, since dependencies are handled by the arch build system. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@Angel-Karasu could you then please also update Readme file as @MusicalArtist12 suggested, just so we avoid any ambiguity, thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Angel-Karasu:</strong></p>
+                    <p>I don't understand what I should add in the README because if the AUR package works on Arch I don't see why it wouldn't work on Arch based distributions</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>MusicalArtist12:</strong></p>
+                    <p>I might've just misread the latest diff if that's the only change then. otherwise this looks good to me. I can separately create a PR that mentions that the AUR build doesn't use the installer.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Angel-Karasu:</strong></p>
+                    <p>The AUR package does not change and should normally already work on all Arch-based distributions. My change is to the installer, I'm just changing the way it detects the distribution, instead of using `/etc/os-release`, it checks if there is a `/etc/arch-release` file that is present on all Arch-based distributions.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I might've just misread the latest diff if that's the only change then. otherwise this looks good to me. I can separately create a PR that mentions that the AUR build doesn't use the installer.
+
+@MusicalArtist12 sounds good to me, separate PR for README update works for me. Maybe also a good idea to include/mention @Angel-Karasu under AUR/Arch section in case of questions, unless they are objections from @Angel-Karasu side.
+
+@Angel-Karasu changes LGTM. Thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

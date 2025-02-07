@@ -1,0 +1,84 @@
+
+        <html>
+        <head>
+            <title>Issue #650: Charging thresholds. Matebook 13 & deprecated APIs</title>
+        </head>
+        <body>
+            <h1>Charging thresholds. Matebook 13 & deprecated APIs</h1>
+            <p><strong>Issue #650</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- Yes
+
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+N/A
+
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+N/A
+
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+N/A
+
+### Error output:
+```text
+N/A
+```
+---
+
+### System information:
+Matebook 13
+
+Add/paste output of:
+
+```
+N/A
+```
+
+The current threshold code is touching `/sys/class/power_supply/BATx/charge_start_threshold` (and end). AFAIK, these are deprecated and only used and introduced by thinkpad_acpi. There's a parallel device for `/sys/class_power_supply/BATx/charge_control_start_threshold` (and end), that works identically and seems to be the standard for other kernel modules.
+
+That one controls the thresholds on my Matebook 13, for example. I'm not quite sure which module supplies it, but I'd not look at modules but just if the path exists.
+
+Matebook 13 lists these modules with the name `acpi`
+```$ lsmod|grep acpi
+snd_intel_sdw_acpi     16384  1 snd_intel_dspcfg
+acpi_als               16384  1
+industrialio_triggered_buffer    12288  1 acpi_als
+snd_soc_acpi           16384  2 snd_sof_amd_acp,snd_acp_config
+acpi_cpufreq           32768  0
+industrialio          135168  3 industrialio_triggered_buffer,acpi_als,kfifo_buf
+i2c_hid_acpi           12288  0
+i2c_hid                40960  1 i2c_hid_acpi```
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>the kernal module that supplies that path might not be named acpi like example ideapad_laptop is a kernal module for lenovo ideapads 
+
+check this site https://linrunner.de/tlp/settings/bc-vendors.html and lsmod | grep modules and see if you have of these
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>zoitrok:</strong></p>
+                    <p>Aha, you're right. It's `huawei_wmi` for the matebook 13 (2020).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing the issue due to inactivity. </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

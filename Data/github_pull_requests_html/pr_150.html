@@ -1,0 +1,104 @@
+
+        <html>
+        <head>
+            <title>Pull Request #150: Deliver custom parallel version of cpufreqctl.</title>
+        </head>
+        <body>
+            <h1>Deliver custom parallel version of cpufreqctl.</h1>
+            <p><strong>Pull Request #150</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>This will provide a new parallel version of `cpufreqctl` named
+`cpufreqctl.auto-cpufreq` that is to be used by `auto-cpufreq`. This
+prevents the system-wide version of this file from being clobbered,
+which affects the integrity of what the package manager originally
+installed. Applications depending on `cpufreqctl` will still get the
+version that they expect.
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>marc0der:</strong></p>
+                    <p>Addresses #149 </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@marc0der brilliant! I really love how elegantly this problem has been resolved and thank you for your contribution.
+
+@crian @yochananmarqos I have couple of more PR to review and was planning to make a new release (1.5.3). Since I know that will trigger a new AUR package build, can you please confirm that these changes will not break anything on your side? Asking because IIRC AUR package was following same logic auto-cpufreq used to in regards to `cpufreqctl`. 
+
+Please let me know!
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>yochananmarqos:</strong></p>
+                    <p>@AdnanHodzic That will work. However, before you get too far, what is with the generic `/usr/lib/python3.9/site-packages/source/` folder? It should be `/usr/lib/python3.9/site-packages/auto_cpufreq/`, no?
+
+@crian The install file will need to be [updated](https://github.com/yochananmarqos/pkgbuilds/commit/cd7f3549129e5736d533b83835b4a486a6c166ba#diff-db5bc312b8273781b3996f715a9955af76e310e5a17e9cc81a0062b9f82ff95bR27) to remove the binary.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> @AdnanHodzic That will work. However, before you get too far, what is with the generic `/usr/lib/python3.9/site-packages/source/` folder? It should be `/usr/lib/python3.9/site-packages/auto_cpufreq/`, no?
+
+I'm not sure I understand this part, as this location is not altered or mentioned anywhere in auto-cpufreq code. 
+
+> @crian The install file will need to be [updated](url) to remove the binary.
+
+These changes are merged with `master`, but I will not make a new release until I hear that changes have been updated on AUR package side. 
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>marc0der:</strong></p>
+                    <p>@yochananmarqos it seems like the link you were referring to is broken. would you be able to post the correct link so I can submit a fix if necessary?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@marc0der I believe link @yochananmarqos was refering to is [auto-cpufreq.git AUR](https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=auto-cpufreq-git#n41)
+
+I tagged @crian since he's the maintainer of the AUR package.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>yochananmarqos:</strong></p>
+                    <p>@AdnanHodzic 
+> I'm not sure I understand this part, as this location is not altered or mentioned anywhere in auto-cpufreq code.
+
+It's due to [this line](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/setup.py#L21) in the `setup.py`. It should be`packages=['auto_cpufreq'],` and [this line](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/bin/auto-cpufreq#L12) in `bin/auto_cpufreq` should be `from auto_cpufreq.core import *`. Also the `source` folder would have to be named `auto_cpufreq`.
+
+I've made [these changes](https://github.com/yochananmarqos/pkgbuilds/commit/d501d0c37d6405b1f2ebc7efb4d490bf0c865a73) in my PKGBUILD to correct it for now.
+
+> it seems like the link you were referring to is broken
+
+Oops. forgot to paste the link. I updated my comment.
+
+@marc0der Nope, not that line.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>yochananmarqos:</strong></p>
+                    <p>@AdnanHodzic #153 </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> @AdnanHodzic #153
+
+Nice! Merged</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I just published [v1.5.3](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.5.3) I hope this doesn't break the AUR package ... as I haven't heard anything from @crian in regards [to comment](https://github.com/AdnanHodzic/auto-cpufreq/pull/150#issuecomment-763890610) I made.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

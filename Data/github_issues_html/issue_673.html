@@ -1,0 +1,191 @@
+
+        <html>
+        <head>
+            <title>Issue #673: [Feature] Bluetooth disabled after reboot</title>
+        </head>
+        <body>
+            <h1>[Feature] Bluetooth disabled after reboot</h1>
+            <p><strong>Issue #673</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? Yes.
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)? It didnt't fail.
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)? Yes.
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)? Yes.
+
+### Error output:
+
+There isn't error ocurring. Just a problem with bluetooth always turned off when rebooting or turning on the PC.
+
+### System information:
+
+Add/paste output of:
+
+Linux distro: Ubuntu 23.10 Mantic Minotaur
+Linux kernel: 6.5.0-26-generic
+Processor: AMD Ryzen 7 5700U with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: amd-pstate-epp
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4372 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      0.0%        47 °C       400 MHz
+CPU1      0.0%        47 °C      2891 MHz
+CPU2      0.0%        47 °C       400 MHz
+CPU3      0.0%        47 °C       400 MHz
+CPU4      0.0%        47 °C      1777 MHz
+CPU5      0.0%        47 °C       400 MHz
+CPU6      1.0%        47 °C      1852 MHz
+CPU7      0.0%        47 °C       400 MHz
+CPU8      0.0%        47 °C       400 MHz
+CPU9      0.0%        47 °C       400 MHz
+CPU10      0.0%        47 °C       400 MHz
+CPU11      0.0%        47 °C       400 MHz
+CPU12      0.0%        47 °C      2513 MHz
+CPU13      0.0%        47 °C       400 MHz
+CPU14      0.0%        47 °C       400 MHz
+CPU15      0.0%        47 °C       400 MHz
+
+auto-cpufreq version: 2.2.0 (git: 215026a)
+
+Python: 3.11.6
+psutil package: 5.9.8
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.37 %
+
+Total CPU usage: 0.5 %
+Total system load: 0.38
+Average temp. of all cores: 47.00 °C 
+
+Currently using: performance governor
+Warning: CPU turbo is not available
+Currently turbo boost is: off
+
+
+### Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+When not using auto-cpufreq my bluetooth stays the way I leave it: if it's turned on, stays turned on after rebooting, and if it's turned off, stays turned off.
+
+When using auto-cpufreq my bluetooth is always turned off after a reboot, doesn't matter if I turn it on and leave that way when rebooting. It's not good for me and some other users that  the software works this way because I use a bluetooth mouse, so every time I have to turn it on again and reconnect to my mouse. </p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>To my knowledge auto-cpufreq doesn't do any thing with Bluetooth did you by chance have tlp installed before? There could be effects from tlp still.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>`auto-cpufreq` does disable bluetooth on boot while the daemon is installed. To override this, edit `/etc/bluetooth/main.conf` and replace `AutoEnable=false` with `AutoEnable=true`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>wilhem-meignan:</strong></p>
+                    <p>Thanks @shadeyg56 for the info.
+
+I don't know if the goal of this is to save power but this seems crazy to me. If you don't have a laptop with integrated keyboard and trackpad, you could find yourself on reboot with no usable keyboard and mouse.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Thanks @shadeyg56 for the info.
+> 
+> I don't know if the goal of this is to save power but this seems crazy to me. If you don't have a laptop with integrated keyboard and trackpad, you could find yourself on reboot with no usable keyboard and mouse.
+
+No, it's not crazy [as explained here](https://github.com/AdnanHodzic/auto-cpufreq/issues/92#issuecomment-1080318720). 
+
+TL;DR: Having bluetooth on uses battery, auto-cpufreq daemon will disable bluetooth **at boot**, which you can always turn on if needed. 
+
+If you or anyone else has a better idea how to deal with this please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>wilhem-meignan:</strong></p>
+                    <p>Hi @AdnanHodzic, thanks for taking the time to reply.
+
+As I understand it, Bluetooth is only disabled during boot but enabled after that (if enabled at all by the user). You are right. This corresponds to my observations. The Bluetooth keyboard and mouse only got connected late after logging-in.
+
+I went the other direction and enabled Bluetooth during boot and also the fast-connect setting which makes the keyboard and mouse connect faster on the login screen before logging-in[1].
+
+It makes sense to completely disable Bluetooth when it is not needed. But when used, I don't see the point of disabling it during boot.
+
+Was the decision to disable Bluetooth during boot based on some measurements? Sorry to put that in question and I don't know the answer but considering that Bluetooth is enabled by default the whole time on smartphones, I would be surprised if it had much impact on a laptop's battery life.
+
+[1] For those interested:
+
+In /etc/bluetooth/main.conf
+
+```
+# Enable Bluetooth during boot:
+AutoEnable=true
+
+# Enable fast-connect:
+FastConnectable = true
+```
+
+FWIW: the comment for that last setting warns: "the tradeoff is increased power consumptions".</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Since the bluetooth file is written to when `auto-cpufreq --install` is ran, maybe it's worth adding a `--no-bluetooth` flag or something like that, which would prevent `--install` from touching the bluetooth file for users that don't want to disable bluetooth on boot</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Since the bluetooth file is written to when `auto-cpufreq --install` is ran, maybe it's worth adding a `--no-bluetooth` flag or something like that, which would prevent `--install` from touching the bluetooth file for users that don't want to disable bluetooth on boot
+
+Exactly this, `---no-bluetooth` I would introduce this as a new flag for those who don't want auto-cpufreq to mess with their bluetooth.
+
+With that said, I'll re-open this issue and add [Feature] to it ... so:
+> If you or anyone else has a better idea how to deal with this please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>nassimabed:</strong></p>
+                    <p>Reporting what I tried and how it worked (or didn't) after installing auto-cpufeq and enabling the daemon:
+I am on Ubuntu 22.04 LTS kernel 6.8.0-41-generic.
+
+I edited /etc/bluetooth/main.conf to change **FastConnectable = true** and J**ustWorkRepairing = always**. **AutoEnable was already flagged true**. Then I connected trackpad and keyboard by bluetooth and they worked.
+Then I rebooted: Bluetooth was **on after reboot** already but the two devices **did not auto-connect**. 
+
+I need them to auto-connect if I want to get rid of the cable for the keyboard (my machine is an old desktop iMac and my keyboard has Arabic alphabet and I can't find dongle-BT keyboards with Arabic in Thailand not to mention I need that USB port to stay available).
+
+Going to bluetoothctl then doing "devices" to see MAC addresses then doing "trust" for each MAC address (keyboard and trackpad) followed by reboot resulted in trackpad autoconnecting but keyboard not autoconnecting.
+
+I am going to try bluetooth-autoconnect from https://github.com/jrouleau/bluetooth-autoconnect
+Let's see. More later.
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Since the bluetooth file is written to when `auto-cpufreq --install` is ran, maybe it's worth adding a `--no-bluetooth` flag or something like that, which would prevent `--install` from touching the bluetooth file for users that don't want to disable bluetooth on boot
+
+If anyone here wants to give it a try in implementing this functionality, please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

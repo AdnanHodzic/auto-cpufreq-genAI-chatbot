@@ -1,0 +1,343 @@
+
+        <html>
+        <head>
+            <title>Issue #278: Service keeps enabling discrete GPU, causing higher power drain instead of saving it</title>
+        </head>
+        <body>
+            <h1>Service keeps enabling discrete GPU, causing higher power drain instead of saving it</h1>
+            <p><strong>Issue #278</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>hello there,
+I've started using using `auto-cpufreq` on my laptop (MSI Bravo 15 B5DD) and I've noticed that whenever it's enabled and doing its thing, the LED that indicates which GPU is currently used is constantly switching between orange (discrete GPU) and white (integrated GPU), with the former being active for the majority of time. it reflects on the battery life when unplugged, with Plasma's battery widget actually estimating shorter remaining battery life when running `auto-cpufreq` in the `--live` option, and significantly extending the estimation when stopping it. I've observed the same behaviour with it running as a daemon.
+
+the laptop model is MSI Bravo 15 B5DD with AMD Ryzen 5600H CPU and AMD Radeon RX 5500M dGPU, running EndeavourOS (Arch-based) with KDE Plasma.
+I've attached my `auto-cpufreq.conf` below the system information, although the only thing I've changed compared to the example file from the readme is the governor when plugged in (`schedutil` instead of `performance`), which as far as I understand shouldn't have any effect on the behaviour when unplugged, anyway. I've also tried changing `turbo` to `never` and restarting the service, and the same issue persisted.
+
+I'll be happy to provide any other required information, just might need a little bit of hand holding here and there :) 
+
+
+### System information:
+```
+Using  settings defined in /etc/auto-cpufreq.conf file
+
+Note: You can quit monitor mode by pressing "ctrl+c"
+
+------------------------ auto-cpufreq running ------------------------------
+
+ERROR: auto-cpufreq is running in daemon mode.
+
+Make sure to stop the deamon before running with --live or --monitor mode
+[nj@bravo15 ~]$ sudo auto-cpufreq --debug
+
+Using settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------------------------------------------------------
+
+Linux distro: EndeavourOS rolling rolling
+Linux kernel: 5.14.16-arch1-1
+Processor: AMD Ryzen 5 5600H with Radeon Graphics
+Cores: 12
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3300 MHz
+CPU min frequency: 1200 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0:     5.0%     31 °C     1200 MHz
+CPU1:     0.0%     31 °C     1200 MHz
+CPU2:     7.2%     31 °C     1200 MHz
+CPU3:     0.0%     31 °C     1200 MHz
+CPU4:     8.0%     31 °C     1198 MHz
+CPU5:     3.0%     31 °C     1200 MHz
+CPU6:     2.0%     31 °C     1200 MHz
+CPU7:     0.0%     31 °C     1200 MHz
+CPU8:     4.0%     31 °C     1200 MHz
+CPU9:     1.0%     31 °C     1200 MHz
+CPU10:   33.0%     31 °C     1200 MHz
+CPU11:    0.0%     31 °C     1198 MHz
+
+auto-cpufreq version:
+fatal: not a git repository (or any of the parent directories): .git
+CalledProcessError(128, ['git', 'describe', '--always'])
+
+Python: 3.9.7
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 8.0.3
+/bin/sh: line 1: pip3: command not found
+distro package
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.22 %
+
+Total CPU usage: 0.8 %
+Total system load: 1.09
+Average temp. of all cores: 31.0 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+
+```
+---
+
+### /etc/auto-cpufreq.conf:
+```
+# settings for when connected to a power source
+[charger]
+# see available governors by running: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+# preferred governor.
+governor = schedutil
+
+# turbo boost setting. possible values: always, auto, never
+turbo = auto
+
+# settings for when using battery power
+[battery]
+# see available governors by running: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+# preferred governor
+governor = powersave
+
+# turbo boost setting. possible values: always, auto, never
+turbo = auto
+```
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>What if you don't use `/etc/auto-cpufreq.conf` (which is optional anyways), what happens then as I didn't understand if you tried that.
+
+Also please make sure to have the [latest 1.7.2 release](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.7.2).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>noodlejetski:</strong></p>
+                    <p>okay, I've updated to 1.7.2 and the same behaviour persists. some additional details that I've noticed:
+
+1. removing the .conf file doesn't change anything with regard to this particular behaviour;
+2. even when the service/daemon is disabled and I just run the program with the `--monitor` parameter, the dGPU indicator still lights up and the battery estimated time drops significantly until I stop it;
+3. the indicator in question correlates with the `--monitor`/`--stats`/`--live` output. the dGPU turns on as soon as the "Current CPU stats" section is displayed, and turns off after the "auto-cpufreq refresh in:" countdown finishes.
+4. as a probably unrelated bonus, running `neofetch` also briefly makes the dGPU indicator light up when it's about to display the GPU information, unless I specifically make it not check for it.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Just [released v1.9.2](https://github.com/AdnanHodzic/auto-cpufreq/releases) which adds ability to change power governor used by default with auto-cpufreq from `balanced` to `performance` [using power_helper.py script](https://github.com/AdnanHodzic/auto-cpufreq/#1-power_helperpy-script). Curious to hear if you still have same problem if you switch to `performance` governor?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>Sorry to comment on this after more than a year, but I am having the same issue, and I wanted to know if OP ever found a fix for this. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Can you confirm if this is related to: https://github.com/AdnanHodzic/auto-cpufreq/issues/398</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>TinBlock50:</strong></p>
+                    <p>I didn't notice problem #398. However, the problem of the active GPU is also present on my ASUS G14 2022 with the Ryzen 6800HS and RX 6700S. No idea if this info helps, but if the auto-cpufreq is off and the CPU-X graphics card page is open, the GPU will also be activated. 
+
+As a small idea from a user with no programming experience. Does the auto-cpufreq service access the graphics card info somewhere? 
+
+If you still need information, please write what and how I can retrieve it.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>TinBlock50:</strong></p>
+                    <p>I just checked my laptop for problem #398. it doesn't look that bad but the battery performance is greatly reduced.
+
+On battery:
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Fedora Linux 36 Workstation Edition
+Linux kernel: 5.18.9-200.fc36.x86_64
+Processor: AMD Ryzen 7 6800HS with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: amd-pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4785 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	100.0%     58 °C     1073 MHz
+CPU1:	100.0%     58 °C     1073 MHz
+CPU2:	100.0%     58 °C     1073 MHz
+CPU3:	100.0%     58 °C     1073 MHz
+CPU4:	100.0%     58 °C     1073 MHz
+CPU5:	100.0%     58 °C     1073 MHz
+CPU6:	100.0%     58 °C     1073 MHz
+CPU7:	100.0%     58 °C     1073 MHz
+CPU8:	100.0%     58 °C     1073 MHz
+CPU9:	100.0%     58 °C     1073 MHz
+CPU10:	100.0%     58 °C     1073 MHz
+CPU11:	100.0%     58 °C     1073 MHz
+CPU12:	100.0%     58 °C     1073 MHz
+CPU13:	100.0%     58 °C     1073 MHz
+CPU14:	100.0%     58 °C     1073 MHz
+CPU15:	100.0%     58 °C     1073 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: discharging
+
+Setting to use: "powersave" governor
+
+Total CPU usage: 100.0 %
+Total system load: 13.85
+Average temp. of all cores: 58.38 °C 
+
+High CPU load
+setting turbo boost: on
+
+-------------------------------------------------------------------------------
+
+		"auto-cpufreq" is about to refresh ...
+		Executed on: July 06 (Wednesday) - 18:34:37
+
+-------------------------------------------------------------------------------
+
+```
+
+On power adapter:
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Fedora Linux 36 Workstation Edition
+Linux kernel: 5.18.9-200.fc36.x86_64
+Processor: AMD Ryzen 7 6800HS with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: amd-pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4785 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	100.0%     80 °C     3654 MHz
+CPU1:	100.0%     80 °C     3654 MHz
+CPU2:	100.0%     80 °C     3654 MHz
+CPU3:	100.0%     80 °C     3654 MHz
+CPU4:	100.0%     80 °C     3654 MHz
+CPU5:	100.0%     80 °C     3654 MHz
+CPU6:	100.0%     80 °C     3654 MHz
+CPU7:	100.0%     80 °C     3654 MHz
+CPU8:	100.0%     80 °C     3655 MHz
+CPU9:	100.0%     80 °C     3655 MHz
+CPU10:	100.0%     80 °C     3655 MHz
+CPU11:	100.0%     80 °C     3655 MHz
+CPU12:	100.0%     80 °C     3655 MHz
+CPU13:	100.0%     80 °C     3655 MHz
+CPU14:	100.0%     80 °C     3655 MHz
+CPU15:	100.0%     80 °C     3655 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+
+Total CPU usage: 56.2 %
+Total system load: 15.48
+Average temp. of all cores: 80.00 °C 
+
+High system load
+setting turbo boost: on
+
+-------------------------------------------------------------------------------
+
+		"auto-cpufreq" is about to refresh ...
+		Executed on: July 06 (Wednesday) - 18:44:15
+
+-------------------------------------------------------------------------------
+```
+
+In the first second on the power adapter:
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Fedora Linux 36 Workstation Edition
+Linux kernel: 5.18.9-200.fc36.x86_64
+Processor: AMD Ryzen 7 6800HS with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: amd-pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4785 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	100.0%     83 °C     4227 MHz
+CPU1:	100.0%     83 °C     4227 MHz
+CPU2:	100.0%     83 °C     4227 MHz
+CPU3:	100.0%     83 °C     4227 MHz
+CPU4:	100.0%     83 °C     4227 MHz
+CPU5:	100.0%     83 °C     4227 MHz
+CPU6:	100.0%     83 °C     4227 MHz
+CPU7:	100.0%     83 °C     4227 MHz
+CPU8:	100.0%     83 °C     4227 MHz
+CPU9:	100.0%     83 °C     4227 MHz
+CPU10:	100.0%     83 °C     4227 MHz
+CPU11:	100.0%     83 °C     4227 MHz
+CPU12:	100.0%     83 °C     4227 MHz
+CPU13:	100.0%     83 °C     4227 MHz
+CPU14:	100.0%     83 °C     4227 MHz
+CPU15:	100.0%     83 °C     4227 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+
+Total CPU usage: 100.0 %
+Total system load: 4.47
+Average temp. of all cores: 82.75 °C 
+
+High CPU load
+setting turbo boost: on
+
+-------------------------------------------------------------------------------
+
+		"auto-cpufreq" is about to refresh ...
+		Executed on: July 06 (Wednesday) - 18:43:17
+
+-------------------------------------------------------------------------------
+
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Was this mentioned in #216 as it could simply be mentioned as part of documentation? 
+
+If there are any changes that could be made please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+In meantime closing the issue due to inactivity.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

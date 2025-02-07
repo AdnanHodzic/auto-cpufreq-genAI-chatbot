@@ -1,0 +1,112 @@
+
+        <html>
+        <head>
+            <title>Pull Request #576: feat: support for pyproject.toml</title>
+        </head>
+        <body>
+            <h1>feat: support for pyproject.toml</h1>
+            <p><strong>Pull Request #576</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>## Initial Support for pyproject.toml
+
+### Changes
+- Support for pyproject as per [PEP-518](https://peps.python.org/pep-0518/)
+- setup.py renamed to setup.old.py 
+
+### Needs help in checking if
+- Snap builds works
+- Nix build works
+
+### Couldn't Implement
+- [ ] python setup.py install  ***--record*** equivalent in this case 
+
+### Breaking Changes
+- Dynamic versioning is not the same as the one provided by pkg_marker, however appropriate apis in core.py has been provided in to fix that problem
+  eg: 
+          Old Version Scheme : auto-cpufreq==2.0.0-e7dyadda
+           New Version SCheme : auto-cpufreq-2.0.0-e7dyadda
+   `auto-cpufreq --version` won't be affected by this however.
+
+- bin files have moved from `bin/<exec>` to `auto-cpufreq/bin/<exec>.py`
+
+### Tested
+- [x] Installation works
+- [x] auto-cpufreq --install works 
+- [x] GUI works
+
+## Running the project
+
+- ```bash
+  git clone git@github:AdnanHodzic/auto-cpufreq.git
+  cd auto-cpufreq
+  poetry install
+  poetry run auto-cpufreq --help
+  ```
+
+- Alternatively, we can use editable pip install for development purposes
+  ```bash
+  git clone git@github:AdnanHodzic/auto-cpufreq.git
+  cd auto-cpufreq
+  # Setup  your Virtual Environment
+  pip3 install -e .
+  auto-cpufreq
+  ```</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Awesome, I can test to see if it builds on Nix. Is there any point into hanging onto the setup.py?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rootCircle:</strong></p>
+                    <p>> Awesome, I can test to see if it builds on Nix.
+
+That would be great! :smile: 
+
+> Is there any point into hanging onto the setup.py?
+
+No, I don't think so, I have just kept it for archival purpose, maybe we can remove it after proper testing is done......</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>The Nix package needed some slight modifications to work, but I have pushed the changes to your branch to make it build on Nix!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rootCircle:</strong></p>
+                    <p>> The Nix package needed some slight modifications to work, but I have pushed the changes to your branch to make it build on Nix!
+
+Sounds great! Thanks :smile:</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>LGTM & thank you for your contibution! 
+
+Wondering if "Running the project" part should've been included anywhere into README? Also let's keep an eye if `pip3 install .` is not working on plethora of distros that auto-cpufreq that can be installed on nowdays :) 
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rootCircle:</strong></p>
+                    <p>> Wondering if "Running the project" part should've been included anywhere into README?
+
+Sure, I can
+
+> Also let's keep an eye if pip3 install . is not working on plethora of distros that auto-cpufreq that can be installed on nowdays :)
+
+How about replacing that with `pip` as fallback, if that doesn't works out?
+
+@AdnanHodzic I wanted to tell that if this update breaks few things due to record `files.txt` in tool_remove in `auto-cpufreq-installer`, although I have tested if installation and removal things works or not!   
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

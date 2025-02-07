@@ -1,0 +1,64 @@
+
+        <html>
+        <head>
+            <title>Issue #33: ARM Devices</title>
+        </head>
+        <body>
+            <h1>ARM Devices</h1>
+            <p><strong>Issue #33</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>```
+Traceback (most recent call last):
+  File "auto-cpufreq.py", line 448, in <module>
+    cli()
+  File "/usr/local/lib/python3.7/dist-packages/click/core.py", line 764, in __call__
+    return self.main(*args, **kwargs)
+  File "/usr/local/lib/python3.7/dist-packages/click/core.py", line 717, in main
+    rv = self.invoke(ctx)
+  File "/usr/local/lib/python3.7/dist-packages/click/core.py", line 956, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/usr/local/lib/python3.7/dist-packages/click/core.py", line 555, in invoke
+    return callback(*args, **kwargs)
+  File "auto-cpufreq.py", line 421, in cli
+    sysinfo()
+  File "auto-cpufreq.py", line 349, in sysinfo
+    print("CPU" + str(core_num) + " temp: {:.0f}".format(core_temp['coretemp'][core_num].current) + "°C")
+KeyError: 'coretemp'
+```
+
+Seems that it can read the CPU temp easily fixed by adding 
+
+cat /sys/devices/virtual/thermal/thermal_zone0/temp 
+
+For checking temp if not available via the pypi packages :) 
+
+anyways thanks for a great tool</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Thanks, I'll add this on ToDo list for the next release.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>@swetoast could you please test the new release, as I think that this bug should be solved</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>swetoast:</strong></p>
+                    <p>works, closing issue tnx for the works guys</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>It's too late to announce ARM support as part of 1.2 release now, but it'll definitely be in release for next release.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

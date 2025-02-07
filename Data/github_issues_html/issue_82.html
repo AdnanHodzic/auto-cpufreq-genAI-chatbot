@@ -1,0 +1,115 @@
+
+        <html>
+        <head>
+            <title>Issue #82: The systemd log is being spammed by auto-cpufreq</title>
+        </head>
+        <body>
+            <h1>The systemd log is being spammed by auto-cpufreq</h1>
+            <p><strong>Issue #82</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I've started using the tool and loving it so far. Good work!
+
+After installation, the `auto-cpufreq` service is continually outputting the full payload of the `--log` command to the system logs. 
+
+When tailing the logs with `journalctl --follow`, I see a continual stream of these log reports being dumped in the log every 5 seconds.
+
+```
+...
+Aug 07 12:34:18 rocinante auto-cpufreq.service[561395]: ----------------------------- System information ------------------------------
+Aug 07 12:34:18 rocinante auto-cpufreq.service[561395]: Linux distro: Manjaro Linux UNKNOWN version
+Aug 07 12:34:18 rocinante auto-cpufreq.service[561395]: Linux kernel: 5.4.52-1-MANJARO
+Aug 07 12:34:18 rocinante auto-cpufreq.service[561395]: Driver: intel_pstate
+Aug 07 12:34:18 rocinante auto-cpufreq.service[561395]: Architecture: x86_64
+Aug 07 12:34:18 rocinante auto-cpufreq.service[561395]: Processor: Intel(R) Core(TM) i7-8650U CPU @ 1.90GHz
+...
+```
+My system info:
+
+```
+               +
+               #
+              ###
+             #####
+             ######
+            ; #####;            User: marco
+           +##.#####            Hostname: rocinante
+          +##########           Distro: Arch Linux
+         #############;         Kernel: 5.4.52-1-MANJARO
+        ###############+        Uptime: 10 days, 14:03
+       #######   #######        Window Manager: i3
+     .######;     ;###;`".      Desktop Environment:
+    .#######;     ;#####.       Shell: /bin/zsh
+    #########.   .########`     Terminal: screen-256color
+   ######'           '######    Packages: 1588
+  ;####                 ####;   CPU: Intel(R) Core(TM) i7-8650U CPU @ 1.90GHz
+  ##'                     '##   RAM: 6717 MB / 15766 MB
+ #'                         `#  Disk: 469GB / 989GB
+```
+Installed with snap:
+```
+snap     2.45.2-1
+snapd    2.45.2-1
+series   16
+manjaro  -
+kernel   5.4.52-1-MANJARO
+```
+
+Should this perhaps rather be a one-line summary whenever the state of cpu scaling is changed by the tool?
+
+I also further noticed the continued references to a `/var/log/auto-cpufreq.log` file in the service descriptor and elsewhere, but this file never seems to be created. I tried creating it myself, but it still doesn't get populated with the logs.
+
+I realise that these are just teething issues that still need to be sorted. Keep up the great work!</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>First of all thank you, will do :)
+
+I remember this same thing was mentioned in #53. Hence, I think it would be a good think to address this issue in one of the future releases.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>marc0der:</strong></p>
+                    <p>Great stuff. Some further digging has revealed that all logging is done straight to standard out. Perhaps this issue could be circumvented using targeted logging using a logger library. I could look into this, but since python isn't my first language I'm not promising anything.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Go for it, it would be amazing to see a PR from you :) Otherwise, even if you find a nice library that could be used for this purpose that would also be great.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Released a fix as part of 1.2.3 version which is available in beta channel, install it by running:
+
+```
+sudo snap install auto-cpufreq --beta
+```
+
+After you confirm it's working as expected for you I'll promote it to stable channel, merge changes with master and close this issue.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>marc0der:</strong></p>
+                    <p>I just tried it out and it works perfectly :+1: </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Awesome, enjoy.
+
+Changes have been promoted to stable channel, hence if you want to move back to stable from beta, can you do so by running:
+
+```
+sudo snap switch --channel=stable auto-cpufreq
+```</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

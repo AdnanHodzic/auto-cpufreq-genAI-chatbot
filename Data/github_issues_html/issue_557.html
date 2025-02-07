@@ -1,0 +1,448 @@
+
+        <html>
+        <head>
+            <title>Issue #557: Installer Fails "AttributeError: install_layout. Did you mean: 'install_platlib'?"</title>
+        </head>
+        <body>
+            <h1>Installer Fails "AttributeError: install_layout. Did you mean: 'install_platlib'?"</h1>
+            <p><strong>Issue #557</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+Yes
+
+### Error output:
+```
+`~/auto-cpufreq$ sudo ./auto-cpufreq-installer
+───────────────────────────────────────────────────────────────────────────────────────────────── auto-cpufreq installer ─────────────────────────────────────────────────────────────────────────────────────────────────
+
+Welcome to auto-cpufreq tool installer.
+  
+Options:
+
+[I]nstall
+[U]pdate
+[R]emove
+[Q]uit
+
+Select a key: [i/u/r/q]: I
+
+
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+Detected Debian based distribution
+
+
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+Setting up Python environment
+
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+E: Unable to locate package libgtk-3
+
+Installing necessary Python packages
+
+DEPRECATION: Loading egg at /opt/auto-cpufreq/venv/lib/python3.11/site-packages/auto_cpufreq-1.9.9+9f132bdc.post6.dirty-py3.11.egg is deprecated. pip 23.3 will enforce this behaviour change. A possible replacement is to use pip for package installation..
+DEPRECATION: Loading egg at /opt/auto-cpufreq/venv/lib/python3.11/site-packages/psutil-5.9.5-py3.11-linux-x86_64.egg is deprecated. pip 23.3 will enforce this behaviour change. A possible replacement is to use pip for package installation..
+DEPRECATION: Loading egg at /opt/auto-cpufreq/venv/lib/python3.11/site-packages/requests-2.31.0-py3.11.egg is deprecated. pip 23.3 will enforce this behaviour change. A possible replacement is to use pip for package installation..
+DEPRECATION: Loading egg at /opt/auto-cpufreq/venv/lib/python3.11/site-packages/click-8.1.7-py3.11.egg is deprecated. pip 23.3 will enforce this behaviour change. A possible replacement is to use pip for package installation..
+DEPRECATION: Loading egg at /opt/auto-cpufreq/venv/lib/python3.11/site-packages/distro-1.8.0-py3.11.egg is deprecated. pip 23.3 will enforce this behaviour change. A possible replacement is to use pip for package installation..
+Requirement already satisfied: pip in /opt/auto-cpufreq/venv/lib/python3.11/site-packages (23.2.1)
+Requirement already satisfied: wheel in /opt/auto-cpufreq/venv/lib/python3.11/site-packages (0.41.2)
+DEPRECATION: Loading egg at /opt/auto-cpufreq/venv/lib/python3.11/site-packages/auto_cpufreq-1.9.9+9f132bdc.post6.dirty-py3.11.egg is deprecated. pip 23.3 will enforce this behaviour change. A possible replacement is to use pip for package installation..
+DEPRECATION: Loading egg at /opt/auto-cpufreq/venv/lib/python3.11/site-packages/psutil-5.9.5-py3.11-linux-x86_64.egg is deprecated. pip 23.3 will enforce this behaviour change. A possible replacement is to use pip for package installation..
+DEPRECATION: Loading egg at /opt/auto-cpufreq/venv/lib/python3.11/site-packages/requests-2.31.0-py3.11.egg is deprecated. pip 23.3 will enforce this behaviour change. A possible replacement is to use pip for package installation..
+DEPRECATION: Loading egg at /opt/auto-cpufreq/venv/lib/python3.11/site-packages/click-8.1.7-py3.11.egg is deprecated. pip 23.3 will enforce this behaviour change. A possible replacement is to use pip for package installation..
+DEPRECATION: Loading egg at /opt/auto-cpufreq/venv/lib/python3.11/site-packages/distro-1.8.0-py3.11.egg is deprecated. pip 23.3 will enforce this behaviour change. A possible replacement is to use pip for package installation..
+Requirement already satisfied: setuptools in /opt/auto-cpufreq/venv/lib/python3.11/site-packages (from -r requirements.txt (line 1)) (66.1.1)
+Requirement already satisfied: psutil in /opt/auto-cpufreq/venv/lib/python3.11/site-packages/psutil-5.9.5-py3.11-linux-x86_64.egg (from -r requirements.txt (line 2)) (5.9.5)
+Requirement already satisfied: click in /opt/auto-cpufreq/venv/lib/python3.11/site-packages/click-8.1.7-py3.11.egg (from -r requirements.txt (line 3)) (8.1.7)
+Requirement already satisfied: distro in /opt/auto-cpufreq/venv/lib/python3.11/site-packages/distro-1.8.0-py3.11.egg (from -r requirements.txt (line 4)) (1.8.0)
+Requirement already satisfied: requests in /opt/auto-cpufreq/venv/lib/python3.11/site-packages/requests-2.31.0-py3.11.egg (from -r requirements.txt (line 5)) (2.31.0)
+Collecting PyGObject (from -r requirements.txt (line 6))
+  Using cached PyGObject-3.46.0.tar.gz (723 kB)
+  Installing build dependencies ... error
+  error: subprocess-exited-with-error
+  
+  × pip subprocess to install build dependencies did not run successfully.
+  │ exit code: 1
+  ╰─> [47 lines of output]
+      Collecting setuptools
+        Obtaining dependency information for setuptools from https://files.pythonhosted.org/packages/bb/26/7945080113158354380a12ce26873dd6c1ebd88d47f5bc24e2c5bb38c16a/setuptools-68.2.2-py3-none-any.whl.metadata
+        Using cached setuptools-68.2.2-py3-none-any.whl.metadata (6.3 kB)
+      Collecting wheel
+        Obtaining dependency information for wheel from https://files.pythonhosted.org/packages/b8/8b/31273bf66016be6ad22bb7345c37ff350276cfd46e389a0c2ac5da9d9073/wheel-0.41.2-py3-none-any.whl.metadata
+        Using cached wheel-0.41.2-py3-none-any.whl.metadata (2.2 kB)
+      Collecting pycairo
+        Using cached pycairo-1.24.0.tar.gz (344 kB)
+        Installing build dependencies: started
+        Installing build dependencies: finished with status 'done'
+        Getting requirements to build wheel: started
+        Getting requirements to build wheel: finished with status 'done'
+        Installing backend dependencies: started
+        Installing backend dependencies: finished with status 'done'
+        Preparing metadata (pyproject.toml): started
+        Preparing metadata (pyproject.toml): finished with status 'done'
+      Using cached setuptools-68.2.2-py3-none-any.whl (807 kB)
+      Using cached wheel-0.41.2-py3-none-any.whl (64 kB)
+      Building wheels for collected packages: pycairo
+        Building wheel for pycairo (pyproject.toml): started
+        Building wheel for pycairo (pyproject.toml): finished with status 'error'
+        error: subprocess-exited-with-error
+      
+        × Building wheel for pycairo (pyproject.toml) did not run successfully.
+        │ exit code: 1
+        ╰─> [15 lines of output]
+            running bdist_wheel
+            running build
+            running build_py
+            creating build
+            creating build/lib.linux-x86_64-cpython-311
+            creating build/lib.linux-x86_64-cpython-311/cairo
+            copying cairo/__init__.py -> build/lib.linux-x86_64-cpython-311/cairo
+            copying cairo/__init__.pyi -> build/lib.linux-x86_64-cpython-311/cairo
+            copying cairo/py.typed -> build/lib.linux-x86_64-cpython-311/cairo
+            running build_ext
+            Package cairo was not found in the pkg-config search path.
+            Perhaps you should add the directory containing `cairo.pc'
+            to the PKG_CONFIG_PATH environment variable
+            Package 'cairo', required by 'virtual:world', not found
+            Command '['pkg-config', '--print-errors', '--exists', 'cairo >= 1.15.10']' returned non-zero exit status 1.
+            [end of output]
+      
+        note: This error originates from a subprocess, and is likely not a problem with pip.
+        ERROR: Failed building wheel for pycairo
+      Failed to build pycairo
+      ERROR: Could not build wheels for pycairo, which is required to install pyproject.toml-based projects
+      [end of output]
+  
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+error: subprocess-exited-with-error
+
+× pip subprocess to install build dependencies did not run successfully.
+│ exit code: 1
+╰─> See above for output.
+
+note: This error originates from a subprocess, and is likely not a problem with pip.
+
+
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+installing auto-cpufreq tool
+
+/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/installer.py:27: SetuptoolsDeprecationWarning: setuptools.installer is deprecated. Requirements should be satisfied by a PEP 517 installer.
+  warnings.warn(
+running install
+/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/command/install.py:34: SetuptoolsDeprecationWarning: setup.py install is deprecated. Use build and pip and other standards-based tools.
+  warnings.warn(
+/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/command/easy_install.py:146: EasyInstallDeprecationWarning: easy_install command is deprecated. Use build and pip and other standards-based tools.
+  warnings.warn(
+running bdist_egg
+running egg_info
+writing auto_cpufreq.egg-info/PKG-INFO
+writing dependency_links to auto_cpufreq.egg-info/dependency_links.txt
+writing requirements to auto_cpufreq.egg-info/requires.txt
+writing top-level names to auto_cpufreq.egg-info/top_level.txt
+reading manifest file 'auto_cpufreq.egg-info/SOURCES.txt'
+adding license file 'LICENSE'
+writing manifest file 'auto_cpufreq.egg-info/SOURCES.txt'
+installing library code to build/bdist.linux-x86_64/egg
+running install_lib
+running build_py
+creating build/bdist.linux-x86_64/egg
+creating build/bdist.linux-x86_64/egg/auto_cpufreq
+copying build/lib/auto_cpufreq/core.py -> build/bdist.linux-x86_64/egg/auto_cpufreq
+copying build/lib/auto_cpufreq/tlp_stat_parser.py -> build/bdist.linux-x86_64/egg/auto_cpufreq
+copying build/lib/auto_cpufreq/power_helper.py -> build/bdist.linux-x86_64/egg/auto_cpufreq
+copying build/lib/auto_cpufreq/__init__.py -> build/bdist.linux-x86_64/egg/auto_cpufreq
+creating build/bdist.linux-x86_64/egg/auto_cpufreq/gui
+copying build/lib/auto_cpufreq/gui/tray.py -> build/bdist.linux-x86_64/egg/auto_cpufreq/gui
+copying build/lib/auto_cpufreq/gui/objects.py -> build/bdist.linux-x86_64/egg/auto_cpufreq/gui
+copying build/lib/auto_cpufreq/gui/__init__.py -> build/bdist.linux-x86_64/egg/auto_cpufreq/gui
+copying build/lib/auto_cpufreq/gui/app.py -> build/bdist.linux-x86_64/egg/auto_cpufreq/gui
+byte-compiling build/bdist.linux-x86_64/egg/auto_cpufreq/core.py to core.cpython-311.pyc
+byte-compiling build/bdist.linux-x86_64/egg/auto_cpufreq/tlp_stat_parser.py to tlp_stat_parser.cpython-311.pyc
+byte-compiling build/bdist.linux-x86_64/egg/auto_cpufreq/power_helper.py to power_helper.cpython-311.pyc
+byte-compiling build/bdist.linux-x86_64/egg/auto_cpufreq/__init__.py to __init__.cpython-311.pyc
+byte-compiling build/bdist.linux-x86_64/egg/auto_cpufreq/gui/tray.py to tray.cpython-311.pyc
+byte-compiling build/bdist.linux-x86_64/egg/auto_cpufreq/gui/objects.py to objects.cpython-311.pyc
+byte-compiling build/bdist.linux-x86_64/egg/auto_cpufreq/gui/__init__.py to __init__.cpython-311.pyc
+byte-compiling build/bdist.linux-x86_64/egg/auto_cpufreq/gui/app.py to app.cpython-311.pyc
+creating build/bdist.linux-x86_64/egg/EGG-INFO
+installing scripts to build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+running install_scripts
+running build_scripts
+creating build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+copying build/scripts-3.11/auto-cpufreq-gtk -> build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+copying build/scripts-3.11/auto-cpufreq -> build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+changing mode of build/bdist.linux-x86_64/egg/EGG-INFO/scripts/auto-cpufreq-gtk to 755
+changing mode of build/bdist.linux-x86_64/egg/EGG-INFO/scripts/auto-cpufreq to 755
+copying auto_cpufreq.egg-info/PKG-INFO -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying auto_cpufreq.egg-info/SOURCES.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying auto_cpufreq.egg-info/dependency_links.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying auto_cpufreq.egg-info/requires.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying auto_cpufreq.egg-info/top_level.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying auto_cpufreq.egg-info/zip-safe -> build/bdist.linux-x86_64/egg/EGG-INFO
+creating 'dist/auto_cpufreq-1.9.9+9f132bdc.post6.dirty-py3.11.egg' and adding 'build/bdist.linux-x86_64/egg' to it
+removing 'build/bdist.linux-x86_64/egg' (and everything under it)
+Processing auto_cpufreq-1.9.9+9f132bdc.post6.dirty-py3.11.egg
+Removing /opt/auto-cpufreq/venv/lib/python3.11/site-packages/auto_cpufreq-1.9.9+9f132bdc.post6.dirty-py3.11.egg
+Copying auto_cpufreq-1.9.9+9f132bdc.post6.dirty-py3.11.egg to /opt/auto-cpufreq/venv/lib/python3.11/site-packages
+auto-cpufreq 1.9.9+9f132bdc.post6.dirty is already the active version in easy-install.pth
+Installing auto-cpufreq script to /opt/auto-cpufreq/venv/bin
+Installing auto-cpufreq-gtk script to /opt/auto-cpufreq/venv/bin
+
+Installed /opt/auto-cpufreq/venv/lib/python3.11/site-packages/auto_cpufreq-1.9.9+9f132bdc.post6.dirty-py3.11.egg
+Processing dependencies for auto-cpufreq==1.9.9+9f132bdc.post6.dirty
+Searching for PyGObject
+Reading https://pypi.org/simple/PyGObject/
+Downloading https://files.pythonhosted.org/packages/ac/4a/f24ddf1d20cc4b56affc7921e29928559a06c922eb60077448392792b914/PyGObject-3.46.0.tar.gz#sha256=481437b05af0a66b7c366ea052710eb3aacbb979d22d30b797f7ec29347ab1e6
+Best match: PyGObject 3.46.0
+Processing PyGObject-3.46.0.tar.gz
+Writing /tmp/easy_install-4xzo7vp_/PyGObject-3.46.0/setup.cfg
+Running PyGObject-3.46.0/setup.py -q bdist_egg --dist-dir /tmp/easy_install-4xzo7vp_/PyGObject-3.46.0/egg-dist-tmp-hu_k90eg
+/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/command/install.py:34: SetuptoolsDeprecationWarning: setup.py install is deprecated. Use build and pip and other standards-based tools.
+  warnings.warn(
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/sandbox.py", line 156, in save_modules
+    yield saved
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/sandbox.py", line 198, in setup_context
+    yield
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/sandbox.py", line 259, in run_setup
+    _execfile(setup_script, ns)
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/sandbox.py", line 46, in _execfile
+    exec(code, globals, locals)
+  File "/tmp/easy_install-4xzo7vp_/PyGObject-3.46.0/setup.py", line 1248, in <module>
+  File "/tmp/easy_install-4xzo7vp_/PyGObject-3.46.0/setup.py", line 1208, in main
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/__init__.py", line 108, in setup
+    return distutils.core.setup(**attrs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/_distutils/core.py", line 185, in setup
+    return run_commands(dist)
+           ^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/_distutils/core.py", line 201, in run_commands
+    dist.run_commands()
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/_distutils/dist.py", line 969, in run_commands
+    self.run_command(cmd)
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/dist.py", line 1213, in run_command
+    super().run_command(command)
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/_distutils/dist.py", line 988, in run_command
+    cmd_obj.run()
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/command/bdist_egg.py", line 165, in run
+    cmd = self.call_command('install_lib', warn_dir=0)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/command/bdist_egg.py", line 151, in call_command
+    self.run_command(cmdname)
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/_distutils/cmd.py", line 318, in run_command
+    self.distribution.run_command(command)
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/dist.py", line 1213, in run_command
+    super().run_command(command)
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/_distutils/dist.py", line 987, in run_command
+    cmd_obj.ensure_finalized()
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/_distutils/cmd.py", line 111, in ensure_finalized
+    self.finalize_options()
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/command/install_lib.py", line 17, in finalize_options
+    self.set_undefined_options('install',('install_layout','install_layout'))
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/_distutils/cmd.py", line 296, in set_undefined_options
+    setattr(self, dst_option, getattr(src_cmd_obj, src_option))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/_distutils/cmd.py", line 107, in __getattr__
+    raise AttributeError(attr)
+AttributeError: install_layout. Did you mean: 'install_platlib'?
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/auto-cpufreq/setup.py", line 18, in <module>
+    setup(
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/__init__.py", line 108, in setup
+    return distutils.core.setup(**attrs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/_distutils/core.py", line 185, in setup
+    return run_commands(dist)
+           ^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/_distutils/core.py", line 201, in run_commands
+    dist.run_commands()
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/_distutils/dist.py", line 969, in run_commands
+    self.run_command(cmd)
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/dist.py", line 1213, in run_command
+    super().run_command(command)
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/_distutils/dist.py", line 988, in run_command
+    cmd_obj.run()
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/command/install.py", line 74, in run
+    self.do_egg_install()
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/command/install.py", line 131, in do_egg_install
+    cmd.run(show_deprecation=False)
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/command/easy_install.py", line 444, in run
+    self.easy_install(spec, not self.no_deps)
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/command/easy_install.py", line 686, in easy_install
+    return self.install_item(None, spec, tmpdir, deps, True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/command/easy_install.py", line 733, in install_item
+    self.process_distribution(spec, dist, deps)
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/command/easy_install.py", line 778, in process_distribution
+    distros = WorkingSet([]).resolve(
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/pkg_resources/__init__.py", line 815, in resolve
+    dist = self._resolve_dist(
+           ^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/pkg_resources/__init__.py", line 851, in _resolve_dist
+    dist = best[req.key] = env.best_match(
+                           ^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/pkg_resources/__init__.py", line 1123, in best_match
+    return self.obtain(req, installer)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/pkg_resources/__init__.py", line 1135, in obtain
+    return installer(requirement)
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/command/easy_install.py", line 705, in easy_install
+    return self.install_item(spec, dist.location, tmpdir, deps)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/command/easy_install.py", line 731, in install_item
+    dists = self.install_eggs(spec, download, tmpdir)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/command/easy_install.py", line 924, in install_eggs
+    return self.build_and_install(setup_script, setup_base)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/command/easy_install.py", line 1198, in build_and_install
+    self.run_setup(setup_script, setup_base, args)
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/command/easy_install.py", line 1182, in run_setup
+    run_setup(setup_script, args)
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/sandbox.py", line 249, in run_setup
+    with setup_context(setup_dir):
+  File "/usr/lib/python3.11/contextlib.py", line 155, in __exit__
+    self.gen.throw(typ, value, traceback)
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/sandbox.py", line 190, in setup_context
+    with save_modules():
+  File "/usr/lib/python3.11/contextlib.py", line 155, in __exit__
+    self.gen.throw(typ, value, traceback)
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/sandbox.py", line 169, in save_modules
+    saved_exc.resume()
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/sandbox.py", line 143, in resume
+    raise exc.with_traceback(self._tb)
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/sandbox.py", line 156, in save_modules
+    yield saved
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/sandbox.py", line 198, in setup_context
+    yield
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/sandbox.py", line 259, in run_setup
+    _execfile(setup_script, ns)
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/sandbox.py", line 46, in _execfile
+    exec(code, globals, locals)
+  File "/tmp/easy_install-4xzo7vp_/PyGObject-3.46.0/setup.py", line 1248, in <module>
+  File "/tmp/easy_install-4xzo7vp_/PyGObject-3.46.0/setup.py", line 1208, in main
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/__init__.py", line 108, in setup
+    return distutils.core.setup(**attrs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/_distutils/core.py", line 185, in setup
+    return run_commands(dist)
+           ^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/_distutils/core.py", line 201, in run_commands
+    dist.run_commands()
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/_distutils/dist.py", line 969, in run_commands
+    self.run_command(cmd)
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/dist.py", line 1213, in run_command
+    super().run_command(command)
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/_distutils/dist.py", line 988, in run_command
+    cmd_obj.run()
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/command/bdist_egg.py", line 165, in run
+    cmd = self.call_command('install_lib', warn_dir=0)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/command/bdist_egg.py", line 151, in call_command
+    self.run_command(cmdname)
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/_distutils/cmd.py", line 318, in run_command
+    self.distribution.run_command(command)
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/dist.py", line 1213, in run_command
+    super().run_command(command)
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/_distutils/dist.py", line 987, in run_command
+    cmd_obj.ensure_finalized()
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/_distutils/cmd.py", line 111, in ensure_finalized
+    self.finalize_options()
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/command/install_lib.py", line 17, in finalize_options
+    self.set_undefined_options('install',('install_layout','install_layout'))
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/_distutils/cmd.py", line 296, in set_undefined_options
+    setattr(self, dst_option, getattr(src_cmd_obj, src_option))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/setuptools/_distutils/cmd.py", line 107, in __getattr__
+    raise AttributeError(attr)
+AttributeError: install_layout
+
+
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+auto-cpufreq tool successfully installed.
+
+For list of options, run:
+auto-cpufreq --help"
+
+
+──────────────────────────────────────────────────────────
+````
+`---
+
+### System information:
+Debian 12
+
+Add/paste output of:
+
+```
+~/auto-cpufreq$ auto-cpufreq --debug
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.9.9+9f132bdc.post6.dirty', 'auto-cpufreq')
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/pkg_resources/__init__.py", line 3248, in <module>
+    @_call_aside
+     ^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/pkg_resources/__init__.py", line 3223, in _call_aside
+    f(*args, **kwargs)
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/pkg_resources/__init__.py", line 3261, in _initialize_master_working_set
+    working_set = WorkingSet._build_master()
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/pkg_resources/__init__.py", line 617, in _build_master
+    ws.require(__requires__)
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/pkg_resources/__init__.py", line 956, in require
+    needed = self.resolve(parse_requirements(requirements))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/pkg_resources/__init__.py", line 815, in resolve
+    dist = self._resolve_dist(
+           ^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/pkg_resources/__init__.py", line 856, in _resolve_dist
+    raise DistributionNotFound(req, requirers)
+pkg_resources.DistributionNotFound: The 'PyGObject' distribution was not found and is required by auto-cpufreq
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+
+Trying to install using git installer and continously get this error. 
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>A change was recently pushed to master to this fix this on Debian.
+
+Please pull the latest changes and run the installer again</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

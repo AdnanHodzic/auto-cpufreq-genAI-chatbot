@@ -1,0 +1,276 @@
+
+        <html>
+        <head>
+            <title>Pull Request #599: Create auto-cpufreq-sysvinit</title>
+        </head>
+        <body>
+            <h1>Create auto-cpufreq-sysvinit</h1>
+            <p><strong>Pull Request #599</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Run Script (Could be replaceable by auto-cpufreq-r6 runscript )
+
+And a sysvinit daemon for auto-cpufreq generated THANKS TO :- 
+
+https://github.com/yunginnanet/sysvinit-service-generator fork of https://github.com/wyhasany/sysvinit-service-generator
+
+It should be inside /etc/init.d/</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>LGTM, but the part which I'm missing is how will the [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto-cpufreq-installer) detect if system user is running on is running on systemv and it's not refering to [install script anywhre](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/scripts/auto-cpufreq-install.sh)?
+
+Or was there other you were envisioning of working?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AmerXz:</strong></p>
+                    <p>It's deleted</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> It's deleted
+
+:+1:, but this part is still missing:
+
+> Also to repeat what Adnan suggested, the [daemon installer script](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/scripts/auto-cpufreq-install.sh#L71C25-L71C25) should be updated to include this new sysvinit service. The problem I see is what we already support openrc which uses sysvinit by default, so they both use the `init` process name for PID 1, so we need a way to distinguish the difference.
+> 
+> Something like this could work:
+> 
+> ```shell
+> # snippet
+> elif [ "$(ps h -o comm 1)" = "init" ];then
+>     # Check if /etc/inittab file exists
+>     if [ -e "/etc/inittab" ]; then
+>        # sysvinit command here
+>     else
+>         # openrc stuff moved here
+>     fi
+> ```
+> 
+> Additionally, the same change should be made to the [daemon removal script](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/scripts/auto-cpufreq-remove.sh#L55). If that doesn't make sense, please let me know and also feel free to comment if you have any alternative ideas since I am not as familiar with openrc or sysvinit :)
+
+For reference see how in [daemon installer script](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/scripts/auto-cpufreq-install.sh#L71C25-L71C25) it was done for `# Install script for openrc` or `# Install script for systemd` and refer to @shadeyg56 comment above.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AmerXz:</strong></p>
+                    <p>Sorry if I was late I want to take some time until I finish some few important things to do these days  and I need to organize myself a little bit.
+
+I will test my fork repository and will give you what happens then .
+
+ also thanks for these suggestions.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>No worries and take your time</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AmerXz:</strong></p>
+                    <p>```
+# Install script for openrc / sysvinit
+elif [ "$(ps h -o comm 1)" = "init" ];then
+   mkdir /etc/inittab
+    if [ -e "/etc/inittab" ]; then 
+        echo -e "\n* Deploy auto-cpufreq sysvinit unit file"
+        cp /usr/local/share/auto-cpufreq/scripts/auto-cpufreq-sysvinit /etc/init.d/auto-cpufreq
+	
+        echo -e "\n* "Reloading sysvinit manager configuration"
+	service auto-cpufreq reload
+ 
+        echo -e "\n* "Starting auto-cpufreq daemon (sysvinit) service"
+        service auto-cpufreq start
+        
+        echo -e "\n* "Enabling auto-cpufreq daemon (sysvinit) service at boot"
+	chkconfig auto-cpufreq-sysvinit on
+      else
+        echo -e "\n* Deploy auto-cpufreq openrc unit file"
+        cp /usr/local/share/auto-cpufreq/scripts/auto-cpufreq-openrc /etc/init.d/auto-cpufreq
+	echo -e "\n* "Starting auto-cpufreq daemon (openrc) service"
+	rc-service auto-cpufreq start
+
+	echo -e "\n* Enabling auto-cpufreq daemon (openrc) service at boot"
+	rc-update add auto-cpufreqlocal/share/auto-cpufreq/scripts/auto-cpufreq-openrc /etc/init.d/auto-cpufreq
+```
+
+
+I Edited openrc script to be like that and I used this fedora resource in this link that helped me find sysvinit commands https://fedoraproject.org/wiki/SysVinit_to_Systemd_Cheatsheet
+
+For now I didn't test the code 
+
+tell me for any suggestions if needed
+
+I'll see you guys next time</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>I will test in a VM with both init systems</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>nixon87:</strong></p>
+                    <p>I am testing this right now on MX linux 23 Fluxbox 64 bit edition (non systemd) and would like to post my observations from discord (sry for the ad-hoc writing style):
+
+Mh, it seems to work, installation went good, when i started in monitor mode it reminded me to de-install tlp, I did that restarted, now I'm running in live mode, the temperatures are the same with a different monitoring tool, unplugging the power supply gets detected, the setting to use governor is the same like in cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor   from another terminal. The testing laptop is fairly old: Not setting EPP (Not supported by system)  Warning: CPU turbo is not available seem plausible.
+
+However, I get "System has not been booted with systemd as init system (PID 1 ). Can't operate. Failed to connect to bus: PC is not active .... " when starting live or monitor mode, but I ignored that for now.
+
+I see, I have to check if I get it installed permanently.
+
+There seems to be a problem in line 84 at the auto-cpufreq-install script:
+
+echo -e "\n* "Enabling auto-cpufreq daemon (sysvinit) service at boot"
+    chkconfig auto-cpufreq-sysvinit on
+    
+ when running 
+ 
+ sudo auto-cpufreq -- install
+
+   * Turn off bluetooth on boot
+
+   * Deploy auto-cpufreq install script
+
+    * Deplo auto-cpufreq*remove script
+
+There was a problem, couldn't determine GNOME Power Profiles Daemon 
+
+-----------------Running auto-cpufreq daemon install script -------------------------
+/usr/local/bin/auto-cpufreq-install: line 84: syntax error near unexpected token >> ( <<
+/usr/local/bin/auto-cpufreq-install: line 84: echo -e "\n* "Enabling auto-cpufreq daemon (sysvinit) service at boot" '
+
+--------------------- auto-cpufreq daemon installed and runnin--------------------------
+
+....
+I wrote the above by hand from another pc.
+
+
+Thank you for your work on non-systemd compatibility . :)
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>nixon87:</strong></p>
+                    <p>Further investigating: there seems to be at least some trouble with the additional  (")  after "\n 
+from line 78 - 89  
+
+        echo -e "\n* "Reloading sysvinit manager configuration"
+	service auto-cpufreq reload
+ 
+        echo -e "\n* "Starting auto-cpufreq daemon (sysvinit) service"
+        service auto-cpufreq start
+
+        echo -e "\n* "Enabling auto-cpufreq daemon (sysvinit) service at boot"
+	chkconfig auto-cpufreq-sysvinit on
+
+and 
+
+          echo -e "\n* "Starting auto-cpufreq daemon (openrc) service"
+      </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>nixon87:</strong></p>
+                    <p>After deleting the additional " the terminal output says it doesn't know chkconfig which doesn't seem to be used by mx linux fluxbox (not installed).  </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AmerXz:</strong></p>
+                    <p>I'm downloding mx linux on a vm and test the code again , I'm sorry for not giving much time to this pull request .</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AmerXz:</strong></p>
+                    <p>Ok it seems that chkconfig command is deprecated years ago and we should use insteasd sysv-rc-conf it can be found in debian repos https://packages.debian.org/bookworm/sysv-rc-conf
+ 
+source https://askubuntu.com/questions/221293/why-is-chkconfig-no-longer-available-in-ubuntu/277732#277732</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>nixon87:</strong></p>
+                    <p>Alrighty, there are some errors I want to post here besides chkconfig, you might have come across them in your virtual machine:
+
+when running auto-cpufreq --install    (with the changes from above)
+
+I also get these three errors:
+
+mkdir: cannot create folder : "/etc/inittab": file exists already
+
+* Reloading sysvinit manager configuration
+auto-cpufreq: unrecognized service
+
+* starting auto-cpufreq daemon (ssvinit) service
+auto-cpufreq: unrecognized service
+
+Again, thanks for your work :)
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>nixon87:</strong></p>
+                    <p>Just for a heads up: as written in the review  the copying when running auto-cpufreq --install seems to work now. When adding chmod +x /etc/init.d/auto-cpufreq and restart the os the shell script runs as a system service at reboot. But when running auto-cpufreq --stats the daemon doesn't seem to be active. I think it's close to working but sadly I am no expert at all. I guess the sysvinit script needs some revisit and maybe the things pointed out by [shadeyg56](https://github.com/shadeyg56) regarding the daemon removal script. Maybe [shadeyg56](https://github.com/shadeyg56)  can take a look at the state right now?   </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@shadeyg56 could you please take a final look and confirm if it's all working, if it's let's merge this. Thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>nixon87:</strong></p>
+                    <p>As written above I think it's not quite there yet, at least on my machine the auto-cpufreq daemon isn't active. The init system script gets started however (after the suggested changes).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Haven't been able to test in a VM since `sudo auto-cpufreq --install` does not work in VMs so the OS would need to be installed natively. @AmerXz have you tested the changes?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AmerXz:</strong></p>
+                    <p>I did some test to the code and it ran perfectly fine on mx-linux with sysvinit even after reboot , But  I couldn't test it in openrc distro .
+
+I tried to install artix with openrc but the installation was broken so I need another distro or maybe other iso version .</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rakshasha-medhi:</strong></p>
+                    <p>> I did some test to the code and it ran perfectly fine on mx-linux with sysvinit even after reboot , But I couldn't test it in openrc distro .
+> 
+> I tried to install artix with openrc but the installation was broken so I need another distro or maybe other iso version .
+
+Hi, I'm looking to use auto-cpufreq with MX-Linux as well but I still got the same error message in your earlier posts:
+*System has not been booted with systemd as init system (PID 1). Can't operate.
+
+how did you manage to get it work with MX-Linux and sysvinit system? would love to learn more to get this working.
+or is this still undergoing tests? I notice the status is WIP.
+Thanks for the great tool !</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AmerXz:</strong></p>
+                    <p>Did you clone from `patch-2` branch in my fork repo ?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>IIRC @Angel-Karasu recently made some changes to make auto-cpufreq work with MX Linux?
+
+Regardless, @AmerXz if this is anywhere close to merging (if it works) maybe it's good idea to start the review/merge process?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AmerXz:</strong></p>
+                    <p>It works on mx-linux but I didn't test it on openrc distro</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

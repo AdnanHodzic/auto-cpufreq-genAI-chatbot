@@ -1,0 +1,49 @@
+
+        <html>
+        <head>
+            <title>Issue #322: Fix #321, skip hid devices with battery</title>
+        </head>
+        <body>
+            <h1>Fix #321, skip hid devices with battery</h1>
+            <p><strong>Issue #322</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Fix for issue #321 
+
+HID device with battery show up under `/sys/class/power_supply`
+
+`hidpp_battery_0`
+`hidpp_battery_1`
+
+skip devices contain "hid", tested by user and fixes the issue.
+
+I'm not sure if "hid" is too broad match. that's why I will add those names to the list if future errors come up with this, I can refine if needed.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Great stuff, always looking forward to your contributions!
+
+> I'm not sure if "hid" is too broad match. that's why I will add those names to the list if future errors come up with this, I can refine if needed.
+
+For now it's fine, but let's keep an eye on it.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>> Great stuff, always looking forward to your contributions!
+> 
+> > I'm not sure if "hid" is too broad match. that's why I will add those names to the list if future errors come up with this, I can refine if needed.
+> 
+> For now it's fine, but let's keep an eye on it.
+
+I will!</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,175 @@
+
+        <html>
+        <head>
+            <title>Issue #299: Not working properly with Lenovo's battery protection</title>
+        </head>
+        <body>
+            <h1>Not working properly with Lenovo's battery protection</h1>
+            <p><strong>Issue #299</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hi, 
+I noticed when battery protection is active (the battery charges until 60% ) and the laptop is plugged in but not charging the service detects the battery as unplugged and disables the charging governor.
+It would be great if there could be a workaround to use the charging governor and the battery protection at the same time</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Hi,
+
+Yes it would be great, however I don't own one such device so I'm not sure how I would test this. If you're willing to give it a try, please consider [contributing by creating a PR](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>This is probably different per Lenovo device. I'm on a Lenovo laptop which uses the ideapad_laptop kernel module. In conservation mode, it stops charging around 60% but still has the charging status.
+
+What is the model you are using?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>daniandtheweb:</strong></p>
+                    <p>I'm using the same module.
+I should add that right now the behavior came back to being normal even if I hadn't changed any configuration.
+Maybe it has been some package conflicting with the service but right now I'm not being able to replicate it.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>tnagorra:</strong></p>
+                    <p>For me,
+`tlp-stat -b` shows `BAT0` status to be `Idle` but `cat /sys/class/power_supply/BAT0/status` shows `Unknown`
+
+```
+~
+[I] ➜ sudo tlp-stat -b
+--- TLP 1.4.0 --------------------------------------------
+
++++ Battery Care
+Plugin: thinkpad
+Supported features: charge thresholds, recalibration
+Driver usage:
+* natacpi (thinkpad_acpi) = active (charge thresholds)
+* tpacpi-bat (acpi_call)  = active (recalibration)
+Parameter value ranges:
+* START_CHARGE_THRESH_BAT0/1:  0(off)..96(default)..99
+* STOP_CHARGE_THRESH_BAT0/1:   1..100(default)
+
++++ ThinkPad Battery Status: BAT0 (Main / Internal)
+/sys/class/power_supply/BAT0/manufacturer                   = LGC
+/sys/class/power_supply/BAT0/model_name                     = 5B10W51826
+/sys/class/power_supply/BAT0/cycle_count                    =     20
+/sys/class/power_supply/BAT0/energy_full_design             =  50500 [mWh]
+/sys/class/power_supply/BAT0/energy_full                    =  51480 [mWh]
+/sys/class/power_supply/BAT0/energy_now                     =  44580 [mWh]
+/sys/class/power_supply/BAT0/power_now                      =      0 [mW]
+/sys/class/power_supply/BAT0/status                         = Idle
+
+/sys/class/power_supply/BAT0/charge_control_start_threshold =     75 [%]
+/sys/class/power_supply/BAT0/charge_control_end_threshold   =     80 [%]
+tpacpi-bat.BAT0.forceDischarge                              =      0
+
+Charge                                                      =   86.6 [%]
+Capacity                                                    =  101.9 [%]
+
+~
+[I] ➜ cat /sys/class/power_supply/BAT0/status
+Unknown
+~
+[I] ➜ grep . /sys/class/power_supply/B*/status
+Unknown
+~
+[I] ➜ grep . /sys/class/power_supply/A*/online
+1
+```
+
+This commit should have fixed the issue when battery status is not identified.
+https://github.com/AdnanHodzic/auto-cpufreq/commit/897664aa3ddc25c7e538608bc0da31d6fb822086
+
+EDIT: Works for me on version 1.8.0</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Thanks for the info, very helpfull.
+
+I'm looking at the code and I'm thinking of rewriting stuff. Little bit scared because I read alot of issues which seems to have a lot of edge cases.
+
+My idea would be fairly simple. 
+first check if ac is found, if so check online is 0 or 1 to identify powercable. if not found find battery and check  /status for "Discharge" to be on battery otherwise it is on powercable. 
+
+When there is totally nothing in  /sys/class/power_supply/* then set state to powercord because we are probably on a desktop.
+
+@AdnanHodzic what are your thoughts about this.
+
+I think if I apply my logic on the comment above information, i think that should work. 
+
+@tnagorra could maybe give me the output of the following:
+`cat /sys/class/power_supply/A*/type`
+`cat /sys/class/power_supply/B*/type`
+Which I think should return: Mains and Battery. I hope I'm correct.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>I have made some big changes in the battery charging checking code.
+
+Please test this and let me know if it works for you while being on a charger and when you are on battery only.
+It's on the `fix-charging-state` branch of my repo. Which you can checkout as described below.
+
+Make sure you remove the current auto-cpufreq installed on your system.
+
+```
+git clone https://github.com/bobslept/auto-cpufreq.git
+cd auto-cpufreq
+git checkout fix-charging-state
+sudo ./auto-cpufreq-installer --install
+```
+Now auto-cpufreq is installed. You can now use it in live mode to test the fix like this:
+`sudo auto-cpufreq --live`
+
+to remove all this from your system use the remove function from the installer:
+`sudo ./auto-cpufreq-installer --remove`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>tnagorra:</strong></p>
+                    <p>> @tnagorra could maybe give me the output of the following:
+> cat /sys/class/power_supply/A*/type
+> cat /sys/class/power_supply/B*/type
+> Which I think should return: Mains and Battery. I hope I'm correct.
+
+You are correct. They are `Mains` and `Battery`.
+
+```
+[I] ➜ cat /sys/class/power_supply/A*/type
+Mains
+~
+[I] ➜ cat /sys/class/power_supply/B*/type
+Battery
+```
+
+@bobslept your new changes does work on my PC (thinkpad p14s)
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Thank you so much for testing this! This really helps alot.
+We probably need a little bit more people to test this change before we actually merge it into master.
+Thanks again!
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Thanks to @bobslept the proposed changes have now been merged with `master` branch. Changes will be part of the upcoming 1.8.2 release.  
+
+Until the release is made, changes can be installed by either having latest `master` changes and installing them using [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto-cpufreq-installer) or using `beta` channel of Snap package (`sudo snap install auto-cpufreq --beta`). With that said I'm closing this issue, please re-open it if the issue persists.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

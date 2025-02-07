@@ -1,0 +1,153 @@
+
+        <html>
+        <head>
+            <title>Issue #465: FileNotFoundError: [Errno 2] No such file or directory: '/usr/share/auto-cpufreq/scripts/auto-cpufreq-install.sh'</title>
+        </head>
+        <body>
+            <h1>FileNotFoundError: [Errno 2] No such file or directory: '/usr/share/auto-cpufreq/scripts/auto-cpufreq-install.sh'</h1>
+            <p><strong>Issue #465</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+### Error output:
+```text
+╰─➤  sudo auto-cpufreq --config ~/Desktop/auto-cpufreq.conf 
+
+--------------------- Deploying auto-cpufreq as a daemon ----------------------
+
+* Turn off bluetooth on boot
+
+* Deploy auto-cpufreq install script
+Traceback (most recent call last):
+  File "/usr/bin/auto-cpufreq", line 226, in <module>
+    main()
+  File "/usr/lib/python3.10/site-packages/click/core.py", line 1130, in __call__
+    return self.main(*args, **kwargs)
+  File "/usr/lib/python3.10/site-packages/click/core.py", line 1055, in main
+    rv = self.invoke(ctx)
+  File "/usr/lib/python3.10/site-packages/click/core.py", line 1404, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/usr/lib/python3.10/site-packages/click/core.py", line 760, in invoke
+    return __callback(*args, **kwargs)
+  File "/usr/bin/auto-cpufreq", line 203, in main
+    deploy_daemon()
+  File "/usr/lib/python3.10/site-packages/auto_cpufreq/core.py", line 357, in deploy_daemon
+    shutil.copy(SCRIPTS_DIR / "auto-cpufreq-install.sh", "/usr/bin/auto-cpufreq-install")
+  File "/usr/lib/python3.10/shutil.py", line 417, in copy
+    copyfile(src, dst, follow_symlinks=follow_symlinks)
+  File "/usr/lib/python3.10/shutil.py", line 254, in copyfile
+    with open(src, 'rb') as fsrc:
+FileNotFoundError: [Errno 2] No such file or directory: '/usr/share/auto-cpufreq/scripts/auto-cpufreq-install.sh'
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+╰─➤  sudo auto-cpufreq --debug                                                                                                                                                                                                            1 ↵
+
+Using settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux rolling n/a
+Linux kernel: 6.0.11-arch1-1
+Processor: AMD Ryzen 5 5600H with Radeon Graphics
+Cores: 12
+Architecture: x86_64
+Driver: amd-pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3301 MHz
+CPU min frequency: 400 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0:     3.0%     52 °C     3266 MHz
+CPU1:     2.0%     52 °C     3287 MHz
+CPU2:     2.0%     52 °C     3268 MHz
+CPU3:     2.0%     52 °C     3301 MHz
+CPU4:     0.0%     52 °C     3301 MHz
+CPU5:     0.0%     52 °C     3146 MHz
+CPU6:     6.7%     52 °C     3773 MHz
+CPU7:     1.0%     52 °C     3301 MHz
+CPU8:     7.0%     52 °C     3269 MHz
+CPU9:     1.0%     52 °C     3868 MHz
+CPU10:    3.9%     52 °C     3297 MHz
+CPU11:    4.0%     52 °C     3392 MHz
+
+CPU fan speed: 2227 RPM
+
+auto-cpufreq version: Version         : 1.9.7-1
+
+Python: 3.10.8
+psutil package: 5.9.4
+platform package: 1.0.8
+click package: 8.1.3
+distro package: 1.8.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.16 %
+
+Total CPU usage: 2.1 %
+Total system load: 0.36
+Average temp. of all cores: 52.00 °C 
+
+Currently using: performance governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+---
+Settings in the default config (`/etc/auto-cpufreq.conf`) are not being applied and when trying to use the `--config` parameter that error gets thrown. The file on my desktop as well as the file at the default location both have the example config from the readme.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@abvee it seems like this is something missing as part of changes made to installer as part of #459. Please correct me if I'm wrong.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ItsLiyua:</strong></p>
+                    <p>nevermind I was just being an idiot and forgot to uncomment the lines containing the frequency settings.
+
+I don't know what the problem with the `--config` option is but the default config loads fine. Thank you for your quick reply.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>abvee:</strong></p>
+                    <p>> 
+
+This seems to be an issue before my PRs..... I think the path in `auto-cpufreq` itself is wrong ??? 
+
+I reverted to a state before my PRs were made and the `install` function in the installer put the `scripts` directory in `/usr/local/share/auto-cpufreq`.
+
+I went back even further.... to about September 2020, and the installer still puts the scripts in `/usr/local/share/auto-cpufreq`, but the actual python script seems to be looking at `/usr/share/auto-cpufreq`
+
+This bug with `--config` seems to have been around for a long time. Also, the `scripts` folder seems to be completely untracked. The `remove` function in the installer doesn't remove the folder, and I still have to check if `auto-cpufreq --remove` removes it either.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,59 @@
+
+        <html>
+        <head>
+            <title>Pull Request #66: added issue template</title>
+        </head>
+        <body>
+            <h1>added issue template</h1>
+            <p><strong>Pull Request #66</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p></p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Great, stuff.
+
+Just so you are aware where I was going with this. For issues, I was planning to implement similar/same feature to "debug" option I created for [displaylink-debian tool.](https://github.com/AdnanHodzic/displaylink-debian).
+
+This way whoever was about to report an issue could run `auto-cpufreq --debug` and include useful info to the bug report, i.e: sys info, governors, etc ...</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>We can add `inxi` as deps and call `inxi -Fz` on `--debug`
+How do u think? </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I think it's a great for now. It (`inxi`) has everything we need, except maybe the available governors. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>Yeah governors would be nice to show.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>and useful, as I think a lot of source issues could relate to this. Maybe a mix of `inxi` and `auto-cpufreq` output only showing governor info?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>So, we can add `inxi` as a deps, and then implement `--debug` option to format output with governors</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Sounds good to me.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

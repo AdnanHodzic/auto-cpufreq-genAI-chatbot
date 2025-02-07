@@ -1,0 +1,133 @@
+
+        <html>
+        <head>
+            <title>Pull Request #329: Started the solution to Snap and PopOS not working</title>
+        </head>
+        <body>
+            <h1>Started the solution to Snap and PopOS not working</h1>
+            <p><strong>Pull Request #329</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Addresses issue #323 
+
+Needs Snap detection on line 102/103
+
+This code does NOT function properly unless that detection added
+
+Added ability for the program to resume if the PopOS fix works</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Isn't it a snap only issue? After reading this comment from #240
+> I got this error too when installing from Snap on Pop!OS 21.04. I was able to work around by installing with [git instead](https://github.com/AdnanHodzic/auto-cpufreq#auto-cpufreq-installer).
+
+I've installed a VM with PopOS and the `distro` package from a python shell works just fine without changes.
+If so it would be lot easier. On permission denied, detect file exists, detect snap, print solution.
+
+Or just, permission denied, detect snap, if PopOS print solution and otherwise print open issue on github.
+
+I think snap detection is like this:
+```
+if os.getenv("PKG_MARKER") == "SNAP":
+   # we are in snap package
+```
+
+**I verified that this is only a snap issue because installing using the git installer does not have this problem**
+So in the end, it's just the snap package that doesn't like the softlink from PopOS.
+
+I think something like this will be enough:
+```
+except PermissionError:
+    # Current work-around for Pop!_OS where symlink causes permission issues
+    print("[!] Warning: Cannot get distro name")
+    if os.path.exists("/etc/pop-os/os-release"):
+            # Check if using a Snap 
+            if os.getenv("PKG_MARKER") == "SNAP":
+                print("[!] Snap install on PopOS detected, you must manually run the following" 
+                        " commands in another terminal:\n")            
+                print("[!] Backup the /etc/os-release file:")
+                print("sudo mv /etc/os-release /etc/os-release-backup\n")                
+                print("[!] Create hardlink to /etc/os-release:")
+                print("sudo ln /etc/pop-os/os-release /etc/os-release\n")            
+                print("[!] Aborting. Restart auto-cpufreq when you created the hardlink")
+                sys.exit(1)
+            else:
+                # This should not be the case. But better be sure.
+                print("[!] Check /etc/os-release permissions and make sure it is not a symbolic link")
+                print("[!] Aborting...")
+                sys.exit(1)
+
+    else:
+        print("[!] Check /etc/os-release permissions and make sure it is not a symbolic link")
+        print("[!] Aborting...")
+        sys.exit(1)
+```
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>emilyastranova:</strong></p>
+                    <p>I have implemented those changes :+1: </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Just build 1.9.0 Snap from your repo, works like charm! :tada: 
+Thank you, great work! 
+
+```
+beep@pop-os:~/auto-cpufreq-snap$ sudo auto-cpufreq --monitor
+[!] Warning: Cannot get distro name
+[!] Snap install on PopOS detected, you must manually run the following commands in another terminal:
+ 
+[!] Backup the /etc/os-release file:
+sudo mv /etc/os-release /etc/os-release-backup
+ 
+[!] Create hardlink to /etc/os-release:
+sudo ln /etc/pop-os/os-release /etc/os-release
+ 
+[!] Aborting. Restart auto-cpufreq when you created the hardlink
+beep@pop-os:~/auto-cpufreq-snap$ sudo mv /etc/os-release /etc/os-release-backup
+beep@pop-os:~/auto-cpufreq-snap$ sudo ln /etc/pop-os/os-release /etc/os-release
+beep@pop-os:~/auto-cpufreq-snap$ sudo auto-cpufreq --monitor
+ 
+Note: You can quit monitor mode by pressing "ctrl+c"
+
+-snip-
+ 
+-------------------------------------------------------------------------------
+ 
+Linux distro: Pop!_OS 20.04 LTS
+Linux kernel: 5.15.5-76051505-generic
+```
+The same snap on Ubuntu runs just without the warning message. I think it's just perfect.
+
+Let's see what @AdnanHodzic thinks of it.
+
+If go this route, lets not forget to remove these lines:
+https://github.com/AdnanHodzic/auto-cpufreq/blob/5332dffdb75568885483a92c6f2ec43a1093b59e/snap/snapcraft.yaml#L44-L52</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I also think it's perfect! Great job @tyleraharrison and as always thank @bobslept for the assistance in review process :slightly_smiling_face: 
+
+> If go this route, lets not forget to remove these lines:
+> 
+> https://github.com/AdnanHodzic/auto-cpufreq/blob/5332dffdb75568885483a92c6f2ec43a1093b59e/snap/snapcraft.yaml#L44-L52
+
+I'll give Canonical folks few more days, but if it's not approved in few days when I'm doing a new release I'll take care of removing these lines.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Changes live as part of [v1.9.0 release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

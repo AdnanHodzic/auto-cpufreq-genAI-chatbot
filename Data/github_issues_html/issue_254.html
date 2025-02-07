@@ -1,0 +1,84 @@
+
+        <html>
+        <head>
+            <title>Issue #254: What does it do better than TLP?</title>
+        </head>
+        <body>
+            <h1>What does it do better than TLP?</h1>
+            <p><strong>Issue #254</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Morning!
+
+Thank you for creating auto-cpufreq.
+I have a question though: what does it do?
+
+I've understood that it does something related to automatic tuning of the cpu performance governors and turbo boost. I've understood that auto-cpufrequ is supposed to improve cpu life and performance and that it's supposed to be an improvement over TLP because it fixes some of the problems of TLP.
+
+How does it do this? What are the problems present in TLP that are not present in auto-cpufreq? What tradeoffs where chosen? Simply enabling turbo boost would trade off battery life for performance, but this project claims both battery life and performance are enhanced. How is this achieved?</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Hi @koraa did you take a look at [Youtube demo of auto-cpufreq](https://www.youtube.com/watch?v=QkYRpVEEIlg)? I believe it at least answers questions on how it works. Let me know what questions remain after you've seen the video.
+
+Also, please refer to [auto-cpufreq – Automatic CPU speed & power optimizer for Linux](https://foolcontrol.org/?p=3124) blog post, as this also gives some idea on why this project was started. Hint, not being with TLP was one of them.
+
+Thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>koraa:</strong></p>
+                    <p>I have watched the video and red the blog post. I am still wondering what this packages does better than tlp…I was quite successful at enabling turbo boost by setting
+
+```sh
+CPU_BOOST_ON_AC=1
+CPU_BOOST_ON_BAT=1
+```
+
+Also isn't it reccomended nowdays to just leave on the performance scheduler and let intel_pstate do it's thing.
+
+Also why does this package install a ttf font oO</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Rabcor:</strong></p>
+                    <p>> I have watched the video and red the blog post. I am still wondering what this packages does better than tlp…I was quite successful at enabling turbo boost by setting
+> 
+> ```shell
+> CPU_BOOST_ON_AC=1
+> CPU_BOOST_ON_BAT=1
+> ```
+> 
+> Also isn't it reccomended nowdays to just leave on the performance scheduler and let intel_pstate do it's thing.
+> 
+> Also why does this package install a ttf font oO
+
+TL;DR: auto-cpufreq gives you the best of both worlds when it comes to powersaving and performance whereas TLP only gives you one or the other, and it's not as buggy as TLP.
+
+TLP is a buggy mess, in my case one setting actually doubled my power draw instead of reducing it like it should and half the settings didn't work. This includes the one you refer to, even if CPU_BOOST_ON_AC/BAT were set to 0 it never actually disabled boost,just disabling boost gives me up to 10w of power saving (this is under low load conditions where boost wouldn't even be useful anyways!·
+
+auto-cpufreq toggles boost on and off automaticaly depending on load, .e.g. you have boost when you would benefit from it, but when you wouldn't you get to save power, it's all automated, which is great.
+
+I've tested using TLP vs using auto-cpufreq for power saving, and what i've found is that my power savings are the same if i configure auto-cpufreq to use the powersave govrnor as they were on TLP using a whole bunch of settings.
+
+As for leaving things on the performance governor and letting intel_pstate handle everything, i mean, that's probably fine for most people but if every watt matters (like it tends to on battery) this is less efficient thatn using the powersave governor, for me I saw about a 3W difference. under low loads.
+
+I didn't really test much under higher loads though, but there you have it.
+
+As for using intel_pstate vs acpi_cpufreq (the latter of which allows auto-cpufreq to control the cpu frequencies and lower them when not under load) I didn't actually see any powersaving difference on my wattmeter. But just because I didn't doesn't mean there wouldn't be for others.
+
+laptop models and desktop builds are vastly different and for reasons often inexplicable to us consumers, for some rigs certain settings will save you power while on others those same settings would drive up power draw, which is why it's important to have this option, because i wouldn't be surprised if there would be quite a few setups that would benefit greatly from this (since after all intel_pstate doesn't actually seem to lower frequencies at all)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing the issue due to inactivity, and suggesting to move it to [Discussion](https://github.com/AdnanHodzic/auto-cpufreq/discussions).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

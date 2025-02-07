@@ -1,0 +1,56 @@
+
+        <html>
+        <head>
+            <title>Issue #132: [Feature] Watch CPU frequency in near real time.</title>
+        </head>
+        <body>
+            <h1>[Feature] Watch CPU frequency in near real time.</h1>
+            <p><strong>Issue #132</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>This is not an issue, I just want to share this code snippet for monitoring CPU frequency in almost realtime. I use auto-cpufreq on all my Linux devices, even desktops and it is always nice to see if it is working properly or not. Note: I found this code months ago and unfortunately I don't know whom to give credit. 
+
+Just run this command from the terminal
+`watch -n.1 "cat /proc/cpuinfo | grep \"^[c]pu MHz\""`</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I use auto-cpufreq on all my Linux devices, even desktops and it is always nice to see if it is working properly or not
+
+Glad to hear this!
+
+In that case I'm marking this as a [request]. I think this feature would be perfectly implemented as part of what's requested in #87 
+
+I don't know when I'll have time to implement this feature, so if you're up and know bit of Python please make the changes yourself and submit a PR. I'll be glad to do the code review. 
+
+If anything you'll be given credit as [part of Releases](https://github.com/AdnanHodzic/auto-cpufreq/releases) :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>netikras:</strong></p>
+                    <p>Two things to consider:
+1. cat + grep -- that's unnecessary. Especially when grep can easily do what cat does -- read a file. Just do `grep <pattern> <file>`
+2. Current refresh rate is what, 4 seconds? Tuning it down to 0.1 second would mean that auto-cpufreq will utilize 40x more CPU resources. This makes it possible for auto-cpufreq itself to cause high CPU usage and switch to Performance mode, meaning the governor will always be at Performance, even when the computer is idling. This risk is especially worrying in smaller, older computers, esp. single-core ones w/o HT.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Tat's an excellent point @netikras and same conclusion I came to when I was thinking about this last time. Definitely something to keep on mind if we go forward with implementation of one this feature request.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>In [latest release 1.9.4,](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.9.4) changes have been made where auto-cpufreq will refresh frequencies in (near) real time and counter has been removed.
+
+Refresh rate is still around every 3-4 seconds, as through my analysis and testing anything below this timeframe will only cause tool to use unnecessary amount of resources, which would defeat purpose of this tool.
+
+With that said I'll close this feature request.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

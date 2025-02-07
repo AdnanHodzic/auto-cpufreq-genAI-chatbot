@@ -1,0 +1,176 @@
+
+        <html>
+        <head>
+            <title>Pull Request #719: Issue #698: Add --fullcharge flag to set battery thresholds to max</title>
+        </head>
+        <body>
+            <h1>Issue #698: Add --fullcharge flag to set battery thresholds to max</h1>
+            <p><strong>Pull Request #719</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>This pull request closes [Issue #698](https://github.com/AdnanHodzic/auto-cpufreq/issues/698). It adds a `--fullcharge` flag to the auto-cpufreq command. For the`thinkpad`, `ideapad_acpi`, and `ideapad_laptop` interfaces, this sets the charge thresholds to 98 and 99 for start and end respectively to allow for a full charge if you are using very low thresholds for battery longevity. The command only runs if default thresholds are set in a config which then will be set back on the next reboot of the laptop.
+
+ps. This is one of my first very first contributions to any open source project, but it's something that I was looking for in a piece of software that I rely on daily. (without auto-cpufreq I wouldn't be able to use my laptop off of a charger at all so thank you for creating this lol) Any feedback about anything being wrong, "unsafe", missing, or things I could improve would be greatly appreciated. </p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Love it! Besides this being an useful feature that I will also use. 
+
+It's great to hear this is your very first contribution, after the changes are merged you'll be credited for your work as part of the [upcoming release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+In PR description instead of "This pull request is for #698"  I'd rephrase it it "This pull request `Closes #698`", this way when the changes are merged #698 will be automatically closed.
+
+From code POV, it LGTM, and I tested the changes and they work as intended.
+
+Only request I have is that you also update the README and since this is a new flag add it [under auto-cpufreq modes and options section](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#auto-cpufreq-modes-and-options).
+
+Also it's a good idea to rephrase: "Use `auto-cpufreq --fullcharge` to temporarily set thresholds 99" line to something like "Use `auto-cpufreq --fullcharge` to temporary fully charge the battery if [Battery charging thresholds](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#battery-charging-thresholds) are used. Option will only be valid until reboot"
+
+But then I'd also reference `--fullcharge` flag to its description in modes part saying something like:
+
+"Use `auto-cpufreq --fullcharge` to temporarily (until reboot) fully charge battery in case [battery charging thresholds](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#battery-charging-thresholds) are used"
+
+instead of: 
+
+"Use `auto-cpufreq --fullcharge` to temporarily set thresholds 99" for the flag description when --help is run.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I've also noticed something weird and potentially very concerning/serious bug. After I set following as part of my auto-cpufreq.conf file to test this PR:
+
+```
+# battery charging threshold
+# reference: https://github.com/AdnanHodzic/auto-cpufreq/#battery-charging-thresholds
+enable_thresholds = true
+#start_threshold = 20
+stop_threshold = 90
+```
+
+and then using `sudo auto-cpufreq --fullcharge`
+
+My battery would charge to 100%, but after reboot I noticed that even after commenting out battery threshold section as part of config file, i.e:
+
+```
+# battery charging threshold
+# reference: https://github.com/AdnanHodzic/auto-cpufreq/#battery-charging-thresholds
+#enable_thresholds = true
+#start_threshold = 20
+#stop_threshold = 90
+```
+
+My battery would not charge to 100% anymore, i.e:
+
+```
+-------------------------------- Battery Info ---------------------------------
+
+battery count = 1
+BAT0 start threshold = 0
+BAT0 start threshold = 90
+```
+
+The way I fixed this problem was by setting config file to:
+
+```
+# battery charging threshold
+# reference: https://github.com/AdnanHodzic/auto-cpufreq/#battery-charging-thresholds
+enable_thresholds = true
+#start_threshold = 20
+stop_threshold = 100  
+```
+
+Then used fullcharge flag:
+
+```
+sudo auto-cpufreq --fullcharge
+
+-------------------------------- Battery Info ---------------------------------
+
+battery count = 1
+BAT0 start threshold = 98
+BAT0 start threshold = 99
+```
+
+and after disabling back threshold settings in config file, i.e:
+
+```
+# battery charging threshold
+# reference: https://github.com/AdnanHodzic/auto-cpufreq/#battery-charging-thresholds
+#enable_thresholds = true                                                                                               
+#start_threshold = 20
+#stop_threshold = 100
+```
+
+Battery would charge back to 100%. So in this way, using `auto-cpufreq --fullcharge` would **permanently** set battery charging which is not something we want.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lukasnxyz:</strong></p>
+                    <p>Interesting, I don't think I had this issue, but I'll try to reproduce it. Maybe it has something to do with reloading the config file on boot. I think a better way to handle this would be to make sure that `start_threshold`, `end_threshold`, and `enable_thresholds` are set to ensure that they can revert back. I'll look into this more and get back to it as well as your previous comment.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lukasnxyz:</strong></p>
+                    <p>Hi @AdnanHodzic, completely forgot about this pull request lol. Anyways I can't seem to reproduce your error. I've added a check to make sure that auto-cpufreq has defaults to load up again on restart and they work fine on my machine (Thinkpad T14s Gen 3, Ubuntu 24.04 LTS). The check looks something like this:
+```python
+
+def fullcharge_thresholds(config):
+    if config.config_thresholds_are_set():
+        if lsmod("thinkpad_acpi"): thinkpad_set_threshold_fullcharge()
+        else: return
+    else:
+        print("ERROR:\n\nTo run auto-cpufreq, you must have default battery thresholds in your config enabled!")
+        footer()
+        exit(1)
+```
+```python
+    # can't import footer (would be circular dependency)
+    def config_thresholds_are_set(self):
+        reqs = ["enable_thresholds", "start_threshold", "stop_threshold"]
+        if self._config.has_section("battery"):
+            for r in reqs:
+                try: self._config["battery"][r]
+                except KeyError:
+                    print("ERROR:\n\n" + r + "has not been set in your config!")
+                    #footer()
+                    return False
+            return True
+        else:
+            print("ERROR:\n\n No config file found!")
+            #footer()
+            return False
+```
+and it just checks if there's a config and if thresholds are enabled and defined. Here's the new branch I've opened: https://github.com/lukasnxyz/auto-cpufreq/tree/th_toggle
+
+Also you said that after reboot, your laptop would not charge back to 100%, but that's kind of the point, that it resets after reboot. My idea was: I'm working at home and have stop threshold set to 80 to preserve battery life, but I know I have to go to Uni in a bit and spend the day there and would like my full battery capacity. So I just run --fullcharge, get to 99% and am set. Then shutdown laptop at night and the morning thresholds are back to my preferred ones for preserving battery longevity. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Sorry for taking such long time to review these changes as in meantime person who implemented this functionality, said how [he doesn't have time to main it any further](https://discord.com/channels/1158239366251020361/1158239367337349164/1279513754085621822). 
+
+With battery threshold issues being raised on [both Discord](https://discord.com/channels/1158239366251020361/1158252850841919498/1298326400738132008) and [Github issues](https://github.com/AdnanHodzic/auto-cpufreq/issues/741).
+
+With all this said, I'm considering dropping battery threshold feature since no one is there to maintain it. Hence, since you created a PR for this feature, would you be interested in taking look at some of these issues so this feature is not dropped? As otherwise it won't make sense to merge these changes.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lukasnxyz:</strong></p>
+                    <p>No problem,
+
+yes I'd be willing to step in. I have a Thinkpad which I can test on, but no Ideapad. You want to discuss further on discord?
+https://discordapp.com/users/558360539323957248</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Sure, btw I have an IdeaPad we could test the changes on.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

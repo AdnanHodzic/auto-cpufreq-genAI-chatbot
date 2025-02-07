@@ -1,0 +1,237 @@
+
+        <html>
+        <head>
+            <title>Issue #603: after installing auto-cpufreq --install it tells me that the daemon is not running and that I should install</title>
+        </head>
+        <body>
+            <h1>after installing auto-cpufreq --install it tells me that the daemon is not running and that I should install</h1>
+            <p><strong>Issue #603</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? Yes
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)? No
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)? Yes
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)? Yes
+
+### Error output:
+```text
+everi3 ~ → sudo auto-cpufreq --install
+[sudo] password for everi3:
+
+--------------------- Deploying auto-cpufreq as a daemon ----------------------
+
+* Turn off bluetooth on boot
+
+* Deploy auto-cpufreq install script
+
+* Deploy auto-cpufreq remove script
+There was a problem, couldn't determine GNOME Power Profiles Daemon
+
+------------------ Running auto-cpufreq daemon install script ------------------
+
+* Deploy auto-cpufreq systemd unit file
+
+* Reloading systemd manager configuration
+
+* Stopping auto-cpufreq daemon (systemd) service
+
+* Starting auto-cpufreq daemon (systemd) service
+
+* Enabling auto-cpufreq daemon (systemd) service at boot
+
+----------------- auto-cpufreq daemon installed and running -----------------
+
+To view live stats, run:
+auto-cpufreq --stats
+
+To disable and remove auto-cpufreq daemon, run:
+sudo auto-cpufreq --remove
+
+-------------------------------------------------------------------------------
+
+everi3 ~ → auto-cpufreq --stats
+
+------------------------ auto-cpufreq not running ------------------------------
+
+ERROR: auto-cpufreq is not running in daemon mode.
+
+Make sure to run "sudo auto-cpufreq --install" first
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+everi3 ~ → sudo auto-cpufreq --debug
+
+Using settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------------------------------------------------------
+
+Linux distro: EndeavourOS rolling rolling
+Linux kernel: 6.1.62-1-lts
+Processor: AMD Ryzen 7 6800HS Creator Edition
+Cores: 16
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3200 MHz
+CPU min frequency: 1600 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      0.0%        35 °C      3200 MHz
+CPU1      0.0%        35 °C      2107 MHz
+CPU2      0.0%        35 °C      4741 MHz
+CPU3      0.0%        35 °C      3200 MHz
+CPU4      0.0%        35 °C      3874 MHz
+CPU5      0.0%        35 °C      3200 MHz
+CPU6      1.0%        35 °C      3200 MHz
+CPU7      0.0%        35 °C      3200 MHz
+CPU8      0.0%        35 °C      3200 MHz
+CPU9      0.0%        35 °C      2021 MHz
+CPU10      0.0%        35 °C      1977 MHz
+CPU11      2.0%        35 °C      1571 MHz
+CPU12      2.0%        35 °C      3200 MHz
+CPU13      0.0%        35 °C      3200 MHz
+CPU14      1.0%        35 °C      1480 MHz
+CPU15      0.0%        35 °C      3200 MHz
+
+auto-cpufreq version: 2.0.0 (git: 15c17fc)
+
+Python: 3.11.5
+psutil package: 5.9.6
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.8.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.21 %
+
+Total CPU usage: 0.3 %
+Total system load: 0.22
+Average temp. of all cores: 35.00 °C
+
+Currently using: performance governor
+Currently turbo boost is: on
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+---
+Hello, I am trying to use auto-cpufreq on a Lenovo Yoga Slim 7 Pro with AMD Ryzen 6800HS laptop. I downloaded it from the github and followed to instructions to install it. I have also created a config file to set custom values. This is how my config file looks. 
+
+```
+# settings for when connected to a power source
+[charger]
+# see available governors by running: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+# preferred governor
+governor = performance
+
+# minimum cpu frequency (in kHz)
+# example: for 800 MHz = 800000 kHz --> scaling_min_freq = 800000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly
+scaling_min_freq = 1600000
+
+# maximum cpu frequency (in kHz)
+# example: for 1GHz = 1000 MHz = 1000000 kHz -> scaling_max_freq = 1000000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly
+scaling_max_freq = 32000000
+
+# turbo boost setting. possible values: always, auto, never
+turbo = always
+
+# settings for when using battery power
+[battery]
+# see available governors by running: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+# preferred governor
+governor = powersave
+
+# minimum cpu frequency (in kHz)
+# example: for 800 MHz = 800000 kHz --> scaling_min_freq = 800000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly
+scaling_min_freq = 1600000
+
+# maximum cpu frequency (in kHz)
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# example: for 1GHz = 1000 MHz = 1000000 kHz -> scaling_max_freq = 1000000
+# to use this feature, uncomment the following line and set the value accordingly
+# scaling_max_freq = 16000000
+
+# turbo boost setting (always, auto, or never)
+turbo = never
+
+```
+When I reboot my computer, and use "auto-cpufreq --stats" command or "auto-cpufreq --force=powersave" , it tells me that auto--cpufreq daemon is not running and that I have to install it. I tried the installation command 2-3 times already always resulting on the same output that I showed above. Using this command "sudo systemctl enable --now auto-cpufreq.service" makes it work for the active session but when I reboot I have to do this again. It kind of works because it is able to limit my cpu to 1600 mhz and 3200 mhz, but yes, the daemon is not running and I have to always manually renable like this. 
+
+I had tried power-profiles-daemon and TLP earlier, and I uninstalled them before installing auto-cpufreq, but since I am a noob and I don't know the advanced ways, I tried to enable powerprofilesdaemon and tlp with the systemctl, the way they indicate in their documentation and it says that the service is not found, so i assume that they are uninstalled correctly. 
+
+As an extra, I use the echo command to disable cpu cores when I want such as this:
+
+```
+echo 0 > /sys/devices/system/cpu/cpu6/online 
+echo 0 > /sys/devices/system/cpu/cpu7/online
+echo 0 > /sys/devices/system/cpu/cpu8/online
+echo 0 > /sys/devices/system/cpu/cpu9/online
+echo 0 > /sys/devices/system/cpu/cpu10/online
+echo 0 > /sys/devices/system/cpu/cpu11/online
+echo 0 > /sys/devices/system/cpu/cpu12/online
+echo 0 > /sys/devices/system/cpu/cpu13/online
+echo 0 > /sys/devices/system/cpu/cpu14/online
+echo 0 > /sys/devices/system/cpu/cpu15/online
+
+```
+
+ but i don't think that it would cause the issue? I tried looking at the troubleshootings and the opened threads but could not see this error, could someone help me indicate to the correct path to solve this? thank you!
+
+FIXED IT: Hello, sorry for disturbing you with my useless question but I fixed it. When I was using auto-cpufreq --stats I saw that it was giving me an error saying that the set max cpu frequency for performance mode was not on the permitted range. I had put it to 320000 mhz (the max frequency without turbo boost) and then I changed it to the speed of the frequency and it works.) So I can not change the max frequency on the permitted frequency values? on my /sys/../cpu_freq for the available frequency it lists:
+1600000 1800000 320000 
+values. I wanted to share this for someone else having the same problem like me. Cheers.
+
+*EDIT 2:* I also found out that when I reboot my computer, it works correctly now, starting the daemon..etc. But then when I disable some cores, and run "auto-cpufreq --stats" it tells me that auto-cpufreq is not installed. So most probably, disabling cores is messing some stuff. But the good thing is that the settings that I set with the auto-cpufreq keeps working. Like on my powersave mode, I limit the cpu frequency to 1600000 hz and even if it tells me that auto-cpufreq is not running, when I launch a small render on Blender, the cpus do not go higher than 1600000 hz.  
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>danu9622:</strong></p>
+                    <p>run the folowing
+sudo auto-cpufreq --install</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Since you installed it using auto-cpufreq-installer, try removing it `sudo ./auto-cpufreq-installer --remove`, this will remove auto-cpufreq binary as well remove daemon if running.
+
+After that make sure there no running auto-cpufreq processes, i.e: `ps -ef | grep auto-cpufreq`, if there are make sure to stop them.
+
+Then re-install `sudo ./auto-cpufreq-installer --install` & `sudo auto-cpufreq --install`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Looks like the OP edited their original message that they resolved the issue however
+> But then when I disable some cores, and run "auto-cpufreq --stats" it tells me that auto-cpufreq is not installed. So most probably, disabling cores is messing some stuff.
+
+This is a bug I was able to reproduce. Disabling any core causes the daemon to crash. I'm going to close this one and open a new issue addressing this, Thanks to OP for discovering this</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,140 @@
+
+        <html>
+        <head>
+            <title>Issue #46: /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_preference</title>
+        </head>
+        <body>
+            <h1>/sys/devices/system/cpu/cpu0/cpufreq/energy_performance_preference</h1>
+            <p><strong>Issue #46</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hi!
+Got error when use 
+`sudo auto-cpufreq --live`
+
+> Setting to use "performance" governor
+> /usr/bin/cpufreqctl: row 267: /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_preference: Access denied
+> /usr/bin/cpufreqctl: row 267: /sys/devices/system/cpu/cpu1/cpufreq/energy_performance_preference: Access denied
+> /usr/bin/cpufreqctl: row 267: /sys/devices/system/cpu/cpu2/cpufreq/energy_performance_preference: Access denied
+> /usr/bin/cpufreqctl: row 267: /sys/devices/system/cpu/cpu3/cpufreq/energy_performance_preference: Access denied
+
+I check that files and they doesn't exist....
+Ubuntu 18.04.4
+
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Did you use `auto-cpufreq-installer` to install or did you the `snap`?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>volnes:</strong></p>
+                    <p>> auto-cpufreq-installer
+
+this</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@validatedev any idea on this one? Seems to be related to [latest changes to `cpufreqctl` file.](https://github.com/AdnanHodzic/auto-cpufreq/pull/45)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>validatedev:</strong></p>
+                    <p>@AdnanHodzic Will look at it asap.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>validatedev:</strong></p>
+                    <p>@volnes Could you have a chance for letting the CPU model to us please?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>volnes:</strong></p>
+                    <p>Intel i5-2540M @ 3.300GHz</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>validatedev:</strong></p>
+                    <p>I suspect that older CPU's are not support EPP, which is Intel SpeedShift on Windows. Making some changes and let you try @volnes </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>validatedev:</strong></p>
+                    <p>I wanna sure about the absence of the parameters, @volnes could you try `cat /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_available_preferences` please?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>volnes:</strong></p>
+                    <p>> cat /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_available_preferences
+
+as i say early, there no such file...
+
+![image](https://user-images.githubusercontent.com/5400851/77457360-9d3ef300-6e0d-11ea-8b2c-952bb1388e46.png)
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@validatedev perhaps the simplest thing to do (altough it's bit of a hack), would be to add a file check for:
+
+- `/sys/devices/system/cpu/cpu*/cpufreq/energy_performance_preference`
+- `/sys/devices/system/cpu/cpu*/cpufreq/energy_performance_available_preferences`
+
+If one of the  files isn't there simply skip run of `s.run("cpufreqctl --epp --set=balance_power", shell=True) ` in `core.py`.
+
+Unless you have some other more elegant solution :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>validatedev:</strong></p>
+                    <p>@AdnanHodzic yeah that's what I'm doing right now :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>:+1: looking forward to PR then :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>validatedev:</strong></p>
+                    <p>@volnes 
+Could you try https://github.com/validatedev/auto-cpufreq/tree/fix-conflict-with-TLP because I want to sure about my fix is working, then I'll PR that.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>volnes:</strong></p>
+                    <p>@validatedev 
+![image](https://user-images.githubusercontent.com/5400851/77460221-de390680-6e11-11ea-8b3b-4f069761309e.png)
+i think all ok, no errors</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@validatedev I made some comments as there are code conflicts in #47 
+
+Could you please look into them as I'd like to merge these changes ASAP as it's a serious bug and I want to release new version of snap including these changes as well.
+
+Thanks</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@volnes problem has been fixed as part of #48 PR. Please pull the latest changes and re-install the tool. 
+
+Please feel free to re-open the issue if you're still experiencing the same issue.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>volnes:</strong></p>
+                    <p>@AdnanHodzic @validatedev  yes i updated to latest, problem fixed, thanks guys for your work</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

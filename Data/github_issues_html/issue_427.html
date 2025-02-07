@@ -1,0 +1,42 @@
+
+        <html>
+        <head>
+            <title>Issue #427: Could it offer the sleep mode for a period of inactive operation ?</title>
+        </head>
+        <body>
+            <h1>Could it offer the sleep mode for a period of inactive operation ?</h1>
+            <p><strong>Issue #427</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>As above, if the laptop is inactive for 5 minutes, is there any operation that could let the machine move into suspend mode actomaticlly, like tlp do it similarly?
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>It does do this. Idea is for auto-cpufreq not to interfere into Linux/kernel doing the heavy lifting. auto-cpufreq will set the right governor/frequency during the idle time, cores will go to their minimum and device will go to suspend if that's what it's configured to do after 5 minutes.
+
+With this said, will also close this issue as it's not an issue but rather a question which should've been posted in [Discussion](https://github.com/AdnanHodzic/auto-cpufreq/discussions) section.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>applejwjcat:</strong></p>
+                    <p>> It does do this. Idea is for auto-cpufreq not to interfere into Linux/kernel doing the heavy lifting. auto-cpufreq will set the right governor/frequency during the idle time, cores will go to their minimum and device will go to suspend if that's what it's configured to do after 5 minutes.
+> 
+> With this said, will also close this issue as it's not an issue but rather a question which should've been posted in [Discussion](https://github.com/AdnanHodzic/auto-cpufreq/discussions) section.
+
+Excuse me, But how to configure it to make the screen light down and the device suspended after a specific time? how to change that time, I mean in the conf file? 
+Is there a complete configuration file or some man doc to understand ? </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>What you're asking is unrelated with auto-cpufreq, but rather knowing how to configure your Linux system. Please refer to [following guide on how to do what you're trying to do on Ubuntu](https://linuxconfig.org/disable-turn-off-lock-screen-on-ubuntu-22-04-jammy-jellyfish-linux#:ifications).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

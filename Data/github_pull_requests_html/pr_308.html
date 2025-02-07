@@ -1,0 +1,94 @@
+
+        <html>
+        <head>
+            <title>Pull Request #308: Change the way of checking the charging state</title>
+        </head>
+        <body>
+            <h1>Change the way of checking the charging state</h1>
+            <p><strong>Pull Request #308</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Would always be charging, unless a battery tells us we are discharging, or the AC we found tells us we are connected to a cable.
+
+This would also work on systems where somehow we cannot find an AC but only a battery. Which I have seen in some earlier opened issues.
+
+Works on my system with ACAD as AC and BAT1 as battery
+
+Fixes issue #306  
+Fixes issue #307 
+Fixes issue #299 
+
+
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Thanks for looking into this! This change was originally started as part of #168 based on a [lot of user feedback](https://twitter.com/fooctrl/status/1357230198857564160).
+
+Proposed changes looks sound and they also worked on my side (X1 Carbon), I just wish if we had more confirmations that it works on various/different hardware. It would be great if battery detection issues could be solved once and for all, as besides the issues you mentioned, these issues keep popping up.
+
+Let me think about this and in meantime let's wait for confirmations in #307 and #299.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Yes, I totally understand. I would love to see way more users test this before actually merged into master.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Note for this PR after reading alot of earlier issues. As seen in #124
+
+"hid" devices may show up under /sys/class/power_supply/ as discharging battery.
+It should be no problem to filter any item that contains "hid" before actually looping all the items. 
+Or just skip them while looping.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>This is really great. Already all the issues are reported as fixed. I have told that we need probably need a little bit more testing before actually merging this. 
+
+One other thing that makes me very happy. One person mentioned that the PR #285 had fixed an issue for them, and had positive results with this current PR also. Which is great, because codewise they are totally different. So I think we are on the right track!
+
+Maybe you could make an issue with a request for testing this. I don't see any other way to get people to test this without actually having problems at this moment.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> 
+
+This is definitely the step in right direction. Here's an idea, what if we use logic you implemented as part of this PR as "main" logic, and as a "fallback" (at the end of loop in case nothing was matched) use the old mechanism to determine if device is charging or not?
+
+This way, we could have best of the both worlds. This can also be a transitory thing, where once we've determined that new "main" logic catches every case old mechanism can be completely removed. If we had this I would just merge this with `master` right away, only remaining question would be how do we know which case/mechanism was used ...</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>I really don't know. Just leave it here and see how it works out.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@bobslept I've decided to merge these changes with `master`, let's just go with it and if there are numerous people complaining about charging state not being detected properly things can be improved as we go. 
+
+Please do be aware I will tap you if I see this top of issues :slightly_smiling_face: </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Really interesting to see what happends. Will be on top of new battery issues :innocent: </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@bobslept since you've been involved with auto-cpufreq a lot as of lately, you might be interested in #312 :slightly_smiling_face: </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

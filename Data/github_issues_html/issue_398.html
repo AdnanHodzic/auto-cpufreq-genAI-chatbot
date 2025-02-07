@@ -1,0 +1,424 @@
+
+        <html>
+        <head>
+            <title>Issue #398: CPU not scaling up in battery mode [Kernel 5.17 with amd-pstate driver]</title>
+        </head>
+        <body>
+            <h1>CPU not scaling up in battery mode [Kernel 5.17 with amd-pstate driver]</h1>
+            <p><strong>Issue #398</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hello,
+
+first of all thanks for this very helpful tool.
+I just installed kernel 5.17 (including the new amd-pstate driver) on my system and am experiencing weird behaviour when using auto-cpufreq. First of all, the "min" and "max" frequencies seem to adjust dynamically (seen in auto-cpufreq --stats).
+I tested the following scenarios while running prime95 (full cpu-load simulation). When charging, the freq goes only up to 2.3 GHz on all cores, and in battery mode I barely reach 1 GHz. I also experienced low frequencies (when on battery) with kernel 5.15 and the acpi driver.
+
+I tried installing auto-cpufreq through the AUR package, as well as from source. 
+Am I doing something wrong, or is using the new amd-pstate driver a bad idea in general?
+
+Thank you very much!
+
+<details>
+<summary>Output of auto-cpufreq --debug</summary>
+### System information:
+
+Base clock = 1.8 GHz 
+Boost = up to 4.3 GHz
+
+-------------------------------------------------------------------------------
+
+Linux distro: Manjaro Linux 21.2.6 Qonos
+Linux kernel: 5.17.9-1-MANJARO
+Processor: AMD Ryzen 7 5700U with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: amd-pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1801 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  5.8%     51 °C     1801 MHz
+CPU1:	  1.0%     51 °C     1776 MHz
+CPU2:	  5.0%     51 °C     1801 MHz
+CPU3:	  0.0%     51 °C     1801 MHz
+CPU4:	  1.0%     51 °C     1801 MHz
+CPU5:	  1.0%     51 °C     1801 MHz
+CPU6:	  1.0%     51 °C     1801 MHz
+CPU7:	  0.0%     51 °C     1801 MHz
+CPU8:	  2.0%     51 °C     1801 MHz
+CPU9:	  0.0%     51 °C     1801 MHz
+CPU10:	  0.0%     51 °C     1801 MHz
+CPU11:	  0.0%     51 °C     1801 MHz
+CPU12:	  1.0%     51 °C     1801 MHz
+CPU13:	  0.0%     51 °C     1801 MHz
+CPU14:	  7.4%     51 °C     1801 MHz
+CPU15:	  0.0%     51 °C     1801 MHz
+
+auto-cpufreq version: 1.9.4
+
+Python: 3.10.4
+psutil package: 5.9.1
+platform package: 1.0.8
+click package: 8.1.3
+distro package: 1.7.0
+
+Computer type: Convertible
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.07 %
+
+Total CPU usage: 2.3 %
+Total system load: 0.38
+Average temp. of all cores: 50.88 °C 
+
+Currently using: performance governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+
+</details>
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>fukaraca:</strong></p>
+                    <p>After i upgraded the Kernel from 5.13 to 5.18 and initialized AMD_PSTATE it started working properly.  /etc/autocpufreq.conf file and AMD's CPPC driver settings are given below.
+
+**/etc/auto-cpufreq.conf file example**
+
+```
+# settings for when connected to a power source
+[charger]
+# see available governors by running: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+# preferred governor.
+governor = performance
+
+# minimum cpu frequency (in kHz)
+# example: for 800 MHz = 800000 kHz --> scaling_min_freq = 800000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly
+#scaling_min_freq = 3500000
+
+# maximum cpu frequency (in kHz)
+# example: for 1GHz = 1000 MHz = 1000000 kHz -> scaling_max_freq = 1000000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly
+#scaling_max_freq = 4200000
+
+# turbo boost setting. possible values: always, auto, never
+turbo = always
+
+# settings for when using battery power
+[battery]
+# see available governors by running: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+# preferred governor
+governor = powersave
+
+# minimum cpu frequency (in kHz)
+# example: for 800 MHz = 800000 kHz --> scaling_min_freq = 800000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly
+scaling_min_freq = 1500000
+
+# maximum cpu frequency (in kHz)
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# example: for 1GHz = 1000 MHz = 1000000 kHz -> scaling_max_freq = 1000000
+# to use this feature, uncomment the following line and set the value accordingly
+scaling_max_freq = 3300000
+
+# turbo boost setting. possible values: always, auto, never
+turbo = auto
+
+```
+
+And AMD settings from [here](https://discourse.ubuntu.com/t/amd-p-state-in-kernel-5-17-oem/27275/3)
+
+> **HOW TO ENABLE AMD-PSTATE FOR UBUNTU JAMMY WITH KERNEL 5.17 OEM**
+> 
+> edit `/etc/initramfs-tools/modules` and include `amd_pstate` at the end of the text file
+> edit `/etc/default/grub` and modify this line `GRUB_CMDLINE_LINUX="initcall_blacklist=acpi_cpufreq_init"`
+> in a terminal, execute `sudo update-grub` then `sudo update-initramfs -u`
+> `reboot`
+> check that less /sys/devices/system/cpu/cpu0/cpufreq/scaling_driver returns amd-pstate (you can also check this with sudo tlp-stat -p )</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>mldytech:</strong></p>
+                    <p>Hey, thanks for your answer!
+According to the second section you posted: Since I'm Manjaro, amd_pstate seems to be enabled by default. At least the output of "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_driver" is correct. Therefore I did not change anything else.
+
+Unfortunately the config file did not change the behaviour when on battery and under full load. CPU is still not scaling over the scaling_min_freq (now ~1.1GHz). To clarify my problem a bit more, here is the output of "auto-cpufreq --debug" under full CPU load on battery, as well as plugged-in.
+<details>
+<summary> On battery (with above config-file) </summary>
+Using settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------------------------------------------------------
+
+Linux distro: Manjaro Linux 21.2.6 Qonos
+Linux kernel: 5.17.9-1-MANJARO
+Processor: AMD Ryzen 7 5700U with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: amd-pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4372 MHz
+CPU min frequency: 1000 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	100.0%     67 °C     1098 MHz
+CPU1:	100.0%     67 °C     1098 MHz
+CPU2:	100.0%     67 °C     1098 MHz
+CPU3:	100.0%     67 °C     1098 MHz
+CPU4:	100.0%     67 °C     1098 MHz
+CPU5:	100.0%     67 °C     1098 MHz
+CPU6:	100.0%     67 °C     1098 MHz
+CPU7:	100.0%     67 °C     1098 MHz
+CPU8:	100.0%     67 °C     1098 MHz
+CPU9:	100.0%     67 °C     1098 MHz
+CPU10:	100.0%     67 °C     1098 MHz
+CPU11:	100.0%     67 °C     1098 MHz
+CPU12:	100.0%     67 °C     1098 MHz
+CPU13:	100.0%     67 °C     1098 MHz
+CPU14:	100.0%     67 °C     1098 MHz
+CPU15:	100.0%     67 °C     1098 MHz
+
+auto-cpufreq version: 1.9.4
+
+Python: 3.10.4
+psutil package: 5.9.1
+platform package: 1.0.8
+click package: 8.1.3
+distro package: 1.7.0
+
+Computer type: Convertible
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.07 %
+
+Total CPU usage: 100.0 %
+Total system load: 11.51
+Average temp. of all cores: 66.75 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+
+
+</details>
+<details>
+<summary> Plugged in (with above config-file)</summary>
+Using settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------------------------------------------------------
+
+Linux distro: Manjaro Linux 21.2.6 Qonos
+Linux kernel: 5.17.9-1-MANJARO
+Processor: AMD Ryzen 7 5700U with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: amd-pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1801 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	100.0%     68 °C     1777 MHz
+CPU1:	100.0%     68 °C     1777 MHz
+CPU2:	100.0%     68 °C     1777 MHz
+CPU3:	100.0%     68 °C     1777 MHz
+CPU4:	100.0%     68 °C     1777 MHz
+CPU5:	100.0%     68 °C     1777 MHz
+CPU6:	100.0%     68 °C     1777 MHz
+CPU7:	100.0%     68 °C     1777 MHz
+CPU8:	100.0%     68 °C     1777 MHz
+CPU9:	100.0%     68 °C     1777 MHz
+CPU10:	100.0%     68 °C     1777 MHz
+CPU11:	100.0%     68 °C     1777 MHz
+CPU12:	100.0%     68 °C     1777 MHz
+CPU13:	100.0%     68 °C     1777 MHz
+CPU14:	100.0%     68 °C     1777 MHz
+CPU15:	100.0%     68 °C     1777 MHz
+
+auto-cpufreq version: 1.9.4
+
+Python: 3.10.4
+psutil package: 5.9.1
+platform package: 1.0.8
+click package: 8.1.3
+distro package: 1.7.0
+
+Computer type: Convertible
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.07 %
+
+Total CPU usage: 100.0 %
+Total system load: 7.53
+Average temp. of all cores: 68.00 °C 
+
+Currently using: performance governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+
+</details></p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>riskingh:</strong></p>
+                    <p>Having simiar issue when using amd-pstate on battery mode. Even when turbo boost kicks in it never gets over min cpu freq
+
+Stats:
+```Linux distro: Ubuntu 21.10 Impish Indri
+Linux kernel: 5.17.0-051700-generic
+Processor: AMD Ryzen 9 5900HS with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: amd-pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3301 MHz
+CPU min frequency: 800 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0:    28.7%     57 °C      800 MHz
+CPU1:    74.0%     57 °C      780 MHz
+CPU2:   100.0%     57 °C      780 MHz
+CPU3:     5.8%     57 °C      800 MHz
+CPU4:    22.8%     57 °C      780 MHz
+CPU5:     9.1%     57 °C      800 MHz
+CPU6:    39.0%     57 °C      780 MHz
+CPU7:    19.2%     57 °C      800 MHz
+CPU8:    73.7%     57 °C      800 MHz
+CPU9:     6.0%     57 °C      800 MHz
+CPU10:   34.3%     57 °C      780 MHz
+CPU11:   10.0%     57 °C      800 MHz
+CPU12:    4.0%     57 °C      800 MHz
+CPU13:   55.0%     57 °C      780 MHz
+CPU14:   16.2%     57 °C      800 MHz
+CPU15:   45.0%     57 °C      780 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: discharging
+
+Setting to use: "powersave" governor
+
+Total CPU usage: 35.0 %
+Total system load: 7.70
+Average temp. of all cores: 56.75 °C
+
+High CPU load
+setting turbo boost: on
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>riskingh:</strong></p>
+                    <p>Looks like this is amd-pstate behavior with "powersave" governor and it should be replaced with "ondemand" instead </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Looks like this is amd-pstate behavior with "powersave" governor and it should be replaced with "ondemand" instead
+
+@riskingh I do not own AMD CPU hence I cannot test this. If you or anyone else wants to submit a PR which could potentially resolve this problem that would be great, as I always encourage users to[ submit code contributions](https://github.com/AdnanHodzic/auto-cpufreq#code-contribution) and credit everyone for their work.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>zoitrok:</strong></p>
+                    <p>@AdnanHodzic 
+I don't think this is just on AMD CPUs. The `powersave` governor just won't scale up at all on any of my devices. My i7-8550U, i7-2620M and Ryzen 3700U all stay on the lowest clock frequency on `powersave`.
+
+I'm not a big fan of changing existing behavior, which is why my solution to this was to submit the (now merged) PR to add config files. It seems a lot of people would be expecting the behavior of the `conservative` governor on battery.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>mldytech:</strong></p>
+                    <p>@zoitrok I think you're absolutely right. [According to arch-wiki](https://wiki.archlinux.org/title/CPU_frequency_scaling#Scaling_governors), the powersave-governor always sets the frequency at it's minimum. I wasn't aware of that before.
+
+Nevertheless, I think there is something fishy about the amd-pstate driver. I experience sometimes weird behaviour when using it. Can anyone confirm that, or might it just be my individual setup?
+
+For now I went back to acpi-cpufreq driver and upgraded to kernel 5.18. Using an adjusted config file, I now get the desired results. Under full load, the Ryzen 7 5700U scales up to 2.3 GHz in charging-mode as well as in battery-mode. Even though it's capable of up to 4.3 GHz, I think it might be limited due to thermals (~75°C @2.3GHz, full load) - am I right?
+
+Below is my current config file for those who are interested. Min and max frequencies are adapted to my specific CPU.
+
+
+```
+[charger]
+governor = performance
+scaling_min_freq = 1400000
+scaling_max_freq = 4369921
+turbo = auto
+
+[battery]
+governor = conservative
+scaling_min_freq = 1400000
+scaling_max_freq = 4369921
+turbo = auto
+```
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>zoitrok:</strong></p>
+                    <p>@mldytech turbo=auto leaves it up to auto-cpufreq to enable the turbo. It takes a bit of sustained load to kick in. In my world keeping it on 'always' gives a more responsive system with no real hit to heat or battery.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>RaptaG:</strong></p>
+                    <p>Hello, I can reproduce. Yesterday night I got `auto-cpufreq` to work, and it did improve performance (while on charge). I installed it via the AUR package and enabled it with the `sudo systemctl enable auto-cpufreq`, then rebooted. Everything worked fine and the performance optimization was _notable_. Today, when I opened my laptop, (battery mode) I noticed the same thing. It was lagging because the CPU was not scaling up and was locked to 500Mhz (CPU: Intel Celeron N2840). I had to manually disable the service manually (with `sudo systemctl disable auto-cpufreq`). Kernel: 5.18.12-arch1-1 x86_64. Please fix that, `auto-cpufreq` brings my old laptop back to life, but with this problem it makes it function even worse :(</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing the issue due to inactivity. 
+
+If there are any changes that could be made please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>DCH3416:</strong></p>
+                    <p>> conser
+
+
+
+> Hello, I can reproduce. Yesterday night I got `auto-cpufreq` to work, and it did improve performance (while on charge). I installed it via the AUR package and enabled it with the `sudo systemctl enable auto-cpufreq`, then rebooted. Everything worked fine and the performance optimization was _notable_. Today, when I opened my laptop, (battery mode) I noticed the same thing. It was lagging because the CPU was not scaling up and was locked to 500Mhz (CPU: Intel Celeron N2840). I had to manually disable the service manually (with `sudo systemctl disable auto-cpufreq`). Kernel: 5.18.12-arch1-1 x86_64. Please fix that, `auto-cpufreq` brings my old laptop back to life, but with this problem it makes it function even worse :(
+
+I have the same CPU. I was able to correct being locked at 500Mhz by changing to governor = conservative under battery in auto-cpufreq.conf</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>RaptaG:</strong></p>
+                    <p>> I have the same CPU. I was able to correct being locked at 500Mhz by changing to governor = conversative under battery in auto-cpufreq.conf
+
+Thanks a lot!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>This issue seems to be resolved, closing.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

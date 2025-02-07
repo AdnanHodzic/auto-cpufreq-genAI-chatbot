@@ -1,0 +1,145 @@
+
+        <html>
+        <head>
+            <title>Issue #4: TypeError: __init__() got an unexpected keyword argument 'hidden'</title>
+        </head>
+        <body>
+            <h1>TypeError: __init__() got an unexpected keyword argument 'hidden'</h1>
+            <p><strong>Issue #4</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hi.
+
+I just cloned the repo, installed dependencies and run the script but got a `TypeError`:
+
+```console
+> sudo python3 auto-cpufreq.py
+Traceback (most recent call last):
+  File "auto-cpufreq.py", line 382, in <module>
+    @click.option("--daemon", is_flag=True, hidden=True)
+  File "/usr/lib/python3/dist-packages/click/decorators.py", line 170, in decorator
+    _param_memo(f, OptionClass(param_decls, **attrs))
+  File "/usr/lib/python3/dist-packages/click/core.py", line 1460, in __init__
+    Parameter.__init__(self, param_decls, type=type, **attrs)
+TypeError: __init__() got an unexpected keyword argument 'hidden'
+```
+
+I am using Linux Mint 19.3.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>volnes:</strong></p>
+                    <p>Same here Ubuntu Mate 18.04.3
+`sudo python3 auto-cpufreq.py
+Traceback (most recent call last):
+  File "auto-cpufreq.py", line 382, in <module>
+    @click.option("--daemon", is_flag=True, hidden=True)
+  File "/usr/lib/python3/dist-packages/click/decorators.py", line 170, in decorator
+    _param_memo(f, OptionClass(param_decls, **attrs))
+  File "/usr/lib/python3/dist-packages/click/core.py", line 1460, in __init__
+    Parameter.__init__(self, param_decls, type=type, **attrs)
+TypeError: __init__() got an unexpected keyword argument 'hidden'
+`
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Hey, 
+
+I think both of you have the same problem problem of using older version of "Click" package, can you please tell me which version it is? 
+
+`sudo pip3 show Click | grep -i version`
+
+Since I'm almost certain this is the case, could you get latest versions using:
+
+```
+sudo pip3 install psutil click distro
+```
+
+and let me know if you still have the same issue? </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>volnes:</strong></p>
+                    <p>Version: 6.7 from ubuntu repos
+`sudo pip3 install psutil click distro`
+in my case just pip3 without sudo:
+`pip3 install psutil click distro`
+
+now click verson 7.0</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>As I pointed out in [requirements installation part](https://github.com/AdnanHodzic/auto-cpufreq#requirements-installation-for-all-other-linux-distributions). You have to use sudo in this case.
+
+Either way, did upgrading click fix your problem?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>dannykopping:</strong></p>
+                    <p>@AdnanHodzic same issue here - followed instructions closely, same result</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>dannykopping:</strong></p>
+                    <p>```bash
+dpkg -l | egrep -e "python3\\s" -e python3-distro -e python3-psutil -e python3-click
+ii  libpython3-stdlib:amd64               3.6.7-1~18.04                                   amd64        interactive high-level object-oriented language (default python3 version)
+ii  python3                               3.6.7-1~18.04                                   amd64        interactive high-level object-oriented language (default python3 version)
+ii  python3-click                         6.7-3                                           all          Simple wrapper around optparse for powerful command line utilities - Python 3.x
+ii  python3-distro                        1.0.1-2                                         all          Linux OS platform information API
+ii  python3-distro-info                   0.18ubuntu0.18.04.1                             all          information about distributions' releases (Python 3 module)
+ii  python3-magic                         2:0.4.15-1                                      all          python3 interface to the libmagic file type identification library
+ii  python3-minimal                       3.6.7-1~18.04                                   amd64        minimal subset of the Python language (default python3 version)
+ii  python3-psutil                        5.4.2-1ubuntu0.1                                amd64        module providing convenience functions for managing processes (Python3)
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>volnes:</strong></p>
+                    <p>> As I pointed out in requirements installation part. You have to use sudo in this case.
+
+no on ubuntu 18.04.03 not needed to use sudo for install click and others and yes it's fixed for me</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Booteille:</strong></p>
+                    <p>By using `pip3 install psutil click distro` (without `sudo`) I was able to upgrade click to version 7.0 (from version 6.7).
+
+Now, running `sudo python3 auto-cpufreq.py` works.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Lusitaniae:</strong></p>
+                    <p>Seems that using apt will install outdated python click, version 6.7
+
+Update it with
+ 
+`sudo pip3 install --upgrade click`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>dannykopping:</strong></p>
+                    <p>That did the trick - thanks @Lusitaniae </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Booteille:</strong></p>
+                    <p>Since there is a solution, I think you can close the issue @AdnanHodzic. But I think you should update the installation instructions to prevent the user click 7.0 is needed.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@Booteille yes, will do, it seems a lot of issues that arose are based on old package versions.
+
+ReadMe [updated accordingly](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/README.md#requirements-installation-for-debianubuntu-and-their-derivatives).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

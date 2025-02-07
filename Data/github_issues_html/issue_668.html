@@ -1,0 +1,155 @@
+
+        <html>
+        <head>
+            <title>Issue #668: service stops on nixos after boot</title>
+        </head>
+        <body>
+            <h1>service stops on nixos after boot</h1>
+            <p><strong>Issue #668</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I have installed auto-cpufreq on NixOS via flake, like you descriped, but the service auto-cpufreq.service comes up at boot and then quicklie stops it self. I could start it manually but this is not how this programm is supposed to run.
+
+### Service output:
+```text
+○ auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux
+     Loaded: loaded (/etc/systemd/system/auto-cpufreq.service; enabled; preset: enabled)
+    Drop-In: /nix/store/8rpc5ps61dll71g8rs2kh1c7a587lcsj-system-units/auto-cpufreq.service.d
+             └─overrides.conf
+     Active: inactive (dead) since Sat 2024-03-30 13:24:48 CET; 1min 52s ago
+   Duration: 2.008s
+    Process: 3504 ExecStart=/nix/store/6h1452xcnjw0a4z89mqf0gfigx3rqspy-python3.10-auto-cpufreq-2.2.0/bin/auto-cpufreq --daemon --config /nix/store/j8gxwdnc9a719wqkaann4l2wp9mh70vk-auto-cpufreq.conf (>
+   Main PID: 3504 (code=killed, signal=TERM)
+         IP: 0B in, 0B out
+        CPU: 359ms
+
+Mär 30 13:24:46 Shi systemd[1]: Started auto-cpufreq - Automatic CPU speed & power optimizer for Linux.
+Mär 30 13:24:48 Shi systemd[1]: Stopping auto-cpufreq - Automatic CPU speed & power optimizer for Linux...
+Mär 30 13:24:48 Shi systemd[1]: auto-cpufreq.service: Deactivated successfully.
+Mär 30 13:24:48 Shi systemd[1]: Stopped auto-cpufreq - Automatic CPU speed & power optimizer for Linux.
+```
+---
+
+### System information:
+
+Add/paste output of debug:
+
+```                                                                                                                            
+-------------------------------------------------------------------------------                                                                                                                          
+   
+Linux distro: NixOS 24.05 Uakari
+Linux kernel: 6.8.2
+Processor: AMD Ryzen 7 7840HS w/ Radeon 780M Graphics
+Cores: 16
+Architecture: x86_64
+Driver: amd-pstate-epp
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 6080 MHz
+CPU min frequency: 400 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0      0.0%        41 °C      1397 MHz
+CPU1      1.0%        41 °C      1397 MHz
+CPU2      1.0%        41 °C       400 MHz
+CPU3      1.0%        41 °C      1397 MHz
+CPU4      1.0%        41 °C      1381 MHz
+CPU5      2.0%        41 °C      1386 MHz
+CPU6      0.0%        41 °C       400 MHz
+CPU7      0.0%        41 °C       400 MHz
+CPU8      1.0%        41 °C      1392 MHz
+CPU9      3.0%        41 °C       400 MHz
+CPU10      1.0%        41 °C      1396 MHz
+CPU11      1.0%        41 °C      1375 MHz
+CPU12      1.0%        41 °C      1397 MHz
+CPU13      1.0%        41 °C       400 MHz
+CPU14      2.0%        41 °C      1391 MHz
+CPU15      1.0%        41 °C      1356 MHz
+
+CPU fan speed: 0 RPM
+
+auto-cpufreq version: 2.2.0 (git: )
+
+Python: 3.10.14
+psutil package: 5.9.8
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: /nix/store/5lr5n3qa4day8l1ivbwlcby2nknczqkq-bash-5.2p26/bin/sh: line 1: dmidecode: command not found
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.11 %
+
+Total CPU usage: 1.5 %
+Total system load: 0.58
+Average temp. of all cores: 40.62 °C 
+
+Currently using: powersave governor
+Warning: CPU turbo is not available
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>eblechschmidt:</strong></p>
+                    <p>I also tried the version from nixpkgs unstable and it has the same problem. It is quite strange because using the flake I ran it with `sudo auto-cpufreq --live` which was working perfectly fine.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Svenum:</strong></p>
+                    <p>Same behavior </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>I can't reproduce this. The service doesn't crash for me when using the flake version. 
+Have you pulled from the latest commit?
+Also you can try running `sudo auto-cpufreq --daemon` to see if there is an error or other output</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>eblechschmidt:</strong></p>
+                    <p>No errors using  `sudo auto-cpufreq --daemon`. As OP states it starts perfectly fine when using `systemctl start`after boot. I also tried not to use ` inputs.nixpkgs.follows = "nixpkgs";` to ensure it is not something introduced by another dependency.
+
+Is there a way to get more output than the four lines (I get the same as OP) of `journalctl`?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>> Is there a way to get more output than the four lines (I get the same as OP) of journalctl?
+
+Not that I know of, which I think points to this being an issue outside of auto-cpufreq but we'll see. 
+
+> I also tried not to use  inputs.nixpkgs.follows = "nixpkgs"; to ensure it is not something introduced by another dependency.
+
+This seems unlikely since OP and I have the same dependency versions, but I'll look into this.
+
+Are you perhaps also using `amd-pstate-epp`? I am using `acpi-cpufreq` so that could be the common denominator here
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Svenum:</strong></p>
+                    <p>Fixed it self for me after flake update. I close this Issue.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>eblechschmidt:</strong></p>
+                    <p>Same here, fixed for me as well.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

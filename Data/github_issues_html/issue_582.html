@@ -1,0 +1,35 @@
+
+        <html>
+        <head>
+            <title>Issue #582: refactor(flake): improve usage</title>
+        </head>
+        <body>
+            <h1>refactor(flake): improve usage</h1>
+            <p><strong>Issue #582</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>changes:
+- allow for different system architectures
+- separate dev deps into separate file
+- gui now functions properly when installing though flake</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Hi, I am the original author of the flake. I just started using Nix about 2 months ago so my Nix writing skills are not the greatest haha so I appreciate this
+
+I hadn't noticed the GUI wasn't working since I had the files I needed in `/usr/local` from messing around with `auto-cpufreq` before having the flake so thanks for catching that!
+
+I did push a few changes. I removed darwin from being a build system because `auto-cpufreq` only supports the Linux kernel. Also the icon still wasn't working in the about dialog so I added that to the substitute as well.
+
+The module was still using `x86_64-linux` so I updated it to inherit the system.
+
+Thanks for your contribution and you'll receive credit in the next release!</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

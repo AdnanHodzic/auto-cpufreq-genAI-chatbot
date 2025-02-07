@@ -1,0 +1,44 @@
+
+        <html>
+        <head>
+            <title>Issue #315: [Request] Change CPU governor based on battery level</title>
+        </head>
+        <body>
+            <h1>[Request] Change CPU governor based on battery level</h1>
+            <p><strong>Issue #315</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Currently `auto-cpufreq` changes governor according to power state (Charging and Discharging), right?
+
+I think it would be awesome to be able to set governor based on battery levels as well. 
+For example,
+Charging state governor: `performance`
+Discharging state governor: `schedutil`
+If battery is below 40%, governor: `powersave`
+
+Thanks</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>josh1244:</strong></p>
+                    <p>I agree, this would be a good feature. Is there a way to manually control the govener?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>mizzunet:</strong></p>
+                    <p>> Is there a way to manually control the govener?
+
+Yeah, by editing `/etc/auto-cpufreq.conf`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Since I'm very limited with available time to do this myself, if you or anyone else wants to give it a try in implementing this functionality, please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,87 @@
+
+        <html>
+        <head>
+            <title>Issue #667: No "Warning: CPU turbo is not available" when using amd-pstate-epp</title>
+        </head>
+        <body>
+            <h1>No "Warning: CPU turbo is not available" when using amd-pstate-epp</h1>
+            <p><strong>Issue #667</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Description
+There is a warning about CPU turbo is not available when using amd-pstate-epp (amd-pstate in active mode). This warning doesn't make sense, since amd-pstate-epp is managing the CPU turbo within the driver. Maybe there should be a message about CPU turbo managed by the driver, so people are not confused.
+
+### Error output:
+See System information.
+
+### System information:
+
+```
+-------------------------------------------------------------------------------
+
+Linux distro: NixOS 24.05 Uakari
+Linux kernel: 6.8.1
+Processor: AMD Ryzen 7 5800H with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: amd-pstate-epp
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4463 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      3.0%        56 °C      3165 MHz
+CPU1      0.0%        56 °C       400 MHz
+CPU2      1.0%        56 °C      3193 MHz
+CPU3      0.0%        56 °C       400 MHz
+CPU4      4.0%        56 °C      3467 MHz
+CPU5      2.0%        56 °C      3169 MHz
+CPU6      0.0%        56 °C      4340 MHz
+CPU7      0.0%        56 °C       400 MHz
+CPU8      1.0%        56 °C       400 MHz
+CPU9      1.0%        56 °C       400 MHz
+CPU10      1.0%        56 °C       400 MHz
+CPU11      0.0%        56 °C       400 MHz
+CPU12      0.0%        56 °C      3210 MHz
+CPU13      0.0%        56 °C      3453 MHz
+CPU14      2.0%        56 °C      3452 MHz
+CPU15      0.0%        56 °C       400 MHz
+
+CPU fan speed: 0 RPM
+
+auto-cpufreq version: 2.2.0 (git: )
+
+Python: 3.10.14
+psutil package: 5.9.8
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.09 %
+
+Total CPU usage: 1.5 %
+Total system load: 0.39
+Average temp. of all cores: 56.00 °C 
+
+Currently using: performance governor
+Warning: CPU turbo is not available
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+            </div>
+        </body>
+        </html>
+        

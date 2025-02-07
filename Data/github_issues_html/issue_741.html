@@ -1,0 +1,250 @@
+
+        <html>
+        <head>
+            <title>Issue #741: Spamming of 'line 105: echo: write error: Device or resource busy' in journal (once again)</title>
+        </head>
+        <body>
+            <h1>Spamming of 'line 105: echo: write error: Device or resource busy' in journal (once again)</h1>
+            <p><strong>Issue #741</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted?  yes
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)? no
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)? yes
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)? no yet
+
+### Error output:
+
+Yet another issue with the line 105 echo write error.
+The system is a Legion 7 laptop with AMD Ryzen 7 5800H with Radeon Graphics CPU.
+This affect only the performance mode.
+
+```text
+# systemctl status auto-cpufreq.service
+● auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux
+     Loaded: loaded (/usr/lib/systemd/system/auto-cpufreq.service; enabled; preset: disabled)
+     Active: active (running) since Wed 2024-07-17 10:40:51 CEST; 27min ago
+ Invocation: e27bc93997ca449a97868688b47e26a8
+   Main PID: 6187 (auto-cpufreq)
+      Tasks: 2 (limit: 76915)
+     Memory: 23.9M (peak: 27M)
+        CPU: 24.727s
+     CGroup: /system.slice/auto-cpufreq.service
+             └─6187 /usr/bin/python /usr/bin/auto-cpufreq --daemon
+
+jui 17 11:08:20 alpha.arcenik.lan auto-cpufreq[43239]: /usr/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+jui 17 11:08:20 alpha.arcenik.lan auto-cpufreq[43239]: /usr/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+jui 17 11:08:20 alpha.arcenik.lan auto-cpufreq[43239]: /usr/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+jui 17 11:08:20 alpha.arcenik.lan auto-cpufreq[43239]: /usr/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+jui 17 11:08:20 alpha.arcenik.lan auto-cpufreq[43239]: /usr/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+jui 17 11:08:20 alpha.arcenik.lan auto-cpufreq[43239]: /usr/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+jui 17 11:08:20 alpha.arcenik.lan auto-cpufreq[43239]: /usr/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+jui 17 11:08:20 alpha.arcenik.lan auto-cpufreq[43239]: /usr/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+jui 17 11:08:20 alpha.arcenik.lan auto-cpufreq[43239]: /usr/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+jui 17 11:08:20 alpha.arcenik.lan auto-cpufreq[43239]: /usr/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+```
+
+I was able to reproduce the problem from the shell
+
+```
+# echo balance_performance > /sys/devices/system/cpu/cpu15/cpufreq/energy_performance_preference
+-bash: echo: write error: Device or resource busy
+
+# echo performance > /sys/devices/system/cpu/cpu15/cpufreq/energy_performance_preference
+
+# cat /sys/devices/system/cpu/cpu15/cpufreq/energy_performance_available_preferences 
+default performance balance_performance balance_power power 
+```
+
+
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+# auto-cpufreq --debug
+could not get value from conservation mode
+
+-------------------------------- Battery Info ---------------------------------
+
+battery count = 1
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/site-packages/auto_cpufreq/battery_scripts/ideapad_laptop.py", line 92, in ideapad_laptop_print_thresholds
+    with open(f'/sys/class/power_supply/BAT{b}/charge_start_threshold', 'r') as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/sys/class/power_supply/BAT0/charge_start_threshold'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/bin/auto-cpufreq", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/usr/lib/python3.12/site-packages/click/core.py", line 1157, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/site-packages/click/core.py", line 1078, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/site-packages/click/core.py", line 1434, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/site-packages/click/core.py", line 783, in invoke
+    return __callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/site-packages/auto_cpufreq/bin/auto_cpufreq.py", line 169, in main
+    battery_get_thresholds()
+  File "/usr/lib/python3.12/site-packages/auto_cpufreq/battery_scripts/battery.py", line 42, in battery_get_thresholds
+    ideapad_laptop_print_thresholds()
+  File "/usr/lib/python3.12/site-packages/auto_cpufreq/battery_scripts/ideapad_laptop.py", line 101, in ideapad_laptop_print_thresholds
+    print(f"ERROR: failed to read battery thresholds: {e}")
+                                                       ^
+NameError: name 'e' is not defined
+```
+
+```
+# auto-cpufreq --version
+
+-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux rolling n/a
+Linux kernel: 6.9.9-arch1-1
+auto-cpufreq version: Version         : 2.3.0-1
+
+-------------------------------------------------------------------------------
+```
+
+The content of the sys/class/power_supply/BAT0:
+
+```
+# ls -l /sys/class/power_supply/BAT0/
+total 0
+-rw-r--r-- 1 root root 4096 17 jui 11:13 alarm
+-r--r--r-- 1 root root 4096 17 jui 11:13 capacity
+-r--r--r-- 1 root root 4096 17 jui 11:13 capacity_level
+-r--r--r-- 1 root root 4096 17 jui 11:13 cycle_count
+lrwxrwxrwx 1 root root    0 17 jui 11:13 device -> ../../../PNP0C0A:00
+-r--r--r-- 1 root root 4096 17 jui 11:13 energy_full
+-r--r--r-- 1 root root 4096 17 jui 11:13 energy_full_design
+-r--r--r-- 1 root root 4096 17 jui 11:13 energy_now
+drwxr-xr-x 3 root root    0 17 jui 11:13 hwmon1
+-r--r--r-- 1 root root 4096 17 jui 11:13 manufacturer
+-r--r--r-- 1 root root 4096 17 jui 11:13 model_name
+drwxr-xr-x 2 root root    0 17 jui 11:13 power
+-r--r--r-- 1 root root 4096 17 jui 11:13 power_now
+-r--r--r-- 1 root root 4096 17 jui 11:13 present
+-r--r--r-- 1 root root 4096 17 jui 11:13 serial_number
+-r--r--r-- 1 root root 4096 17 jui 11:13 status
+lrwxrwxrwx 1 root root    0 17 jui 10:36 subsystem -> ../../../../../../../../../class/power_supply
+-r--r--r-- 1 root root 4096 17 jui 11:13 technology
+-r--r--r-- 1 root root 4096 17 jui 11:13 type
+-rw-r--r-- 1 root root 4096 17 jui 11:13 uevent
+-r--r--r-- 1 root root 4096 17 jui 11:13 voltage_min_design
+-r--r--r-- 1 root root 4096 17 jui 11:13 voltage_now
+```
+
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@Angel-Karasu this looks like a problem introduced in #736 as I remember changes to ` print(f"ERROR: failed to read battery thresholds: {e}`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>arcenik:</strong></p>
+                    <p>After disabled amd_pstate the log spam problem is fixed.
+
+Another way to fix this could be to use **performance**  instead of **balance_performance**
+
+Or validate the values found in **energy_performance_available_preferences**
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Angel-Karasu:</strong></p>
+                    <p>> @Angel-Karasu this looks like a problem introduced in #736 as I remember changes to ` print(f"ERROR: failed to read battery thresholds: {e}`
+
+There is an error because the version of `auto-cpufreq` in the AUR isn't up to date, we can see it uses the method to read battery threshold before #716 </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> > @Angel-Karasu this looks like a problem introduced in #736 as I remember changes to ` print(f"ERROR: failed to read battery thresholds: {e}`
+> 
+> There is an error because the version of `auto-cpufreq` in the AUR isn't up to date, we can see it uses the method to read battery threshold before #716
+
+In that case tagging AUR package maintainers ... @MusicalArtist12, @liljaylj, @parmjotsinghrobot</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>MusicalArtist12:</strong></p>
+                    <p>> > > @Angel-Karasu this looks like a problem introduced in #736 as I remember changes to ` print(f"ERROR: failed to read battery thresholds: {e}`
+> > 
+> > There is an error because the version of `auto-cpufreq` in the AUR isn't up to date, we can see it uses the method to read battery threshold before #716
+> 
+> In that case tagging AUR package maintainers ... @MusicalArtist12, @liljaylj, @parmjotsinghrobot
+
+I'll update it tonight</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>kralle333:</strong></p>
+                    <p>seeing similar issue, installed using latest version from master
+
+![image](https://github.com/user-attachments/assets/fbbce40b-dc94-46e8-ac82-b7278cc0ca41)
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>armenr:</strong></p>
+                    <p>I've installed from the master git branch - getting this same issue on my machine.
+
+But, when I run `auto-cpufreq --stats` I do see what *appears* to be the correct output:
+
+![image](https://github.com/user-attachments/assets/51e8036a-bc6d-4923-ba1f-0e1bdcbdd9e2)
+
+```
+PC    ➜  LENOVO Yoga Pro 7 14IMH9 Type 83E2
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>This seems like an identical issue as in #765 and issue was solved in #750 however PR with fix was never submitted ... hence if anyone would like to give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases). 
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Xenapte:</strong></p>
+                    <p>![image](https://github.com/user-attachments/assets/e356733a-baff-4c3d-a820-786b1146452f)
+
+Same issue for me except that it's on line 99. With the latest AUR release (2.4.0-1) on a ThinkBook laptop.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>NicksQ69:</strong></p>
+                    <p>> ![image](https://private-user-images.githubusercontent.com/17661805/367455196-e356733a-baff-4c3d-a820-786b1146452f.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Mjk4NzU5NzcsIm5iZiI6MTcyOTg3NTY3NywicGF0aCI6Ii8xNzY2MTgwNS8zNjc0NTUxOTYtZTM1NjczM2EtYmFmZi00YzNkLWE4MjAtNzg2YjExNDY0NTJmLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNDEwMjUlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQxMDI1VDE3MDExN1omWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWFiNDMwZGM4MjNjOGQwM2I1NGU2NjdmMTBhYWE2NjJjOThkZTg3ZTZmNjc5MmIzNGU4NjE0ZTk5Y2MxYTA1Y2QmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0._Vt3ffMhb04xJdFOJG09YbpU9uFVwCvY6SqVqKZbOSw)
+> 
+> Same issue for me except that it's on line 99. With the latest AUR release (2.4.0-1) on a ThinkBook laptop.
+
+Hi, same issue :(
+someone can help us ?
+(I don't know if it's related, but I enabled secure boot recently, and updated the kernel, is it related?)</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

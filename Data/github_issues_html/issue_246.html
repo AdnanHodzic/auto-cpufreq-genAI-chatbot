@@ -1,0 +1,153 @@
+
+        <html>
+        <head>
+            <title>Issue #246: Reported as 'not found' with sudo on RHEL 8.3</title>
+        </head>
+        <body>
+            <h1>Reported as 'not found' with sudo on RHEL 8.3</h1>
+            <p><strong>Issue #246</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Trying not to use snap for this as it actually consumes more power to use it. The installer runs without error but it will not start when run with sudo.
+
+### Error output:
+```text
+sudo /usr/local/bin/auto-cpufreq
+
+-------------------------------- auto-cpufreq ---------------------------------
+
+Automatic CPU speed & power optimizer for Linux
+
+Example usage:
+auto-cpufreq --monitor
+
+-----
+
+Traceback (most recent call last):
+  File "/usr/local/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.0', 'auto-cpufreq')
+  File "/usr/lib/python3.6/site-packages/pkg_resources/__init__.py", line 654, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/usr/lib/python3.6/site-packages/pkg_resources/__init__.py", line 1441, in run_script
+    exec(script_code, namespace, namespace)
+  File "/usr/local/lib/python3.6/site-packages/auto_cpufreq-1.0-py3.6.egg/EGG-INFO/scripts/auto-cpufreq", line 151, in <module>
+  File "/usr/local/lib/python3.6/site-packages/click/core.py", line 1137, in __call__
+    return self.main(*args, **kwargs)
+  File "/usr/local/lib/python3.6/site-packages/click/core.py", line 1062, in main
+    rv = self.invoke(ctx)
+  File "/usr/local/lib/python3.6/site-packages/click/core.py", line 1404, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/usr/local/lib/python3.6/site-packages/click/core.py", line 763, in invoke
+    return __callback(*args, **kwargs)
+  File "/usr/local/lib/python3.6/site-packages/auto_cpufreq-1.0-py3.6.egg/EGG-INFO/scripts/auto-cpufreq", line 33, in main
+  File "/usr/lib64/python3.6/subprocess.py", line 423, in run
+    with Popen(*popenargs, **kwargs) as process:
+  File "/usr/lib64/python3.6/subprocess.py", line 729, in __init__
+    restore_signals, start_new_session)
+  File "/usr/lib64/python3.6/subprocess.py", line 1364, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: 'auto-cpufreq': 'auto-cpufreq'
+```
+---
+
+### System information:
+```text
+sudo /usr/local/bin/auto-cpufreq --debug
+
+-------------------------------------------------------------------------------
+
+Linux distro: Red Hat Enterprise Linux 8.3 Ootpa
+Linux kernel: 4.18.0-240.22.1.el8_3.x86_64
+Processor: Intel(R) Core(TM) i7-10850H CPU @ 2.70GHz
+Cores: 12
+Architecture: x86_64
+Driver: /bin/sh: cpufreqctl.auto-cpufreq: command not found
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2700 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	 0.0%     42 °C     2662 MHz
+CPU1:	 0.0%     42 °C     2639 MHz
+CPU2:	 2.9%     42 °C     2700 MHz
+CPU3:	 1.0%     42 °C     2567 MHz
+CPU4:	 0.0%     44 °C     2700 MHz
+CPU5:	 0.0%     44 °C     2664 MHz
+CPU6:	 0.0%     42 °C     2700 MHz
+CPU7:	 0.0%     42 °C     2668 MHz
+CPU8:	 1.0%     42 °C     2700 MHz
+CPU9:	14.9%     42 °C     2669 MHz
+CPU10:	 0.0%     44 °C     2700 MHz
+CPU11:	 0.0%     44 °C     1998 MHz
+
+auto-cpufreq version:
+fatal: not a git repository (or any of the parent directories): .git
+CalledProcessError(128, ['git', 'describe', '--always'])
+
+Python: 3.6.8
+psutil package: 5.7.3
+platform package: 1.0.8
+click package: 8.0.1
+distro package 1.6.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.08 %
+
+Total CPU usage: 1.4 %
+Total system load: 0.28
+Average temp. of all cores: 42.666666666666664 °C 
+
+Currently using: /bin/sh: governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Could you install it using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq#snap-store)? As it runs in a container and isolates its Python env from your env. 
+
+Also with [v1.7.0 release](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.7.0) it's now possible to manually define some of the settings instead of leaving everything to be picked up automatically. Could you try tweaking some of the [available options](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq) and report back on how that worked for you? Thanks</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>zomgugoff:</strong></p>
+                    <p>As I initially wrote, I'm trying not to use Snap as it consumes additional power, negating the use of auto-cpufreq. As such, I have stopped using it (and Snap, for that matter).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Snap as it consumes additional power, negating the use of auto-cpufreq. 
+
+I'm sorry but this statement is just not true. There's no difference in battery life between using snap and regular auto-cpufreq, even if there is small that it's negligible. This is the first time I actually heard from anybody that it makes such a drastic difference. However, if this really is the case for you, I would suggest reporting this problem on [Snapcraft forum](https://forum.snapcraft.io/) and see where it goes from there.
+
+Of course, I don't want to force you to use certain software, I'm just saying that people who reported this same issue didn't have it with snap package, i.e: #212 </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>zomgugoff:</strong></p>
+                    <p>I'm just working from what powertop reports. I realize it's an estimate, but it reported using well over a watt use and with the battery capacity of the laptop I'm using this on, that's an amount I can't sacrifice.
+
+For the record, it did work with the Snap package, but I found that tuned works just as well and doesn't require Snap.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing the issue due to inactivity, if the problem persist please feel free to re-open the issue.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

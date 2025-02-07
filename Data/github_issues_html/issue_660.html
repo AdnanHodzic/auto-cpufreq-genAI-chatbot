@@ -1,0 +1,102 @@
+
+        <html>
+        <head>
+            <title>Issue #660: CPU Frequency on battery power very low on a Intel 12gen </title>
+        </head>
+        <body>
+            <h1>CPU Frequency on battery power very low on a Intel 12gen </h1>
+            <p><strong>Issue #660</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Replaced the Intel Pstate driver, as can be seen below.
+I always get :
+CPU max frequency: 2501 MHz
+CPU min frequency: 400 MHz
+regardless of settings in  /etc/auto-cpufreq.conf
+While on AC power, the system works as expected.
+On battery power the CPU never gets above 2500Mhz, even though the temp is below 40 degrees.
+On AC they reach 4400Mhz.
+
+```
+
+Using settings defined in /etc/auto-cpufreq.conf file
+
+Note: You can quit stats mode by pressing "ctrl+c"
+Configuration file enforces turbo boost
+setting turbo boost: on
+
+-------------------------------------------------------------------------------
+
+		"auto-cpufreq" is about to refresh ...
+		Executed on: March 03 (Sunday) - 01:03:21
+
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 22.04 Jammy Jellyfish
+Linux kernel: 6.2.0-39-generic
+Processor: 12th Gen Intel(R) Core(TM) i3-1215U
+Cores: 8
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2501 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      4.0%        36 °C      1063 MHz
+CPU1      3.0%        36 °C       752 MHz
+CPU2      5.1%        37 °C      1905 MHz
+CPU3      5.9%        37 °C       401 MHz
+CPU4      5.1%        38 °C      1671 MHz
+CPU5      4.0%        38 °C      2501 MHz
+CPU6      2.0%        38 °C      2081 MHz
+CPU7      9.3%        38 °C      1590 MHz
+
+CPU fan speed: 3011 RPM
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Setting to use: "performance" governor
+Warning: governor overwritten using `--force` flag.
+Not setting EPP (not supported by system)
+
+Total CPU usage: 4.1 %
+Total system load: 1.09
+Average temp. of all cores: 37.25 °C 
+
+Configuration file enforces turbo boost
+setting turbo boost: on
+```
+
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>tipoman9:</strong></p>
+                    <p>After a day of attempts, switched the driver with  intel_pstate=disable , disabled C0 CPU halts with idle=poll in grub, tweaked  /dev/cpu_dma_latency and etc brought no improvement.
+Intalled portable windows 10 and compared. The performance loss in battery mode seems similar, though on Windows the CPU drops to about 3200Mhz, while on Linux I get 2800Mhz max.
+Performance reported by "7z b" is about 20% better in windows 10 than Ubuntu 22.04.
+So there seems to be some minor possibility for improvement....</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>tipoman9:</strong></p>
+                    <p>Seems the laptop is restricted by the manufacturer to no more than 15Watt while on battery. Played with ```throttlestop``` under windows and ```throttled``` undel linux.
+Under windows  I can keep constant 16Watt and 26000 performance rating of ```7z b```
+Under linux the I barely reach 10W and 15000 performance rating. Use this to monitor ```sudo turbostat --Summary --quiet --show Busy%,Bzy_MHz,IRQ,PkgWatt,PkgTmp,GFXWatt,CorWatt --interval 6```
+Seems there is some issue under Linux, same hardware is twice slower.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing the issue due to inactivity as it seems unrelated to auto-cpufreq.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

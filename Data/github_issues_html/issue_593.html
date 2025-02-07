@@ -1,0 +1,138 @@
+
+        <html>
+        <head>
+            <title>Issue #593: Asus ROG - AMD dGPU is up all the time (Hybrid mode) when auto-cpufreq is running</title>
+        </head>
+        <body>
+            <h1>Asus ROG - AMD dGPU is up all the time (Hybrid mode) when auto-cpufreq is running</h1>
+            <p><strong>Issue #593</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>This issue was already discussed on https://github.com/AdnanHodzic/auto-cpufreq/issues/278 but closed due to inactivity. Not sure if it's exactly the same root cause, but the consequence is the same.
+
+All the functionality of auto-cpufreq is ok, and it works as intended. However, and I understand that is due to the fact that it has to be monitoring temperature all the time, the dGPU of the computer (when on Hybrid mode) is up all the time. Therefore the energy consumption is much higher than could be.
+
+Running sensors (of lm-sensors package) also does a similar thing, when you run it, to obtain the dGPU temperature, it has to wake it up. I understand that the continuous monitoring of temperature of auto-cpufreq is doing the same, it's getting the temperature of all the sensors of the system, and therefore, requiring the dGPU one, having to wake it up.
+
+I haven't seen any option applicable to configuring auto-cpufreq related with the temperature retrieval. Not very experienced with the psutil package and the methods used by it in core.py but I can give it a try. However I'd appreciate if anyone has more info about the topic.
+
+If I can find anything testing psutil package I'll let it know here.
+
+**Edit 1:**
+This line in core.py it's what wakes up the dGPU
+`temp_sensors = psutil.sensors_temperatures()`
+
+---
+
+### System information:
+-------------------------------------------------------------------------------
+
+Linux distro: Linux Mint 21.2 Victoria
+Linux kernel: 6.2.0-36-generic
+Processor: AMD Ryzen 9 5900HX with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3300 MHz
+CPU min frequency: 1200 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0     12.0%        49 °C      1200 MHz
+CPU1      6.1%        49 °C      1200 MHz
+CPU2      1.0%        49 °C      1198 MHz
+CPU3      0.0%        49 °C      1200 MHz
+CPU4      8.2%        49 °C      1200 MHz
+CPU5      0.0%        49 °C      1198 MHz
+CPU6      2.0%        49 °C      1197 MHz
+CPU7     14.7%        49 °C      1197 MHz
+CPU8      1.0%        49 °C      1198 MHz
+CPU9      0.0%        49 °C      1200 MHz
+CPU10      3.0%        49 °C      1200 MHz
+CPU11      0.0%        49 °C      1200 MHz
+CPU12      7.4%        49 °C      1200 MHz
+CPU13      1.0%        49 °C      1200 MHz
+CPU14      6.9%        49 °C      1196 MHz
+CPU15      0.0%        49 °C      1200 MHz
+
+CPU fan speed: 0 RPM
+
+CPU fan speed: 0 RPM
+
+auto-cpufreq version: 2.0.0 (git: 4ddff1f)
+
+Python: 3.10.12
+psutil package: 5.9.6
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.8.0
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.08 %
+
+Total CPU usage: 1.7 %
+Total system load: 1.98
+Average temp. of all cores: 49.00 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>sayantandas:</strong></p>
+                    <p>I can confirm I have the same issue as described above. The system loses battery in 1.5 hours. 
+If I use Gnome Power profiles instead I get atleast 3 hours of backup.
+
+```myrog14 ~]$ lspci  | grep -i ATI
+01:00.0 PCI bridge: Advanced Micro Devices, Inc. [AMD/ATI] Navi 10 XL Upstream Port of PCI Express Switch (rev c2)
+02:00.0 PCI bridge: Advanced Micro Devices, Inc. [AMD/ATI] Navi 10 XL Downstream Port of PCI Express Switch
+03:00.0 VGA compatible controller: Advanced Micro Devices, Inc. [AMD/ATI] Navi 23 [Radeon RX 6650 XT / 6700S / 6800S] (rev c2)
+03:00.1 Audio device: Advanced Micro Devices, Inc. [AMD/ATI] Navi 21/23 HDMI/DP Audio Controller
+06:00.0 Non-Volatile memory controller: Micron Technology Inc 2450 NVMe SSD [HendrixV] (DRAM-less) (rev 01)
+07:00.0 VGA compatible controller: Advanced Micro Devices, Inc. [AMD/ATI] Rembrandt [Radeon 680M] (rev c8)
+07:00.1 Audio device: Advanced Micro Devices, Inc. [AMD/ATI] Rembrandt Radeon High Definition Audio Controller```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>I don't have a dGPU so I can't test this for myself, but your explanation makes sense. Unfortunately, `psutil.sensors_temperatures()` only has a parameter for using fahrenheit.
+
+If psutil is indeed causing the problem, it should be possible to ditch psutil in its entirety as all the function does is check `/sys/class/hwmon*` and return the results in a nice format. So we could just create out own temperature function that checks `/sys/class/hwmon*` and only returns the temp for the CPU rather than returning all sensors and grabbing our correct sensor from that list. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>jlrpalomar:</strong></p>
+                    <p>@shadeyg56 That sounds interesting, but I guess that hwmon* is different between computer models. Maybe it could be optional in the auto-cpufreq config file, that you can specify the hwmon folder for the CPU temp
+
+Edit: i.e., in my case, if I run sensors the CPU temperature is reported with this one:
+`k10temp-pci-00c3
+Adapter: PCI adapter
+Tctl:         +45.0°C`
+
+Running 'sensors k10temp-pci-00c3' only won't wake up the dGPU, as it only takes this sensors info.
+
+As said above, it'll be interesting to have 1 option where you can specify the sensor name for CPU temperature (or multiple sensors if wanted), instead of getting all of them. Of course, psutil doesn't give this option
+
+Edit 2: 
+searching a bit in the internet, an easy way to get it without using psutil could be from these files:
+"cat /sys/class/thermal/thermal_zone*/temp"
+but I'm not sure how standard this is between Intel or AMD and different MB vendors and their drivers. 
+Ref: https://stackoverflow.com/questions/71187758/cpu-temperature-real-time-with-python-default-libraries
+In my case, this returns the temperature in C multiplied by thousand (i.e.: 45ºC => 45000)
+But I only have thermal_zone0</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

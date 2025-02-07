@@ -1,0 +1,125 @@
+
+        <html>
+        <head>
+            <title>Issue #230: Neither --install, nor does --stats work</title>
+        </head>
+        <body>
+            <h1>Neither --install, nor does --stats work</h1>
+            <p><strong>Issue #230</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+```text
+╰─λ sudo auto-cpufreq --install
+
+--------------------- Deploying auto-cpufreq as a daemon ----------------------
+
+* Turn off bluetooth on boot
+
+* Deploy auto-cpufreq install script
+Traceback (most recent call last):
+File "/usr/bin/auto-cpufreq", line 151, in <module>
+main()
+File "/usr/lib/python3.9/site-packages/click/core.py", line 1137, in __call__
+return self.main(*args, **kwargs)
+File "/usr/lib/python3.9/site-packages/click/core.py", line 1062, in main
+rv = self.invoke(ctx)
+File "/usr/lib/python3.9/site-packages/click/core.py", line 1404, in invoke
+return ctx.invoke(self.callback, **ctx.params)
+File "/usr/lib/python3.9/site-packages/click/core.py", line 763, in invoke
+return __callback(*args, **kwargs)
+File "/usr/bin/auto-cpufreq", line 131, in main
+deploy_daemon()
+File "/usr/lib/python3.9/site-packages/auto_cpufreq/core.py", line 300, in deploy_daemon
+shutil.copy(
+File "/usr/lib/python3.9/shutil.py", line 418, in copy
+copyfile(src, dst, follow_symlinks=follow_symlinks)
+File "/usr/lib/python3.9/shutil.py", line 264, in copyfile
+with open(src, 'rb') as fsrc, open(dst, 'wb') as fdst:
+FileNotFoundError: [Errno 2] No such file or directory: '/usr/share/auto-cpufreq/scripts/auto-cpufreq-install.sh'
+```
+---
+
+### System information:
+```text
+[🔴] × sudo auto-cpufreq --debug
+
+-------------------------------------------------------------------------------
+
+Linux distro: Garuda Linux Soaring Bateleur
+Linux kernel: 5.13.9-zen1-1-zen
+Processor: AMD Ryzen 7 4800H with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2900 MHz
+CPU min frequency: 1400 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0:     7.1%     54 °C     2900 MHz
+CPU1:     3.0%     54 °C     2900 MHz
+CPU2:     4.0%     54 °C     2900 MHz
+CPU3:     5.0%     54 °C     2900 MHz
+CPU4:     3.1%     54 °C     2900 MHz
+CPU5:     2.0%     54 °C     2900 MHz
+CPU6:     5.1%     54 °C     2900 MHz
+CPU7:     1.0%     54 °C     2900 MHz
+CPU8:     2.1%     54 °C     2900 MHz
+CPU9:     6.1%     54 °C     2325 MHz
+CPU10:    4.0%     54 °C     2900 MHz
+CPU11:    1.0%     54 °C     2900 MHz
+CPU12:    3.0%     54 °C     2900 MHz
+CPU13:    1.0%     54 °C     2900 MHz
+CPU14:    9.1%     54 °C     2900 MHz
+CPU15:    0.0%     54 °C     2900 MHz
+
+auto-cpufreq version:
+Version                  : 1.6.4-1
+
+Python: 3.9.6
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 8.0.1
+distro package 1.5.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.11 %
+
+Total CPU usage: 2.5 %
+Total system load: 0.83
+Average temp. of all cores: 53.75 °C
+
+Currently using: performance governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+```
+---
+
+Hello!
+So I installed this package form my package manager (PacMan), and when I do `sudo auto-cpufreq --install` I get error shown above.
+But, I also have an issue with `sudo auto-cpufreq --stats`is show nothing, as you can see in the picture below.
+![image](https://user-images.githubusercontent.com/50217071/129328262-f9222a81-4178-4d83-88dd-9d5889d28bbe.png)
+
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Ilovemyhous:</strong></p>
+                    <p>Hello again!
+Well... turns out it was fixed by simply rebooting I think.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,366 @@
+
+        <html>
+        <head>
+            <title>Issue #463: Auto-cpufreq not autostarting via systemctl</title>
+        </head>
+        <body>
+            <h1>Auto-cpufreq not autostarting via systemctl</h1>
+            <p><strong>Issue #463</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+Auto-cpufreq will not auto start on laptop boot. I have enabled the daemon via systemctl and I have to manually start the daemon every time i boot my laptop which is not optimal.
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+### System information:
+
+Add/paste output of:
+
+```
+auto-cpufreq --debug
+Linux distro: EndeavourOS rolling rolling
+Linux kernel: 6.0.10-arch2-1
+Processor: 11th Gen Intel(R) Core(TM) i7-11850H @ 2.50GHz
+Cores: 16
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2501 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  2.0%     51 °C      800 MHz
+CPU1:	  8.9%     53 °C      800 MHz
+CPU2:	  0.0%     49 °C      800 MHz
+CPU3:	  0.0%     51 °C      800 MHz
+CPU4:	  0.0%     52 °C      800 MHz
+CPU5:	  0.0%     52 °C      800 MHz
+CPU6:	  2.0%     59 °C      800 MHz
+CPU7:	  2.0%     53 °C      800 MHz
+CPU8:	  1.0%     51 °C     2501 MHz
+CPU9:	  0.0%     53 °C      800 MHz
+CPU10:	  1.0%     49 °C      800 MHz
+CPU11:	  0.0%     51 °C      800 MHz
+CPU12:	  1.0%     52 °C     1600 MHz
+CPU13:	  0.0%     52 °C      801 MHz
+CPU14:	  0.0%     59 °C     1210 MHz
+CPU15:	  2.0%     53 °C     1283 MHz
+
+auto-cpufreq version: 1.9.6
+
+Python: 3.10.8
+psutil package: 5.9.4
+platform package: 1.0.8
+click package: 8.1.3
+distro package: 1.8.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.08 %
+
+Total CPU usage: 0.4 %
+Total system load: 0.89
+Average temp. of all cores: 52.50 °C
+
+Currently using: schedutil governor
+Currently turbo boost is: on
+```
+
+I have tried uninstalling and reinstalling the package. I am using the aur version of auto-cpufreq (not git version)
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>There have been some changes/improvements made to install as part of [1.9.7 release](https://github.com/AdnanHodzic/auto-cpufreq/releases), can you please remove auto-cpufreq and try re-installing it again and report if that fixes the problem?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>conrad-mo:</strong></p>
+                    <p>No luck it still doesn't auto-start on boot</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>danielcastelluccio:</strong></p>
+                    <p>I also have this issue on EndeavourOS on 1.9.7.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>siddharthkumarjha:</strong></p>
+                    <p>I also have this problem. I am running 1.9.7 on garuda linux (arch based). I think this is happening due to its conflict with power-profiles-daemon.service. I noticed that even after disabling the power-profiles-daemon.service after a reboot the service was up and running and the auto-cpufreq was inactive(dead) despite being enabled.
+~~~
+systemctl status auto-cpufreq
+○ auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux
+Loaded: loaded (/usr/lib/systemd/system/auto-cpufreq.service; enabled; preset: disabled)
+Active: inactive (dead) since Sun 2022-12-18 15:13:21 IST; 14s ago
+Duration: 11.828s
+Process: 729 ExecStart=/usr/bin/auto-cpufreq --daemon (code=killed, signal=TERM)
+Main PID: 729 (code=killed, signal=TERM)
+CPU: 430ms
+
+Dec 18 15:13:10 siddharth systemd[1]: Started auto-cpufreq - Automatic CPU speed & power optimizer for Linux.
+Dec 18 15:13:21 siddharth systemd[1]: Stopping auto-cpufreq - Automatic CPU speed & power optimizer for Linux>
+Dec 18 15:13:21 siddharth systemd[1]: auto-cpufreq.service: Deactivated successfully.
+Dec 18 15:13:21 siddharth systemd[1]: Stopped auto-cpufreq - Automatic CPU speed & power optimizer for Linux.
+
+╭─siddharth@siddharth in ~ took 4s
+100%
+[🔴] × systemctl status power-profiles-daemon.service
+● power-profiles-daemon.service - Power Profiles daemon
+Loaded: loaded (/usr/lib/systemd/system/power-profiles-daemon.service; disabled; preset: disabled)
+Active: active (running) since Sun 2022-12-18 15:13:21 IST; 26s ago
+Main PID: 2074 (power-profiles-)
+Tasks: 3 (limit: 18724)
+Memory: 3.5M
+CPU: 35ms
+CGroup: /system.slice/power-profiles-daemon.service
+└─2074 /usr/lib/power-profiles-daemon
+
+Dec 18 15:13:21 siddharth systemd[1]: Starting Power Profiles daemon...
+Dec 18 15:13:21 siddharth systemd[1]: Started Power Profiles daemon.
+~~~</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>auto-cpufreq will [disable power-profiles-daemon.service](https://twitter.com/fooctrl/status/1467469508373884933) by default. Also you should never have to manually start the service and it should be [started automatically ](https://github.com/AdnanHodzic/auto-cpufreq#install---auto-cpufreq-daemon)after daemon install.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>siddharthkumarjha:</strong></p>
+                    <p>> auto-cpufreq will [disable power-profiles-daemon.service](https://twitter.com/fooctrl/status/1467469508373884933) by default. Also you should never have to manually start the service and it should be [started automatically ](https://github.com/AdnanHodzic/auto-cpufreq#install---auto-cpufreq-daemon)after daemon install.
+
+Well it's not happening. I manually disabled power-profiles-daemon.service with systemctl but it's still up and running and the auto-cpufreq is not.
+Since I am using arch based distro I figured I didn't need to use the ```auto-cpufreq --install``` flag and just enabling them from the systemctl should be fine according to this https://github.com/AdnanHodzic/auto-cpufreq/issues/84 .
+
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Yes, unfortunately I can't help you further with this, as I don't use Arch and AUR package is not maintained from [what I know and as it's mentioned on Readme](https://github.com/AdnanHodzic/auto-cpufreq/#aur-package-archmanjaro-linux).
+
+If you could figure this problem out and make a fix for it, I would gladly review your changes and give credit to [your contribution to one of the future releases](https://github.com/AdnanHodzic/auto-cpufreq/releases). </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>siddharthkumarjha:</strong></p>
+                    <p>I feel kinda stupid for posting this but today I decided to finally find a solution to my problems and the only thing that worked was masking the power-profiles-daemon.service. I believe that KDE powerdevil was calling this service at each startup causing the auto-cpufreq.service despite being enabled to get stopped because of the conflict.
+Would be nice if the Readme was updated for arch users to 
+~~~
+sudo systemctl mask power-profiles-daemon.service
+~~~
+followed by:
+~~~
+sudo systemctl enable --now auto-cpufreq
+~~~
+As this is enough for the service to get up and running. Provided it was downloaded from AUR
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@siddharthkumarjha 
+
+> Would be nice if the Readme was updated for arch users to
+
+Please feel free to do it yourself, create a PR and link it to this issue, reference: [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>siddharthkumarjha:</strong></p>
+                    <p>@AdnanHodzic I have tried to create a pull request for the updated readme. Please check it.
+PS; This is the first time ever I am contributing to any project.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> @AdnanHodzic I have tried to create a pull request for the updated readme. Please check it. PS; This is the first time ever I am contributing to any project.
+
+That's great to hear! Really happy I encouraged you to do one such thing. :smiley: 
+
+PR checked and comments added, let's continue the discussion there.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Issue fixed by [#485 PR](https://github.com/AdnanHodzic/auto-cpufreq/pull/485)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>helgiles:</strong></p>
+                    <p>Hello! I have a same problem on the already updated fedora 41. I fully reinstall auto-cpufreq. But after restarting operating system is active gnome power deamon.
+I made:
+```
+sudo systemctl stop power-profiles-daemon.service
+sudo systemctl mask power-profiles-daemon.service
+sudo systemctl start auto-cpufreq.service
+```
+All is fine, it works. Restart, and it don't work again.
+
+[System-Details-Report.md](https://github.com/user-attachments/files/17605956/System-Details-Report.md)
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>siddharthkumarjha:</strong></p>
+                    <p>> ```
+> ...
+> sudo systemctl start auto-cpufreq.service
+> ```
+> 
+> All is fine, it works. Restart, and it don't work again.
+> 
+Just to be sure you have enabled the service already right?
+
+```
+sudo systemctl enable --now auto-cpufreq.service
+```
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Hello! I have a same problem on the already updated fedora 41. I fully reinstall auto-cpufreq. But after restarting operating system is active gnome power deamon. I made:
+> 
+> ```
+> sudo systemctl stop power-profiles-daemon.service
+> sudo systemctl mask power-profiles-daemon.service
+> sudo systemctl start auto-cpufreq.service
+> ```
+> 
+> All is fine, it works. Restart, and it don't work again.
+> 
+> [System-Details-Report.md](https://github.com/user-attachments/files/17605956/System-Details-Report.md)
+
+@helgiles [fix is mentioned](https://github.com/AdnanHodzic/auto-cpufreq/issues/779#issuecomment-2447274337) as part of #779, and I've also proposed the [best way to fix it](https://github.com/AdnanHodzic/auto-cpufreq/issues/779#issuecomment-2452926496).
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>helgiles:</strong></p>
+                    <p>I see, thank you for your answer! Unfortunately, I don't know pyhton and
+don't know on that, otherwise I could join work on it.
+
+сб, 2 лист. 2024 р. о 10:58 Adnan Hodzic ***@***.***> пише:
+
+> Hello! I have a same problem on the already updated fedora 41. I fully
+> reinstall auto-cpufreq. But after restarting operating system is active
+> gnome power deamon. I made:
+>
+> sudo systemctl stop power-profiles-daemon.service
+> sudo systemctl mask power-profiles-daemon.service
+> sudo systemctl start auto-cpufreq.service
+>
+> All is fine, it works. Restart, and it don't work again.
+>
+> System-Details-Report.md
+> <https://github.com/user-attachments/files/17605956/System-Details-Report.md>
+>
+> @helgiles <https://github.com/helgiles> fix is mentioned
+> <https://github.com/AdnanHodzic/auto-cpufreq/issues/779#issuecomment-2447274337>
+> as part of #779 <https://github.com/AdnanHodzic/auto-cpufreq/issues/779>,
+> and I've also proposed the best way to fix it
+> <https://github.com/AdnanHodzic/auto-cpufreq/issues/779#issuecomment-2452926496>
+> .
+>
+> —
+> Reply to this email directly, view it on GitHub
+> <https://github.com/AdnanHodzic/auto-cpufreq/issues/463#issuecomment-2452926567>,
+> or unsubscribe
+> <https://github.com/notifications/unsubscribe-auth/ALETDBEDKH2NZWQ7KJ6D52LZ6SH5FAVCNFSM6AAAAABRBOMSX6VHI2DSMVQWIX3LMV43OSLTON2WKQ3PNVWWK3TUHMZDINJSHEZDMNJWG4>
+> .
+> You are receiving this because you were mentioned.Message ID:
+> ***@***.***>
+>
+
+
+-- 
+*З повагою, Олег Слюсар.*
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>In that case I would simply advise you remove and disable tuned as [as mentioned here](https://github.com/AdnanHodzic/auto-cpufreq/issues/779#issuecomment-2447274337) and your problem will be fixed.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>helgiles:</strong></p>
+                    <p>I read it absently.. and missed this moment. Thank you very much! Now
+everything works.
+
+сб, 2 лист. 2024 р. о 12:01 Adnan Hodzic ***@***.***> пише:
+
+> In that case I would simply advise you remove and disable tuned as as
+> mentioned here
+> <https://github.com/AdnanHodzic/auto-cpufreq/issues/779#issuecomment-2447274337>
+> and your problem will be fixed.
+>
+> —
+> Reply to this email directly, view it on GitHub
+> <https://github.com/AdnanHodzic/auto-cpufreq/issues/463#issuecomment-2452940690>,
+> or unsubscribe
+> <https://github.com/notifications/unsubscribe-auth/ALETDBGU64QGOC5QRABUCRLZ6SPHLAVCNFSM6AAAAABRBOMSX6VHI2DSMVQWIX3LMV43OSLTON2WKQ3PNVWWK3TUHMZDINJSHE2DANRZGA>
+> .
+> You are receiving this because you were mentioned.Message ID:
+> ***@***.***>
+>
+
+
+-- 
+*З повагою, Олег Слюсар.*
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Btw, [contribution was made in the meantime](https://github.com/AdnanHodzic/auto-cpufreq/issues/779#issuecomment-2453041930), and this issue is now permanently fixed with latest code changes.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>helgiles:</strong></p>
+                    <p>Good news!
+
+сб, 2 лист. 2024 р., 18:41 користувач Adnan Hodzic ***@***.***>
+пише:
+
+> Btw, contribution was made in the meantime
+> <https://github.com/AdnanHodzic/auto-cpufreq/issues/779#issuecomment-2453041930>,
+> and this issue is now permanently fixed with latest code changes.
+>
+> —
+> Reply to this email directly, view it on GitHub
+> <https://github.com/AdnanHodzic/auto-cpufreq/issues/463#issuecomment-2453043593>,
+> or unsubscribe
+> <https://github.com/notifications/unsubscribe-auth/ALETDBFQSVOZBLHYLAUEH33Z6T6DZAVCNFSM6AAAAABRBOMSX6VHI2DSMVQWIX3LMV43OSLTON2WKQ3PNVWWK3TUHMZDINJTGA2DGNJZGM>
+> .
+> You are receiving this because you were mentioned.Message ID:
+> ***@***.***>
+>
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

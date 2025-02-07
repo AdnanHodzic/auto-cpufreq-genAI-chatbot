@@ -1,0 +1,65 @@
+
+        <html>
+        <head>
+            <title>Issue #134: Adds OpenSUSE Tumbleweed to detected distributions</title>
+        </head>
+        <body>
+            <h1>Adds OpenSUSE Tumbleweed to detected distributions</h1>
+            <p><strong>Issue #134</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hi all,
+I added the detection of the OpenSUSE Tumbleweed distribution to the installer script as I'm using a laptop with it and I wanted to install auto-cpufreq.
+
+I used this commit to install it, it shouldn't give problems to others using the same distro.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Hi @NJOYSoftware, first of all thank you for your contribution.
+
+I'll merge these changes, but could you please consider extending this condition match beyond just "opensuse-tumbleweed? Wouldn't it be better if it worked with any OpenSuse version?
+
+Example:
+
+```
+[ $ID == "opensuse-tumbleweed" ];
+```
+matching was more like:
+```
+[ $ID == "opensuse*" ];
+```
+
+Thanks,
+
+Adnan</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>asperan:</strong></p>
+                    <p>> but could you please consider extending this condition match beyond just "opensuse-tumbleweed? Wouldn't it be better if it worked with any OpenSuse version?
+
+I would say so, but I don't know if any opensuse distro would install the software in this way, so I didn't want to commit something that I don't know it works smoothly. In the next days, I'll setup a VM with opensuse leap to check whether it works the same or not, and I can make a new PR.
+
+Thank you for merging my commit!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> > but could you please consider extending this condition match beyond just "opensuse-tumbleweed? Wouldn't it be better if it worked with any OpenSuse version?
+> 
+> I would say so, but I don't know if any opensuse distro would install the software in this way, so I didn't want to commit something that I don't know it works smoothly. In the next days, I'll setup a VM with opensuse leap to check whether it works the same or not, and I can make a new PR.
+
+Good thinking, sure take your time and I'll be looking forward to any future PR you may have. 
+
+> Thank you for merging my commit!
+
+Of course, changes are already live as part of [v1.5.0 release](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.5.0) :)</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

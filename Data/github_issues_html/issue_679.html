@@ -1,0 +1,255 @@
+
+        <html>
+        <head>
+            <title>Issue #679: add warnings for charge thresholds</title>
+        </head>
+        <body>
+            <h1>add warnings for charge thresholds</h1>
+            <p><strong>Issue #679</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>this PR added warning messages. #675 suggested this change. instead of try and except this replaces it with `os.path.exists` and `os.path.isfile` checks  </p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Good idea, but the issue is these messages will only be printed once in `auto-cpufreq --stats`, which makes them pretty useless and unlikely to be seen by the user
+
+There needs to be something that is called every time the daemon refreshes. A potential solution I can think of would be to save any messages thrown by the battery scripts during setup and just append those to the stats on every daemon refresh</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>I think for the mean time this will work it will give warnings with --live --monitor --status Mabye in a future PR we can add these other functions</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Great start and definitely needed, but we can make this PR better :) 
+
+Logging is definitely a much needed feature, work was started on this long time ago as part of #182 but unfortunately was never completed. 
+
+Hence, until we don't have that. What I would propose is to output both:
+
+```
+number of batteries = X
+batteryX start threshold is set to 0
+batteryX stop threshold is set to 100
+```
+
+lines as part of live, monitoring (already there, just let's format them to be as above with line breaks separating it from rest of the output) and also include this as part of `--stats` & `--debug`.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>ive reformatted the output of the battery information how does this look?
+
+-------------------------------- Battery Info ---------------------------------
+
+battery count = 2
+
+battery0 start threshold = 80
+
+battery0 stop threshold = 90
+
+battery1 start threshold = 80
+
+battery1 stop threshold = 90
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> battery count = 2
+> 
+> battery0 start threshold = 80
+> 
+> battery0 stop threshold = 90
+> 
+> battery1 start threshold = 80
+> 
+> battery1 stop threshold = 90
+
+Looks good, but I would remove the empty lines between these, i.e:
+
+```
+-------------------------------- Battery Info ---------------------------------
+
+battery count = 2
+battery0 start threshold = 80
+battery0 stop threshold = 90
+battery1 start threshold = 80
+battery1 stop threshold = 90
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>unfortunately i cant remove the blank lines for some reason in python when you read a file it prints a blank line. ive tried other ways but it didnt work.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> unfortunately i cant remove the blank lines for some reason in python when you read a file it prints a blank line. ive tried other ways but it didnt work.
+
+Just add `end=""` at the end of statement, i.e: `print(f'battery{b} start threshold = {f.read()}', end="")` and that should do the  trick.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> > unfortunately i cant remove the blank lines for some reason in python when you read a file it prints a blank line. ive tried other ways but it didnt work.
+> 
+> Just add `end=""` at the end of statement, i.e: `print(f'battery{b} start threshold = {f.read()}', end="")` and that should do the trick.
+
+@PurpleWazard I didn't see it, did you add these changes? Thinking of making a release in few days so want to merge all PR that will be part of it.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>just pushed it sorry about the delay</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>No worries and thanks! Unfortunately after install `--stats` fails due to following error:
+
+```
+sudo auto-cpufreq --stats                    
+
+Note: You can quit stats mode by pressing "ctrl+c"
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/click/core.py", line 1157, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/click/core.py", line 1078, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/click/core.py", line 1434, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/click/core.py", line 783, in invoke
+    return __callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/auto_cpufreq/bin/auto_cpufreq.py", line 155, in main
+    brttery_get_thresholds()
+    ^^^^^^^^^^^^^^^^^^^^^^
+NameError: name 'brttery_get_thresholds' is not defined. Did you mean: 'battery_get_thresholds'?
+```
+
+Also, let's add it to `--debug` if possible.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>on it
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>--debug is already working i fixed the typo --stats works</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> --debug is already working i fixed the typo --stats works
+
+Debug and install (--stats) works perfectly now, but `--live` is outputting following errors:
+
+```
+sudo auto-cpufreq --live   
+
+Note: You can quit live mode by pressing "ctrl+c"
+
+-------------------------------- Battery Info ---------------------------------
+
+battery count = 1
+battery0 start threshold = 0
+battery0 stop threshold = 100
+
+----------------------------------- Warning -----------------------------------
+
+Detected running GNOME Power Profiles daemon service!
+This daemon might interfere with auto-cpufreq and has been disabled.
+
+This daemon is not automatically disabled in "monitor" mode and
+will be enabled after auto-cpufreq is removed.
+
+
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 24.04 Noble Numbat
+Linux kernel: 6.8.0-31-generic
+Processor: Intel(R) Core(TM) i7-8565U CPU @ 1.80GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4600 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      2.1%        53 °C      1629 MHz
+CPU1      4.1%        53 °C      2401 MHz
+CPU2      5.1%        52 °C      2400 MHz
+CPU3      8.1%        53 °C      2400 MHz
+CPU4      6.1%        53 °C      2400 MHz
+CPU5      8.0%        53 °C      2400 MHz
+CPU6      5.1%        52 °C      2400 MHz
+CPU7      4.0%        53 °C       742 MHz
+
+CPU fan speed: 0 RPM
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+/usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+/usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+/usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+/usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+/usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+/usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+/usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+/usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+Setting to use: "balance_performance" EPP
+
+Total CPU usage: 1.0 %
+Total system load: 1.37
+Average temp. of all cores: 52.75 °C 
+
+Load optimal (load average: 1.37, 1.80, 1.91)
+setting turbo boost: off
+
+-------------------------------------------------------------------------------
+
+		"auto-cpufreq" is about to refresh ..
+```		
+
+Couldn't replicate this on changes from `master` branch ...</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>-live works without issues for me. that issue your having might have alreadly been fix its just my repo hasnt gotten that commit yet. i just updated my fork so it should have those changes now.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> -live works without issues for me. that issue your having might have alreadly been fix its just my repo hasnt gotten that commit yet. i just updated my fork so it should have those changes now.
+
+Perfect! As always, thank you for your contribution and you'll be credited for you work as part of upcoming release. </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

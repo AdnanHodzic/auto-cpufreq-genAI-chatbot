@@ -1,0 +1,190 @@
+
+        <html>
+        <head>
+            <title>Issue #512: Installation probelm in Ubuntu 18.04 LTS</title>
+        </head>
+        <body>
+            <h1>Installation probelm in Ubuntu 18.04 LTS</h1>
+            <p><strong>Issue #512</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? Yes, I do
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)? Yes I do
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)? Yes I do
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+### Error output:
+```text
+novan@ThinkPadP53:~/auto-cpufreq$ sudo ./auto-cpufreq-installer 
+─────────────────────────────────────────────────────────────────────────────────── auto-cpufreq installer ───────────────────────────────────────────────────────────────────────────────────
+
+Welcome to auto-cpufreq tool installer.
+  			
+Options:
+
+[I]nstall
+[R]emove
+[Q]uit
+
+Select a key: [i/r/q]: i
+
+───────────────────────────────────────────────────────────────────────────────────
+
+
+Detected Debian based distribution
+
+
+───────────────────────────────────────────────────────────────────────────────────
+
+
+Setting up Python environment
+
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+dmidecode is already the newest version (3.1-1ubuntu0.1).
+python3-dev is already the newest version (3.6.7-1~18.04).
+python3-setuptools is already the newest version (39.0.1-2ubuntu0.1).
+python3-pip is already the newest version (9.0.1-2.3~ubuntu1.18.04.8).
+python3-venv is already the newest version (3.6.7-1~18.04).
+0 upgraded, 0 newly installed, 0 to remove and 256 not upgraded.
+
+Installing necessary Python packages
+
+The directory '/home/novan/.cache/pip/http' or its parent directory is not owned by the current user and the cache has been disabled. Please check the permissions and owner of that directory. If executing pip with sudo, you may want sudo's -H flag.
+The directory '/home/novan/.cache/pip' or its parent directory is not owned by the current user and caching wheels has been disabled. check the permissions and owner of that directory. If executing pip with sudo, you may want sudo's -H flag.
+Collecting pip
+  Downloading https://files.pythonhosted.org/packages/a4/6d/6463d49a933f547439d6b5b98b46af8742cc03ae83543e4d7688c2420f8b/pip-21.3.1-py3-none-any.whl (1.7MB)
+    100% |████████████████████████████████| 1.7MB 289kB/s 
+Collecting wheel
+  Downloading https://files.pythonhosted.org/packages/27/d6/003e593296a85fd6ed616ed962795b2f87709c3eee2bca4f6d0fe55c6d00/wheel-0.37.1-py2.py3-none-any.whl
+Installing collected packages: pip, wheel
+  Found existing installation: pip 9.0.1
+    Uninstalling pip-9.0.1:
+      Successfully uninstalled pip-9.0.1
+Successfully installed pip-21.3.1 wheel-0.37.1
+WARNING: The directory '/home/novan/.cache/pip' or its parent directory is not owned or is not writable by the current user. The cache has been disabled. Check the permissions and owner of that directory. If executing pip with sudo, you should use sudo's -H flag.
+Requirement already satisfied: setuptools in /opt/auto-cpufreq/venv/lib/python3.6/site-packages (from -r requirements.txt (line 1)) (39.0.1)
+Collecting psutil
+  Downloading psutil-5.9.5-cp36-abi3-manylinux_2_12_x86_64.manylinux2010_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl (282 kB)
+     |████████████████████████████████| 282 kB 969 kB/s            
+Collecting click
+  Downloading click-8.0.4-py3-none-any.whl (97 kB)
+     |████████████████████████████████| 97 kB 1.9 MB/s            
+Collecting distro
+  Downloading distro-1.8.0-py3-none-any.whl (20 kB)
+Collecting importlib-metadata
+  Downloading importlib_metadata-4.8.3-py3-none-any.whl (17 kB)
+Collecting zipp>=0.5
+  Downloading zipp-3.6.0-py3-none-any.whl (5.3 kB)
+Collecting typing-extensions>=3.6.4
+  Downloading typing_extensions-4.1.1-py3-none-any.whl (26 kB)
+Installing collected packages: zipp, typing-extensions, importlib-metadata, psutil, distro, click
+Successfully installed click-8.0.4 distro-1.8.0 importlib-metadata-4.8.3 psutil-5.9.5 typing-extensions-4.1.1 zipp-3.6.0
+
+
+───────────────────────────────────────────────────────────────────────────────────
+
+
+installing auto-cpufreq tool
+
+**Traceback (most recent call last):
+  File "setup.py", line 43, in <module>
+    scripts=["bin/auto-cpufreq"],
+  File "/opt/auto-cpufreq/venv/lib/python3.6/site-packages/setuptools/__init__.py", line 129, in setup
+    return distutils.core.setup(**attrs)
+  File "/usr/lib/python3.6/distutils/core.py", line 108, in setup
+    _setup_distribution = dist = klass(attrs)
+  File "/opt/auto-cpufreq/venv/lib/python3.6/site-packages/setuptools/dist.py", line 372, in __init__
+    _Distribution.__init__(self, attrs)
+  File "/usr/lib/python3.6/distutils/dist.py", line 281, in __init__
+    self.finalize_options()
+  File "/opt/auto-cpufreq/venv/lib/python3.6/site-packages/setuptools/dist.py", line 528, in finalize_options
+    ep.load()(self, ep.name, value)
+  File "/opt/auto-cpufreq/venv/lib/python3.6/site-packages/pkg_resources/__init__.py", line 2324, in load
+    return self.resolve()
+  File "/opt/auto-cpufreq/venv/lib/python3.6/site-packages/pkg_resources/__init__.py", line 2330, in resolve
+    module = __import__(self.module_name, fromlist=['__name__'], level=0)
+  File "/home/novan/auto-cpufreq/.eggs/setuptools_git_versioning-1.13.3-py3.6.egg/setuptools_git_versioning.py", line 1
+    from __future__ import annotations
+    ^
+SyntaxError: future feature annotations is not defined**
+
+
+───────────────────────────────────────────────────────────────────────────────────
+
+
+auto-cpufreq tool successfully installed.
+
+For list of options, run:
+auto-cpufreq --help"
+
+
+───────────────────────────────────────────────────────────────────────────────────
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+novan@ThinkPadP53:~/auto-cpufreq$ auto-cpufreq --debug
+/opt/auto-cpufreq/venv/bin/python: can't open file '/opt/auto-cpufreq/venv/bin/auto-cpufreq': [Errno 2] No such file or directory
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+I am using Ubuntu 18.04 LTS, when I installed using the auto-cpufreq installer, I am facing the errors and have no idea how to fix the problem.
+
+Regards,
+
+Novan
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>You didn't fill out the issue template, so my first suggestion would be is did you try installing Snap package if auto-cpufreq-installer failed and if that ends up with same problem? As I see some libraries not being installed correctly due to your home directory permissions.
+
+Template issue ignored and not filled out, hence making this issue invalid, closing. Feel free to re-open this issue with properly filled out requested fields.
+
+Reference:
+
+### Fill out informtion requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+### Error output:
+```text
+Add/paste error output in case of failed installation or other failing component
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+auto-cpufreq --debug
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behavior.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

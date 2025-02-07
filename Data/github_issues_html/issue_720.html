@@ -1,0 +1,142 @@
+
+        <html>
+        <head>
+            <title>Issue #720: [ Nix / NixOS ] PR #718 breaks flake</title>
+        </head>
+        <body>
+            <h1>[ Nix / NixOS ] PR #718 breaks flake</h1>
+            <p><strong>Issue #720</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+### Error output:
+```text
+error:
+       … while calling the 'seq' builtin
+
+         at /nix/store/i1aw9jjgxcvyd642s12kw3iasmarwd42-source/lib/modules.nix:322:18:
+
+          321|         options = checked options;
+          322|         config = checked (removeAttrs config [ "_module" ]);
+             |                  ^
+          323|         _module = checked (config._module);
+
+       … while evaluating a branch condition
+
+         at /nix/store/i1aw9jjgxcvyd642s12kw3iasmarwd42-source/lib/modules.nix:261:9:
+
+          260|       checkUnmatched =
+          261|         if config._module.check && config._module.freeformType == null && merged.unmatchedDefns != [] then
+             |         ^
+          262|           let
+
+       (stack trace truncated; use '--show-trace' to show the full trace)
+
+       error: undefined variable 'mkForce'
+
+       at /nix/store/f641gq84hc4hka15bln4wnqdkxg4v49a-source/nix/module.nix:47:35:
+
+           46|         serviceConfig.WorkingDirectory = "";
+           47|         serviceConfig.ExecStart = mkForce [
+             |                                   ^
+           48|           ""
+
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+-------------------------------------------------------------------------------
+
+Linux distro: NixOS 24.05 Uakari
+Linux kernel: 6.9.2
+Processor: 11th Gen Intel(R) Core(TM) i7-11370H @ 3.30GHz
+Cores: 8
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3201 MHz
+CPU min frequency: 400 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0      5.0%        43 °C       752 MHz
+CPU1     15.0%        41 °C      2895 MHz
+CPU2      4.0%        40 °C      2447 MHz
+CPU3      6.0%        40 °C      3300 MHz
+CPU4      4.1%        43 °C      3201 MHz
+CPU5     10.9%        41 °C       925 MHz
+CPU6      2.0%        40 °C      2238 MHz
+CPU7      4.0%        40 °C      3201 MHz
+
+auto-cpufreq version: 2.3.0 (git: )
+
+Python: 3.11.9
+psutil package: 5.9.8
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.22 %
+
+Total CPU usage: 12.8 %
+Total system load: 0.42
+Average temp. of all cores: 41.00 °C 
+
+Currently using: performance governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+---
+
+Hi, PR https://github.com/AdnanHodzic/auto-cpufreq/pull/718 is broken for me (see error above); I had to revert to the previous commit:
+
+```nix
+    auto-cpufreq = { # Energy efficiency
+      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:AdnanHodzic/auto-cpufreq?rev=3f6d7a3e77732c1dbe4873b69404fefd899ad35e";
+    };
+```
+
+Edit: oops! I forgot to add the `auto-cpufreq --debug` output.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>1e44c80
+
+Sorry about that</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>isabelroses:</strong></p>
+                    <p>Ahh sorry, thats my bad, should've caught that.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

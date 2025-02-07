@@ -1,0 +1,140 @@
+
+        <html>
+        <head>
+            <title>Issue #443: Error When running program. </title>
+        </head>
+        <body>
+            <h1>Error When running program. </h1>
+            <p><strong>Issue #443</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+-----  Yes could not see same issue
+
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+----  Yes installs correctly but when running gives following error
+----   ImportError: /usr/lib/python3.10/lib-dynload/_ctypes.cpython-310-x86_64-linux-gnu.so: failed to map segment from shared object
+
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+- --- N/A
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+----  N/A as this issue is relating to other errors
+
+### Error output:
+```
+Traceback (most recent call last):
+  File "/snap/auto-cpufreq/122/lib/python3.10/site-packages/psutil/_pslinux.py", line 304, in <module>
+    from resource import prlimit  # python >= 3.4
+ImportError: /usr/lib/python3.10/lib-dynload/resource.cpython-310-x86_64-linux-gnu.so: failed to map segment from shared object
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/snap/auto-cpufreq/122/bin/auto-cpufreq", line 14, in <module>
+    from auto_cpufreq.core import *
+  File "/snap/auto-cpufreq/122/lib/python3.10/site-packages/auto_cpufreq/core.py", line 9, in <module>
+    import psutil
+  File "/snap/auto-cpufreq/122/lib/python3.10/site-packages/psutil/__init__.py", line 102, in <module>
+    from . import _pslinux as _psplatform
+  File "/snap/auto-cpufreq/122/lib/python3.10/site-packages/psutil/_pslinux.py", line 306, in <module>
+    import ctypes
+  File "/usr/lib/python3.10/ctypes/__init__.py", line 8, in <module>
+    from _ctypes import Union, Structure, Array
+ImportError: /usr/lib/python3.10/lib-dynload/_ctypes.cpython-310-x86_64-linux-gnu.so: failed to map segment from shared object
+
+```
+---
+
+### System information:sudo
+
+inxi ouput
+System:    Host: Secure-OS Kernel: 5.4.0-112-generic x86_64 bits: 64
+           Desktop: Xfce 4.12.3 Distro: Linux Kodachi
+Machine:   Device: laptop System: LENOVO product: xxxxxxv: ThinkPad T480 serial: N/A
+           Mobo: LENOVO model: 20L6S42000 v: SDK0J40697 WIN serial: N/A
+           UEFI [Legacy]: LENOVO v: N24ET70P (1.45 ) date: 07/22/2022
+Battery    BAT0: charge: 20.0 Wh 99.0% condition: 20.2/24.0 Wh (84%)
+           BAT1: charge: 19.4 Wh 100.3% condition: 19.4/23.9 Wh (81%)
+CPU:       Quad core Intel Core i7-8650U (-MT-MCP-) speed/max: 800/4200 MHz
+Graphics:  Card: Intel UHD Graphics 620
+           Display Server: x11 (X.Org 1.19.6 )
+           drivers: modesetting (unloaded: fbdev,vesa)
+           Resolution: 1920x1080@60.02hz, 1920x1080@60.00hz
+           OpenGL: renderer: Mesa DRI Intel UHD Graphics 620 (KBL GT2)
+           version: 4.6 Mesa 20.0.8
+Network:   Card-1: Intel Ethernet Connection (4) I219-LM driver: e1000e
+           Card-2: Intel Wireless 8265 / 8275 driver: iwlwifi
+Drives:    HDD Total Size: 6641.6GB (0.4% used)
+Info:      Processes: 375 Uptime: 4:31 Memory: 3177.4/15655.2MB
+           Client: Shell (bash) inxi: 2.3.56 
+
+
+```
+auto-cpufreq --debug
+
+<<<
+Traceback (most recent call last):
+  File "/snap/auto-cpufreq/122/lib/python3.10/site-packages/psutil/_pslinux.py", line 304, in <module>
+    from resource import prlimit  # python >= 3.4
+ImportError: /usr/lib/python3.10/lib-dynload/resource.cpython-310-x86_64-linux-gnu.so: failed to map segment from shared object
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/snap/auto-cpufreq/122/bin/auto-cpufreq", line 14, in <module>
+    from auto_cpufreq.core import *
+  File "/snap/auto-cpufreq/122/lib/python3.10/site-packages/auto_cpufreq/core.py", line 9, in <module>
+    import psutil
+  File "/snap/auto-cpufreq/122/lib/python3.10/site-packages/psutil/__init__.py", line 102, in <module>
+    from . import _pslinux as _psplatform
+  File "/snap/auto-cpufreq/122/lib/python3.10/site-packages/psutil/_pslinux.py", line 306, in <module>
+    import ctypes
+  File "/usr/lib/python3.10/ctypes/__init__.py", line 8, in <module>
+    from _ctypes import Union, Structure, Array
+ImportError: /usr/lib/python3.10/lib-dynload/_ctypes.cpython-310-x86_64-linux-gnu.so: failed to map segment from shared object
+
+<<<
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+I have gone through your scripts files and I like the way your code is neatly displayed.
+
+I have installed, removed, reinstalled both the snap and github version several times over the past few weeks
+There was one instance when the /opt/auto-cpufreq/.. venv files not found error occured.
+
+Deleted all the occurance of auto-cpufreq and tried again with only snap and that is the stage I am in now.
+
+Watched the videos but as this is a installation error , was not able to troubleshoot watching the videos
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>SunkenHero:</strong></p>
+                    <p>Looks like you installed it via Snap, the Snap package is buggy and i would recommend to install it via the install file...</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Looks like you installed it via Snap, the Snap package is buggy and i would recommend to install it via the install file...
+
+I'd argue that Snap package is buggy because I use it myself and spent great time making it work as it should.
+
+Regardless, as @SunkenHero suggested in case Snap package causes problems just use[ auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer).
+
+Closing the issue due to inactivity.
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

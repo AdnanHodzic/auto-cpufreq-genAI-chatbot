@@ -1,0 +1,183 @@
+
+        <html>
+        <head>
+            <title>Pull Request #459: Modified Installer</title>
+        </head>
+        <body>
+            <h1>Modified Installer</h1>
+            <p><strong>Pull Request #459</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Fixed some formatting for the installer and lessened the number of echo calls with here docs, etc.
+
+Now, seperators are done properly, to the width of the terminal and are proper box dashes (as per the Unicode specification):
+
+![image](https://user-images.githubusercontent.com/82954751/203756022-a1510f2b-012b-4b10-b719-4ddc7d6f4ea2.png)
+
+Adjusting the size adjusts the bar:
+
+![image](https://user-images.githubusercontent.com/82954751/203756858-dd906225-4724-4356-b27d-c47fbd42d3b6.png)
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Very nice, I actually wanted to do this myself but never got around it. Two things:
+
+1. Adjusting the size of terminal will result in breaking the lines, i.e:
+![This is an image](http://foolcontrol.org/wp-content/uploads/2022/11/auto-cpufreq-new-sep.png)
+
+As from what I understood this doesn't happen for you? If I re-run the same command on new re-sized terminal width then line will be adjusted.
+
+2. Why is this only done for `install`, as for example `remove` will not use any of this new functionality. I.e
+```
+------------------------- auto-cpufreq daemon removed -------------------------
+```
+
+But I guess it's related to what I proposed in 4 as this stuff is used outside of installer
+
+3. Let's ident "For list of options, run:" to the left, as now it looks bit off:
+
+```
+auto-cpufreq tool successfully installed.
+
+  		For list of options, run:
+auto-cpufreq --help
+```
+
+
+5. After we merge this, it would be great if you could make these same changes across auto-cpufreq output where `sep` and `seperator` are being used.
+
+
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>abvee:</strong></p>
+                    <p>> As from what I understood this doesn't happen for you?
+
+Well, lines that are already drawn will not resize, but yes, running the command again in a resized terminal will adjust to the size.
+
+> Why is this only done for install, as for example remove will not use any of this new functionality. 
+
+I uh... didn't see that. I'll make some commits and fix those, they will probably use the same logic as the install heading :smile: 
+
+> Let's ident "For list of options, run:" to the left, as now it looks bit off:
+
+Will do
+
+>  After we merge this, it would be great if you could make these same changes across auto-cpufreq output where sep and seperator are being used.
+
+The only problem with that is that I don't know python very well.... I usually program in c and make small shell scripts. It shouldn't be too hard though. I'll keep you informed if I cannot do it</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>If it helps, there's even a snippet that will take care of terminal sizing/padding but was never merged with `master` branch, reference: https://github.com/AdnanHodzic/auto-cpufreq/pull/325#issuecomment-999486895</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>abvee:</strong></p>
+                    <p>I'll probably make a new branch and PR to merge anything outside the installer.
+
+I took the liberty to replace Hyphens in the headers to an "equals to" sign (`=`):
+
+![image](https://user-images.githubusercontent.com/82954751/203985644-0d4663ac-9c6f-4843-81bb-db2febae1324.png)
+
+![image](https://user-images.githubusercontent.com/82954751/203985897-a937af3b-49f3-4c7f-8682-bd73b370961c.png)
+
+Let me know if you prefer one over the other, and if there are any other problems :dagger: 
+
+**P.S**: Thanks for being so nice on my first PRs :)
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I'll probably make a new branch and PR to merge anything outside the installer.
+
+Definitely a good idea, since there will be lot more changes and it'll be a lot bigger PR.
+
+> I took the liberty to replace Hyphens in the headers to an "equals to" sign (=):
+
+Let's please return these to `---`, I find the output to be "too bulky" with `===`. Ideally these would be lines as they are for `seperator` and could also scale. See if you could make it like that, as that would be excellent. 
+
+> Let me know if you prefer one over the other, and if there are any other problems dagger
+
+Also let's add an empty line before "Welcome to ..."
+
+> P.S: Thanks for being so nice on my first PRs :)
+
+Most welcome, I'm honored to make your first PR a pleasant experience and too many more! :beers: 
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>abvee:</strong></p>
+                    <p>> Ideally these would be lines as they are for seperator and could also scale. See if you could make it like that, as that would be excellent.
+
+> Also let's add an empty line before "Welcome to ..."
+
+Done
+
+They also dynamically size just like the seperator:
+
+![image](https://user-images.githubusercontent.com/82954751/204070623-352a5fd5-fed9-44b1-8bdb-0ece77acdd88.png)
+
+![image](https://user-images.githubusercontent.com/82954751/204070650-0afb266a-75e6-4232-9542-82dbb65afeee.png)
+
+
+> Most welcome, I'm honored to make your first PR a pleasant experience and too many more! beers
+
+Thanks again :D. 
+Let's hope I have many more</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I've just noticed a regression introduced as part of #460, so let's resolve this first before this PR is merged.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I was about to merge these changes, but then I found out what was missing as part of #462, I won't revert the changes so maybe it's easiest to make the changes as part of this PR?
+
+Currently, if you do `sudo ./auto-cpufreq-installer --install` and do not run `sudo auto-cpufreq --install` in meantime, but go straight to `sudo ./auto-cpufreq-installer --remove` you'll end up getting the following error:
+
+```
+Couldn't remove the auto-cpufreq daemon
+/usr/local/bin/auto-cpufreq-remove or /usr/bin/auto-cpufreq-remove do not exist.
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>abvee:</strong></p>
+                    <p>> so maybe it's easiest to make the changes as part of this PR?
+
+Okay, will do.
+
+> you'll end up getting the following error:
+
+Okay, I'll keep the error, but remove the other files....</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>abvee:</strong></p>
+                    <p>the `auto-cpufreq --remove` command already prints an error, so I'm not going to reprint it.
+
+I also added a check for the  wrapper script, so it should just work now</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Perfect! Thank you for your contribution and I'm making to be making a v1.9.7 release where you'll get credit for all your work :)</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

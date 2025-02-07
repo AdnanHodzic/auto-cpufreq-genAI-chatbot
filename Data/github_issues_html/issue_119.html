@@ -1,0 +1,116 @@
+
+        <html>
+        <head>
+            <title>Issue #119: Issues with CPUs disabled</title>
+        </head>
+        <body>
+            <h1>Issues with CPUs disabled</h1>
+            <p><strong>Issue #119</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>System info has some issues when running while having offline cpus:
+- psutil does't report offline CPUs, core numbers are wrong
+- psutil reports wrong maximum frequency
+- wrong cpu numbering and temperatures in table
+- cpufreqctl prints error messages when setting governor/epp
+
+Linux distro: Manjaro Linux 20.1 Mikah
+Linux kernel: 5.8.6-1-MANJARO
+Snap package: no
+Python: 3.8.5
+psutil package: 5.7.2
+
+-------------------------------------------------------------------------------
+
+Linux distro: Manjaro Linux 20.1 Mikah
+Linux kernel: 5.8.6-1-MANJARO
+
+Processor: Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz
+Cores: 9
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 4078 MHz
+CPU min frequency: 800 MHz
+
+Core	 Usage     Frequency    Temperature
+CPU0:	  0.0%     4295 MHz     47 °C
+CPU1:	  1.0%     4303 MHz     49 °C
+CPU2:	  0.0%     1090 MHz     46 °C
+CPU3:	  0.0%     4405 MHz     62 °C
+CPU4:	  0.0%     4393 MHz     48 °C
+CPU5:	  0.0%     4296 MHz     45 °C
+CPU6:	100.0%     4398 MHz    nan °C
+CPU7:	  0.0%      800 MHz    nan °C
+CPU8:	  1.0%     4310 MHz    nan °C
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: discharging
+
+Setting to use: "powersave" governor
+/usr/bin/cpufreqctl: line 143: echo: write error: Invalid argument
+/usr/bin/cpufreqctl: line 143: echo: write error: Invalid argument
+/usr/bin/cpufreqctl: line 143: echo: write error: Invalid argument
+/usr/bin/cpufreqctl: line 267: echo: write error: Invalid argument
+/usr/bin/cpufreqctl: line 267: echo: write error: Invalid argument
+/usr/bin/cpufreqctl: line 267: echo: write error: Invalid argument
+Setting to use: "balance_power" EPP
+
+Total CPU usage: 11.7 %
+Total system load: 1.21 
+
+High CPU load, setting turbo boost: on
+
+-------------------------------------------------------------------------------
+
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Haptein:</strong></p>
+                    <p>It also looks like psutil reports wrong current frequencies percpu with offline cores:
+
+From psutil:
+Core	 Usage     Frequency   
+CPU0:	100.0%     3355 MHz     
+CPU1:	100.0%     3610 MHz     
+CPU2:	100.0%     3573 MHz     
+CPU3:	100.0%     3610 MHz     
+CPU4:	  0.0%     3563 MHz    
+CPU5:	  0.0%     3576 MHz    
+CPU8:	100.0%      800 MHz   
+CPU9:	  0.0%      800 MHz     
+CPU10:	  1.0%     3598 MHz 
+CPU11:	  1.0%     3560 MHz 
+
+Formatted rom /proc/cpuinfo:
+CPU0		: 3465.708
+CPU1		: 3465.891
+CPU2	        : 3466.120
+CPU3		: 3466.327
+CPU4		: 3466.354
+CPU5		: 3132.101
+CPU8		: 2928.991
+CPU9		: 3039.303
+CPU10		: 2802.238
+CPU11		: 3138.782
+
+Here CPU 8 and 9 are different
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Solved as part of #120 </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

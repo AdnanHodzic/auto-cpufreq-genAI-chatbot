@@ -1,0 +1,50 @@
+
+        <html>
+        <head>
+            <title>Issue #172: Remove pacman wildcard</title>
+        </head>
+        <body>
+            <h1>Remove pacman wildcard</h1>
+            <p><strong>Issue #172</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>```
+❯ pacman -Qs auto-cpufreq
+local/auto-cpufreq-git 1.6.0.r0.g0ce8311-1
+    Automatic CPU speed & power optimizer
+```
+
+With wildcard:
+```
+auto-cpufreq version:
+error: package 'auto-cpufreq*' was not found
+```
+```
+❯ pacman -Qi auto-cpufreq* | grep Version
+zsh: no matches found: auto-cpufreq*
+```
+
+Without wildcard:
+```
+auto-cpufreq version:
+Version         : 1.6.0.r0.g0ce8311-1
+```
+```
+❯ pacman -Qi auto-cpufreq | grep Version
+Version         : 1.6.0.r0.g0ce8311-1
+```
+
+It turns out it only works with the wildcard in my `pkgbuilds` directory where `auto-cpufreq-git` lives. Weird.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Good catch, wildcard must've been a leftover from testing. Thanks!</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

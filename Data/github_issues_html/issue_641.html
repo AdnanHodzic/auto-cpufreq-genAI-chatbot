@@ -1,0 +1,343 @@
+
+        <html>
+        <head>
+            <title>Issue #641: issue w.r.t --monitor and --live flag</title>
+        </head>
+        <body>
+            <h1>issue w.r.t --monitor and --live flag</h1>
+            <p><strong>Issue #641</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? Yes
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)? 
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)? Yes
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)? yes
+
+### Error output:
+
+this is when running auto-cpufreq with --monitor flag
+
+```
+
+Note: You can quit monitor mode by pressing "ctrl+c"
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/opt/auto-cpufreq/venv/lib64/python3.12/site-packages/click/core.py", line 1157, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib64/python3.12/site-packages/click/core.py", line 1078, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib64/python3.12/site-packages/click/core.py", line 1434, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib64/python3.12/site-packages/click/core.py", line 783, in invoke
+    return __callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib64/python3.12/site-packages/auto_cpufreq/bin/auto_cpufreq.py", line 100, in main
+    battery_get_thresholds()
+  File "/opt/auto-cpufreq/venv/lib64/python3.12/site-packages/auto_cpufreq/battery_scripts/battery.py", line 51, in battery_get_thresholds
+    if conf["battery"]["enable_thresholds"] == "true":
+       ~~~~^^^^^^^^^^^
+  File "/usr/lib64/python3.12/configparser.py", line 941, in __getitem__
+    raise KeyError(key)
+KeyError: 'battery'
+
+```
+
+the above one is when i was not using a config file.
+but when i created a config file as mentioned in the document i am getting the below result
+
+```
+
+Using settings defined in /etc/auto-cpufreq.conf file
+
+Note: You can quit monitor mode by pressing "ctrl+c"
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/opt/auto-cpufreq/venv/lib64/python3.12/site-packages/click/core.py", line 1157, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib64/python3.12/site-packages/click/core.py", line 1078, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib64/python3.12/site-packages/click/core.py", line 1434, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib64/python3.12/site-packages/click/core.py", line 783, in invoke
+    return __callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib64/python3.12/site-packages/auto_cpufreq/bin/auto_cpufreq.py", line 100, in main
+    battery_get_thresholds()
+  File "/opt/auto-cpufreq/venv/lib64/python3.12/site-packages/auto_cpufreq/battery_scripts/battery.py", line 51, in battery_get_thresholds
+    if conf["battery"]["enable_thresholds"] == "true":
+       ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.12/configparser.py", line 1222, in __getitem__
+    raise KeyError(key)
+KeyError: 'enable_thresholds'
+
+```
+
+also, when running auto-cpufreq with --live flag, i am getting this write error. but only when plugged in(using performance governor and balance performance epp)
+
+```
+
+Linux distro: Fedora Linux 39 Thirty Nine
+Linux kernel: 6.7.3-200.fc39.x86_64
+Processor: Intel(R) Core(TM) i5-10210U CPU @ 1.60GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1600 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      1.0%        37 °C      1600 MHz
+CPU1      1.0%        38 °C      1600 MHz
+CPU2      1.0%        40 °C       400 MHz
+CPU3      0.0%        39 °C       400 MHz
+CPU4      0.0%        37 °C      1600 MHz
+CPU5      0.0%        38 °C       400 MHz
+CPU6      1.0%        40 °C      1600 MHz
+CPU7      0.0%        39 °C      1600 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+/usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+/usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+/usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+/usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+/usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+/usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+/usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+/usr/local/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+Setting to use: "balance_performance" EPP
+
+Total CPU usage: 0.6 %
+Total system load: 0.20
+Average temp. of all cores: 38.50 °C
+
+Load optimal (load average: 0.20, 0.23, 0.21)
+setting turbo boost: off
+
+```
+
+i found a thread w.r.t --live flag. but it was with amd processors. did'nt know what to do with that. new to linux
+
+also, installed it via git repo
+
+---
+
+### System information:
+
+```
+auto-cpufreq --debug
+
+
+Linux distro: Fedora Linux 39 Thirty Nine
+Linux kernel: 6.7.3-200.fc39.x86_64
+Processor: Intel(R) Core(TM) i5-10210U CPU @ 1.60GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1600 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      0.0%        37 °C      1600 MHz
+CPU1      0.0%        38 °C       400 MHz
+CPU2      0.0%        40 °C       400 MHz
+CPU3      1.0%        38 °C      1600 MHz
+CPU4      1.0%        37 °C      1600 MHz
+CPU5      2.9%        38 °C      1600 MHz
+CPU6      0.0%        40 °C      1600 MHz
+CPU7      1.0%        38 °C      1601 MHz
+
+auto-cpufreq version: 2.1.0 (git: 3e8ee20)
+
+Python: 3.12.1
+psutil package: 5.9.8
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: Convertible
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.38 %
+
+Total CPU usage: 0.3 %
+Total system load: 0.06
+Average temp. of all cores: 38.25 °C
+
+Currently using: performance governor
+Currently turbo boost is: off
+
+```
+
+
+---
+
+Thanks in advance</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>could i have your /etc/auto-cpufreq.conf file please im working on the battery stuff for this project and having your config file would help me.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>i believe Ive found the issue. i will submit a pull request.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>madmax5647:</strong></p>
+                    <p>> could i have your /etc/auto-cpufreq.conf file please im working on the battery stuff for this project and having your config file would help me.
+
+```
+
+# settings for when connected to a power source
+[charger]
+# see available governors by running: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+# preferred governor
+governor = performance
+
+# EPP: see available preferences by running: cat /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_available_preferences
+energy_performance_preference = balanced_performance
+
+# minimum cpu frequency (in kHz)
+# example: for 800 MHz = 800000 kHz --> scaling_min_freq = 800000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly
+# scaling_min_freq = 800000
+
+# maximum cpu frequency (in kHz)
+# example: for 1GHz = 1000 MHz = 1000000 kHz -> scaling_max_freq = 1000000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly
+# scaling_max_freq = 1000000
+
+# turbo boost setting. possible values: always, auto, never
+turbo = auto
+
+# settings for when using battery power
+[battery]
+# see available governors by running: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+# preferred governor
+governor = powersave
+
+# EPP: see available preferences by running: cat /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_available_preferences
+energy_performance_preference = balanced_performance
+
+# minimum cpu frequency (in kHz)
+# example: for 800 MHz = 800000 kHz --> scaling_min_freq = 800000
+
+```
+
+i changed only the epp options.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>madmax5647:</strong></p>
+                    <p>@PurpleWazard i updated my battery.py script with the code you provided manually and now --monitor flag is not throwing any exceptions. but the --live flag stills throws the exception. i wonder if i could ignore it if it does not affect the working itself. because it does not throw any error while running with --stats flag after installing the daemon</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>The battery scripts don't effect --live I'm not having any issue with --live so I'm not sure what it is.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@madmax5647 curios, after you pull the latest changes if you change to some [other (intel) driver](https://github.com/AdnanHodzic/auto-cpufreq/#troubleshooting) will you get the same error? </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>madmax5647:</strong></p>
+                    <p>@AdnanHodzic No i am not getting any error. but the epp setting is not applied anymore. it is showing "Not setting EPP (not supported by system)".I switched to acpi-cpufreq
+
+this is when i run with --live flag
+```
+
+Linux distro: Fedora Linux 39 Thirty Nine
+Linux kernel: 6.7.3-200.fc39.x86_64
+Processor: Intel(R) Core(TM) i5-10210U CPU @ 1.60GHz
+Cores: 8
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1600 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      2.0%        40 °C      1600 MHz
+CPU1      1.0%        41 °C      1601 MHz
+CPU2      2.0%        42 °C      1600 MHz
+CPU3      1.0%        41 °C      1600 MHz
+CPU4      1.0%        40 °C      1600 MHz
+CPU5      1.0%        41 °C      1602 MHz
+CPU6      2.0%        42 °C      1600 MHz
+CPU7      2.0%        41 °C      1600 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+Not setting EPP (not supported by system)
+
+Total CPU usage: 1.1 %
+Total system load: 0.16
+Average temp. of all cores: 41.00 °C
+
+Load optimal (load average: 0.16, 0.19, 0.10)
+setting turbo boost: off
+
+```
+
+what should i do? 
+this is what available for me
+```
+
+ls /lib/modules/$(uname -r)/kernel/drivers/cpufreq/
+
+acpi-cpufreq.ko.xz  amd_freq_sensitivity.ko.xz  amd-pstate-ut.ko.xz  p4-clockmod.ko.xz  pcc-cpufreq.ko.xz  powernow-k8.ko.xz  speedstep-lib.ko.xz
+
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Sorry I wasn't able to reproduce this either, everything works fine for me with `--live`. 
+
+@PurpleWazard but for some weird reason I'm not seeing EPP at all in `--monitor`</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

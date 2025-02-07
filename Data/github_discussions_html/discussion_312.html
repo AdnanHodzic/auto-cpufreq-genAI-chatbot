@@ -1,0 +1,244 @@
+
+        <html>
+        <head>
+            <title>Discussion #312: auto-cpufreq is looking for co-maintainers & open source developers to help shape future of the project!</title>
+        </head>
+        <body>
+            <h1>auto-cpufreq is looking for co-maintainers & open source developers to help shape future of the project!</h1>
+            <p><strong>Discussion #312</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>_Update: If you would like to discuss anything regardin auto-cpufreq or its development, please join [auto-cpufreq Discord server!](https://discord.gg/jYvWNr68)_
+
+At the time of writing this, auto-cpufreq has 2243 stars on Github and with such exponential growth it's hard to keep up with everything. Especially since I do its development and everything else that requires running one such project in my free time without any financial compensation.
+
+I announced I was looking for co-maintainers after project reached over 1000 stars on both [Twitter](https://twitter.com/fooctrl/status/1400141578937720835) and [LinkedIn](https://www.linkedin.com/posts/adnanhodzic_github-adnanhodzicauto-cpufreq-automatic-activity-6805907547158007808-Ay3F/) but it didn't get a lot of traction and no one reached out.
+
+Considering project is open source over the time it had a [lot of contributors](https://github.com/AdnanHodzic/auto-cpufreq/graphs/contributors), which have all been [credited for their work](https://github.com/AdnanHodzic/auto-cpufreq/releases) but no one stuck around. Linux is constantly evolving space and there are always new [issues and feature requests](https://github.com/AdnanHodzic/auto-cpufreq/issues), and since I encourage [contributing to the project,](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) there's a constant influx of [PR's to review](https://github.com/AdnanHodzic/auto-cpufreq/pulls).
+
+Hence I'm looking for (long term) co-maintainer/s and developers who would help with workload of project going forward. I will not leave the project and will stay in its lead. I will still help with the workload and help onboard new members and together I would like us to shape future of the project. 
+
+In its current form auto-cpufreq is very stable and besides implementing [existing feature requests](https://github.com/AdnanHodzic/auto-cpufreq/issues?q=is%3Aissue+feature+is%3Aopen), next big feature I would need help with is to have it implemented as a [GNOME extension](https://extensions.gnome.org/).
+
+Please let me know if you're interested in improving Linux and helping the overall Open Source community by being part of auto-cpufreq!
+
+Adnan</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>cristian158:</strong></p>
+                    <p>Hey Adnan, I've been following this project since almost a year and now it's part of my basic toolbox. I would love to help you maintain it with no financial expectations of course, the thing is that I'm just a real newbie with a lot of interest in Linux, Open Source and related matters. Basically, my knowledge is limited but my passion for improving and learning is huge. 
+Maybe I could help you with very basic tasks and learn along the way until I understand more advanced stuff.
+Let me know if my help is needed. If not, let me know what should I study in order to learn whatever it's needed to help you with this project and in the future come back to you.
+Hugs and thanks a lot for the immense contribution to the foss world.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Hey @cristian158, thank you for your kind words and of course your help is needed. Also, participating in open source projects is a great way to learn new things :slightly_smiling_face: 
+
+Most help would be needed with going through existing/new issues and answering questions in discussion section. Also having someone to [test](https://github.com/AdnanHodzic/auto-cpufreq/issues/368#issuecomment-1062638363) would be great, same thing goes for reviewing existing/new pull requests. Of course finally it would be to code some of the requested features and fixes. 
+
+Let's start with these things and then we can take it from there: 
+
+- Subscribe to get all notifications related to auto-cpufreq ("Notifications" button).
+- Get fully acquainted with [auto-cpufreq and it's features (README.md)](https://github.com/AdnanHodzic/auto-cpufreq/).
+- Thoroughly inspect source code, from [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto-cpufreq-installer) to [core.py](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto_cpufreq/core.py) and [auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/bin/auto-cpufreq) and newly[ power_helper.py](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto_cpufreq/power_helper.py)
+- Go through [existing issues and feature requests](https://github.com/AdnanHodzic/auto-cpufreq/issues). There's a lot of issues which can be triaged and/or are low hanging fruit which can be picked up and fixed. A lot of them can also be closed, either to being open for too long (no activity) or might've been fixed by one of the [releases.](https://github.com/AdnanHodzic/auto-cpufreq/releases) I think looking into these is the best way to get started, as you'll see what the issues/requests are and you'll get acquainted with code if you haven't yet by this point. The way you handle these will also give me a great overview on how you're doing.
+- Of course, if you pick up anything from issues, create a Pull request. Take a look at how [merged pull requests](https://github.com/AdnanHodzic/auto-cpufreq/pulls?q=is%3Apr+is%3Aall) look like and what it took to get them to that stage. For example [311](https://github.com/AdnanHodzic/auto-cpufreq/pull/311) and  [314](https://github.com/AdnanHodzic/auto-cpufreq/pull/314) are great examples how you could help with review and testing process (what was done by "bobslept" user in this case). 
+- Also take a look at [discussions ](https://github.com/AdnanHodzic/auto-cpufreq/discussions) and provide answers on what's being asked or if some of it can be linked to new issues.
+
+After you get hang of these things, then let's talk about giving you contributor permissions so you can start labeling issues and even merging PR's without requiring anything from my side.
+
+In the meantime, please let me know if you have any questions and/or comments!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>cristian158:</strong></p>
+                    <p>Thank you so much for your answer!
+Like I said, my knowledge is very limited so I won't be able to help any time soon but with all these suggestions I can now focus my study.
+I follow you here and on twitter so we keep in touch
+
+Thanks again!!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>sperky7933:</strong></p>
+                    <p>Hi
+I have absolutely no experience with this, but I do know python and am willing to help since I now have the summer off. This program single-handedly made the battery of my laptop last 1 hour and 50 minutes to 5 hours, so I would love to contribute back and help this epic project. I have most of the summer off unless I get an internship so I can do whatever.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Hi, that's great to hear! I believe I explained it all in [my post above](https://github.com/AdnanHodzic/auto-cpufreq/discussions/312#discussioncomment-2450050). I did the same with few other folks who were interested via email, but unfortunately I don't see that anyone did anything.
+
+Regardless, I think that should be enough to get you started and I'm here if you have any other questions in meantime.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Those interested in contributing to this project, thing you could help with most is to simply start going through [influx of new/existing issues which are reported and triaging them](https://github.com/AdnanHodzic/auto-cpufreq/issues), as a lot of them are pointing to existing issue. Some of them are even including fixes which could easily be picked up and added to the code.  Other easy start would just to be to answer questions asked in [Discussion](https://github.com/AdnanHodzic/auto-cpufreq/discussions) section.
+
+That would be the easiest way to start, followed by [rest of my suggestions.](https://github.com/AdnanHodzic/auto-cpufreq/discussions/312#discussioncomment-2450050)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>SunkenHero:</strong></p>
+                    <p>Hello,
+so i would be interested to be a developer in this project. I am trying my best to make it better. I am using the software since a few months and would love to help developing it. I also think that i would learn a lot for my live here.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Would love to have you onboard, please check message above which I believe has all the necessary instructions/information. #436 would be an ideal bug to tackle. And as instructed above, handling incoming issues/PR's/discussion items would be the best way to start. Just your reply in #433 is a great step forward, so keep it up :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>harshil1973:</strong></p>
+                    <p>I have applied to this year's GSoC; if I do not get selected, I may work on the Gnome extension of this project. It will be enjoyable to implement. I have mainly skills related to Rust and a little bit of Python, and I have also been in the development of a Fractal project of Gnome. Still, do you recommend me something I can start learning?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Hi, would love to have you as a contributor, as I suggested to others please take a [look at this to get started,](https://github.com/AdnanHodzic/auto-cpufreq/discussions/312#discussioncomment-2919629) and please inform me if you have any other questions and/or comments!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>FrostKnight:</strong></p>
+                    <p>This project has been excellent. I did wonder though, would it benefit BSDs to have a tool like this? Or are they already lean enough on their own?
+
+I would bet that the 2nd question has some truth, the only thing being, it could be an advantage at some point.
+
+This isn't a huge issue, as of now, but it was a thought.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I believe BSD has the same problem as Linux, hence having auto-cpufreq on BSD as well would be of great value. I would encourage you to give a try yourself and try to make a [code contribution ](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution):) 
+
+If you have any other question please[ join auto-cpufreq Discord server!](https://discord.gg/jYvWNr68)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>FrostKnight:</strong></p>
+                    <p>Yeah, I figured that was the case. Btw, I detest discord and I barely tolerate discourse as a forum service too.
+
+As for me making contribution, I am not very well versed on making code from scratch or based on kernel type things. I usually need the whole thing lain in front of me due to my limited programming skills.
+
+If I had to guess, this would require getting a BSD dev's attention. 
+
+I have noticed that FreeBSD has some guide for this. Its outdated tho. 
+
+But other guides probably exist too. Anywho, bluetooth, ethernet, wifi when not used should probably always be disabled. Bluetooth  is one of those things however I wish I could permanently disable on a hardware level. ;)
+
+Not secure and bloated like the blob monster from that really old cheesy film. :P
+
+"1958"</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Minjares:</strong></p>
+                    <p>Discord server is no longer working, could you give another link to the server. I would like to contribute to this repository.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>[This](https://discord.gg/Sjauxtj6kH) link from the README should work. The one from the contributor discussion is outdated  </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Angel-Karasu:</strong></p>
+                    <p>Hello,
+I'm not an expert in Linux or even python, but I'm not a beginner either. I'd like to be able to do my bit and contribute to various projects to improve the use of Linux.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Welcome! Basically everything I [said above still stands](https://github.com/AdnanHodzic/auto-cpufreq/discussions/312#discussioncomment-2450050) how to get started. Only thing that changed is that now we have a [Discord community](https://discord.gg/Sjauxtj6kH) where you can ask questions, and I know you're already active there.
+
+Either way, fire away if you have any questions!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I just collected all of the issues & feature requests, a lot of them could be connected to each other (especially Fedora & RedHat issues). There are even issues which have suggested code attached to it how to fix the problem, but user didn't bother creating a PR.
+
+Hence for you @Angel-Karasu or anyone else who would like to contribute, I think this would be the best starting point. As these are the things that need attention, but aren't getting it.
+
+**Open feature requests:**
+
+- #29
+
+- #156
+
+- #157
+
+- #229
+
+- #315
+
+- #356
+
+- #380
+
+- #385
+
+- #451
+
+- #497
+
+- #621
+
+- #698
+
+**Issues:**
+
+- #83
+
+- #106
+
+- #357
+
+- #464
+
+- #468
+
+- #472
+
+- #517
+
+- #522
+
+- #552
+
+- #574
+
+- #588
+
+- #593
+
+- #601
+
+- #602
+
+- #615
+
+- #634
+
+- #665
+
+- #677
+
+- #677
+
+- #681
+
+- #685</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

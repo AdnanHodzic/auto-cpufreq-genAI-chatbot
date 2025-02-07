@@ -1,0 +1,120 @@
+
+        <html>
+        <head>
+            <title>Issue #334: Unable to install auto-cpufreq AUR</title>
+        </head>
+        <body>
+            <h1>Unable to install auto-cpufreq AUR</h1>
+            <p><strong>Issue #334</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+```text
+Paste here error output
+error: failed to commit transaction (conflicting files)
+python-click: /usr/lib/python3.10/site-packages/click/__init__.py exists in filesystem
+python-click: /usr/lib/python3.10/site-packages/click/__pycache__/__init__.cpython-310.pyc exists in filesystem
+python-click: /usr/lib/python3.10/site-packages/click/__pycache__/_compat.cpython-310.pyc exists in filesystem
+python-click: /usr/lib/python3.10/site-packages/click/__pycache__/_termui_impl.cpython-310.pyc exists in filesystem
+python-click: /usr/lib/python3.10/site-packages/click/__pycache__/_textwrap.cpython-310.pyc exists in filesystem
+python-click: /usr/lib/python3.10/site-packages/click/__pycache__/_unicodefun.cpython-310.pyc exists in filesystem
+python-click: /usr/lib/python3.10/site-packages/click/__pycache__/_winconsole.cpython-310.pyc exists in filesystem
+python-click: /usr/lib/python3.10/site-packages/click/__pycache__/core.cpython-310.pyc exists in filesystem
+python-click: /usr/lib/python3.10/site-packages/click/__pycache__/decorators.cpython-310.pyc exists in filesystem
+python-click: /usr/lib/python3.10/site-packages/click/__pycache__/exceptions.cpython-310.pyc exists in filesystem
+python-click: /usr/lib/python3.10/site-packages/click/__pycache__/formatting.cpython-310.pyc exists in filesystem
+python-click: /usr/lib/python3.10/site-packages/click/__pycache__/globals.cpython-310.pyc exists in filesystem
+python-click: /usr/lib/python3.10/site-packages/click/__pycache__/parser.cpython-310.pyc exists in filesystem
+python-click: /usr/lib/python3.10/site-packages/click/__pycache__/shell_completion.cpython-310.pyc exists in filesystem
+python-click: /usr/lib/python3.10/site-packages/click/__pycache__/termui.cpython-310.pyc exists in filesystem
+python-click: /usr/lib/python3.10/site-packages/click/__pycache__/testing.cpython-310.pyc exists in filesystem
+python-click: /usr/lib/python3.10/site-packages/click/__pycache__/types.cpython-310.pyc exists in filesystem
+python-click: /usr/lib/python3.10/site-packages/click/__pycache__/utils.cpython-310.pyc exists in filesystem
+python-click: /usr/lib/python3.10/site-packages/click/_compat.py exists in filesystem
+python-click: /usr/lib/python3.10/site-packages/click/_termui_impl.py exists in filesystem
+python-click: /usr/lib/python3.10/site-packages/click/_textwrap.py exists in filesystem
+python-click: /usr/lib/python3.10/site-packages/click/_unicodefun.py exists in filesystem
+python-click: /usr/lib/python3.10/site-packages/click/_winconsole.py exists in filesystem
+python-click: /usr/lib/python3.10/site-packages/click/core.py exists in filesystem
+python-click: /usr/lib/python3.10/site-packages/click/decorators.py exists in filesystem
+python-click: /usr/lib/python3.10/site-packages/click/exceptions.py exists in filesystem
+python-click: /usr/lib/python3.10/site-packages/click/formatting.py exists in filesystem
+python-click: /usr/lib/python3.10/site-packages/click/globals.py exists in filesystem
+python-click: /usr/lib/python3.10/site-packages/click/parser.py exists in filesystem
+python-click: /usr/lib/python3.10/site-packages/click/py.typed exists in filesystem
+python-click: /usr/lib/python3.10/site-packages/click/shell_completion.py exists in filesystem
+python-click: /usr/lib/python3.10/site-packages/click/termui.py exists in filesystem
+python-click: /usr/lib/python3.10/site-packages/click/testing.py exists in filesystem
+python-click: /usr/lib/python3.10/site-packages/click/types.py exists in filesystem
+python-click: /usr/lib/python3.10/site-packages/click/utils.py exists in filesystem
+Errors occurred, no packages were upgraded.
+ -> error installing repo packages
+
+
+### System information:
+Endeavour OS
+Paste here output of the auto-cpufreq --debug
+Linux distro: EndeavourOS rolling rolling
+Linux kernel: 5.15.11-zen1-1-zen
+Processor: AMD Ryzen 7 5800H with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3200 MHz
+CPU min frequency: 1200 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0:     5.1%     53 °C     1200 MHz
+CPU1:     2.0%     53 °C     1200 MHz
+CPU2:     4.0%     53 °C     1200 MHz
+CPU3:     6.9%     53 °C     1200 MHz
+CPU4:     7.0%     53 °C     1200 MHz
+CPU5:    20.4%     53 °C     1200 MHz
+CPU6:    17.0%     53 °C     1200 MHz
+CPU7:     2.0%     53 °C     3200 MHz
+CPU8:     2.0%     53 °C     1200 MHz
+CPU9:     1.0%     53 °C     1200 MHz
+CPU10:    4.0%     53 °C     1200 MHz
+CPU11:    0.0%     53 °C     1200 MHz
+CPU12:    3.0%     53 °C     1200 MHz
+CPU13:    0.0%     53 °C     1200 MHz
+CPU14:    3.0%     53 °C     1868 MHz
+CPU15:    2.0%     53 °C     1200 MHz
+
+auto-cpufreq version:
+fatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+CalledProcessError(128, ['git', 'describe', '--always'])
+
+Python: 3.10.1
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 8.0.3
+distro package 1.6.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.17 %
+
+Total CPU usage: 5.3 %
+Total system load: 1.19
+Average temp. of all cores: 52.75 °C 
+
+Currently using: schedutil governor
+Currently turbo boost is: on
+
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+            </div>
+        </body>
+        </html>
+        

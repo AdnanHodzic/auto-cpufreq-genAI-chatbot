@@ -1,0 +1,40 @@
+
+        <html>
+        <head>
+            <title>Discussion #225: ondemand instead of performance governor when on AC</title>
+        </head>
+        <body>
+            <h1>ondemand instead of performance governor when on AC</h1>
+            <p><strong>Discussion #225</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hello everyone,
+
+I was wondering if it was possible to set the default governor to be ondemand instead performance when connected to power? I looked briefly at the code and it seemed like the quickest way to do this would be to remove "performance" from the ALL_GOVERNORS list. Is there a way to do something like this without reinstalling? Thanks!</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>nblinov:</strong></p>
+                    <p>commenting out "performance" did not quite work due to the checks in gov_check() function. What did work was slightly modifying the function get_avail_performance as follows
+```
+def get_avail_performance():
+    if "ondemand" in get_avail_gov():
+        return "ondemand"
+    for g in ALL_GOVERNORS:
+        if g in get_avail_gov():
+            return g
+```
+The installation using auto-cpufreq-installer went fine, and now the governor is set to ondemand when the laptop is plugged in. This is nice since the fan rarely turns on during most light workloads for me.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>zoitrok:</strong></p>
+                    <p>These things are configurable now. https://github.com/AdnanHodzic/auto-cpufreq#2-auto-cpufreq-config-file</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

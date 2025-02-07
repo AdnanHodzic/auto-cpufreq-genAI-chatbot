@@ -1,0 +1,92 @@
+
+        <html>
+        <head>
+            <title>Issue #210: Permission Error in Pop_OS 21.04</title>
+        </head>
+        <body>
+            <h1>Permission Error in Pop_OS 21.04</h1>
+            <p><strong>Issue #210</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+```text
+PermissionError(13, 'Permission denied')
+Linux distro: UNKNOWN distro UNKNOWN version
+```
+---
+
+### System information:
+```text
+-------------------------------------------------------------------------------
+
+PermissionError(13, 'Permission denied')
+Linux distro: UNKNOWN distro UNKNOWN version
+Linux kernel: 5.12.10-surface
+Processor: Intel(R) Core(TM) i5-6300U CPU @ 2.40GHz
+Cores: 4
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3000 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  9.0%    nan °C      551 MHz
+CPU1:	  6.1%    nan °C     2500 MHz
+CPU2:	  5.1%    nan °C      584 MHz
+CPU3:	  5.3%    nan °C      557 MHz
+
+auto-cpufreq version:
+Snap: 1.6.4
+
+Python: 3.8.5
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 7.1.2
+distro package 1.5.0
+
+Computer type: /sys/firmware/dmi/tables/smbios_entry_point: Permission denied
+/dev/mem: Permission denied
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.38 %
+
+Total CPU usage: 3.3 %
+Total system load: 0.67
+Average temp. of all cores: nan °C 
+
+Currently using: powersave governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+
+```
+---
+
+I initially had the same issue as #189 but whilst on 20.10. I have since updated to the 21.04 beta and the fix in #189 no longer works. Along with that, it cannot detect the distro either it seems.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AMoonRabbit:</strong></p>
+                    <p>Okay, I managed to get this working. I had to remove the snap install completely and install fresh and that seems to have gotten around this issue for now. Marking as resolved.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>atul-g:</strong></p>
+                    <p>> I had to remove the snap install completely and install fresh
+
+Hey @AMoonRabbit , by installing fresh, did you mean a re-install with snap itself or installing it via auto-cpufreq-installer ?
+
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

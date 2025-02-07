@@ -1,0 +1,93 @@
+
+        <html>
+        <head>
+            <title>Issue #579: Slow System performanc on battery</title>
+        </head>
+        <body>
+            <h1>Slow System performanc on battery</h1>
+            <p><strong>Issue #579</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+I have installed this tool and it's been amazing to use so far
+But facing a lot of slow performance issues and lags when system is on battery.
+my governer override is set to default.
+
+### Have you tried?
+
+
+### Error output:
+
+```
+---
+
+### System information
+root@ayush-ThinkPad-L430:/home/ayush# auto-cpufreq --debug
+
+-------------------------------------------------------------------------------
+
+Linux distro: Linux Mint 21.2 Victoria
+Linux kernel: 5.15.0-86-generic
+Processor: Intel(R) Core(TM) i5-3230M CPU @ 2.60GHz
+Cores: 4
+Architecture: x86_64
+Driver: intel_cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2600 MHz
+CPU min frequency: 1200 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      2.0%        51 °C      2600 MHz
+CPU1      4.0%        51 °C      2423 MHz
+CPU2      0.0%        49 °C      2600 MHz
+CPU3      2.0%        49 °C      2600 MHz
+
+CPU fan speed: 0 RPM
+
+auto-cpufreq version: 2.0.0 (git: c3e2f83d)
+
+Python: 3.10.12
+psutil package: 5.9.5
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.8.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.39 %
+
+Total CPU usage: 0.8 %
+Total system load: 0.44
+Average temp. of all cores: 50.00 °C 
+
+Currently using: performance governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+
+root@ayush-ThinkPad-L430:/home/ayush# 
+
+
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>When running on battery, auto-cpufreq uses the "powersave" governor which limits your frequency quite a bit (in this case 1200 is set to your minimum). You also have a very old CPU so this limited frequency hinders your performance quite a bit.
+
+To help a bit, you could try increasing your minimum frequency using a config file. Information on this can be found [here](https://github.com/AdnanHodzic/auto-cpufreq#3-auto-cpufreq-config-file) in the README.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

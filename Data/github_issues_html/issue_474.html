@@ -1,0 +1,173 @@
+
+        <html>
+        <head>
+            <title>Issue #474: Daemon has high cpu usage(consistently 10-12%)</title>
+        </head>
+        <body>
+            <h1>Daemon has high cpu usage(consistently 10-12%)</h1>
+            <p><strong>Issue #474</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- Yes
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+-Yes
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+- Yes
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+- Yes
+I have also tried reinstalling multiple times.
+### Error output:
+```text
+Add/paste error output in case of failed installation or other failing component
+```
+---
+
+### System information:
+
+Add/paste output of:
+-------------------------------------------------------------------------------
+
+Linux distro: Void rolling void
+Linux kernel: 6.1.6_1
+Processor: Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+Cores: 12
+Architecture: x86_64
+Driver: /bin/sh: 1: cpufreqctl.auto-cpufreq: not found
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2601 MHz
+CPU min frequency: 800 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0:    19.2%     42 °C     2494 MHz
+CPU1:     2.0%     41 °C     2600 MHz
+CPU2:     1.0%     42 °C      800 MHz
+CPU3:     2.0%     40 °C     2600 MHz
+CPU4:     5.9%     42 °C      800 MHz
+CPU5:     1.0%     39 °C      800 MHz
+CPU6:     6.0%     42 °C      800 MHz
+CPU7:     4.0%     41 °C      800 MHz
+CPU8:     3.0%     42 °C      800 MHz
+CPU9:     0.0%     40 °C      800 MHz
+CPU10:    9.0%     42 °C     2607 MHz
+CPU11:    5.1%     39 °C      800 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+
+-------------------------------------------------------------------------------
+
+```
+auto-cpufreq --debug
+```
+Linux distro: Void rolling void
+Linux kernel: 6.1.6_1
+Processor: Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+Cores: 12
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2601 MHz
+CPU min frequency: 800 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0:     2.0%     41 °C     2601 MHz
+CPU1:    16.2%     41 °C      800 MHz
+CPU2:     1.0%     41 °C      800 MHz
+CPU3:     3.9%     40 °C     2599 MHz
+CPU4:     1.0%     42 °C     2585 MHz
+CPU5:     0.0%     40 °C     2600 MHz
+CPU6:     2.0%     41 °C      800 MHz
+CPU7:     1.0%     41 °C      800 MHz
+CPU8:     0.0%     41 °C      800 MHz
+CPU9:     1.0%     40 °C     2213 MHz
+CPU10:    2.0%     42 °C     2600 MHz
+CPU11:    1.0%     40 °C      800 MHz
+
+auto-cpufreq version: 1.9.7 (git: 1c9ff32a)
+
+Python: 3.11.1
+psutil package: 5.9.4
+platform package: 1.0.8
+click package: 8.1.3
+distro package: 1.8.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.17 %
+
+Total CPU usage: 2.3 %
+Total system load: 0.94
+Average temp. of all cores: 40.83 °C 
+
+Currently using: schedutil governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behavior.
+Daemon running in /opt/auto-cpufreq has very high cpu usage(10-12%) consistently when running. Doesn't seem like normal behavior. Any solutions?
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>This right here seems to be a problem: `Driver: /bin/sh: 1: cpufreqctl.auto-cpufreq: not found`
+
+Can you try changing the driver or other suggestions proposed in [Troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq/#troubleshooting)?
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>respectablenoob-source:</strong></p>
+                    <p>> This right here seems to be a problem: `Driver: /bin/sh: 1: cpufreqctl.auto-cpufreq: not found`
+> 
+> Can you try changing the driver or other suggestions proposed in [Troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq/#troubleshooting)?
+
+Yes, just retried the troubleshootings tips and they make no difference. However I tried reinstalling and recieved this message which I didn't notice the first time installing :`warning: auto-cpufreq: unable to open supervise/ok: file does not exist
+warning: auto-cpufreq: unable to open supervise/ok: file does not exist
+`
+which may be useful in debugging this issue.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>hmyzna:</strong></p>
+                    <p>i am on void linux too, and the service provided by auto-cpufreq installer for runit doesn't work, it constantly crashes. However, when I run "sudo auto-cpufreq --daemon" everything works just fine.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Animeshz:</strong></p>
+                    <p>Just doing `export PATH=$PATH:/usr/local/bin` solves that, in the run file of the service before exec.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Everyone affected by this problem, changes made by @Animeshz have been merged as part of #508 PR. 
+
+Please pull the latest git changes and install them using [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer). Snap package changes will be included as part of upcoming release.
+
+If problem persists, please feel free to comment or re-open this issue. </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

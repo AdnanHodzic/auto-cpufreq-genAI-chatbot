@@ -1,0 +1,331 @@
+
+        <html>
+        <head>
+            <title>Issue #801: upgraded to debian testing off 12.x and not able to install now.</title>
+        </head>
+        <body>
+            <h1>upgraded to debian testing off 12.x and not able to install now.</h1>
+            <p><strong>Issue #801</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Has been working well for over a year on debian stable. Any ideas?
+
+-----
+
+
+  Installing build dependencies ... done
+  Getting requirements to build wheel ... done
+  Preparing metadata (pyproject.toml) ... error
+  error: subprocess-exited-with-error
+  
+  × Preparing metadata (pyproject.toml) did not run successfully.
+  │ exit code: 1
+  ╰─> [35 lines of output]
+      Traceback (most recent call last):
+        File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 353, in <module>
+          main()
+        File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 335, in main
+          json_out['return_val'] = hook(**hook_input['kwargs'])
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 149, in prepare_metadata_for_build_wheel
+          return hook(metadata_directory, config_settings)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        File "/tmp/pip-build-env-c7ex3i08/overlay/lib/python3.12/site-packages/poetry/core/masonry/api.py", line 42, in prepare_metadata_for_build_wheel
+          poetry = Factory().create_poetry(Path().resolve(), with_groups=False)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        File "/tmp/pip-build-env-c7ex3i08/overlay/lib/python3.12/site-packages/poetry_dynamic_versioning/patch.py", line 26, in alt_poetry_create
+          name = _get_and_apply_version(
+                 ^^^^^^^^^^^^^^^^^^^^^^^
+        File "/tmp/pip-build-env-c7ex3i08/overlay/lib/python3.12/site-packages/poetry_dynamic_versioning/__init__.py", line 685, in _get_and_apply_version
+          version, instance = _get_version(config, name)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+        File "/tmp/pip-build-env-c7ex3i08/overlay/lib/python3.12/site-packages/poetry_dynamic_versioning/__init__.py", line 501, in _get_version
+          version = _get_version_from_dunamai(vcs, pattern, config)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        File "/tmp/pip-build-env-c7ex3i08/overlay/lib/python3.12/site-packages/poetry_dynamic_versioning/__init__.py", line 462, in _get_version_from_dunamai
+          return Version.from_vcs(
+                 ^^^^^^^^^^^^^^^^^
+        File "/tmp/pip-build-env-c7ex3i08/overlay/lib/python3.12/site-packages/dunamai/__init__.py", line 2090, in from_vcs
+          return cls._do_vcs_callback(
+                 ^^^^^^^^^^^^^^^^^^^^^
+        File "/tmp/pip-build-env-c7ex3i08/overlay/lib/python3.12/site-packages/dunamai/__init__.py", line 2145, in _do_vcs_callback
+          return callback(**kwargs)
+                 ^^^^^^^^^^^^^^^^^^
+        File "/tmp/pip-build-env-c7ex3i08/overlay/lib/python3.12/site-packages/dunamai/__init__.py", line 1104, in from_git
+          _detect_vcs(vcs, path)
+        File "/tmp/pip-build-env-c7ex3i08/overlay/lib/python3.12/site-packages/dunamai/__init__.py", line 371, in _detect_vcs
+          raise RuntimeError("This does not appear to be a {} project".format(expected_vcs.value.title()))
+      RuntimeError: This does not appear to be a Git project
+      [end of output]
+  
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+error: metadata-generation-failed
+
+× Encountered error while generating package metadata.
+╰─> See above for output.
+
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>jmergy:</strong></p>
+                    <p>installed python3-pyproject-hooks 
+installed dunamai
+
+still no dice
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Remove everything and re-install, `sudo ./auto-cpufreq-installer --remove` followed by `sudo ./auto-cpufreq-installer --install`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>jmergy:</strong></p>
+                    <p>Thanks @AdnanHodzic - trying again and doesn't seem to be the trick. I must be missing a dependency or something. Running on v2.5.0
+
+# ./auto-cpufreq-installer --install
+
+
+─────────────────────────────────────────────────────────────────────────── Detected Debian based distribution ───────────────────────────────────────────────────────────────────────────
+
+
+────────────────────────────────────────────────────────────────────────────── Setting up Python environment ──────────────────────────────────────────────────────────────────────────────
+
+python3-dev is already the newest version (3.12.8-1).
+python3-pip is already the newest version (24.3.1+dfsg-1).
+python3-venv is already the newest version (3.12.8-1).
+python3-setuptools is already the newest version (75.6.0-1).
+dmidecode is already the newest version (3.6-2).
+libgirepository1.0-dev is already the newest version (1.82.0-3).
+libcairo2-dev is already the newest version (1.18.2-2).
+libgtk-3-dev is already the newest version (3.24.43-4).
+gcc is already the newest version (4:14.2.0-1).
+Summary:
+  Upgrading: 0, Installing: 0, Removing: 0, Not Upgrading: 2
+
+────────────────────────────────────────────────────────────────────────── Installing necessary Python packages ──────────────────────────────────────────────────────────────────────────
+
+Requirement already satisfied: pip in /opt/auto-cpufreq/venv/lib/python3.12/site-packages (24.3.1)
+Requirement already satisfied: wheel in /opt/auto-cpufreq/venv/lib/python3.12/site-packages (0.45.1)
+
+────────────────────────────────────────────────────────────────────────────── Installing auto-cpufreq tool ──────────────────────────────────────────────────────────────────────────────
+
+Processing /home/mergy/Downloads/auto-cpufreq-2.5.0
+  Installing build dependencies ... done
+  Getting requirements to build wheel ... done
+  Preparing metadata (pyproject.toml) ... error
+  error: subprocess-exited-with-error
+  
+  × Preparing metadata (pyproject.toml) did not run successfully.
+  │ exit code: 1
+  ╰─> [35 lines of output]
+      Traceback (most recent call last):
+        File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 353, in <module>
+          main()
+        File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 335, in main
+          json_out['return_val'] = hook(**hook_input['kwargs'])
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 149, in prepare_metadata_for_build_wheel
+          return hook(metadata_directory, config_settings)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        File "/tmp/pip-build-env-w_d1xfcc/overlay/lib/python3.12/site-packages/poetry/core/masonry/api.py", line 42, in prepare_metadata_for_build_wheel
+          poetry = Factory().create_poetry(Path().resolve(), with_groups=False)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        File "/tmp/pip-build-env-w_d1xfcc/overlay/lib/python3.12/site-packages/poetry_dynamic_versioning/patch.py", line 26, in alt_poetry_create
+          name = _get_and_apply_version(
+                 ^^^^^^^^^^^^^^^^^^^^^^^
+        File "/tmp/pip-build-env-w_d1xfcc/overlay/lib/python3.12/site-packages/poetry_dynamic_versioning/__init__.py", line 686, in _get_and_apply_version
+          version, instance = _get_version(config, name)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+        File "/tmp/pip-build-env-w_d1xfcc/overlay/lib/python3.12/site-packages/poetry_dynamic_versioning/__init__.py", line 502, in _get_version
+          version = _get_version_from_dunamai(vcs, pattern, config)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        File "/tmp/pip-build-env-w_d1xfcc/overlay/lib/python3.12/site-packages/poetry_dynamic_versioning/__init__.py", line 463, in _get_version_from_dunamai
+          return Version.from_vcs(
+                 ^^^^^^^^^^^^^^^^^
+        File "/tmp/pip-build-env-w_d1xfcc/overlay/lib/python3.12/site-packages/dunamai/__init__.py", line 2090, in from_vcs
+          return cls._do_vcs_callback(
+                 ^^^^^^^^^^^^^^^^^^^^^
+        File "/tmp/pip-build-env-w_d1xfcc/overlay/lib/python3.12/site-packages/dunamai/__init__.py", line 2145, in _do_vcs_callback
+          return callback(**kwargs)
+                 ^^^^^^^^^^^^^^^^^^
+        File "/tmp/pip-build-env-w_d1xfcc/overlay/lib/python3.12/site-packages/dunamai/__init__.py", line 1104, in from_git
+          _detect_vcs(vcs, path)
+        File "/tmp/pip-build-env-w_d1xfcc/overlay/lib/python3.12/site-packages/dunamai/__init__.py", line 371, in _detect_vcs
+          raise RuntimeError("This does not appear to be a {} project".format(expected_vcs.value.title()))
+      RuntimeError: This does not appear to be a Git project
+      [end of output]
+  
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+error: metadata-generation-failed
+
+× Encountered error while generating package metadata.
+╰─> See above for output.
+
+note: This is an issue with the package mentioned above, not pip.
+hint: See above for details.
+
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>jmergy:</strong></p>
+                    <p># ./auto-cpufreq-installer --install
+
+
+─────────────────────────────────────────────────────────────────────────── Detected Debian based distribution ───────────────────────────────────────────────────────────────────────────
+
+
+────────────────────────────────────────────────────────────────────────────── Setting up Python environment ──────────────────────────────────────────────────────────────────────────────
+
+python3-dev is already the newest version (3.12.8-1).
+python3-pip is already the newest version (24.3.1+dfsg-1).
+python3-venv is already the newest version (3.12.8-1).
+python3-setuptools is already the newest version (75.6.0-1).
+dmidecode is already the newest version (3.6-2).
+libgirepository1.0-dev is already the newest version (1.82.0-3).
+libcairo2-dev is already the newest version (1.18.2-2).
+libgtk-3-dev is already the newest version (3.24.43-4).
+gcc is already the newest version (4:14.2.0-1).
+Summary:
+  Upgrading: 0, Installing: 0, Removing: 0, Not Upgrading: 0
+
+────────────────────────────────────────────────────────────────────────── Installing necessary Python packages ──────────────────────────────────────────────────────────────────────────
+
+Requirement already satisfied: pip in /opt/auto-cpufreq/venv/lib/python3.12/site-packages (24.3.1)
+Requirement already satisfied: wheel in /opt/auto-cpufreq/venv/lib/python3.12/site-packages (0.45.1)
+
+────────────────────────────────────────────────────────────────────────────── Installing auto-cpufreq tool ──────────────────────────────────────────────────────────────────────────────
+
+Processing /home/mergy/Downloads/auto-cpufreq-2.5.0
+  Installing build dependencies ... done
+  Getting requirements to build wheel ... done
+  Preparing metadata (pyproject.toml) ... error
+  error: subprocess-exited-with-error
+  
+  × Preparing metadata (pyproject.toml) did not run successfully.
+  │ exit code: 1
+  ╰─> [35 lines of output]
+      Traceback (most recent call last):
+        File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 353, in <module>
+          main()
+        File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 335, in main
+          json_out['return_val'] = hook(**hook_input['kwargs'])
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 149, in prepare_metadata_for_build_wheel
+          return hook(metadata_directory, config_settings)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        File "/tmp/pip-build-env-62v_sr24/overlay/lib/python3.12/site-packages/poetry/core/masonry/api.py", line 42, in prepare_metadata_for_build_wheel
+          poetry = Factory().create_poetry(Path().resolve(), with_groups=False)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        File "/tmp/pip-build-env-62v_sr24/overlay/lib/python3.12/site-packages/poetry_dynamic_versioning/patch.py", line 26, in alt_poetry_create
+          name = _get_and_apply_version(
+                 ^^^^^^^^^^^^^^^^^^^^^^^
+        File "/tmp/pip-build-env-62v_sr24/overlay/lib/python3.12/site-packages/poetry_dynamic_versioning/__init__.py", line 686, in _get_and_apply_version
+          version, instance = _get_version(config, name)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+        File "/tmp/pip-build-env-62v_sr24/overlay/lib/python3.12/site-packages/poetry_dynamic_versioning/__init__.py", line 502, in _get_version
+          version = _get_version_from_dunamai(vcs, pattern, config)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        File "/tmp/pip-build-env-62v_sr24/overlay/lib/python3.12/site-packages/poetry_dynamic_versioning/__init__.py", line 463, in _get_version_from_dunamai
+          return Version.from_vcs(
+                 ^^^^^^^^^^^^^^^^^
+        File "/tmp/pip-build-env-62v_sr24/overlay/lib/python3.12/site-packages/dunamai/__init__.py", line 2090, in from_vcs
+          return cls._do_vcs_callback(
+                 ^^^^^^^^^^^^^^^^^^^^^
+        File "/tmp/pip-build-env-62v_sr24/overlay/lib/python3.12/site-packages/dunamai/__init__.py", line 2145, in _do_vcs_callback
+          return callback(**kwargs)
+                 ^^^^^^^^^^^^^^^^^^
+        File "/tmp/pip-build-env-62v_sr24/overlay/lib/python3.12/site-packages/dunamai/__init__.py", line 1104, in from_git
+          _detect_vcs(vcs, path)
+        File "/tmp/pip-build-env-62v_sr24/overlay/lib/python3.12/site-packages/dunamai/__init__.py", line 371, in _detect_vcs
+          raise RuntimeError("This does not appear to be a {} project".format(expected_vcs.value.title()))
+      RuntimeError: This does not appear to be a Git project
+      [end of output]
+  
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+error: metadata-generation-failed
+
+× Encountered error while generating package metadata.
+╰─> See above for output.
+
+note: This is an issue with the package mentioned above, not pip.
+hint: See above for details.
+
+──────────────────────────────────────────────────────────────────────── auto-cpufreq tool successfully installed ────────────────────────────────────────────────────────────────────────
+
+For list of options, run:
+auto-cpufreq --help
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>You ignored to fill out the issue template, so it's hard for me to debug this issue. 
+
+Please fill out 
+
+```
+### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+### Error output:
+```text
+Add/paste error output in case of failed installation or other failing component
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+auto-cpufreq --debug
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+---
+```
+
+and I might be able to look into this further.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>jmergy:</strong></p>
+                    <p>@AdnanHodzic thanks!
+
+pulling the v2.5.0 code via git vs direct download solved this. 
+
+```
+# git clone https://github.com/AdnanHodzic/auto-cpufreq.git
+
+# cd auto-cpufreq
+
+# ./auto-cpufreq-installer 
+```
+
+and it completed the install. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>jmergy:</strong></p>
+                    <p>![image](https://github.com/user-attachments/assets/ef608bf5-7e29-408f-89f1-fc71dbd86620)
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

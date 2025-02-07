@@ -1,0 +1,82 @@
+
+        <html>
+        <head>
+            <title>Issue #739: Remove network-online.target as a systemd-service dependency for the sake of boot time?</title>
+        </head>
+        <body>
+            <h1>Remove network-online.target as a systemd-service dependency for the sake of boot time?</h1>
+            <p><strong>Issue #739</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+
+Yes. I tried to keyword match against network.target network-online.target 
+
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+### Error output:
+```text
+$ systemd-analyze critical-chain       
+The time when unit became active or started is printed after the "@" character.
+The time the unit took to start is printed after the "+" character.
+
+graphical.target @10.655s
+└─multi-user.target @10.655s
+  └─auto-cpufreq.service @10.655s
+    └─network-online.target @10.654s
+      └─NetworkManager-wait-online.service @2.523s +8.129s
+        └─NetworkManager.service @2.182s +337ms
+          └─basic.target @2.180s
+            └─dbus-broker.service @2.152s +24ms
+...
+```
+
+
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+auto-cpufreq --debug
+```
+Skipped this since this seem unrelated to the core issue.
+
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+---
+
+The main question of this Issue is whether we can remove the dependency from auto-cpufreq.service onto network-online.target. This systemd target blocks until network connectivity which can take several seconds. I do not believe auto-cpufreq uses the network so I believe this dependency can be removed. The blame history points at https://github.com/AdnanHodzic/auto-cpufreq/commit/84e0c6cfa19bf761c1ba85ba8258512adb797072 but I didn't find additional information.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> . I do not believe auto-cpufreq uses the network so I believe this dependency can be removed.
+
+I would agree with you on this one, as I can't remember why exactly was this change made.
+
+> I do not believe auto-cpufreq uses the network so I believe this dependency can be removed. The blame history points at https://github.com/AdnanHodzic/auto-cpufreq/commit/84e0c6cfa19bf761c1ba85ba8258512adb797072 but I didn't find additional information.
+
+I would encourage you to give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@kevinywlui I just pushed changes which remove network-online.target as a systemd-service in order to increase boot time.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

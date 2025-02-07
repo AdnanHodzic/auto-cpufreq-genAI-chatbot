@@ -1,0 +1,52 @@
+
+        <html>
+        <head>
+            <title>Issue #38: Cannot --install auto-cpufreq</title>
+        </head>
+        <body>
+            <h1>Cannot --install auto-cpufreq</h1>
+            <p><strong>Issue #38</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I just installed auto-cpugreq from AUR on Manjaro and decided to use --install after I tested it live, however I'm getting this output
+
+```
+[~] sudo auto-cpufreq --install
+
+--------------------- Deploying auto-cpufreq as a daemon ----------------------
+
+* Turn off bluetooth on boot
+
+* Deploy auto-cpufreq as system wide accessible binary
+cp: cannot stat 'auto-cpufreq.py': No such file or directory
+
+* Deploy auto-cpufreq install script
+cp: cannot stat 'scripts/auto-cpufreq-install.sh': No such file or directory
+
+* Deploy auto-cpufreq remove script
+cp: cannot stat 'scripts/auto-cpufreq-remove.sh': No such file or directory
+/bin/sh: /usr/bin/auto-cpufreq-install: No such file or directory
+```
+I've been trying to search for the file "auto-cpufreq-remove.sh" with no results at all.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Since I didn't write the AUR package myself but it was done by a contributor @crian, and since there was a similar problem in [#23](https://github.com/AdnanHodzic/auto-cpufreq/issues/23) you might want to [install `auto-cpufreq` from source](https://github.com/AdnanHodzic/auto-cpufreq#get-auto-cpufreq-source-code).
+
+And then simply installing [necessary packages using pip](https://github.com/AdnanHodzic/auto-cpufreq#requirements-installation-for-all-other-linux-distributions).
+
+In meantime, I'm working on creating a snap which will help with unify installation on every distribution out there.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Notaduck:</strong></p>
+                    <p>@AdnanHodzic Thanks for the reply, your suggested solution worked without any hick ups! Thanks.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,121 @@
+
+        <html>
+        <head>
+            <title>Issue #193: Error while installing</title>
+        </head>
+        <body>
+            <h1>Error while installing</h1>
+            <p><strong>Issue #193</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+```text
+Traceback (most recent call last):
+  File "/usr/bin/auto-cpufreq", line 151, in <module>
+    main()
+  File "/usr/lib/python3.9/site-packages/click/core.py", line 829, in __call__
+    return self.main(*args, **kwargs)
+  File "/usr/lib/python3.9/site-packages/click/core.py", line 782, in main
+    rv = self.invoke(ctx)
+  File "/usr/lib/python3.9/site-packages/click/core.py", line 1066, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/usr/lib/python3.9/site-packages/click/core.py", line 610, in invoke
+    return callback(*args, **kwargs)
+  File "/usr/bin/auto-cpufreq", line 130, in main
+    gov_check()
+  File "/usr/lib/python3.9/site-packages/auto_cpufreq/core.py", line 351, in gov_check
+    for gov in get_avail_gov():
+  File "/usr/lib/python3.9/site-packages/auto_cpufreq/core.py", line 179, in get_avail_gov
+    return f.read_text().strip().split(" ")
+  File "/usr/lib/python3.9/pathlib.py", line 1255, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+  File "/usr/lib/python3.9/pathlib.py", line 1241, in open
+    return io.open(self, mode, buffering, encoding, errors, newline,
+  File "/usr/lib/python3.9/pathlib.py", line 1109, in _opener
+    return self._accessor.open(self, flags, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors'
+
+```
+---
+
+### System information:
+```text
+--------------------------------- Root check ----------------------------------
+
+ERROR:
+
+Must be run root for this functionality to work, i.e: 
+sudo auto-cpufreq
+
+-------------------------------------------------------------------------------
+
+[will@ManjaroTop ~]$ sudo auto-cpufreq --debug
+
+-------------------------------------------------------------------------------
+
+Linux distro: Manjaro Linux 21.0.2 Ornara
+Linux kernel: 5.10.30-1-MANJARO
+Processor: AMD A8-7410 APU with AMD Radeon R5 Graphics
+Cores: 4
+Architecture: x86_64
+Driver: /bin/sh: line 1: cpufreqctl.auto-cpufreq: command not found
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 0 MHz
+CPU min frequency: 0 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  1.0%     46 °C     2196 MHz
+CPU1:	  2.0%     46 °C     2196 MHz
+CPU2:	  3.8%     46 °C     2195 MHz
+CPU3:	  2.0%     46 °C     2196 MHz
+
+auto-cpufreq version:
+Version         : 1.6.4-1
+
+Python: 3.9.3
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 7.1.2
+distro package 1.5.0
+
+Computer type: Portable
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.14 %
+
+Total CPU usage: 1.5 %
+Total system load: 0.32
+Average temp. of all cores: 46.0 °C 
+
+Currently using: /bin/sh: governor
+Warning: CPU turbo is not available
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>web3Gurung:</strong></p>
+                    <p>Hey there!
+I think you have installed this tool from the AUR. This can be solved by reading this [readme](https://github.com/AdnanHodzic/auto-cpufreq#aur-package-archmanjaro-linux) section. You will get help from [this comment](https://github.com/AdnanHodzic/auto-cpufreq/issues/96#issuecomment-673690458) solution too.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing the issue due to inactivity. </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,139 @@
+
+        <html>
+        <head>
+            <title>Issue #689: Dinit init system not supported</title>
+        </head>
+        <body>
+            <h1>Dinit init system not supported</h1>
+            <p><strong>Issue #689</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I successfully installed cpufreq-auto, but I can't enable it in my init system.
+
+I'm using Artix Linux with Dinit.
+
+## Error output:
+```shell
+$ sudo auto-cpufreq --install
+--------------------- Deploying auto-cpufreq as a daemon ----------------------
+
+* Turn off bluetooth on boot
+
+* Deploy auto-cpufreq install script
+
+* Deploy auto-cpufreq remove script
+
+----------------------------------- Warning -----------------------------------
+
+Detected you are running a TLP service!
+This daemon might interfere with auto-cpufreq which can lead to unexpected results.
+We strongly encourage you to remove TLP unless you really know what you are doing.
+
+------------------ Running auto-cpufreq daemon install script ------------------
+
+* Unsupported init system detected, could not install the daemon
+
+
+* Please open an issue on https://github.com/AdnanHodzic/auto-cpufreq
+
+
+----------------- auto-cpufreq daemon installed and running -----------------
+
+To view live stats, run:
+auto-cpufreq --stats
+
+To disable and remove auto-cpufreq daemon, run:
+sudo auto-cpufreq --remove
+
+-------------------------------------------------------------------------------
+```
+
+## System information:
+```shell
+$ sudo auto-cpufreq --debug
+
+-------------------------------------------------------------------------------
+
+Linux distro: Artix Linux  
+Linux kernel: 6.8.7-zen1-2-zen
+Processor: Intel(R) Core(TM) i5-9300HF CPU @ 2.40GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4100 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      0.0%        39 °C       900 MHz
+CPU1      2.0%        41 °C       800 MHz
+CPU2      0.0%        38 °C       900 MHz
+CPU3      1.0%        40 °C       800 MHz
+CPU4      1.0%        39 °C       900 MHz
+CPU5      0.0%        41 °C       901 MHz
+CPU6      0.0%        38 °C       800 MHz
+CPU7      0.0%        40 °C       900 MHz
+
+auto-cpufreq version: 1 (git: )
+
+Python: 3.12.3
+psutil package: 5.9.8
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.38 %
+
+Total CPU usage: 0.5 %
+Total system load: 0.64
+Average temp. of all cores: 39.50 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+```</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Angel-Karasu:</strong></p>
+                    <p>In `auto-cpu-freq-install.sh` add :
+```shell
+# Install script for dinit
+elif [ "$(ps h -o comm 1)" = "dinit" ];then
+	echo -e "\n* Deploying auto-cpufreq dinit unit file"
+	cp /usr/local/share/auto-cpufreq/scripts/auto-cpufreq-dinit /etc/dinit.d/auto-cpufreq
+
+	echo -e "Starting auto-cpufreq daemon (dinit) service"
+	dinitctl start auto-cpufreq
+
+	echo -e "\n* Enabling auto-cpufreq daemon (dinit) service at boot"
+	dinitctl enable auto-cpufreq
+```
+
+And create file `auto-cpu-dinit` :
+```shell
+type = scripted
+command = /usr/local/bin/auto-cpufreq --daemon
+run-as = root
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Functionality implemented as part of #690 PR</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

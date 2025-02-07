@@ -1,0 +1,169 @@
+
+        <html>
+        <head>
+            <title>Issue #6: auto-cpufreq --log seems stopped working</title>
+        </head>
+        <body>
+            <h1>auto-cpufreq --log seems stopped working</h1>
+            <p><strong>Issue #6</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I cannot be able to see the stream of the log. It just stopped with the following content:
+```
+
+----------------------------- System information ------------------------------
+
+Linux distro: Ubuntu 20.04 Focal Fossa
+Linux kernel: 5.0.0-37-generic
+Driver: intel_pstate
+Architecture: x86_64
+Processor: Intel(R) Core(TM) i5-8265U CPU @ 1.60GHz
+Cores: 8
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 
+3900 MHz
+
+CPU frequency for each core:
+
+CPU0: 3114 MHz
+CPU1: 3175 MHz
+CPU2: 3301 MHz
+CPU3: 3556 MHz
+CPU4: 3242 MHz
+CPU5: 2934 MHz
+CPU6: 3488 MHz
+CPU7: 3382 MHz
+
+Temperature for each physical core:
+
+CPU0 temp: 44°C
+CPU1 temp: 40°C
+CPU2 temp: 41°C
+CPU3 temp: 44°C
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+Setting to use "performance" governor
+
+Total CPU usage: 3.2 %
+Total system load: 0.34 
+
+Setting turbo boost: on
+
+-------------------------------------------------------------------------------
+
+			"auto-cpufreq" refresh in: 2
+
+
+```
+
+But right now I'm not on the charging status, that machine goes with the battery.
+
+```
+● auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer f>
+     Loaded: loaded (/lib/systemd/system/auto-cpufreq.service; enabled; vendor >
+     Active: active (running) since Sun 2020-01-05 14:00:51 +03; 24min ago
+   Main PID: 1843 (python3)
+      Tasks: 1 (limit: 9195)
+     Memory: 19.3M
+     CGroup: /system.slice/auto-cpufreq.service
+             └─1843 /usr/bin/python3 /usr/bin/auto-cpufreq --daemon
+
+```
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Exorust:</strong></p>
+                    <p>I have observed that this happens even when the module is active it doesn't seem to log.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Please correct me if I'm wrong, but you're saying that `auto-cpufreq --log` stops working? Or that it doesn't displays logs anymore?
+
+What would happen if you ran `sudo python3 auto-cpufreq.py --log` from `auto-cpufreq` git repo?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>validatedev:</strong></p>
+                    <p>Yeah it had stopped, reinstalled and that problem has been solved but don't sure it persist. Watching the situation atm.
+Edit: After installing and rebooting the OS, the problem has happened again. And same problem happens with `sudo python3 auto-cpufreq.py --log`.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>validatedev:</strong></p>
+                    <p>Well, it has started to work again. Interesting.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Maybe it has something to do with running an unreleased Ubuntu version. 
+
+But not sure, either way I'll close the issue for now and feel free to re-open it, if the problem resurfaces.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Exorust:</strong></p>
+                    <p>This problem still arises with the new PR. 
+
+The process is running but doesn't log anything. 
+![Screenshot from 2020-01-10 10-51-30](https://user-images.githubusercontent.com/20578676/72127937-2dd16f80-3397-11ea-9e8e-b0eca6982054.png)
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@Exorust I merged PR #25 
+
+If this problem is still there with latest changes, could you tell me what's the output of running:
+
+```
+tail -f -n 50 /var/log/auto-cpufreq.log 
+```
+
+and let's continue the discussion in #31 </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>zshamrock:</strong></p>
+                    <p>I pulled the latest master with #25 in it and has been running the tool for a while. So far no issue, everything works well.
+
+Minor likely, even when the laptop is fully charged it says "Battery is: charging ", although it doesn't cause any issue or misbehavior.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I pulled the latest master with #25 in it and has been running the tool for a while. So far no issue, everything works well.
+
+Great!
+
+> Minor likely, even when the laptop is fully charged it says "Battery is: charging ", although it doesn't cause any issue or misbehavior.
+
+Yes I noticed this as well, but it's not a problem, it's how the library works.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>validatedev:</strong></p>
+                    <p>> > Minor likely, even when the laptop is fully charged it says "Battery is: charging ", although it doesn't cause any issue or misbehavior.
+> 
+> Yes I noticed this as well, but it's not a problem, it's how the library works.
+
+We can change `charging` with `AC` .</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I think `charging` is okay. Because if you think about it that's exactly what's happening when the cable is plugged in.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

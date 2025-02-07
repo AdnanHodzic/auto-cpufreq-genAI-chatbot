@@ -1,0 +1,94 @@
+
+        <html>
+        <head>
+            <title>Issue #276: issues on pop_os</title>
+        </head>
+        <body>
+            <h1>issues on pop_os</h1>
+            <p><strong>Issue #276</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I have some issues on pop_os
+
+1. 
+```
+user@pop-os:~$ sudo auto-cpufreq --monitor
+...
+...
+...
+  File "/snap/auto-cpufreq/77/lib/python3.8/site-packages/distro.py", line 1064, in _os_release_info
+    with open(self.os_release_file) as release_file:
+PermissionError: [Errno 13] Permission denied: '/etc/os-release'
+```
+Turns out in pop_os the /etc/os-release file is symlinked to another file, as a workaround i removed the symlink and copied the file in its place, you might want to add a check to see if the file is symlinked maybe follow to main file or something.
+ 
+2. this is most likely not the right place to ask but you might know so giving it a shot, pop_os does NOT use grub, instead uses systemd-boot (never used it before) would you know how to change from `intel_pstate` to `acpi-cpufreq` ?
+
+3. for some reason "auto-cpufrq" is not listed in the pop_os store, i installed the snap from the command line however tab wouldnt auto complete the name, and typing in the terminal "auto-cpu" wont auto-complete with tab.
+
+Thanks
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I have some issues on pop_os
+>
+>user@pop-os:~$ sudo auto-cpufreq --monitor
+...
+...
+...
+  File "/snap/auto-cpufreq/77/lib/python3.8/site-packages/distro.py", line 1064, in _os_release_info
+    with open(self.os_release_file) as release_file:
+PermissionError: [Errno 13] Permission denied: '/etc/os-release'
+Turns out in pop_os the /etc/os-release file is symlinked to another file, as a workaround i removed the symlink and copied the file in its place, you might want to add a check to see if the file is symlinked maybe follow to main file or something.
+
+
+I've seen this error and it's solution before mentioned in few other issues, like: #240 
+
+>this is most likely not the right place to ask but you might know so giving it a shot, pop_os does NOT use grub, instead uses systemd-boot (never used it before) would you know how to change from intel_pstate to acpi-cpufreq ?
+>
+>for some reason "auto-cpufrq" is not listed in the pop_os store, i installed the snap from the command line however tab wouldnt auto complete the name, and typing in the terminal "auto-cpu" wont auto-complete with tab.
+
+Sorry but both of these seem to be related strictly to your environment, hence I can't help you with that. I would ask someone from Pop OS side.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>andrej-zirko:</strong></p>
+                    <p>This is a popos issue, where the /etc/os-release is symlinked to the /etc/pop-os/os-release. The solution is to create a hard-link instead of the symlink. It's working for me. Hope it helps you as well. 
+
+`
+sudo mv /etc/os-release /etc/os-release-backup
+sudo ln /etc/pop-os/os-release /etc/os-release
+`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>WUZICANGJIE:</strong></p>
+                    <p>> This is a popos issue, where the /etc/os-release is symlinked to the /etc/pop-os/os-release. The solution is to create a hard-link instead of the symlink. It's working for me. Hope it helps you as well.
+> 
+> `sudo mv /etc/os-release /etc/os-release-backup sudo ln /etc/pop-os/os-release /etc/os-release`
+
+It works! Thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Since this seems to be a recurring issue for Pop OS, if someone can fix this once and for all and [make a contribution](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) as part of [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto-cpufreq-installer) or add it as part of [core functionality](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto_cpufreq/core.py) (so it also works if installed using a snap package) that would be great.
+
+Thanks</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Thanks to @tyleraharrison contribution, this problem is now permanently fixed for Pop OS!
+
+Changes are available on `master` branch and are part of [1.8.2 release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

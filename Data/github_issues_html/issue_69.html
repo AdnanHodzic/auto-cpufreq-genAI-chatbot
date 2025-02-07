@@ -1,0 +1,286 @@
+
+        <html>
+        <head>
+            <title>Issue #69: [Question] Disable CPU cores to prolongate battery time based on the config file</title>
+        </head>
+        <body>
+            <h1>[Question] Disable CPU cores to prolongate battery time based on the config file</h1>
+            <p><strong>Issue #69</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>@AdnanHodzic what do you think, about adding a feature (option in config when the config file will be available see #26  ) that will disable CPU cores in order to have more battery life?
+I found that we can easily disable CPU cores by command `echo 0 > /sys/devices/system/cpu/cpu0/online`
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Sounds like a good idea for settings file idea in #26. Something like this: `limit number of cores (available cores: xy)`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>mmstick:</strong></p>
+                    <p>I have doubts that disabling CPU cores would improve battery life. I suspect this would decrease battery life, because you need to do the same amount of work either way, and forcing work onto fewer processors just keeps the fewer cores operating at higher frequencies for longer periods of time. Efficiency tends to reduce at higher frequencies.
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>@mmstick yep, you a right. But what if to disable/enable cores depending on the average CPU load % ?
+So, if my laptop is on IDLE, than maybe disabling CPU cores will decrease power consumption?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>The more I'm thinking about this, this shouldn't be part of the settings file, as it will definitely have counter effects as @mmstick pointed out. But I'm sure if load/cpu usage is very low and cores are dropped it'll only increase battery life. Real life example, certain cars (i,e: BMW) are doing this where at low speeds/eco boost mode they only use 1 cylinder to use as little fuel as possible. 
+
+Hence we should go in direction of handling this automatically. Where if absolutely minimum load/cpu usage is detected to proceed with disabling the cores. Then with slightness change in cpu/load to enable cores. @Red-Eyed I think we should only make these changes while in powersave. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p> I think that internal combustion engine(ICE) is a bad analogy as CPU and ICE has different nature, so it needs to be investigated and tested firstly.
+
+Yes, sure in powersave only.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I think that internal combustion engine(ICE) is a bad analogy as CPU and ICE has different nature
+
+Agreed, I realized the same as soon as I posted it :)
+
+> so it needs to be investigated and tested firstly.
+
+Of course, research and testing is what's it's all about.
+
+> Yes, sure in powersave only.
+
+:+1: 
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>LadislavMalecek:</strong></p>
+                    <p>I have lightly experimented with disabling CPU cores using cpufreq, and in my case, it increases battery life substantially. On Ryzen 5800h going from 16 threads to 4 increases the battery life from 7.5h to 9.5h while doing very light work/reading and from 4:20 to 5:20h while watching youtube. But more exact testing is needed.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>With [v1.7.0 release](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.7.0) it's now possible to manually define some of the settings instead of leaving everything to be picked up automatically. Could you try tweaking some of the [available options](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq) and report back on how that worked for you?
+
+Considering #26 is now also closed, I'll close this issue as well. Please re-open it if the problem persists.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>123batman:</strong></p>
+                    <p>@LadislavMalecek Can you please post your configuration on how to disable cores automatically? Are you using cpufreq and auto-cpufreq in parallel or how does it work?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>netikras:</strong></p>
+                    <p>@AdnanHodzic @mmstick 
+
+> I have doubts that disabling CPU cores would improve battery life. I suspect this would decrease battery life, because you need to do the same amount of work either way, and forcing work onto fewer processors just keeps the fewer cores operating at higher frequencies for longer periods of time. Efficiency tends to reduce at higher frequencies.
+
+I can confirm with high confidence, that disabling CPU cores works very well when battery longevity is the goal. But that's only up to a point [I'll elaborate later]. I own a beast of a laptop with a 20-core (thread) CPU. The vendor promised me ~10 hours of battery life. However, I could only squeeze out like 4 hours, mostly reading and browsing on the web via wifi, and watching a movie is a power drain for this laptop, as a single ~1:45 movie on Netflix drains it from 100% full charge down to ~30-40%. Yes, I'm on battery-saving profile. And with BT5 headphones
+
+However, I came across this .../cpu1/online file just recently and thought to myself: "what the hell, I'll give it a shot" w/o having too much hope and disabled 16 of my CPUs (leaving only 4). To my surprise, now a 2h movie on Netflix drained it to ~60% (same circumstances). IDK why it is like that: maybe inter-CPU comms, maybe offline CPUs don't suck that TDP (staggering 45W, compared to only 15W on my i7 skylake), maybe something else.. IDK. But I can confirm that it WORKS. 
+
+    DISABLING CPUs WORKS IN TERMS OF BATTERY CONCERVATION.
+
+However, that's only the case up to a point. Because I'm doing non-intensive activities (so far). When I'm firing up java compilation, IDE indexing, hprof analysis, docker builds and things of this nature, my remaining CPUs are struggling, burning all the time at 100% and taking very long to complete. I haven't done comparisons, but it *feels like* it's probably consuming more watts-over-work-unit overall to complete the same task on low-CPU setup rather than on high-cpu. I've seen this happen with my Skylake too and I can 100% confidently confirm that a downscaled CPU (at least vertically) burns through battery charge much faster than an upscaled CPU when doing heavy computations.
+
+
+`model name      : 13th Gen Intel(R) Core(TM) i7-13700H`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Thanks for the confirmation @netikras I'll [discuss with rest of the team/contributors ](https://discord.gg/Sjauxtj6kH)that we prioritize implementation of one such feature, if any of the contributors or I have time.
+
+For now manual way to go about disabling cores can be found in #654
+
+In meantime, if you or anyone else wants to give it a try in implementing this functionality, please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>codingjerk:</strong></p>
+                    <p>@netikras hi there :)
+
+> I can confirm with high confidence, that disabling CPU cores works very well when battery longevity is the goal. But that's only up to a point [I'll elaborate later].
+
+It's pretty neat result, I will investigate into it to check if I can get same results too.
+
+> watching a movie is a power drain for this laptop, as a single ~1:45 movie on Netflix drains it from 100% full charge down to ~30-40%
+
+Wow, I'm on almost the same workload and the same setup (Intel i9-13900H). And for me, video drains almost no battery, and I could get like 10h of battery life easily.
+
+Any chance you don't have hardware video acceleration? Easy way to check it is `intel_gpu_top`.
+
+> `model name : 13th Gen Intel(R) Core(TM) i7-13700H`
+
+Wow, we have almost the same processors. Yeah, I would totally recommend you to check if hardware acceleration is enabled and used in your case.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>netikras:</strong></p>
+                    <p>@codingjerk 
+> Any chance you don't have hardware video acceleration? Easy way to check it is intel_gpu_top.
+
+Thanks for bringing this up!!
+intel_gpu_top shows ~14-20% in Render/3D when watching a Netflix movie and 40-60% when watching a 4k Transformers' video on Youtube.
+Didn't try Netflix, but the same YT video on FF spikes Render/3D% to 99.9% and it stays there almost all the time.
+
+I take it that FF does it better then?
+
+![image](https://github.com/AdnanHodzic/auto-cpufreq/assets/2045031/00662135-ba34-460e-9b47-f7231068e140)
+
+
+(apologies to the OP for an off-topic)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> (apologies to the OP for an off-topic)
+
+I think this is important, we could even add this somewhere to README as it does extend battery life. I recently [shared on social media](https://x.com/fooctrl/status/1787019761684971962) which flags I use to have "pinch to zoom" support.
+
+Since then I just ammended VAAPI support using: `Exec=/usr/bin/brave-browser-stable --enable-features=TouchpadOverscrollHistoryNavigation,VaapiVideoDecoder,VaapiVide    oEncoder --enable-zero-copy %U` 
+
+Above will work for all chromium based browsers, and this gives me the best performance and battery life.
+
+![brave gpu](https://github.com/AdnanHodzic/auto-cpufreq/assets/1041579/d0bd4bd1-7876-42ef-87e5-a9c8674902a8)
+
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>codingjerk:</strong></p>
+                    <p>@netikras 
+
+> Thanks for bringing this up!! intel_gpu_top shows ~14-20% in Render/3D when watching a Netflix movie and 40-60% when watching a 4k Transformers' video on Youtube. Didn't try Netflix, but the same YT video on FF spikes Render/3D% to 99.9% and it stays there almost all the time.
+
+So you already have hardware acceleration enabled? Do you have dedicated GPU, btw? I don't, maybe here is the difference.
+
+If not, I invite you to try exacly my configuration which help with battery usage a lot. Since we have almost the same processor, I hope it will help in your case too:
+
+```bash
+# This is to limit GPU frequency -- in my case it reduces GPU power usage by 3 times (!), and doesn't bring any problems when using WM (Hyprland), browser (Firefox) or watching Netflix / YouTube
+# Maybe replace card1 with card0 here
+
+echo 100 > /sys/class/drm/card1/gt_max_freq_mhz
+echo 100 > /sys/class/drm/card1/gt_boost_freq_mhz
+```
+
+```bash
+# Use `powersave` governor, it enables `energy_performance_preference`
+
+for governor in /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor; do
+  echo powersave > $governor
+done
+```
+
+```bash
+# Change `energy_performance_preference`. This is the most important
+# Use `balance_power` or `power` -- they provide the same performance / watt, but `power` limits peak power usage more (so it trades off peak performance)
+# I recommend `power` for daily usage and `balance_power` then you feel you need extra performance.
+# `performance` and `balance_performance` in my tests are actually not much better than `balance_power` but they drain battery VERY fast
+
+for epp in /sys/devices/system/cpu/cpu*/cpufreq/energy_performance_preference do
+  echo balance_power > $epp
+done
+```
+
+```bash
+# (Optional, for some extra battery life)
+# Limit maximum processor P-state. This is trade-off, you will limit your CPU maximum performance in exchange of lower peak power usage and just a bit better performance/watt.
+# In my case values between 20-30 works the best, but you can experiment.
+# 100 is also okay tho, it's just controls your peak power usage, but actual performance/watt is almost the same.
+
+echo 30 > /sys/devices/system/cpu/intel_pstate/max_perf_pct
+```
+
+```bash
+# (Optional, for some extra battery life)
+# Disable turbo boost, limiting peak power usage even more
+# Should be only useful if you set 100 to max_perf_pct and it showed pretty small difference in my cases (~2.2% in performance and ~2.8% in battery life)
+
+echo 1 > /sys/devices/system/cpu/intel_pstate/no_turbo
+```
+
+You can send results here if @AdnanHodzic is okay with that, or you can email me, I have same account name as here at gmail.com.
+
+> I take it that FF does it better then?
+
+Actually -- as I tested on Netflix -- Chromium uses less battery than Firefox in my case (both are configured with HW acceleration and with bloat disabled) -- and it uses significantly less -- Chromium uses 3.86W with CPU+GPU while Firefox uses 4.95W. Overall system usage is ~8.2W (9.2W with Firefox) when watching Netflix with wifi and BT headset, so it's like 8-9h battery life for my 75Wh battery.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>codingjerk:</strong></p>
+                    <p>Now, about disabling cores.
+
+**TL;DR**: disabling all P-cores helped me a bit, disabling over cores was counter-productive. 
+
+I tried many options, and in my case results were following:
+
+- Disabling all, but 1 core limits peak power usage in case of high workload, but performance / watt drops too much (by 3.9 times) and total battery usage increases.
+- Disabling HyperThreading cores -- makes performance / watt worse, but no so much -- by 37%.
+- Disabling E-cores -- results in drop in performance / watt -- 19%.
+- Finally, disabling P-cores (leaving only E-cores and 1 P-core of CPU0, because it's not hot pluggable in my system) -- just 13% drop in performance / watt, in excange of huge limit in peak usage -- 41% in my case.
+
+I did all of this testing with actual CPU workload (`7z b`).
+
+To be sure it will not ruin other cases I checked idle power usage and every time usage was the same.
+
+And I also checked power usage in light load and Netflix and surprise for me -- disabling P-cores is a bit better: I got 6.3% less battery usage, so thank you for reporting your case too @netikras   </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>netikras:</strong></p>
+                    <p>@codingjerk Thank you for the elaborate instructions, I will definitely play around with those as soon as I have some time to spare. As for now, I am running on 2 cores at 50% capacity each (so basically 5% of total firepower). And to scale cores comfortably I came up with this dumb script: https://gitlab.com/-/snippets/3725997 . Definitely did not invest as much time and effort as you did :D I'm just slashing CPUs offline in a row and calling it a day. :D 
+
+How did you measure power consumption per-application (ff/chromium)?
+8-9W sounds like a dream to me. I have a maxxed-capacity battery (99.2Wh) and I see that my LinuxMint sucks 12-20W out of it as I'm writing this message. I hope I'll get close to your wattage after playing around with the knobs and levers you've shared.
+
+And no, I don't have an aux GPU. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>codingjerk:</strong></p>
+                    <p>@netikras 
+
+> How did you measure power consumption per-application (ff/chromium)?
+
+I use mainly `turbostat`, `powertop` and `intel_gpu_top`, but AFAIK they all access same kernel interfaces.
+
+I didn't meaure it per-application tho, in my cases per-application and per-device usage statistics (except CPU/Package/Cores/GPU) are flawed and I simply don't look at it and measure whole system consumpltion always.
+
+> with this dumb script: https://gitlab.com/-/snippets/3725997
+
+It's actually pretty neat and pleasant to read, thanks.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> > with this dumb script: https://gitlab.com/-/snippets/3725997
+> 
+> It's actually pretty neat and pleasant to read, thanks.
+
+@netikras it would be great if once you had time to try implementing this as part of [auto-cpufreq and project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>megusta-01:</strong></p>
+                    <p>I would also welcome it if it is implemented. From a logic point of view, you would have to monitor the CPU load and first switch off P-cores and leave at least two E-cores running. </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

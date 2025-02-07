@@ -1,0 +1,405 @@
+
+        <html>
+        <head>
+            <title>Issue #84: FileNotFoundError: [Errno 2] No such file or directory: '/usr/share/auto-cpufreq/scripts/auto-cpufreq-install.sh'</title>
+        </head>
+        <body>
+            <h1>FileNotFoundError: [Errno 2] No such file or directory: '/usr/share/auto-cpufreq/scripts/auto-cpufreq-install.sh'</h1>
+            <p><strong>Issue #84</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>```bash
+yay -S auto-cpufreq
+sudo auto-cpufreq --install
+```
+### Error output:
+```text
+--------------------- Deploying auto-cpufreq as a daemon ----------------------
+
+* Turn off bluetooth on boot
+
+* Deploy auto-cpufreq install script
+Traceback (most recent call last):
+  File "/usr/bin/auto-cpufreq", line 115, in <module>
+    main()
+  File "/usr/lib/python3.8/site-packages/click/core.py", line 829, in __call__
+    return self.main(*args, **kwargs)
+  File "/usr/lib/python3.8/site-packages/click/core.py", line 782, in main
+    rv = self.invoke(ctx)
+  File "/usr/lib/python3.8/site-packages/click/core.py", line 1066, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/usr/lib/python3.8/site-packages/click/core.py", line 610, in invoke
+    return callback(*args, **kwargs)
+  File "/usr/bin/auto-cpufreq", line 98, in main
+    deploy_daemon()
+  File "/usr/lib/python3.8/site-packages/source/core.py", line 215, in deploy_daemon
+    shutil.copy(SCRIPTS_DIR / "auto-cpufreq-install.sh", "/usr/bin/auto-cpufreq-install")
+  File "/usr/lib/python3.8/shutil.py", line 415, in copy
+    copyfile(src, dst, follow_symlinks=follow_symlinks)
+  File "/usr/lib/python3.8/shutil.py", line 261, in copyfile
+    with open(src, 'rb') as fsrc, open(dst, 'wb') as fdst:
+FileNotFoundError: [Errno 2] No such file or directory: '/usr/share/auto-cpufreq/scripts/auto-cpufreq-install.sh'
+
+```
+---
+
+### System information:
+```text
+-------------------------------------------------------------------------------
+
+System: Hewlett-Packard product: HP EliteBook Folio 1040 G1 v: A3009D510203 
+           serial: <filter> 
+           Mobo: Hewlett-Packard model: 213E v: KBC Version 24.2B serial: <filter> 
+           BIOS: Hewlett-Packard v: L83 Ver. 01.21 date: 08/19/2014 
+Battery:   ID-1: BAT0 charge: 25.1 Wh condition: 31.1/31.1 Wh (100%) 
+CPU:       Governors: performance powersave Topology: Dual Core model: Intel Core i5-4300U bits: 64 type: MT MCP L2 cache: 3072 KiB 
+           Speed: 799 MHz min/max: 800/2500 MHz Core speeds (MHz): 1: 798 2: 798 3: 798 4: 798 
+Graphics:  Device-1: Intel Haswell-ULT Integrated Graphics driver: i915 v: kernel 
+           Display: x11 server: X.Org 1.20.8 driver: intel unloaded: modesetting,vesa 
+           resolution: 1920x1080~60Hz 
+           OpenGL: renderer: Mesa DRI Intel HD Graphics 4400 (HSW GT2) v: 4.5 Mesa 20.1.3 
+Audio:     Device-1: Intel Haswell-ULT HD Audio driver: snd_hda_intel 
+           Device-2: Intel 8 Series HD Audio driver: snd_hda_intel 
+           Sound Server: ALSA v: k5.6.19-2-MANJARO 
+Network:   Device-1: Intel Ethernet I218-LM driver: e1000e 
+           IF: enp0s25 state: down mac: <filter> 
+           Device-2: Intel Wireless 7260 driver: iwlwifi 
+           IF: wlo1 state: up mac: <filter> 
+Drives:    Local Storage: total: 167.68 GiB used: 13.97 GiB (8.3%) 
+           ID-1: /dev/sda vendor: Intel model: SSDSCKGF180A4H size: 167.68 GiB 
+Partition: ID-1: / size: 29.52 GiB used: 13.97 GiB (47.3%) fs: ext4 dev: /dev/sda3 
+Sensors:   
+{'battery': sbattery(percent=80.62789867998573, secsleft=11894, power_plugged=False),
+ 'fans': {},
+ 'temperatures:': {'acpitz': [shwtemp(label='', current=42.0, high=128.0, critical=128.0),
+                              shwtemp(label='', current=0.0, high=128.0, critical=128.0),
+                              shwtemp(label='', current=37.0, high=128.0, critical=128.0),
+                              shwtemp(label='', current=36.0, high=128.0, critical=128.0),
+                              shwtemp(label='', current=34.0, high=128.0, critical=128.0),
+                              shwtemp(label='', current=114.0, high=128.0, critical=128.0)],
+                   'coretemp': [shwtemp(label='Package id 0', current=43.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 0', current=37.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 1', current=42.0, high=100.0, critical=100.0),
+                                shwtemp(label='Package id 0', current=43.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 0', current=37.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 1', current=42.0, high=100.0, critical=100.0)]}} System Temperatures: cpu: 37.0 C mobo: N/A 
+           Fan Speeds (RPM): N/A 
+Info:      Processes: 159 Uptime: 45m Memory: 7.68 GiB used: 1.11 GiB (14.5%) Shell: auto-cpufreq 
+           inxi: 3.0.37 
+
+-------------------------------------------------------------------------------
+
+```
+---
+```bash
+
+ ██████████████████  ████████     
+ ██████████████████  ████████     OS: Manjaro 20.0.3 Lysia
+ ██████████████████  ████████     Kernel: x86_64 Linux 5.6.19-2-MANJARO
+ ██████████████████  ████████     Uptime: 55m
+ ████████            ████████     Packages: 1041
+ ████████  ████████  ████████     Shell: zsh 5.8
+ ████████  ████████  ████████     Resolution: 1920x1080
+ ████████  ████████  ████████     WM: i3
+ ████████  ████████  ████████     GTK Theme: Adapta-Nokto-Eta-Maia [GTK2/3]
+ ████████  ████████  ████████     Icon Theme: breeze
+ ████████  ████████  ████████     Font: Noto Sans,  10
+ ████████  ████████  ████████     Disk: 14G / 34G (44%)
+ ████████  ████████  ████████     CPU: Intel Core i5-4300U @ 4x 2.5GHz [44.0°C]
+ ████████  ████████  ████████     GPU: Mesa DRI Intel(R) HD Graphics 4400 (HSW GT2)
+                                  RAM: 1453MiB / 7859MiB
+
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>yes it doesn't work at all on manjaro, just checked that out</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Not even if if it's installed as a snap?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>yochananmarqos:</strong></p>
+                    <p>@Bu4ak
+
+> sudo auto-cpufreq --install
+
+Don't do that, it's already installed. Enable the service and go.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>> Not even if if it's installed as a snap?
+
+so, I guess the problem is with AUR installation, not the snap. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>yochananmarqos:</strong></p>
+                    <p>@Red-Eyed 
+
+> I guess the problem is with AUR installation
+
+No, the problem is people are trying to install it when it's already installed. The AUR package installs all the required files including the service.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>I installed it via `pacman` on my manjaro that didn't see `auto-cpufreq` and got the same error `FileNotFoundError`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>yochananmarqos:</strong></p>
+                    <p>@Red-Eyed The new Manjaro community package (currently in the testing repo) is the same except it also automatically enables the service.
+
+Again, it's ready to go after installation. There's no need to run the install command at all. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>@Bu4ak is that fixed?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bu4ak:</strong></p>
+                    <p> @Red-Eyed ,
+**yochananmarqos** are [absolutely right](https://github.com/AdnanHodzic/auto-cpufreq/issues/84#issuecomment-670938278). There is no need to run ```sudo auto-cpufreq --install``` because it is already installed (via AUR in my case).
+
+To enable daemon service:
+```
+ systemctl enable auto-cpufreq
+ systemctl start auto-cpufreq</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>I understand that there is no need to run `--install`. But calling `--install` and getting that error doesn't seem right for the end user.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>yochananmarqos:</strong></p>
+                    <p>@Red-Eyed Well, don't tell them to, then. 😉
+
+On Arch & derivatives, Pacman should track all installed files to the system to avoid conflicts when installing or updating packages. It's customary that a package installed via the repos or AUR should install all required files for this reason.
+
+I can do a PR for the README for Arch & Manjaro here in a bit.
+
+EDIT: [PR](https://github.com/AdnanHodzic/auto-cpufreq/pull/90) is done.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>crian:</strong></p>
+                    <p>In the AUR package all files are installed and ready to go. The end-user just needs to enable the systemd service.
+There is no need to run the install command.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Hi @crian, as I mentioned in #91 
+
+>I didn't know that was the case with AUR package. In my opinion and to keep things consistent as they are with snap and 
+>auto-cpufreq-installer. It would be the best if after AUR package installation, auto-cpufreq would be available as a binary, 
+>and then you have an option to run it live or install or whatever you want to do with it.
+
+Just so I'm on the same page. Is there a reason why this is done differently as part of AUR package? Because if there's a reason for this kind of implementation I think we should properly [mention it under "AUR Linux" section](https://github.com/AdnanHodzic/auto-cpufreq#arch-linux) as otherwise Arch/Manjaro users will run into problems.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>yochananmarqos:</strong></p>
+                    <p>@AdnanHodzic 
+> after AUR installation, auto-cpufreq --install will be automatically run 
+
+No, the [PKGBUILD](https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=auto-cpufreq-git) installs `auto-cpufreq.service` to `/usr/lib/systemd/system/`. 
+
+> and just the systemctl needs to be enabled?
+
+For the AUR package, yes. The user will see [a message after installation](https://aur.archlinux.org/cgit/aur.git/tree/auto-cpufreq.install?h=auto-cpufreq-git) letting them know they need to enable the service.
+
+However, with the Manjaro package, the service is [automatically enabled](https://gitlab.manjaro.org/packages/community/auto-cpufreq/-/blob/master/auto-cpufreq.install).
+
+Both packages install `cpufreqctl.sh` to `/usr/share/auto-cpufreq/`.
+
+>  It would be the best if after AUR package installation, auto-cpufreq would be available as a binary
+
+It is via the `setup.py`:
+
+```
+❯ pacman -Ql auto-cpufreq-git
+auto-cpufreq-git /usr/
+auto-cpufreq-git /usr/bin/
+auto-cpufreq-git /usr/bin/auto-cpufreq
+auto-cpufreq-git /usr/lib/
+auto-cpufreq-git /usr/lib/python3.8/
+auto-cpufreq-git /usr/lib/python3.8/site-packages/
+auto-cpufreq-git /usr/lib/python3.8/site-packages/auto_cpufreq-1.0-py3.8.egg-info/
+auto-cpufreq-git /usr/lib/python3.8/site-packages/auto_cpufreq-1.0-py3.8.egg-info/PKG-INFO
+auto-cpufreq-git /usr/lib/python3.8/site-packages/auto_cpufreq-1.0-py3.8.egg-info/SOURCES.txt
+auto-cpufreq-git /usr/lib/python3.8/site-packages/auto_cpufreq-1.0-py3.8.egg-info/dependency_links.txt
+auto-cpufreq-git /usr/lib/python3.8/site-packages/auto_cpufreq-1.0-py3.8.egg-info/requires.txt
+auto-cpufreq-git /usr/lib/python3.8/site-packages/auto_cpufreq-1.0-py3.8.egg-info/top_level.txt
+auto-cpufreq-git /usr/lib/python3.8/site-packages/auto_cpufreq-1.0-py3.8.egg-info/zip-safe
+auto-cpufreq-git /usr/lib/python3.8/site-packages/source/
+auto-cpufreq-git /usr/lib/python3.8/site-packages/source/__init__.py
+auto-cpufreq-git /usr/lib/python3.8/site-packages/source/__pycache__/
+auto-cpufreq-git /usr/lib/python3.8/site-packages/source/__pycache__/__init__.cpython-38.opt-1.pyc
+auto-cpufreq-git /usr/lib/python3.8/site-packages/source/__pycache__/__init__.cpython-38.pyc
+auto-cpufreq-git /usr/lib/python3.8/site-packages/source/__pycache__/core.cpython-38.opt-1.pyc
+auto-cpufreq-git /usr/lib/python3.8/site-packages/source/__pycache__/core.cpython-38.pyc
+auto-cpufreq-git /usr/lib/python3.8/site-packages/source/core.py
+auto-cpufreq-git /usr/lib/systemd/
+auto-cpufreq-git /usr/lib/systemd/system/
+auto-cpufreq-git /usr/lib/systemd/system/auto-cpufreq.service
+auto-cpufreq-git /usr/share/
+auto-cpufreq-git /usr/share/auto-cpufreq/
+auto-cpufreq-git /usr/share/auto-cpufreq/scripts/
+auto-cpufreq-git /usr/share/auto-cpufreq/scripts/cpufreqctl.sh
+```
+
+Perhaps add a check for `pacman` when running the` --install` option and detect if the service is already installed to `/etc/systemd/system/` or not. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>crian:</strong></p>
+                    <p>> Hi @crian, as I mentioned in #91
+> 
+> > I didn't know that was the case with AUR package. In my opinion and to keep things consistent as they are with snap and
+> > auto-cpufreq-installer. It would be the best if after AUR package installation, auto-cpufreq would be available as a binary,
+> > and then you have an option to run it live or install or whatever you want to do with it.
+> 
+> Just so I'm on the same page. Is there a reason why this is done differently as part of AUR package? Because if there's a reason for this kind of implementation I think we should properly [mention it under "AUR Linux" section](https://github.com/AdnanHodzic/auto-cpufreq#arch-linux) as otherwise Arch/Manjaro users will run into problems.
+
+The AUR package compiles and installs all files. That's a typical behavior of a PKGBUILD.
+
+It's a good idea to mention this in the readme. So that arch users don't run into this issue.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@yochananmarqos thank you for an elaborate clarification. 
+
+> > after AUR installation, auto-cpufreq --install will be automatically run
+> 
+> No, the [PKGBUILD](https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=auto-cpufreq-git) installs `auto-cpufreq.service` to `/usr/lib/systemd/system/`.
+> 
+> > and just the systemctl needs to be enabled?
+> 
+> For the AUR package, yes. The user will see [a message after installation](https://aur.archlinux.org/cgit/aur.git/tree/auto-cpufreq.install?h=auto-cpufreq-git) letting them know they need to enable the service.
+> However, with the Manjaro package, the service is automatically enabled.
+
+I was just about to say, why isn't the service triggered automatically after install. Can't this be the case for both AUR and Manjaro package?
+
+> Both packages install `cpufreqctl.sh` to `/usr/share/auto-cpufreq/`.
+> 
+> > It would be the best if after AUR package installation, auto-cpufreq would be available as a binary
+
+:+1: 
+
+> It is via the `setup.py`:
+> 
+> ```
+> ❯ pacman -Ql auto-cpufreq-git
+> auto-cpufreq-git /usr/
+> auto-cpufreq-git /usr/bin/
+> auto-cpufreq-git /usr/bin/auto-cpufreq
+> auto-cpufreq-git /usr/lib/
+> auto-cpufreq-git /usr/lib/python3.8/
+> auto-cpufreq-git /usr/lib/python3.8/site-packages/
+> auto-cpufreq-git /usr/lib/python3.8/site-packages/auto_cpufreq-1.0-py3.8.egg-info/
+> auto-cpufreq-git /usr/lib/python3.8/site-packages/auto_cpufreq-1.0-py3.8.egg-info/PKG-INFO
+> auto-cpufreq-git /usr/lib/python3.8/site-packages/auto_cpufreq-1.0-py3.8.egg-info/SOURCES.txt
+> auto-cpufreq-git /usr/lib/python3.8/site-packages/auto_cpufreq-1.0-py3.8.egg-info/dependency_links.txt
+> auto-cpufreq-git /usr/lib/python3.8/site-packages/auto_cpufreq-1.0-py3.8.egg-info/requires.txt
+> auto-cpufreq-git /usr/lib/python3.8/site-packages/auto_cpufreq-1.0-py3.8.egg-info/top_level.txt
+> auto-cpufreq-git /usr/lib/python3.8/site-packages/auto_cpufreq-1.0-py3.8.egg-info/zip-safe
+> auto-cpufreq-git /usr/lib/python3.8/site-packages/source/
+> auto-cpufreq-git /usr/lib/python3.8/site-packages/source/__init__.py
+> auto-cpufreq-git /usr/lib/python3.8/site-packages/source/__pycache__/
+> auto-cpufreq-git /usr/lib/python3.8/site-packages/source/__pycache__/__init__.cpython-38.opt-1.pyc
+> auto-cpufreq-git /usr/lib/python3.8/site-packages/source/__pycache__/__init__.cpython-38.pyc
+> auto-cpufreq-git /usr/lib/python3.8/site-packages/source/__pycache__/core.cpython-38.opt-1.pyc
+> auto-cpufreq-git /usr/lib/python3.8/site-packages/source/__pycache__/core.cpython-38.pyc
+> auto-cpufreq-git /usr/lib/python3.8/site-packages/source/core.py
+> auto-cpufreq-git /usr/lib/systemd/
+> auto-cpufreq-git /usr/lib/systemd/system/
+> auto-cpufreq-git /usr/lib/systemd/system/auto-cpufreq.service
+> auto-cpufreq-git /usr/share/
+> auto-cpufreq-git /usr/share/auto-cpufreq/
+> auto-cpufreq-git /usr/share/auto-cpufreq/scripts/
+> auto-cpufreq-git /usr/share/auto-cpufreq/scripts/cpufreqctl.sh
+> ```
+> 
+> Perhaps add a check for `pacman` when running the` --install` option and detect if the service is already installed to `/etc/systemd/system/` or not.
+
+Sounds like a good idea to me.
+
+> > Hi @crian, as I mentioned in #91
+> > > I didn't know that was the case with AUR package. In my opinion and to keep things consistent as they are with snap and
+> > > auto-cpufreq-installer. It would be the best if after AUR package installation, auto-cpufreq would be available as a binary,
+> > > and then you have an option to run it live or install or whatever you want to do with it.
+> > 
+> > 
+> > Just so I'm on the same page. Is there a reason why this is done differently as part of AUR package? Because if there's a reason for this kind of implementation I think we should properly [mention it under "AUR Linux" section](https://github.com/AdnanHodzic/auto-cpufreq#arch-linux) as otherwise Arch/Manjaro users will run into problems.
+> 
+> The AUR package compiles and installs all files. That's a typical behavior of a PKGBUILD.
+> 
+> It's a good idea to mention this in the readme. So that arch users don't run into this issue.
+
+@crian
+
+:+1: I'm fine with whatever approach you guys take. You're the maintainers of these packages. 
+
+@crian @yochananmarqos 
+
+If things can't be automated, and end user needs to do something after install. I would really appreciate if one of you could edit the exiting [Arch Linux](https://github.com/AdnanHodzic/auto-cpufreq#arch-linux) section and add necessary instructions. Either extend it to "Arch/Manjaro Linux" or create single section for "Arch Linux" and another one for "Manjaro Linux" is fine with me. 
+
+Of course, I'm more then willing to assist you with this during review process.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>yochananmarqos:</strong></p>
+                    <p>> why isn't the service triggered automatically after install. Can't this be the case for both AUR and Manjaro package?
+
+The service is not enabled by default with the AUR package because of Arch's [KISS](https://wiki.archlinux.org/index.php/Arch_terminology#KISS) principle and [Simplicity](https://wiki.archlinux.org/index.php/Arch_Linux#Simplicity).
+
+> [Arch] does not add automation features such as enabling a service simply because the package was installed. 
+
+However, [Manjaro's](https://manjaro.org/) "Enjoy the Simplicity" involves making things easier:
+
+> Manjaro is an accessible, friendly, open-source operating system. Providing all the benefits of cutting-edge software combined with a focus on getting started quickly, **automated tools to require less manual intervention**, and help readily available when needed. Manjaro is suitable for both newcomers and experienced computer users.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@yochananmarqos 
+
+> > why isn't the service triggered automatically after install. Can't this be the case for both AUR and Manjaro package?
+> 
+> The service is not enabled by default with the AUR package because of Arch's [KISS](https://wiki.archlinux.org/index.php/Arch_terminology#KISS) principle and [Simplicity](https://wiki.archlinux.org/index.php/Arch_Linux#Simplicity).
+> 
+> > [Arch] does not add automation features such as enabling a service simply because the package was installed.
+> 
+> However, [Manjaro's](https://manjaro.org/) "Enjoy the Simplicity" involves making these easier:
+> 
+> > Manjaro is an accessible, friendly, open-source operating system. Providing all the benefits of cutting-edge software combined with a focus on getting started quickly, **automated tools to require less manual intervention**, and help readily available when needed. Manjaro is suitable for both newcomers and experienced computer users.
+
+I'm completely fine with that, every distro has its own ways of doing this and philosophies which should be respected.
+
+In this case could you please create another MR for re-organizing the README. But this time, extending Arch Linux section and pointing existing elements that are part of the README. I really had a feeling in #90 it was solely focusing on how to get it installed/running on Arch, and in process making these instructions fuzzy for other distros.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>[README ](https://github.com/AdnanHodzic/auto-cpufreq)updated, I hope this clarifies any confusion. Please submit a new PR if you think otherwise. </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

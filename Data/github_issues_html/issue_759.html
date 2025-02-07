@@ -1,0 +1,27 @@
+
+        <html>
+        <head>
+            <title>Issue #759: Unpin psutil and requests packages</title>
+        </head>
+        <body>
+            <h1>Unpin psutil and requests packages</h1>
+            <p><strong>Issue #759</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>We had these packages pinned because of #654 and #707. 
+The psutil package had an official update so we no longer need to pull from the github repo and the requests package got updated in Nix so its now safe to unpin both of these dependencies
+
+Also added poetry to the dev shell for Nix for convenience</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>LGTM and makes total sense! Thanks</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

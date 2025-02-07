@@ -1,0 +1,41 @@
+
+        <html>
+        <head>
+            <title>Issue #522: Make use of `energy_perf_bias`?</title>
+        </head>
+        <body>
+            <h1>Make use of `energy_perf_bias`?</h1>
+            <p><strong>Issue #522</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hi,
+
+first of all: Thank you for creating `auto-cpufreq`, I really like it and prefer it to more invasive alternatives like TLP.
+
+I'm fairly new to Linux power management and just found out about the `energy_perf_bias` value for Intel processors (see <https://wiki.archlinux.org/title/CPU_frequency_scaling#Intel_performance_and_energy_bias_hint>).
+
+Currently, it is set to the default value of `6` on my system although `auto-cpufreq` set the governor to `performance`.
+I wonder if setting the value to `0` has the potential to further improve performance? If so, would it make sense to include such a feature in `auto-cpufreq`?</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Could be an interesting thing to have ... since I'm very limited with available time to do this myself, if you or anyone else wants to give it a try in implementing this functionality, please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>This functionality has been implemented as part of #771, please refer to [config file ](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#3-auto-cpufreq-config-file)on how to enable & set it up.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ret2src:</strong></p>
+                    <p>Awesome, thank you!</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

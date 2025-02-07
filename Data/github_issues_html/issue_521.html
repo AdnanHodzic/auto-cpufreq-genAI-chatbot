@@ -1,0 +1,105 @@
+
+        <html>
+        <head>
+            <title>Issue #521: Asahi Fedora Remix issue</title>
+        </head>
+        <body>
+            <h1>Asahi Fedora Remix issue</h1>
+            <p><strong>Issue #521</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+
+```
+`Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.9.8+3dcf2fd8', 'auto-cpufreq')
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/pkg_resources/__init__.py", line 3259, in <module>
+    @_call_aside
+     ^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/pkg_resources/__init__.py", line 3234, in _call_aside
+    f(*args, **kwargs)
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/pkg_resources/__init__.py", line 3272, in _initialize_master_working_set
+    working_set = WorkingSet._build_master()
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/pkg_resources/__init__.py", line 581, in _build_master
+    ws.require(__requires__)
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/pkg_resources/__init__.py", line 909, in require
+    needed = self.resolve(parse_requirements(requirements))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/pkg_resources/__init__.py", line 795, in resolve
+    raise DistributionNotFound(req, requirers)
+pkg_resources.DistributionNotFound: The 'psutil' distribution was not found and is required by auto-cpufreq
+```
+
+
+Add/paste error output in case of failed installation or other failing component
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.9.8+3dcf2fd8', 'auto-cpufreq')
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/pkg_resources/__init__.py", line 3259, in <module>
+    @_call_aside
+     ^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/pkg_resources/__init__.py", line 3234, in _call_aside
+    f(*args, **kwargs)
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/pkg_resources/__init__.py", line 3272, in _initialize_master_working_set
+    working_set = WorkingSet._build_master()
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/pkg_resources/__init__.py", line 581, in _build_master
+    ws.require(__requires__)
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/pkg_resources/__init__.py", line 909, in require
+    needed = self.resolve(parse_requirements(requirements))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/pkg_resources/__init__.py", line 795, in resolve
+    raise DistributionNotFound(req, requirers)
+pkg_resources.DistributionNotFound: The 'psutil' distribution was not found and is required by auto-cpufreq
+
+```
+I tried:
+reinstalling psutil
+rebooting
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>SaekoYes:</strong></p>
+                    <p>I would also like to add that Im running asahi linux gnome on the apple m1</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rootCircle:</strong></p>
+                    <p>Not been to asahi environment,  but possibly try running 
+`/opt/auto-cpufreq/venv/bin/pip3 install psutil` 
+and check if it fixes the issue?
+
+If you are expecting to install `psutil` systemwide, prefer your default package manager in that case.
+`sudo pacman -S python-psutil`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>SaekoYes:</strong></p>
+                    <p>that is exactly what I did, same error</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>SaekoYes:</strong></p>
+                    <p>Well that is weird, it appears to be working after updating my system today. Sorry for wasting your time.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

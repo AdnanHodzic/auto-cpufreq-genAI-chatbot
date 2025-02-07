@@ -1,0 +1,84 @@
+
+        <html>
+        <head>
+            <title>Issue #808: Update auto-cpufreq-installer to update Suse support</title>
+        </head>
+        <body>
+            <h1>Update auto-cpufreq-installer to update Suse support</h1>
+            <p><strong>Issue #808</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Changed python38 to python3 to solve an install error and also python3-setuptools were causing a conflict using python311-setuptools ended up solving that install.
+
+Solved failed installation on OpenSUSE systems.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>CaffineAddic:</strong></p>
+                    <p>![image](https://github.com/user-attachments/assets/3e3353a5-aac5-4eec-93b5-59b8c1db1b6f)
+Working Install proof, in case anyone wants to see
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>One small remark, can you please make a change to set `python311-setuptools` as `python3-setuptools`? As this way it won't be limited by particular Python version and will always get the latest, preventing the problem that occured in #805 from happening in future again.
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>CaffineAddic:</strong></p>
+                    <p>Actually python3-setuptools are being maped to some old 54 version or something 
+
+the latest version available for OpenSUSE is available as python311-setuptools-75.6.0-2.2.noarch 
+
+If python3-setuptools were tried to be installed it caused a conflict and the installation setup to fail.
+
+
+
+Problem: 1: the installed python311-setuptools-75.6.0-2.2.noarch obsoletes 'python3-setuptools < 75.6.0-2.2' provided by the to be installed python3-setuptools-57.0.0-1.55.noarch
+
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Clear, weird that Suse is doing it like that instead of linking python metapackage to its latest version. 
+
+Regardless, rest LGTM and thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+Closes: #805</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>CaffineAddic:</strong></p>
+                    <p>Thanks a bunch, if you have any specific things if you wanna delegate to me I would be happy to work on</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Thank, best thing to do is take a look at [Looking for developers and co-maintainers](https://github.com/AdnanHodzic/auto-cpufreq#looking-for-developers-and-co-maintainers) section of README, or [my latest comment](https://github.com/AdnanHodzic/auto-cpufreq/discussions/312#discussioncomment-9556465) in #312</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>CaffineAddic:</strong></p>
+                    <p>Oh I did, honestly it's my first time so starting on alone to develop a new part of this project would be a little daunting, I would feel more in line if you could just delegate some task with some tips on how would I go about completing it.
+
+Sorry for being a little inflexible </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Sure, I can keep your name on when new issues come in, but there's a lot of [existing open ones](https://github.com/AdnanHodzic/auto-cpufreq/issues?q=is%3Aissue%20state%3Aopen) so please check if there's any interesting for you. In meantime I would recommend to subscribe to all[ auto-cpufreq issues ](https://github.com/AdnanHodzic/auto-cpufreq/issues.)so you're notified when there's a new one.
+
+Also, please note just yesterday I released [auto-cpufreq-genAI-chatbot ](https://foolcontrol.org/?p=4903) and try to also use it for some things :) </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

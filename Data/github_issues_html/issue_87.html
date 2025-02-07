@@ -1,0 +1,257 @@
+
+        <html>
+        <head>
+            <title>Issue #87: [Feature] Tray-Icon for Status-Info</title>
+        </head>
+        <body>
+            <h1>[Feature] Tray-Icon for Status-Info</h1>
+            <p><strong>Issue #87</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Can you add a tray icon (red / green) so that the status (active / inactive) of auto-cpufreq is visible.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>@AdnanHodzic I could help with this, maybe even implement. Had experience with python app indicator</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>@AdnanHodzic could you please label issues by category and priority?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>schinfo:</strong></p>
+                    <p>Only you as the owner can set labels in GitHub ;-)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> @AdnanHodzic I could help with this, maybe even implement. Had experience with python app indicator
+
+Sure, sounds like a nice idea. 
+
+> Only you as the owner can set labels in GitHub ;-)
+
+I just sent @Red-Eyed an invite to be a collaborator, with that status he'll be able to do these things :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Kwaadpepper:</strong></p>
+                    <p>If you do not want to reinvent the wheel there is this tool
+https://github.com/konkor/cpufreq
+
+It does not do the automatic job of https://github.com/AdnanHodzic/auto-cpufreq, so both are working well together
+
+It provides a nice icon with info
+![Capture d’écran de 2020-08-14 09-29-12](https://user-images.githubusercontent.com/6019313/90224883-aa866980-de10-11ea-8a1f-8a5e84231716.png)
+
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>schinfo:</strong></p>
+                    <p>cpufreq maybe a very good tool, but the tray-icon doesn't work at Cinnamon</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>yochananmarqos:</strong></p>
+                    <p>@Kwaadpepper `cpufreq` conflicts with `auto-cpufreq` as they both install the same `cpufreqctl` binary.
+
+Compare `cpufreq`'s [`cpufreqctl`](https://github.com/konkor/cpufreq/blob/master/cpufreqctl) and `auto-cpufreq`'s [`cpufreqctl.sh`](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/scripts/cpufreqctl.sh).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>During install auto-cpufreq [will take a backup of original ](https://github.com/AdnanHodzic/auto-cpufreq/blob/d0aeb8c2a2efc692e07fee098b9f8757b452591e/source/core.py#L157)`cpufreqctl` if it detects it and will use its own version which has slight improvements over the original. It will also restore the original `cpufreqctl` if [auto-cpufreq is removed](https://github.com/AdnanHodzic/auto-cpufreq/blob/d0aeb8c2a2efc692e07fee098b9f8757b452591e/source/core.py#L174).
+
+> @Kwaadpepper cpufreq conflicts with auto-cpufreq as they both install the same cpufreqctl binary.
+
+So this is not necessary true as auto-cpufreq will attempt to resolve any conflicts. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>yochananmarqos:</strong></p>
+                    <p>@AdnanHodzic Ah, I see. That will have to be manually dealt with in the AUR package, see my [install file](https://github.com/yochananmarqos/pkgbuilds/blob/master/auto-cpufreq-git/auto-cpufreq.install#L26). I've let the AUR maintainers know.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> @AdnanHodzic Ah, I see. That will have to be manually dealt with in the AUR package, see my [install file](https://github.com/yochananmarqos/pkgbuilds/blob/master/auto-cpufreq-git/auto-cpufreq.install#L26). I've let the AUR maintainers know.
+
+Cool thanks. I think it would be the best if AUR install file did the same thing `auto-cpufreq` is trying to do if `cpufreqctl` is detected, but let's see if @crian has something against this.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>crian:</strong></p>
+                    <p>> > @AdnanHodzic Ah, I see. That will have to be manually dealt with in the AUR package, see my [install file](https://github.com/yochananmarqos/pkgbuilds/blob/master/auto-cpufreq-git/auto-cpufreq.install#L26). I've let the AUR maintainers know.
+> 
+> Cool thanks. I think it would be the best if AUR install file did the same thing `auto-cpufreq` is trying to do if `cpufreqctl` is detected, but let's see if @crian has something against this.
+
+I'm fine with this. Currently updating the AUR pkg.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> > > @AdnanHodzic Ah, I see. That will have to be manually dealt with in the AUR package, see my [install file](https://github.com/yochananmarqos/pkgbuilds/blob/master/auto-cpufreq-git/auto-cpufreq.install#L26). I've let the AUR maintainers know.
+> > 
+> > 
+> > Cool thanks. I think it would be the best if AUR install file did the same thing `auto-cpufreq` is trying to do if `cpufreqctl` is detected, but let's see if @crian has something against this.
+> 
+> I'm fine with this. Currently updating the AUR pkg.
+
+Nice, thanks. Let me know once this has been done, so I can close part of this discussion and I believe same thing is with #133.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>crian:</strong></p>
+                    <p>> > > > @AdnanHodzic Ah, I see. That will have to be manually dealt with in the AUR package, see my [install file](https://github.com/yochananmarqos/pkgbuilds/blob/master/auto-cpufreq-git/auto-cpufreq.install#L26). I've let the AUR maintainers know.
+> > > 
+> > > 
+> > > Cool thanks. I think it would be the best if AUR install file did the same thing `auto-cpufreq` is trying to do if `cpufreqctl` is detected, but let's see if @crian has something against this.
+> > 
+> > 
+> > I'm fine with this. Currently updating the AUR pkg.
+> 
+> Nice, thanks. Let me know once this has been done, so I can close part of this discussion and I believe same thing is with #133.
+
+Done https://aur.archlinux.org/cgit/aur.git/commit/?h=auto-cpufreq-git&id=ff0101f0f6552eb085ede88f132d9cb1677f72f1</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@crian awesome, thanks! 
+
+@yochananmarqos and everybody else who had problems with `cpufreqctl` AUR conflict, if the problem persist please open a new issue as it got out of scope from the original request. Thanks</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>yochananmarqos:</strong></p>
+                    <p>@AdnanHodzic: Really? Thanks.
+
+> Thanks to our contributors for this release!
+>
+>@crian</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> @AdnanHodzic: Really? Thanks.
+> 
+> > Thanks to our contributors for this release!
+> > @crian
+
+I like to give people credit for their work. Even if it's as simple as creating new version of AUR package which fixes a bug or 2.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>crian:</strong></p>
+                    <p>> > @AdnanHodzic: Really? Thanks.
+> > > Thanks to our contributors for this release!
+> > > @crian
+> 
+> I like to give people credit for their work. Even if it's as simple as creating new version of AUR package which fixes a bug or 2.
+
+You should give the credit to @yochananmarqos as he fixed it.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@crian thanks for the heads up, I completely missed it. @yochananmarqos sorry about that! Updated [1.5.1 release contributors list](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.5.1).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>After  [v1.7.0 release](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.7.0) release and [config/settings file going live](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/README.md#configuring-auto-cpufreq). This feature is probably next highest item on my priority list. If anyone wants to give it a try at implementing this feature, I'll make sure to give you credit as part of [releases page](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Since I'm very limited with available time to do this myself, if you or anyone else wants to give it a try in implementing this functionality, please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>KAGEYAM4:</strong></p>
+                    <p>Any update on this , currently if i want to force switch to peformance mode , opening terminal > sudoing > writing password. A tray indicator will be nice to force switch on the fly ( 3 modes - auto, powersave, perforcmace ). 
+
+Can i use cpu-freq in meantime ? I am on Arch , installed auto-cpu freq thorugh install script. is there any better tray switching method available ?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>If you install auto-cpufreq from changes that are on `master` branch right now, you'll get a desktop entry "auto-cpufreq" which allow you to easily switch between performance/powersave/default mode using auto-cpufreq GTK GUI app.
+
+These changes will be released soon with upcoming v2.0 release and I'll make a video & update documentation about new functionality. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>KAGEYAM4:</strong></p>
+                    <p>> If you install auto-cpufreq from changes that are on `master` branch right now, you'll get a desktop entry "auto-cpufreq" which allow you to easily switch between performance/powersave/default mode using auto-cpufreq GTK GUI app.
+> 
+> These changes will be released soon with upcoming v2.0 release and I'll make a video & update documentation about new functionality.
+
+when switching mode using gtk gui , it prompts for password , is there a way to skip it ?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> when switching mode using gtk gui , it prompts for password , is there a way to skip it ?
+
+This was done by design. As that's when actual "sudo" privledges will be required in background.
+
+@shadeyg56 now that I think of it, another idea could to require sudo password when auto-cpufreq GUI is initially started. Altough that's not intuative, since maybe some folks will just run it to see the stats.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>right, at some point the GUI HAS to prompt for root password.
+
+Originally, the app actually did prompt during launch, but we changed it because of exactly what you said. I believe it is fine how it is now. 
+
+@KAGEYAM4 because overriding is a root action, it doesn't matter what medium you use, it will always need root somehow. It is quite quick to open up the GUI, select the override and enter your password. Please note that the GUI that is available in master has some known issues that are currently being worked on in another branch, but we hope to merge soon :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I believe it is fine how it is now.
+
+It's definitely fine as it is now.
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>KAGEYAM4:</strong></p>
+                    <p>> right, at some point the GUI HAS to prompt for root password.
+> 
+> Originally, the app actually did prompt during launch, but we changed it because of exactly what you said. I believe it is fine how it is now.
+> 
+> @KAGEYAM4 because overriding is a root action, it doesn't matter what medium you use, it will always need root somehow. It is quite quick to open up the GUI, select the override and enter your password. Please note that the GUI that is available in master has some known issues that are currently being worked on in another branch, but we hope to merge soon :)
+
+Before this i used Windows and KDE, both had quick way to switch power governor, that's what i was hoping here. ( quick switch using tray option )
+
+But seeing that this project whole purpose is to automate this process, i can see that this change won't be used by many.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>KAGEYAM4:</strong></p>
+                    <p>Is there some other project which provides tray icon to switch power governor and dosen't confilit with `auto-cpufreq` ? 
+
+Or is there some permissions that i can change to add my user/group to not get prompted for sudo access ?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>With [release of v2.0.0](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v2.0.0) now auto-cpufreq has GUI. Hence, tray can be replicated in [GNOME by adding auto-cpufreq to "dash" by right clicking and selecting "pin".](https://youtu.be/SPGpkZ0AZVU?si=SaJ-jcFCJ99uEph2&t=420)
+
+Closing the issue.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

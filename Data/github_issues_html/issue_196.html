@@ -1,0 +1,309 @@
+
+        <html>
+        <head>
+            <title>Issue #196: install broke unrelated user-executable python lib (which `pip completion` depended on)</title>
+        </head>
+        <body>
+            <h1>install broke unrelated user-executable python lib (which `pip completion` depended on)</h1>
+            <p><strong>Issue #196</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>## bug report
+
+**tl;dr** `pip completion --bash` now fails with permission denied after installing auto-cpufreq (see below on how I installed). I'll post back here when I have more.
+
+I'm guessing this is an easy fix, so I'm planning on coming back later with a pull request (assuming I figure out what the installer did that was not-quite-right). Figured I should log this bug regardless - in case I don't get around to this for a while. I'm assuming:
+- there was _previously_ some package-installed library that `pip completion` utilized (and so `pip completion --bash` ran fine in my `~/.bashrc` until now)
+- this project's install script force-reinstalled its own dependency less elegantly (eg not "other"-executable), and now `pip completion` runs into issue.
+
+---
+
+## debug info
+
+### Error output:
+```
+$ pip completion --bash
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/pip/_vendor/__init__.py", line 33, in vendored
+    __import__(vendored_name, globals(), locals(), level=0)
+ModuleNotFoundError: No module named 'pip._vendor.pkg_resources'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/bin/pip3", line 9, in <module>
+    from pip._internal import main
+  File "/usr/lib/python3/dist-packages/pip/_internal/__init__.py", line 19, in <module>
+    from pip._vendor.urllib3.exceptions import DependencyWarning
+  File "/usr/lib/python3/dist-packages/pip/_vendor/__init__.py", line 77, in <module>
+    vendored("pkg_resources")
+  File "/usr/lib/python3/dist-packages/pip/_vendor/__init__.py", line 36, in vendored
+    __import__(modulename, globals(), locals(), level=0)
+  File "<frozen importlib._bootstrap>", line 983, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 967, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 668, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 638, in _load_backward_compatible
+  File "/usr/share/python-wheels/pkg_resources-0.0.0-py2.py3-none-any.whl/pkg_resources/__init__.py", line 3191, in <module>
+  File "/usr/share/python-wheels/pkg_resources-0.0.0-py2.py3-none-any.whl/pkg_resources/__init__.py", line 3175, in _call_aside
+  File "/usr/share/python-wheels/pkg_resources-0.0.0-py2.py3-none-any.whl/pkg_resources/__init__.py", line 3204, in _initialize_master_working_set
+  File "/usr/share/python-wheels/pkg_resources-0.0.0-py2.py3-none-any.whl/pkg_resources/__init__.py", line 574, in _build_master
+  File "/usr/share/python-wheels/pkg_resources-0.0.0-py2.py3-none-any.whl/pkg_resources/__init__.py", line 567, in __init__
+  File "/usr/share/python-wheels/pkg_resources-0.0.0-py2.py3-none-any.whl/pkg_resources/__init__.py", line 623, in add_entry
+  File "/usr/share/python-wheels/pkg_resources-0.0.0-py2.py3-none-any.whl/pkg_resources/__init__.py", line 2033, in find_on_path
+  File "/usr/share/python-wheels/pkg_resources-0.0.0-py2.py3-none-any.whl/pkg_resources/__init__.py", line 2095, in distributions_from_metadata
+PermissionError: [Errno 13] Permission denied: '/usr/local/lib/python3.7/dist-packages/zipp-3.4.1.dist-info'
+
+```
+---
+
+### System information:
+```sh
+$ sudo auto-cpufreq --debug
+
+-------------------------------------------------------------------------------
+
+Linux distro: Debian GNU/Linux 10 buster
+Linux kernel: 5.10.0-0.bpo.5-amd64
+Processor: Intel(R) Core(TM) i7-8550U CPU @ 1.80GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1800 MHz
+CPU min frequency: 400 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0:     1.0%     51 °C     1800 MHz
+CPU1:    18.8%     50 °C     1799 MHz
+CPU2:     3.0%     50 °C     1800 MHz
+CPU3:     1.0%     52 °C     1800 MHz
+CPU4:     0.0%     51 °C     1516 MHz
+CPU5:     0.0%     50 °C     1800 MHz
+CPU6:     0.0%     50 °C     1800 MHz
+CPU7:     6.0%     52 °C     1800 MHz
+
+auto-cpufreq version:
+Git commit: e1409aa
+
+Python: 3.7.3
+psutil package: 5.7.2
+platform package: 1.0.8
+click package: 8.0.1
+distro package 1.3.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.14 %
+
+Total CPU usage: 3.8 %
+Total system load: 1.1
+Average temp. of all cores: 50.75 °C
+
+Currently using: performance governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+
+```
+
+### quick dump of `history | grep cpufreq`
+
+```sh
+$ git clone git@github.com:AdnanHodzic/auto-cpufreq.git
+$ sudo ./auto-cpufreq/auto-cpufreq-installer
+$ systemctl status auto-cpufreq
+$ l /usr/local/share/auto-cpufreq/
+$ sudo ls -la /usr/local/share/auto-cpufreq/scripts/
+$ sudo auto-cpufreq --install
+$ systemctl status auto-cpufreq
+# active, running, and ok
+$ journalctl --pager-end --follow --catalog --unit  auto-cpufreq
+$ sudo auto-cpufreq --stats
+# no errors, but when i unplug power i still see "Battery is: chargin"
+```</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I'm guessing this is an easy fix, so I'm planning on coming back later with a pull request (assuming I figure out what the installer did that was not-quite-right). Figured I should log this bug regardless - in case I don't get around to this for a while.
+
+Looking forward to a PR if you get a chance! 
+
+Not sure what happened during install. I was also thinking of moving `auto-cpufreq-installer` to `pipenv`, but never got around it. Although it probably wouldn't address the problem you ran into.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>jzacsh:</strong></p>
+                    <p>**tl;dr** [quick, temporary stop-gap][emergencyStopgap] recommended, and I'll leave to you to decide proper fix as I'm guessing you've more experience with Python than I do. Happy to put something together if you want to give me some direction, though
+
+
+## quick investigation of the installer
+
+> this project's install script force-reinstalled its own dependency less elegantly (eg not "other"-executable), and now `pip completion` runs into issue.
+
+okay I read the install script a bit more carefully and indeed this^ hunch was right, we're just running `sudo pip` which this article outlines nicely as a recipe for conflict with my own system's package manager: https://www.getpagespeed.com/server-setup/do-not-run-pip-as-root
+
+NOTE: I've now found more things broken by this (even `less` - using a syntax highlighter that's worked for years - is now broken).
+
+@AdnanHodzic Might I recommend [just stopping anyone from running this script][emergencyStopgap] until the correct installation method is devised? We can do that here, and leave this issue open, but I want to keep others from borking their machine. To clarify my thinking: I'm kind of lucky that I have a backup of my system files, so I'm going to spend some time very carefully rolling back later today or tomorrow (to just before this use of auto-cpufreq), but I **don't** think we'd want to reasonably rely on that, particularly if we know we have a script here doing something _well documented_ as causing pain (running `pip install` as root).
+
+## exactly what to do instead
+
+on the topic of _properly_ solving closing this issue with a correct install strategy...
+
+> Looking forward to a PR if you get a chance!
+
+I thought I'd find some shell scripting that moved some python files around, but I see the problem is just the [`pip` being run as root](https://github.com/AdnanHodzic/auto-cpufreq/blob/433c48b93d844a8459528e5955f9ae5d72a75c61/auto-cpufreq-installer#L31). I'm not a python developer, so have extremely little familiarity with best practices for python.
+
+> Not sure what happened during install. I was also thinking of moving `auto-cpufreq-installer` to `pipenv`, but never got around it. Although it probably wouldn't address the problem you ran into.
+
+Yeah, pipenv sounds like the right track - it seems that the article's author created [something called `pip-safe`](https://pypi.org/project/pip-safe/) which seems related. Again I'm not a python developer, so really in over my head, but even before this article I'm easily bumping into people saying **not** to run pip outside of a virtualenv ([_"It's rarely a good idea to `pip install <package>` outside of a virtualenv."_](https://stackoverflow.com/a/54351636/287374)).
+
+
+[emergencyStopgap]: https://github.com/jzacsh/auto-cpufreq/commit/51824fea9cd253d8075f8d617b30de7ac0603363
+
+---
+
+(PS: thanks for this project! I hope you don't take my any of my evaluation of _the script_ as actually being critical of _your project_. Quite the opposite - I wish I'd run into a package like this forever ago!)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Please don't mind me replying in bit of a mixed up order. 
+
+> (PS: thanks for this project! I hope you don't take my any of my evaluation of the script as actually being critical of your project. Quite the opposite - I wish I'd run into a package like this forever ago!)
+
+No worries, I took your feedback in best possible way and thank you for very valuable input @jzacsh :)
+
+> ## exactly what to do instead
+> on the topic of _properly_ solving closing this issue with a correct install strategy...
+> 
+> > Looking forward to a PR if you get a chance!
+> 
+> I thought I'd find some shell scripting that moved some python files around, but I see the problem is just the [`pip` being run as root](https://github.com/AdnanHodzic/auto-cpufreq/blob/433c48b93d844a8459528e5955f9ae5d72a75c61/auto-cpufreq-installer#L31). I'm not a python developer, so have extremely little familiarity with best practices for python.
+
+When I started this project I was thinking what would be the best and most unified way to have it packaged. Even as someone who is ex Debian package maintainer, I naively thought that packing it [as a Snap package](https://github.com/AdnanHodzic/auto-cpufreq#snap-store) would solve all my problems and every distro could use it as such. As it's running in complete isolation (strictly confined) in a container. 
+
+However, around this same time I realized I needed workaround (temporary) solution for those distros that didn't support Snap. Long story short, it's just amazing how temporary solutions end up becoming permanent.
+
+> ## quick investigation of the installer
+> > this project's install script force-reinstalled its own dependency less elegantly (eg not "other"-executable), and now `pip completion` runs into issue.
+> 
+> okay I read the install script a bit more carefully and indeed this^ hunch was right, we're just running `sudo pip` which this article outlines nicely as a recipe for conflict with my own system's package manager: https://www.getpagespeed.com/server-setup/do-not-run-pip-as-root
+> 
+> NOTE: I've now found more things broken by this (even `less` - using a syntax highlighter that's worked for years - is now broken).
+
+I was aware of this from beginning, but since tool relies on root permissions so heavily I accepted going with this implementation hoping that most people would install it either as a [Snap](https://github.com/AdnanHodzic/auto-cpufreq#snap-store) or [AUR](https://github.com/AdnanHodzic/auto-cpufreq#aur-package-archmanjaro-linux) package. This Github project has over 1000 stars and a lot of installs across the board but this went undetected until now :)
+
+> @AdnanHodzic Might I recommend [just stopping anyone from running this script](https://github.com/jzacsh/auto-cpufreq/commit/51824fea9cd253d8075f8d617b30de7ac0603363) until the correct installation method is devised? We can do that here, and leave this issue open, but I want to keep others from borking their machine. To clarify my thinking: I'm kind of lucky that I have a backup of my system files, so I'm going to spend some time very carefully rolling back later today or tomorrow (to just before this use of auto-cpufreq), but I **don't** think we'd want to reasonably rely on that, particularly if we know we have a script here doing something _well documented_ as causing pain (running `pip install` as root).
+
+I also absolutely don't want to interfere or break anyone's setup. As if we go down this path, we need to come up with an alternative solution for current implementation fast, and I'm really tight with time ATM. 
+
+My addendum to your proposal would be is to display a re-phrase [a message a bit](https://github.com/jzacsh/auto-cpufreq/commit/51824fea9cd253d8075f8d617b30de7ac0603363) and encourage people to either use Snap/AUR until installer itself has been refactored, offering them to proceed with installer at their own risk. If they accept, installation continues, if not it exits as originally proposed.
+
+> > Not sure what happened during install. I was also thinking of moving `auto-cpufreq-installer` to `pipenv`, but never got around it. Although it probably wouldn't address the problem you ran into.
+> 
+> Yeah, pipenv sounds like the right track - it seems that the article's author created [something called `pip-safe`](https://pypi.org/project/pip-safe/) which seems related. Again I'm not a python developer, so really in over my head, but even before this article I'm easily bumping into people saying **not** to run pip outside of a virtualenv ([_"It's rarely a good idea to `pip install <package>` outside of a virtualenv."_](https://stackoverflow.com/a/54351636/287374)).
+
+Thanks for heads up, I wasn't aware of `pip-safe`. For other projects I used `pipenv` with great results.
+
+Either way, looking forward to hearing your thoughts.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>jzacsh:</strong></p>
+                    <p>> My addendum to your proposal would be is to display a re-phrase a message a bit and encourage people to either use Snap/AUR until installer itself has been refactored, offering them to proceed with installer at their own risk. If they accept, installation continues, if not it exits as originally proposed.
+
+sgtm! commmit a0d72c9 does this and is ready in pull request #208
+
+
+---
+
+
+wrt _actually_ fixing this, I'm actually not even sure that this tool was working correctly on my system, so **at the moment** I'm a little less motivated to tackle the proper-install fix we want here. I'm sure I'll get sick of my battery life in a couple weeks and come back here - just want to call out that others should feel free to tackle this (e.g. `pipenv` solution, or w/e makes sense from a Pythonista's POV)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>jzacsh:</strong></p>
+                    <p>> thought that packing it as a Snap package would solve all my problems and every distro could use it as such. As it's running in complete isolation (strictly confined) in a container.
+
+Oh, btw, I only went with the script because I'm not using snap on my system. I have flatpak though - so maybe a quick fix is make a flathub publication and _then_ you can kill the script?? :shrug: </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>jzacsh:</strong></p>
+                    <p>ah! figured out why this hasn't bitten anyone else - my **guess** is most people don't set their `umask` to anything more restrictive than the common default (`022`). I personally have it to 077 for my own user, but there's a gotcha to that practice when you're _also the admin_ on your machine:
+
+> Another caveat (not really a downside, once you are aware of it) is when you start doing sudo stuff such as **installing local programs, ruby gems, python eggs (not OS manage packages obviously),** creating configuration files, and so on.
+
+-- (emphasis added for the relevant bit) https://unix.stackexchange.com/a/784/239551
+
+(Interestingly I _do_ have a ton of side-loaded things outside of `apt` packages, so not sure why I've not been bitten yet).
+
+**tl;dr** anyway, I guess this is just a +1 for snap/flatpak and/or proper packaging. But hopefully helpful for whoever else bumps into this.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> > My addendum to your proposal would be is to display a re-phrase a message a bit and encourage people to either use Snap/AUR until installer itself has been refactored, offering them to proceed with installer at their own risk. If they accept, installation continues, if not it exits as originally proposed.
+> 
+> sgtm! commmit [a0d72c9](https://github.com/AdnanHodzic/auto-cpufreq/commit/a0d72c959b6d2d72911d7a8c8ee3e99158add666) does this and is ready in pull request #208
+
+Made a comment. 
+
+> wrt _actually_ fixing this, I'm actually not even sure that this tool was working correctly on my system, so **at the moment** I'm a little less motivated to tackle the proper-install fix we want here. I'm sure I'll get sick of my battery life in a couple weeks and come back here - just want to call out that others should feel free to tackle this (e.g. `pipenv` solution, or w/e makes sense from a Pythonista's POV)
+
+If you had it installed successfully, then it had to be working as intended. 
+
+> > thought that packing it as a Snap package would solve all my problems and every distro could use it as such. As it's running in complete isolation (strictly confined) in a container.
+> 
+> Oh, btw, I only went with the script because I'm not using snap on my system. I have flatpak though - so maybe a quick fix is make a flathub publication and _then_ you can kill the script??
+
+Reason why there isn't a flatpak is due to its limitations, see #71 for more info
+
+> ah! figured out why this hasn't bitten anyone else - my **guess** is most people don't set their `umask` to anything more restrictive than the common default (`022`). I personally have it to 077 for my own user, but there's a gotcha to that practice when you're _also the admin_ on your machine:
+> 
+> > Another caveat (not really a downside, once you are aware of it) is when you start doing sudo stuff such as **installing local programs, ruby gems, python eggs (not OS manage packages obviously),** creating configuration files, and so on.
+> 
+> -- (emphasis added for the relevant bit) https://unix.stackexchange.com/a/784/239551
+> 
+> (Interestingly I _do_ have a ton of side-loaded things outside of `apt` packages, so not sure why I've not been bitten yet).
+> 
+> **tl;dr** anyway, I guess this is just a +1 for snap/flatpak and/or proper packaging. But hopefully helpful for whoever else bumps into this.
+
+Good to know. I'm trying to figure if #203 and #201 are related to this, although it seems like they are. As if they are not, and your problem originates from setting umask, maybe it's best to do nothing with installer until its replacement with pipenv (or something else) is here.
+
+Regarding "something else" category I just idea how to solve this problem in most seamless/easy way. Simply install necessary Python libraries using apt instead of pip ....  which is what I was thinking about originally, but back then apt package with same libraries were much older then they are with pip and that's the reason I went with pip.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>jzacsh:</strong></p>
+                    <p>> If you had it installed successfully, then it had to be working as intended.
+
+I made my comment based on the fact that the battery status wasn't detected (see my `history` output in original report) - but perhaps that's not a sign that something was broken.
+
+> maybe it's best to do nothing with installer until its replacement with pipenv
+
+Ok, I'll hold off further commits on that pr then.
+
+> Simply install necessary Python libraries using apt instead of pip
+
+Oooh, +1 I'll test this (without any system setup) when I'm back at desk .. (I'll just run `python3 ./auto_cpufreq/core.py` directly and see if it's obvious what packages might be needed).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Changes live as part of [v1.9.0 release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

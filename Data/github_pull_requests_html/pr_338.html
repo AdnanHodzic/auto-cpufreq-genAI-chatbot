@@ -1,0 +1,122 @@
+
+        <html>
+        <head>
+            <title>Pull Request #338: Ability to reset scaling frequencies to default</title>
+        </head>
+        <body>
+            <h1>Ability to reset scaling frequencies to default</h1>
+            <p><strong>Pull Request #338</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Sets frequencies:
+
+- if option is used in auto-cpufreq.conf: use configured value
+- if option is disabled/no conf file used: set default frequencies
+
+Frequency setting is performed only once on power supply change</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Thanks for looking into this so quickly. Changes look good to me, 
+
+Regarding your remarks in #324 
+
+> How do we know whether the scaling frequencies were set by auto-cpufreq before or not?
+
+This is the tricky part, we don't know about it, only way would be to keep saving them in another file (or as env variable) and then use that file/env var as a reference, but this is very tricky and complicated. Although, this seems to be fixed with your latest changes on `varaki-scaling_reset`, correct me if I'm wrong?
+
+> Configuration file gets parsed only on startup and it's not being watched for changes during auto-cpufreq is running.
+> Should we always check whether the scaling min/max freqs differ from the defaults?
+
+I would do this, as currently this is very confusing. User changes something, expects to see changes but nothing happens. If you're testing these changes with `auto-cpufreq --live`, then it works perfectly, as you have to close (auto-cpufreq) and start over to see the changes. 
+
+If `auto-cpufreq --install` is used, then only option is to either `auto-cpufreq --remove` and then run `auto-cpufreq --install` again and everything will be fine. 
+
+The way I see it, we have 2 options:
+
+1. if it's detected changed were made to whole `/etc/auto-cpufreq.conf` file or only `scaling_min/max_freq` values, to inform user to: reinstall auto-cpufreq `daemon` or simply restart the computer to apply the changes? (simple, but ugly)
+2. Try to do this automatically when changes to config file are detected (restart auto-cpufreq?) without user noticing anything and applying the changes (complicated)
+
+>I'll figure out something that's resource friendly and doesn't do any checks/settings more than it's necessary, but looking at >auto-cpufreq as a whole, I think re-organizing it into a class based structure would help a lot in general for long-term.
+
+This is something I have in my private notes/ToDo but never got to it. 
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>varaki:</strong></p>
+                    <p>> Although, this seems to be fixed with your latest changes on varaki-scaling_reset, correct me if I'm wrong?
+
+Yes, the min/max limit values (from cpuinfo_min/max_freq files) are fetched and stored in the corresponding function attributes, when the function gets called first time.
+These values will be used as default if not overridden via auto-cpufreq.conf.
+
+For example:
+
+Machine is on battery power, only the "scaling _**max**_freq" is defined in the "**battery**" section, and no frequency options are defined for "charger" section:
+
+1. the value defined in the config as "scaling_ **max**_freq" will be set on the system as "scaling _**max**_freq"
+2. the default (fetched from cpuinfo _**min**_freq) value will be set for "scaling _**min**_freq"
+3. nothing will be performed again until script is restarted or power supply changes
+4. user plugs in the charger
+5. charger power supply is detected by the function and since no scaling frequency options are defined in "charger" section, the value fetched from "cpuinfo _**max**_freq" will be set as "scaling _**max**_freq"  and the value fetched from "cpuinfo _**min**_freq" will be set as "scaling _**min**_freq"</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> > Although, this seems to be fixed with your latest changes on varaki-scaling_reset, correct me if I'm wrong?
+> 
+> Yes, the min/max limit values (from cpuinfo_min/max_freq files) are fetched and stored in the corresponding function attributes, when the function gets called first time. These values will be used as default if not overridden via auto-cpufreq.conf.
+> 
+> For example:
+> 
+> Machine is on battery power, only the "scaling _**max**_freq" is defined in the "**battery**" section, and no frequency options are defined for "charger" section:
+> 
+> 1. the value defined in the config as "scaling_ **max**_freq" will be set on the system as "scaling _**max**_freq"
+> 2. the default (fetched from cpuinfo _**min**_freq) value will be set for "scaling _**min**_freq"
+> 3. nothing will be performed again until script is restarted or power supply changes
+> 4. user plugs in the charger
+> 5. charger power supply is detected by the function and since no scaling frequency options are defined in "charger" section, the value fetched from "cpuinfo _**max**_freq" will be set as "scaling _**max**_freq"  and the value fetched from "cpuinfo _**min**_freq" will be set as "scaling _**min**_freq"
+
+I missed this during my initial review, this part works perfectly as you explained. 
+
+But it still brings us to this point, as I think average Joe will have no idea why his newly defined values in config file are not picked up. Hence I think it would be perfect if auto-cpufreq could be restarted in case changes to `auto-cpufreq.conf` are detected. If implementing this type of logic with restart is too complicated. Then at least print out a message to user that app/or computer needs to be restarted in order for changes to be applied (but this pretty ugly solution, as in case they installed it, they'll have no idea how to restart an app).
+
+> > Configuration file gets parsed only on startup and it's not being watched for changes during auto-cpufreq is running.
+> > Should we always check whether the scaling min/max freqs differ from the defaults?
+> 
+> I would do this, as currently this is very confusing. User changes something, expects to see changes but nothing happens. If you're testing these changes with `auto-cpufreq --live`, then it works perfectly, as you have to close (auto-cpufreq) and start over to see the changes.
+> 
+> If `auto-cpufreq --install` is used, then only option is to either `auto-cpufreq --remove` and then run `auto-cpufreq --install` again and everything will be fine.
+> 
+> The way I see it, we have 2 options:
+> 
+> 1. if it's detected changed were made to whole `/etc/auto-cpufreq.conf` file or only `scaling_min/max_freq` values, to inform user to: reinstall auto-cpufreq `daemon` or simply restart the computer to apply the changes? (simple, but ugly)
+> 2. Try to do this automatically when changes to config file are detected (restart auto-cpufreq?) without user noticing anything and applying the changes (complicated)
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>varaki:</strong></p>
+                    <p>All previously existing param changes required script/service restart to make effect anyway, but nevertheless, this can be done in a separate PR, because it's a new feature and a rather big change.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> All previously existing param changes required script/service restart to make effect anyway, but nevertheless, this can be done in a separate PR, because it's a new feature and a rather big change.
+
+Makes sense, let's do that then. Thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Changes are live as part of [1.9.1 release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,229 @@
+
+        <html>
+        <head>
+            <title>Issue #94: The 'click' distribution was not found and is required by auto-cpufreq</title>
+        </head>
+        <body>
+            <h1>The 'click' distribution was not found and is required by auto-cpufreq</h1>
+            <p><strong>Issue #94</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+```
+Started auto-cpufreq - Automatic CPU speed & power optimizer for Linux.
+Traceback (most recent call last):
+  File "/usr/local/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.0', 'auto-cpufreq')
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3088, in <module>
+    @_call_aside
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3072, in _call_aside
+    f(*args, **kwargs)
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3101, in _initialize_master_working_set
+    working_set = WorkingSet._build_master()
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 574, in _build_master
+    ws.require(__requires__)
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 892, in require
+    needed = self.resolve(parse_requirements(requirements))
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 778, in resolve
+    raise DistributionNotFound(req, requirers)
+pkg_resources.DistributionNotFound: The 'click' distribution was not found and is required by auto-cpufreq
+```
+---
+
+### System information:
+```
+System: LENOVO product: MFG_IN_GO v: ThinkPad T440s serial: N/A
+           Mobo: LENOVO model: MFG_IN_GO v: 0B98401 WIN serial: N/A
+           UEFI: LENOVO v: GJET79WW (2.29 ) date: 09/03/2014
+Battery    BAT0: charge: 14.8 Wh 79.7% condition: 18.6/23.2 Wh (80%)
+           BAT1: charge: 26.6 Wh 41.3% condition: 64.5/71.3 Wh (90%)
+CPU:       Governors: conservative ondemand userspace powersave performance schedutil Dual core Intel Core i7-4600U (-MT-MCP-) cache: 4096 KB
+           clock speeds: max: 2701 MHz 1: 2711 MHz 2: 2709 MHz 3: 2727 MHz 4: 2753 MHz
+Graphics:  Card-1: Intel Haswell-ULT Integrated Graphics Controller
+           Card-2: NVIDIA GK208M [GeForce GT 730M]
+           Display Server: x11 (X.Org 1.19.6 ) drivers: modesetting (unloaded: fbdev,vesa)
+           Resolution: 1920x1080@60.05hz
+           OpenGL: renderer: Mesa DRI Intel HD Graphics 4400 (HSW GT2) version: 4.5 Mesa 20.0.8
+Audio:     Card-1 Intel 8 Series HD Audio Controller driver: snd_hda_intel Sound: ALSA v: k5.4.0-42-lowlatency
+           Card-2 Intel Haswell-ULT HD Audio Controller driver: snd_hda_intel
+Network:   Card-1: Intel Ethernet Connection I218-LM driver: e1000e
+           IF: enp0s25 state: down mac: <filter>
+           Card-2: Intel Wireless 7260 driver: iwlwifi
+           IF: wlp3s0 state: up mac: <filter>
+Drives:    HDD Total Size: 240.1GB (19.3% used)
+           ID-1: /dev/sda model: OCZ size: 240.1GB
+Partition: ID-1: / size: 35G used: 32G (96%) fs: ext4 dev: /dev/sda4
+           ID-2: /home size: 122G used: 128K (1%) fs: zfs dev: N/A
+           ID-3: swap-1 size: 12.76GB used: 6.39GB (50%) fs: swap dev: /dev/sda3
+RAID:      Device-1: /dev/tank - DEGRADED raid: zfs-no-raid components: online: none FAILED: crypttank
+Sensors:   
+{'battery': sbattery(percent=79.53688745288099, secsleft=<BatteryTime.POWER_TIME_UNLIMITED: -2>, power_plugged=True),
+ 'fans': {'thinkpad': [sfan(label='', current=3607)]},
+ 'temperatures:': {'acpitz': [shwtemp(label='', current=57.0, high=200.0, critical=200.0)],
+                   'coretemp': [shwtemp(label='Package id 0', current=62.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 0', current=60.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 1', current=62.0, high=100.0, critical=100.0)],
+                   'thinkpad': [shwtemp(label='', current=57.0, high=None, critical=None),
+                                shwtemp(label='', current=0.0, high=None, critical=None),
+                                shwtemp(label='', current=0.0, high=None, critical=None),
+                                shwtemp(label='', current=0.0, high=None, critical=None),
+                                shwtemp(label='', current=0.0, high=None, critical=None),
+                                shwtemp(label='', current=0.0, high=None, critical=None),
+                                shwtemp(label='', current=0.0, high=None, critical=None),
+                                shwtemp(label='', current=0.0, high=None, critical=None)]}} System Temperatures: cpu: 57.0C mobo: 0.0C
+           Fan Speeds (in rpm): cpu: 3575
+Info:      Processes: 556 Uptime: 8 days Memory: 10533.2/11861.2MB Client: Shell (sh) inxi: 2.3.56
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>How did you install auto-cpufreq, using the installer or snap package?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Asheboy:</strong></p>
+                    <p>Installer.
+
+On Thu, 13 Aug 2020, 06:58 Adnan Hodzic, <notifications@github.com> wrote:
+
+> How did you install auto-cpufreq, using the installer or snap package?
+>
+> —
+> You are receiving this because you authored the thread.
+> Reply to this email directly, view it on GitHub
+> <https://github.com/AdnanHodzic/auto-cpufreq/issues/94#issuecomment-673278515>,
+> or unsubscribe
+> <https://github.com/notifications/unsubscribe-auth/AAN46QLKHHVETKL7H3USJ4DSAN6HFANCNFSM4P5GOY2Q>
+> .
+>
+
+-- 
+--
+
+
+* <http://www.clock.co.uk/>
+*
+
+
+
+
+
+_
+_
+The Old School House
+Bridge 
+Road, Hunton Bridge,
+Kings Langley, WD4 8RQ
+
+Switchboard: +44 1923 261166
+
+www.clock.co.uk <http://www.clock.co.uk/>
+
+
+
+*
+*
+* 
+<http://twitter.com/clock>    <https://github.com/clocklimited>    
+<http://www.linkedin.com/company/clock-limited>   
+*
+*
+*
+
+www.clock.co.uk/email-disclaimer <http://www.clock.co.uk/email-disclaimer>
+
+clock.® is a Registered Trademark of Clock Limited in the European 
+Community and other territories
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>For some reason installation of `click` package failed during installation.
+
+What happens if you run:
+
+```
+sudo pip3 install click
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Asheboy:</strong></p>
+                    <p>I actually did try this before opening:
+
+```pip3 install --user click```
+
+but that didn't resolve the issue.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>> I actually did try this before opening:
+> 
+> `pip3 install --user click`
+> 
+> but that didn't resolve the issue.
+
+It doesn't work because `auto-cpufreq` uses system python
+try `sudo pip3 install click`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Asheboy:</strong></p>
+                    <p>Right, that works. Thank you.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>@Asheboy why did you close the issue?
+User shouldn't install any additional dependencies</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Asheboy:</strong></p>
+                    <p>@Red-Eyed Simply because my own issue is resolved. I'm happy for you to reopen it.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>In last commit I've implemented what should be env agnostic way to install pip packages.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>fadh1l:</strong></p>
+                    <p>The issue is still present for me and I've tried the above fixes.
+```
+/usr/lib/python3/dist-packages/pkg_resources/__init__.py:116: PkgResourcesDeprecationWarning: 1.16.0-unknown is an invalid version and will not be supported in a future release
+  warnings.warn(
+/usr/lib/python3/dist-packages/pkg_resources/__init__.py:116: PkgResourcesDeprecationWarning: 0.1.43ubuntu1 is an invalid version and will not be supported in a future release
+  warnings.warn(
+Traceback (most recent call last):
+  File "/usr/local/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.0', 'auto-cpufreq')
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3267, in <module>
+    def _initialize_master_working_set():
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3241, in _call_aside
+    f(*args, **kwargs)
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 3279, in _initialize_master_working_set
+    working_set = WorkingSet._build_master()
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 573, in _build_master
+    ws.require(__requires__)
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 891, in require
+    needed = self.resolve(parse_requirements(requirements))
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 777, in resolve
+    raise DistributionNotFound(req, requirers)
+pkg_resources.DistributionNotFound: The 'auto-cpufreq==1.0' distribution was not found and is required by the application
+
+```</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

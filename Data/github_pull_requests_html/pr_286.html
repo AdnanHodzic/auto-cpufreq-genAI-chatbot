@@ -1,0 +1,126 @@
+
+        <html>
+        <head>
+            <title>Pull Request #286: fixed the heating problem on charging</title>
+        </head>
+        <body>
+            <h1>fixed the heating problem on charging</h1>
+            <p><strong>Pull Request #286</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>## Issue: #279 
+
+### The temperature is quite stable now while charging. I am using various applications like vscode, whatsdesk, teams, discord and a browser with several tabs. I believe the problem was that it turns turbo ON when the laptop is charging which increased the temperature to around 65 to 75 Celsius. Currently with all the above applications open that too for more than an hour, the temperature is around 40 Celsius. I am adding the screenshots for the debug and stats command below along with a modified .conf file. 
+### Earlier even though setting the governer as powersave, I still was facing the heating issues on charging because somehow it was not shutting off the turbo. 
+
+![debug](https://user-images.githubusercontent.com/67036708/142721936-eb167829-f703-434e-a41b-d682a7e18170.png)
+
+![stats](https://user-images.githubusercontent.com/67036708/142721951-c6c66bdf-bdec-4b38-bffd-f63d601f44a9.png)
+
+![config](https://user-images.githubusercontent.com/67036708/142722047-8fee6651-5bd7-493d-96bf-14cc807ea97c.png)
+
+
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Hey, thanks for your contribution, but it seems like some things are missing as part of this PR, as soon as I try to run it in `live` mode I get following error:
+
+```
+ahodzic@carbon7 ~/code/auto-cpufreq (achintya-7-master)$ sudo auto-cpufreq --live
+
+Note: You can quit live mode by pressing "ctrl+c"
+
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 21.10 impish
+Linux kernel: 5.13.0-21-generic
+Processor: Intel(R) Core(TM) i7-8565U CPU @ 1.80GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4600 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  5.9%     61 °C     2000 MHz
+CPU1:	  5.1%     61 °C     2000 MHz
+CPU2:	  6.8%     59 °C     3784 MHz
+CPU3:	  6.9%     60 °C     2000 MHz
+CPU4:	  5.1%     61 °C     2000 MHz
+CPU5:	  6.0%     61 °C     2000 MHz
+CPU6:	  6.9%     59 °C     2000 MHz
+CPU7:	  6.1%     60 °C     2000 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Traceback (most recent call last):
+  File "/usr/local/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.0', 'auto-cpufreq')
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 651, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 1455, in run_script
+    exec(script_code, namespace, namespace)
+  File "/usr/local/lib/python3.9/dist-packages/auto_cpufreq-1.0-py3.9.egg/EGG-INFO/scripts/auto-cpufreq", line 169, in <module>
+  File "/usr/lib/python3/dist-packages/click/core.py", line 829, in __call__
+    return self.main(*args, **kwargs)
+  File "/usr/lib/python3/dist-packages/click/core.py", line 782, in main
+    rv = self.invoke(ctx)
+  File "/usr/lib/python3/dist-packages/click/core.py", line 1066, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/usr/lib/python3/dist-packages/click/core.py", line 610, in invoke
+    return callback(*args, **kwargs)
+  File "/usr/local/lib/python3.9/dist-packages/auto_cpufreq-1.0-py3.9.egg/EGG-INFO/scripts/auto-cpufreq", line 95, in main
+  File "/usr/local/lib/python3.9/dist-packages/auto_cpufreq-1.0-py3.9.egg/auto_cpufreq/core.py", line 874, in set_autofreq
+  File "/usr/local/lib/python3.9/dist-packages/auto_cpufreq-1.0-py3.9.egg/auto_cpufreq/core.py", line 191, in charging
+KeyError: 'heating_problem'
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>achintya-7:</strong></p>
+                    <p>It seems that this is caused because no auto-cpufreq.conf file is formed by default. I should have put this in a try catch field to prevent this error. Can you also check the code again including the auto-cpufreq.conf file. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Changes make sense to me, but I'll need to test them bit more under heavy workload (as I don't have the overheating you have).
+
+But could you make following changes as part of this PR:
+
+1. Make it work when user is not using config file
+2. With these changes, auto-cpufreq --live or --stats will state: "No config file being used" even when `/etc/auto-cpufreq.conf` is in place. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>achintya-7:</strong></p>
+                    <p>Ok sir, I will be continuing to work and test on this error after the exams. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AnonPol:</strong></p>
+                    <p>@AdnanHodzic I think it's best the tool respects kernel defaults for CPU governor and only modifies the turbo boost to on or off depending on how intensive the activity is on CPU. This "powersave"  governor of CPUFreq can cause massive under-performance while device is on battery and the "performance" governor can cause overheating while device is charging due to both of these governors from my understanding setting the CPU frequency always to minimum and maximum frequency that it can run at. TLP another battery saving tool by default respects the kernel defaults for CPU governor. Intel_pstate "performance" and "powersave" governors are a different matter. Both of the intel_pstate governors operate similar to schedutil/on-demand governor of CPUFreq so not sure what point there is to changing between them while charging and on battery.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@AnonPol I think it's best to have this kind of discussion under [discussions](https://github.com/AdnanHodzic/auto-cpufreq/discussions) section and not as part of this PR. But short answer is that auto-cpufreq was designed to respect and let the kernel do the heavy lifting. 
+
+However, landscape is filled with various different hardware and specs which means making decisions automatically is not an easy chores. Hence, if something works better for certain users while they define it as part of [custom configuration file](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq) for their needs, I see no problem in that nor does it deviate from original strategy which I outlined above.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closed due to inactivity.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

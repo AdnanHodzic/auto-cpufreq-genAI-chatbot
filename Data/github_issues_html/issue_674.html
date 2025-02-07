@@ -1,0 +1,47 @@
+
+        <html>
+        <head>
+            <title>Issue #674: gh-667: Modify message when using amd-pstate-epp</title>
+        </head>
+        <body>
+            <h1>gh-667: Modify message when using amd-pstate-epp</h1>
+            <p><strong>Issue #674</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hi, First of all, auto-cpufreq is super useful for my laptop, thank you for working on this.
+
+While I read the relevant threads, it looks like setting turbo can be delegated to the amd-pstate-epp.
+Please let me know if I knew wrong :)</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>corona10:</strong></p>
+                    <p>cc @LDPrg</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>corona10:</strong></p>
+                    <p>![Screenshot from 2024-04-07 13-12-22](https://github.com/AdnanHodzic/auto-cpufreq/assets/5110323/8422b2d0-cf12-4cb2-9b4e-e0095f489afc)
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Looks good, but still since `/sys/devices/system/cpu/cpufreq/boost` is set on both `amd_pstate=guided` and `amd_pstate=passive`, the else statement can be removed since this is handled by ` elif cpufreq.exists()`
+
+Also i forgot to mention, the `return False` should be indented into the if statement</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Thanks for the changes. 
+
+You'll be credited as part of the next release.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

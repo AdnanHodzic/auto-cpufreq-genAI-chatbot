@@ -1,0 +1,101 @@
+
+        <html>
+        <head>
+            <title>Issue #194: More a FYI / not really a bug / installation instructions give different results than installation itself</title>
+        </head>
+        <body>
+            <h1>More a FYI / not really a bug / installation instructions give different results than installation itself</h1>
+            <p><strong>Issue #194</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>First and foremost: Thank you very,very much for such a great tool - I have a hypersensitive condition so that I can go bonkers hearing all that fan noise all the time or pulsed. YOU TOOL GAVE ME GREAT RELIEF! THX MILLION TIMES.
+
+I firstly installed it following your manual with snap ``sudo snap install auto-cpufreq`` .
+
+Worked like a charm and I used ``systemctl status snap.auto-cpufreq.service.service`` afterwards to see if it was running:
+
+(sudo) systemctl status snap.auto-cpufreq.service.service
+---
+### Error output:
+```
+Unit snap.auto-cpufreq.service could not be found.
+```
+
+### System information:
+```-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 21.04 hirsute
+Linux kernel: 5.11.0-18-generic
+Processor: 11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz
+Cores: 8
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2701 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  0.0%     42 °C     2701 MHz
+CPU1:	  0.0%     40 °C     2701 MHz
+CPU2:	  0.0%     40 °C     2701 MHz
+CPU3:	  0.0%     43 °C     2701 MHz
+CPU4:	  0.0%     42 °C     2701 MHz
+CPU5:	  1.0%     40 °C     2701 MHz
+CPU6:	  1.0%     40 °C     2346 MHz
+CPU7:	  0.0%     43 °C     2701 MHz
+
+auto-cpufreq version:
+Git commit: e1409aa
+
+Python: 3.9.5
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 8.0.1
+distro package 1.5.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.07 %
+
+Total CPU usage: 0.6 %
+Total system load: 0.34
+Average temp. of all cores: 41.25 °C 
+
+Currently using: performance governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```
+---
+
+I then deleted it with snap and used my loved ``apt`` and your advice on this and this works PERFECTLY.
+Just the ``snap`` thing misses something,
+
+Many thanks again and best regards,
+
+Dietrich Christopeit</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> First and foremost: Thank you very,very much for such a great tool - I have a hypersensitive condition so that I can go bonkers hearing all that fan noise all the time or pulsed. YOU TOOL GAVE ME GREAT RELIEF! THX MILLION TIMES.
+
+You're most welcome and thank you for sharing this, as this kind of stuff is always great to hear.
+
+> I then deleted it with snap and used my loved apt and your advice on this and this works PERFECTLY.
+> Just the snap thing misses something,
+
+Weird, it's good to know it's working with installer/apt. In meantime, I'll leave this bug report open to see if anyone ran into similar issue and will take a more thorough look when I have some time.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,340 @@
+
+        <html>
+        <head>
+            <title>Issue #457: Mount snap "auto-cpufreq" (82) (installation not allowed by "etc-auto-cpufreq-conf" plug rule of interface "system-files" for "auto-cpufreq" snap)</title>
+        </head>
+        <body>
+            <h1>Mount snap "auto-cpufreq" (82) (installation not allowed by "etc-auto-cpufreq-conf" plug rule of interface "system-files" for "auto-cpufreq" snap)</h1>
+            <p><strong>Issue #457</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hi Team,
+
+I cannot install auto-cpufreq via snap in Raspberry Pi 3 Model B Plus Rev 1.3. Initially, i tried this approach;
+```
+git clone https://github.com/AdnanHodzic/auto-cpufreq.git
+cd auto-cpufreq && sudo ./auto-cpufreq-installer
+```
+However, i have the same exp with;
+https://github.com/AdnanHodzic/auto-cpufreq/issues/192
+
+So i tried to install via snap as suggested; however, i cannot get it working on my machine. I'm getting these error messages;
+
+```
+$ sudo snap install auto-cpufreq
+error: cannot perform the following tasks:
+- Mount snap "auto-cpufreq" (82) (installation not allowed by "etc-auto-cpufreq-conf" plug rule of interface "system-files" for "auto-cpufreq" snap)
+```
+
+### System information:
+```
+$ snap --version
+snap      2.57.5
+snapd     2.57.5
+series    16
+raspbian  11
+kernel    5.15.76-v7+
+
+$ cat /proc/cpuinfo
+processor	: 0
+model name	: ARMv7 Processor rev 4 (v7l)
+BogoMIPS	: 38.40
+Features	: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 lpae evtstrm crc32 
+CPU implementer	: 0x41
+CPU architecture: 7
+CPU variant	: 0x0
+CPU part	: 0xd03
+CPU revision	: 4
+
+processor	: 1
+model name	: ARMv7 Processor rev 4 (v7l)
+BogoMIPS	: 38.40
+Features	: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 lpae evtstrm crc32 
+CPU implementer	: 0x41
+CPU architecture: 7
+CPU variant	: 0x0
+CPU part	: 0xd03
+CPU revision	: 4
+
+processor	: 2
+model name	: ARMv7 Processor rev 4 (v7l)
+BogoMIPS	: 38.40
+Features	: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 lpae evtstrm crc32 
+CPU implementer	: 0x41
+CPU architecture: 7
+CPU variant	: 0x0
+CPU part	: 0xd03
+CPU revision	: 4
+
+processor	: 3
+model name	: ARMv7 Processor rev 4 (v7l)
+BogoMIPS	: 38.40
+Features	: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 lpae evtstrm crc32 
+CPU implementer	: 0x41
+CPU architecture: 7
+CPU variant	: 0x0
+CPU part	: 0xd03
+CPU revision	: 4
+
+Hardware	: BCM2835
+Revision	: a020d3
+Serial		: 00000000c3715c32
+Model		: Raspberry Pi 3 Model B Plus Rev 1.3
+
+$ cat /etc/*release
+PRETTY_NAME="Raspbian GNU/Linux 11 (bullseye)"
+NAME="Raspbian GNU/Linux"
+VERSION_ID="11"
+VERSION="11 (bullseye)"
+VERSION_CODENAME=bullseye
+ID=raspbian
+ID_LIKE=debian
+HOME_URL="http://www.raspbian.org/"
+SUPPORT_URL="http://www.raspbian.org/RaspbianForums"
+BUG_REPORT_URL="http://www.raspbian.org/RaspbianBugs"
+```
+
+Any suggestions on how to go about this?
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>SunkenHero:</strong></p>
+                    <p>Have you tried using the installer script?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>kurtobando:</strong></p>
+                    <p>> Have you tried using the installer script?
+
+Are you referring to ? 
+```
+auto-cpufreq-installer
+```
+
+Yes, i did. If not, can you guide me which installer script you are referring to?
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>SunkenHero:</strong></p>
+                    <p>Yes i meant that script, i would assume the installation failed with the installer script too. Could you please give the error output.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>kurtobando:</strong></p>
+                    <p>> Yes i meant that script, i would assume the installation failed with the installer script too. Could you please give the error output.
+
+Here are the steps i have done so far;
+```
+# ./auto-cpufreq-installer 
+
+-------------------------- auto-cpufreq installer -----------------------------
+
+Welcome to auto-cpufreq tool installer.
+
+Options:
+
+[I]nstall
+[R]emove
+[Q]uit
+
+Select a key: [i/r/q]: i
+
+-------------------------------------------------------------------------------
+
+Detected Debian based distribution
+
+-------------------------------------------------------------------------------
+
+Setting up Python environment
+
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+dmidecode is already the newest version (3.3-2).
+python3-dev is already the newest version (3.9.2-3).
+python3-setuptools is already the newest version (52.0.0-4).
+python3-venv is already the newest version (3.9.2-3).
+python3-pip is already the newest version (20.3.4-4+rpt1+deb11u1).
+0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+
+Installing necessary Python packages
+
+Looking in indexes: https://pypi.org/simple, https://www.piwheels.org/simple
+Requirement already satisfied: pip in /opt/auto-cpufreq/venv/lib/python3.9/site-packages (20.3.4)
+Collecting pip
+  Using cached pip-22.3.1-py3-none-any.whl (2.1 MB)
+Collecting wheel
+  Using cached https://www.piwheels.org/simple/wheel/wheel-0.38.4-py3-none-any.whl (36 kB)
+Installing collected packages: wheel, pip
+  Attempting uninstall: pip
+    Found existing installation: pip 20.3.4
+    Uninstalling pip-20.3.4:
+      Successfully uninstalled pip-20.3.4
+Successfully installed pip-22.3.1 wheel-0.38.4
+Looking in indexes: https://pypi.org/simple, https://www.piwheels.org/simple
+Requirement already satisfied: setuptools in /opt/auto-cpufreq/venv/lib/python3.9/site-packages (from -r requirements.txt (line 1)) (44.1.1)
+Collecting psutil
+  Using cached https://www.piwheels.org/simple/psutil/psutil-5.9.4-cp39-abi3-linux_armv7l.whl (274 kB)
+Collecting click
+  Using cached https://www.piwheels.org/simple/click/click-8.1.3-py3-none-any.whl (96 kB)
+Collecting distro
+  Using cached https://www.piwheels.org/simple/distro/distro-1.8.0-py3-none-any.whl (20 kB)
+Installing collected packages: psutil, distro, click
+Successfully installed click-8.1.3 distro-1.8.0 psutil-5.9.4
+
+-------------------------------------------------------------------------------
+
+installing auto-cpufreq tool
+
+running install
+running bdist_egg
+running egg_info
+writing auto_cpufreq.egg-info/PKG-INFO
+writing dependency_links to auto_cpufreq.egg-info/dependency_links.txt
+writing requirements to auto_cpufreq.egg-info/requires.txt
+writing top-level names to auto_cpufreq.egg-info/top_level.txt
+reading manifest file 'auto_cpufreq.egg-info/SOURCES.txt'
+writing manifest file 'auto_cpufreq.egg-info/SOURCES.txt'
+installing library code to build/bdist.linux-armv7l/egg
+running install_lib
+running build_py
+creating build/bdist.linux-armv7l/egg
+creating build/bdist.linux-armv7l/egg/auto_cpufreq
+copying build/lib/auto_cpufreq/power_helper.py -> build/bdist.linux-armv7l/egg/auto_cpufreq
+copying build/lib/auto_cpufreq/core.py -> build/bdist.linux-armv7l/egg/auto_cpufreq
+copying build/lib/auto_cpufreq/tlp_stat_parser.py -> build/bdist.linux-armv7l/egg/auto_cpufreq
+copying build/lib/auto_cpufreq/__init__.py -> build/bdist.linux-armv7l/egg/auto_cpufreq
+byte-compiling build/bdist.linux-armv7l/egg/auto_cpufreq/power_helper.py to power_helper.cpython-39.pyc
+byte-compiling build/bdist.linux-armv7l/egg/auto_cpufreq/core.py to core.cpython-39.pyc
+byte-compiling build/bdist.linux-armv7l/egg/auto_cpufreq/tlp_stat_parser.py to tlp_stat_parser.cpython-39.pyc
+byte-compiling build/bdist.linux-armv7l/egg/auto_cpufreq/__init__.py to __init__.cpython-39.pyc
+creating build/bdist.linux-armv7l/egg/EGG-INFO
+installing scripts to build/bdist.linux-armv7l/egg/EGG-INFO/scripts
+running install_scripts
+running build_scripts
+creating build/bdist.linux-armv7l/egg/EGG-INFO/scripts
+copying build/scripts-3.9/auto-cpufreq -> build/bdist.linux-armv7l/egg/EGG-INFO/scripts
+changing mode of build/bdist.linux-armv7l/egg/EGG-INFO/scripts/auto-cpufreq to 755
+copying auto_cpufreq.egg-info/PKG-INFO -> build/bdist.linux-armv7l/egg/EGG-INFO
+copying auto_cpufreq.egg-info/SOURCES.txt -> build/bdist.linux-armv7l/egg/EGG-INFO
+copying auto_cpufreq.egg-info/dependency_links.txt -> build/bdist.linux-armv7l/egg/EGG-INFO
+copying auto_cpufreq.egg-info/requires.txt -> build/bdist.linux-armv7l/egg/EGG-INFO
+copying auto_cpufreq.egg-info/top_level.txt -> build/bdist.linux-armv7l/egg/EGG-INFO
+copying auto_cpufreq.egg-info/zip-safe -> build/bdist.linux-armv7l/egg/EGG-INFO
+creating 'dist/auto_cpufreq-1.9.6+d77c1de6-py3.9.egg' and adding 'build/bdist.linux-armv7l/egg' to it
+removing 'build/bdist.linux-armv7l/egg' (and everything under it)
+Processing auto_cpufreq-1.9.6+d77c1de6-py3.9.egg
+Copying auto_cpufreq-1.9.6+d77c1de6-py3.9.egg to /opt/auto-cpufreq/venv/lib/python3.9/site-packages
+Adding auto-cpufreq 1.9.6+d77c1de6 to easy-install.pth file
+Installing auto-cpufreq script to /opt/auto-cpufreq/venv/bin
+
+Installed /opt/auto-cpufreq/venv/lib/python3.9/site-packages/auto_cpufreq-1.9.6+d77c1de6-py3.9.egg
+Processing dependencies for auto-cpufreq==1.9.6+d77c1de6
+Searching for setuptools==44.1.1
+Best match: setuptools 44.1.1
+Adding setuptools 44.1.1 to easy-install.pth file
+Installing easy_install script to /opt/auto-cpufreq/venv/bin
+
+Using /opt/auto-cpufreq/venv/lib/python3.9/site-packages
+Searching for psutil==5.9.4
+Best match: psutil 5.9.4
+Adding psutil 5.9.4 to easy-install.pth file
+
+Using /opt/auto-cpufreq/venv/lib/python3.9/site-packages
+Searching for distro==1.8.0
+Best match: distro 1.8.0
+Adding distro 1.8.0 to easy-install.pth file
+Installing distro script to /opt/auto-cpufreq/venv/bin
+
+Using /opt/auto-cpufreq/venv/lib/python3.9/site-packages
+Searching for click==8.1.3
+Best match: click 8.1.3
+Adding click 8.1.3 to easy-install.pth file
+
+Using /opt/auto-cpufreq/venv/lib/python3.9/site-packages
+Finished processing dependencies for auto-cpufreq==1.9.6+d77c1de6
+writing list of installed files to 'files.txt'
+
+-------------------------------------------------------------------------------
+
+auto-cpufreq tool successfully installed.
+
+For list of options, run:
+auto-cpufreq --help
+
+-------------------------------------------------------------------------------
+```
+then run;
+
+```
+# auto-cpufreq --monitor
+
+Note: You can quit monitor mode by pressing "ctrl+c"
+
+-------------------------------------------------------------------------------
+
+Linux distro: Raspbian GNU/Linux 11 bullseye
+Linux kernel: 5.15.76-v7+
+Processor: ARMv7 Processor rev 4 (v7l)
+Cores: 4
+Architecture: armv7l
+Driver: cpufreq-dt
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1400 MHz
+CPU min frequency: 600 MHz
+
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.9.6+d77c1de6', 'auto-cpufreq')
+  File "/opt/auto-cpufreq/venv/lib/python3.9/site-packages/pkg_resources/__init__.py", line 666, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/opt/auto-cpufreq/venv/lib/python3.9/site-packages/pkg_resources/__init__.py", line 1469, in run_script
+    exec(script_code, namespace, namespace)
+  File "/opt/auto-cpufreq/venv/lib/python3.9/site-packages/auto_cpufreq-1.9.6+d77c1de6-py3.9.egg/EGG-INFO/scripts/auto-cpufreq", line 226, in <module>
+  File "/opt/auto-cpufreq/venv/lib/python3.9/site-packages/click/core.py", line 1130, in __call__
+    return self.main(*args, **kwargs)
+  File "/opt/auto-cpufreq/venv/lib/python3.9/site-packages/click/core.py", line 1055, in main
+    rv = self.invoke(ctx)
+  File "/opt/auto-cpufreq/venv/lib/python3.9/site-packages/click/core.py", line 1404, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/opt/auto-cpufreq/venv/lib/python3.9/site-packages/click/core.py", line 760, in invoke
+    return __callback(*args, **kwargs)
+  File "/opt/auto-cpufreq/venv/lib/python3.9/site-packages/auto_cpufreq-1.9.6+d77c1de6-py3.9.egg/EGG-INFO/scripts/auto-cpufreq", line 100, in main
+  File "/opt/auto-cpufreq/venv/lib/python3.9/site-packages/auto_cpufreq-1.9.6+d77c1de6-py3.9.egg/auto_cpufreq/core.py", line 1107, in sysinfo
+IndexError: list index out of range
+
+```
+Same behavior with https://github.com/AdnanHodzic/auto-cpufreq/issues/192
+
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>SunkenHero:</strong></p>
+                    <p>You can try out my [Fork](https://github.com/SunkenHero/auto-cpufreq). It should display -1 for the frequencys.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>It would be great if we got it working for RPI's, because I also have [a RPI K8s cluster](https://foolcontrol.org/?p=4004) where I would also like to use auto-cpufreq but never got time to properly make it work.
+
+Hence, let's make it work first with installer, and then once we have working changes I can update the snap package.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>This problem should now be fixed as part of[ 1.9.8 release](https://github.com/AdnanHodzic/auto-cpufreq/releases) as it also includes >= RPI 4 support.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

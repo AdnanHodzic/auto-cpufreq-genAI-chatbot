@@ -1,0 +1,81 @@
+
+        <html>
+        <head>
+            <title>Issue #703: Rework read_stats output formatting</title>
+        </head>
+        <body>
+            <h1>Rework read_stats output formatting</h1>
+            <p><strong>Issue #703</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Makes the output of the --stats argument easier to read.
+
+* Formatted the output of each core properly into a table, the spacing was slightly off before.
+
+* Colored the headers of each table column in green for easier visual parsing
+
+* Colored the temperature reading in red for any core that is above 85 degrees so it's easy to quickly tell if something is going wrong. Might want to adjust the number it is pretty arbitrary.
+
+This is kind of jank but only because it was already jank to begin with. The reading and writing of stats as a whole should probably be refactored to use a more convenient interface but it works fine as it is now so I'm not sure if it's actually necessary.
+
+Old Output:
+![old_output](https://github.com/AdnanHodzic/auto-cpufreq/assets/87823030/b7ff27b1-07be-4b3d-bd26-b6cb18e8be1c)
+
+New Output:
+![new_output](https://github.com/AdnanHodzic/auto-cpufreq/assets/87823030/54cd4fe7-cd4f-4f37-8b92-53b55c96ec2b)
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Personally, I like this change and do think it looks much nicer, so I'm approving this, but leaving it up to @AdnanHodzic to merge this, in case he wants some changes. 
+
+>The reading and writing of stats as a whole should probably be refactored to use a more convenient interface but it works fine as it is now so I'm not sure if it's actually necessary
+
+I agree with this as well. I think taking over stdout for the stats is a bit unnecessary. Having the stats written to a file and read from there makes sense to me but doing it through stdout is weird and can be confusing at times. I think a good solution would be creating a class similar to `Logging` that can handle stats writing/reading without stopping up stdout, which I'm down to start working on a PR for.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>dementive:</strong></p>
+                    <p>I just tried to add the `auto-cpufreq" is about to refresh ...` part to the bottom but I can't get it working for some reason. It is currently already printing the about to refresh text but it is printing it at the top of the next refresh instead of the bottom of the last refresh and because of the way the stdout stuff works I don't see a way to fix it but im probably just missing something. Adding it to the bottom of the for loop didn't work and checking for it inside the for loop also didn't work...</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Yeah it might just be best to merge this into its own branch since I'm in the midst of the stats rewrite right now. Then I can include your changes with mine and add you as a co-author</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>dementive:</strong></p>
+                    <p>I agree, no need to merge this a stats rework will be much better, this code is pretty weird anyway because of how the stats currently work. You can just grab the parts you need out of this and include them in your rework its probably not necessary to merge it. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Okay, then let's leave this PR open until PR with @shadeyg56 changes are merged, or even feel free to close it @dementive and create a new PR once ready? Up to you ...</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Are there any updates regarding this PR?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>dementive:</strong></p>
+                    <p>Did that stats rework ever come through? If not iirc this should probably be fine to merge unless you still have some tweaks you want me to make. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Did that stats rework ever come through? If not iirc this should probably be fine to merge unless you still have some tweaks you want me to make.
+
+@shadeyg56 ?
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

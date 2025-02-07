@@ -1,0 +1,28 @@
+
+        <html>
+        <head>
+            <title>Discussion #419: How does this compare to a simple cronjob + shell script?</title>
+        </head>
+        <body>
+            <h1>How does this compare to a simple cronjob + shell script?</h1>
+            <p><strong>Discussion #419</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I am looking for a _light weight_ solution to automatically change my cpu policy to "powersave" when on battery and "performance" when not on battery. I currently have a simple shell script that my root runs every minute with a single if statement to check if I am discharging and set the policy to lowpower, otherwise set the policy to performance.
+
+For my rather simple use case, is this tool better than a cronjob and shell script? If so, what advantages does it provide?</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I suggest you watch the [tool demo video on Youtube](https://www.youtube.com/watch?v=QkYRpVEEIlg&t=1s), or some of the [other youtube videos](https://www.youtube.com/results?search_query=auto-cpufreq).
+
+auto-cpufreq has multiple states based on which it'll change frequencies or governors to prologue battery life without compromising resources as also mentioned [on Readme](https://github.com/AdnanHodzic/auto-cpufreq/#features). Not just switching states if it's plugged  in or not.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,268 @@
+
+        <html>
+        <head>
+            <title>Issue #658: System doesn't boot after disabling intel_pstate</title>
+        </head>
+        <body>
+            <h1>System doesn't boot after disabling intel_pstate</h1>
+            <p><strong>Issue #658</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted?
+	-  Yes
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+	- No
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+	- No
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+	- Yes
+### Error
+After disabling intel_pstate system doesn't boot, Seems just stuck at showing vendor logo.
+After reverting the changes of `/etc/default/grub` it boots normally again:
+This is my `grub` file:
+```
+GRUB_DEFAULT=0
+GRUB_TIMEOUT_STYLE=menu
+GRUB_TIMEOUT=0
+GRUB_DISTRIBUTOR=`lsb_release -i -s 2> /dev/null || echo Debian`
+GRUB_CMDLINE_LINUX_DEFAULT="quiet splash intel_pstate=disable resume=UUID=75014eab-9c4f-4920-a93c-a146720c5adc"
+GRUB_CMDLINE_LINUX=""
+
+GRUB_DISABLE_OS_PROBER=false
+
+```
+
+Tried removing  `resume=UUID=75014eab-9c4f-4920-a93c-a146720c5adc`, But it's the same.
+After removing `intel_pstate=disable ` and executing `update-grub`  through the recovery-mode system booted system normally.
+
+---
+
+### System information:
+Device: Huawei Matebook D16 (HUAWEI RLEF-XX)
+Add/paste output of:
+
+```
+# sudo auto-cpufreq --debug
+
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 23.10 Mantic Minotaur
+Linux kernel: 6.5.0-21-generic
+Processor: 12th Gen Intel(R) Core(TM) i5-12450H
+Cores: 12
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2000 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      0.0%        44 °C       400 MHz
+CPU1      0.0%        44 °C       887 MHz
+CPU2      0.0%        45 °C       400 MHz
+CPU3      0.0%        45 °C       400 MHz
+CPU4      1.0%        44 °C       400 MHz
+CPU5      0.0%        44 °C      1101 MHz
+CPU6      0.0%        46 °C       400 MHz
+CPU7      1.0%        46 °C      1130 MHz
+CPU8      0.0%        46 °C       400 MHz
+CPU9      0.0%        46 °C       400 MHz
+CPU10      0.0%        46 °C       400 MHz
+CPU11      0.0%        47 °C       400 MHz
+
+auto-cpufreq version: 2.2.0 (git: b4c5276)
+
+Python: 3.11.6
+psutil package: 5.9.8
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.17 %
+
+Total CPU usage: 2.2 %
+Total system load: 0.45
+Average temp. of all cores: 45.25 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+
+
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>This isn't really an auto-cpufreq issue. But make sure you have the following packages installed using:
+
+```
+sudo apt-get update
+
+sudo apt-get install acpi-support acpid acpi
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>niamotullah:</strong></p>
+                    <p>> sudo apt-get install acpi-support acpid acpi
+
+`E: Unable to locate package acpi-support`
+But installed `acpid` and `acpi`. 
+Still the same
+
+>The package named acpi-support is not available in Ubuntu 23.10 or any recent versions of Ubuntu. The functionalities previously offered by acpi-support are now integrated into the kernel itself. This means you don't need to install any separate package for ACPI (Advanced Configuration and Power Management) support.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Definitely not normal behavior. Maybe because it's a Huawei laptop. Personally, I didn't even know they made laptops.
+
+I would check your bios for any relevant settings. It might just be the firmware</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>niamotullah:</strong></p>
+                    <p>> I would check your bios for any relevant settings. It might just be the firmware
+
+Let me know if i can be helpful somehow with my device</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>You can try running `sudo dmesg` to look for any relevant messages that might point to something.
+
+In your bios, look for settings related to dynamic CPU frequency or P-states</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>niamotullah:</strong></p>
+                    <p>> You can try running `sudo dmesg` to look for any relevant messages that might point to something.
+> 
+> In your bios, look for settings related to dynamic CPU frequency or P-states
+
+I don't actually know what signs to look for, I'm a newbie on Linux.
+Can you suggest something? maybe something to learn.
+
+These are all options in my bios:
+ 
+![photo_2024-02-28_01-23-02](https://github.com/AdnanHodzic/auto-cpufreq/assets/58494481/01c538e9-c98f-44fc-9414-4d6f50ed483a)
+
+
+There is some extra information that might help:
+- [hw-probe](https://linux-hardware.org/?probe=17ed092beb)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>niamotullah:</strong></p>
+                    <p>> ```
+> GRUB_CMDLINE_LINUX_DEFAULT="quiet splash intel_pstate=disable resume=UUID=75014eab-9c4f-4920-a93c-a146720c5adc"
+> ```
+
+
+I have disabled intel_pstate by replacing `intel_pstate=disable` with `intel_pstate=passive` .
+
+But now system are so slow on battery. UI lags so much, almost unusable.
+Any solution?
+
+
+```
+$ sudo auto-cpufreq --debug
+
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 23.10 Mantic Minotaur
+Linux kernel: 6.5.0-26-generic
+Processor: 12th Gen Intel(R) Core(TM) i5-12450H
+Cores: 12
+Architecture: x86_64
+Driver: intel_cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2000 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      2.0%        44 °C       472 MHz
+CPU1      2.0%        44 °C       400 MHz
+CPU2      3.0%        45 °C       400 MHz
+CPU3      1.0%        45 °C       472 MHz
+CPU4      0.0%        47 °C       472 MHz
+CPU5      0.0%        47 °C       400 MHz
+CPU6      5.0%        45 °C       472 MHz
+CPU7      0.0%        45 °C       472 MHz
+CPU8      3.0%        47 °C       400 MHz
+CPU9      0.0%        47 °C       400 MHz
+CPU10      0.0%        46 °C       400 MHz
+CPU11      0.0%        46 °C       400 MHz
+
+auto-cpufreq version: 2.2.0 (git: 215026a)
+
+Python: 3.11.6
+psutil package: 5.9.8
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.17 %
+
+Total CPU usage: 3.4 %
+Total system load: 1.37
+Average temp. of all cores: 45.67 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>> I have disabled intel_pstate by replacing intel_pstate=disable with intel_pstate=passive
+
+That means you have *enabled* intel_pstate
+
+> But now system are so slow on battery
+
+This is likely because of how intel_pstate handles the powersave governor
+You can change to using a different governor on battery by using a config file. Instructions can be found [here](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#3-auto-cpufreq-config-file) in the README
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing the issue due to inactivity. </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

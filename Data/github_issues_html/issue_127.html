@@ -1,0 +1,347 @@
+
+        <html>
+        <head>
+            <title>Issue #127: CPU frequency doesn't automatically adjust</title>
+        </head>
+        <body>
+            <h1>CPU frequency doesn't automatically adjust</h1>
+            <p><strong>Issue #127</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>No error output, but there seems to be a bug where the CPU doesn't scale up its' frequency when doing tasks such as gaming. I posted about the issue on https://forum.garudalinux.org/t/csgo-microstutters/776 . I'm sorry if this isn't the right way to post about the issue, but I am new to Linux and this is my first post on GitHub.
+
+### Error output:
+```text
+● auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux
+     Loaded: loaded (/usr/lib/systemd/system/auto-cpufreq.service; enabled; vendor preset: disabled)
+     Active: active (running) since Mon 2020-10-05 17:34:45 CEST; 2h 5min ago
+   Main PID: 2106 (auto-cpufreq)
+      Tasks: 2 (limit: 19060)
+     Memory: 31.3M
+     CGroup: /system.slice/auto-cpufreq.service
+             ├─  2106 /usr/sbin/python /usr/bin/auto-cpufreq --daemon
+             └─240652 /bin/sh -c cpufreqctl --driver
+
+okt. 05 17:34:45 linux-desktop systemd[1]: Started auto-cpufreq - Automatic CPU speed & power optimizer for Linux.
+```</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>The actual issue is desktop computer with no battery shows 
+Battery is : discharging
+
+I am also experiencing the same
+
+Its a major issue for desktop pc where there is no battery and  need performance</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I believe with [v.1.5.1 release ](https://github.com/AdnanHodzic/auto-cpufreq/releases)this problem has been fixed, as turbo state is very easily triggered. As I know a few people who use it on a desktop and don't have this problem. 
+
+Could you please verify if this is still the problem and could you also include output of: 
+
+```
+sudo auto-cpufreq --debug
+```
+
+Thanks</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>```
+-------------------------------------------------------------------------------
+
+Linux distro: Garuda Linux Rolling n/a
+Linux kernel: 5.9.12-97-tkg-bmq
+Processor: AMD Ryzen 5 3400G with Radeon Vega Graphics
+Cores: 8
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 3700 MHz
+CPU min frequency: 1400 MHz
+
+         Usage  Temperature  Frequency
+CPU0:    11.0%     45 °C     1301 MHz
+CPU1:    13.0%     45 °C     3057 MHz
+CPU2:     4.0%     45 °C     3117 MHz
+CPU3:     6.1%     45 °C     2935 MHz
+CPU4:     0.0%     45 °C     1378 MHz
+CPU5:     1.0%     45 °C     3024 MHz
+CPU6:     2.0%     45 °C     3065 MHz
+CPU7:     5.0%     45 °C     3061 MHz
+
+fatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+Snap package: no
+
+Python: 3.9.0
+psutil package: 5.7.3
+platform package: 1.0.8
+click package: 7.1.2
+/bin/sh: pip3: command not found
+distro package
+
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.11 %
+
+Total CPU usage: 5.9 %
+Total system load: 1.17
+Average temp. of all cores: 45.375 °C 
+
+Currently using: schedutil governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>sudo auto-cpufreq --debug
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Garuda Linux Rolling n/a
+Linux kernel: 5.9.12-97-tkg-bmq
+Processor: AMD Ryzen 5 3400G with Radeon Vega Graphics
+Cores: 8
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 3700 MHz
+CPU min frequency: 1400 MHz
+
+         Usage  Temperature  Frequency
+CPU0:   100.0%     71 °C     3786 MHz
+CPU1:   100.0%     71 °C     3787 MHz
+CPU2:   100.0%     71 °C     3786 MHz
+CPU3:   100.0%     71 °C     3786 MHz
+CPU4:   100.0%     71 °C     3785 MHz
+CPU5:   100.0%     71 °C     3785 MHz
+CPU6:   100.0%     71 °C     3790 MHz
+CPU7:   100.0%     71 °C     3787 MHz
+
+fatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+Snap package: no
+
+Python: 3.9.0
+psutil package: 5.7.3
+platform package: 1.0.8
+click package: 7.1.2
+/bin/sh: pip3: command not found
+distro package
+
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.11 %
+
+Total CPU usage: 71.4 %
+Total system load: 8.8
+Average temp. of all cores: 71.0 °C 
+
+Currently using: schedutil governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>romario74:</strong></p>
+                    <p>$ sudo auto-cpufreq --debug
+
+-------------------------------------------------------------------------------
+
+Linux distro: Manjaro Linux 20.2 Nibia
+Linux kernel: 5.9.12-1-MANJARO
+Processor: Intel(R) Core(TM) i7-4790 CPU @ 3.60GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_cpufreq
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 3600 MHz
+CPU min frequency: 800 MHz
+
+	 Usage  Temperature  Frequency
+CPU0:	  2.0%     34 °C     3300 MHz
+CPU1:	  3.9%     34 °C     3559 MHz
+CPU2:	  2.0%     36 °C     3776 MHz
+CPU3:	  3.0%     35 °C     3374 MHz
+CPU4:	  6.1%     34 °C     3593 MHz
+CPU5:	  5.9%     34 °C     3580 MHz
+CPU6:	  2.0%     36 °C     3241 MHz
+CPU7:	  4.0%     35 °C     3535 MHz
+
+fatal: Kein Git-Repository (oder irgendeines der Elternverzeichnisse): .git
+Snap package: no
+
+Python: 3.9.0
+psutil package: 5.7.3
+platform package: 1.0.8
+click package: 7.1.2
+distro package 1.5.0
+
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.1 %
+
+Total CPU usage: 5.0 %
+Total system load: 0.92
+Average temp. of all cores: 34.75 °C 
+
+Currently using: schedutil governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>adworacz:</strong></p>
+                    <p>Same issue for me - I'm on a desktop and battery is seen as discharging.
+
+Debug output:
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Manjaro Linux 20.2.1 Nibia
+Linux kernel: 5.10.2-2-MANJARO
+Processor: AMD Ryzen Threadripper 3960X 24-Core Processor
+Cores: 48
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 3800 MHz
+CPU min frequency: 2200 MHz
+
+	 Usage  Temperature  Frequency
+CPU0:	  1.0%     43 °C     2938 MHz
+CPU1:	  0.0%     43 °C     3433 MHz
+CPU2:	  0.0%     43 °C     2059 MHz
+CPU3:	  0.0%     43 °C     2195 MHz
+CPU4:	  0.0%     43 °C     2195 MHz
+CPU5:	  0.0%     43 °C     2195 MHz
+CPU6:	  1.0%     43 °C     2196 MHz
+CPU7:	  0.0%     43 °C     2196 MHz
+CPU8:	  0.0%     43 °C     2196 MHz
+CPU9:	  0.0%     43 °C     2196 MHz
+CPU10:	  0.0%     43 °C     2196 MHz
+CPU11:	  0.0%     43 °C     2196 MHz
+CPU12:	  0.0%     43 °C     2195 MHz
+CPU13:	  0.0%     43 °C     2196 MHz
+CPU14:	  0.0%     43 °C     2195 MHz
+CPU15:	  0.0%     43 °C     2196 MHz
+CPU16:	  1.0%     43 °C     2196 MHz
+CPU17:	  2.0%     43 °C     2195 MHz
+CPU18:	  0.0%     43 °C     2195 MHz
+CPU19:	  1.0%     43 °C     2196 MHz
+CPU20:	  5.9%     43 °C     2195 MHz
+CPU21:	  0.0%     43 °C     2196 MHz
+CPU22:	  1.0%     43 °C     2195 MHz
+CPU23:	  0.0%     43 °C     2196 MHz
+CPU24:	  0.0%     43 °C     3016 MHz
+CPU25:	  0.0%     43 °C     4045 MHz
+CPU26:	  0.0%     43 °C     2058 MHz
+CPU27:	  1.0%     43 °C     2196 MHz
+CPU28:	  0.0%     43 °C     2195 MHz
+CPU29:	  1.0%     43 °C     2196 MHz
+CPU30:	  0.0%     43 °C     2195 MHz
+CPU31:	  1.0%     43 °C     2194 MHz
+CPU32:	  0.0%     43 °C     2195 MHz
+CPU33:	  1.0%     43 °C     2196 MHz
+CPU34:	  2.0%     43 °C     2196 MHz
+CPU35:	  0.0%     43 °C     2195 MHz
+CPU36:	  0.0%     43 °C     2196 MHz
+CPU37:	  0.0%     43 °C     2196 MHz
+CPU38:	  3.9%     43 °C     2196 MHz
+CPU39:	  0.0%     43 °C     2197 MHz
+CPU40:	  0.0%     43 °C     2201 MHz
+CPU41:	  0.0%     43 °C     2196 MHz
+CPU42:	  0.0%     43 °C     2201 MHz
+CPU43:	  0.0%     43 °C     2196 MHz
+CPU44:	  0.0%     43 °C     2193 MHz
+CPU45:	  0.0%     43 °C     2195 MHz
+CPU46:	  0.0%     43 °C     2201 MHz
+CPU47:	  0.0%     43 °C     2194 MHz
+
+Build git commit: ac08553
+Snap package: no
+
+Python: 3.9.1
+psutil package: 5.7.3
+platform package: 1.0.8
+click package: 7.1.2
+distro package 1.5.0
+
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.03 %
+
+Total CPU usage: 0.2 %
+Total system load: 0.39
+Average temp. of all cores: 42.625 °C
+
+Currently using: schedutil governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+```
+
+If it helps, here's my /sys/class/powersupply directory:
+```
+~/src/Ananicy >>> ll /sys/class/power_supply
+Permissions Size User Date Modified Name
+lrwxrwxrwx     0 root  9 Jan 20:08  hidpp_battery_0 -> ../../devices/pci0000:40/0000:40:01.1/0000:41:00.0/0000:42:08.0/0000:44:00.3/usb9/9-1/9-1.1/9-1.1.1/9-1.1.1:1.2/0003:046D:C52B.0006/0003:046D:4069.000C/power_supply/hidpp_battery_0
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>cyriana:</strong></p>
+                    <p>Hello there,
+
+I have this issue, too. Auto-cpufreq reports discharging on desktop pc. 
+
+`ls -la /sys/class/power_supply                                                                                                                  ─╯
+insgesamt 0
+drwxr-xr-x  2 root root 0 21. Jan 08:57 .
+drwxr-xr-x 70 root root 0 21. Jan 08:57 ..
+lrwxrwxrwx  1 root root 0 21. Jan 08:57 ucsi-source-psy-0-00081 -> ../../devices/pci0000:00/0000:00:03.1/0000:29:00.3/i2c-0/0-0008/power_supply/ucsi-source-psy-0-00081
+`
+Is there a workaround for this? I needed to disable auto-cpufreq for now. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@cyriana changes which should address this issue have been merged as part of #162 are merged with `master`.
+
+Changes will be released to Snap and AUR package as part of [1.5.4 release](https://github.com/AdnanHodzic/auto-cpufreq/releases) which will be released later today or tomorrow.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

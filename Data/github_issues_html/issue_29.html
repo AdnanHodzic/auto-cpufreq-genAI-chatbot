@@ -1,0 +1,168 @@
+
+        <html>
+        <head>
+            <title>Issue #29: [Request] devuan + mx-linux version (non systemd support)</title>
+        </head>
+        <body>
+            <h1>[Request] devuan + mx-linux version (non systemd support)</h1>
+            <p><strong>Issue #29</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p></p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>OrionRandD:</strong></p>
+                    <p>Could you make a version of this tool for devuan and mx-linux?
+Perhaps you can contact devs for those distros. So that, they can fork you for it to be available on their distros.
+I am sure they will be interested in this wonderful tool.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>You mean as a package or? Since both are Debian derivatives, this tool should work fine on both distros as is.
+
+Similar suggestion was [raised on Reddit](https://www.reddit.com/r/linux/comments/ejxx9f/github_autocpufreq_automatic_cpu_speed_power/fd5bs67/), and what I'm planning to do is create a snap for this tool in next major release.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>OrionRandD:</strong></p>
+                    <p>@AdnanHodzic What I mean is that Devuan and Mx-linux do not use systemd. So it won't work there. You can have a look on Devuan and Mx init system explanations</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Ah right, okay I'll add ToDo item to implement ability for `auto-cpufreq` to also work without systemd.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>OrionRandD:</strong></p>
+                    <p>Thx.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Until this request is implemented, I would advise you to install [auto-cpufreq from a snap](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store) package.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Until this request is implemented, I would advise you to install [auto-cpufreq from a snap](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store) package.
+
+Are there any updates on this issue?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>parnote:</strong></p>
+                    <p>> @AdnanHodzic What I mean is that Devuan and Mx-linux do not use systemd. So it won't work there. You can have a look on Devuan and Mx init system explanations
+
+PCLinuxOS is also another distro that is free from systemd. There has been interest there in auto-cpufreq.
+
+PLEASE, can there possibly be a systemd free version of auto-cpufreq?
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I do not have time to implement this feature, especially since I also don't use any of the mentioned distros.
+
+But if any of you wants to implement this feature and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution), please do so! As I'd love to have improved non systemd support as part of auto-cpufreq.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>parnote:</strong></p>
+                    <p>Thank you for your reply. I'd love to help if I had the knowledge or skills to do so ... but I don't.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>leath-dub:</strong></p>
+                    <p>would runinning `auto-cpufreq --live &` work for non systemd distros?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>Someone made a runit service for auto-cpufreq which might be helpful → https://github.com/plinki/auto-cpufreq-runit</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Someone made a runit service for auto-cpufreq which might be helpful → https://github.com/plinki/auto-cpufreq-runit
+
+I would absolutely love it if these changes could merged with auto-cpufreq `master` branch.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>exkc:</strong></p>
+                    <p>hi i am running auto-cpufreq daemon mode without systemd. It seem to work fine (except for auto-cpufreq --install failed to install the  daemon service for me. It was nothingburger for me . I can do it manually. )  . (btw I dont expect it will work properly bc i am using it on arm.).
+
+
+
+ > You mean as a package or? Since both are Debian derivatives, this tool should work fine on both distros as is.
+
+> Similar suggestion was [raised on Reddit](https://www.reddit.com/r/linux/comments/ejxx9f/github_autocpufreq_automatic_cpu_speed_power/fd5bs67/), and what I'm planning to do is create a snap for this tool in next major release.
+
+
+Also snapd require systemd,@AdnanHodzic.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>peterc-s:</strong></p>
+                    <p>any news on this? tried installing on artix recently with runit and the installer looks like it's trying to do the right things but not succeeding:
+
+```
+--------------------- Deploying auto-cpufreq as a daemon ----------------------
+
+* Turn off bluetooth on boot [skipping] (package providing bluetooth access is not present)
+
+* Deploy auto-cpufreq install script
+
+* Deploy auto-cpufreq remove script
+
+------------------ Running auto-cpufreq daemon install script ------------------
+
+* Deploy auto-cpufreq runit unit file
+mkdir: cannot create directory ‘/etc/runit/sv/auto-cpufreq’: File exists
+cp: cannot stat '/usr/local/share/auto-cpufreq/scripts/auto-cpufreq-runit': No such file or directory
+chmod: cannot access '/etc/runit/sv/auto-cpufreq/run': No such file or directory
+
+* Creating symbolic link (/run/runit/service/auto-cpufreq -> /etc/runit/sv/auto-cpufreq)
+ln: failed to create symbolic link '/run/runit/service/auto-cpufreq': File exists
+
+* Stopping auto-cpufreq daemon (runit) service
+ok: down: auto-cpufreq: 1s, normally up, want up
+
+* Starting auto-cpufreq daemon (runit) service
+timeout: down: auto-cpufreq: 8s, normally up
+
+----------------- auto-cpufreq daemon installed and running -----------------
+
+To view live stats, run:
+auto-cpufreq --stats
+
+To disable and remove auto-cpufreq daemon, run:
+sudo auto-cpufreq --remove
+
+-------------------------------------------------------------------------------
+```
+
+I reckon this is an Artix thing as Artix puts runit services in a different place (not /etc/runit/service, but /run/runit/service).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Artix issue has been fixed as of recently (again) as part of #706 </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Support for Devuan is also supported, closing this issue.
+
+Please feel free to re-open if issue persists.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

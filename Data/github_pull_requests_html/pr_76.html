@@ -1,0 +1,89 @@
+
+        <html>
+        <head>
+            <title>Pull Request #76: Fix for amd</title>
+        </head>
+        <body>
+            <h1>Fix for amd</h1>
+            <p><strong>Pull Request #76</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Just realized that now I have "nan" temperature for amd, git fixed this.
+tested in snap
+but this is based on the prev PR</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Awesome! Check if there's anything else you'd like to add, I want to check few things myself and [make a 1.20 release](https://github.com/AdnanHodzic/auto-cpufreq/releases) some time tonight :partying_face: </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>before this commit, I got this:
+```
+----------------------------- System information ------------------------------
+
+Linux distro: UNKNOWN distro UNKNOWN version
+Linux kernel: 5.4.0-7634-generic
+Driver: acpi-cpufreq
+Architecture: x86_64
+Processor: AMD Ryzen 5 3500U with Radeon Vega Mobile Gfx
+Cores: 8
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 2100MHz
+CPU min frequency: 1400MHz
+
+CPU frequency for each core:
+
+CPU0: 1296 MHz
+CPU1: 1267 MHz
+CPU2: 1253 MHz
+CPU3: 1284 MHz
+CPU4: 1343 MHz
+CPU5: 1379 MHz
+CPU6: 1334 MHz
+CPU7: 1353 MHz
+
+Temperature for each physical core:
+
+CPU0 temp: nan°C
+CPU1 temp: nan°C
+CPU2 temp: nan°C
+CPU3 temp: nan°C
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: discharging
+Setting to use: "powersave" governor
+
+Total CPU usage: 0.3 %
+Total system load: 0.09 
+
+Load optimal, setting turbo boost: off
+
+-------------------------------------------------------------------------------
+
+      "auto-cpufreq" refresh in: 4^C
+Aborted!```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Yes, that's what I meant by my [comment](https://github.com/AdnanHodzic/auto-cpufreq/pull/75#issuecomment-669990930) in #76, hence maybe I should revert the changes there?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>No, don't revert. Now it works fine (I built snap and checked it)
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

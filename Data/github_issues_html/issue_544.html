@@ -1,0 +1,157 @@
+
+        <html>
+        <head>
+            <title>Issue #544: no commands work</title>
+        </head>
+        <body>
+            <h1>no commands work</h1>
+            <p><strong>Issue #544</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+- it doesn't failed
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+- yes
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+- yes
+
+### Error output:
+``Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.9.9', 'auto-cpufreq')
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/pkg_resources/__init__.py", line 3259, in <module>
+    @_call_aside
+     ^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/pkg_resources/__init__.py", line 3234, in _call_aside
+    f(*args, **kwargs)
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/pkg_resources/__init__.py", line 3272, in _initialize_master_working_set
+    working_set = WorkingSet._build_master()
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/pkg_resources/__init__.py", line 581, in _build_master
+    ws.require(__requires__)
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/pkg_resources/__init__.py", line 909, in require
+    needed = self.resolve(parse_requirements(requirements))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/pkg_resources/__init__.py", line 795, in resolve
+    raise DistributionNotFound(req, requirers)
+pkg_resources.DistributionNotFound: The 'PyGObject' distribution was not found and is required by auto-cpufreq
+
+```
+---
+
+### System information:
+void linux
+intel i5 6600u
+Add/paste output of:
+
+```
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.9.9', 'auto-cpufreq')
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/pkg_resources/__init__.py", line 3259, in <module>
+    @_call_aside
+     ^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/pkg_resources/__init__.py", line 3234, in _call_aside
+    f(*args, **kwargs)
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/pkg_resources/__init__.py", line 3272, in _initialize_master_working_set
+    working_set = WorkingSet._build_master()
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/pkg_resources/__init__.py", line 581, in _build_master
+    ws.require(__requires__)
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/pkg_resources/__init__.py", line 909, in require
+    needed = self.resolve(parse_requirements(requirements))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/pkg_resources/__init__.py", line 795, in resolve
+    raise DistributionNotFound(req, requirers)
+pkg_resources.DistributionNotFound: The 'PyGObject' distribution was not found and is required by auto-cpufreq
+
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+just doesn't work because the issues in running the code but when installing the output is it installed successfully 
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>try running `xbps-install libgirepository python3-cairo` and running the installer again</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Ccalibur:</strong></p>
+                    <p>hey i also get the same exact error no commands working 
+am on openSUSE tumbleweed 
+
+
+`localhost:/home/zatime # auto-cpufreq --install
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.9.9+71ebc3e8', 'auto-cpufreq')
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/pkg_resources/__init__.py", line 3259, in <module>
+    @_call_aside
+     ^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/pkg_resources/__init__.py", line 3234, in _call_aside
+    f(*args, **kwargs)
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/pkg_resources/__init__.py", line 3272, in _initialize_master_working_set
+    working_set = WorkingSet._build_master()
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/pkg_resources/__init__.py", line 581, in _build_master
+    ws.require(__requires__)
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/pkg_resources/__init__.py", line 909, in require
+    needed = self.resolve(parse_requirements(requirements))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/pkg_resources/__init__.py", line 795, in resolve
+    raise DistributionNotFound(req, requirers)
+pkg_resources.DistributionNotFound: The 'PyGObject' distribution was not found and is required by auto-cpufreq
+`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>DimitriosKakouris:</strong></p>
+                    <p>Same error also, running Fedora 38.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Hello could both of you try installing the packages I mentioned above from your distro's package manager?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Ccalibur:</strong></p>
+                    <p>i already have them installed </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>hm, I haven't been able to reproduce this on any of my distros so it does seem to be only affecting certain distros.
+
+I'll see if I can reproduce this. In the meantime, you can switch to a previous release/commit</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>zeyadelkholyttt:</strong></p>
+                    <p>> try running `xbps-install libgirepository python3-cairo` and running the installer again
+
+i have them installed already </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>eret9616:</strong></p>
+                    <p>same on kubuntu</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

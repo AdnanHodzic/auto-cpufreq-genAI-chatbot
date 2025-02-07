@@ -1,0 +1,153 @@
+
+        <html>
+        <head>
+            <title>Issue #706: Cannot install the daemon on Artix Linux (runit)</title>
+        </head>
+        <body>
+            <h1>Cannot install the daemon on Artix Linux (runit)</h1>
+            <p><strong>Issue #706</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? **YES**
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)? **NO, I don't want to use snap on my system**
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)? **NO, not a config issue.**
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)? **YES**
+
+### Error output:
+```text
+--------------------- Deploying auto-cpufreq as a daemon ----------------------
+
+* Turn off bluetooth on boot
+
+* Deploy auto-cpufreq install script
+
+* Deploy auto-cpufreq remove script
+
+----------------------------------- Warning -----------------------------------
+
+Detected you are running a TLP service!
+This daemon might interfere with auto-cpufreq which can lead to unexpected results.
+We strongly encourage you to remove TLP unless you really know what you are doing.
+
+──────────────────────────────────────────────────────────────────────────────────── Running auto-cpufreq daemon install script ────────────────────────────────────────────────────────────────────────────────────
+
+/usr/local/bin/auto-cpufreq-install: line 61: ./etc/os-release: No such file or directory
+
+* Runit init detected but your distro is not supported
+
+
+* Please open an issue on https://github.com/AdnanHodzic/auto-cpufreq
+
+
+----------------- auto-cpufreq daemon installed and running -----------------
+
+To view live stats, run:
+auto-cpufreq --stats
+
+To disable and remove auto-cpufreq daemon, run:
+sudo auto-cpufreq --remove
+
+-------------------------------------------------------------------------------```
+---
+
+### System information:
+```
+-------------------------------- Battery Info ---------------------------------
+
+battery count = 1
+BAT0 start threshold = 0
+BAT0 stop threshold = 100
+
+-------------------------------------------------------------------------------
+
+Linux distro: Artix Linux rolling n/a
+Linux kernel: 6.6.30-2-lts
+Processor: AMD Ryzen 7 PRO 6860Z with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: amd-pstate-epp
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4768 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      1.0%        44 °C       400 MHz
+CPU1      2.0%        44 °C       400 MHz
+CPU2      0.0%        44 °C      1358 MHz
+CPU3      1.0%        44 °C       400 MHz
+CPU4      1.0%        44 °C      2768 MHz
+CPU5      0.0%        44 °C       400 MHz
+CPU6      0.0%        44 °C      1351 MHz
+CPU7      2.0%        44 °C       400 MHz
+CPU8      0.0%        44 °C       400 MHz
+CPU9      0.0%        44 °C       400 MHz
+CPU10      0.0%        44 °C       400 MHz
+CPU11      0.0%        44 °C       400 MHz
+CPU12      0.0%        44 °C       400 MHz
+CPU13      0.0%        44 °C       400 MHz
+CPU14      1.0%        44 °C       400 MHz
+CPU15      1.0%        44 °C       400 MHz
+
+CPU fan speed: 0 RPM
+
+auto-cpufreq version: 2.3.0 (git: 1f911b5)
+
+Python: 3.12.3
+psutil package: 5.9.8
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.1 %
+
+Total CPU usage: 0.6 %
+Total system load: 0.46
+Average temp. of all cores: 44.00 °C 
+
+Currently using: powersave governor
+CPU turbo is controlled by amd-pstate-epp driver
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```
+
+I am running `Artix Linux` with the `runit` init system. 
+
+I can't install the daemon, it says that my distro is not supported, but it looks like the program is looking for a file names `/etc/os-release` but fails to find it.
+
+I've been running auto-cpufreq for more than a year now, but it recently broke somehow so I decided to reinstall it and I couldn't get the service running. 
+
+`auto-cpufreq --live` works fine.
+
+Thank you!</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Looks like there was a regression
+
+Please pull the latest commit, reinstall, and it should be fixed</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>niceiq:</strong></p>
+                    <p>Works fine now! Thank you my guy great work. </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

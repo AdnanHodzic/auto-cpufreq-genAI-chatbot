@@ -1,0 +1,50 @@
+
+        <html>
+        <head>
+            <title>Issue #467: [Feature] Performance Powersave toggler.</title>
+        </head>
+        <body>
+            <h1>[Feature] Performance Powersave toggler.</h1>
+            <p><strong>Issue #467</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>The tools are working fine.
+Just have one request it should have a cli way of interaction to switch the governor.
+
+e.g 
+currently, my config states that on charging the governor should be `performance` and when not on AC it should be `powersave`
+
+This ramps up my fan while charging.
+sometimes I want it to be on powersave even when it is charging to keep my fan silent. and for that I have to change the config and reload auto-cpufreq
+
+I want the feature to be something like 
+```bash
+auto-cpufreq --force governer powersave    # This should keep the governer to powersave mode no matter what the state is.
+auto-cpufreq --force governer performance # This should keep the governer to performance mode no matter what the state is (AC or on Battery)
+auto-cpufreq --force reset # resets to the config state.
+auto-cpufreq --state # (should return powersave,performance,reseted) So that the user can create a indicator in it's bar config.
+```</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>This is already possible with [auto-cpufreq config file](https://github.com/AdnanHodzic/auto-cpufreq#2-auto-cpufreq-config-file). 
+
+It would be great to have this functionality, especially if we had a [gnome extension, as I proposed here.](https://github.com/AdnanHodzic/auto-cpufreq/discussions/312#discussion-3751810)
+
+Since I'm very limited with available time to do this myself. If you want to give it a try in implementing this functionality, please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Changes made by @shadeyg56 as part of #476 are now merged with `master` branch, hence closing this issue.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

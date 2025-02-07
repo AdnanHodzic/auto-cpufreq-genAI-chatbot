@@ -1,0 +1,82 @@
+
+        <html>
+        <head>
+            <title>Issue #573: Battery charge limmits interfering with discharge detection</title>
+        </head>
+        <body>
+            <h1>Battery charge limmits interfering with discharge detection</h1>
+            <p><strong>Issue #573</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>My laptop uses charge limit's to prolong the batteries longevity, as a result that status of the battery may be discharging (since no charge is being added), but it is still using AC power.
+
+The current discharge detection does not account for this behavior: [core.py:311](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto_cpufreq/core.py)
+```python
+if val == "Discharging":
+  # we found a discharging battery
+  return False
+```
+
+This could be fixed by checking the battery current
+```python
+if val == "Discharging":
+	# we found a discharging battery
+	try: 
+	    with open(Path(power_supply_path + supply + "/current_now")) as f:
+	        current = str(f.read()[:-1])
+	        # A battery's status might be "Discharging" but that doesn't necessarily mean it's draining
+	        if current != "0":
+	            return False
+	except FileNotFoundError:
+	    return False
+```
+I'm not sure if this is the optimal approach with is why I haven't opened a pr.
+[diff.TXT](https://github.com/AdnanHodzic/auto-cpufreq/files/12807572/diff.TXT)</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ElSargo:</strong></p>
+                    <p>Possibly related to #83 </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>I have a charge limit set on my laptop so that it doesn't charge past 80% but I haven't had this issue. 
+What does running `cat /sys/class/power_supply/BAT1/status` output for you while the laptop is at the charge limit?
+
+Also may I ask what you're using to limit the charge? Is it a kernel firmware or something else?
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ElSargo:</strong></p>
+                    <p>The output is "Not charging", I might be mistaken as to the cause of the issue. I thought that was it becuase `auto-cpufreq --status` shows
+```
+Battery is: discharging
+
+Setting to use: "powersave" governor
+```
+The limit is being set by laptop firmware</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Hm yeah not sure why auto-cpufreq is picking up that its discharging
+
+What do you get from `cat /sys/class/power_supply/ACAD/online`?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ElSargo:</strong></p>
+                    <p>cat /sys/class/power_supply/ACAD/online gives no such file error
+but /sys/class/power_supply/ADP1/online is 1
+After taking the latest from source and installing it, it seems to be working now...
+Sorry for the inconvinience</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

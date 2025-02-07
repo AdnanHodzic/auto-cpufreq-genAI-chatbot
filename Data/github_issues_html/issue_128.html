@@ -1,0 +1,42 @@
+
+        <html>
+        <head>
+            <title>Issue #128: snap service is always inactive</title>
+        </head>
+        <body>
+            <h1>snap service is always inactive</h1>
+            <p><strong>Issue #128</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hi,
+
+Thank you for developing such a tool. The Youtube video is amazing and it's actually the reason why I'm excited about it.
+
+I have Dell Precision 5530, running Ubuntu 20.04.1 LTS. I installed the snap package and expected the service (daemon) started. It seems to be enabled but inactive:
+
+```
+$ snap services                                                                                                                                                                                        
+Service                                   Startup  Current   Notes
+auto-cpufreq.service                      enabled  inactive  -
+```
+
+Looks like it doesn't really work in the background as it's not changing the governor and turbo boost. How can I enable it?</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I apologize for such delayed reply. You can check snap package daemon status by running: 
+
+```
+systemctl status snap.auto-cpufreq.service.service
+```
+
+as explained on projects [README](https://github.com/AdnanHodzic/auto-cpufreq/#install---auto-cpufreq-daemon). </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

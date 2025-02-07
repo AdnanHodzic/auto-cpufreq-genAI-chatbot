@@ -1,0 +1,41 @@
+
+        <html>
+        <head>
+            <title>Discussion #272: CPU governor always on powersave</title>
+        </head>
+        <body>
+            <h1>CPU governor always on powersave</h1>
+            <p><strong>Discussion #272</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>It seems to turbo boost when under load but it's always on the "powersave". I am using this program in combination with TLP (all cpu related settings in TLP settings disabled)
+
+`auto-cpufreq --monitor` says the current governor and suggested governor is "powersave" all the time. I'm not sure if this is a problem, but even when doing lots of CPU work, (compiling stuff putting all cores up to 100% for a couple minutes) it still recommends and use "powersave". 
+
+I have just installed through the AUR, there doesn't seem to be any config file so everything should be as default. Is this behaviour (always being on the powersave governor) normal?
+
+Also, if it doesn't change CPU governor on my system, is it anything else that it does? Maybe using just TLP would be fine for my system (since it doesn't change CPU governor for whatever reason and TLP has a turbo boost setting)</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I had a similar issue with TLP couple of years ago where it was keeping my cores "capped" at certain frequency. Normally, this shouldn't be a auto-cpufreq issue.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AmitGolden:</strong></p>
+                    <p>Does `auto-cpufreq --monitor` say that your battery is discharging even when it's charging?
+If so, #274 might solve your issue</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>#274 changes are now also merged with `master` so make sure to have the [latest 1.7.2 release.](https://github.com/AdnanHodzic/auto-cpufreq/releases)</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

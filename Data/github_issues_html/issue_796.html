@@ -1,0 +1,467 @@
+
+        <html>
+        <head>
+            <title>Issue #796: Facing severe performance issue: All CPU at minimum CPU frequency in Performance mode</title>
+        </head>
+        <body>
+            <h1>Facing severe performance issue: All CPU at minimum CPU frequency in Performance mode</h1>
+            <p><strong>Issue #796</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted?  Yes
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)? No
+
+```
+$ grep 'GRUB_CMDLINE' /etc/default/grub
+GRUB_CMDLINE_LINUX="resume=/dev/mapper/vgubuntu-FedoraSwap rd.lvm.lv=vgubuntu/FedoraRoot rd.lvm.lv=vgubuntu/FedoraSwap rhgb quiet module_blacklist=hid_sensor_hub nvme.noacpi=1 vconsole.font=LatGrkCyr-12x22 modprobe.blacklist=cros_ec_lpcs rd.driver.blacklist=cros_ec_lpcs libata.allow_tpm=1"
+```
+
+
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)? No
+
+# About
+
+```bash
+$ inxi -Fzxx 
+```
+
+```
+System:
+  Kernel: 6.11.8-300.fc41.x86_64 arch: x86_64 bits: 64 compiler: gcc
+    v: 2.43.1-2.fc41
+  Desktop: GNOME v: 47.1 tk: GTK v: 3.24.43 wm: gnome-shell dm: GDM
+    Distro: Fedora Linux 41 (Workstation Edition)
+Machine:
+  Type: Laptop System: Framework product: Laptop (12th Gen Intel Core) v: A4
+    serial: <superuser required>
+  Mobo: Framework model: FRANMACP04 v: A4 serial: <superuser required>
+    part-nu: FRANDACP04 UEFI: INSYDE v: 03.06 date: 11/10/2022
+Battery:
+  ID-1: BAT1 charge: 31.2 Wh (60.3%) condition: 51.7/55.0 Wh (94.0%)
+    volts: 15.8 min: 15.4 model: NVT Framewo serial: <filter> status: charging
+CPU:
+  Info: 12-core (4-mt/8-st) model: 12th Gen Intel Core i5-1240P bits: 64
+    type: MST AMCP arch: Alder Lake rev: 3 cache: L1: 1.1 MiB L2: 9 MiB
+    L3: 12 MiB
+  Speed (MHz): avg: 400 min/max: 400/4400:3300 cores: 1: 400 2: 400 3: 400
+    4: 400 5: 400 6: 400 7: 400 8: 400 9: 400 10: 400 11: 400 12: 400 13: 400
+    14: 400 15: 400 16: 400 bogomips: 67584
+  Flags: avx avx2 ht lm nx pae sse sse2 sse3 sse4_1 sse4_2 ssse3 vmx
+Graphics:
+  Device-1: Intel Alder Lake-P GT2 [Iris Xe Graphics] vendor: Framework
+    driver: i915 v: kernel arch: Gen-12.2 ports: active: eDP-1
+    empty: DP-1, DP-2, DP-3, DP-4 bus-ID: 00:02.0 chip-ID: 8086:46a6
+  Device-2: Realtek Laptop Camera driver: uvcvideo type: USB rev: 2.0
+    speed: 480 Mb/s lanes: 1 bus-ID: 3-7:3 chip-ID: 0bda:5634
+  Display: wayland server: X.org v: 1.21.1.14 with: Xwayland v: 24.1.4
+    compositor: gnome-shell driver: X: loaded: modesetting unloaded: fbdev,vesa
+    dri: iris gpu: i915 display-ID: 0
+  Monitor-1: eDP-1 model: BOE Display 0x095f res: 2256x1504 dpi: 201
+    diag: 343mm (13.5")
+  API: EGL v: 1.5 platforms: device: 0 drv: iris device: 1 drv: swrast gbm:
+    drv: iris surfaceless: drv: iris wayland: drv: iris x11: drv: iris
+  API: OpenGL v: 4.6 compat-v: 4.5 vendor: intel mesa v: 24.2.7 glx-v: 1.4
+    direct-render: yes renderer: Mesa Intel Graphics (ADL GT2)
+    device-ID: 8086:46a6 display-ID: :0.0
+  API: Vulkan v: 1.3.296 surfaces: xcb,xlib,wayland device: 0
+    type: integrated-gpu driver: N/A device-ID: 8086:46a6 device: 1
+    type: integrated-gpu driver: N/A device-ID: 8086:46a6 device: 2 type: cpu
+    driver: N/A device-ID: 10005:0000 device: 3 type: cpu driver: N/A
+    device-ID: 10005:0000
+Audio:
+  Device-1: Intel Alder Lake PCH-P High Definition Audio vendor: Framework
+    driver: snd_hda_intel v: kernel bus-ID: 00:1f.3 chip-ID: 8086:51c8
+  API: ALSA v: k6.11.8-300.fc41.x86_64 status: kernel-api
+  Server-1: PipeWire v: 1.2.6 status: active with: 1: pipewire-pulse
+    status: active 2: wireplumber status: active 3: pipewire-alsa type: plugin
+    4: pw-jack type: plugin
+  Server-2: PulseAudio v: 17.0 status: off (using pipewire-pulse)
+Network:
+  Device-1: Intel Wi-Fi 6E AX210/AX1675 2x2 [Typhoon Peak] driver: iwlwifi
+    v: kernel pcie: speed: 5 GT/s lanes: 1 bus-ID: a6:00.0 chip-ID: 8086:2725
+  IF: wlp166s0 state: up mac: <filter>
+  Device-2: ASIX AX88179 Gigabit Ethernet driver: cdc_ncm type: USB rev: 3.2
+    speed: 5 Gb/s lanes: 1 bus-ID: 2-3.2.1:6 chip-ID: 0b95:1790
+  IF: eth0 state: down mac: <filter>
+  IF-ID-1: docker0 state: up speed: 10000 Mbps duplex: unknown mac: <filter>
+  IF-ID-2: vethabf803c state: up speed: 10000 Mbps duplex: full
+    mac: <filter>
+Bluetooth:
+  Device-1: Intel AX210 Bluetooth driver: btusb v: 0.8 type: USB rev: 2.0
+    speed: 12 Mb/s lanes: 1 bus-ID: 3-10:6 chip-ID: 8087:0032
+  Report: btmgmt ID: hci0 rfk-id: 0 state: down bt-service: enabled,running
+    rfk-block: hardware: no software: yes address: <filter> bt-v: 5.3 lmp-v: 12
+Drives:
+  Local Storage: total: 3.64 TiB used: 2.45 TiB (67.3%)
+  ID-1: /dev/nvme0n1 vendor: Samsung model: SSD 990 PRO 2TB size: 1.82 TiB
+    speed: 63.2 Gb/s lanes: 4 serial: <filter> temp: 47.9 C
+  ID-2: /dev/sda vendor: Western Digital model: WD10SDSW-11AGTS0
+    size: 931.48 GiB type: USB rev: 3.2 spd: 5 Gb/s lanes: 1 serial: <filter>
+  ID-3: /dev/sdb vendor: Western Digital model: WD10SDSW-11AGTS0
+    size: 931.48 GiB type: USB rev: 3.2 spd: 5 Gb/s lanes: 1 serial: <filter>
+Partition:
+  ID-1: / size: 98.12 GiB used: 50.56 GiB (51.5%) fs: ext4 dev: /dev/dm-0
+    mapped: vgubuntu-FedoraRoot
+  ID-2: /boot size: 738.4 MiB used: 390.2 MiB (52.8%) fs: ext4
+    dev: /dev/nvme0n1p2
+  ID-3: /boot/efi size: 127.7 MiB used: 24.4 MiB (19.1%) fs: vfat
+    dev: /dev/nvme0n1p4
+  ID-4: /home size: 17.55 GiB used: 11.94 GiB (68.0%) fs: ext4
+    dev: /dev/dm-5 mapped: vgubuntu-FedoraHome
+Swap:
+  ID-1: swap-1 type: partition size: 32 GiB used: 0 KiB (0.0%) priority: -2
+    dev: /dev/dm-1 mapped: vgubuntu-FedoraSwap
+  ID-2: swap-2 type: zram size: 8 GiB used: 4 MiB (0.0%) priority: 100
+    dev: /dev/zram0
+Sensors:
+  System Temperatures: cpu: 60.0 C mobo: N/A
+  Fan Speeds (rpm): N/A
+Info:
+  Memory: total: 32 GiB note: est. available: 31.05 GiB used: 7.55 GiB (24.3%)
+  Processes: 489 Power: uptime: 1h 25m wakeups: 0 Init: systemd v: 256
+    target: graphical (5) default: graphical
+  Packages: pm: rpm pkgs: N/A note: see --rpm pm: flatpak pkgs: 74
+    Compilers: clang: 19.1.2 gcc: 14.2.1 Shell: Bash v: 5.2.32
+    running-in: codium inxi: 3.3.36
+```
+
+# Troubleshooting
+
+## Update
+
+```
+$ sudo dnf update
+Updating and loading repositories:
+Repositories loaded.
+Nothing to do.
+```
+
+## Booting with different kernels
+
+Tried booting with following kernel (but same issue)
+- 6.11.5-300.fc41.x86_64
+- 6.11.8-300.fc41.x86_64
+
+
+##  CPU frequency
+
+```bash
+$ \cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+performance
+$ \cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors 
+performance powersave
+```
+
+``` bash
+$ watch -n.1 "grep \"^[c]pu MHz\" /proc/cpuinfo"
+```
+
+```
+Every 0.1s: grep "^[c]pu MHz" /proc/cpuinfo                                                            lamyer: Tue Nov 26 18:23:23 2024
+
+cpu MHz         : 400.190
+cpu MHz         : 400.453
+cpu MHz         : 400.041
+cpu MHz         : 400.004
+cpu MHz         : 400.000
+cpu MHz         : 400.000
+cpu MHz         : 400.015
+cpu MHz         : 400.000
+cpu MHz         : 399.947
+cpu MHz         : 400.010
+cpu MHz         : 399.991
+cpu MHz         : 400.024
+cpu MHz         : 400.011
+cpu MHz         : 399.998
+cpu MHz         : 399.777
+cpu MHz         : 399.990
+```
+
+## Turbostat
+
+```
+turbostat
+turbostat version 2024.07.26 - Len Brown <lenb@kernel.org>
+Kernel command line: BOOT_IMAGE=(hd4,gpt2)/vmlinuz-6.11.5-300.fc41.x86_64 root=/dev/mapper/vgubuntu-FedoraRoot ro resume=/dev/mapper/vgubuntu-FedoraSwap rd.lvm.lv=vgubuntu/FedoraRoot rd.lvm.lv=vgubuntu/FedoraSwap rhgb quiet module_blacklist=hid_sensor_hub nvme.noacpi=1 vconsole.font=LatGrkCyr-12x22 modprobe.blacklist=cros_ec_lpcs rd.driver.blacklist=cros_ec_lpcs libata.allow_tpm=1
+CPUID(0): GenuineIntel 0x20 CPUID levels
+CPUID(1): family:model:stepping 0x6:9a:3 (6:154:3) microcode 0x434
+CPUID(0x80000000): max_extended_levels: 0x80000008
+CPUID(1): SSE3 MONITOR SMX EIST TM2 TSC MSR ACPI-TM HT TM
+CPUID(6): APERF, TURBO, DTS, PTM, HWP, HWPnotify, HWPwindow, HWPepp, HWPpkg, EPB
+cpu0: MSR_IA32_MISC_ENABLE: 0x00850089 (TCC EIST MWAIT PREFETCH TURBO)
+CPUID(7): No-SGX Hybrid
+CPUID(0x15): eax_crystal: 2 ebx_tsc: 110 ecx_crystal_hz: 38400000
+TSC: 2112 MHz (38400000 Hz * 110 / 2 / 1000000)
+CPUID(0x16): base_mhz: 2100 max_mhz: 4400 bus_mhz: 100
+cpu0: MSR_PLATFORM_INFO: 0x804043df0811500
+4 * 100.0 = 400.0 MHz max efficiency frequency
+21 * 100.0 = 2100.0 MHz base frequency
+cpu0: MSR_TURBO_RATIO_LIMIT: 0x2323232323252c2c
+35 * 100.0 = 3500.0 MHz max turbo 8 active cores
+35 * 100.0 = 3500.0 MHz max turbo 7 active cores
+35 * 100.0 = 3500.0 MHz max turbo 6 active cores
+35 * 100.0 = 3500.0 MHz max turbo 5 active cores
+35 * 100.0 = 3500.0 MHz max turbo 4 active cores
+37 * 100.0 = 3700.0 MHz max turbo 3 active cores
+44 * 100.0 = 4400.0 MHz max turbo 2 active cores
+44 * 100.0 = 4400.0 MHz max turbo 1 active cores
+cpu0: MSR_SECONDARY_TURBO_RATIO_LIMIT: 0x1f1f1f1f21212121
+31 * 100.0 = 3100.0 MHz max turbo 8 active cores
+31 * 100.0 = 3100.0 MHz max turbo 7 active cores
+31 * 100.0 = 3100.0 MHz max turbo 6 active cores
+31 * 100.0 = 3100.0 MHz max turbo 5 active cores
+33 * 100.0 = 3300.0 MHz max turbo 4 active cores
+33 * 100.0 = 3300.0 MHz max turbo 3 active cores
+33 * 100.0 = 3300.0 MHz max turbo 2 active cores
+33 * 100.0 = 3300.0 MHz max turbo 1 active cores
+cpu0: MSR_CONFIG_TDP_NOMINAL: 0x00000011 (base_ratio=17)
+cpu0: MSR_CONFIG_TDP_LEVEL_1: 0x000e00a0 (PKG_MIN_PWR_LVL1=0 PKG_MAX_PWR_LVL1=0 LVL1_RATIO=14 PKG_TDP_LVL1=160)
+cpu0: MSR_CONFIG_TDP_LEVEL_2: 0x00150118 (PKG_MIN_PWR_LVL2=0 PKG_MAX_PWR_LVL2=0 LVL2_RATIO=21 PKG_TDP_LVL2=280)
+cpu0: MSR_CONFIG_TDP_CONTROL: 0x00000000 ( lock=0)
+cpu0: MSR_TURBO_ACTIVATION_RATIO: 0x00000010 (MAX_NON_TURBO_RATIO=16 lock=0)
+cpu0: cpufreq driver: intel_pstate
+cpu0: cpufreq governor: performance
+cpufreq intel_pstate no_turbo: 0
+cpu0: MSR_MISC_PWR_MGMT: 0x000030c2 (ENable-EIST_Coordination ENable-EPB DISable-OOB)
+cpu0: MSR_PM_ENABLE: 0x00000001 (HWP)
+cpu0: MSR_HWP_CAPABILITIES: 0x01111638 (high 56 guar 22 eff 17 low 1)
+cpu0: MSR_HWP_REQUEST: 0x00003838 (min 56 max 56 des 0 epp 0x0 window 0x0 pkg 0x0)
+cpu0: MSR_HWP_REQUEST_PKG: 0x8000ff01 (min 1 max 255 des 0 epp 0x80 window 0x0)
+cpu0: MSR_HWP_INTERRUPT: 0x00000005 (EN_Guaranteed_Perf_Change, Dis_Excursion_Min)
+cpu0: MSR_HWP_STATUS: 0x00000004 (No-Guaranteed_Perf_Change, Excursion_Min)
+cpu0: EPB: 0 (performance)
+cpu0: MSR_IA32_POWER_CTL: 0x00e4005b (C1E auto-promotion: ENabled)
+cpu0: MSR_PKG_CST_CONFIG_CONTROL: 0x74008008 (UNdemote-C1, demote-C1, locked, pkg-cstate-limit=8 (unlimited))
+/dev/cpu_dma_latency: 2000000000 usec (default)
+current_driver: intel_idle
+current_governor: menu
+current_governor_ro: menu
+cpu0: POLL: CPUIDLE CORE POLL IDLE
+cpu0: C1E: MWAIT 0x01
+cpu0: C6: MWAIT 0x20
+cpu0: C8: MWAIT 0x40
+cpu0: C10: MWAIT 0x60
+cpu0: MSR_PKGC3_IRTL: 0x00000000 (NOTvalid, 0 ns)
+cpu0: MSR_PKGC6_IRTL: 0x00000000 (NOTvalid, 0 ns)
+cpu0: MSR_PKGC8_IRTL: 0x00000000 (NOTvalid, 0 ns)
+cpu0: MSR_PKGC10_IRTL: 0x00000000 (NOTvalid, 0 ns)
+Uncore Frequency package0 die0: 400 - 3800 MHz (400 - 3800 MHz) 400 MHz
+RAPL: 9362 sec. Joule Counter Range, at 28 Watts
+cpu0: MSR_RAPL_POWER_UNIT: 0x000a0e03 (0.125000 Watts, 0.000061 Joules, 0.000977 sec.)
+cpu0: MSR_PKG_POWER_INFO: 0x000000e0 (28 W TDP, RAPL 0 - 0 W, 0.000000 sec.)
+cpu0: MSR_PKG_POWER_LIMIT: 0x42020000dc8640 (UNlocked)
+cpu0: PKG Limit #1: ENabled (200.000 Watts, 28.000000 sec, clamp DISabled)
+cpu0: PKG Limit #2: DISabled (64.000 Watts, 0.002441* sec, clamp DISabled)
+cpu0: MSR_VR_CURRENT_CONFIG: 0x000002d0
+cpu0: PKG Limit #4: 90.000000 Watts (UNlocked)
+cpu0: MSR_DRAM_POWER_LIMIT: 0x00000000 (UNlocked)
+cpu0: DRAM Limit: DISabled (0.000 Watts, 0.000977 sec, clamp DISabled)
+cpu0: MSR_PP0_POLICY: 9
+cpu0: MSR_PP0_POWER_LIMIT: 0x00000000 (UNlocked)
+cpu0: Cores Limit: DISabled (0.000 Watts, 0.000977 sec, clamp DISabled)
+cpu0: MSR_PP1_POLICY: 13
+cpu0: MSR_PP1_POWER_LIMIT: 0x00000000 (UNlocked)
+cpu0: GFX Limit: DISabled (0.000 Watts, 0.000977 sec, clamp DISabled)
+cpu0: MSR_IA32_TEMPERATURE_TARGET: 0x80640000 (100 C) (100 default - 0 offset)
+cpu0: MSR_IA32_PACKAGE_THERM_STATUS: 0x8826000c (62 C)
+cpu0: MSR_IA32_PACKAGE_THERM_INTERRUPT: 0x02000003 (100 C, 100 C)
+cpu0: MSR_MISC_FEATURE_CONTROL: 0x00000000 (L2-Prefetch L2-Prefetch-pair L1-Prefetch L1-IP-Prefetch)
+Core    CPU     Avg_MHz Busy%   Bzy_MHz TSC_MHz IPC     IRQ     SMI     POLL    C1E     C6      C8      C10     POLL%   C1E%    C6%   C8%      C10%    CPU%c1  CPU%c6  CPU%c7  CoreTmp CoreThr PkgTmp  Totl%C0 Any%C0  GFX%C0  CPUGFX% Pkg%pc2 Pkg%pc3 Pkg%pc6 Pkg%pc8 Pk%pc10CPU%LPI SYS%LPI PkgWatt CorWatt GFXWatt RAMWatt PKG_%   RAM_%   UncMHz
+-       -       79      19.78   400     2115    1.37    34313   0       21      4429    831     2551    18271   0.00    1.45    0.70  2.65     75.71   2.42    51.94   18.58   55      0       62      324.99  91.37   12.65   12.32   2.29    1.04    3.14    0.00    0.00  0.00     0.00    4.47    0.89    0.05    0.00    0.00    0.00    400
+0       0       158     39.41   400     2112    1.97    3363    0       2       233     66      259     3031    0.00    1.27    0.88  4.26     54.75   1.97    0.83    41.07   55      0       62      325.04  91.38   12.65   12.32   2.29    1.04    3.14    0.00    0.00  0.00     0.00    4.46    0.88    0.05    0.00    0.00    0.00    400
+0       1       71      17.69   400     2112    1.67    2443    0       3       201     62      144     2641    0.00    0.98    0.78  2.22     78.69   1.97
+4       2       96      24.00   400     2112    1.71    1941    0       1       324     49      158     908     0.00    1.61    0.65  2.62     71.31   1.91    0.42    57.40   55      0
+4       3       71      17.87   400     2112    1.94    1196    0       0       134     5       26      423     0.00    0.48    0.07  0.47     81.16   1.91
+8       4       115     28.78   400     2112    1.89    2058    0       0       201     30      121     792     0.00    0.93    0.43  2.10     67.91   1.49    0.42    62.69   53      0
+8       5       26      6.48    400     2112    1.92    520     0       0       35      3       5       203     0.00    0.29    0.04  0.08     93.14   1.49
+12      6       98      24.43   400     2112    1.67    2469    0       2       421     69      134     804     0.00    1.77    0.87  2.06     71.05   2.54    0.85    61.64   52      0
+12      7       43      10.86   400     2112    1.45    1070    0       0       100     9       54      563     0.00    0.42    0.15  0.95     87.72   2.54
+16      8       83      20.65   400     2112    0.73    2318    0       0       342     138     274     1074    0.00    1.87    1.91  4.46     71.34   1.85    76.11   0.00    52      0
+17      9       73      18.22   400     2112    0.75    1930    0       2       257     85      279     1034    0.00    1.32    1.28  4.69     74.70   1.31    79.21   0.00    52      0
+18      10      63      15.87   400     2112    0.80    1620    0       1       188     47      179     923     0.00    1.21    0.70  3.01     79.37   1.21    81.98   0.00    52      0
+19      11      82      20.52   400     2112    0.77    6083    0       6       1290    98      152     2582    0.01    7.40    1.11  2.33     69.07   14.38   63.20   0.00    53      0
+20      12      71      17.71   400     2112    0.97    1696    0       1       142     43      239     728     0.00    0.79    0.66  3.97     77.02   0.88    80.58   0.00    53      0
+21      13      80      19.88   400     2112    1.25    1970    0       0       187     44      211     792     0.00    0.88    0.61  3.76     75.02   1.02    78.21   0.00    53      0
+22      14      56      14.11   400     2112    0.99    1262    0       1       93      30      150     735     0.00    0.49    0.39  2.62     82.51   0.49    84.72   0.00    53      0
+23      15      80      20.06   400     2112    0.68    2374    0       2       281     53      166     1038    0.00    1.53    0.73  2.79     75.08   1.71    77.08   0.00    54      0
+Core    CPU     Avg_MHz Busy%   Bzy_MHz TSC_MHz IPC     IRQ     SMI     POLL    C1E     C6      C8      C10     POLL%   C1E%    C6%   C8%      C10%    CPU%c1  CPU%c6  CPU%c7  CoreTmp CoreThr PkgTmp  Totl%C0 Any%C0  GFX%C0  CPUGFX% Pkg%pc2 Pkg%pc3 Pkg%pc6 Pkg%pc8 Pk%pc10CPU%LPI SYS%LPI PkgWatt CorWatt GFXWatt RAMWatt PKG_%   RAM_%   UncMHz
+-       -       32      8.03    400     2112    1.65    14573   0       9       1195    201     2018    10350   0.00    0.48    0.18  2.24     89.20   0.64    62.27   25.86   55      0       62      138.18  76.31   0.28    0.13    7.11    3.12    8.38    1.84    0.00  0.00     0.00    3.23    0.52    0.00    0.00    0.00    0.00    400
+0       0       141     35.17   400     2112    2.16    2868    0       0       110     36      318     2071    0.00    0.99    0.52  5.57     58.20   1.69    0.46    53.45   51      0       62      138.02  76.22   0.28    0.13    7.10    3.12    8.37    1.84    0.00  0.00     0.00    3.23    0.52    0.00    0.00    0.00    0.00    400
+0       1       31      7.70    400     2112    2.00    1350    0       1       128     0       91      2076    0.00    1.67    0.00  1.62     89.28   1.69
+4       2       60      15.12   400     2112    2.29    1268    0       0       69      15      120     565     0.00    0.37    0.22  2.12     82.31   0.34    0.20    82.61   55      0
+4       3       4       0.91    400     2112    1.96    66      0       0       5       0       0       62      0.00    0.02    0.00  0.00     99.07   0.34
+8       4       38      9.53    400     2112    1.53    1033    0       1       84      20      137     622     0.00    0.40    0.31  2.34     87.60   0.56    0.31    87.58   50      0
+8       5       4       0.95    400     2112    1.08    211     0       0       4       3       24      166     0.00    0.03    0.04  0.45     98.57   0.56
+12      6       37      9.15    400     2112    1.76    792     0       1       30      10      68      569     0.00    0.17    0.15  1.21     89.45   0.35    0.14    86.66   53      0
+12      7       13      3.30    400     2112    2.72    279     0       0       27      2       15      115     0.00    0.27    0.03  0.28     96.14   0.35
+16      8       28      6.99    400     2112    0.68    1038    0       0       83      24      225     665     0.00    0.44    0.36  4.01     88.37   0.44    91.91   0.00    53      0
+17      9       25      6.21    400     2112    0.72    950     0       1       85      19      198     704     0.00    0.50    0.29  3.53     89.63   0.51    92.64   0.00    52      0
+18      10      22      5.53    400     2112    0.79    813     0       1       128     16      150     490     0.00    0.69    0.21  2.71     90.98   0.74    93.42   0.00    52      0
+19      11      19      4.69    400     2112    0.67    660     0       0       33      14      137     421     0.00    0.13    0.19  2.45     92.63   0.13    94.98   0.00    54      0
+20      12      19      4.85    400     2112    0.85    737     0       0       27      14      174     481     0.00    0.13    0.19  3.11     91.84   0.13    94.69   0.00    53      0
+21      13      31      7.72    400     2112    1.17    1138    0       3       260     15      145     594     0.00    1.30    0.23  2.57     88.33   1.57    90.25   0.00    53      0
+22      14      24      6.07    400     2112    1.19    722     0       0       29      5       126     449     0.00    0.16    0.06  2.26     91.54   0.17    93.54   0.00    54      0
+23      15      18      4.62    400     2112    1.31    648     0       1       93      8       90      300     0.00    0.48    0.12  1.58     93.27   0.62    94.78   0.00    53      0
+Core    CPU     Avg_MHz Busy%   Bzy_MHz TSC_MHz IPC     IRQ     SMI     POLL    C1E     C6      C8      C10     POLL%   C1E%    C6%   C8%      C10%    CPU%c1  CPU%c6  CPU%c7  CoreTmp CoreThr PkgTmp  Totl%C0 Any%C0  GFX%C0  CPUGFX% Pkg%pc2 Pkg%pc3 Pkg%pc6 Pkg%pc8 Pk%pc10CPU%LPI SYS%LPI PkgWatt CorWatt GFXWatt RAMWatt PKG_%   RAM_%   UncMHz
+-       -       51      12.64   400     2112    1.34    24183   0       17      3595    581     2443    16299   0.00    1.12    0.49  2.58     83.36   2.35    57.15   22.50   55      0       62      214.33  85.48   1.65    1.51    4.07    2.38    4.14    0.00    0.00  0.00     0.00    3.78    0.66    0.01    0.00    0.00    0.00    400
+0       0       139     34.82   400     2112    1.95    3489    0       3       406     78      308     2669    0.00    1.94    1.00  5.24     57.56   2.47    0.76    45.99   55      0       62      214.34  85.49   1.65    1.51    4.07    2.38    4.14    0.00    0.00  0.00     0.00    3.78    0.66    0.01    0.00    0.00    0.00    400
+0       1       63      15.63   400     2112    2.08    1811    0       3       123     15      74      2146    0.00    1.23    0.21  1.28     81.93   2.47
+4       2       100     24.98   400     2112    1.76    2178    0       1       174     38      194     828     0.00    0.86    0.56  3.26     70.54   1.18    0.47    69.62   53      0
+4       3       10      2.57    400     2112    1.43    179     0       0       24      0       0       125     0.00    0.17    0.00  0.00     97.28   1.18
+8       4       77      19.18   400     2112    1.67    1724    0       0       235     82      255     858     0.00    1.23    0.97  4.34     74.52   1.38    0.86    75.01   53      0
+8       5       9       2.14    400     2112    0.82    200     0       0       11      1       10      136     0.00    0.06    0.01  0.17     97.64   1.38
+12      6       65      16.24   400     2112    1.63    1330    0       1       219     54      166     666     0.00    1.37    0.75  2.66     79.15   1.38    0.74    79.40   53      0
+12      7       5       1.37    400     2112    1.09    186     0       0       12      3       7       135     0.00    0.04    0.04  0.13     98.45   1.38
+16      8       48      12.08   400     2112    0.87    1252    0       2       184     58      220     919     0.00    1.09    0.83  3.63     82.56   1.18    85.75   0.00    53      0
+17      9       38      9.58    400     2112    0.64    1247    0       0       162     40      196     917     0.00    0.81    0.56  3.43     85.80   0.93    88.56   0.00    53      0
+18      10      37      9.21    400     2112    0.71    1127    0       0       136     41      241     877     0.00    0.66    0.57  4.12     85.64   0.97    88.88   0.00    54      0
+19      11      46      11.39   400     2112    0.58    4304    0       2       881     42      82      2849    0.00    5.14    0.39  1.22     82.24   17.63   69.95   0.00    53      0
+20      12      47      11.63   400     2112    0.83    1551    0       3       566     43      208     683     0.00    1.54    0.66  3.64     82.72   1.89    85.78   0.00    53      0
+21      13      45      11.35   400     2112    0.85    1270    0       0       140     24      221     1099    0.00    0.66    0.34  3.75     84.13   0.66    86.80   0.00    53      0
+22      14      32      8.07    400     2112    0.63    806     0       0       85      39      132     628     0.00    0.44    0.62  2.22     88.78   0.44    91.03   0.00    54      0
+23      15      48      12.03   400     2112    0.54    1529    0       2       237     23      129     764     0.00    0.66    0.33  2.24     84.89   1.06    86.26   0.00    54      0
+```
+
+
+## 400 MHz (asserted by call to kernel)
+
+```
+$ sudo cpupower frequency-info 
+analyzing CPU 0:
+  driver: intel_pstate
+  CPUs which run at the same hardware frequency: 0
+  CPUs which need to have their frequency coordinated by software: 0
+  maximum transition latency:  Cannot determine or is not supported.
+  hardware limits: 400 MHz - 4.40 GHz
+  available cpufreq governors: performance powersave
+  current policy: frequency should be within 400 MHz and 4.40 GHz.
+                  The governor "performance" may decide which speed to use
+                  within this range.
+  current CPU frequency: Unable to call hardware
+  current CPU frequency: 400 MHz (asserted by call to kernel)
+  boost state support:
+    Supported: yes
+    Active: yes
+```
+
+## Journalctl
+
+```
+$ journalctl -f 
+2024-11-26T18:17:01+01:00 lamyer audit[146427]: USER_START pid=146427 uid=0 auid=0 ses=14 subj=system_u:system_r:spc_t:s0 msg='op=PAM:session_open grantors=pam_loginuid,pam_env,pam_env,pam_permit,pam_unix,pam_limits acct="root" exe="/usr/sbin/cron" hostname=? addr=? terminal=cron res=success'
+2024-11-26T18:17:01+01:00 lamyer audit[146428]: CRED_REFR pid=146428 uid=0 auid=0 ses=14 subj=system_u:system_r:spc_t:s0 msg='op=PAM:setcred grantors=pam_permit acct="root" exe="/usr/sbin/cron" hostname=? addr=? terminal=cron res=success'
+2024-11-26T18:17:01+01:00 lamyer audit[146427]: CRED_DISP pid=146427 uid=0 auid=0 ses=14 subj=system_u:system_r:spc_t:s0 msg='op=PAM:setcred grantors=pam_permit acct="root" exe="/usr/sbin/cron" hostname=? addr=? terminal=cron res=success'
+2024-11-26T18:17:01+01:00 lamyer audit[146427]: USER_END pid=146427 uid=0 auid=0 ses=14 subj=system_u:system_r:spc_t:s0 msg='op=PAM:session_close grantors=pam_loginuid,pam_env,pam_env,pam_permit,pam_unix,pam_limits acct="root" exe="/usr/sbin/cron" hostname=? addr=? terminal=cron res=success'
+2024-11-26T18:17:08+01:00 lamyer kernel: perf: interrupt took too long (5074 > 5050), lowering kernel.perf_event_max_sample_rate to 39000
+```
+
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+auto-cpufreq --debug
+```
+
+```
+
+Linux distro: Fedora Linux 41 Workstation Edition
+Linux kernel: 6.11.8-300.fc41.x86_64
+Processor: 12th Gen Intel(R) Core(TM) i5-1240P
+Cores: 16
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4400 MHz
+CPU min frequency: 400 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0     62.2%        60 °C       400 MHz
+CPU1     81.0%        60 °C       400 MHz
+CPU2     54.6%        59 °C       400 MHz
+CPU3     95.0%        59 °C       400 MHz
+CPU4     83.2%        59 °C       400 MHz
+CPU5     80.8%        59 °C       400 MHz
+CPU6     81.8%        58 °C       400 MHz
+CPU7     77.8%        58 °C       400 MHz
+CPU8     91.9%        59 °C       400 MHz
+CPU9     91.9%        59 °C       400 MHz
+CPU10     91.9%        59 °C       400 MHz
+CPU11    100.0%        59 °C       400 MHz
+CPU12     99.0%        60 °C       400 MHz
+CPU13    100.0%        60 °C       400 MHz
+CPU14    100.0%        59 °C       400 MHz
+CPU15    100.0%        60 °C       400 MHz
+
+auto-cpufreq version: 2.4.0
+
+Python: 3.13.0
+psutil package: 6.1.0
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.1 %
+
+Total CPU usage: 99.0 %
+Total system load: 14.79
+Average temp. of all cores: 59.19 °C 
+
+Currently using: performance governor
+Currently turbo boost is: on
+```
+
+![image](https://github.com/user-attachments/assets/522f28e9-79bc-49fb-83c3-5f6703bf2fcc)
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Is it any different if you [change the driver](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#troubleshooting) or use a [config file](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#3-auto-cpufreq-config-file)?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ryuheechul:</strong></p>
+                    <p>I'm also experiencing the same thing.
+
+(`performance` governor automatically kicks in when there is AC power connected and `schedutil` and way slower with performance governor ironically due to the frequency limited to 400 MHz - reported via `cpupower frequency-info` as "current CPU frequency". But `performance` governor set as override - while not connected to power - would not suffer the same issue mysteriously)
+
+It's happening across multiple different kernel versions ranging at least from 6.6.68 to 6.12.7.
+
+And drivers both with 
+`amd-pstate-epp` and `acpi-cpufreq`.
+
+The device experiencing this is GPD Win Max 2 (AMD) on NixOS.
+
+I'm also not using any custom configuration, FYI.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ryuheechul:</strong></p>
+                    <p>Follow up on my comment above, I'm experiencing this issue even without `auto-cpufreq` being used and now I see some search result that people report their Linux machine slow down quite a lot on charging (with some low battery level, probably low enough to cause actual charging to kick off and people speculate that it might have to do with heat caused by charging). In fact, when my device's battery is full and connected to charger, this issue kind of disappears which seems to back the stories that people share with their experience.
+
+---
+
+one new update, I may have found the real culprit. It was the ~faulty power adapter~  I tried another adapter and the problem just disappeared. 
+(actually my charger is not faulty but maybe my usage on that, it has multiple ports and using all of them at the same time reduces power supply for each port - but why lower power supply causes that when even lower power supply, no adapter at all works fine? this comment may explains that a bit, https://www.reddit.com/r/gpdwin/comments/zh2ly7/comment/jnw47au/)</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

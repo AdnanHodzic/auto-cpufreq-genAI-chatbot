@@ -1,0 +1,320 @@
+
+        <html>
+        <head>
+            <title>Issue #54: Auto installer failed to install python, won't run</title>
+        </head>
+        <body>
+            <h1>Auto installer failed to install python, won't run</h1>
+            <p><strong>Issue #54</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>```fireflower@romuluotain8:~$ cd auto-cpufreq && sudo ./auto-cpufreq-installer
+
+-------------------------- auto-cpufreq installer -----------------------------
+
+Welcome to auto-cpufreq tool installer.
+
+Options:
+
+[I]nstall
+[R]emove
+[Q]uit
+
+Select a key: [i/r/q]: i
+
+-------------------------------------------------------------------------------
+
+Detected Debian based distribution
+
+-------------------------------------------------------------------------------
+
+Setting up Python environment
+
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+python3-dev is already the newest version (3.6.7-1~18.04).
+python3-pip is already the newest version (9.0.1-2.3~ubuntu1.18.04.1).
+0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+
+-------------------------------------------------------------------------------
+
+Installing necessary Python packages
+
+The directory '/home/fireflower/.cache/pip/http' or its parent directory is not owned by the current user and the cache has been disabled. Please check the permissions and owner of that directory. If executing pip with sudo, you may want sudo's -H flag.
+The directory '/home/fireflower/.cache/pip' or its parent directory is not owned by the current user and caching wheels has been disabled. check the permissions and owner of that directory. If executing pip with sudo, you may want sudo's -H flag.
+Requirement already satisfied: psutil in /usr/lib/python3/dist-packages
+Collecting click
+  Downloading https://files.pythonhosted.org/packages/dd/c0/4d8f43a9b16e289f36478422031b8a63b54b6ac3b1ba605d602f10dd54d6/click-7.1.1-py2.py3-none-any.whl (82kB)
+    100% |████████████████████████████████| 92kB 4.6MB/s 
+Collecting distro
+  Downloading https://files.pythonhosted.org/packages/25/b7/b3c4270a11414cb22c6352ebc7a83aaa3712043be29daa05018fd5a5c956/distro-1.5.0-py2.py3-none-any.whl
+Collecting power
+  Downloading https://files.pythonhosted.org/packages/6a/fc/a730a7c7a9a30b8e0774ca7e06c54181f61620250749ac3de47da138cfd4/power-1.4.tar.gz
+    Complete output from command python setup.py egg_info:
+    Traceback (most recent call last):
+      File "<string>", line 1, in <module>
+    ModuleNotFoundError: No module named 'setuptools'
+    
+    ----------------------------------------
+Command "python setup.py egg_info" failed with error code 1 in /tmp/pip-build-3uuw_wzv/power/
+
+-------------------------------------------------------------------------------
+
+installing auto-cpufreq tool
+
+Traceback (most recent call last):
+  File "setup.py", line 3, in <module>
+    from setuptools import setup
+ModuleNotFoundError: No module named 'setuptools'
+
+-------------------------------------------------------------------------------
+
+auto-cpufreq tool successfully installed.
+
+For list of options, run:
+auto-cpufreq
+
+-------------------------------------------------------------------------------
+fireflower@romuluotain8:
+
+```
+
+Seems like python installation failed and automatic installation failed with it but reports successful installation.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Please pull the latest changes, followed by:
+
+```
+sudo ./auto-cpufreq-installer --remove
+sudo ./auto-cpufreq-installer --install
+```
+
+Please re-open the issue if the problem is not fixed.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Tulikukka:</strong></p>
+                    <p>> Please pull the latest changes, followed by:
+> 
+> ```
+> sudo ./auto-cpufreq-installer --remove
+> sudo ./auto-cpufreq-installer --install
+> ```
+> 
+> Please re-open the issue if the problem is not fixed.
+
+```fireflower@romuluotain8:~$ sudo ./auto-cpufreq/auto-cpufreq-installer --remove
+
+-------------------------------------------------------------------------------
+
+auto-cpufreq tool and all its supporting files successfully removed.
+
+fireflower@romuluotain8:~$ sudo ./auto-cpufreq/auto-cpufreq-installer --install
+
+-------------------------------------------------------------------------------
+
+Detected Debian based distribution
+
+-------------------------------------------------------------------------------
+
+Setting up Python environment
+
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+python3-dev is already the newest version (3.6.7-1~18.04).
+python3-pip is already the newest version (9.0.1-2.3~ubuntu1.18.04.1).
+0 upgraded, 0 newly installed, 0 to remove and 28 not upgraded.
+
+-------------------------------------------------------------------------------
+
+Installing necessary Python packages
+
+The directory '/home/fireflower/.cache/pip/http' or its parent directory is not owned by the current user and the cache has been disabled. Please check the permissions and owner of that directory. If executing pip with sudo, you may want sudo's -H flag.
+The directory '/home/fireflower/.cache/pip' or its parent directory is not owned by the current user and caching wheels has been disabled. check the permissions and owner of that directory. If executing pip with sudo, you may want sudo's -H flag.
+Requirement already satisfied: psutil in /usr/lib/python3/dist-packages
+Collecting click
+  Downloading https://files.pythonhosted.org/packages/dd/c0/4d8f43a9b16e289f36478422031b8a63b54b6ac3b1ba605d602f10dd54d6/click-7.1.1-py2.py3-none-any.whl (82kB)
+    100% |████████████████████████████████| 92kB 1.6MB/s 
+Collecting distro
+  Downloading https://files.pythonhosted.org/packages/25/b7/b3c4270a11414cb22c6352ebc7a83aaa3712043be29daa05018fd5a5c956/distro-1.5.0-py2.py3-none-any.whl
+Collecting power
+  Downloading https://files.pythonhosted.org/packages/6a/fc/a730a7c7a9a30b8e0774ca7e06c54181f61620250749ac3de47da138cfd4/power-1.4.tar.gz
+    Complete output from command python setup.py egg_info:
+    Traceback (most recent call last):
+      File "<string>", line 1, in <module>
+    ModuleNotFoundError: No module named 'setuptools'
+    
+    ----------------------------------------
+Command "python setup.py egg_info" failed with error code 1 in /tmp/pip-build-eyuwlbri/power/
+
+-------------------------------------------------------------------------------
+
+installing auto-cpufreq tool
+
+python3: can't open file 'setup.py': [Errno 2] No such file or directory
+cp: cannot stat 'scripts/': No such file or directory
+
+-------------------------------------------------------------------------------
+
+auto-cpufreq tool successfully installed.
+
+For list of options, run:
+auto-cpufreq
+
+-------------------------------------------------------------------------------
+fireflower@romuluotain8:~$ uname -a
+Linux romuluotain8 5.3.0-46-generic #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 x86_64 x86_64 x86_64 GNU/Linux
+
+```
+
+Actual distro: Mint 19.3, packages: https://controlc.com/e20f93bf
+The installer is complaining about access rights to PIP cache but even as a root I get same setuptools error without pip complaints.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>What happens if you run:
+
+```
+sudo ./auto-cpufreq-installer --remove
+sudo apt-get install python3-setuptools
+sudo ./auto-cpufreq-installer --install
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Tulikukka:</strong></p>
+                    <p>> What happens if you run:
+> 
+> ```
+> sudo ./auto-cpufreq-installer --remove
+> sudo apt-get install python3-setuptools
+> sudo ./auto-cpufreq-installer --install
+> ```
+
+```fireflower@romuluotain8:~$ sudo ./auto-cpufreq/auto-cpufreq-installer --remove
+[sudo] password for fireflower:              
+
+-------------------------------------------------------------------------------
+
+auto-cpufreq tool and all its supporting files successfully removed.
+
+fireflower@romuluotain8:~$ sudo apt-get install python3-setuptools
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+Suggested packages:
+  python-setuptools-doc
+The following NEW packages will be installed:
+  python3-setuptools
+0 upgraded, 1 newly installed, 0 to remove and 29 not upgraded.
+Need to get 248 kB of archives.
+After this operation, 1 319 kB of additional disk space will be used.
+Get:1 http://mirrors.nic.funet.fi/ubuntu bionic/main amd64 python3-setuptools all 39.0.1-2 [248 kB]
+Fetched 248 kB in 0s (1 043 kB/s)            
+Selecting previously unselected package python3-setuptools.
+(Reading database ... 287964 files and directories currently installed.)
+Preparing to unpack .../python3-setuptools_39.0.1-2_all.deb ...
+Unpacking python3-setuptools (39.0.1-2) ...
+Setting up python3-setuptools (39.0.1-2) ...
+fireflower@romuluotain8:~$ sudo ./auto-cpufreq/auto-cpufreq-installer --install
+
+-------------------------------------------------------------------------------
+
+Detected Debian based distribution
+
+-------------------------------------------------------------------------------
+
+Setting up Python environment
+
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+python3-dev is already the newest version (3.6.7-1~18.04).
+python3-pip is already the newest version (9.0.1-2.3~ubuntu1.18.04.1).
+0 upgraded, 0 newly installed, 0 to remove and 29 not upgraded.
+
+-------------------------------------------------------------------------------
+
+Installing necessary Python packages
+
+The directory '/home/fireflower/.cache/pip/http' or its parent directory is not owned by the current user and the cache has been disabled. Please check the permissions and owner of that directory. If executing pip with sudo, you may want sudo's -H flag.
+The directory '/home/fireflower/.cache/pip' or its parent directory is not owned by the current user and caching wheels has been disabled. check the permissions and owner of that directory. If executing pip with sudo, you may want sudo's -H flag.
+Requirement already satisfied: psutil in /usr/lib/python3/dist-packages
+Collecting click
+  Downloading https://files.pythonhosted.org/packages/dd/c0/4d8f43a9b16e289f36478422031b8a63b54b6ac3b1ba605d602f10dd54d6/click-7.1.1-py2.py3-none-any.whl (82kB)
+    100% |████████████████████████████████| 92kB 716kB/s 
+Collecting distro
+  Downloading https://files.pythonhosted.org/packages/25/b7/b3c4270a11414cb22c6352ebc7a83aaa3712043be29daa05018fd5a5c956/distro-1.5.0-py2.py3-none-any.whl
+Collecting power
+  Downloading https://files.pythonhosted.org/packages/6a/fc/a730a7c7a9a30b8e0774ca7e06c54181f61620250749ac3de47da138cfd4/power-1.4.tar.gz
+Installing collected packages: click, distro, power
+  Running setup.py install for power ... done
+Successfully installed click-7.1.1 distro-1.5.0 power-1.4
+
+-------------------------------------------------------------------------------
+
+installing auto-cpufreq tool
+
+python3: can't open file 'setup.py': [Errno 2] No such file or directory
+cp: cannot stat 'scripts/': No such file or directory
+
+-------------------------------------------------------------------------------
+
+auto-cpufreq tool successfully installed.
+
+For list of options, run:
+auto-cpufreq```
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Seems like your Python environment is misconfigured, does this get you any further?
+
+```
+pip3 install --upgrade setuptools
+sudo ./auto-cpufreq-installer --install
+```
+
+In case it fails you can also try:
+
+```
+sudo pip3 install --upgrade setuptools
+sudo ./auto-cpufreq-installer --install
+```
+
+Also please note if Mint 19.3 has snap version 2.44 you could simply [install snap package](https://github.com/AdnanHodzic/auto-cpufreq#snap-store) and avoid all these issues.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Tulikukka:</strong></p>
+                    <p>Error persists, I will try cleaning my system a bit from python / etc. and reinstall them. Changed distro because didn't quite like my desktop enviroment that ubuntu came with (auto-cpufreq was a succesful install on native distro) and changing desktop environment on the fly made ubuntu behave somewhat oddly. 
+
+On the last resort I will try snap package installer</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Tulikukka:</strong></p>
+                    <p>reinstalling all python packages didn't help, so the issue is probably on somewhere very deep of the mint distro.
+
+Snap worked but don't know should snap automatically add itself to the PATH environment variable or not... Well for me it didn't so commands are not fetched from there. 
+
+Anyway the program seems to be working now, cpu changing frequency from 0.8GHz to 2.8GHz on laptop and battery life seems to agree.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Yes, snap should do everything for you. Okay great, in that case I'm closing this issue.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

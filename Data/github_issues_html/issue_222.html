@@ -1,0 +1,145 @@
+
+        <html>
+        <head>
+            <title>Issue #222: Does not work properly on Pinebook Pro</title>
+        </head>
+        <body>
+            <h1>Does not work properly on Pinebook Pro</h1>
+            <p><strong>Issue #222</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I have installed auto-cpufreq and its system requirements from the AUR and it doesn't seem to work properly. I ran `sudo auto-cpufreq --stats` and it didn't even read the temperatures of the CPU, `sensors` did however. It seems like it only stays on powersave mode. I can confirm this via the software itself and via a plasma system monitor widget. I'll paste the CPU information and the software errors and etc.
+### `sensors` output:
+```
+cw2015_battery-i2c-4-62
+Adapter: rk3x-i2c
+in0:           3.89 V  
+curr1:       907.00 mA 
+
+gpu_thermal-virtual-0
+Adapter: Virtual device
+temp1:        +33.9°C  (crit = +95.0°C)
+
+tcpm_source_psy_4_0022-i2c-4-22
+Adapter: rk3x-i2c
+in0:           0.00 V  (min =  +0.00 V, max =  +0.00 V)
+curr1:         0.00 A  (max =  +0.00 A)
+
+cpu_thermal-virtual-0
+Adapter: Virtual device
+temp1:        +33.3°C  (crit = +95.0°C)
+
+
+```
+### `lscpu` CPU info:
+```
+Architecture:           aarch64
+  CPU op-mode(s):       32-bit, 64-bit
+  Byte Order:           Little Endian
+CPU(s):                 6
+  On-line CPU(s) list:  0-5
+Vendor ID:              ARM
+  Model name:           Cortex-A53
+    Model:              4
+    Thread(s) per core: 1
+    Core(s) per socket: 4
+    Socket(s):          1
+    Stepping:           r0p4
+    CPU max MHz:        1416.0000
+    CPU min MHz:        408.0000
+    BogoMIPS:           48.00
+    Flags:              fp asimd evtstrm aes pmull sha1 sha2 crc32 cpuid
+  Model name:           Cortex-A72
+    Model:              2
+    Thread(s) per core: 1
+    Core(s) per socket: 2
+    Socket(s):          1
+    Stepping:           r0p2
+    CPU max MHz:        1800.0000
+    CPU min MHz:        408.0000
+    BogoMIPS:           48.00
+    Flags:              fp asimd evtstrm aes pmull sha1 sha2 crc32 cpuid
+Vulnerabilities:        
+  Itlb multihit:        Not affected
+  L1tf:                 Not affected
+  Mds:                  Not affected
+  Meltdown:             Not affected
+  Spec store bypass:    Not affected
+  Spectre v1:           Mitigation; __user pointer sanitization
+  Spectre v2:           Mitigation; Branch predictor hardening
+  Srbds:                Not affected
+  Tsx async abort:      Not affected
+
+```
+
+---
+
+### System information:
+```text
+-------------------------------------------------------------------------------
+
+Linux distro: Manjaro-ARM 21.07 n/a
+Linux kernel: 5.13.4-1-MANJARO-ARM
+Processor:
+Cores: 6
+Architecture: aarch64
+Driver: cpufreq-dt
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1800 MHz
+CPU min frequency: 408 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0:    14.7%    nan °C        1 MHz
+CPU3:    26.5%    nan °C        4 MHz
+
+Disabled CPUs: 1,2,4,5
+
+auto-cpufreq version:
+Git commit: c0f2022
+
+Python: 3.9.6
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 8.0.1
+distro package 1.5.0
+
+Computer type: 
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.41 %
+
+Total CPU usage: 16.2 %
+Total system load: 1.5
+Average temp. of all cores: nan °C 
+
+Currently using: powersave governor
+Warning: CPU turbo is not available
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+
+```
+---
+_PS: Id like to also point out that `auto-cpufreq` reports some cores disabled, yet they are really not._</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>With [v1.7.0 release](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.7.0) it's now possible to manually define some of the settings instead of leaving everything to be picked up automatically. Could you try tweaking some of the [available options](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq) and report back on how that worked for you? Thanks</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing due to inactivity. </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

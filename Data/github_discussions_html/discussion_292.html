@@ -1,0 +1,39 @@
+
+        <html>
+        <head>
+            <title>Discussion #292: Do not use powersave governor (as default governor on battery) and (performance governor while charging) for CPU's that don't have intel_pstate driver by default.</title>
+        </head>
+        <body>
+            <h1>Do not use powersave governor (as default governor on battery) and (performance governor while charging) for CPU's that don't have intel_pstate driver by default.</h1>
+            <p><strong>Discussion #292</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>The "powersave" generic CPU governor always sets the CPU to minimum frequency and does not allow it go up during intensive activities. So it is useful if you want maximum battery savings but not useful if you want your system to feel responsive and smooth and not sluggish while on battery (due to 800 MHZ frequency of CPU's that powersave governor is forcing). The "performance" generic governor while charging is opposite behavior always making the CPU go to the maximum frequency while charging even if just doing web browsing.  A better choice would be schedutil/on-demand governor for CPU's that don't have intel_pstate driver.  The linux kernel already chooses on-demand/schedutil governor by default for CPU's that don't have intel_pstate driver so best is to respect the kernel defaults for CPU's that aren't using intel_pstate driver. TLP another battery saving application is doing this.  A person should be allowed to change the CPU governor to powersave and performacne if they wish but default behavior should not be powersave otherwise people will wonder why their laptop (if having Intel CPU that doesn't support "intel_pstate" driver and AMD CPU) is sluggish on battery (and for performance governor if they use "auto-cpufreq --stats" function wonder why CPU is having high temps while charging) and they would probably think auto-cpufreq is causing this and remove it due to this behavior.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AnonPol:</strong></p>
+                    <p>@AdnanHodzic I understand why you chose the defaults as your CPU seems to be supporting intel_pstate CPU driver which is having two governors "powersave" and "performance" which function similar to schedutil/on-demand generic governors of CPUFreq but if you want people to have similar functionality as the intel_pstate governors you should not use the powersave and performance generic governors as they are very different to the intel_pstate driver governors and instead use schedutil/on-demand.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> The "powersave" generic CPU governor always sets the CPU to minimum frequency and does not allow it go up during intensive activities. So it is useful if you want maximum battery savings but not useful if you want your system to feel responsive and smooth and not sluggish while on battery (due to 800 MHZ frequency of CPU's that powersave governor is forcing). The "performance" generic governor while charging is opposite behavior always making the CPU go to the maximum frequency while charging even if just doing web browsing. A better choice would be schedutil/on-demand governor for CPU's that don't have intel_pstate driver. The linux kernel already chooses on-demand/schedutil governor by default for CPU's that don't have intel_pstate driver so best is to respect the kernel defaults for CPU's that aren't using intel_pstate driver. TLP another battery saving application is doing this.
+
+Interesting that you say this, as one of the reasons why I [created this tool](https://foolcontrol.org/?p=3124) is because TLP would cap my resources to particular frequency, auto-cpufreq doesn't do that for me.
+
+> A person should be allowed to change the CPU governor to powersave and performacne if they wish but default behavior should not be powersave otherwise people will wonder why their laptop (if having Intel CPU that doesn't support "intel_pstate" driver and AMD CPU) is sluggish on battery (and for performance governor if they use "auto-cpufreq --stats" function wonder why CPU is having high temps while charging) and they would probably think auto-cpufreq is causing this and remove it due to this behavior.
+
+You are allowed to make some adjustments yourself using [auto-cpufreq config file](https://github.com/AdnanHodzic/auto-cpufreq#configuring-auto-cpufreq). 
+
+> I understand why you chose the defaults as your CPU seems to be supporting intel_pstate CPU driver which is having two governors "powersave" and "performance" which function similar to schedutil/on-demand generic governors of CPUFreq but if you want people to have similar functionality as the intel_pstate governors you should not use the powersave and performance generic governors as they are very different to the intel_pstate driver governors and instead use schedutil/on-demand.
+
+If you have an idea how things could be improved for the better, I invite you to [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq#code-contribution) which I'll gladly review and if changes are accepted you will be given credit for your contribution.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

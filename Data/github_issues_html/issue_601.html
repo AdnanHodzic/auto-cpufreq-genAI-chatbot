@@ -1,0 +1,486 @@
+
+        <html>
+        <head>
+            <title>Issue #601: Fedora Silverblue 39 Installation Fails</title>
+        </head>
+        <body>
+            <h1>Fedora Silverblue 39 Installation Fails</h1>
+            <p><strong>Issue #601</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Running `sudo ./auto-cpufreq-installer` errors on building dependencies, #394 shows it use to work so just wondering if this could get working again.
+```
+─────────────────────────────────────────────── auto-cpufreq installer ───────────────────────────────────────────────
+
+Welcome to auto-cpufreq tool installer.
+  			
+Options:
+
+[I]nstall
+[R]emove
+[Q]uit
+
+Select a key: [i/r/q]: I
+
+
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+Detected RedHat based distribution
+
+
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+Setting up Python environment
+
+./auto-cpufreq-installer: line 159: yum: command not found
+
+Installing necessary Python packages
+
+Requirement already satisfied: pip in /opt/auto-cpufreq/venv/lib64/python3.12/site-packages (23.2.1)
+Collecting pip
+  Obtaining dependency information for pip from https://files.pythonhosted.org/packages/47/6a/453160888fab7c6a432a6e25f8afe6256d0d9f2cbd25971021da6491d899/pip-23.3.1-py3-none-any.whl.metadata
+  Downloading pip-23.3.1-py3-none-any.whl.metadata (3.5 kB)
+Collecting wheel
+  Obtaining dependency information for wheel from https://files.pythonhosted.org/packages/fa/7f/4c07234086edbce4a0a446209dc0cb08a19bb206a3ea53b2f56a403f983b/wheel-0.41.3-py3-none-any.whl.metadata
+  Downloading wheel-0.41.3-py3-none-any.whl.metadata (2.2 kB)
+Downloading pip-23.3.1-py3-none-any.whl (2.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.1/2.1 MB 18.1 MB/s eta 0:00:00
+Downloading wheel-0.41.3-py3-none-any.whl (65 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 65.8/65.8 kB 22.8 MB/s eta 0:00:00
+Installing collected packages: wheel, pip
+  Attempting uninstall: pip
+    Found existing installation: pip 23.2.1
+    Uninstalling pip-23.2.1:
+      Successfully uninstalled pip-23.2.1
+Successfully installed pip-23.3.1 wheel-0.41.3
+
+
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+installing auto-cpufreq tool
+
+Processing /var/home/User/Downloads/auto-cpufreq
+  Installing build dependencies ... done
+  Getting requirements to build wheel ... done
+  Preparing metadata (pyproject.toml) ... done
+Collecting PyGObject<4.0.0,>=3.46.0 (from auto-cpufreq==2.0.0+15c17fc)
+  Downloading PyGObject-3.46.0.tar.gz (723 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 723.4/723.4 kB 9.2 MB/s eta 0:00:00
+  Installing build dependencies ... error
+  error: subprocess-exited-with-error
+  
+  × pip subprocess to install build dependencies did not run successfully.
+  │ exit code: 1
+  ╰─> [46 lines of output]
+      Collecting setuptools
+        Downloading setuptools-68.2.2-py3-none-any.whl.metadata (6.3 kB)
+      Collecting wheel
+        Downloading wheel-0.41.3-py3-none-any.whl.metadata (2.2 kB)
+      Collecting pycairo
+        Downloading pycairo-1.25.1.tar.gz (347 kB)
+           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 347.1/347.1 kB 4.8 MB/s eta 0:00:00
+        Installing build dependencies: started
+        Installing build dependencies: finished with status 'done'
+        Getting requirements to build wheel: started
+        Getting requirements to build wheel: finished with status 'done'
+        Installing backend dependencies: started
+        Installing backend dependencies: finished with status 'done'
+        Preparing metadata (pyproject.toml): started
+        Preparing metadata (pyproject.toml): finished with status 'done'
+      Using cached setuptools-68.2.2-py3-none-any.whl (807 kB)
+      Using cached wheel-0.41.3-py3-none-any.whl (65 kB)
+      Building wheels for collected packages: pycairo
+        Building wheel for pycairo (pyproject.toml): started
+        Building wheel for pycairo (pyproject.toml): finished with status 'error'
+        error: subprocess-exited-with-error
+      
+        × Building wheel for pycairo (pyproject.toml) did not run successfully.
+        │ exit code: 1
+        ╰─> [15 lines of output]
+            running bdist_wheel
+            running build
+            running build_py
+            creating build
+            creating build/lib.linux-x86_64-cpython-312
+            creating build/lib.linux-x86_64-cpython-312/cairo
+            copying cairo/__init__.py -> build/lib.linux-x86_64-cpython-312/cairo
+            copying cairo/__init__.pyi -> build/lib.linux-x86_64-cpython-312/cairo
+            copying cairo/py.typed -> build/lib.linux-x86_64-cpython-312/cairo
+            running build_ext
+            Package cairo was not found in the pkg-config search path.
+            Perhaps you should add the directory containing `cairo.pc'
+            to the PKG_CONFIG_PATH environment variable
+            Package 'cairo', required by 'virtual:world', not found
+            Command '['pkg-config', '--print-errors', '--exists', 'cairo >= 1.15.10']' returned non-zero exit status 1.
+            [end of output]
+      
+        note: This error originates from a subprocess, and is likely not a problem with pip.
+        ERROR: Failed building wheel for pycairo
+      Failed to build pycairo
+      ERROR: Could not build wheels for pycairo, which is required to install pyproject.toml-based projects
+      [end of output]
+  
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+error: subprocess-exited-with-error
+
+× pip subprocess to install build dependencies did not run successfully.
+│ exit code: 1
+╰─> See above for output.
+
+note: This error originates from a subprocess, and is likely not a problem with pip.
+cp: cannot create regular file '/usr/share/pixmaps/auto-cpufreq.png': Read-only file system
+cp: cannot create regular file '/usr/share/polkit-1/actions/org.auto-cpufreq.pkexec.policy': Read-only file system
+Error on file "scripts/auto-cpufreq-gtk.desktop": Failed to create file “/usr/share/applications/auto-cpufreq-gtk.desktop.9YKLE2”: Read-only file system
+The databases in [/usr/share/applications] could not be updated.
+
+
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+auto-cpufreq tool successfully installed.
+
+For list of options, run:
+auto-cpufreq --help"
+
+
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+```</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>This was brought up in #574
+
+Here is my comment I left there pertaining to this issue
+
+> The main issue I see is when looking at /etc/os-release it only shows the distro as Fedora rawhide. Is there anyway for the script to distinguish a standard Fedora install from a Silverblue install?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>sbancuz:</strong></p>
+                    <p>I found a solution, but it's not a "good" one and at least it seems to work. Install poetry, remove all references to cairo and Gobject, inside the .toml file remove all the references to the GUI and make sure to delete the poetry.lock file. A more permanent fix would be to separare the two packages and let the user decide if it actually wants the GTK interface.
+
+EDIT: maybe just removing the gui stuff from the toml file is enough, I didn't test it</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rootCircle:</strong></p>
+                    <p>> A more permanent fix would be to separare the two packages and let the user decide if it actually wants the GTK interface.
+
+I kind-of agree with this. In future, can we go on with opt-in based design, handling GUI and CLI separately? This may in a way solve the dependency loophole for multiple users at once and might also decrease installation time (building wheels for PyGObject takes a while).
+
+It's also very possible with our current design with [poetry](https://python-poetry.org/docs/master/managing-dependencies/) and [this](https://python-poetry.org/docs/pyproject/#scripts). In a way, we can group dependencies, moving GUI dependencies to other group and hence solving GUI installation dependency problems. In future, hence we can control the GUI installation with probable certain flag during installation, that can be used as a fallback in case of dependencies issue.
+(I haven't tested these yet as my exams are going on, but might test it soon whenever I get free!)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>riley-momo:</strong></p>
+                    <p>I have exactly the same issue and have not found a working solution, I am on bluefin based on fedora 39</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>CanglanXYA:</strong></p>
+                    <p>Fedora 39 workstation is also suffering from similar install failure while generating the package metadata.
+
+When "raise RuntimeError", it replys that "This does not appear to be a Git project"</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>CanglanXYA:</strong></p>
+                    <p>> > A more permanent fix would be to separare the two packages and let the user decide if it actually wants the GTK interface.
+> 
+> I kind-of agree with this. In future, can we go on with opt-in based design, handling GUI and CLI separately? This may in a way solve the dependency loophole for multiple users at once and might also decrease installation time (building wheels for PyGObject takes a while).
+> 
+> It's also very possible with our current design with [poetry](https://python-poetry.org/docs/master/managing-dependencies/) and [this](https://python-poetry.org/docs/pyproject/#scripts). In a way, we can group dependencies, moving GUI dependencies to other group and hence solving GUI installation dependency problems. In future, hence we can control the GUI installation with probable certain flag during installation, that can be used as a fallback in case of dependencies issue. (I haven't tested these yet as my exams are going on, but might test it soon whenever I get free!)
+
+Cant agree any more. I like the CLI version, its fast and clean! There is literally no need for me to install a bunch of things just for GUI, buggable and slooooow</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>reesericci:</strong></p>
+                    <p>> EDIT: maybe just removing the gui stuff from the toml file is enough, I didn't test it
+
+Can confirm that this works! I just commented out anything with PyGObject or about installing the GTK UI. Here's my working toml file:
+
+<details>
+<summary><code>pyproject.toml</code></summary>
+
+```
+[tool.poetry]
+name = "auto-cpufreq"
+version = "2.2.0"
+description = "Automatic CPU speed & power optimizer for Linux"
+authors = ["Adnan Hodzic <adnan@hodzic.org>"]
+license = "GPL-3.0-or-later"
+readme = "README.md"
+classifiers=[
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Operating System :: POSIX :: Linux",
+    "Environment :: Console",
+    "Natural Language :: English"
+]
+keywords=["linux", "cpu", "speed", "power", "frequency", "turbo", "optimzier", "auto", "cpufreq"]
+repository = "https://github.com/AdnanHodzic/auto-cpufreq"
+documentation = "https://github.com/AdnanHodzic/auto-cpufreq#readme"
+packages = [
+    { include = "./auto_cpufreq" },
+#    { include = "./auto_cpufreq/gui" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+psutil = "^5.9.5"
+click = "^8.1.0"
+distro = "^1.8.0"
+requests = "^2.31.0"
+#PyGObject = "^3.46.0"
+
+[tool.poetry.group.dev.dependencies]
+poetry = "^1.6.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning>=1.0.0,<2.0.0"]
+build-backend = "poetry_dynamic_versioning.backend"
+
+[tool.poetry.scripts]
+auto-cpufreq = "auto_cpufreq.bin.auto_cpufreq:main"
+#auto-cpufreq-gtk = "auto_cpufreq.bin.auto_cpufreq_gtk:main"
+
+# https://github.com/mtkennerly/poetry-dynamic-versioning
+[tool.poetry-dynamic-versioning]
+enable = true
+vcs = "git"
+format = "v{base}+{commit}"
+
+# SideNote
+# Regarding zip_safe = https://setuptools.pypa.io/en/latest/deprecated/zip_safe.html
+
+```
+
+</details></p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> > EDIT: maybe just removing the gui stuff from the toml file is enough, I didn't test it
+> 
+> Can confirm that this works! I just commented out anything with PyGObject or about installing the GTK UI. Here's my working toml file:
+> 
+> `pyproject.toml`
+
+@rootCircle is there any way to have or not to have these changes based on certain condition? If not, it might be a best idea to simply update [Installing auto-cpufreq part of README](https://github.com/AdnanHodzic/auto-cpufreq/?tab=readme-ov-file#installing-auto-cpufreq) and add section for Fedora Silverblue with this info ...</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>sbancuz:</strong></p>
+                    <p>Maybe it can be done with either the extras or with the flag --without/--only, not too sure since I've never used poetry.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rootCircle:</strong></p>
+                    <p>> > > EDIT: maybe just removing the gui stuff from the toml file is enough, I didn't test it
+> > 
+> > Can confirm that this works! I just commented out anything with PyGObject or about installing the GTK UI. Here's my working toml file:
+> > 
+> > `pyproject.toml`
+> 
+> @rootCircle is there any way to have or not to have these changes based on certain condition? If not, it might be a best idea to simply update [Installing auto-cpufreq part of README](https://github.com/AdnanHodzic/auto-cpufreq/?tab=readme-ov-file#installing-auto-cpufreq) and add section for Fedora Silverblue with this info ...
+
+I am not sure! I will try tinkering around a bit and will update, if it works out! I have been a fan of `feature flags` in rust and I believe someone might have tried complementing that feature in Python too. So, it might be doable. But implementing this means when need to divide the tool into three parts
+
+- core (mandatory )
+- cli
+- gui
+
+With either of cli or gui or both can be installed. This might require a bit of code restructuring in my opinion. I will check in and report!
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rootCircle:</strong></p>
+                    <p>Some Updates!
+
+I tried the group dependency and extras in poetry, although they are perfect for installing deps, based on type of OS(controlled through flag in Installer script), but we can't control which entry points to include and exclude. Basically, what that means is, during installation, both auto-cpufreq and auto-cpufreq-gtk is created and then we need to manually remove auto-cpufreq-gtk based on requirements. This is kind of unintuitive, but the only solution I can find right now.
+
+Suggestions are welcome!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>sbancuz:</strong></p>
+                    <p>In the auto-cpufreq-gtk.py script you can check for the packages presence and base the installation from there. It would not be perfect since if someone had already globally installed all the required packages would get the gtk one regardless, but it could work</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rootCircle:</strong></p>
+                    <p>> In the auto-cpufreq-gtk.py script you can check for the packages presence and base the installation from there. It would not be perfect since if someone had already globally installed all the required packages would get the gtk one regardless, but it could work
+
+This could be a potential solution, but there are few problems, here and there. Let's say a user wants to download only the CLI, the `auto-cpufreq-gtk` entry point will still be visible for the user, although unusable. This might be annoying in my opinion, alternate we can do is instead of using `auto-cpufreq-gtk` we can simply call `auto-cpufreq --gui` and use it that way, making it a lot cleaner. This way we will only have a single entry point to the `CLI` and we can overcome the limitations of poetry in controlling scripts based on flags. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rootCircle:</strong></p>
+                    <p>Also, here is the `pyproject.toml`, I could come with.
+
+```toml
+[tool.poetry]
+name = "auto-cpufreq"
+version = "2.2.0"
+description = "Automatic CPU speed & power optimizer for Linux"
+authors = ["Adnan Hodzic <adnan@hodzic.org>"]
+license = "GPL-3.0-or-later"
+readme = "README.md"
+classifiers=[
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Operating System :: POSIX :: Linux",
+    "Environment :: Console",
+    "Natural Language :: English"
+]
+keywords=["linux", "cpu", "speed", "power", "frequency", "turbo", "optimzier", "auto", "cpufreq"]
+repository = "https://github.com/AdnanHodzic/auto-cpufreq"
+documentation = "https://github.com/AdnanHodzic/auto-cpufreq#readme"
+packages = [
+    { include = "./auto_cpufreq" },
+    { include = "./auto_cpufreq/gui" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+psutil = "^5.9.8"
+click = "^8.1.0"
+distro = "^1.9.0"
+requests = "^2.31.0"
+PyGObject = {version= "^3.46.0", optional=true}
+
+[tool.poetry.extras]
+guix = ["PyGObject"]
+
+[tool.poetry.group.dev.dependencies]
+poetry = "^1.6.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning>=1.0.0,<2.0.0"]
+build-backend = "poetry_dynamic_versioning.backend"
+
+[tool.poetry.scripts]
+auto-cpufreq = "auto_cpufreq.bin.auto_cpufreq:main"
+auto-cpufreq-gtk = "auto_cpufreq.bin.auto_cpufreq_gtk:main"
+
+# https://github.com/mtkennerly/poetry-dynamic-versioning
+[tool.poetry-dynamic-versioning]
+enable = true
+vcs = "git"
+format = "v{base}+{commit}"
+
+# SideNote
+# Regarding zip_safe = https://setuptools.pypa.io/en/latest/deprecated/zip_safe.html
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>catgirlcataclysm:</strong></p>
+                    <p>> > EDIT: maybe just removing the gui stuff from the toml file is enough, I didn't test it
+> 
+> Can confirm that this works! I just commented out anything with PyGObject or about installing the GTK UI. Here's my working toml file:
+> `pyproject.toml`
+
+This may be a stupid question, but upon running the install script with the modified pyproject.toml, it installs properly, but when I try to run it it errors with no "pyinotify" module. Installing that on silverblue/kinoite has proven to be a bit of trouble for me. (I'm a bit new to immutable fedora.)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Loklann:</strong></p>
+                    <p>> > > EDIT: maybe just removing the gui stuff from the toml file is enough, I didn't test it
+> > 
+> > 
+> > Can confirm that this works! I just commented out anything with PyGObject or about installing the GTK UI. Here's my working toml file:
+> > `pyproject.toml`
+> 
+> This may be a stupid question, but upon running the install script with the modified pyproject.toml, it installs properly, but when I try to run it it errors with no "pyinotify" module. Installing that on silverblue/kinoite has proven to be a bit of trouble for me. (I'm a bit new to immutable fedora.)
+
+Hey, I'm having the exact same issue on Fedora 40, have you found solution yet ?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>It seems like what @rootCircle [suggested](https://github.com/AdnanHodzic/auto-cpufreq/issues/601#issuecomment-1949931987) is the solution. 
+
+However, unfortunately no one made any PR's regarding this so far.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>guanhongming:</strong></p>
+                    <p>I encountered this issue as well on Fedora Atomic 41. Adding both `pyinotify` and `pyasyncore` to the project's dependencies fixed the problem.  Tested and working.
+```toml
+[tool.poetry]
+name = "auto-cpufreq"
+version = "2.2.0"
+description = "Automatic CPU speed & power optimizer for Linux"
+authors = ["Adnan Hodzic <adnan@hodzic.org>"]
+license = "GPL-3.0-or-later"
+readme = "README.md"
+classifiers=[
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Operating System :: POSIX :: Linux",
+    "Environment :: Console",
+    "Natural Language :: English"
+]
+keywords=["linux", "cpu", "speed", "power", "frequency", "turbo", "optimzier", "auto", "cpufreq"]
+repository = "https://github.com/AdnanHodzic/auto-cpufreq"
+documentation = "https://github.com/AdnanHodzic/auto-cpufreq#readme"
+packages = [
+    { include = "./auto_cpufreq" },
+    { include = "./auto_cpufreq/gui" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+psutil = "^5.9.8"
+click = "^8.1.0"
+distro = "^1.9.0"
+requests = "^2.31.0"
+pyinotify = "^0.9.6"
+pyasyncore = "^1.0.0" 
+#PyGObject = {version= "^3.46.0", optional=true}
+
+[tool.poetry.extras]
+#guix = ["PyGObject"]
+
+[tool.poetry.group.dev.dependencies]
+poetry = "^1.6.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning>=1.0.0,<2.0.0"]
+build-backend = "poetry_dynamic_versioning.backend"
+
+[tool.poetry.scripts]
+auto-cpufreq = "auto_cpufreq.bin.auto_cpufreq:main"
+auto-cpufreq-gtk = "auto_cpufreq.bin.auto_cpufreq_gtk:main"
+
+# https://github.com/mtkennerly/poetry-dynamic-versioning
+[tool.poetry-dynamic-versioning]
+enable = true
+vcs = "git"
+format = "v{base}+{commit}"
+
+# SideNote
+# Regarding zip_safe = https://setuptools.pypa.io/en/latest/deprecated/zip_safe.html
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@guanhongming it would be great to have these changes merged with auto-cpufreq repo. [Could you please create a PR(code contribution)](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

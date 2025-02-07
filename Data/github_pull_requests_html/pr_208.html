@@ -1,0 +1,77 @@
+
+        <html>
+        <head>
+            <title>Pull Request #208: warn user, rather than stop them: #196</title>
+        </head>
+        <body>
+            <h1>warn user, rather than stop them: #196</h1>
+            <p><strong>Pull Request #208</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Output from manual testing _(with an `exit 99` a few lines down after
+this patch, so the script wouldn't actually continue for my testing -
+see exit codes included in my $PS1)_
+
+```sh
+$ ./auto-cpufreq-installer
+WARNING: this installer is temporarily NOT recommended
+Instead please use our Snap package (or AUR if you're on Arch)
+For more context, see:
+https://github.com/AdnanHodzic/auto-cpufreq/issues/196
+
+Continue anyway? [N/y]
+1:$ ./auto-cpufreq-installer
+WARNING: this installer is temporarily NOT recommended
+Instead please use our Snap package (or AUR if you're on Arch)
+For more context, see:
+https://github.com/AdnanHodzic/auto-cpufreq/issues/196
+
+Continue anyway? [N/y] y
+Continuing with this installer.
+99:$ ./auto-cpufreq-installer
+WARNING: this installer is temporarily NOT recommended
+Instead please use our Snap package (or AUR if you're on Arch)
+For more context, see:
+https://github.com/AdnanHodzic/auto-cpufreq/issues/196
+
+Continue anyway? [N/y] noy
+1:$ ./auto-cpufreq-installer
+WARNING: this installer is temporarily NOT recommended
+Instead please use our Snap package (or AUR if you're on Arch)
+For more context, see:
+https://github.com/AdnanHodzic/auto-cpufreq/issues/196
+
+Continue anyway? [N/y] YES
+Continuing with this installer.
+```</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>LGTM, can you just rephrase following part to:
+
+```
+echo -e "WARNING: this installer is temporarily NOT recommended\n" >&2
+echo -e "Instead please use our Snap package:" >&2
+echo -e "https://github.com/AdnanHodzic/auto-cpufreq#snap-store\n"
+echo -e "or AUR if you're using Arch/Manjaro or any of its derivatives\n"
+echo -e "https://github.com/AdnanHodzic/auto-cpufreq#aur-package-archmanjaro-linux\n"
+echo -e "For more context, see: https://github.com/AdnanHodzic/auto-cpufreq/issues/196" >&2
+```
+
+Think it's good to point to direct links and will give better text formatting.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@jzacsh I'm sorry these changes never went live, but this has now been permanently resoled as part of auto-cpufreq running in a python virtual env. Changes live as part of [v1.9.0 release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+Regardless, thank you for your contribution! </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

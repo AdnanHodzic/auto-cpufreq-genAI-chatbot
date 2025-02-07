@@ -1,0 +1,173 @@
+
+        <html>
+        <head>
+            <title>Pull Request #311: Fix for PopOS os_release problem</title>
+        </head>
+        <body>
+            <h1>Fix for PopOS os_release problem</h1>
+            <p><strong>Pull Request #311</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Fixes issue #276</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Nice! Great improvement for the PopOS users. Maybe before offering this option to the user, check if `/etc/pop-os/os-release` exists so that you are for sure being on the PopOS distro which causes this error?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Nice! Great improvement for the PopOS users. Maybe before offering this option to the user, check if `/etc/pop-os/os-release` exists so that you are for sure being on the PopOS distro which causes this error?
+
+Absolutely agree, let's run this block only if detected distro is pop os.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>emilyastranova:</strong></p>
+                    <p>How does this look?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Almost there, I would just do it like this: 
+
+```
+try:
+    dist_name = distro.id()
+except PermissionError:
+    # Current work-around for distros like Pop!_OS where symlink causes permission issues
+    print("Warning: Cannot get distro name")
+    if os.path.exists("/etc/pop-os/os-release"):
+        print("Pop!_OS detected")
+        print("Pop!_OS uses a symbolic link for the os-release file, this causes issues \
+            and can be fixed by converting to a hard link")
+        print("Attempting to change symlink to hard link for /etc/os-release -> /etc/pop-os/os-release")
+
+        yN = input("Continue? [y/N] ")
+        if yN.lower() == "y":
+            # Backup /etc/os-release
+            os.system("sudo mv /etc/os-release /etc/os-release-backup")
+            # Create hard link to /etc/os-release
+            os.system("sudo ln /etc/pop-os/os-release /etc/os-release")
+    else:
+        print("Aborting...")
+        sys.exit(1)
+```
+
+I've tried to comment the code as review kind of thing on github, but never did that before. So I think this is a little bit easier for now. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>emilyastranova:</strong></p>
+                    <p>I too have never been able to do code revisions in pull requests, been meaning to learn. Will revise</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>emilyastranova:</strong></p>
+                    <p>With this modification users are still able to continue even though the OS name was never read if they press Y. Is that intended behavior?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>emilyastranova:</strong></p>
+                    <p>dist_name will not be initialized and cause issues at `elif dist_name in ["arch", "manjaro", "garuda"]:`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>No now your `Continue? [y/N]` is part of the `if os.path.exists("/etc/pop-os/os-release"):` code.
+So if the file exists, you will ask them to continue, if that file did not exists, it will go to the `print("Aborting...")`
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>emilyastranova:</strong></p>
+                    <p>I was just looking at that, didn't notice it got indented. Making the change now :+1: </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Great I think we are there! Now we just wait for @AdnanHodzic to review it one last time and then he probably merge it when he is happy! 
+
+I will already say thank you for your contribution to auto-cpufreq!  :+1: </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>emilyastranova:</strong></p>
+                    <p>Glad I could help, this tool has served me well on my new Framework laptop so I thought I'd give back. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>emilyastranova:</strong></p>
+                    <p>Did not mean to hit resolve, let me open the code real quick</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>I don't really know if I did that right. But the thing is: If the user choose N. we need also nicely print abort and exit. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>emilyastranova:</strong></p>
+                    <p>Is there a clean way to do that without just adding an identical abort block?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>emilyastranova:</strong></p>
+                    <p>```
+    yN = input("Continue? [y/N] ")
+        if yN.lower() == "y":
+            # Backup /etc/os-release
+            os.system("sudo mv /etc/os-release /etc/os-release-backup")
+            # Create hard link to /etc/os-release
+            os.system("sudo ln /etc/pop-os/os-release /etc/os-release")
+        else:
+            print("Aborting...")
+            sys.exit(1)
+    else:
+        print("Aborting...")
+        sys.exit(1)
+```
+        
+Seems a little dirty but it gets the job done</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>emilyastranova:</strong></p>
+                    <p>![image](https://user-images.githubusercontent.com/16725119/146658285-ace2a767-3530-4ef0-97ca-bbbeef682503.png)
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Yeah I see. Not really know a nicer way of doing this at the moment. That's why I added another print message. Something like "Operation aborted by user." Would make more sense on that print maybe.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>emilyastranova:</strong></p>
+                    <p>That should do it</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Wow that was fast! Well I think it's great! Thank you very much :+1: 
+And thanks for letting me play with the review option a little bit :partying_face: </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>emilyastranova:</strong></p>
+                    <p>Yeah now I understand how the "commit changes" works, just didn't see the indicator for a bit on my side</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Looks great, thank you for your contribution @tyleraharrison and thank you for your assistance reviewing this PR @bobslept!</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

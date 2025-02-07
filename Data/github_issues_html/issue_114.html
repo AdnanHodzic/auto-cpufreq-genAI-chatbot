@@ -1,0 +1,55 @@
+
+        <html>
+        <head>
+            <title>Issue #114: Wrong core temperatures on 'coretemp'</title>
+        </head>
+        <body>
+            <h1>Wrong core temperatures on 'coretemp'</h1>
+            <p><strong>Issue #114</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>CPU0's temp corresponds to package temp, CPU1's temp to CPU2's so on and so forth.
+
+Linux distro: Manjaro Linux 20.1 Mikah
+Linux kernel: 5.8.6-1-MANJARO
+Processor: Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz
+Cores: 12
+Architecture: x86_64
+Driver: intel_pstate
+
+CPU0 temp: 35°C
+CPU1 temp: 33°C
+CPU2 temp: 34°C
+CPU3 temp: 32°C
+CPU4 temp: 33°C
+CPU5 temp: 33°C
+
+From psutil:
+'coretemp': [
+shwtemp(label='Package id 0', current=35.0, high=100.0, critical=100.0), 
+shwtemp(label='Core 0', current=33.0, high=100.0, critical=100.0),
+shwtemp(label='Core 1', current=34.0, high=100.0, critical=100.0),
+shwtemp(label='Core 2', current=32.0, high=100.0, critical=100.0),
+shwtemp(label='Core 3', current=33.0, high=100.0, critical=100.0),
+shwtemp(label='Core 4', current=33.0, high=100.0, critical=100.0),
+shwtemp(label='Core 5', current=33.0, high=100.0, critical=100.0),
+shwtemp(label='Package id 0', current=35.0, high=100.0, critical=100.0),
+shwtemp(label='Core 0', current=33.0, high=100.0, critical=100.0),
+shwtemp(label='Core 1', current=34.0, high=100.0, critical=100.0),
+shwtemp(label='Core 2', current=32.0, high=100.0, critical=100.0),
+shwtemp(label='Core 3', current=33.0, high=100.0, critical=100.0),
+shwtemp(label='Core 4', current=33.0, high=100.0, critical=100.0),
+shwtemp(label='Core 5', current=33.0, high=100.0, critical=100.0)]</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Addressed as part of #116 </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,93 @@
+
+        <html>
+        <head>
+            <title>Issue #161: Unable to remove via --remove option for Snap package</title>
+        </head>
+        <body>
+            <h1>Unable to remove via --remove option for Snap package</h1>
+            <p><strong>Issue #161</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+```text
+sudo auto-cpufreq --remove
+Traceback (most recent call last):
+  File "/snap/auto-cpufreq/49/bin/auto-cpufreq", line 134, in <module>
+    main()
+  File "/snap/auto-cpufreq/49/lib/python3.8/site-packages/click/core.py", line 829, in __call__
+    return self.main(*args, **kwargs)
+  File "/snap/auto-cpufreq/49/lib/python3.8/site-packages/click/core.py", line 782, in main
+    rv = self.invoke(ctx)
+  File "/snap/auto-cpufreq/49/lib/python3.8/site-packages/click/core.py", line 1066, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/snap/auto-cpufreq/49/lib/python3.8/site-packages/click/core.py", line 610, in invoke
+    return callback(*args, **kwargs)
+  File "/snap/auto-cpufreq/49/bin/auto-cpufreq", line 124, in main
+    if auto_cpufreq_log_file.exists():
+AttributeError: 'NoneType' object has no attribute 'exists'
+
+```
+---
+
+### System information:
+```text
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 20.10 (Groovy Gorilla)
+Linux kernel: 5.8.0-41-generic
+Processor: Intel(R) Core(TM)2 Duo CPU     P7550  @ 2.26GHz
+Cores: 2
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 2261 MHz
+CPU min frequency: 798 MHz
+
+	 Usage  Temperature  Frequency
+CPU0:	  5.1%     56 °C      918 MHz
+CPU1:	  4.1%     56 °C     1148 MHz
+
+Snap package: yes
+
+Python: 3.8.5
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 7.1.2
+distro package 1.5.0
+
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.19 %
+
+Total CPU usage: 7.5 %
+Total system load: 0.58
+Average temp. of all cores: 56.0 °C 
+
+Currently using: ondemand governor
+Warning: CPU turbo is not available
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@MesteMonokrom changes have been pushed, run `snap refresh auto-cpufreq` to fetch latest changes.
+
+Please feel free to re-open the issue if the problem persist. </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

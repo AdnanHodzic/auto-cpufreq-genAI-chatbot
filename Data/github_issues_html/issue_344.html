@@ -1,0 +1,94 @@
+
+        <html>
+        <head>
+            <title>Issue #344: Current version not showing when installed via source code</title>
+        </head>
+        <body>
+            <h1>Current version not showing when installed via source code</h1>
+            <p><strong>Issue #344</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+```
+auto-cpufreq version:
+fatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+CalledProcessError(128, ['git', 'describe', '--always'])
+```
+#### Additional info
+The current version is not showing up. I pulled the code via git into my `/home` and installed it from there. Is there an option to tell the current installed version where to find the git repo and get the info regarding the version. Moreover, I wonder what would be the proper way to update the software and if it would be better to put the git repo into `/opt/auto-cpufreq`.
+
+---
+
+### System Information
+```
+Linux distro: Debian GNU/Linux 11 bullseye
+Linux kernel: 5.10.0-9-amd64
+Processor: Intel(R) Core(TM) i9-8950HK CPU @ 2.90GHz
+Cores: 12
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2900 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  1.1%     40 °C      900 MHz
+CPU1:	  1.0%     37 °C      900 MHz
+CPU2:	  2.0%     38 °C      900 MHz
+CPU3:	  8.8%     37 °C      900 MHz
+CPU4:	  0.0%     38 °C      900 MHz
+CPU5:	  2.9%     38 °C      900 MHz
+CPU6:	  1.0%     40 °C      900 MHz
+CPU7:	  0.0%     37 °C      900 MHz
+CPU8:	  1.0%     38 °C      900 MHz
+CPU9:	  1.0%     37 °C      900 MHz
+CPU10:	  3.0%     38 °C      900 MHz
+CPU11:	  0.0%     38 °C      900 MHz
+
+auto-cpufreq version:
+fatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+CalledProcessError(128, ['git', 'describe', '--always'])
+
+Python: 3.9.2
+psutil package: 5.9.0
+platform package: 1.0.8
+click package: 8.0.3
+distro package 1.6.0
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.07 %
+
+Total CPU usage: 3.0 %
+Total system load: 0.92
+Average temp. of all cores: 38.0 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: off
+```
+---</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ariasmn:</strong></p>
+                    <p>Can confirm. I bumped into the same error while looking into #341 . This issue should be fixed before trying to implement the update feature in my opinion.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Issue permanently resolved as part of [1.9.1 release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

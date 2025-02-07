@@ -1,0 +1,111 @@
+
+        <html>
+        <head>
+            <title>Issue #199: Can you add a way to install this without pip? (non systemd support)</title>
+        </head>
+        <body>
+            <h1>Can you add a way to install this without pip? (non systemd support)</h1>
+            <p><strong>Issue #199</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>My distro has blacklisted pip  but I wanted to see if this really saves as much battery power as you claim. :)
+
+Also, python-distro won't install, so I cannot use it for that reason either. 
+
+I am using a distro without systemd, I will also add.
+
+Hyperbola aka... 
+
+Can you make it possible to use make to install this and not require these two depends.
+
+python-distro
+python-setuptools
+also pip as well if possible. 
+
+If you make it possible to build with make instead of those two and pip, I could probably use it.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>You can install it from [Snap store](https://github.com/AdnanHodzic/auto-cpufreq#snap-store) or [AUR store](https://github.com/AdnanHodzic/auto-cpufreq#aur-package-archmanjaro-linux) depending on which distribution you're running.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>FrostKnight:</strong></p>
+                    <p>Snap store and flatpak and pip are not options in general for my distro, not sure about appimage, but yeah, 
+
+cmake and make would work,  but those above options are excluded...
+
+I tried AUR, but that failed. As odd as it sounds...</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Which distribution are you using?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>FrostKnight:</strong></p>
+                    <p>my distro is Hyperbola actually.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I tried AUR, but that failed. As odd as it sounds...
+
+It seems like problem is that your distro doesn't have systemd. 
+
+Note to myself: related #29, #200
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>FrostKnight:</strong></p>
+                    <p>Yeah, if you could make a package that is a bit more simplistic, doesn't require pip, etc... that would help.
+
+I can install bleachbit easily enough, even the new version and it doesn't require pip.  
+But it does have a python like installation method. Just, without pip... obviously. :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Yep, this become highest priority for next release. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Michael-AU:</strong></p>
+                    <p>If I may add to this discussion the requirement for systemd is a problem for quite a few distros (e.g. MX, Devuan, just to name 2 Debian based distros). I run Debian Buster without systemd as PID 1 and auto-cpufreq won't work even though it installs. I'm trying to build my own Debian based distro that the user has the option to not use systemd and I would really like to be able to have auto-cpufreq as part of it.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>FrostKnight:</strong></p>
+                    <p>Cool, sounds awesome, thanks! I hope you will support runit and openrc and s6 too! :)
+
+I mostly look forward to runit, because it is mega lightweight. :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@FrostKnight #235 was just merged with master which adds support for Void Linux (runit)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>FrostKnight:</strong></p>
+                    <p>That's good, thanks. :)
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I suggest to install it using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq#snap-store). As it runs in a container and isolates its Python env from your env. so you shouldn't experience Python related errors.
+
+In meantime I'm closing the issue since it seems to be resolved, please re-open it if the problem persists.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

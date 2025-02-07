@@ -1,0 +1,62 @@
+
+        <html>
+        <head>
+            <title>Issue #71: [Feature] add Flatpak support</title>
+        </head>
+        <body>
+            <h1>[Feature] add Flatpak support</h1>
+            <p><strong>Issue #71</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>As far as we know that not all linux distribution uses snap by default.
+I think that adding flatpak package would be a nice addition for the RHEL/Fedora/Silverblue/CentOS users and others (clear linux, POP OS, and other who relise on flatpak as default)
+
+I have a bit of experience with flatpak, so can try to look in that direction.
+
+@AdnanHodzic  if you consider flatpak support, than you can assign this issue to me.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Sure, feel to to start working on it. The more ways users have to install the app the better.
+
+Although if a user has `snapd`, snap should also work on RHEL/CentOS/Fedora and etc ...</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>jdferron:</strong></p>
+                    <p>Agreed, Linux Mint as of LM20 does not support snap packages.   Flatpak support would be awesome!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>@jdferron Linux mint [does support it](https://snapcraft.io/docs/installing-snapd), it's just Ubuntu/Debian with whistles.
+Just don't confuse, you probably wanted to say that `snapd` is not preinstalled by default :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>@Red-Eyed It is not just not pre-installed by default, though. `snapd` is actively blocked from being installed without running a command first. (Check here: https://linuxmint-user-guide.readthedocs.io/en/latest/snap.html)
+
+ I would also like to say that I think Linux Mint is a great distro and I believe it is a valuable contributor to the Linux community. Therefore, I think it isn't fair to say that they are *just Ubuntu/Debian with whistles.* It's just my opinion, though.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>mmstick:</strong></p>
+                    <p>This kind of software cannot work as a Flatpak. Flatpak is designed for desktop applications, rather than system services, and applications run by it are executed in a separate namespace with limited access to the host. You can't do anything that requires root, without having a DBus system service installed and running on the host that can do what's needed.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Thanks for your confirmation @mmstick as this was my suspicion from the very beginning from my (limited) knowledge on how Flatpak works.
+
+Since this is a "wont fix", I'm closing the issue. If someone has anything else to add, or would like to have further discussions please feel free to re-open it.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

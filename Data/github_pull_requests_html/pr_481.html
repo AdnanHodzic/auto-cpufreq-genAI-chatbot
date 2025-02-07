@@ -1,0 +1,58 @@
+
+        <html>
+        <head>
+            <title>Pull Request #481: Fix uncaught error in checking for snap</title>
+        </head>
+        <body>
+            <h1>Fix uncaught error in checking for snap</h1>
+            <p><strong>Pull Request #481</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I noticed this error when running `sudo auto-cpufreq --install`
+
+```Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.9.7+dadfae08.post9.dirty', 'auto-cpufreq')
+  File "/opt/auto-cpufreq/venv/lib/python3.10/site-packages/pkg_resources/__init__.py", line 672, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/opt/auto-cpufreq/venv/lib/python3.10/site-packages/pkg_resources/__init__.py", line 1479, in run_script
+    exec(script_code, namespace, namespace)
+  File "/opt/auto-cpufreq/venv/lib/python3.10/site-packages/auto_cpufreq-1.9.7+dadfae08.post9.dirty-py3.10.egg/EGG-INFO/scripts/auto-cpufreq", line 225, in <module>
+  File "/opt/auto-cpufreq/venv/lib/python3.10/site-packages/click/core.py", line 1130, in __call__
+    return self.main(*args, **kwargs)
+  File "/opt/auto-cpufreq/venv/lib/python3.10/site-packages/click/core.py", line 1055, in main
+    rv = self.invoke(ctx)
+  File "/opt/auto-cpufreq/venv/lib/python3.10/site-packages/click/core.py", line 1404, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/opt/auto-cpufreq/venv/lib/python3.10/site-packages/click/core.py", line 760, in invoke
+    return __callback(*args, **kwargs)
+  File "/opt/auto-cpufreq/venv/lib/python3.10/site-packages/auto_cpufreq-1.9.7+dadfae08.post9.dirty-py3.10.egg/EGG-INFO/scripts/auto-cpufreq", line 202, in main
+  File "/opt/auto-cpufreq/venv/lib/python3.10/site-packages/auto_cpufreq-1.9.7+dadfae08.post9.dirty-py3.10.egg/auto_cpufreq/core.py", line 382, in deploy_daemon
+  File "/opt/auto-cpufreq/venv/lib/python3.10/site-packages/auto_cpufreq-1.9.7+dadfae08.post9.dirty-py3.10.egg/auto_cpufreq/power_helper.py", line 261, in gnome_power_svc_disable
+  File "/usr/lib/python3.10/subprocess.py", line 345, in call
+    with Popen(*popenargs, **kwargs) as p:
+  File "/usr/lib/python3.10/subprocess.py", line 971, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/usr/lib/python3.10/subprocess.py", line 1847, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: 'snap'
+```
+
+
+The issue was that `snap_pkg_check` was moved outside the try/except block. This should fix it.
+
+Because this is a fatal error that was pushed to master, I am merging immediately. @AdnanHodzic, please review this and make sure it does not need to be adjusted. I tested and it works on my end but I am not using a snap install
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@shadeyg56 good catch and good call.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

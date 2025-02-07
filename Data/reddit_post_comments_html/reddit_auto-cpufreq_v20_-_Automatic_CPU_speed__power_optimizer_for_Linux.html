@@ -1,0 +1,423 @@
+<html><head><title>auto-cpufreq v2.0 - Automatic CPU speed & power optimizer for Linux</title></head><body><h1>auto-cpufreq v2.0 - Automatic CPU speed & power optimizer for Linux</h1><p><em>Posted by u/ahodzic</em> on 2023-09-30 16:33:19</p><div><strong>Score:</strong> 74</div><div><strong>Content:</strong><br>https://github.com/AdnanHodzic/auto-cpufreq/releases</div><hr><h2>Comments</h2><ul><li><strong>u/spacecase-25:</strong> <div class="md"><p>Interesting idea, do you have data that shows this actually saves battery over intel p_state?</p>
+</div><br><small>Score: 11 | Posted on 2023-09-30 18:49:11</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Unfortunately I don&#39;t. But easiest thing you can do is, start using auto-cpufreq (install daemon) and you should see how much additional battery time you&#39;re getting. For me it adds about 2 additional hours, but your mileage might very. </p>
+
+<p>If you want to test this theory, override the governor to &quot;performance&quot; (default Linux behavior) and see how much battery life you&#39;ll get. Then override it to &quot;powersave&quot; and see how much you would get then.</p>
+
+<p>What, auto-cpufreq does is switch between these automatically (including turning turbo boost_off &amp; on) based on various criteria. I talk more about this in initial release video, take a look if you&#39;re interested: <a href="https://youtu.be/QkYRpVEEIlg?si=jl4GUli1-2w3sof3&amp;t=40">https://youtu.be/QkYRpVEEIlg?si=jl4GUli1-2w3sof3&amp;t=40</a></p>
+</div><br><small>Score: 11 | Posted on 2023-09-30 19:15:52</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/Feisty-Standard-7013:</strong> <div class="md"><p>Are there any downsides of using autocpufreq?</p>
+</div><br><small>Score: 3 | Posted on 2023-10-01 19:23:02</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>No</p>
+</div><br><small>Score: 1 | Posted on 2023-10-01 20:17:26</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/Feisty-Standard-7013:</strong> <div class="md"><p>Then why is it not the default in distros like ubuntu or fedora? If it detects a battery, then using autocpufreq will be very good for the battery right?</p>
+</div><br><small>Score: 1 | Posted on 2023-10-03 18:27:14</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Great question to which I don&#39;t have a question ... But I have a few ideas.</p>
+
+<p>Maybe because it&#39;s not easy for some developers of these big companies to accept that some individual/s are doing a better job in this dept then some of their teams. So instead of joining forces they are trying to make their own solution the same problem.</p>
+
+<p>Or maybe it&#39;s because speed optimization &amp; power effeciency isn&#39;t high enough on their list of priorities. </p>
+
+<p>I know Garuda Linux distro comes with auto-cpufreq installed by default, but there might be more.</p>
+</div><br><small>Score: 5 | Posted on 2023-10-03 18:49:06</small></li><ul></ul></ul></ul></ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/None:</strong> <div class="md"><p>Hi <a href="/r/ahodzic">r/ahodzic</a> when i enter sudo-cpufreq --monitor it says;   </p>
+
+<p>Error auto-cpufreq is running in daemon mode  </p>
+
+<p>Make sure to stop the daemon before running with --live or --monitor mode  </p>
+
+<p>I used auto-cpufreq version 2 GUI. Is there anything wrong or missed?</p>
+</div><br><small>Score: 2 | Posted on 2023-10-02 00:08:11</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Yes, you already installed it. So you&#39;re interested in &quot;auto-cpufreq --stats&quot; or running auto-cpufreq GUI app which will show you same info.</p>
+
+<p>&#39;live&quot; and &quot;monitor&quot; are only for demo purposes. See <a href="https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-modes-and-options">https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-modes-and-options</a> or <a href="https://www.youtube.com/watch?v=SPGpkZ0AZVU&amp;t=314s">https://www.youtube.com/watch?v=SPGpkZ0AZVU&amp;t=314s</a></p>
+</div><br><small>Score: 5 | Posted on 2023-10-02 03:50:52</small></li><ul></ul></ul></ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/muffdivemcgruff:</strong> <div class="md"><p>Oh gawd, I looked at the source code, please don’t install this trash.</p>
+</div><br><small>Score: -25 | Posted on 2023-09-30 21:57:39</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/anugosh:</strong> <div class="md"><p>Bit easy to shit on someone else&#39;s work without giving any justification, init?<br/>
+Not saying you&#39;re wrong, or right, but why exactly do you say it&#39;s trash?</p>
+</div><br><small>Score: 11 | Posted on 2023-09-30 22:24:42</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/muffdivemcgruff:</strong> <div class="md"><p>Number one, it’s written in python, all of the python files have explicitly declared the interpreter location. So it has zero reproducibility, which one would assume seeing as there’s an included nix flake. Also, python is going to be super inefficient when it comes down to a task like this, and it may seem innocuous it’s going to likely not function in a way that actually saves power. When working with tooling like this you need to hit the problem in kernel, because there’s already hooks for system events, etc.</p>
+
+<p>And finally, all measurements should be using eBPF for speed, executable size and for security.</p>
+</div><br><small>Score: -15 | Posted on 2023-09-30 22:40:48</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/SpaceboyRoss:</strong> <div class="md"><p>If you know anything about Nix packaging, patching the interpreter in a script file is super easy. There&#39;s sed and there&#39;s the automatic fix up phase which scans for different problems and tries to correct them.</p>
+</div><br><small>Score: 5 | Posted on 2023-10-01 07:32:17</small></li><ul></ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/None:</strong> <div class="md"><p>Idk about v2 but I&#39;ve been using v1 on 2 different laptops and I get a small battery life improvement with both compared to TLP (like 15%) , also able to use turbo boost now if needed</p>
+</div><br><small>Score: 5 | Posted on 2023-09-30 22:49:40</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/muffdivemcgruff:</strong> <div class="md"><p>I love all the downvotes from all of this, did anyone who provided the downvotes even read thru the source code? It’s a fucking python script that calls bash scrips and sends basic echo commands into sysfs. Literal Linux 101.</p>
+</div><br><small>Score: 2 | Posted on 2023-10-01 00:52:34</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/SpaceboyRoss:</strong> <div class="md"><p>Just because it&#39;s a Python script calling bash doesn&#39;t mean it&#39;s bad. This is a relatively new project and there&#39;s always the chance that it could be rewritten in something like Rust, Go, Zig, etc. For a proof of concept, this looks good enough.</p>
+</div><br><small>Score: 5 | Posted on 2023-10-01 07:35:43</small></li><ul></ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/the_abortionat0r:</strong> <div class="md"><blockquote>
+<p>I love all the downvotes from all of this, did anyone who provided the downvotes even read thru the source code? It’s a fucking python script that calls bash scrips and sends basic echo commands into sysfs. Literal Linux 101.</p>
+</blockquote>
+
+<p>Its working, what more do you want? Its not giving people trouble and is solving a problem.</p>
+
+<p>While I&#39;m not a &quot;then you make a better one&quot; kind of guy I am going to point out that you&#39;ve failed to name a practical issue and failed to name a solution and its real world benefit.</p>
+
+<p>And I mean real world. Mincraft is written in Java. Would it being in another language speed it up? Absolutely, orders of magnitude.</p>
+
+<p>This is python and bash would writing it in a low level language show any real world difference? Likely not. So whats the issue?</p>
+
+<p>You sound like a BSD religious type fighting for ideals over function.</p>
+</div><br><small>Score: 1 | Posted on 2023-11-07 09:46:23</small></li><ul></ul></ul></ul></ul></ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/SpiritedTap1990:</strong> <div class="md"><p>It&#39;s open source, fix it and open a PR</p>
+</div><br><small>Score: 2 | Posted on 2023-10-02 19:24:58</small></li><ul></ul></ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/muffdivemcgruff:</strong> <div class="md"><p>Nope, and he never will because he’s likely using CPU to monitor CPU.</p>
+
+<p>I know how to do it the correct way but I won’t bother mentioning it here because I’d rather watch op learn on his own.</p>
+</div><br><small>Score: -28 | Posted on 2023-09-30 21:54:40</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/None:</strong> <div class="md"><p>Lol what a trashy person</p>
+</div><br><small>Score: 1 | Posted on 2023-10-02 10:07:45</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/muffdivemcgruff:</strong> <div class="md"><p>I try.</p>
+</div><br><small>Score: 1 | Posted on 2023-10-02 10:38:46</small></li><ul></ul></ul></ul></ul><li><strong>u/FlowersForAlgorithm:</strong> <div class="md"><p>Hey thanks so much.</p>
+
+<p>I use auto-cpufreq. Battery life on my surface pro 3 running Debian 12 went from 40 minutes to 6+ hours using auto-cpufreq. Great software.</p>
+</div><br><small>Score: 11 | Posted on 2023-10-01 00:35:06</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Thank you for sharing, always love to hear these kind of comments!</p>
+
+<p>Off topic: since I see Debian logo in your profile, as of today there&#39;s even a <a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1053294">Debian RFP</a> :)</p>
+</div><br><small>Score: 5 | Posted on 2023-10-01 08:57:17</small></li><ul></ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/None:</strong> <div class="md"><p>Wow</p>
+</div><br><small>Score: 4 | Posted on 2023-10-01 03:27:04</small></li><ul></ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/None:</strong> <div class="md"><p>[deleted]</p>
+</div><br><small>Score: 0 | Posted on 2023-10-01 17:06:57</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/FlowersForAlgorithm:</strong> <div class="md"><p>I tried TLP and it offered material improvement (from 45 minutes to about 1.5 hours), but came with system instability and seriously decreased performance. Ie, it was laggy as all get out and would freeze up for a few seconds at a time with tlp.</p>
+
+<p>I’ve had no issues like that with autocpu-freq, it works seemlessly. And the battery life improvement increase is much better with autocpu-freq.</p>
+
+<p>You can call autocpu-freq anytime from the command line (with the daemon I think) and check exactly what is going on, and there are a bunch of options to change functionality, but I’ve never bothered with them because it already works so well.</p>
+</div><br><small>Score: 3 | Posted on 2023-10-01 19:59:24</small></li><ul></ul></ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>auto-cpufreq Github: <a href="https://github.com/AdnanHodzic/auto-cpufreq/">https://github.com/AdnanHodzic/auto-cpufreq/</a><br/>
+Blog post: <a href="https://foolcontrol.org/?p=4603">https://foolcontrol.org/?p=4603</a><br/>
+auto-cpufreq v2.0 release &amp; demo of all available features and options Youtube video: <a href="https://www.youtube.com/watch?v=SPGpkZ0AZVU">https://www.youtube.com/watch?v=SPGpkZ0AZVU</a></p>
+</div><br><small>Score: 7 | Posted on 2023-09-30 16:33:37</small></li><ul></ul><li><strong>u/rayjump:</strong> <div class="md"><p>Thanks! Love the tool to improve my laptop&#39;s battery life. It&#39;s just so easy to setup and doing a really great job.</p>
+</div><br><small>Score: 3 | Posted on 2023-10-01 11:02:52</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Thanks for sharing, always like to hear comments like this one 😊</p>
+</div><br><small>Score: 3 | Posted on 2023-10-01 11:30:52</small></li><ul></ul></ul><li><strong>u/TZReddit:</strong> <div class="md"><p>Would this also decrease idle / general temperatures? My laptop has one of its 2 fans broken, leading to increased temps, could this help with that issue?</p>
+</div><br><small>Score: 2 | Posted on 2023-10-01 01:56:38</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Hm, maybe it could be possible using <a href="https://github.com/AdnanHodzic/auto-cpufreq/#3-auto-cpufreq-config-file">config file</a>, which I also mentioned in <a href="https://www.youtube.com/watch?v=SPGpkZ0AZVU&amp;t=608s">v2.0 release Youtube video</a>. </p>
+
+<p>Otherwise, feel free to <a href="https://github.com/AdnanHodzic/auto-cpufreq/issues">submit a bug issue/feature request</a> as it&#39;s quite an edge case or even consider <a href="https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution">contributing to the project yourself!</a> :)</p>
+</div><br><small>Score: 2 | Posted on 2023-10-01 08:55:20</small></li><ul></ul></ul><li><strong>u/ECrispy:</strong> <div class="md"><p>Thank you so much for this great tool !! I spent a lot of time reading about all the power saving options for Linux, since battery life wasn&#39;t as good as on Windows.</p>
+
+<p>The conclusion seemed to be that auto-cpufreq was the best and easiest option for most end users.</p>
+
+<p>Is there anything else we need to do? Do we need to worry about governors and schedulers?</p>
+</div><br><small>Score: 2 | Posted on 2023-10-06 02:51:46</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Most welcome! Nope, it&#39;s all done automatically. If you wish you can force use of governors, and you can even use a config file if you want additional configuration:</p>
+
+<p>More explained here: <a href="https://www.youtube.com/watch?v=SPGpkZ0AZVU&amp;t=529s">https://www.youtube.com/watch?v=SPGpkZ0AZVU&amp;t=529s</a> and <a href="https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq">https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq</a></p>
+</div><br><small>Score: 1 | Posted on 2023-10-06 07:49:01</small></li><ul></ul></ul><li><strong>u/blaisedegrille:</strong> <div class="md"><p>I used to go with TLP but since switching to auto-cpufreq, it has been working fine on my Debian 12 sid. Thanks a lot.</p>
+
+<p>Edit: Can i use powertop in paralel with auto-cpufreq?</p>
+</div><br><small>Score: 2 | Posted on 2023-12-31 13:08:51</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Great to hear! Please consider donating or contributing to the project: <a href="https://github.com/AdnanHodzic/auto-cpufreq/#donate">https://github.com/AdnanHodzic/auto-cpufreq/#donate</a></p>
+
+<p>And yes, no problem using powertop in tandem with auto-cpufreq.</p>
+</div><br><small>Score: 1 | Posted on 2023-12-31 15:34:17</small></li><ul></ul></ul><li><strong>u/FryBoyter:</strong> <div class="md"><blockquote>
+<p>Automatic CPU speed &amp; power optimizer for, Linux based on active monitoring of a laptop&#39;s battery state, CPU usage, CPU temperature and system load. Ultimately allowing you to improve battery life without making any compromises.</p>
+</blockquote>
+
+<p>Do I understand correctly that the tool is therefore basically only useful if you have a computer with a battery?</p>
+
+<p>Because when I start the tool on my normal computer, I get the following message, among others.</p>
+
+<pre><code>---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: &quot;performance&quot; governor
+
+Total CPU usage: 0.3
+
+Total system load: 0.46
+
+Average temp. of all cores: 31.00 °C 
+
+Load optimal (load average: 0.46, 0.47, 0.45)
+
+setting turbo boost: off
+</code></pre>
+
+<p>With a normal computer without a battery, the state of charge of the (non-existent) battery does not change and therefore presumably the governor does not change either.</p>
+</div><br><small>Score: 1 | Posted on 2023-10-01 09:59:11</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>No, while it&#39;s targeting laptops, as I explained in <a href="https://www.youtube.com/watch?v=SPGpkZ0AZVU&amp;t=144s">v2.0 release video</a>, there are people who use it on desktops. Where I even argue there&#39;s a use case to use it on servers :)</p>
+</div><br><small>Score: 1 | Posted on 2023-10-01 10:31:16</small></li><ul></ul></ul><li><strong>u/globulous9:</strong> <div class="md"><p>Is this different than just using the ondemand scheduler that ships in the kernel?  This appears to just toggle between powersave and performance?</p>
+</div><br><small>Score: 1 | Posted on 2023-10-01 10:51:37</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>I recommend you watch the <a href="https://youtu.be/QkYRpVEEIlg?si=eWeVGmS7RduKbIia&amp;t=47">initial release video</a> where I go more into detail how exactly it works. Otherwise I hope<a href="https://github.com/AdnanHodzic/auto-cpufreq/">auto-cpufreq Readme</a> tells more.</p>
+</div><br><small>Score: 1 | Posted on 2023-10-01 10:56:32</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/globulous9:</strong> <div class="md"><p>sorry, I should have said, the reason I&#39;m asking is because I tried to watch the video.  I have impaired hearing and the auto-captions aren&#39;t too clear.</p>
+</div><br><small>Score: 3 | Posted on 2023-10-02 06:04:49</small></li><ul></ul></ul></ul><li><strong>u/algaefied_creek:</strong> <div class="md"><p>Does this work well with AMD CPUs? Any additional tools needed?</p>
+</div><br><small>Score: 1 | Posted on 2023-10-10 09:08:47</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Yes:  <a href="https://github.com/AdnanHodzic/auto-cpufreq/#supported-architectures-and-devices">https://github.com/AdnanHodzic/auto-cpufreq/#supported-architectures-and-devices</a></p>
+
+<p>No: you just install it and will take care of everything it needs.</p>
+</div><br><small>Score: 1 | Posted on 2023-10-10 10:56:52</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/algaefied_creek:</strong> <div class="md"><p>Nice! Is there a PKGBUILD for the Arch AUR for Arch and Manjaro? If not I can try to mess around this week</p>
+</div><br><small>Score: 1 | Posted on 2023-10-10 16:23:02</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>There is, but it&#39;s not maintained, so please feel free to pick it up :) <a href="https://github.com/AdnanHodzic/auto-cpufreq/#aur-package-archmanjaro-linux">https://github.com/AdnanHodzic/auto-cpufreq/#aur-package-archmanjaro-linux</a></p>
+</div><br><small>Score: 2 | Posted on 2023-10-11 08:44:32</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/algaefied_creek:</strong> <div class="md"><p>Currently bedridden for awhile, so maybe. But long term, no guarantees I&#39;ll be able to stick around.  😣</p>
+</div><br><small>Score: 2 | Posted on 2023-10-11 09:20:22</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>No worries and I wish you a speedy recovery!</p>
+</div><br><small>Score: 1 | Posted on 2023-10-11 12:30:30</small></li><ul></ul></ul></ul></ul></ul></ul><li><strong>u/loveisfoss7:</strong> <div class="md"><p>Here are some tests I did.</p>
+
+<p>Device: Lenovo IdeaPad Flex 5 14IAU7 with an intel 1255U with integrated graphics.</p>
+
+<p>OS: Fedora 39, Gnome 45</p>
+
+<p>auto-cpufreq version (when used): 2.1.0</p>
+
+<p>&#x200B;</p>
+
+<p>Monitor brightness 35%, WiFi on, BT off</p>
+
+<p>intel_pstate + power-profile-daemon = idles at 5.3 W</p>
+
+<p>intel_pstate + auto-cpufreq = idles at 4.7 W</p>
+
+<p>acpi-cpufreq + auto-cpufreq = idles at 5.7 W</p>
+
+<p>&#x200B;</p>
+
+<p>Monitor brightess at 1%, WiFi on, BT off</p>
+
+<p>intel_pstate + auto-cpufreq = idles at 4.0 W</p>
+
+<p>&#x200B;</p>
+
+<p>I think the battery goes down slower with auto-cpufreq compared to how it did with power-profile-daemon. This may be due to turbo boost being off when not needed and maybe due to lower max frequencies (not sure if power-profile-deamon changes the frequency cap). The fact that turbo boost is off causes a 1-2 second delay when opening an application, which is expected and probably okay when considering the possible battery life gain.</p>
+
+<p><a href="https://www.reddit.com/u/ahodzic">u/ahodzic</a> is it normal to have less power consumption with intel_pstate than with acpi-cpufreq when using auto-cpufreq?</p>
+</div><br><small>Score: 1 | Posted on 2023-12-22 23:04:48</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><blockquote>
+<p><a href="/u/ahodzic">u/ahodzic</a>  </p>
+
+<p>is it normal to have less power consumption with intel_pstate than with acpi-cpufreq when using auto-cpufreq?</p>
+</blockquote>
+
+<p>Not sure, since I don&#39;t know details on what&#39;s the difference between those two, I guess in short `intel_pstate` is just a better driver.</p>
+
+<p>It&#39;s interesting because for some folks `acpi-cpufreq` works better (see it reported in issues from time to time) as also mentioned in <a href="https://github.com/AdnanHodzic/auto-cpufreq/?tab=readme-ov-file#troubleshooting">auto-cpufreq Troubleshooting section</a>.</p>
+</div><br><small>Score: 2 | Posted on 2023-12-23 07:39:21</small></li><ul></ul></ul><li><strong>u/None:</strong> <div class="md"><p>[deleted]</p>
+</div><br><small>Score: 1 | Posted on 2023-12-23 20:57:47</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>I suggest you start using <a href="https://github.com/AdnanHodzic/auto-cpufreq/?tab=readme-ov-file#3-auto-cpufreq-config-file">auto-cpufreq config file.</a></p>
+
+<p>Please make sure there are more changes coming to once this <a href="https://github.com/AdnanHodzic/auto-cpufreq/pull/619">PR is merged</a>.</p>
+</div><br><small>Score: 1 | Posted on 2023-12-25 10:58:25</small></li><ul></ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>Unfortunately I don&#39;t. But easiest thing you can do is, start using auto-cpufreq (install daemon) and you should see how much additional battery time you&#39;re getting. For me it adds about 2 additional hours, but your mileage might very. </p>
+
+<p>If you want to test this theory, override the governor to &quot;performance&quot; (default Linux behavior) and see how much battery life you&#39;ll get. Then override it to &quot;powersave&quot; and see how much you would get then.</p>
+
+<p>What, auto-cpufreq does is switch between these automatically (including turning turbo boost_off &amp; on) based on various criteria. I talk more about this in initial release video, take a look if you&#39;re interested: <a href="https://youtu.be/QkYRpVEEIlg?si=jl4GUli1-2w3sof3&amp;t=40">https://youtu.be/QkYRpVEEIlg?si=jl4GUli1-2w3sof3&amp;t=40</a></p>
+</div><br><small>Score: 11 | Posted on 2023-09-30 19:15:52</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/Feisty-Standard-7013:</strong> <div class="md"><p>Are there any downsides of using autocpufreq?</p>
+</div><br><small>Score: 3 | Posted on 2023-10-01 19:23:02</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>No</p>
+</div><br><small>Score: 1 | Posted on 2023-10-01 20:17:26</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/Feisty-Standard-7013:</strong> <div class="md"><p>Then why is it not the default in distros like ubuntu or fedora? If it detects a battery, then using autocpufreq will be very good for the battery right?</p>
+</div><br><small>Score: 1 | Posted on 2023-10-03 18:27:14</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Great question to which I don&#39;t have a question ... But I have a few ideas.</p>
+
+<p>Maybe because it&#39;s not easy for some developers of these big companies to accept that some individual/s are doing a better job in this dept then some of their teams. So instead of joining forces they are trying to make their own solution the same problem.</p>
+
+<p>Or maybe it&#39;s because speed optimization &amp; power effeciency isn&#39;t high enough on their list of priorities. </p>
+
+<p>I know Garuda Linux distro comes with auto-cpufreq installed by default, but there might be more.</p>
+</div><br><small>Score: 5 | Posted on 2023-10-03 18:49:06</small></li><ul></ul></ul></ul></ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/None:</strong> <div class="md"><p>Hi <a href="/r/ahodzic">r/ahodzic</a> when i enter sudo-cpufreq --monitor it says;   </p>
+
+<p>Error auto-cpufreq is running in daemon mode  </p>
+
+<p>Make sure to stop the daemon before running with --live or --monitor mode  </p>
+
+<p>I used auto-cpufreq version 2 GUI. Is there anything wrong or missed?</p>
+</div><br><small>Score: 2 | Posted on 2023-10-02 00:08:11</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Yes, you already installed it. So you&#39;re interested in &quot;auto-cpufreq --stats&quot; or running auto-cpufreq GUI app which will show you same info.</p>
+
+<p>&#39;live&quot; and &quot;monitor&quot; are only for demo purposes. See <a href="https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-modes-and-options">https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-modes-and-options</a> or <a href="https://www.youtube.com/watch?v=SPGpkZ0AZVU&amp;t=314s">https://www.youtube.com/watch?v=SPGpkZ0AZVU&amp;t=314s</a></p>
+</div><br><small>Score: 5 | Posted on 2023-10-02 03:50:52</small></li><ul></ul></ul></ul><li><strong>u/muffdivemcgruff:</strong> <div class="md"><p>Oh gawd, I looked at the source code, please don’t install this trash.</p>
+</div><br><small>Score: -25 | Posted on 2023-09-30 21:57:39</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/anugosh:</strong> <div class="md"><p>Bit easy to shit on someone else&#39;s work without giving any justification, init?<br/>
+Not saying you&#39;re wrong, or right, but why exactly do you say it&#39;s trash?</p>
+</div><br><small>Score: 11 | Posted on 2023-09-30 22:24:42</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/muffdivemcgruff:</strong> <div class="md"><p>Number one, it’s written in python, all of the python files have explicitly declared the interpreter location. So it has zero reproducibility, which one would assume seeing as there’s an included nix flake. Also, python is going to be super inefficient when it comes down to a task like this, and it may seem innocuous it’s going to likely not function in a way that actually saves power. When working with tooling like this you need to hit the problem in kernel, because there’s already hooks for system events, etc.</p>
+
+<p>And finally, all measurements should be using eBPF for speed, executable size and for security.</p>
+</div><br><small>Score: -15 | Posted on 2023-09-30 22:40:48</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/SpaceboyRoss:</strong> <div class="md"><p>If you know anything about Nix packaging, patching the interpreter in a script file is super easy. There&#39;s sed and there&#39;s the automatic fix up phase which scans for different problems and tries to correct them.</p>
+</div><br><small>Score: 5 | Posted on 2023-10-01 07:32:17</small></li><ul></ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/None:</strong> <div class="md"><p>Idk about v2 but I&#39;ve been using v1 on 2 different laptops and I get a small battery life improvement with both compared to TLP (like 15%) , also able to use turbo boost now if needed</p>
+</div><br><small>Score: 5 | Posted on 2023-09-30 22:49:40</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/muffdivemcgruff:</strong> <div class="md"><p>I love all the downvotes from all of this, did anyone who provided the downvotes even read thru the source code? It’s a fucking python script that calls bash scrips and sends basic echo commands into sysfs. Literal Linux 101.</p>
+</div><br><small>Score: 2 | Posted on 2023-10-01 00:52:34</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/SpaceboyRoss:</strong> <div class="md"><p>Just because it&#39;s a Python script calling bash doesn&#39;t mean it&#39;s bad. This is a relatively new project and there&#39;s always the chance that it could be rewritten in something like Rust, Go, Zig, etc. For a proof of concept, this looks good enough.</p>
+</div><br><small>Score: 5 | Posted on 2023-10-01 07:35:43</small></li><ul></ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/the_abortionat0r:</strong> <div class="md"><blockquote>
+<p>I love all the downvotes from all of this, did anyone who provided the downvotes even read thru the source code? It’s a fucking python script that calls bash scrips and sends basic echo commands into sysfs. Literal Linux 101.</p>
+</blockquote>
+
+<p>Its working, what more do you want? Its not giving people trouble and is solving a problem.</p>
+
+<p>While I&#39;m not a &quot;then you make a better one&quot; kind of guy I am going to point out that you&#39;ve failed to name a practical issue and failed to name a solution and its real world benefit.</p>
+
+<p>And I mean real world. Mincraft is written in Java. Would it being in another language speed it up? Absolutely, orders of magnitude.</p>
+
+<p>This is python and bash would writing it in a low level language show any real world difference? Likely not. So whats the issue?</p>
+
+<p>You sound like a BSD religious type fighting for ideals over function.</p>
+</div><br><small>Score: 1 | Posted on 2023-11-07 09:46:23</small></li><ul></ul></ul></ul></ul></ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/SpiritedTap1990:</strong> <div class="md"><p>It&#39;s open source, fix it and open a PR</p>
+</div><br><small>Score: 2 | Posted on 2023-10-02 19:24:58</small></li><ul></ul></ul><li><strong>u/muffdivemcgruff:</strong> <div class="md"><p>Nope, and he never will because he’s likely using CPU to monitor CPU.</p>
+
+<p>I know how to do it the correct way but I won’t bother mentioning it here because I’d rather watch op learn on his own.</p>
+</div><br><small>Score: -28 | Posted on 2023-09-30 21:54:40</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/None:</strong> <div class="md"><p>Lol what a trashy person</p>
+</div><br><small>Score: 1 | Posted on 2023-10-02 10:07:45</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/muffdivemcgruff:</strong> <div class="md"><p>I try.</p>
+</div><br><small>Score: 1 | Posted on 2023-10-02 10:38:46</small></li><ul></ul></ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>Thank you for sharing, always love to hear these kind of comments!</p>
+
+<p>Off topic: since I see Debian logo in your profile, as of today there&#39;s even a <a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1053294">Debian RFP</a> :)</p>
+</div><br><small>Score: 5 | Posted on 2023-10-01 08:57:17</small></li><ul></ul><li><strong>u/None:</strong> <div class="md"><p>Wow</p>
+</div><br><small>Score: 4 | Posted on 2023-10-01 03:27:04</small></li><ul></ul><li><strong>u/None:</strong> <div class="md"><p>[deleted]</p>
+</div><br><small>Score: 0 | Posted on 2023-10-01 17:06:57</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/FlowersForAlgorithm:</strong> <div class="md"><p>I tried TLP and it offered material improvement (from 45 minutes to about 1.5 hours), but came with system instability and seriously decreased performance. Ie, it was laggy as all get out and would freeze up for a few seconds at a time with tlp.</p>
+
+<p>I’ve had no issues like that with autocpu-freq, it works seemlessly. And the battery life improvement increase is much better with autocpu-freq.</p>
+
+<p>You can call autocpu-freq anytime from the command line (with the daemon I think) and check exactly what is going on, and there are a bunch of options to change functionality, but I’ve never bothered with them because it already works so well.</p>
+</div><br><small>Score: 3 | Posted on 2023-10-01 19:59:24</small></li><ul></ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>Thanks for sharing, always like to hear comments like this one 😊</p>
+</div><br><small>Score: 3 | Posted on 2023-10-01 11:30:52</small></li><ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>Hm, maybe it could be possible using <a href="https://github.com/AdnanHodzic/auto-cpufreq/#3-auto-cpufreq-config-file">config file</a>, which I also mentioned in <a href="https://www.youtube.com/watch?v=SPGpkZ0AZVU&amp;t=608s">v2.0 release Youtube video</a>. </p>
+
+<p>Otherwise, feel free to <a href="https://github.com/AdnanHodzic/auto-cpufreq/issues">submit a bug issue/feature request</a> as it&#39;s quite an edge case or even consider <a href="https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution">contributing to the project yourself!</a> :)</p>
+</div><br><small>Score: 2 | Posted on 2023-10-01 08:55:20</small></li><ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>Most welcome! Nope, it&#39;s all done automatically. If you wish you can force use of governors, and you can even use a config file if you want additional configuration:</p>
+
+<p>More explained here: <a href="https://www.youtube.com/watch?v=SPGpkZ0AZVU&amp;t=529s">https://www.youtube.com/watch?v=SPGpkZ0AZVU&amp;t=529s</a> and <a href="https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq">https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq</a></p>
+</div><br><small>Score: 1 | Posted on 2023-10-06 07:49:01</small></li><ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>Great to hear! Please consider donating or contributing to the project: <a href="https://github.com/AdnanHodzic/auto-cpufreq/#donate">https://github.com/AdnanHodzic/auto-cpufreq/#donate</a></p>
+
+<p>And yes, no problem using powertop in tandem with auto-cpufreq.</p>
+</div><br><small>Score: 1 | Posted on 2023-12-31 15:34:17</small></li><ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>No, while it&#39;s targeting laptops, as I explained in <a href="https://www.youtube.com/watch?v=SPGpkZ0AZVU&amp;t=144s">v2.0 release video</a>, there are people who use it on desktops. Where I even argue there&#39;s a use case to use it on servers :)</p>
+</div><br><small>Score: 1 | Posted on 2023-10-01 10:31:16</small></li><ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>I recommend you watch the <a href="https://youtu.be/QkYRpVEEIlg?si=eWeVGmS7RduKbIia&amp;t=47">initial release video</a> where I go more into detail how exactly it works. Otherwise I hope<a href="https://github.com/AdnanHodzic/auto-cpufreq/">auto-cpufreq Readme</a> tells more.</p>
+</div><br><small>Score: 1 | Posted on 2023-10-01 10:56:32</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/globulous9:</strong> <div class="md"><p>sorry, I should have said, the reason I&#39;m asking is because I tried to watch the video.  I have impaired hearing and the auto-captions aren&#39;t too clear.</p>
+</div><br><small>Score: 3 | Posted on 2023-10-02 06:04:49</small></li><ul></ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>Yes:  <a href="https://github.com/AdnanHodzic/auto-cpufreq/#supported-architectures-and-devices">https://github.com/AdnanHodzic/auto-cpufreq/#supported-architectures-and-devices</a></p>
+
+<p>No: you just install it and will take care of everything it needs.</p>
+</div><br><small>Score: 1 | Posted on 2023-10-10 10:56:52</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/algaefied_creek:</strong> <div class="md"><p>Nice! Is there a PKGBUILD for the Arch AUR for Arch and Manjaro? If not I can try to mess around this week</p>
+</div><br><small>Score: 1 | Posted on 2023-10-10 16:23:02</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>There is, but it&#39;s not maintained, so please feel free to pick it up :) <a href="https://github.com/AdnanHodzic/auto-cpufreq/#aur-package-archmanjaro-linux">https://github.com/AdnanHodzic/auto-cpufreq/#aur-package-archmanjaro-linux</a></p>
+</div><br><small>Score: 2 | Posted on 2023-10-11 08:44:32</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/algaefied_creek:</strong> <div class="md"><p>Currently bedridden for awhile, so maybe. But long term, no guarantees I&#39;ll be able to stick around.  😣</p>
+</div><br><small>Score: 2 | Posted on 2023-10-11 09:20:22</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>No worries and I wish you a speedy recovery!</p>
+</div><br><small>Score: 1 | Posted on 2023-10-11 12:30:30</small></li><ul></ul></ul></ul></ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><blockquote>
+<p><a href="/u/ahodzic">u/ahodzic</a>  </p>
+
+<p>is it normal to have less power consumption with intel_pstate than with acpi-cpufreq when using auto-cpufreq?</p>
+</blockquote>
+
+<p>Not sure, since I don&#39;t know details on what&#39;s the difference between those two, I guess in short `intel_pstate` is just a better driver.</p>
+
+<p>It&#39;s interesting because for some folks `acpi-cpufreq` works better (see it reported in issues from time to time) as also mentioned in <a href="https://github.com/AdnanHodzic/auto-cpufreq/?tab=readme-ov-file#troubleshooting">auto-cpufreq Troubleshooting section</a>.</p>
+</div><br><small>Score: 2 | Posted on 2023-12-23 07:39:21</small></li><ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>I suggest you start using <a href="https://github.com/AdnanHodzic/auto-cpufreq/?tab=readme-ov-file#3-auto-cpufreq-config-file">auto-cpufreq config file.</a></p>
+
+<p>Please make sure there are more changes coming to once this <a href="https://github.com/AdnanHodzic/auto-cpufreq/pull/619">PR is merged</a>.</p>
+</div><br><small>Score: 1 | Posted on 2023-12-25 10:58:25</small></li><ul></ul><li><strong>u/Feisty-Standard-7013:</strong> <div class="md"><p>Are there any downsides of using autocpufreq?</p>
+</div><br><small>Score: 3 | Posted on 2023-10-01 19:23:02</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>No</p>
+</div><br><small>Score: 1 | Posted on 2023-10-01 20:17:26</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/Feisty-Standard-7013:</strong> <div class="md"><p>Then why is it not the default in distros like ubuntu or fedora? If it detects a battery, then using autocpufreq will be very good for the battery right?</p>
+</div><br><small>Score: 1 | Posted on 2023-10-03 18:27:14</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Great question to which I don&#39;t have a question ... But I have a few ideas.</p>
+
+<p>Maybe because it&#39;s not easy for some developers of these big companies to accept that some individual/s are doing a better job in this dept then some of their teams. So instead of joining forces they are trying to make their own solution the same problem.</p>
+
+<p>Or maybe it&#39;s because speed optimization &amp; power effeciency isn&#39;t high enough on their list of priorities. </p>
+
+<p>I know Garuda Linux distro comes with auto-cpufreq installed by default, but there might be more.</p>
+</div><br><small>Score: 5 | Posted on 2023-10-03 18:49:06</small></li><ul></ul></ul></ul></ul><li><strong>u/None:</strong> <div class="md"><p>Hi <a href="/r/ahodzic">r/ahodzic</a> when i enter sudo-cpufreq --monitor it says;   </p>
+
+<p>Error auto-cpufreq is running in daemon mode  </p>
+
+<p>Make sure to stop the daemon before running with --live or --monitor mode  </p>
+
+<p>I used auto-cpufreq version 2 GUI. Is there anything wrong or missed?</p>
+</div><br><small>Score: 2 | Posted on 2023-10-02 00:08:11</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Yes, you already installed it. So you&#39;re interested in &quot;auto-cpufreq --stats&quot; or running auto-cpufreq GUI app which will show you same info.</p>
+
+<p>&#39;live&quot; and &quot;monitor&quot; are only for demo purposes. See <a href="https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-modes-and-options">https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-modes-and-options</a> or <a href="https://www.youtube.com/watch?v=SPGpkZ0AZVU&amp;t=314s">https://www.youtube.com/watch?v=SPGpkZ0AZVU&amp;t=314s</a></p>
+</div><br><small>Score: 5 | Posted on 2023-10-02 03:50:52</small></li><ul></ul></ul><li><strong>u/anugosh:</strong> <div class="md"><p>Bit easy to shit on someone else&#39;s work without giving any justification, init?<br/>
+Not saying you&#39;re wrong, or right, but why exactly do you say it&#39;s trash?</p>
+</div><br><small>Score: 11 | Posted on 2023-09-30 22:24:42</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/muffdivemcgruff:</strong> <div class="md"><p>Number one, it’s written in python, all of the python files have explicitly declared the interpreter location. So it has zero reproducibility, which one would assume seeing as there’s an included nix flake. Also, python is going to be super inefficient when it comes down to a task like this, and it may seem innocuous it’s going to likely not function in a way that actually saves power. When working with tooling like this you need to hit the problem in kernel, because there’s already hooks for system events, etc.</p>
+
+<p>And finally, all measurements should be using eBPF for speed, executable size and for security.</p>
+</div><br><small>Score: -15 | Posted on 2023-09-30 22:40:48</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/SpaceboyRoss:</strong> <div class="md"><p>If you know anything about Nix packaging, patching the interpreter in a script file is super easy. There&#39;s sed and there&#39;s the automatic fix up phase which scans for different problems and tries to correct them.</p>
+</div><br><small>Score: 5 | Posted on 2023-10-01 07:32:17</small></li><ul></ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/None:</strong> <div class="md"><p>Idk about v2 but I&#39;ve been using v1 on 2 different laptops and I get a small battery life improvement with both compared to TLP (like 15%) , also able to use turbo boost now if needed</p>
+</div><br><small>Score: 5 | Posted on 2023-09-30 22:49:40</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/muffdivemcgruff:</strong> <div class="md"><p>I love all the downvotes from all of this, did anyone who provided the downvotes even read thru the source code? It’s a fucking python script that calls bash scrips and sends basic echo commands into sysfs. Literal Linux 101.</p>
+</div><br><small>Score: 2 | Posted on 2023-10-01 00:52:34</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/SpaceboyRoss:</strong> <div class="md"><p>Just because it&#39;s a Python script calling bash doesn&#39;t mean it&#39;s bad. This is a relatively new project and there&#39;s always the chance that it could be rewritten in something like Rust, Go, Zig, etc. For a proof of concept, this looks good enough.</p>
+</div><br><small>Score: 5 | Posted on 2023-10-01 07:35:43</small></li><ul></ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/the_abortionat0r:</strong> <div class="md"><blockquote>
+<p>I love all the downvotes from all of this, did anyone who provided the downvotes even read thru the source code? It’s a fucking python script that calls bash scrips and sends basic echo commands into sysfs. Literal Linux 101.</p>
+</blockquote>
+
+<p>Its working, what more do you want? Its not giving people trouble and is solving a problem.</p>
+
+<p>While I&#39;m not a &quot;then you make a better one&quot; kind of guy I am going to point out that you&#39;ve failed to name a practical issue and failed to name a solution and its real world benefit.</p>
+
+<p>And I mean real world. Mincraft is written in Java. Would it being in another language speed it up? Absolutely, orders of magnitude.</p>
+
+<p>This is python and bash would writing it in a low level language show any real world difference? Likely not. So whats the issue?</p>
+
+<p>You sound like a BSD religious type fighting for ideals over function.</p>
+</div><br><small>Score: 1 | Posted on 2023-11-07 09:46:23</small></li><ul></ul></ul></ul></ul></ul><li><strong>u/SpiritedTap1990:</strong> <div class="md"><p>It&#39;s open source, fix it and open a PR</p>
+</div><br><small>Score: 2 | Posted on 2023-10-02 19:24:58</small></li><ul></ul><li><strong>u/None:</strong> <div class="md"><p>Lol what a trashy person</p>
+</div><br><small>Score: 1 | Posted on 2023-10-02 10:07:45</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/muffdivemcgruff:</strong> <div class="md"><p>I try.</p>
+</div><br><small>Score: 1 | Posted on 2023-10-02 10:38:46</small></li><ul></ul></ul><li><strong>u/FlowersForAlgorithm:</strong> <div class="md"><p>I tried TLP and it offered material improvement (from 45 minutes to about 1.5 hours), but came with system instability and seriously decreased performance. Ie, it was laggy as all get out and would freeze up for a few seconds at a time with tlp.</p>
+
+<p>I’ve had no issues like that with autocpu-freq, it works seemlessly. And the battery life improvement increase is much better with autocpu-freq.</p>
+
+<p>You can call autocpu-freq anytime from the command line (with the daemon I think) and check exactly what is going on, and there are a bunch of options to change functionality, but I’ve never bothered with them because it already works so well.</p>
+</div><br><small>Score: 3 | Posted on 2023-10-01 19:59:24</small></li><ul></ul><li><strong>u/globulous9:</strong> <div class="md"><p>sorry, I should have said, the reason I&#39;m asking is because I tried to watch the video.  I have impaired hearing and the auto-captions aren&#39;t too clear.</p>
+</div><br><small>Score: 3 | Posted on 2023-10-02 06:04:49</small></li><ul></ul><li><strong>u/algaefied_creek:</strong> <div class="md"><p>Nice! Is there a PKGBUILD for the Arch AUR for Arch and Manjaro? If not I can try to mess around this week</p>
+</div><br><small>Score: 1 | Posted on 2023-10-10 16:23:02</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>There is, but it&#39;s not maintained, so please feel free to pick it up :) <a href="https://github.com/AdnanHodzic/auto-cpufreq/#aur-package-archmanjaro-linux">https://github.com/AdnanHodzic/auto-cpufreq/#aur-package-archmanjaro-linux</a></p>
+</div><br><small>Score: 2 | Posted on 2023-10-11 08:44:32</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/algaefied_creek:</strong> <div class="md"><p>Currently bedridden for awhile, so maybe. But long term, no guarantees I&#39;ll be able to stick around.  😣</p>
+</div><br><small>Score: 2 | Posted on 2023-10-11 09:20:22</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>No worries and I wish you a speedy recovery!</p>
+</div><br><small>Score: 1 | Posted on 2023-10-11 12:30:30</small></li><ul></ul></ul></ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>No</p>
+</div><br><small>Score: 1 | Posted on 2023-10-01 20:17:26</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/Feisty-Standard-7013:</strong> <div class="md"><p>Then why is it not the default in distros like ubuntu or fedora? If it detects a battery, then using autocpufreq will be very good for the battery right?</p>
+</div><br><small>Score: 1 | Posted on 2023-10-03 18:27:14</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Great question to which I don&#39;t have a question ... But I have a few ideas.</p>
+
+<p>Maybe because it&#39;s not easy for some developers of these big companies to accept that some individual/s are doing a better job in this dept then some of their teams. So instead of joining forces they are trying to make their own solution the same problem.</p>
+
+<p>Or maybe it&#39;s because speed optimization &amp; power effeciency isn&#39;t high enough on their list of priorities. </p>
+
+<p>I know Garuda Linux distro comes with auto-cpufreq installed by default, but there might be more.</p>
+</div><br><small>Score: 5 | Posted on 2023-10-03 18:49:06</small></li><ul></ul></ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>Yes, you already installed it. So you&#39;re interested in &quot;auto-cpufreq --stats&quot; or running auto-cpufreq GUI app which will show you same info.</p>
+
+<p>&#39;live&quot; and &quot;monitor&quot; are only for demo purposes. See <a href="https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-modes-and-options">https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-modes-and-options</a> or <a href="https://www.youtube.com/watch?v=SPGpkZ0AZVU&amp;t=314s">https://www.youtube.com/watch?v=SPGpkZ0AZVU&amp;t=314s</a></p>
+</div><br><small>Score: 5 | Posted on 2023-10-02 03:50:52</small></li><ul></ul><li><strong>u/muffdivemcgruff:</strong> <div class="md"><p>Number one, it’s written in python, all of the python files have explicitly declared the interpreter location. So it has zero reproducibility, which one would assume seeing as there’s an included nix flake. Also, python is going to be super inefficient when it comes down to a task like this, and it may seem innocuous it’s going to likely not function in a way that actually saves power. When working with tooling like this you need to hit the problem in kernel, because there’s already hooks for system events, etc.</p>
+
+<p>And finally, all measurements should be using eBPF for speed, executable size and for security.</p>
+</div><br><small>Score: -15 | Posted on 2023-09-30 22:40:48</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/SpaceboyRoss:</strong> <div class="md"><p>If you know anything about Nix packaging, patching the interpreter in a script file is super easy. There&#39;s sed and there&#39;s the automatic fix up phase which scans for different problems and tries to correct them.</p>
+</div><br><small>Score: 5 | Posted on 2023-10-01 07:32:17</small></li><ul></ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/None:</strong> <div class="md"><p>Idk about v2 but I&#39;ve been using v1 on 2 different laptops and I get a small battery life improvement with both compared to TLP (like 15%) , also able to use turbo boost now if needed</p>
+</div><br><small>Score: 5 | Posted on 2023-09-30 22:49:40</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/muffdivemcgruff:</strong> <div class="md"><p>I love all the downvotes from all of this, did anyone who provided the downvotes even read thru the source code? It’s a fucking python script that calls bash scrips and sends basic echo commands into sysfs. Literal Linux 101.</p>
+</div><br><small>Score: 2 | Posted on 2023-10-01 00:52:34</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/SpaceboyRoss:</strong> <div class="md"><p>Just because it&#39;s a Python script calling bash doesn&#39;t mean it&#39;s bad. This is a relatively new project and there&#39;s always the chance that it could be rewritten in something like Rust, Go, Zig, etc. For a proof of concept, this looks good enough.</p>
+</div><br><small>Score: 5 | Posted on 2023-10-01 07:35:43</small></li><ul></ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/the_abortionat0r:</strong> <div class="md"><blockquote>
+<p>I love all the downvotes from all of this, did anyone who provided the downvotes even read thru the source code? It’s a fucking python script that calls bash scrips and sends basic echo commands into sysfs. Literal Linux 101.</p>
+</blockquote>
+
+<p>Its working, what more do you want? Its not giving people trouble and is solving a problem.</p>
+
+<p>While I&#39;m not a &quot;then you make a better one&quot; kind of guy I am going to point out that you&#39;ve failed to name a practical issue and failed to name a solution and its real world benefit.</p>
+
+<p>And I mean real world. Mincraft is written in Java. Would it being in another language speed it up? Absolutely, orders of magnitude.</p>
+
+<p>This is python and bash would writing it in a low level language show any real world difference? Likely not. So whats the issue?</p>
+
+<p>You sound like a BSD religious type fighting for ideals over function.</p>
+</div><br><small>Score: 1 | Posted on 2023-11-07 09:46:23</small></li><ul></ul></ul></ul></ul><li><strong>u/muffdivemcgruff:</strong> <div class="md"><p>I try.</p>
+</div><br><small>Score: 1 | Posted on 2023-10-02 10:38:46</small></li><ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>There is, but it&#39;s not maintained, so please feel free to pick it up :) <a href="https://github.com/AdnanHodzic/auto-cpufreq/#aur-package-archmanjaro-linux">https://github.com/AdnanHodzic/auto-cpufreq/#aur-package-archmanjaro-linux</a></p>
+</div><br><small>Score: 2 | Posted on 2023-10-11 08:44:32</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/algaefied_creek:</strong> <div class="md"><p>Currently bedridden for awhile, so maybe. But long term, no guarantees I&#39;ll be able to stick around.  😣</p>
+</div><br><small>Score: 2 | Posted on 2023-10-11 09:20:22</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>No worries and I wish you a speedy recovery!</p>
+</div><br><small>Score: 1 | Posted on 2023-10-11 12:30:30</small></li><ul></ul></ul></ul><li><strong>u/Feisty-Standard-7013:</strong> <div class="md"><p>Then why is it not the default in distros like ubuntu or fedora? If it detects a battery, then using autocpufreq will be very good for the battery right?</p>
+</div><br><small>Score: 1 | Posted on 2023-10-03 18:27:14</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Great question to which I don&#39;t have a question ... But I have a few ideas.</p>
+
+<p>Maybe because it&#39;s not easy for some developers of these big companies to accept that some individual/s are doing a better job in this dept then some of their teams. So instead of joining forces they are trying to make their own solution the same problem.</p>
+
+<p>Or maybe it&#39;s because speed optimization &amp; power effeciency isn&#39;t high enough on their list of priorities. </p>
+
+<p>I know Garuda Linux distro comes with auto-cpufreq installed by default, but there might be more.</p>
+</div><br><small>Score: 5 | Posted on 2023-10-03 18:49:06</small></li><ul></ul></ul><li><strong>u/SpaceboyRoss:</strong> <div class="md"><p>If you know anything about Nix packaging, patching the interpreter in a script file is super easy. There&#39;s sed and there&#39;s the automatic fix up phase which scans for different problems and tries to correct them.</p>
+</div><br><small>Score: 5 | Posted on 2023-10-01 07:32:17</small></li><ul></ul><li><strong>u/None:</strong> <div class="md"><p>Idk about v2 but I&#39;ve been using v1 on 2 different laptops and I get a small battery life improvement with both compared to TLP (like 15%) , also able to use turbo boost now if needed</p>
+</div><br><small>Score: 5 | Posted on 2023-09-30 22:49:40</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/muffdivemcgruff:</strong> <div class="md"><p>I love all the downvotes from all of this, did anyone who provided the downvotes even read thru the source code? It’s a fucking python script that calls bash scrips and sends basic echo commands into sysfs. Literal Linux 101.</p>
+</div><br><small>Score: 2 | Posted on 2023-10-01 00:52:34</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/SpaceboyRoss:</strong> <div class="md"><p>Just because it&#39;s a Python script calling bash doesn&#39;t mean it&#39;s bad. This is a relatively new project and there&#39;s always the chance that it could be rewritten in something like Rust, Go, Zig, etc. For a proof of concept, this looks good enough.</p>
+</div><br><small>Score: 5 | Posted on 2023-10-01 07:35:43</small></li><ul></ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/the_abortionat0r:</strong> <div class="md"><blockquote>
+<p>I love all the downvotes from all of this, did anyone who provided the downvotes even read thru the source code? It’s a fucking python script that calls bash scrips and sends basic echo commands into sysfs. Literal Linux 101.</p>
+</blockquote>
+
+<p>Its working, what more do you want? Its not giving people trouble and is solving a problem.</p>
+
+<p>While I&#39;m not a &quot;then you make a better one&quot; kind of guy I am going to point out that you&#39;ve failed to name a practical issue and failed to name a solution and its real world benefit.</p>
+
+<p>And I mean real world. Mincraft is written in Java. Would it being in another language speed it up? Absolutely, orders of magnitude.</p>
+
+<p>This is python and bash would writing it in a low level language show any real world difference? Likely not. So whats the issue?</p>
+
+<p>You sound like a BSD religious type fighting for ideals over function.</p>
+</div><br><small>Score: 1 | Posted on 2023-11-07 09:46:23</small></li><ul></ul></ul></ul><li><strong>u/algaefied_creek:</strong> <div class="md"><p>Currently bedridden for awhile, so maybe. But long term, no guarantees I&#39;ll be able to stick around.  😣</p>
+</div><br><small>Score: 2 | Posted on 2023-10-11 09:20:22</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>No worries and I wish you a speedy recovery!</p>
+</div><br><small>Score: 1 | Posted on 2023-10-11 12:30:30</small></li><ul></ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>Great question to which I don&#39;t have a question ... But I have a few ideas.</p>
+
+<p>Maybe because it&#39;s not easy for some developers of these big companies to accept that some individual/s are doing a better job in this dept then some of their teams. So instead of joining forces they are trying to make their own solution the same problem.</p>
+
+<p>Or maybe it&#39;s because speed optimization &amp; power effeciency isn&#39;t high enough on their list of priorities. </p>
+
+<p>I know Garuda Linux distro comes with auto-cpufreq installed by default, but there might be more.</p>
+</div><br><small>Score: 5 | Posted on 2023-10-03 18:49:06</small></li><ul></ul><li><strong>u/muffdivemcgruff:</strong> <div class="md"><p>I love all the downvotes from all of this, did anyone who provided the downvotes even read thru the source code? It’s a fucking python script that calls bash scrips and sends basic echo commands into sysfs. Literal Linux 101.</p>
+</div><br><small>Score: 2 | Posted on 2023-10-01 00:52:34</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/SpaceboyRoss:</strong> <div class="md"><p>Just because it&#39;s a Python script calling bash doesn&#39;t mean it&#39;s bad. This is a relatively new project and there&#39;s always the chance that it could be rewritten in something like Rust, Go, Zig, etc. For a proof of concept, this looks good enough.</p>
+</div><br><small>Score: 5 | Posted on 2023-10-01 07:35:43</small></li><ul></ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/the_abortionat0r:</strong> <div class="md"><blockquote>
+<p>I love all the downvotes from all of this, did anyone who provided the downvotes even read thru the source code? It’s a fucking python script that calls bash scrips and sends basic echo commands into sysfs. Literal Linux 101.</p>
+</blockquote>
+
+<p>Its working, what more do you want? Its not giving people trouble and is solving a problem.</p>
+
+<p>While I&#39;m not a &quot;then you make a better one&quot; kind of guy I am going to point out that you&#39;ve failed to name a practical issue and failed to name a solution and its real world benefit.</p>
+
+<p>And I mean real world. Mincraft is written in Java. Would it being in another language speed it up? Absolutely, orders of magnitude.</p>
+
+<p>This is python and bash would writing it in a low level language show any real world difference? Likely not. So whats the issue?</p>
+
+<p>You sound like a BSD religious type fighting for ideals over function.</p>
+</div><br><small>Score: 1 | Posted on 2023-11-07 09:46:23</small></li><ul></ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>No worries and I wish you a speedy recovery!</p>
+</div><br><small>Score: 1 | Posted on 2023-10-11 12:30:30</small></li><ul></ul><li><strong>u/SpaceboyRoss:</strong> <div class="md"><p>Just because it&#39;s a Python script calling bash doesn&#39;t mean it&#39;s bad. This is a relatively new project and there&#39;s always the chance that it could be rewritten in something like Rust, Go, Zig, etc. For a proof of concept, this looks good enough.</p>
+</div><br><small>Score: 5 | Posted on 2023-10-01 07:35:43</small></li><ul></ul><li><strong>u/the_abortionat0r:</strong> <div class="md"><blockquote>
+<p>I love all the downvotes from all of this, did anyone who provided the downvotes even read thru the source code? It’s a fucking python script that calls bash scrips and sends basic echo commands into sysfs. Literal Linux 101.</p>
+</blockquote>
+
+<p>Its working, what more do you want? Its not giving people trouble and is solving a problem.</p>
+
+<p>While I&#39;m not a &quot;then you make a better one&quot; kind of guy I am going to point out that you&#39;ve failed to name a practical issue and failed to name a solution and its real world benefit.</p>
+
+<p>And I mean real world. Mincraft is written in Java. Would it being in another language speed it up? Absolutely, orders of magnitude.</p>
+
+<p>This is python and bash would writing it in a low level language show any real world difference? Likely not. So whats the issue?</p>
+
+<p>You sound like a BSD religious type fighting for ideals over function.</p>
+</div><br><small>Score: 1 | Posted on 2023-11-07 09:46:23</small></li><ul></ul></ul></body></html>

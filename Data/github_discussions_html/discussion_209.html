@@ -1,0 +1,51 @@
+
+        <html>
+        <head>
+            <title>Discussion #209: Automatic CPU speed adjustment based on the temperature.</title>
+        </head>
+        <body>
+            <h1>Automatic CPU speed adjustment based on the temperature.</h1>
+            <p><strong>Discussion #209</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Greetings.
+
+Let me start  the discussion by asking one question, on which the rest of the discussion would depend. Would you be able to continuously set a CPU frequency limit according to current temperature?
+
+If yes, then I would be willing to sponsor implementation of such a frequency governor. </p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Hey, sorry for such delayed reply I've been rather busy. 
+
+Yes, it's possible to do this. Governors are currently changed based once [certain CPU threshold are reached](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto_cpufreq/core.py#L451). 
+
+
+What exactly did you had in mind?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>MarekPasnikowski:</strong></p>
+                    <p>This is what I have in mind:
+
+Frequency choice is always binary - bottom when idle, top when busy.
+
+The top frequency is inversely correlated to the current temperature. Just like each CPU has a list of operational frequencies, I envision a ladder of temperature steps. The ladder would be constructed from two variables. The first variable would be the top temperature limit, at which the only accessible frequency would be the slowest one. The second variable would define the temperature difference between the successive frequency steps. As the temperature decreases, the allowed top frequency increases.
+
+Example:
+```
+available frequency steps:  408 MHz, 600 MHz, 816 MHz, 1.01 GHz, 1.20 GHz, 1.42 GHz
+temperature limit: 70 C
+temperature step: 5 C
+load type: kernel compilation on all cores
+```
+I start with a cold fanless computer, fresh from sleep state. I fire up the compilation. CPU jumps to the top frequency and immediately reaches the first step at 50 C and clocks down to 1.20 GHz. After a few seconds it reaches the second step at 55 C and clocks down further to 1.01 GHz. At this speed the processor is much more efficient and needs more then a minute to gain the temperature of 60 C and clock down to 816 MHz. After some minutes the cooling capacity of the computer is saturated and the CPU is forced to clock down to 600 MHz at 65 C. If ambient temperature is high enough, the CPU will eventually heat up to 70 C and get locked down to the bottom frequency.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,153 @@
+
+        <html>
+        <head>
+            <title>Issue #566: Not working on Void Linux</title>
+        </head>
+        <body>
+            <h1>Not working on Void Linux</h1>
+            <p><strong>Issue #566</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Looks like auto-cpufreq install just fine using installer but...
+
+sudo auto-cpufreq --install
+
+### Error output:
+```
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==2.0.0', 'auto-cpufreq')
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/pkg_resources/__init__.py", line 672, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/pkg_resources/__init__.py", line 1479, in run_script
+    exec(script_code, namespace, namespace)
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/auto_cpufreq-2.0.0-py3.11.egg/EGG-INFO/scripts/auto-cpufreq", line 269, in <module>
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/click/core.py", line 1157, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/click/core.py", line 1078, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/click/core.py", line 1434, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/click/core.py", line 783, in invoke
+    return __callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/auto_cpufreq-2.0.0-py3.11.egg/EGG-INFO/scripts/auto-cpufreq", line 205, in main
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/auto_cpufreq-2.0.0-py3.11.egg/auto_cpufreq/core.py", line 508, in gov_check
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/auto_cpufreq-2.0.0-py3.11.egg/auto_cpufreq/core.py", line 330, in get_avail_gov
+  File "/usr/lib/python3.11/pathlib.py", line 1058, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/pathlib.py", line 1044, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors'
+```
+
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+Linux distro: Void rolling void
+Linux kernel: 6.3.13_1
+Processor: AMD Ryzen 5 2600 Six-Core Processor
+Cores: 4
+Architecture: x86_64
+Driver: cat: /sys/devices/system/cpu/cpu0/cpufreq/scaling_driver: No such file or directory
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 0 MHz
+CPU min frequency: 0 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0     10.1%       nan °C      3400 MHz
+CPU1      9.0%       nan °C      3400 MHz
+CPU2     11.0%       nan °C      3400 MHz
+CPU3      1.0%       nan °C      3400 MHz
+
+auto-cpufreq version: 2.0.0
+
+Python: 3.11.5
+psutil package: 5.9.5
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.8.0
+
+Computer type: Other
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.43 %
+
+Total CPU usage: 1.3 %
+Total system load: 0.34
+Average temp. of all cores: nan °C 
+
+Currently using: cat: governor
+Warning: CPU turbo is not available
+Currently turbo boost is: off
+```
+
+Service can't be installed
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>This is an issue with your system. You have no CPU scaling driver. Are you running Void in a VM or other container?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@shadeyg56 maybe it would be a good idea to catch these exceptions, and print out better error messages if that was a case.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>zen0bit:</strong></p>
+                    <p>qemu cpu passthrough</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Yeah that would be your issue. While in a VM, the kernel will not load any CPU scaling drivers. Doing it manually won't work either (I have tried before). If your host OS is running Linux, then use auto-cpufreq there. If not, then if you ever switch over to native Linux you know where to find us :). This is simply a limitation of virtualization. 
+
+@AdnanHodzic it would be a pretty simple catch to implement even though this is a fairly niche scenario. This should only ever occur when attempting to install auto-cpufreq inside a VM.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> This should only ever occur when attempting to install auto-cpufreq inside a VM.
+
+@shadeyg56 I know, I'm saying it because unfortunately I've seen it to many times where people are trying to run auto-cpufreq in VM's :) </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>zen0bit:</strong></p>
+                    <p>Some nicer error message?
+Also mention in readme [Supported architectures and devices](https://github.com/AdnanHodzic/auto-cpufreq#supported-architectures-and-devices)?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@zen0bit your architecte is supported. You are installing auto-cpufreq on a VM, which won't work as @shadeyg56 explained above.
+
+Install auto-cpufreq on host system instead and then all your VM's will get it's benefits.
+
+In meantime closing the issue.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

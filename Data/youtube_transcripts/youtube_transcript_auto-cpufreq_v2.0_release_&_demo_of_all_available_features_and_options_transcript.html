@@ -1,0 +1,296 @@
+<h1>auto-cpufreq v2.0 release & demo of all available features and options YouTube video transcript</h1>
+<h1>Transcript</h1>
+<p><strong>0.32 - 5.68 seconds:</strong> I would like to start this video with a</p>
+<p><strong>2.40 - 8.40 seconds:</strong> short story I've been using Linux for</p>
+<p><strong>5.68 - 12.08 seconds:</strong> more than 20 years now and my biggest</p>
+<p><strong>8.40 - 15.00 seconds:</strong> problem with it has uh been its uh power</p>
+<p><strong>12.08 - 18.00 seconds:</strong> management so for example if I plug out</p>
+<p><strong>15.00 - 20.52 seconds:</strong> the power uh outside out of my laptop</p>
+<p><strong>18.00 - 23.28 seconds:</strong> right now it will keep running uh in</p>
+<p><strong>20.52 - 25.36 seconds:</strong> performance governor and it will run its</p>
+<p><strong>23.28 - 27.40 seconds:</strong> maximum potential and power which will</p>
+<p><strong>25.36 - 30.24 seconds:</strong> of course negatively reflect on the</p>
+<p><strong>27.40 - 32.28 seconds:</strong> battery life and there are a lot of</p>
+<p><strong>30.24 - 36.16 seconds:</strong> tools which allow you to for example</p>
+<p><strong>32.28 - 39.04 seconds:</strong> manually switch uh to power save or</p>
+<p><strong>36.16 - 41.96 seconds:</strong> performance Governors and they require</p>
+<p><strong>39.04 - 45.40 seconds:</strong> you to usually toggle them</p>
+<p><strong>41.96 - 47.40 seconds:</strong> manually uh yeah which I never like this</p>
+<p><strong>45.40 - 51.08 seconds:</strong> approach as I always wish this was an</p>
+<p><strong>47.40 - 53.28 seconds:</strong> automated process so idea how to fix</p>
+<p><strong>51.08 - 58.76 seconds:</strong> this was already Brewing inside of my</p>
+<p><strong>53.28 - 61.64 seconds:</strong> head for some time now so some uh three</p>
+<p><strong>58.76 - 65.20 seconds:</strong> uh almost four years now bought a new X1</p>
+<p><strong>61.64 - 68.08 seconds:</strong> Carbon U and uh as much as I loved it I</p>
+<p><strong>65.20 - 70.80 seconds:</strong> also hated it at the same time because</p>
+<p><strong>68.08 - 73.88 seconds:</strong> its power life was pretty bad and</p>
+<p><strong>70.80 - 77.24 seconds:</strong> because there was a constant uh battery</p>
+<p><strong>73.88 - 79.88 seconds:</strong> drain besides this uh it would also</p>
+<p><strong>77.24 - 83.68 seconds:</strong> choke if I was watching YouTube videos</p>
+<p><strong>79.88 - 88.48 seconds:</strong> in 4k uh because its CPU was constantly</p>
+<p><strong>83.68 - 90.60 seconds:</strong> throbing so uh soon as I bought it U so</p>
+<p><strong>88.48 - 94.44 seconds:</strong> because it was almost New Year</p>
+<p><strong>90.60 - 96.68 seconds:</strong> I was off for 10 days uh and I thought</p>
+<p><strong>94.44 - 100.60 seconds:</strong> why don't I just create a tool that will</p>
+<p><strong>96.68 - 102.88 seconds:</strong> help me uh fix this problem uh and</p>
+<p><strong>100.60 - 106.00 seconds:</strong> that's what I did I uh in these 10 days</p>
+<p><strong>102.88 - 109.92 seconds:</strong> I managed to create this uh tool and I</p>
+<p><strong>106.00 - 113.40 seconds:</strong> released it on January 3rd 2020 here and</p>
+<p><strong>109.92 - 115.00 seconds:</strong> of course on GitHub also uh and as an</p>
+<p><strong>113.40 - 119.12 seconds:</strong> open source uh</p>
+<p><strong>115.00 - 120.84 seconds:</strong> tool so uh this Tool uh would basically</p>
+<p><strong>119.12 - 123.96 seconds:</strong> uh automatically Ally switch between</p>
+<p><strong>120.84 - 126.68 seconds:</strong> power governers based on CPU utilization</p>
+<p><strong>123.96 - 130.40 seconds:</strong> based if laptop was charging or not CPU</p>
+<p><strong>126.68 - 132.24 seconds:</strong> usage uh load temperature and even if it</p>
+<p><strong>130.40 - 134.88 seconds:</strong> was running on battery and was still</p>
+<p><strong>132.24 - 136.80 seconds:</strong> using power save Governor but CPU usage</p>
+<p><strong>134.88 - 139.56 seconds:</strong> was high it would kick K performance</p>
+<p><strong>136.80 - 142.44 seconds:</strong> governor with t boost on until these</p>
+<p><strong>139.56 - 144.56 seconds:</strong> tasks were complete so ultimately it</p>
+<p><strong>142.44 - 147.76 seconds:</strong> would allow you to extend your battery</p>
+<p><strong>144.56 - 151.56 seconds:</strong> life to the max without making any</p>
+<p><strong>147.76 - 153.36 seconds:</strong> compromises on uh on the performance so</p>
+<p><strong>151.56 - 156.08 seconds:</strong> even if I would even argue even if</p>
+<p><strong>153.36 - 158.24 seconds:</strong> you're not running uh uh Linux on</p>
+<p><strong>156.08 - 160.20 seconds:</strong> laptops and on your desktop there's</p>
+<p><strong>158.24 - 162.52 seconds:</strong> people who are actually doing</p>
+<p><strong>160.20 - 164.68 seconds:</strong> this it could still help you because it</p>
+<p><strong>162.52 - 167.36 seconds:</strong> would uh it could lower your power uh</p>
+<p><strong>164.68 - 169.36 seconds:</strong> power consumption and your electricity</p>
+<p><strong>167.36 - 172.20 seconds:</strong> uh cost for example where I would really</p>
+<p><strong>169.36 - 176.16 seconds:</strong> see this uh reducing cost is for example</p>
+<p><strong>172.20 - 177.32 seconds:</strong> if it was running on uh on service in a</p>
+<p><strong>176.16 - 180.40 seconds:</strong> on a data</p>
+<p><strong>177.32 - 182.60 seconds:</strong> sensor uh so</p>
+<p><strong>180.40 - 185.20 seconds:</strong> and besides the blog post I also</p>
+<p><strong>182.60 - 188.32 seconds:</strong> released a YouTube video basically</p>
+<p><strong>185.20 - 191.28 seconds:</strong> demoing uh how the tool worked and how</p>
+<p><strong>188.32 - 193.08 seconds:</strong> it works exactly is more uh explained in</p>
+<p><strong>191.28 - 195.20 seconds:</strong> this video I'll also link it in the</p>
+<p><strong>193.08 - 198.76 seconds:</strong> description if you are interested in</p>
+<p><strong>195.20 - 201.60 seconds:</strong> taking a look so right after soon after</p>
+<p><strong>198.76 - 204.28 seconds:</strong> the tool was released uh the whole thing</p>
+<p><strong>201.60 - 207.16 seconds:</strong> exploded on GitHub uh it got a lot of</p>
+<p><strong>204.28 - 209.28 seconds:</strong> traction on uh on Twitter it was getting</p>
+<p><strong>207.16 - 211.80 seconds:</strong> a lot of traction because it was really</p>
+<p><strong>209.28 - 215.40 seconds:</strong> helping people it really did what it was</p>
+<p><strong>211.80 - 218.36 seconds:</strong> supposed to do like um I I never used to</p>
+<p><strong>215.40 - 221.48 seconds:</strong> get this kind of a response on Twitter</p>
+<p><strong>218.36 - 225.28 seconds:</strong> for example and even it was trending</p>
+<p><strong>221.48 - 228.76 seconds:</strong> trending uh as number one on on on on on</p>
+<p><strong>225.28 - 231.08 seconds:</strong> Hacker News which I thought was just</p>
+<p><strong>228.76 - 234.60 seconds:</strong> huge uh</p>
+<p><strong>231.08 - 237.56 seconds:</strong> but basically that uh after that rest's</p>
+<p><strong>234.60 - 241.68 seconds:</strong> history which leads me to the current</p>
+<p><strong>237.56 - 245.40 seconds:</strong> day to sorry to to present day so today</p>
+<p><strong>241.68 - 247.20 seconds:</strong> in less than 4 years uh this tool has</p>
+<p><strong>245.40 - 250.00 seconds:</strong> gathered it has</p>
+<p><strong>247.20 - 254.24 seconds:</strong> 4,200 uh stars on GitHub which I think</p>
+<p><strong>250.00 - 258.92 seconds:</strong> is absolutely massive it has 65</p>
+<p><strong>254.24 - 263.52 seconds:</strong> contributors uh and it has 42 releases</p>
+<p><strong>258.92 - 265.48 seconds:</strong> with a big V2 uh 2.0 being released</p>
+<p><strong>263.52 - 268.60 seconds:</strong> today and that's why I'm making this</p>
+<p><strong>265.48 - 271.68 seconds:</strong> video today because since the original</p>
+<p><strong>268.60 - 273.88 seconds:</strong> video was made there have been huge</p>
+<p><strong>271.68 - 276.60 seconds:</strong> number of features and improvements that</p>
+<p><strong>273.88 - 278.48 seconds:</strong> were made and the original video uh it's</p>
+<p><strong>276.60 - 281.12 seconds:</strong> like running literally a python script</p>
+<p><strong>278.48 - 284.40 seconds:</strong> at this point and it only has a monitor</p>
+<p><strong>281.12 - 287.20 seconds:</strong> live and install at this point so uh</p>
+<p><strong>284.40 - 291.32 seconds:</strong> that's uh what I wanted to basically</p>
+<p><strong>287.20 - 293.96 seconds:</strong> showcase so what does the big 2.0 bring</p>
+<p><strong>291.32 - 297.20 seconds:</strong> what are the changes that are there now</p>
+<p><strong>293.96 - 299.16 seconds:</strong> so after I install uh after I installed</p>
+<p><strong>297.20 - 302.20 seconds:</strong> the autoc CPU FR with the installer of</p>
+<p><strong>299.16 - 305.24 seconds:</strong> course after after I uh cloned the repo</p>
+<p><strong>302.20 - 307.24 seconds:</strong> uh it's available as a binary and uh I</p>
+<p><strong>305.24 - 310.24 seconds:</strong> can see the list of options so for</p>
+<p><strong>307.24 - 313.64 seconds:</strong> example monitor of course option is</p>
+<p><strong>310.24 - 316.92 seconds:</strong> still there because this just allows me</p>
+<p><strong>313.64 - 319.16 seconds:</strong> to monitor uh what would this tool do</p>
+<p><strong>316.92 - 321.28 seconds:</strong> suggesting to set turbo boost off for</p>
+<p><strong>319.16 - 324.36 seconds:</strong> example based on the consumption but</p>
+<p><strong>321.28 - 327.84 seconds:</strong> without making any actual changes to to</p>
+<p><strong>324.36 - 331.88 seconds:</strong> your system uh yet uh so it's kind of</p>
+<p><strong>327.84 - 334.68 seconds:</strong> yeah uh then there's also live live will</p>
+<p><strong>331.88 - 337.64 seconds:</strong> basically make the changes it thinks it</p>
+<p><strong>334.68 - 339.76 seconds:</strong> needs to make and it will do the</p>
+<p><strong>337.64 - 343.04 seconds:</strong> recommendations and optimizations live</p>
+<p><strong>339.76 - 345.32 seconds:</strong> for you uh but as soon as you restart</p>
+<p><strong>343.04 - 348.04 seconds:</strong> the computer uh the process will stop</p>
+<p><strong>345.32 - 351.48 seconds:</strong> and you'll be uh yeah without all CPU</p>
+<p><strong>348.04 - 353.52 seconds:</strong> freck again so uh that's why you have</p>
+<p><strong>351.48 - 355.80 seconds:</strong> the install option which will install</p>
+<p><strong>353.52 - 359.24 seconds:</strong> the demon and it will permanently do</p>
+<p><strong>355.80 - 361.60 seconds:</strong> automatic CPU uh optimization so how you</p>
+<p><strong>359.24 - 365.04 seconds:</strong> would normally do this is uh using</p>
+<p><strong>361.60 - 368.64 seconds:</strong> install option but now with uh autoc CPU</p>
+<p><strong>365.04 - 372.76 seconds:</strong> Frack 2 uh there's also an icon there's</p>
+<p><strong>368.64 - 375.32 seconds:</strong> a desktop entry so if I run this and if</p>
+<p><strong>372.76 - 378.44 seconds:</strong> I run uh</p>
+<p><strong>375.32 - 381.44 seconds:</strong> install I can also in install it using</p>
+<p><strong>378.44 - 383.52 seconds:</strong> uh GUI is what I'm trying to say uh this</p>
+<p><strong>381.44 - 385.64 seconds:</strong> will take a bit longer because</p>
+<p><strong>383.52 - 387.64 seconds:</strong> underneath it it's doing a lot of things</p>
+<p><strong>385.64 - 389.80 seconds:</strong> installing the demon which uh you can</p>
+<p><strong>387.64 - 392.44 seconds:</strong> see if you run the install option you</p>
+<p><strong>389.80 - 395.88 seconds:</strong> can see exactly what's happening because</p>
+<p><strong>392.44 - 398.12 seconds:</strong> uh in CA it's more verbos so the app is</p>
+<p><strong>395.88 - 402.36 seconds:</strong> uh yeah the demon is installed the app</p>
+<p><strong>398.12 - 406.00 seconds:</strong> can now close and pre please reopen it</p>
+<p><strong>402.36 - 409.16 seconds:</strong> so uh yeah I'm going to rerun it here</p>
+<p><strong>406.00 - 411.84 seconds:</strong> and uh yeah that's we have the guey now</p>
+<p><strong>409.16 - 415.60 seconds:</strong> so this output would be the same as you</p>
+<p><strong>411.84 - 418.08 seconds:</strong> would see with for example stats so this</p>
+<p><strong>415.60 - 421.40 seconds:</strong> is uh the same output that you're</p>
+<p><strong>418.08 - 424.24 seconds:</strong> getting here uh and now of course I</p>
+<p><strong>421.40 - 427.00 seconds:</strong> think this is very useful because uh now</p>
+<p><strong>424.24 - 429.52 seconds:</strong> that uh demon is a stall I can just oh I</p>
+<p><strong>427.00 - 431.56 seconds:</strong> already have it pinned but yeah this is</p>
+<p><strong>429.52 - 433.52 seconds:</strong> closed for whatever reason I don't need</p>
+<p><strong>431.56 - 435.84 seconds:</strong> to uh start the terminal each time and</p>
+<p><strong>433.52 - 438.68 seconds:</strong> see what's happening I can just run</p>
+<p><strong>435.84 - 442.12 seconds:</strong> autoc CPU frck and I can see what's</p>
+<p><strong>438.68 - 444.56 seconds:</strong> happening uh and uh I can also do this</p>
+<p><strong>442.12 - 446.52 seconds:</strong> but I'll get to this later and there's</p>
+<p><strong>444.56 - 451.52 seconds:</strong> not a lot of options you can uh remove</p>
+<p><strong>446.52 - 455.72 seconds:</strong> the demon and uh you see a b so big 20</p>
+<p><strong>451.52 - 458.96 seconds:</strong> uh made with love of course uh so uh to</p>
+<p><strong>455.72 - 461.88 seconds:</strong> get back to the to the list of options</p>
+<p><strong>458.96 - 465.04 seconds:</strong> then of course uh there's um there's</p>
+<p><strong>461.88 - 468.28 seconds:</strong> remove which will remove the the the</p>
+<p><strong>465.04 - 471.20 seconds:</strong> demon which you can also use do through</p>
+<p><strong>468.28 - 473.28 seconds:</strong> GUI uh then there's another big feature</p>
+<p><strong>471.20 - 477.20 seconds:</strong> which has been released as of recently</p>
+<p><strong>473.28 - 478.92 seconds:</strong> which is update so uh this was uh only</p>
+<p><strong>477.20 - 482.52 seconds:</strong> possible for example if you're running</p>
+<p><strong>478.92 - 485.00 seconds:</strong> uh with certain package manager managers</p>
+<p><strong>482.52 - 489.84 seconds:</strong> but now even if you install it with auto</p>
+<p><strong>485.00 - 492.08 seconds:</strong> CPU fre installer with from git you can</p>
+<p><strong>489.84 - 493.84 seconds:</strong> run update and it will check if there</p>
+<p><strong>492.08 - 495.80 seconds:</strong> are any updates and if there are updates</p>
+<p><strong>493.84 - 498.24 seconds:</strong> it will allow you to update it the tool</p>
+<p><strong>495.80 - 501.00 seconds:</strong> automatically please note that all of</p>
+<p><strong>498.24 - 504.96 seconds:</strong> these options are uh described as part</p>
+<p><strong>501.00 - 508.72 seconds:</strong> of uh the get repo and uh for example uh</p>
+<p><strong>504.96 - 512.04 seconds:</strong> how to install the the autoc CPU frck uh</p>
+<p><strong>508.72 - 514.36 seconds:</strong> I recommend using the installer uh how</p>
+<p><strong>512.04 - 516.40 seconds:</strong> you can configure it uh how you</p>
+<p><strong>514.36 - 519.08 seconds:</strong> different modes that I'm now describing</p>
+<p><strong>516.40 - 521.04 seconds:</strong> are literally described here so we can</p>
+<p><strong>519.08 - 524.08 seconds:</strong> also if you miss something uh you can go</p>
+<p><strong>521.04 - 527.80 seconds:</strong> back and uh look on your own so going</p>
+<p><strong>524.08 - 530.96 seconds:</strong> back to the to the options stats we just</p>
+<p><strong>527.80 - 534.32 seconds:</strong> went over the stats Force so this is an</p>
+<p><strong>530.96 - 537.12 seconds:</strong> option that was introduced well Rel well</p>
+<p><strong>534.32 - 539.84 seconds:</strong> long time ago actually but it can force</p>
+<p><strong>537.12 - 542.20 seconds:</strong> you to use power save or performance</p>
+<p><strong>539.84 - 545.96 seconds:</strong> because not again beauty of autoc CPU</p>
+<p><strong>542.20 - 548.44 seconds:</strong> frck is that it will automatically do uh</p>
+<p><strong>545.96 - 550.76 seconds:</strong> the governor switch or turn turn turbo</p>
+<p><strong>548.44 - 553.56 seconds:</strong> boost on and off depending on the</p>
+<p><strong>550.76 - 555.88 seconds:</strong> certain criteria but if you want to I</p>
+<p><strong>553.56 - 557.36 seconds:</strong> don't know you're you're doing something</p>
+<p><strong>555.88 - 560.32 seconds:</strong> really heavy you want to have that</p>
+<p><strong>557.36 - 562.68 seconds:</strong> toggle like please Force to run in</p>
+<p><strong>560.32 - 565.80 seconds:</strong> performance now it will do that and it</p>
+<p><strong>562.68 - 569.44 seconds:</strong> will not try to do this automatically so</p>
+<p><strong>565.80 - 571.04 seconds:</strong> same thing is here for example so uh</p>
+<p><strong>569.44 - 572.64 seconds:</strong> this is default Behavior where</p>
+<p><strong>571.04 - 574.44 seconds:</strong> automatically it's setting to use</p>
+<p><strong>572.64 - 576.64 seconds:</strong> performance Governor but for example I</p>
+<p><strong>574.44 - 580.08 seconds:</strong> know I'm going to be doing something</p>
+<p><strong>576.64 - 583.80 seconds:</strong> very very resource intensive I can</p>
+<p><strong>580.08 - 586.92 seconds:</strong> switch to Performance and U now it will</p>
+<p><strong>583.80 - 589.96 seconds:</strong> tell me that also it's uh it's uh yeah</p>
+<p><strong>586.92 - 592.28 seconds:</strong> so uh see it's setting to use</p>
+<p><strong>589.96 - 595.28 seconds:</strong> performance Governor so it's using the</p>
+<p><strong>592.28 - 598.00 seconds:</strong> Forest flag basically which is uh</p>
+<p><strong>595.28 - 601.32 seconds:</strong> explained here in the in the</p>
+<p><strong>598.00 - 604.04 seconds:</strong> CLI uh um another useful option so this</p>
+<p><strong>601.32 - 605.84 seconds:</strong> is more if you're into configurating it</p>
+<p><strong>604.04 - 608.48 seconds:</strong> all really to your own needs you know</p>
+<p><strong>605.84 - 610.92 seconds:</strong> what you're doing those kind of things</p>
+<p><strong>608.48 - 614.76 seconds:</strong> another big one which is uh autoc CPU</p>
+<p><strong>610.92 - 618.72 seconds:</strong> frck uh it has a config file so uh what</p>
+<p><strong>614.76 - 622.52 seconds:</strong> this allows you to do is uh is it will</p>
+<p><strong>618.72 - 625.32 seconds:</strong> allow you to for example set a c uh</p>
+<p><strong>622.52 - 627.20 seconds:</strong> autoc CPU fre config file and here for</p>
+<p><strong>625.32 - 629.48 seconds:</strong> example you can set the turbo to for</p>
+<p><strong>627.20 - 631.92 seconds:</strong> example be always on like no no matter</p>
+<p><strong>629.48 - 635.04 seconds:</strong> what's happening I always want it off uh</p>
+<p><strong>631.92 - 636.84 seconds:</strong> on or off for that matter or I want it</p>
+<p><strong>635.04 - 640.88 seconds:</strong> always to run in performance governor</p>
+<p><strong>636.84 - 645.80 seconds:</strong> for example uh I know that uh my cores</p>
+<p><strong>640.88 - 649.32 seconds:</strong> uh can go uh to uh like the minimum CPU</p>
+<p><strong>645.80 - 652.16 seconds:</strong> frequency will be 400 mahz I never want</p>
+<p><strong>649.32 - 653.84 seconds:</strong> it to go like below 1,000 for example</p>
+<p><strong>652.16 - 656.60 seconds:</strong> you could do this with the with the</p>
+<p><strong>653.84 - 658.56 seconds:</strong> config file uh again this is something</p>
+<p><strong>656.60 - 661.80 seconds:</strong> if you really know what what what you're</p>
+<p><strong>658.56 - 663.16 seconds:</strong> doing for for example in this case um</p>
+<p><strong>661.80 - 666.76 seconds:</strong> what else is</p>
+<p><strong>663.16 - 670.64 seconds:</strong> there uh debug debug option is just</p>
+<p><strong>666.76 - 674.44 seconds:</strong> there because uh whenever you're uh uh</p>
+<p><strong>670.64 - 677.40 seconds:</strong> submitting uh uh issue uh basically I</p>
+<p><strong>674.44 - 679.68 seconds:</strong> can show this uh and if you have any</p>
+<p><strong>677.40 - 682.72 seconds:</strong> issues please just go to issues and</p>
+<p><strong>679.68 - 686.60 seconds:</strong> create a new issue of course but here</p>
+<p><strong>682.72 - 689.72 seconds:</strong> you will be asked to uh do paste this</p>
+<p><strong>686.60 - 691.80 seconds:</strong> debug output which uh helps me and other</p>
+<p><strong>689.72 - 694.04 seconds:</strong> contributors figure out what your</p>
+<p><strong>691.80 - 696.76 seconds:</strong> problem is without it the the the issue</p>
+<p><strong>694.04 - 701.04 seconds:</strong> will be closed so please keep this in</p>
+<p><strong>696.76 - 704.16 seconds:</strong> mind and what else is</p>
+<p><strong>701.04 - 706.48 seconds:</strong> left uh version yeah version just shows</p>
+<p><strong>704.16 - 710.12 seconds:</strong> the version of aut of CPU FR uh that</p>
+<p><strong>706.48 - 713.16 seconds:</strong> we're using and uh it can also help so</p>
+<p><strong>710.12 - 716.04 seconds:</strong> you know which which tag git tag is uh</p>
+<p><strong>713.16 - 719.96 seconds:</strong> running on and uh there's of course also</p>
+<p><strong>716.04 - 722.44 seconds:</strong> the Donate option uh yeah I would of of</p>
+<p><strong>719.96 - 724.12 seconds:</strong> course encourage you to do this uh there</p>
+<p><strong>722.44 - 726.60 seconds:</strong> uh there are two ways that you can help</p>
+<p><strong>724.12 - 727.44 seconds:</strong> this project either financially or Co</p>
+<p><strong>726.60 - 729.72 seconds:</strong> code</p>
+<p><strong>727.44 - 733.08 seconds:</strong> contribution uh financially you can do</p>
+<p><strong>729.72 - 735.40 seconds:</strong> it via PayPal or Bitcoin for example but</p>
+<p><strong>733.08 - 738.32 seconds:</strong> what I prefer even more is code</p>
+<p><strong>735.40 - 740.80 seconds:</strong> contribution so basically if you have</p>
+<p><strong>738.32 - 743.20 seconds:</strong> any ideas how to fix this tool where you</p>
+<p><strong>740.80 - 745.64 seconds:</strong> have a problem feel free to make the</p>
+<p><strong>743.20 - 748.44 seconds:</strong> code changes create a pool request and</p>
+<p><strong>745.64 - 751.24 seconds:</strong> you will uh be uh uh you will be</p>
+<p><strong>748.44 - 754.52 seconds:</strong> credited for all of the work that you do</p>
+<p><strong>751.24 - 756.28 seconds:</strong> as part of the release Pages uh I I</p>
+<p><strong>754.52 - 758.64 seconds:</strong> really make sure that even if it's a</p>
+<p><strong>756.28 - 762.40 seconds:</strong> simple readme update you'll get credit</p>
+<p><strong>758.64 - 766.36 seconds:</strong> for that and uh that's been the case for</p>
+<p><strong>762.40 - 769.20 seconds:</strong> every release of autoc CPU frck so far</p>
+<p><strong>766.36 - 772.56 seconds:</strong> so uh as I really want this uh project</p>
+<p><strong>769.20 - 776.36 seconds:</strong> toh keep growing and uh yeah helping</p>
+<p><strong>772.56 - 778.32 seconds:</strong> people um and I think those are all of</p>
+<p><strong>776.36 - 780.92 seconds:</strong> the options that I wanted to talk about</p>
+<p><strong>778.32 - 783.52 seconds:</strong> with this one probably being one of my</p>
+<p><strong>780.92 - 786.36 seconds:</strong> favorites because I had a vision to have</p>
+<p><strong>783.52 - 788.24 seconds:</strong> guy for so long and uh now it's finally</p>
+<p><strong>786.36 - 791.40 seconds:</strong> here so I'm really happy that uh that</p>
+<p><strong>788.24 - 794.44 seconds:</strong> it's there so uh if you're new to the</p>
+<p><strong>791.40 - 798.04 seconds:</strong> project I hope this has uh explained a</p>
+<p><strong>794.44 - 800.64 seconds:</strong> thing or two to you um and uh you'll</p>
+<p><strong>798.04 - 803.84 seconds:</strong> find it useful uh if you're already</p>
+<p><strong>800.64 - 806.56 seconds:</strong> using it I hope I brought you up to dat</p>
+<p><strong>803.84 - 809.08 seconds:</strong> with all of the new features uh again if</p>
+<p><strong>806.56 - 811.08 seconds:</strong> you have any ideas please feel free to</p>
+<p><strong>809.08 - 814.04 seconds:</strong> contribute to the project you'll be</p>
+<p><strong>811.08 - 816.00 seconds:</strong> credited for your work again and in the</p>
+<p><strong>814.04 - 818.40 seconds:</strong> end the most important thing is that I</p>
+<p><strong>816.00 - 821.12 seconds:</strong> would like to thank to all 65</p>
+<p><strong>818.40 - 824.24 seconds:</strong> contributors who made all these releases</p>
+<p><strong>821.12 - 826.84 seconds:</strong> possible over the past almost four years</p>
+<p><strong>824.24 - 830.80 seconds:</strong> because without you a lot of this would</p>
+<p><strong>826.84 - 834.52 seconds:</strong> not be here so uh thank you and um it's</p>
+<p><strong>830.80 - 836.64 seconds:</strong> been a great uh run so far so uh I'm</p>
+<p><strong>834.52 - 839.56 seconds:</strong> looking forward to what the future</p>
+<p><strong>836.64 - 842.32 seconds:</strong> future hold holds for this project</p>
+<p><strong>839.56 - 842.32 seconds:</strong> enjoy</p>

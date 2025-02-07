@@ -1,0 +1,33 @@
+
+        <html>
+        <head>
+            <title>Issue #788: Improve TuneD detection mechanism</title>
+        </head>
+        <body>
+            <h1>Improve TuneD detection mechanism</h1>
+            <p><strong>Issue #788</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>This PR improves the detection mechanism for TuneD on the host system. 
+Previously, when TuneD was removed or absent, the system would generate an error when removing auto-cpufreq deamon or when starting the software in live mode:
+~~~
+* Enabling TuneD
+
+Unit tuned.service does not exist, proceeding anyway.
+Failed to enable unit: Unit file tuned.service does not exist.`
+~~~
+
+With this improvement, auto-cpufreq now gracefully handles the absence of TuneD without producing misleading errors.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Great! Thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

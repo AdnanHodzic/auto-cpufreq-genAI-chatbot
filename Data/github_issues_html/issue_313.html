@@ -1,0 +1,106 @@
+
+        <html>
+        <head>
+            <title>Issue #313: Advised method for disabling gnome power management gives error</title>
+        </head>
+        <body>
+            <h1>Advised method for disabling gnome power management gives error</h1>
+            <p><strong>Issue #313</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+```text
+Traceback (most recent call last):
+  File "/home/xxxx/auto-cpufreq/auto_cpufreq/power_helper.py", line 9, in <module>
+    from auto_cpufreq.tlp_stat_parser import TLPStatusParser
+ModuleNotFoundError: No module named 'auto_cpufreq.tlp_stat_parser'
+
+```
+---
+
+### System information:
+```text
+Using settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------------------------------------------------------
+
+Linux distro: Manjaro Linux 21.2.0 Qonos
+Linux kernel: 5.14.18-1-MANJARO
+Processor: AMD Ryzen 7 4700U with Radeon Graphics
+Cores: 8
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2000 MHz
+CPU min frequency: 1400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  4.0%     62 °C     2000 MHz
+CPU1:	  5.1%     62 °C     2000 MHz
+CPU2:	  3.0%     62 °C     2000 MHz
+CPU3:	  5.0%     62 °C     2296 MHz
+CPU4:	  4.0%     62 °C     2000 MHz
+CPU5:	  3.0%     62 °C     2000 MHz
+CPU6:	  2.0%     62 °C     2000 MHz
+CPU7:	  1.0%     62 °C     2000 MHz
+
+auto-cpufreq version:
+Version         : 1.8.0-1
+
+Python: 3.9.7
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 8.0.3
+distro package 1.6.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.12 %
+
+Total CPU usage: 7.0 %
+Total system load: 0.88
+Average temp. of all cores: 61.625 °C 
+
+Currently using: performance governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Which command did you run? And how did you install auto-cpufreq?
+Because I can't reproduce this error myself, on a fresh copy of the master branch.
+
+I see verson 1.8.0 on your output. The file that is missing producing the error is added in release of 1.8.1. So it looks like a mix up of 1.8.0 release with updated `gnome_power.py` of 1.8.1 but then not added the new introduced 
+`tlp_stat_parser.py` file of 1.8.1. But that's only me guessing :confused: 
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@Woodhousemelena can you confirmed you're experiencing this problem on [1.8.2](https://github.com/AdnanHodzic/auto-cpufreq/releases)?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Just [released v1.9.2](https://github.com/AdnanHodzic/auto-cpufreq/releases) which adds ability to change power governor used by default with auto-cpufreq from `balanced` to `performance` [using power_helper.py script](https://github.com/AdnanHodzic/auto-cpufreq/#1-power_helperpy-script) which could also resolve this problem.
+
+In meantime, closing the issue due to inactivity, if the problem persist please feel free to re-open the issue.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

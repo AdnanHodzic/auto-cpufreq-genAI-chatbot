@@ -1,0 +1,183 @@
+
+        <html>
+        <head>
+            <title>Issue #583: temperature reporting as 0</title>
+        </head>
+        <body>
+            <h1>temperature reporting as 0</h1>
+            <p><strong>Issue #583</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+My cpu on battery is locked to min cpu freq of 1.2ghz
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- yes.
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+- I'm on Linux Mint 21.2
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+- yes
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+- my governor is on already on acpi-cpufreq
+
+https://github.com/AdnanHodzic/auto-cpufreq/assets/107131525/4ab14d25-cc94-4466-b162-19500b3ce786
+
+
+
+### Error output:
+```text
+Add/paste error output in case of failed installation or other failing component
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+auto-cpufreq --debug
+
+Using settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------------------------------------------------------
+
+Linux distro: Linux Mint 21.2 Victoria
+Linux kernel: 5.15.0-86-generic
+Processor: AMD Ryzen 5 5600H with Radeon Graphics
+Cores: 12
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3300 MHz
+CPU min frequency: 1200 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      0.0%         0 °C      1200 MHz
+CPU1      0.0%         0 °C      1200 MHz
+CPU2      2.0%         0 °C      1200 MHz
+CPU3      0.0%         0 °C      1200 MHz
+CPU4      0.0%         0 °C      1197 MHz
+CPU5      0.0%         0 °C      1200 MHz
+CPU6      1.0%         0 °C      1200 MHz
+CPU7      1.0%         0 °C      1200 MHz
+CPU8      4.0%         0 °C      1200 MHz
+CPU9      6.8%         0 °C      1200 MHz
+CPU10      1.0%         0 °C      1200 MHz
+CPU11      2.0%         0 °C      1196 MHz
+
+auto-cpufreq version: 2.0.0 (git: 5bf295d)
+
+Python: 3.10.12
+psutil package: 5.9.5
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.8.0
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.19 %
+
+Total CPU usage: 2.4 %
+Total system load: 5.96
+Average temp. of all cores: 0.00 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: off
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+--- also for some reason, after the update, my cpu temperatures are not displayed, on 1.9.4 were working fine, but on 1.9.8 and on 2.00 are not displayed.
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>mirocw:</strong></p>
+                    <p>So, I was able to "fix" it by switching the governor on battery from "powersave" to "conservative" https://github.com/AdnanHodzic/auto-cpufreq/issues/398#issuecomment-1317507620</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>mirocw:</strong></p>
+                    <p>Also what about not displaying cpu temperature @AdnanHodzic ? should I open new issue for that?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Hey @mirocw, we had an issue recently with temperatures that got fixed but I haven't seen this where it returns 0
+
+Could you do me a favor and run the following commands and post the output?
+```
+pip install psutil
+python
+import psutil
+psutil.sensors_temperatures()
+```  </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>mirocw:</strong></p>
+                    <p>@shadeyg56 
+
+```
+$ pip install psutil
+Defaulting to user installation because normal site-packages is not writeable
+Requirement already satisfied: psutil in /usr/lib/python3/dist-packages (5.9.0)
+$ python3
+Python 3.10.12 (main, Jun 11 2023, 05:26:28) [GCC 11.4.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import psutil
+>>>`psutil.sensors_temperatures()
+{'acpitz': [shwtemp(label='', current=0.0, high=110.0, critical=110.0)], 'nvme': [shwtemp(label='Composite', current=37.85, high=82.85, critical=83.85), shwtemp(label='Sensor 1', current=30.85, high=65261.85, critical=65261.85), shwtemp(label='Sensor 2', current=31.85, high=65261.85, critical=65261.85)], 'amdgpu': [shwtemp(label='edge', current=37.0, high=None, critical=None)], 'k10temp': [shwtemp(label='Tctl', current=40.125, high=None, critical=None)], 'iwlwifi_1': [shwtemp(label='', current=33.0, high=None, critical=None)]}
+>>>
+```
+
+The thing is, the temperature were displayed fine in 1.9.4 version, and after an update to 1.9.8 (maybe 2-3 month ago) they stopped showing, but also maybe around that time I've upgraded from Linux Mint 21.1, to 21.2. Maybe that's the problem or maybe kernel updates?
+I updated to version 2.0 a few days ago.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>> {'acpitz': [shwtemp(label='', current=0.0, high=110.0, critical=110.0)]
+
+Alright so `acpitz` should be your cpu temp reported by acpi but for some reason it is reporting it as 0. If i had to guess, I would say this is something to do with the kernel. I run bleeding edge kernel so I am not sure. 
+
+I'm not very familiar with Mint, is there a way you can rollback or update your kernel?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>mirocw:</strong></p>
+                    <p>> > {'acpitz': [shwtemp(label='', current=0.0, high=110.0, critical=110.0)]
+> 
+> Alright so `acpitz` should be your cpu temp reported by acpi but for some reason it is reporting it as 0. If i had to guess, I would say this is something to do with the kernel. I run bleeding edge kernel so I am not sure.
+> 
+> I'm not very familiar with Mint, is there a way you can rollback or update your kernel?
+
+yes, i've tried numerous kernels form 5.15, 5.19, 6.2. All of them don't report temperature. For me personally it's not a big deal, since I have an applet for temperatures that pull cpu temp from "k10temp" sensor</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>> For me personally it's not a big deal, since I have an applet for temperatures that pull cpu temp from "k10temp" sensor
+
+I'd still like to get this fixed. I can make a workaround where if a sensor is reporting 0 it won't use that one and will skip to the next one. In your case, auto-cpufreq would skip from acpitz to k10temp</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Should be fixed by #586
+
+Please pull the latest changes and run the installer script</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

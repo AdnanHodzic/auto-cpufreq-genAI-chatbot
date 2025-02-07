@@ -1,0 +1,58 @@
+
+        <html>
+        <head>
+            <title>Issue #137: [Request] Display auto-cpufreq version and update availability</title>
+        </head>
+        <body>
+            <h1>[Request] Display auto-cpufreq version and update availability</h1>
+            <p><strong>Issue #137</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>It could be usefull to display current version and update availabilty.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Yes agreed, there are some attempts to detect version with `sudo auto-cpufreq --debug`, but it's not fully unified as some people install it using `auto-cpufreq-installer `and others using snap or AUR package. But I was planning to do this regardless. 
+
+Regarding update availability, you can simply click on ["Watch" notifications](https://docs.github.com/en/enterprise/2.15/user/articles/watching-and-unwatching-repositories) and can be notified about all changes or only "Release" changes. I think that's most useful for everyone who did install from git, while Snap packages are automatically updated and AUR is also based on automatic build based on new releases.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>alkaphreak:</strong></p>
+                    <p>Did a previous install with snap version but i was wondering if it kept it to up to date so i needed to check the installed version ... no success.
+
+I was already following your release ^^</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Did a previous install with snap version but i was wondering if it kept it to up to date so i needed to check the installed version ... no success.
+
+You can check this by running:
+
+```
+snap list | grep auto-cpufreq
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>alkaphreak:</strong></p>
+                    <p>Nice, thanks for the tips, so i'm up to date to the latest : 
+auto-cpufreq       1.5.1                       41        latest/stable    fooctrl     -
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Changes were made in [1.6.0 release](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.6.0). Where version that's being used is being showed for Snap/AUR/auto-cpufreq-installre (source). </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,40 @@
+
+        <html>
+        <head>
+            <title>Pull Request #116: Report core states as a table</title>
+        </head>
+        <body>
+            <h1>Report core states as a table</h1>
+            <p><strong>Pull Request #116</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Tried addressing #115  and #114 (since getting the table data required modifying the same code).
+Please corroborate correct reporting of cpu temps, I can only test with my lap cpu.
+Btw, is the try/exec block really needed? Are there cases where psutil.sensor_temperatures() reports a shwtemp object without the _current_ property?</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Tried addressing #115 and #114 (since getting the table data required modifying the same code).
+
+Thanks!
+
+> Please corroborate correct reporting of cpu temps, I can only test with my lap cpu.
+
+Yes, it works and looks great on Intel i7. @Red-Eyed can you confirm same case is with AMD?
+
+> Btw, is the try/exec block really needed? Are there cases where psutil.sensor_temperatures() reports a shwtemp object without the _current_ property?
+
+TBH, I can't remember why this `try/except` block is there, but there must be a reason. If you think there's a better way to go about this, please feel free to address it in another PR :)
+
+Thank you for your contribution!
+
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

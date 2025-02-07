@@ -1,0 +1,24 @@
+
+        <html>
+        <head>
+            <title>Pull Request #744: Fix AVAILABLE_GOVERNORS</title>
+        </head>
+        <body>
+            <h1>Fix AVAILABLE_GOVERNORS</h1>
+            <p><strong>Pull Request #744</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>The refactor in #736 missed a `strip()` from `get_avail_gov()` (see [blame](https://github.com/AdnanHodzic/auto-cpufreq/blame/34ebd04df0fd605c6c741f834f7b2d9205999f30/auto_cpufreq/core.py#L360)), which caused constant failures in `gov_check()` when trying to install the daemon, even if the required scaling governors are present.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Good catch! Thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

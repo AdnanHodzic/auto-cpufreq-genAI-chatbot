@@ -1,0 +1,27 @@
+
+        <html>
+        <head>
+            <title>Issue #795: #Issue 601: Installation on Atomic Systems by Removing GUI Dependencies</title>
+        </head>
+        <body>
+            <h1>#Issue 601: Installation on Atomic Systems by Removing GUI Dependencies</h1>
+            <p><strong>Issue #795</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>This provides a workaround to allow installation of on Fedora Atomic and similar systems where installing GUI dependencies (specifically PyGObject and related packages) is problematic.
+
+This PR creates a separate `pyproject.toml` file to remove all dependencies and build instructions related to the GUI component. This allows the core functionality of `auto-cpufreq` to be installed without requiring the GUI.
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Why was this PR closed in the end?</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

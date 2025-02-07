@@ -1,0 +1,96 @@
+
+        <html>
+        <head>
+            <title>Issue #655: How to enable Battery Threshold on Asus Vivobook K3502ZA_S3502ZA</title>
+        </head>
+        <body>
+            <h1>How to enable Battery Threshold on Asus Vivobook K3502ZA_S3502ZA</h1>
+            <p><strong>Issue #655</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I would like to enable the battery threshold on my laptop, it is a pretty recent one, and I would like to increase the lifespan of my battery, would be great if anyone could guide me on how do I know if I have the required modules.
+
+This is my system information.
+
+```
+System:
+  Kernel: 6.7.5-zabbly+ arch: x86_64 bits: 64 compiler: gcc v: 12.2.0 clocksource: tsc
+  Desktop: Cinnamon v: 6.0.4 tk: GTK v: 3.24.41 wm: Muffin v: 6.0.1 vt: 7 dm: LightDM v: 1.32.0
+    Distro: LMDE 6 Faye base: Debian 12.1 bookworm
+Machine:
+  Type: Laptop System: ASUSTeK product: VivoBook_ASUSLaptop K3502ZA_S3502ZA v: 1.0
+    serial: <superuser required>
+  Mobo: ASUSTeK model: K3502ZA v: 1.0 serial: <superuser required> uuid: <superuser required>
+    UEFI: American Megatrends LLC. v: K3502ZA.309 date: 09/05/2023
+Battery:
+  ID-1: BAT0 charge: 27.1 Wh (39.4%) condition: 68.8/70.2 Wh (98.1%) volts: 12.7 min: 11.9
+    model: SMP K340258 type: Li-ion serial: N/A status: charging
+CPU:
+  Info: 12-core (4-mt/8-st) model: 12th Gen Intel Core i5-12500H bits: 64 type: MST AMCP
+    smt: enabled arch: Alder Lake rev: 3 cache: L1: 1.1 MiB L2: 9 MiB L3: 18 MiB
+  Speed (MHz): avg: 1086 high: 2500 min/max: 400/4500:3300 cores: 1: 577 2: 587 3: 400 4: 398
+    5: 812 6: 400 7: 491 8: 2500 9: 1100 10: 1608 11: 1795 12: 1779 13: 918 14: 860 15: 1767 16: 1389
+    bogomips: 99532
+  Flags: avx avx2 ht lm nx pae sse sse2 sse3 sse4_1 sse4_2 ssse3 vmx
+Graphics:
+  Device-1: Intel Alder Lake-P GT2 [Iris Xe Graphics] vendor: ASUSTeK driver: i915 v: kernel
+    arch: Gen-12.2 ports: active: eDP-1 empty: DP-1, DP-2, DP-3, DP-4, HDMI-A-1 bus-ID: 0000:00:02.0
+    chip-ID: 8086:46a6 class-ID: 0300
+  Device-2: IMC Networks USB2.0 HD UVC WebCam driver: uvcvideo type: USB rev: 2.0 speed: 480 Mb/s
+    lanes: 1 bus-ID: 3-2:2 chip-ID: 13d3:5463 class-ID: fe01 serial: <filter>
+  Display: x11 server: X.Org v: 21.1.11 with: Xwayland v: 23.2.4 driver: X: loaded: modesetting
+    unloaded: fbdev,vesa dri: iris gpu: i915 display-ID: :0 screens: 1
+  Screen-1: 0 s-res: 1920x1080 s-dpi: 96 s-size: 508x285mm (20.00x11.22") s-diag: 582mm (22.93")
+  Monitor-1: eDP-1 model: Samsung 0x4161 res: 1920x1080 hz: 60 dpi: 142
+    size: 344x194mm (13.54x7.64") diag: 395mm (15.5") modes: 1920x1080
+  API: EGL v: 1.5 hw: drv: intel iris platforms: device: 0 drv: iris device: 1 drv: swrast gbm:
+    drv: iris surfaceless: drv: iris x11: drv: iris inactive: wayland
+  API: OpenGL v: 4.6 compat-v: 4.5 vendor: intel mesa v: 23.3.5-1 glx-v: 1.4 direct-render: yes
+    renderer: Mesa Intel Graphics (ADL GT2) device-ID: 8086:46a6
+Info:
+  Memory: total: 16 GiB note: est. available: 15.25 GiB used: 4.51 GiB (29.6%)
+  Processes: 393 Power: uptime: 2h 39m states: freeze,mem,disk suspend: s2idle wakeups: 0
+    hibernate: platform Init: systemd v: 255 target: graphical (5) default: graphical
+  Compilers: gcc: 13.2.0 alt: 12 Client: Cinnamon v: 6.0.4 inxi: 3.3.33
+```
+
+Thank you for your time :D
+
+
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>You would need to open a feature request then I would be able to add asus laptops to this project </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>https://askubuntu.com/questions/1006778/set-battery-thresholds-on-ubuntu-asus
+
+This thread seems helpful.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>That Ubuntu thread seems to be a copy of the think pad script I made I'll make a PR sometime next week ima little busy this week
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>T-Arjun:</strong></p>
+                    <p>@theinhumaneme refer to this GitHub project : [(https://github.com/tshakalekholoane/bat)]  .</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing the issue due to inactivity. </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

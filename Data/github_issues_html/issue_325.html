@@ -1,0 +1,167 @@
+
+        <html>
+        <head>
+            <title>Issue #325: Reformatted codebase</title>
+        </head>
+        <body>
+            <h1>Reformatted codebase</h1>
+            <p><strong>Issue #325</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>All python scripts are now reformatted with 'black' using line length
+of 100.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Thanks for your contribution! 
+
+I'm curious how and why did you settle on 100 instead of i.e: 80?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>varaki:</strong></p>
+                    <p>> Thanks for your contribution!
+> 
+> I'm curious how and why did you settle on 100 instead of i.e: 80?
+
+80 is just too low, 100 is a better option I think, could be 160 as well, then we can say it's twice as much of what PEP-8 recommends.
+After all we are not forced to use 80x25 terminals like in the '90s. 😃</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Makes sense and it looks good. 
+
+Was thinking if we're doing this with code as part of this PR I would also change the output to be 100 instead of 80 characters long, i.e: 
+
+```
+------------------------------ Current CPU stats ------------------------------
+------------------ Running auto-cpufreq daemon install script ------------------
+```
+
+all of these are <= 80 but then most of the space would be empty and it won't look good if terminal is scaled below 100 characters, so let's keep as it is unless you have a better idea.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>varaki:</strong></p>
+                    <p>> Makes sense and it looks good.
+> 
+> Was thinking if we're doing this with code as part of this PR I would also change the output to be 100 instead of 80 characters long, i.e:
+> 
+> ```
+> ------------------------------ Current CPU stats ------------------------------
+> ------------------ Running auto-cpufreq daemon install script ------------------
+> ```
+> 
+> all of these are <= 80 but then most of the space would be empty and it won't look good if terminal is scaled below 100 characters, so let's keep as it is unless you have a better idea.
+
+I think we can use a function, that dynamically prints out messages in the above format considering the terminal size.
+I've quickly created an example, try it out, it works fine.
+You can control the inner padding as well as the decor character(s) to use:
+
+```
+#!/usr/bin/env python3
+
+import os
+
+def dynamic_print(message, decor="-", padding=1):
+    """
+    Dinamically print messages according to available terminal width
+    If message is equals to or longer than the terminal width, print the message as is
+
+    Parameters:
+        message (str): The message to print
+        decor (str):   Decorator character(s)
+        padding (int): Padding size (how many whitespaces between decor and message)
+
+    Returns:
+        str: Formatted message
+    """
+    term_width = os.get_terminal_size().columns
+    message_size = len(message)
+
+    if message_size >= term_width:
+        print(message)
+        return
+
+    # calculate decor size per side
+    decor_size = int((term_width - (message_size + (padding * 2))) / 2)
+    decor = f"{int(decor_size / len(decor)) * decor}"
+    pad = " " * padding
+
+    # print the formatted message
+    print(f"{decor}{pad}{message}{pad}{decor}")
+
+if __name__ == "__main__":
+    dynamic_print("Current CPU stats")
+    dynamic_print("Running auto-cpufreq daemon install script")
+```
+
+I'll check if there's room for improvement for this, update the scripts to use this and I'll submit this as a separate PR.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I think we can use a function, that dynamically prints out messages in the above format considering the terminal size.
+
+This is exactly what I was thinking of and what would be ideal solution but didn't express it as an idea :slightly_smiling_face: 
+
+However, code sample from above didn't dynamically scale anything, and `-` were printed out in multiple lines.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>varaki:</strong></p>
+                    <p>> However, code sample from above didn't dynamically scale anything, and `-` were printed out in multiple lines.
+
+What do you mean? I don't get it.
+
+I tried it on my work laptop (gnome + gnome terminal),  when I posted the example here and it worked.
+Now I'm on my home laptop (swaywm + alacritty), also works fine.
+Already printed out lines can't be scaled, so if you run the command in a larger sized terminal, then resize it to a smaller size, then the already printed out lines will be wrapped of course. But if you re-run the script after you resized your terminal text will be aligned to that size.
+
+Here's a demo of the command (I only removed the second function call `dynamic_print("Running auto-cpufreq daemon install script")`) run with a oneliner which runs the example every second, for more info:
+https://user-images.githubusercontent.com/23281360/147129736-511a3f2a-6002-41bc-b071-31f7ea338a2d.mp4
+
+As you can see, printouts change with every update if you modify the terminal size.
+
+Another demo with the example.py untouched:
+https://user-images.githubusercontent.com/23281360/147131116-0d7475ef-0759-43df-b45f-c1827688f5e5.mp4
+It also works here, maybe that it prints out two messages (each of them are decorated), that's what caused the confusion for you...
+Maybe you thought that the second message's decorator characters are the continuation of the first one... :)
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Already printed out lines can't be scaled, so if you run the command in a larger sized terminal, then resize it to a smaller size, then the already printed out lines will be wrapped of course.
+
+This the perfect summary right here. Since auto-cpufreq output is re-outputted every 5 seconds I think it would be great if output could be scaled like this. If you have time to implement this as part of auto-cpufreq and create a PR I'll gladly review it!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>varaki:</strong></p>
+                    <p>> > Already printed out lines can't be scaled, so if you run the command in a larger sized terminal, then resize it to a smaller size, then the already printed out lines will be wrapped of course.
+> 
+> This the perfect summary right here. Since auto-cpufreq output is re-outputted every 5 seconds I think it would be great if output could be scaled like this. If you have time to implement this as part of auto-cpufreq and create a PR I'll gladly review it!
+
+Sure, I'm planning to do that. 🙂</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Awesome, looking forward to that PR then :slightly_smiling_face: </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Changes live as part of [v1.9.0 release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

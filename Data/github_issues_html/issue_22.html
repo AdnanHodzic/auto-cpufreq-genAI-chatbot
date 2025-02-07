@@ -1,0 +1,44 @@
+
+        <html>
+        <head>
+            <title>Issue #22: Strange system error</title>
+        </head>
+        <body>
+            <h1>Strange system error</h1>
+            <p><strong>Issue #22</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I suddenly start to see that messages appeared from time to time (exact conditions are not yet clear, once it appeared after restoring from the hibernation, another time just in the middle of a running session, literally in all console/terminal window covering whatever is there at the moment):
+
+```
+(base) alex@precision:~$
+Message from syslogd@precision at Jan  7 18:27:59 ...
+ kernel:[30691.577644] Uhhuh. NMI received for unknown reason 3c on CPU 0.
+
+Message from syslogd@precision at Jan  7 18:27:59 ...
+ kernel:[30691.577645] Do you have a strange power saving mode enabled?
+
+Message from syslogd@precision at Jan  7 18:27:59 ...
+ kernel:[30691.577646] Dazed and confused, but trying to continue
+
+```
+
+Not necessary this is related to `auto-cpufreq`. Could it be related to `tlp` as this was the only relevant package I installed recently and which also potentially could cause this?</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>zshamrock:</strong></p>
+                    <p>Ok, it looks like indeed it is `tlp` issue as described here https://lists.fedoraproject.org/archives/list/kernel@lists.fedoraproject.org/thread/G4HKETHJGN3MBWSPUNDSHNWIJGN343GM/, and the proposed "solution" to hide/silence this error.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Yes, as I mentioned, it's very likely that TLP will come with its own set of issues.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

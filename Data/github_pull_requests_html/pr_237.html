@@ -1,0 +1,32 @@
+
+        <html>
+        <head>
+            <title>Pull Request #237: Artix runnit support</title>
+        </head>
+        <body>
+            <h1>Artix runnit support</h1>
+            <p><strong>Pull Request #237</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>seemed easy enough to add it thanks to void linux steps. Although artix supports other inits which I haven't tried it. Maybe checking if the `runnit` directory exist before installing the daemon, else print manual installations..
+```bash
+if [ -d /etc/runit ] && [ -d /run/runnit ]; then
+...
+```</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Changes LGTM, thank you for your contribution! 
+
+> Although artix supports other inits which I haven't tried it. Maybe checking if the `runnit` directory exist before installing the daemon, else print manual installations..
+
+There was a feature request to add support for Artix #200 but it wasn't specified which init to support (except non systemd). Either way, feel free to extend it to whatever degree you desire and I'll be looking forward to review your Pull Requests. </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

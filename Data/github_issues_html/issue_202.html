@@ -1,0 +1,480 @@
+
+        <html>
+        <head>
+            <title>Issue #202: CPU frequency not scaling down to minimum possible values</title>
+        </head>
+        <body>
+            <h1>CPU frequency not scaling down to minimum possible values</h1>
+            <p><strong>Issue #202</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I'm not sure if this was intended or not but I guess the frequency of all cores should be around min frequency in powersaver mode. These stats are at a time when there is no heavy usage. I found a similar issue (#141) but there was no solution for that. Please let me know if anything else is needed for this issue.
+
+### Live stats while discharging:
+```text
+-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux rolling n/a
+Linux kernel: 5.12.7-arch1-1
+Processor: Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz
+Cores: 12
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2600 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  4.0%     51 °C     2600 MHz
+CPU1:	  1.0%     51 °C     2600 MHz
+CPU2:	  0.0%     50 °C     2600 MHz
+CPU3:	  0.0%     49 °C     2600 MHz
+CPU4:	  2.9%     49 °C     2600 MHz
+CPU5:	  2.9%     49 °C     2600 MHz
+CPU6:	  1.0%     51 °C     2600 MHz
+CPU7:	  2.0%     51 °C     2600 MHz
+CPU8:	  1.0%     50 °C     2600 MHz
+CPU9:	  0.0%     49 °C     2600 MHz
+CPU10:	  1.0%     49 °C     2600 MHz
+CPU11:	  3.9%     49 °C     1810 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: discharging
+
+Setting to use: "powersave" governor
+
+Total CPU usage: 1.4 %
+Total system load: 1.24
+Average temp. of all cores: 49.833333333333336 °C
+
+Load optimal
+setting turbo boost: off
+
+-------------------------------------------------------------------------------
+
+```
+---
+
+### Live stats while charging
+```text
+-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux rolling n/a
+Linux kernel: 5.12.7-arch1-1
+Processor: Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz
+Cores: 12
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2600 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  6.0%     41 °C     2600 MHz
+CPU1:	  4.0%     40 °C     2600 MHz
+CPU2:	  5.0%     40 °C     2598 MHz
+CPU3:	  4.0%     40 °C     2600 MHz
+CPU4:	  7.0%     40 °C     2600 MHz
+CPU5:	  5.0%     39 °C     2600 MHz
+CPU6:	  7.0%     41 °C     2600 MHz
+CPU7:	  5.0%     40 °C     2600 MHz
+CPU8:	  3.0%     40 °C     2600 MHz
+CPU9:	  5.1%     40 °C     2600 MHz
+CPU10:	  5.0%     40 °C     2600 MHz
+CPU11:	  9.8%     39 °C     2600 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+
+Total CPU usage: 8.0 %
+Total system load: 6.68
+Average temp. of all cores: 40.0 °C
+
+High system load
+setting turbo boost: on
+
+-------------------------------------------------------------------------------
+
+```
+---
+
+### System information:
+```text
+-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux rolling n/a
+Linux kernel: 5.12.7-arch1-1
+Processor: Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz
+Cores: 12
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2600 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  2.0%     52 °C     2600 MHz
+CPU1:	  3.0%     51 °C     2600 MHz
+CPU2:	  0.0%     51 °C     2600 MHz
+CPU3:	  1.0%     50 °C     2600 MHz
+CPU4:	  2.0%     50 °C     2600 MHz
+CPU5:	  1.0%     50 °C     2600 MHz
+CPU6:	  0.0%     52 °C     1718 MHz
+CPU7:	  1.0%     51 °C     2600 MHz
+CPU8:	  1.0%     51 °C     2600 MHz
+CPU9:	  1.0%     50 °C     2600 MHz
+CPU10:	  1.0%     50 °C     2600 MHz
+CPU11:	  3.0%     50 °C     2600 MHz
+
+auto-cpufreq version:
+Version         : 1.6.4-1
+
+Python: 3.9.5
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 8.0.1
+distro package 1.5.0
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.1 %
+
+Total CPU usage: 1.0 %
+Total system load: 1.07
+Average temp. of all cores: 50.666666666666664 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+
+```
+---
+
+Edit: I have also added the readings while charging (performance mode). They are all at 2600Mhz (base clock speed). I guess they are intended to be at base clock speed.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>tuteken:</strong></p>
+                    <p>I'm seeing the same behaviour with the same Intel chipset, but on Kubuntu 21.04.
+
+### Live stats while discharging
+
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 21.04 (Hirsute Hippo)
+Linux kernel: 5.11.0-17-generic
+Processor: Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz
+Cores: 12
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2600 MHz
+CPU min frequency: 800 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0:     5.1%     52 °C     2600 MHz
+CPU1:     7.1%     54 °C      800 MHz
+CPU2:    12.0%     53 °C     2600 MHz
+CPU3:     5.1%     51 °C     2600 MHz
+CPU4:     4.0%     51 °C     2600 MHz
+CPU5:     9.9%     54 °C     2600 MHz
+CPU6:     7.1%     52 °C     2600 MHz
+CPU7:     8.8%     54 °C     2600 MHz
+CPU8:     6.2%     53 °C     2600 MHz
+CPU9:     6.1%     51 °C     2600 MHz
+CPU10:    9.0%     51 °C     2600 MHz
+CPU11:    6.0%     54 °C     2600 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: discharging
+
+Setting to use: "powersave" governor
+
+Total CPU usage: 5.7 %
+Total system load: 1.21
+Average temp. of all cores: 52.5 °C
+
+Load optimal
+setting turbo boost: off
+
+-------------------------------------------------------------------------------
+````
+
+### Live stats while charging
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 21.04 (Hirsute Hippo)
+Linux kernel: 5.11.0-17-generic
+Processor: Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz
+Cores: 12
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2600 MHz
+CPU min frequency: 800 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0:     1.0%     53 °C     2600 MHz
+CPU1:     0.0%     54 °C     2600 MHz
+CPU2:     0.0%     52 °C     2600 MHz
+CPU3:     0.0%     51 °C     2600 MHz
+CPU4:     2.0%     52 °C     2600 MHz
+CPU5:     2.0%     53 °C     2600 MHz
+CPU6:     0.0%     53 °C     2600 MHz
+CPU7:     0.0%     54 °C     2600 MHz
+CPU8:     0.0%     52 °C     2600 MHz
+CPU9:     1.0%     51 °C     2600 MHz
+CPU10:    0.0%     52 °C     2600 MHz
+CPU11:    0.0%     53 °C     2600 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+
+Total CPU usage: 0.8 %
+Total system load: 1.15
+Average temp. of all cores: 52.5 °C
+
+Load optimal
+setting turbo boost: off
+
+-------------------------------------------------------------------------------
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>felipejoribeiro:</strong></p>
+                    <p>same thing in Asus notebook with Arch:
+
+```
+Linux distro: Arch Linux rolling n/a
+Linux kernel: 5.12.8-arch1-1
+Processor: Intel(R) Core(TM) i7-8750H CPU @ 2.20GHz
+Cores: 12
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2200 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  0.0%     43 °C     2200 MHz
+CPU1:	  2.0%     45 °C     2200 MHz
+CPU2:	  8.1%     43 °C     2200 MHz
+CPU3:	  1.0%     43 °C     2200 MHz
+CPU4:	  0.0%     45 °C     2200 MHz
+CPU5:	  0.0%     43 °C     2200 MHz
+CPU6:	  0.0%     43 °C     2200 MHz
+CPU7:	  1.0%     45 °C     2200 MHz
+CPU8:	  1.0%     43 °C     2200 MHz
+CPU9:	  3.0%     43 °C     2200 MHz
+CPU10:	 -0.0%     45 °C     1613 MHz
+CPU11:	  3.0%     43 °C     2200 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: discharging
+
+Setting to use: "powersave" governor
+```
+
+```
+Linux distro: Arch Linux rolling n/a
+Linux kernel: 5.12.8-arch1-1
+Processor: Intel(R) Core(TM) i7-8750H CPU @ 2.20GHz
+Cores: 12
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2200 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  0.0%     44 °C     2200 MHz
+CPU1:	  5.0%     45 °C     2200 MHz
+CPU2:	 12.0%     45 °C     2197 MHz
+CPU3:	  3.0%     43 °C     2200 MHz
+CPU4:	  0.0%     45 °C     2200 MHz
+CPU5:	  3.0%     44 °C     2200 MHz
+CPU6:	  2.9%     44 °C     2200 MHz
+CPU7:	  0.0%     45 °C     2200 MHz
+CPU8:	  0.0%     45 °C     2200 MHz
+CPU9:	  0.0%     43 °C     2200 MHz
+CPU10:	  1.0%     45 °C     2200 MHz
+CPU11:	  7.0%     44 °C     2200 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>cacedo:</strong></p>
+                    <p>I noticed the same using the intel_pstate driver. I'm using a DELL XPS 9300
+As soon as I switched to acpi-cpufreq driver, frequency drops to minimum with light use:
+```
+			"auto-cpufreq" refresh in: 1
+		Executed on: June 04 (Friday) - 16:25:47
+
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 21.04 (Hirsute Hippo)
+Linux kernel: 5.11.0-18-generic
+Processor: Intel(R) Core(TM) i7-1065G7 CPU @ 1.30GHz
+Cores: 8
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1501 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  1.0%     49 °C      400 MHz
+CPU1:	  1.0%     46 °C      400 MHz
+CPU2:	  2.0%     46 °C      400 MHz
+CPU3:	  4.1%     49 °C      400 MHz
+CPU4:	  1.0%     49 °C      400 MHz
+CPU5:	  3.2%     46 °C     1283 MHz
+CPU6:	  5.1%     46 °C     1242 MHz
+CPU7:	  2.0%     49 °C      400 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: discharging
+
+Setting to use: "powersave" governor
+
+Total CPU usage: 1.1 %
+Total system load: 0.91
+Average temp. of all cores: 47.5 °C
+
+Load optimal
+setting turbo boost: off
+```
+I followed this guide: https://silvae86.github.io/2020/06/13/switching-to-acpi-power/</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>felipejoribeiro:</strong></p>
+                    <p>Perfect! Using with `TLP` worked like a charm in my setup!
+Thank you.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>wryonik:</strong></p>
+                    <p>@felipejoribeiro can you please tell me the settings you changed to integrate with TLP? The above configuration that I generated is with TLP. I only disabled CPU settings from it.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>felipejoribeiro:</strong></p>
+                    <p>I used the default config found in the referenced link.
+Here it is: https://silvae86.github.io/assets/images/post-images/2020-06-13-switching-to-acpi-power/tlp
+And i'm using it with tlpui.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>tuteken:</strong></p>
+                    <p>I can also confirm that switch to the "acpi-cpufreq" drivers from "intel_pstate" resolved my issue.  Thank for the assistance.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>FPSUsername:</strong></p>
+                    <p>I disabled `intel_pstate` and it runs on `driver: acpi-cpufreq` at the moment. I tried TLP-UI and set the AC and battery to power save for testing. Unfortunately, `auto-cpufreq` still uses the performance governor and all cores are running at the max speed. This could be intended, since it's plugged in and the battery is charged up to 80% (set charging limit).
+
+Before I installed `cpu-autofreq`, I saw that the frequency actually dropped down to ~800MHz, but not anymore.
+
+I'm not sure if TLP is meant to be used with this program though.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I noticed the same using the intel_pstate driver. I'm using a DELL XPS 9300
+> As soon as I switched to acpi-cpufreq driver, frequency drops to minimum with light use:
+> 
+> ```
+> 			"auto-cpufreq" refresh in: 1
+> 		Executed on: June 04 (Friday) - 16:25:47
+> 
+> -------------------------------------------------------------------------------
+> 
+> Linux distro: Ubuntu 21.04 (Hirsute Hippo)
+> Linux kernel: 5.11.0-18-generic
+> Processor: Intel(R) Core(TM) i7-1065G7 CPU @ 1.30GHz
+> Cores: 8
+> Architecture: x86_64
+> Driver: acpi-cpufreq
+> 
+> ------------------------------ Current CPU stats ------------------------------
+> 
+> CPU max frequency: 1501 MHz
+> CPU min frequency: 400 MHz
+> 
+> Core	Usage	Temperature	Frequency
+> CPU0:	  1.0%     49 °C      400 MHz
+> CPU1:	  1.0%     46 °C      400 MHz
+> CPU2:	  2.0%     46 °C      400 MHz
+> CPU3:	  4.1%     49 °C      400 MHz
+> CPU4:	  1.0%     49 °C      400 MHz
+> CPU5:	  3.2%     46 °C     1283 MHz
+> CPU6:	  5.1%     46 °C     1242 MHz
+> CPU7:	  2.0%     49 °C      400 MHz
+> 
+> ---------------------------- CPU frequency scaling ----------------------------
+> 
+> Battery is: discharging
+> 
+> Setting to use: "powersave" governor
+> 
+> Total CPU usage: 1.1 %
+> Total system load: 0.91
+> Average temp. of all cores: 47.5 °C
+> 
+> Load optimal
+> setting turbo boost: off
+> ```
+> 
+> I followed this guide: https://silvae86.github.io/2020/06/13/switching-to-acpi-power/
+
+Added [Troubleshooting section to README on how to change CPU management driver](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting).
+
+Could you please give this a try as I believe it will resolve your problem. If it doesn't please feel free to re-open this issue.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

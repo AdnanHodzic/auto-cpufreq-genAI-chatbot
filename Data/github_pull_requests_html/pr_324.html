@@ -1,0 +1,236 @@
+
+        <html>
+        <head>
+            <title>Pull Request #324: Add min/max allowed frequencies option (#309)</title>
+        </head>
+        <body>
+            <h1>Add min/max allowed frequencies option (#309)</h1>
+            <p><strong>Pull Request #324</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Setting the minimum/maximum allowed CPU frequencies is now possible
+via 'scaling_min_freq' and 'scaling_max_freq' options in config
+for both modes (charger and battery).
+Values should be given in kHZ.
+
+Example:
+scaling_min_freq = 1800000
+scaling_max_freq = 2000000
+
+I also did autoformatting via 'black', using --line-length 100.
+Code is now a bit tidier than before.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Thank you for your work on auto-cpufreq! When we have time we look into this.
+
+One tip in general when contributing a feature. Don't run code formatters, do it as a seperate PR.
+You now touched almost every file at multiple lines, which is not really easy for reviewing a new feature.
+
+But overall, thank you!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>varaki:</strong></p>
+                    <p>Okay, I'll create a separate PR for the reformatted base commit of my feature, so once it's delivered I can rebase this one on it, for making it easier to read.
+
+Reformatted codebase patch: #325 </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@varaki could you please resolve the conflicts before I get to review this? Thank you</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>From just reading the code it looks good! I will let the testing to @AdnanHodzic 
+
+But I have one question, why do you use regex for this?
+```
+        # check if valid value is given
+        freq_val = conf[section][freq_type].strip()
+        if re.match(r"\d+$", freq_val) is None:
+```
+
+Would detecting a ValueError on int() not be easier?
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>**1:** Code changes LGTM, but there's one problem where if there is no `/etc/auto-cpufreq.conf` file and therefor auto-cpufreq is not using it,  I'll still output following: 
+
+```
+Using settings defined in /etc/auto-cpufreq.conf file
+```
+
+**2:** When it comes to testing the changes. Setting the limits didn't seem to make any difference and it seems defined limits were not respected.
+
+**3:** README/Example config contents:
+
+```
+# minimum cpu frequency (in kHz)
+# example: for 1800 MHz -> scaling_min_freq = 1800000
+scaling_min_freq = 1800000
+# maximum cpu frequency (in kHz)
+# example: for 2000 MHz -> scaling_max_freq = 2000000
+scaling_max_freq = 2000000
+```
+
+**3.1:**
+
+`# example: for 1800 MHz -> scaling_min_freq = 1800000`
+
+I would lower `1800000` (1.8GHz) to `800000000` (800MHz). As there are a lot people with exotic hardware, and their max cpu frequency might not even be as high as 1.8Ghz.
+
+**3.2:**
+
+On this topic mentioned above, what should happen if I say `scaling_max_freq = 8000000` (8GHz) but my max cpu frequency is i.e 4GHz? Or if I define higher `scaling_min_freq ` then my cpu is capable of, i.e: `scaling_min_freq = 1800000` (1.8GHz) but my cpu max frequency is 1.2 GHz?
+
+**3.3:**
+
+I would disable/comment `scaling_min_freq` & `scaling_max_freq` lines by default. Adding a note under `# minimum cpu frequency (in kHz)` line to uncomment these for this functionality to work. As I have a feeling if user doesn't know what they are doing and have these values misconfigured these there'll will be lot more problems then benefits.
+
+**3.4:**
+
+MHz to Hz conversion can be bit configuring for a random Joe, so I would also add a link to i.e: [MHz to Hz conversion](https://www.rapidtables.com/convert/frequency/mhz-to-hz.html) for further reference as part of the description.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>varaki:</strong></p>
+                    <p>> From just reading the code it looks good! I will let the testing to @AdnanHodzic
+> 
+> But I have one question, why do you use regex for this?
+> 
+> ```
+>         # check if valid value is given
+>         freq_val = conf[section][freq_type].strip()
+>         if re.match(r"\d+$", freq_val) is None:
+> ```
+> 
+> Would detecting a ValueError on int() not be easier?
+
+Good catch, thanks. A string.isidigit() check would also suffice.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>varaki:</strong></p>
+                    <p>I'll push my changes addressing all observations soon.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>> Good catch, thanks. A string.isidigit() check would also suffice.
+```
+try:
+   freq_val = int(conf[section][freq_type].strip())
+except ValueError:
+   # not integer
+```
+Should do it I think, that would make freq_val an int or raises an error when it couldn't make an int out if it.
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>What is the difference between --frequency-min/max  and the new --frequency-min/max-limit in `cpufreqctl.sh` you implemented?
+Seems to me they are exactly the same? 
+
+Ah I see. One is cpuinfo_freq and the other is scaling_freq. On my system it gives the same results. Sorry.
+But you set them via scaling_freq, wouldn't it be better to also get the scaling_freq then? I don't know for sure.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@varaki please don't consider this as me trying to rush you (especially during a holiday!) but I was thinking of making a new release tomorrow and would love if these changes could be part of it.
+
+If you're close to finishing I can also wait and do the release next week. If not we can also make these changes as part of a new release next year, it all works for me, just let me know so I can plan, thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>varaki:</strong></p>
+                    <p>> @varaki please don't consider this as me trying to rush you (especially during a holiday!) but I was thinking of making a new release tomorrow and would love if these changes could be part of it.
+> 
+> If you're close to finishing I can also wait and do the release next week. If not we can also make these changes as part of a new release next year, it all works for me, just let me know so I can plan, thanks!
+
+Hi, with the latest commit, I consider it done, I think I implemented all changes suggested last time. I also tested it, works for me too.
+So feel free to release it.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Okay good to know, wasn't aware it was ready for review again. Will take another look tomorrow and if it's all good will merge it with `master`.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@varaki verified everything, excellent work and of course thank you for your contribution! </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>varaki:</strong></p>
+                    <p>Great, let's see how it works for a broader audience 🙂</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Great, let's see how it works for a broader audience slightly_smiling_face
+
+We'll find out soon as [v1.9.0 release](https://github.com/AdnanHodzic/auto-cpufreq/releases) is live and I'll tap you if I see issues/questions popping up related to this :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@varaki in meantime I found one bug which should be fixed. If you're using `scaling_min/max_freq`, and you don't want to use values for these variables anymore and you comment them out, or even delete the whole `/etc/auto-cpufreq.conf` file. The previously defined values will be picked up until computer is rebooted. 
+
+It would be great if they could be reverted back to defaults, as soon as it's detected `/etc/auto-cpufreq.conf` is no longer there, or `scaling_min/max_freq` have been commented out.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>varaki:</strong></p>
+                    <p>> @varaki in meantime I found one bug which should be fixed. If you're using `scaling_min/max_freq`, and you don't want to use values for these variables anymore and you comment them out, or even delete the whole `/etc/auto-cpufreq.conf` file. The previously defined values will be picked up until computer is rebooted.
+> 
+> It would be great if they could be reverted back to defaults, as soon as it's detected `/etc/auto-cpufreq.conf` is no longer there, or `scaling_min/max_freq` have been commented out.
+
+One way to reset the original frequencies, is the "comment out in the config, then reboot way".
+Maybe we can reset the values by using the two newly implemented functions I used, to fetch the minimum/maximum possible values for frequencies as a sort of "sanity" check for this feature.
+Okay, I can start working on it tomorrow.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Awesome, thank you!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>varaki:</strong></p>
+                    <p>@AdnanHodzic,
+
+How do we know whether the scaling frequencies were set by auto-cpufreq before or not?
+Configuration file gets parsed only on startup and it's not being watched for changes during auto-cpufreq is running.
+Should we always check whether the scaling min/max freqs differ from the defaults?
+I'll figure out something that's resource friendly and doesn't do any checks/settings more than it's necessary, but looking at auto-cpufreq as a whole, I think re-organizing it into a class based structure would help a lot in general for long-term.
+
+Pull request ready for review: #338 </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@varaki thanks, let's continue this conversation in #338 </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Issue permanently resolved as part of [1.9.1 release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

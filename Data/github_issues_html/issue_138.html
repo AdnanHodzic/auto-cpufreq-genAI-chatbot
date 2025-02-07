@@ -1,0 +1,313 @@
+
+        <html>
+        <head>
+            <title>Issue #138: Device or resource busy error when setting EPP</title>
+        </head>
+        <body>
+            <h1>Device or resource busy error when setting EPP</h1>
+            <p><strong>Issue #138</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>This doesn't happen when it sets governor to "powersave" and EPP to "balance_power"
+### Error output:
+```text
+Battery is: charging
+
+Setting to use: "performance" governor
+/nix/store/85r01271896mbwklcgwjig6xarz1kwrr-python3.8-auto-cpufreq-1.5.1/bin/cpufreqctl: line 267: echo: write error: Device or resource busy
+/nix/store/85r01271896mbwklcgwjig6xarz1kwrr-python3.8-auto-cpufreq-1.5.1/bin/cpufreqctl: line 267: echo: write error: Device or resource busy
+/nix/store/85r01271896mbwklcgwjig6xarz1kwrr-python3.8-auto-cpufreq-1.5.1/bin/cpufreqctl: line 267: echo: write error: Device or resource busy
+/nix/store/85r01271896mbwklcgwjig6xarz1kwrr-python3.8-auto-cpufreq-1.5.1/bin/cpufreqctl: line 267: echo: write error: Device or resource busy
+/nix/store/85r01271896mbwklcgwjig6xarz1kwrr-python3.8-auto-cpufreq-1.5.1/bin/cpufreqctl: line 267: echo: write error: Device or resource busy
+/nix/store/85r01271896mbwklcgwjig6xarz1kwrr-python3.8-auto-cpufreq-1.5.1/bin/cpufreqctl: line 267: echo: write error: Device or resource busy
+/nix/store/85r01271896mbwklcgwjig6xarz1kwrr-python3.8-auto-cpufreq-1.5.1/bin/cpufreqctl: line 267: echo: write error: Device or resource busy
+/nix/store/85r01271896mbwklcgwjig6xarz1kwrr-python3.8-auto-cpufreq-1.5.1/bin/cpufreqctl: line 267: echo: write error: Device or resource busy
+Setting to use: "balance_performance" EPP
+```
+---
+
+### System information:
+```text
+-------------------------------------------------------------------------------
+
+Linux distro: NixOS 21.03pre257339.83cbad92d73 okapi
+Linux kernel: 5.9.12
+Processor: Intel(R) Core(TM) i7-8550U CPU @ 1.80GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 4000 MHz
+CPU min frequency: 400 MHz
+
+	Usage  Temperature  Frequency
+CPU0:	 0.0%     56 °C     3976 MHz
+CPU1:	 0.0%     54 °C     3913 MHz
+CPU2:	 0.0%     55 °C     3995 MHz
+CPU3:	 0.0%     53 °C     3932 MHz
+CPU4:	 0.0%     56 °C     3954 MHz
+CPU5:	 1.0%     54 °C     3768 MHz
+CPU6:	 0.0%     55 °C     3971 MHz
+CPU7:	 0.0%     53 °C     3722 MHz
+
+Build git commit: ef9be55
+Snap package: no
+
+Python: 3.8.6
+psutil package: 5.7.3
+platform package: 1.0.8
+click package: 7.1.2
+/nix/store/r3j288vpmczbl500w6zz89gyfa4nr0b1-bash-4.4-p23/bin/sh: pip3: command not found
+distro package
+
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.19 %
+
+Total CPU usage: 1.0 %
+Total system load: 0.22
+Average temp. of all cores: 54.5 °C 
+
+Currently using: performance governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Creator54:</strong></p>
+                    <p>Could you share your modified source ? i did try to build  but had some python related issues and was just testing nixos so didnt gave much thought
+
+in nixos for doing systemwide changes you need to modify  the configuration/hardware-configuration.nix file
+thus auto-cpufreq would need to change the values via hardware-configuration.nix and do a nixos-rebuild --switch everytime for switching governors
+`powerManagement.cpuFreqGoverno = lib.mkDefault "powersave";`
+
+
+and ig it does not give the error for powersave because in nixos powersave is set by default.   </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Technical27:</strong></p>
+                    <p>`powerManagement.cpuFreqGovernor = lib.mkForce null` didn't help me.
+Nix package and patch [here](https://gist.github.com/Technical27/eda4d3d8efb7ec5f1ee8e7e24c9f8aeb).
+The patch disables some copying and the install/removal</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Technical27:</strong></p>
+                    <p>Even weirder, is that it seems to actually change the governor and EPP. The error seems to have no effect.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> This doesn't happen when it sets governor to "powersave" and EPP to "balance_power"
+> 
+> ### Error output:
+> ```
+> Battery is: charging
+> 
+> Setting to use: "performance" governor
+> /nix/store/85r01271896mbwklcgwjig6xarz1kwrr-python3.8-auto-cpufreq-1.5.1/bin/cpufreqctl: line 267: echo: write error: Device or resource busy
+> /nix/store/85r01271896mbwklcgwjig6xarz1kwrr-python3.8-auto-cpufreq-1.5.1/bin/cpufreqctl: line 267: echo: write error: Device or resource busy
+> /nix/store/85r01271896mbwklcgwjig6xarz1kwrr-python3.8-auto-cpufreq-1.5.1/bin/cpufreqctl: line 267: echo: write error: Device or resource busy
+> /nix/store/85r01271896mbwklcgwjig6xarz1kwrr-python3.8-auto-cpufreq-1.5.1/bin/cpufreqctl: line 267: echo: write error: Device or resource busy
+> /nix/store/85r01271896mbwklcgwjig6xarz1kwrr-python3.8-auto-cpufreq-1.5.1/bin/cpufreqctl: line 267: echo: write error: Device or resource busy
+> /nix/store/85r01271896mbwklcgwjig6xarz1kwrr-python3.8-auto-cpufreq-1.5.1/bin/cpufreqctl: line 267: echo: write error: Device or resource busy
+> /nix/store/85r01271896mbwklcgwjig6xarz1kwrr-python3.8-auto-cpufreq-1.5.1/bin/cpufreqctl: line 267: echo: write error: Device or resource busy
+> /nix/store/85r01271896mbwklcgwjig6xarz1kwrr-python3.8-auto-cpufreq-1.5.1/bin/cpufreqctl: line 267: echo: write error: Device or resource busy
+> Setting to use: "balance_performance" EPP
+> ```
+
+I've never seen an error like this, but I think it might be related to NixOS itself and its packing? I'm saying this because for auto-cpufreq to work in Snap strictly confined mode, changes had to be [made  to snapd itself](https://github.com/snapcore/snapd/pull/8127). 
+
+Maybe something similar has to be done here?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Technical27:</strong></p>
+                    <p>NixOS doesn't limit programs and what they can do with the exectiption that `/nix/store` is readonly so, programs cannot modify their own binaries, libs, etc.
+That is why I used a patch to prevent `scripts/cpufreqctl.sh` from being copied and to disable installing.
+
+I am currently using TLP and that can modify the govenor and cpu frequencies perfectly.
+`auto-cpufreq` works fine and it did change the governor/EPP even when the error shows.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> `auto-cpufreq` works fine and it did change the governor/EPP even when the error shows.
+
+In that case maybe simply hide 
+```
+/nix/store/85r01271896mbwklcgwjig6xarz1kwrr-python3.8-auto-cpufreq-1.5.1/bin/cpufreqctl: line 267: echo: write error: Device or resource busy
+```
+
+output?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Creator54:</strong></p>
+                    <p>> `powerManagement.cpuFreqGovernor = lib.mkForce null` didn't help me.
+> Nix package and patch [here](https://gist.github.com/Technical27/eda4d3d8efb7ec5f1ee8e7e24c9f8aeb).
+> The patch disables some copying and the install/removal
+
+Could you explain how I could test this in my nix system I am bit of a noob 😅
+I did try to include this in my configuration.nix but got issues .
+
+Also why ``powerManagement.cpuFreqGovernor = lib.mkForce null`` why this is null ?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Creator54:</strong></p>
+                    <p>> > This doesn't happen when it sets governor to "powersave" and EPP to "balance_power"
+> > ### Error output:
+> > ```
+> > Battery is: charging
+> > 
+> > Setting to use: "performance" governor
+> > /nix/store/85r01271896mbwklcgwjig6xarz1kwrr-python3.8-auto-cpufreq-1.5.1/bin/cpufreqctl: line 267: echo: write error: Device or resource busy
+> > /nix/store/85r01271896mbwklcgwjig6xarz1kwrr-python3.8-auto-cpufreq-1.5.1/bin/cpufreqctl: line 267: echo: write error: Device or resource busy
+> > /nix/store/85r01271896mbwklcgwjig6xarz1kwrr-python3.8-auto-cpufreq-1.5.1/bin/cpufreqctl: line 267: echo: write error: Device or resource busy
+> > /nix/store/85r01271896mbwklcgwjig6xarz1kwrr-python3.8-auto-cpufreq-1.5.1/bin/cpufreqctl: line 267: echo: write error: Device or resource busy
+> > /nix/store/85r01271896mbwklcgwjig6xarz1kwrr-python3.8-auto-cpufreq-1.5.1/bin/cpufreqctl: line 267: echo: write error: Device or resource busy
+> > /nix/store/85r01271896mbwklcgwjig6xarz1kwrr-python3.8-auto-cpufreq-1.5.1/bin/cpufreqctl: line 267: echo: write error: Device or resource busy
+> > /nix/store/85r01271896mbwklcgwjig6xarz1kwrr-python3.8-auto-cpufreq-1.5.1/bin/cpufreqctl: line 267: echo: write error: Device or resource busy
+> > /nix/store/85r01271896mbwklcgwjig6xarz1kwrr-python3.8-auto-cpufreq-1.5.1/bin/cpufreqctl: line 267: echo: write error: Device or resource busy
+> > Setting to use: "balance_performance" EPP
+> > ```
+> 
+> I've never seen an error like this, but I think it might be related to NixOS itself and its packing? I'm saying this because for auto-cpufreq to work in Snap strictly confined mode, changes had to be [made to snapd itself](https://github.com/snapcore/snapd/pull/8127).
+> 
+> Maybe something similar has to be done here?
+
+Yes, It's because nixos only allows system wide changes when done with /etc/nixos/configuration.nix file .
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>freshgiammi:</strong></p>
+                    <p>This issue might not be caused by NixOS. I've replicated (actually, had since I started using auto-cpufreq) this same issue on Arch running on a XPS 9500. Fairly sure it's not something in my configuration as well, as this has appened after a clean install. 
+
+```
+/usr/bin/cpufreqctl: riga 267: echo: errore in scrittura: Dispositivo o risorsa occupata
+/usr/bin/cpufreqctl: riga 267: echo: errore in scrittura: Dispositivo o risorsa occupata
+/usr/bin/cpufreqctl: riga 267: echo: errore in scrittura: Dispositivo o risorsa occupata
+/usr/bin/cpufreqctl: riga 267: echo: errore in scrittura: Dispositivo o risorsa occupata
+/usr/bin/cpufreqctl: riga 267: echo: errore in scrittura: Dispositivo o risorsa occupata
+/usr/bin/cpufreqctl: riga 267: echo: errore in scrittura: Dispositivo o risorsa occupata
+/usr/bin/cpufreqctl: riga 267: echo: errore in scrittura: Dispositivo o risorsa occupata
+/usr/bin/cpufreqctl: riga 267: echo: errore in scrittura: Dispositivo o risorsa occupata
+/usr/bin/cpufreqctl: riga 267: echo: errore in scrittura: Dispositivo o risorsa occupata
+/usr/bin/cpufreqctl: riga 267: echo: errore in scrittura: Dispositivo o risorsa occupata
+/usr/bin/cpufreqctl: riga 267: echo: errore in scrittura: Dispositivo o risorsa occupata
+/usr/bin/cpufreqctl: riga 267: echo: errore in scrittura: Dispositivo o risorsa occupata
+```
+
+auto-cpufreq --debug
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux rolling n/a
+Linux kernel: 5.9.14-arch1-1
+Processor: Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+Cores: 12
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 5000 MHz
+CPU min frequency: 800 MHz
+
+	 Usage  Temperature  Frequency
+CPU0:	  0.0%     56 °C     4239 MHz
+CPU1:	  2.9%     57 °C     4661 MHz
+CPU2:	  0.0%     55 °C     4910 MHz
+CPU3:	  2.0%     57 °C     4817 MHz
+CPU4:	  1.0%     56 °C     4748 MHz
+CPU5:	  1.0%     56 °C     4666 MHz
+CPU6:	  0.0%     56 °C     4756 MHz
+CPU7:	  1.0%     57 °C     4797 MHz
+CPU8:	  0.0%     55 °C     4852 MHz
+CPU9:	  0.0%     57 °C     4797 MHz
+CPU10:	  1.0%     56 °C     4783 MHz
+CPU11:	  0.0%     56 °C     4699 MHz
+
+fatal: .git non è un repository Git (né lo è alcuna delle directory genitrici)
+Snap package: no
+
+Python: 3.9.0
+psutil package: 5.7.3
+platform package: 1.0.8
+click package: 7.1.2
+distro package 1.5.0
+
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.1 %
+
+Total CPU usage: 0.8 %
+Total system load: 0.52
+Average temp. of all cores: 56.166666666666664 °C 
+
+Currently using: performance governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+
+```
+
+On my side though, governor is changing but EPP isn't, as reported by the error message.
+
+```
+[freshgiammi@xps9500 ~]$ cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+performance
+[freshgiammi@xps9500 ~]$ cat /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_preference 
+performance
+[freshgiammi@xps9500 ~]$ cat /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_available_preferences 
+default performance balance_performance balance_power power 
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>@AdnanHodzic This is related to the implementation of hardware managed performance states (HWP) in intel_pstates. If HWP is activated and the performance governor is selected the EPP value is overwritten with a 0 (performance) and made read only. [[1]](https://www.kernel.org/doc/html/latest/admin-guide/pm/intel_pstate.html#hwp-performance)
+
+You could implement a simple if condition that checks if `/sys/devices/system/cpu/intel_pstate/hwp_dynamic_boost`, which is only present if HWP is enabled, exists and if so, skips setting `/sys/devices/system/cpu/cpu0/cpufreq/energy_performance_preference `.[[2]](https://www.kernel.org/doc/html/latest/admin-guide/pm/intel_pstate.html#global-attributes)
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@likeadoc thanks for clarification and heads up! Since I'm very busy at the moment, if you or anyone else in this report could make these changes and [create a PR,](https://docs.github.com/en/free-pro-team@latest/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request) I would greatly appreciate it. If anything, your contribution would be listed on [releases page](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+Otherwise, you can wait until I make these changes, but I'm really not sure when I'll be able to do so.
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>freshgiammi:</strong></p>
+                    <p>Did a small change that has been running without issues for a couple of days on my end, so I forked and opened a PR. All works fine on my XPS 9500 (i7-10750H), YMMV but it really shouldn't. 
+Those interested should try it.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Changed mentioned by @freshgiammi are also live as part of [auto-cpufreq 1.5.2 release](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.5.2).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

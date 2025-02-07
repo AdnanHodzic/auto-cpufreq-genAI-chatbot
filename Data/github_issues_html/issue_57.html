@@ -1,0 +1,26 @@
+
+        <html>
+        <head>
+            <title>Issue #57: [Request] Instructions on how to exit "auto-cpufreq --log" </title>
+        </head>
+        <body>
+            <h1>[Request] Instructions on how to exit "auto-cpufreq --log" </h1>
+            <p><strong>Issue #57</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>It would be nice if there are some kind of message about how to exit "auto-cpufreq --log". Ctrl+C is working but it is not intuitive for new users.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Note added as part of [1.6.0 release](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.6.0). 
+
+I even re-wrote whole auto-cpufreq with multithreading in mind so this certain key could be detected (i.e: q, esc, etc) and app would quit. But due to lack of support for [keyboard input for window in focus of keyboard python library](https://github.com/boppreh/keyboard/issues/413), this feature will be pushed in one of the future releases.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

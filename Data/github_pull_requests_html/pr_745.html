@@ -1,0 +1,26 @@
+
+        <html>
+        <head>
+            <title>Pull Request #745: Fix: Getting incorrect max frequency value</title>
+        </head>
+        <body>
+            <h1>Fix: Getting incorrect max frequency value</h1>
+            <p><strong>Pull Request #745</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>This PR (partially) closes https://github.com/AdnanHodzic/auto-cpufreq/issues/737. Instead of getting the max frequency from `cpuinfo_max_freq`, it gets from `scaling_max_freq`. It shoudn't be a problem for most systems, since these values tend to be the same. However, on some cases(like https://github.com/AdnanHodzic/auto-cpufreq/issues/737), they are reported different, with the `scaling_max_freq` being the correct one. Apparently this can happen if turbo boost is enabled by means other than the bios , like writing to the cpu registers directly or editing `/sys/devices/system/cpu/intel_pstate/no_turbo`
+
+Any feedback about potential problems or improvements would be greatly appreciated.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>LDrawe:</strong></p>
+                    <p>Closing this for now, as of yesterday I started getting mixed results, will investigate futher to see what's actually going on</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

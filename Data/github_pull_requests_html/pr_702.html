@@ -1,0 +1,32 @@
+
+        <html>
+        <head>
+            <title>Pull Request #702: Refactor charging function</title>
+        </head>
+        <body>
+            <h1>Refactor charging function</h1>
+            <p><strong>Pull Request #702</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>* Removed the `else` from the top level of the charging() function, the logic is the same but slightly easier to read now.
+
+* Use `if not x.exists()` in the charging() function before opening the file instead of FileNotFoundError exceptions, makes the function a lot easier to read.
+
+* Close the power_supply_type_path after reading the supply_type as it is not used later.
+
+* Remove `else: continue` from the end of the charging() function for loop, this didn't actually do anything.
+
+I tested the charging() function on my laptop plugged in and plugged out and it is still working as expected with these changes.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>LGTM! Thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

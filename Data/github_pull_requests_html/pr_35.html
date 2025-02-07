@@ -1,0 +1,100 @@
+
+        <html>
+        <head>
+            <title>Pull Request #35: fix auto-cpufreq --log freezing</title>
+        </head>
+        <body>
+            <h1>fix auto-cpufreq --log freezing</h1>
+            <p><strong>Pull Request #35</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>This PR is supposed to fix https://github.com/AdnanHodzic/auto-cpufreq/issues/31 .</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>validatedev:</strong></p>
+                    <p>Testing for hours and didn't encounter any issue. All goes well.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Sorry for delayed response from my side, been very busy last couple of days. I'll thoroughly review this tomorrow.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Just to confirm, did you also have the problem with logs freezing?
+
+Because no matter what I do without and with these changes my logs never freeze, and I can see them after suspend/hibernate. So I'm not sure how these changes fix this issue since I can't reproduce reported problem in #31 
+
+Regarding changes you made:
+```
+ExecStart=/usr/bin/sh -c '/usr/bin/python3 /usr/bin/auto-cpufreq --daemon'
+StandardOutput=append:/var/log/auto-cpufreq.log
+```
+
+During development of this tool, at one point I had these same changes. Reason why I went the path I went with:
+
+```
+ExecStart=/usr/bin/python3 /usr/bin/auto-cpufreq --daemon
+StandardOutput=file:/var/log/auto-cpufreq.log
+```
+
+1. Process is run directly by systemd, no need to create a bash wrapper around it. Potentially having smaller memory footprint
+
+2. These no need for these logs to be "appended", as the file can be overwritten each time. Also potentially resulting in generation of big log size and then needing log retention. Altough at first look this doesn't seem to be the case.
+
+So if you could share your thinking for number 1 and 2 that would be great.
+
+In meantime, let's see if anyone from #31 reports if this fixed their problem.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>validatedev:</strong></p>
+                    <p>@AdnanHodzic 
+    1. When I try the changes without the bash wrapper, it works as before. Because of that, I share the same thoughts with you and I'll remove the changes for `ExecStart`.
+    2. You're right for the log size, we cannot eliminate of that. Maybe we should introduce the internal changes instead of changing the service file. Moreover, if the user decide to delete the log, instead of display the warning to the user, we should recreate the log file and continue.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Let's leave this PR parked for now. I want people from #31 to confirm this fixes their issue. 
+
+As I cannot replicate the problem they are reporting and in case we pull this PR with master, we only might introduce new problems without being 100% sure it addresses the one it was made for.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>validatedev:</strong></p>
+                    <p>I tested for days and didn't encounter any weird behaviour, just for your info.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>During my testing, I also didn't encounter any issues. So you did a good job, I'm just saying it still leaves us with:
+
+> 2. These no need for these logs to be "appended", as the file can be overwritten each time. Also potentially resulting in generation of big log size and then needing log retention. Although at first look this doesn't seem to be the case.
+
+And I would truly like to understand why #31 happens for some people, so until get more data/input let's leave it as is.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@validatedev I want to merge these changes, since last couple of weeks I've been working what will ultimately become v1.0 of auto-cpufreq. 
+
+Could you please add these changes as [part of snap branch](https://github.com/AdnanHodzic/auto-cpufreq/tree/snap) as that branch has many changes and will be merged with master in next couple of days.
+
+Thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>validatedev:</strong></p>
+                    <p>Then I'll close that PR and open the new.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

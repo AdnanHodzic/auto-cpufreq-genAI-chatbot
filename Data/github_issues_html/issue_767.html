@@ -1,0 +1,210 @@
+
+        <html>
+        <head>
+            <title>Issue #767: Error when Intstalling the Daemon on Linux Mint 22</title>
+        </head>
+        <body>
+            <h1>Error when Intstalling the Daemon on Linux Mint 22</h1>
+            <p><strong>Issue #767</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? **Yes, it looks like it may be similar to #765 but I can't read the errors enough to be sure**
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)? **Yes it works from the snap install but it's restricted**
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)? **I'm not sure what the errors mean so I don't know what to configure.**
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)? **Yes**
+
+### Error output:
+```
+rick@rick-ASUS-TUF-Gaming-F15-FX506LI-FX506LI:~/auto-cpufreq/auto-cpufreq$ sudo auto-cpufreq --install
+
+--------------------- Deploying auto-cpufreq as a daemon ----------------------
+
+* Turn off bluetooth on boot (can be turned on any time later on!)
+
+* Deploy auto-cpufreq install script
+
+* Deploy auto-cpufreq remove script
+auto-cpufreq snap package not installed
+GNOME Power Profiles Daemon should be enabled. run:
+
+sudo python3 power_helper.py --gnome_power_enable
+auto-cpufreq snap package installed, GNOME Power Profiles Daemon should be disabled.
+
+Using profile:  balanced
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/click/core.py", line 1157, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/click/core.py", line 1078, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/click/core.py", line 1434, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/click/core.py", line 783, in invoke
+    return __callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/auto_cpufreq/bin/auto_cpufreq.py", line 149, in main
+    deploy_daemon()
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/auto_cpufreq/core.py", line 323, in deploy_daemon
+    gnome_power_svc_disable()
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/auto_cpufreq/power_helper.py", line 244, in gnome_power_svc_disable
+    call(["powerprofilesctl", "set", "balanced"])
+  File "/usr/lib/python3.12/subprocess.py", line 389, in call
+    with Popen(*popenargs, **kwargs) as p:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/usr/lib/python3.12/subprocess.py", line 1955, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: 'powerprofilesctl'
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+Linux distro: Linux Mint 22 Wilma
+Linux kernel: 6.8.0-41-generic
+Processor: Intel(R) Core(TM) i5-10300H CPU @ 2.50GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2500 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      4.0%        40 °C      2500 MHz
+CPU1      2.0%        40 °C      2500 MHz
+CPU2      2.0%        40 °C      2500 MHz
+CPU3      0.0%        39 °C      2500 MHz
+CPU4      3.0%        40 °C      2500 MHz
+CPU5      0.0%        40 °C       800 MHz
+CPU6      1.0%        40 °C       800 MHz
+CPU7      1.0%        39 °C      2500 MHz
+
+CPU fan speed: 0 RPM
+
+auto-cpufreq version: 2.3.0
+
+Python: 3.12.3
+psutil package: 6.0.0
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.4 %
+
+Total CPU usage: 1.8 %
+Total system load: 0.71
+Average temp. of all cores: 39.75 °C 
+
+Currently using: performance governor
+Currently turbo boost is: off
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behavior.
+When I install through the snap store it works but is restricted due to the Snap limitations. I attempted to install using the installer commands in the Readme. It installs fine and I can see the GUI. When I click the Install button in the GUI it had me enter the password and says it installed the daemon. When I restart the GUI it goes back to the Install button screen.
+
+I ran the `sudo auto-cpufreq --install` command in a terminal and get the error pasted above. The specific laptop model is listed in the user name at the beginning of the error code block.
+
+I have attempted to remove the daemon to make sure there wasn't a partial install process, and reinstall all of auto-cpufreq with no change.
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>What happens if you install `power-profiles-daemon`? `sudo apt install power-profiles-daemon`
+
+You could stick to Snap package if it works, you simple won't be able to use GUI, but you can still install the daemon using `sudo auto-cpufreq --install`
+
+Also, you get an interesting message which doesn't seem right and accurate:
+
+```
+* Deploy auto-cpufreq remove script
+auto-cpufreq snap package not installed
+GNOME Power Profiles Daemon should be enabled. run:
+
+sudo python3 power_helper.py --gnome_power_enable
+auto-cpufreq snap package installed, GNOME Power Profiles Daemon should be disabled.
+```
+
+As after installing [auto-cpufreq with auto-cpufreq-installer,](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#auto-cpufreq-installer) if Snap package is not installed it should look like this:
+
+```
+sudo auto-cpufreq --install
+
+--------------------- Deploying auto-cpufreq as a daemon ----------------------
+
+* Turn off bluetooth on boot (can be turned on any time later on!)
+
+* Deploy auto-cpufreq install script
+
+* Deploy auto-cpufreq remove script
+
+----------------------------------- Warning -----------------------------------
+
+Detected running GNOME Power Profiles daemon service!
+
+This daemon might interfere with auto-cpufreq and has been disabled.
+
+This daemon is not automatically disabled in "monitor" mode and
+will be enabled after auto-cpufreq daemon is removed.
+
+─────────────────────────────────── Running auto-cpufreq daemon install script ───────────────────────────────────
+
+Deploying auto-cpufreq systemd unit file
+
+* Reloading systemd manager configuration
+
+* Starting auto-cpufreq daemon (systemd) service
+
+* Enabling auto-cpufreq daemon (systemd) at boot
+
+----------------- auto-cpufreq daemon installed and running -----------------
+
+To view live stats, run:
+auto-cpufreq --stats
+
+To disable and remove auto-cpufreq daemon, run:
+sudo auto-cpufreq --remove
+
+-------------------------------------------------------------------------------
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>There were some problems with daemon not persisting across reboots as pointed out in [Discrord community](https://discord.com/channels/1158239366251020361/1158252850841919498/1279511402020737054), which I just fixed. Hence, can you also pull the latest changes and verify if the problem persists. As it might also solve your issue ...</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing due to inactivity. </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

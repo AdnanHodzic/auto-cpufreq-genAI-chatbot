@@ -1,0 +1,700 @@
+
+        <html>
+        <head>
+            <title>Issue #305: Added a warning when using TLP</title>
+        </head>
+        <body>
+            <h1>Added a warning when using TLP</h1>
+            <p><strong>Issue #305</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>At this moment it recognizes only TLP on systemd systems. Just like power-profiles-daemon. Did not add automaticly disable feature, just a good warning to think about their choice of using TLP together with auto-cpufreq.
+
+I did a small rewrite for the `if which("systemctl") is not None:` and `bluetoothctl` which makes the code more readable and less prone to typing mistakes.
+
+It runs great, but I did not test SNAP. 
+
+I hope that you like it.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> At this moment it recognizes only TLP on systemd systems. Just like power-profiles-daemon. Did not add automaticly disable feature, just a good warning to think about their choice of using TLP together with auto-cpufreq.
+
+Yea, let's definitely not disable TLP automatically. 
+
+> I did a small rewrite for the `if which("systemctl") is not None:` and `bluetoothctl` which makes the code more readable and less prone to typing mistakes.
+
+Looking good.
+
+> It runs great, but I did not test SNAP.
+
+I'll test it out on Snap, as after this is merged I'll make a new release.
+
+> I hope that you like it.
+
+Code looks great, but I just ran into a weird scenario which might also need to be covered. I installed TLP, started it (`tlp start`), and verified it was enabled and running:
+
+```
+tlp-stat -s
+
+...
++++ TLP Status
+State          = enabled
+RDW state      = enabled
+Last run       = 08:35:51,    137 sec(s) ago
+Mode           = AC
+Power source   = AC
+```
+
+However,  I never got any working in `auto-cpufreq --live` or `--monitor` or `--stats` (after install). Turns out because TLP service wasn't running for some reason:
+
+```
+sudo systemctl status tlp
+○ tlp.service - TLP system startup/shutdown
+     Loaded: loaded (/lib/systemd/system/tlp.service; enabled; vendor preset: enabled)
+     Active: inactive (dead)
+       Docs: https://linrunner.de/tlp
+```
+
+I really don't want to get into debugging TLP and why it's service wasn't started, but it would be good if this check thoroughly made sure it's really not running.
+
+So maybe besides checking if service is running to also check if `tlp-stat -s` output matches `State          = enabled`? Curious to hear how your results of running TLP were different then mine.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Wow great feedback! Thank you for testing this out. 
+I will look into this a bit more! I was totally under the impression that would work. But now I see this:
+``` 
+systemctl status tlp.service 
+● tlp.service - TLP system startup/shutdown
+     Loaded: loaded (/usr/lib/systemd/system/tlp.service; enabled; vendor prese>
+     Active: active (exited) since Fri 2021-12-10 11:54:37 CET; 13s ago
+       Docs: https://linrunner.de/tlp
+    Process: 6293 ExecStart=/usr/sbin/tlp init start (code=exited, status=0/SUC>
+   Main PID: 6293 (code=exited, status=0/SUCCESS)
+        CPU: 327ms
+```
+Look at the active (exited) which then after 20 seconds or so it will go inactive (dead). But TLP is still running. 
+
+Will try to see if I can make it work with tlp-stat, because via systemd is definitely not the way to go. Thanks again for the info!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Pushed a change which uses `tlp-stat` to determine the state. 
+I don't know how stable the `tlp-stat -s` parsing is, but it is working on my end with `TLP 1.4.0`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Much cleaner and better code. :grinning: 
+I think this is it. I won't touch it anymore, before you have checked it out :grin: </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Much cleaner and better code. grinning I think this is it. I won't touch it anymore, before you have checked it out grin
+
+Perfect! After this one I think we have enough for a new release, which is pretty much all you @bobslept, looking forward to seeing more of your PR's :slightly_smiling_face: 
+
+P.S: not sure if it was due to recent PR's but I think I've noticed a potential regression. I was just transcoding a video and while CPU usage on all cores was in 95%'s range, CPU frequency of all cores was in ~2000MHz ranges (out of max 4.6GHz). 
+
+Did you notice anything similar?
+
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 21.10 (Impish Indri)
+Linux kernel: 5.13.0-22-generic
+Processor: Intel(R) Core(TM) i7-8565U CPU @ 1.80GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4600 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	 86.9%     70 °C     2000 MHz
+CPU1:	 88.2%     69 °C     2000 MHz
+CPU2:	 88.9%     71 °C     2000 MHz
+CPU3:	 79.8%     74 °C     2000 MHz
+CPU4:	 93.9%     70 °C     2000 MHz
+CPU5:	 84.0%     69 °C     2000 MHz
+CPU6:	 88.9%     71 °C     2000 MHz
+CPU7:	 89.0%     74 °C     2000 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+
+Total CPU usage: 96.9 %
+Total system load: 8.56
+Average temp. of all cores: 71.0 °C
+
+High CPU load
+setting turbo boost: on
+
+-------------------------------------------------------------------------------
+```
+It also seems like this is only happening when using Handbrake otherwise frequencies go above this limit, will investigate further.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>```
+Linux distro: Fedora Linux 35 
+Linux kernel: 5.15.6-200.fc35.x86_64
+Processor: AMD Ryzen 7 4800U with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1800 MHz
+CPU min frequency: 1400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	 90.9%    103 °C     3179 MHz
+CPU1:	 82.8%    103 °C     3178 MHz
+CPU2:	 83.8%    103 °C     3042 MHz
+CPU3:	 85.0%    103 °C     3035 MHz
+CPU4:	 82.8%    103 °C     3180 MHz
+CPU5:	 82.8%    103 °C     3180 MHz
+CPU6:	 81.0%    103 °C     3180 MHz
+CPU7:	 81.8%    103 °C     3180 MHz
+CPU8:	 84.5%    103 °C     1800 MHz
+CPU9:	 86.9%    103 °C     3180 MHz
+CPU10:	 87.9%    103 °C     3180 MHz
+CPU11:	 83.7%    103 °C     3180 MHz
+CPU12:	 82.7%    103 °C     3180 MHz
+CPU13:	 84.8%    103 °C     3180 MHz
+CPU14:	 84.8%    103 °C     2945 MHz
+CPU15:	 81.8%    103 °C     3117 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+
+Total CPU usage: 91.0 %
+Total system load: 20.8
+Average temp. of all cores: 103.0 °C
+
+High CPU load
+setting turbo boost: on
+
+
+
+```
+I never used handbrakde, so I have no clue what i'm doing but this is while encoding a video in handbrake. Does not look like I'm have this problem on my end. But maybe I am, I just don't know what it should look like. This was with `handbrake-gui 1.4.2`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> ```
+> Linux distro: Fedora Linux 35 
+> Linux kernel: 5.15.6-200.fc35.x86_64
+> Processor: AMD Ryzen 7 4800U with Radeon Graphics
+> Cores: 16
+> Architecture: x86_64
+> Driver: acpi-cpufreq
+> 
+> ------------------------------ Current CPU stats ------------------------------
+> 
+> CPU max frequency: 1800 MHz
+> CPU min frequency: 1400 MHz
+> 
+> Core	Usage	Temperature	Frequency
+> CPU0:	 90.9%    103 °C     3179 MHz
+> CPU1:	 82.8%    103 °C     3178 MHz
+> CPU2:	 83.8%    103 °C     3042 MHz
+> CPU3:	 85.0%    103 °C     3035 MHz
+> CPU4:	 82.8%    103 °C     3180 MHz
+> CPU5:	 82.8%    103 °C     3180 MHz
+> CPU6:	 81.0%    103 °C     3180 MHz
+> CPU7:	 81.8%    103 °C     3180 MHz
+> CPU8:	 84.5%    103 °C     1800 MHz
+> CPU9:	 86.9%    103 °C     3180 MHz
+> CPU10:	 87.9%    103 °C     3180 MHz
+> CPU11:	 83.7%    103 °C     3180 MHz
+> CPU12:	 82.7%    103 °C     3180 MHz
+> CPU13:	 84.8%    103 °C     3180 MHz
+> CPU14:	 84.8%    103 °C     2945 MHz
+> CPU15:	 81.8%    103 °C     3117 MHz
+> 
+> ---------------------------- CPU frequency scaling ----------------------------
+> 
+> Battery is: charging
+> 
+> Setting to use: "performance" governor
+> 
+> Total CPU usage: 91.0 %
+> Total system load: 20.8
+> Average temp. of all cores: 103.0 °C
+> 
+> High CPU load
+> setting turbo boost: on
+> ```
+> 
+> I never used handbrakde, so I have no clue what i'm doing but this is while encoding a video in handbrake. Does not look like I'm have this problem on my end. But maybe I am, I just don't know what it should look like. This was with `handbrake-gui 1.4.2`
+
+Interesting, for you it seems like it's reporting wrong max frequency `CPU max frequency: 1800 MHz` while your CPU is showing 3180Mhz.
+
+This seems to be confirmed problem in my case. You can test this too using `stress` tool (configure based on number of CPU/cores you have):
+
+```
+stress --cpu 8 --io 4 --vm 4 --timeout 60
+```
+
+On max CPU usage, it seemed like my cores are capped at 2000MHz, but as soon as max CPU usage of 100% stopped some of my cores would jump to 4Ghz+.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>That is when the turbo kicks in as of [this](https://www.amd.com/en/products/apu/amd-ryzen-7-4800u) info. Baseclock is 1.8Ghz and max boost is 4.2Ghz.
+
+```
+stress --cpu 16 --io 4 --vm 4 --timeout 60
+```
+
+```
+Linux distro: Fedora Linux 35 
+Linux kernel: 5.15.6-200.fc35.x86_64
+Processor: AMD Ryzen 7 4800U with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1800 MHz
+CPU min frequency: 1400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	100.0%    100 °C     3161 MHz
+CPU1:	100.0%    100 °C     3162 MHz
+CPU2:	100.0%    100 °C     3163 MHz
+CPU3:	100.0%    100 °C     3166 MHz
+CPU4:	100.0%    100 °C     3169 MHz
+CPU5:	 93.7%    100 °C     3174 MHz
+CPU6:	100.0%    100 °C     3179 MHz
+CPU7:	 96.9%    100 °C     3182 MHz
+CPU8:	100.0%    100 °C     3181 MHz
+CPU9:	100.0%    100 °C     3177 MHz
+CPU10:	100.0%    100 °C     3174 MHz
+CPU11:	100.0%    100 °C     3172 MHz
+CPU12:	100.0%    100 °C     3175 MHz
+CPU13:	100.0%    100 °C     3186 MHz
+CPU14:	100.0%    100 °C     3204 MHz
+CPU15:	100.0%    100 °C     3192 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+
+Total CPU usage: 99.9 %
+Total system load: 10.02
+Average temp. of all cores: 99.5 °C
+
+High CPU load
+setting turbo boost: on
+```
+My fan does almost nothing, so my turbo boost is probably throtlled by the temps. This is "intelligent cooling" mode on my system. If use "Extreme performance mode" fans are way more agressive. But I don't want to sit in fan noise all day.
+
+Well I removed auto-cpufreq and set performance mode via gnome power settings. It didn't even activate boost. so all cores where 1800mhz. 
+
+On extreme performance mode I get the same speeds as above. I then tried stress with 2 cores instead of 16 and now I see the 4Ghz mark
+
+```
+Linux distro: Fedora Linux 35 
+Linux kernel: 5.15.6-200.fc35.x86_64
+Processor: AMD Ryzen 7 4800U with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1800 MHz
+CPU min frequency: 1400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	 18.2%     91 °C     1800 MHz
+CPU1:	100.0%     91 °C     4072 MHz
+CPU2:	100.0%     91 °C     4071 MHz
+CPU3:	 20.0%     91 °C     1800 MHz
+CPU4:	 11.2%     91 °C     1800 MHz
+CPU5:	 12.8%     91 °C     4069 MHz
+CPU6:	 14.3%     91 °C     4068 MHz
+CPU7:	100.0%     91 °C     4067 MHz
+CPU8:	100.0%     91 °C     4067 MHz
+CPU9:	  9.6%     91 °C     1800 MHz
+CPU10:	 12.9%     91 °C     1800 MHz
+CPU11:	100.0%     91 °C     4065 MHz
+CPU12:	 20.0%     91 °C     4063 MHz
+CPU13:	  8.5%     91 °C     1800 MHz
+CPU14:	100.0%     91 °C     4065 MHz
+CPU15:	  9.7%     91 °C     1800 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+
+Total CPU usage: 50.0 %
+Total system load: 12.65
+Average temp. of all cores: 90.625 °C
+
+High CPU load
+setting turbo boost: on
+```
+
+Found data for my cpu:
+1.8Ghz base clock
+4.2Ghz single core turbo
+3.2Ghz all cores turbo
+
+So it seems ok.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Weird regardless I'll keep an eye on this.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Weird regardless I'll keep an eye on this.
+
+@bobslept unfortunately after looking into this for a few weeks now, there is a regression. In which if auto-cpufreq detects high load, it should give it all it has (uncap maximum frequencies) to get the job done. What was [demoed originally](https://youtu.be/QkYRpVEEIlg?t=244), this is not happening for me anymore. Not sure with which change, but along a way there was a change which will keeps scaling CPU down to i.e "have cool temperatures" then to go all in and get the job done when really needed.
+
+This is now on top of my list to address this issue, if you also have time to look into this please take a look.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Well the only thing I see currently on battery is that turbo boost goes on, but doesn't uncap the freqencies. So I'm in powersave governor, and it says turbo boost on, but i'm still at 1400mhz powersave mode.
+
+I've quickly installed v1.5.6 & v1.7.0, earlier did not run on my system and it behaves exactly the same. I'm not a very long user of auto-cpufreq but for me on battery was normal behavior. So I never seen this turbo actually go up till 4ghz on battery with powersave governor. I'm on AMD.
+
+I've tested via the config file to use `shedutil` on battery. Now the turbo does go up when its on. 
+
+Good luck tracking this down!
+
+Back on 1.9.0, on a charger in performance mode, i'm not reaching max speed either. stalls on 2.3ghz which is way lower as it was before as seen in comments above. Really no clue what happend.
+
+Another edit. After unstalling auto-cpufreq, I noticed power-profiles-daemon was on powersave. Changed that back to balanced and reinstalled auto-cpufreq. Now it's working again, at least on charger mode.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I've tested via the config file to use `shedutil` on battery. Now the turbo does go up when its on.
+
+Are you saying it did go above what you used to get with `shedutil`? This is AMD only, right?
+
+> Back on 1.9.0, on a charger in performance mode, i'm not reaching max speed either. stalls on 2.3ghz which is way lower as it > was before as seen in comments above. Really no clue what happend.
+
+Same here, I'm absolutely baffled by what happened here.
+
+>Another edit. After unstalling auto-cpufreq, I noticed power-profiles-daemon was on powersave. Changed that back to >balanced and reinstalled auto-cpufreq. Now it's working again, at least on charger mode.
+
+You're reaching max speeds when power-profiles-daemon is set to balanced? Not sure what effect it can have considering auto-cpufreq disables it, but it seems like it still picks something up after it?
+
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>> Are you saying it did go above what you used to get with `shedutil`? This is AMD only, right?
+
+Yes. When I'm on battery with the powersave governor, it enables turbo but always stays on 1400mhz. When using the shedutil governor on battery, it actually boosts to 3.2ghz with all cores (same as on performance with charger). Yes I'm on AMD using acpi-cpufreq driver.
+
+
+> Same here, I'm absolutely baffled by what happened here.
+
+>You're reaching max speeds when power-profiles-daemon is set to balanced? Not sure what effect it can have considering auto-cpufreq disables it, but it seems like it still picks something up after it?
+
+I think what happend is this. I uninstalled auto-cpufreq when I was on battery, then it re-enabled power-profiles-daemon, it put it on "Power saver" mode. Then I installed auto-cpufreq which disables power-profiles-daemon, but somehow the powersave state was still there. When I then used auto-cpufreq in performance governor on charger it wouldn't go above 2.3ghz. 
+
+So I then removed auto-cpufreq and noticed that power-profiles-daemon (which is then enabled again) was on powersave mode in the gnome panel settings. So I set it to balanced and installed auto-cpufreq and I then reached 3.2ghz on all cores again. 
+
+It seems a little strange, but that is what happend. 
+
+I just confirmed this a few minutes ago as described below:
+
+I'm on a charger now. I've uninstalled auto-cpufreq. Put machine in "Power saver" mode via the Gnome GUI. Installed auto-cpufreq and boom. Max speed on stress is 2.3ghz (no typo). Exactly what happend earlier today. 
+
+I uninstalled auto-cpufreq, Put machine in "Balanced" mode via the Gnome GUI. Installed auto-cpufreq again. Boom max speed on stress test is 3.2ghz which is my all core max turbo as described by AMD specs. 
+
+About power-profiles-daemon. They are currently very Intel minded. Somebody tried to [push](https://gitlab.freedesktop.org/hadess/power-profiles-daemon/-/merge_requests/84) acpi-cpufreq changes but they denied at this moment. They waiting for some stuff to land in kernel first. And use kernel callbacks from `platform_profile` or something. They do that on intel side already. Not really sure how it all works, but they go little deeper than just settings governors via cpufreq.
+
+```stress --cpu 16 --io 4 --vm 4 --timeout 60``` after I installed auto-cpufreq when power-profiles-daemon was first set to "Power saver"
+```
+Linux distro: Fedora Linux 35 
+Linux kernel: 5.15.12-200.fc35.x86_64
+Processor: AMD Ryzen 7 4800U with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1800 MHz
+CPU min frequency: 1400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	100.0%     69 °C     2226 MHz
+CPU1:	100.0%     69 °C     2226 MHz
+CPU2:	100.0%     69 °C     2216 MHz
+CPU3:	100.0%     69 °C     2226 MHz
+CPU4:	 99.0%     69 °C     2227 MHz
+CPU5:	100.0%     69 °C     2227 MHz
+CPU6:	100.0%     69 °C     2227 MHz
+CPU7:	 99.0%     69 °C     2227 MHz
+CPU8:	100.0%     69 °C     2227 MHz
+CPU9:	100.0%     69 °C     2227 MHz
+CPU10:	100.0%     69 °C     2227 MHz
+CPU11:	100.0%     69 °C     2227 MHz
+CPU12:	100.0%     69 °C     2227 MHz
+CPU13:	100.0%     69 °C     2227 MHz
+CPU14:	100.0%     69 °C     2227 MHz
+CPU15:	100.0%     69 °C     2227 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+
+Total CPU usage: 99.9 %
+Total system load: 17.19
+Average temp. of all cores: 68.875 °C
+
+High CPU load
+setting turbo boost: on
+```
+
+
+```stress --cpu 16 --io 4 --vm 4 --timeout 60``` after I installed auto-cpufreq when power-profiles-daemon was first set to "Balanced"
+```
+Linux distro: Fedora Linux 35 
+Linux kernel: 5.15.12-200.fc35.x86_64
+Processor: AMD Ryzen 7 4800U with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1800 MHz
+CPU min frequency: 1400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	100.0%     99 °C     3219 MHz
+CPU1:	100.0%     99 °C     3219 MHz
+CPU2:	100.0%     99 °C     3219 MHz
+CPU3:	100.0%     99 °C     3219 MHz
+CPU4:	100.0%     99 °C     3219 MHz
+CPU5:	100.0%     99 °C     3219 MHz
+CPU6:	100.0%     99 °C     3219 MHz
+CPU7:	100.0%     99 °C     3219 MHz
+CPU8:	100.0%     99 °C     3218 MHz
+CPU9:	100.0%     99 °C     3218 MHz
+CPU10:	100.0%     99 °C     3218 MHz
+CPU11:	100.0%     99 °C     3218 MHz
+CPU12:	 97.0%     99 °C     3218 MHz
+CPU13:	100.0%     99 °C     3218 MHz
+CPU14:	100.0%     99 °C     3218 MHz
+CPU15:	100.0%     99 °C     3218 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+
+Total CPU usage: 99.8 %
+Total system load: 17.88
+Average temp. of all cores: 99.0 °C
+
+High CPU load
+setting turbo boost: on
+```
+
+### On battery powersave vs schedutil turbo behavior, same stress command.
+```
+Linux distro: Fedora Linux 35 
+Linux kernel: 5.15.12-200.fc35.x86_64
+Processor: AMD Ryzen 7 4800U with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1800 MHz
+CPU min frequency: 1400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	100.0%     51 °C     1397 MHz
+CPU1:	100.0%     51 °C     1397 MHz
+CPU2:	100.0%     51 °C     1397 MHz
+CPU3:	100.0%     51 °C     1397 MHz
+CPU4:	100.0%     51 °C     1397 MHz
+CPU5:	100.0%     51 °C     1397 MHz
+CPU6:	100.0%     51 °C     1397 MHz
+CPU7:	100.0%     51 °C     1397 MHz
+CPU8:	100.0%     51 °C     1397 MHz
+CPU9:	100.0%     51 °C     1397 MHz
+CPU10:	100.0%     51 °C     1397 MHz
+CPU11:	100.0%     51 °C     1397 MHz
+CPU12:	100.0%     51 °C     1397 MHz
+CPU13:	100.0%     51 °C     1397 MHz
+CPU14:	100.0%     51 °C     1397 MHz
+CPU15:	100.0%     51 °C     1397 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: discharging
+
+Setting to use: "powersave" governor
+
+Total CPU usage: 99.9 %
+Total system load: 7.46
+Average temp. of all cores: 51.375 °C
+
+High CPU load
+setting turbo boost: on
+```
+
+```
+Linux distro: Fedora Linux 35 
+Linux kernel: 5.15.12-200.fc35.x86_64
+Processor: AMD Ryzen 7 4800U with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1800 MHz
+CPU min frequency: 1400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	100.0%     99 °C     3344 MHz
+CPU1:	100.0%     99 °C     3344 MHz
+CPU2:	100.0%     99 °C     3344 MHz
+CPU3:	100.0%     99 °C     3344 MHz
+CPU4:	100.0%     99 °C     3344 MHz
+CPU5:	100.0%     99 °C     3344 MHz
+CPU6:	100.0%     99 °C     3344 MHz
+CPU7:	100.0%     99 °C     3344 MHz
+CPU8:	100.0%     99 °C     3346 MHz
+CPU9:	100.0%     99 °C     3346 MHz
+CPU10:	100.0%     99 °C     3346 MHz
+CPU11:	100.0%     99 °C     3346 MHz
+CPU12:	100.0%     99 °C     3346 MHz
+CPU13:	100.0%     99 °C     3345 MHz
+CPU14:	100.0%     99 °C     3345 MHz
+CPU15:	100.0%     99 °C     3345 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: discharging
+
+Setting to use: "schedutil" governor
+
+Total CPU usage: 100.0 %
+Total system load: 11.53
+Average temp. of all cores: 99.25 °C
+
+High CPU load
+setting turbo boost: on
+```
+I hope you can make any sense out of all my writings :smiley: </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I understood everything I said perfectly well :slightly_smiling_face: 
+
+We need to figure what changes/command `power-profiles-daemon` sets/runs when it's set in "balanced" mode and then implement those changes as part of `auto-cpufreq` just before it disables it ...
+
+**Update**
+
+I get can be set using `sudo powerprofilesctl set balanced`
+
+But of course I'll get the following error: 
+
+```
+Traceback (most recent call last):
+  File "/usr/bin/powerprofilesctl", line 66, in get_proxy
+    proxy = Gio.DBusProxy.new_sync(bus, Gio.DBusProxyFlags.NONE, None,
+gi.repository.GLib.Error: g-io-error-quark: Error calling StartServiceByName for net.hadess.PowerProfiles: Unit power-profiles-daemon.service is masked. (36)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/bin/powerprofilesctl", line 151, in <module>
+    main()
+  File "/usr/bin/powerprofilesctl", line 146, in main
+    _set(args[0])
+  File "/usr/bin/powerprofilesctl", line 80, in _set
+    proxy = get_proxy()
+  File "/usr/bin/powerprofilesctl", line 71, in get_proxy
+    raise SystemError
+SystemError
+```
+
+Hence I propose to run the following command as part of auto-cpufreq just before `power-profiles-daemon` is disabled. Of course first making sure that balanced is available using `powerprofilesctl get`?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Easy way, before disable power-profile-daemon, force it to balanced mode like so:
+```
+powerprofilesctl set balanced
+```
+
+GMTA.
+when power-profiles-daemon is running that command will work. It will be available everywhere. It's their default mode actually.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> GMTA
+
+Indeed :smile: 
+
+Could you please make these changes? Otherwise I can potentially do it next week.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Yes, I will send pr later :+1: </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Awesome! Thank you and looking forward to the PR.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

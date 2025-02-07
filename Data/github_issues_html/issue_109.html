@@ -1,0 +1,733 @@
+
+        <html>
+        <head>
+            <title>Issue #109: Greedy apps causing overheating</title>
+        </head>
+        <body>
+            <h1>Greedy apps causing overheating</h1>
+            <p><strong>Issue #109</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>This isn't as much as an error as what it is something that I've been observing. I often do calls on Zoom and MS Teams, both apps seem to be processor hungry. When I have auto-cpufreq enabled, turbo boost is enabled and the laptop throws everything it can at the process. This results in cores overheating to the extent that they were reaching 95oC. I subsequently had to uninstall auto-cpufreq because it couldn't be disabled.
+
+It would be great if auto-cpufreq had some kind of killswitch that allowed me to turn it off under such extreme cases. Even better would be if auto-cpufreq would be able to identify such cases and engage the killswitch automatically when such cases occur.
+
+### System information:
+```text
+               +                
+               #                
+              ###               
+             #####              
+             ######             
+            ; #####;            User: marco
+           +##.#####            Hostname: rocinante
+          +##########           Distro: Arch Linux
+         #############;         Kernel: 5.7.17-2-MANJARO
+        ###############+        Uptime: 13:55
+       #######   #######        Window Manager: i3
+     .######;     ;###;`".      Desktop Environment: 
+    .#######;     ;#####.       Shell: /bin/zsh
+    #########.   .########`     Terminal: xterm
+   ######'           '######    Packages: 1604
+  ;####                 ####;   CPU: Intel(R) Core(TM) i7-8650U CPU @ 1.90GHz
+  ##'                     '##   RAM: 7277 MB / 15765 MB 
+ #'                         `#  Disk: 378GB / 989GB
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>For analysis purposes, what's the system load/CPU usage/temperature during these calls without auto-cpufreq daemon running? Check by running `auto-cpufreq --monitor` and paste the output here. This is more of a problem with those apps as I have this same behavior on MacBook Pro when running those same apps.
+
+My concern is if turbo was turned off during high core temperatures while CPU is very much needed, that this would only cause more overheating and cause whole system to lag as these app are requesting those CPU resources. 
+
+It would be nice if one such functionality could be implemented. Only (big) challenge would be in distinguishing when CPU usage is high (and yet not that high) for CPU frequency to be (briefly) lowered and yet to keep spinning the fans to lower the CPU core temperatures. 
+
+I noticed similar (edge case) thing when system is running on battery in powersave mode. Since system is running at minimum resources to preserve power, load will (sometimes) become high. But if you just let it briefly run at full power/speed it'll lower the load and then resources could be back to powersave. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>marc0der:</strong></p>
+                    <p>So I've prepared several dumps that show my system performance under the various scenarios. Most interesting to see is that greedy app does not hog the cpu when daemon is stopped, sticking to low frequency and low temp. When daemon is running, frequencies are boosted ~4000 MHz and core temperature rises:
+
+Normal operation (daemon running)
+
+```
+----------------------------- System information ------------------------------
+
+Linux distro: Manjaro Linux UNKNOWN version
+Linux kernel: 5.7.17-2-MANJARO
+Driver: intel_pstate
+Architecture: x86_64
+Processor: Intel(R) Core(TM) i7-8650U CPU @ 1.90GHz
+Cores: 8
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 1900MHz
+CPU min frequency: 400MHz
+
+CPU frequency for each core:
+
+CPU0: 1900 MHz
+CPU1: 1900 MHz
+CPU2: 1900 MHz
+CPU3: 1900 MHz
+CPU4: 1901 MHz
+CPU5: 1900 MHz
+CPU6: 1900 MHz
+CPU7: 1900 MHz
+
+Temperature for each physical core:
+
+CPU0 temp: 55°C
+CPU1 temp: 55°C
+CPU2 temp: 54°C
+CPU3 temp: 53°C
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+Setting to use: "performance" governor
+Setting to use: "balance_performance" EPP
+
+Total CPU usage: 3.0 %
+Total system load: 0.52 
+
+Load optimal, setting turbo boost: off
+
+-------------------------------------------------------------------------------
+```
+
+With greedy app (daemon running)
+
+```
+----------------------------- System information ------------------------------
+
+Linux distro: Manjaro Linux UNKNOWN version
+Linux kernel: 5.7.17-2-MANJARO
+Driver: intel_pstate
+Architecture: x86_64
+Processor: Intel(R) Core(TM) i7-8650U CPU @ 1.90GHz
+Cores: 8
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 4200MHz
+CPU min frequency: 400MHz
+
+CPU frequency for each core:
+
+CPU0: 4018 MHz
+CPU1: 3951 MHz
+CPU2: 3914 MHz
+CPU3: 4054 MHz
+CPU4: 3902 MHz
+CPU5: 3949 MHz
+CPU6: 4054 MHz
+CPU7: 4013 MHz
+
+Temperature for each physical core:
+
+CPU0 temp: 92°C
+CPU1 temp: 92°C
+CPU2 temp: 92°C
+CPU3 temp: 89°C
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+Setting to use: "performance" governor
+Setting to use: "balance_performance" EPP
+
+Total CPU usage: 14.7 %
+Total system load: 1.48 
+
+High load, setting turbo boost: on
+
+-------------------------------------------------------------------------------
+```
+
+With greedy app (daemon stopped, monitoring)
+
+```
+----------------------------- System information ------------------------------
+
+Linux distro: Manjaro Linux UNKNOWN version
+Linux kernel: 5.7.17-2-MANJARO
+Driver: intel_pstate
+Architecture: x86_64
+Processor: Intel(R) Core(TM) i7-8650U CPU @ 1.90GHz
+Cores: 8
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 1900MHz
+CPU min frequency: 400MHz
+
+CPU frequency for each core:
+
+CPU0: 1900 MHz
+CPU1: 1900 MHz
+CPU2: 1900 MHz
+CPU3: 1900 MHz
+CPU4: 1900 MHz
+CPU5: 1900 MHz
+CPU6: 1900 MHz
+CPU7: 1900 MHz
+
+Temperature for each physical core:
+
+CPU0 temp: 57°C
+CPU1 temp: 57°C
+CPU2 temp: 56°C
+CPU3 temp: 57°C
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+Suggesting use of "performance" governor
+Currently using: performance
+
+Total CPU usage: 19.4 %
+Total system load: 1.78 
+
+Currently turbo boost is: off
+Suggesting to set turbo boost: on
+
+-------------------------------------------------------------------------------
+```
+Greedy app in this case is Microsoft Teams, but I'm seeing the same behaviour with Zoom.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Do you install auto-cpufreq using snap or AUR package? 
+
+If you installed it using snap, out of sheer curiosity could you delete it and install it using AUR package. I'm curious to see if you'll have this same problem again. Just to role out it's not related to #110 
+
+Recently I switched from `core18` to `core20` (Python 3.8) and I'm starting to think this could be a problem behind these issues.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>marc0der:</strong></p>
+                    <p>I've installed it with the AUR package and running it as a systemd service now. Will report back here when I've tried it out some more tomorrow.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>marc0der:</strong></p>
+                    <p>Running Greedy, the core temperatures are still very high compared to running without the daemon, although not as critically high as with the snap package. Here is the dump:
+
+```
+Linux distro: Manjaro Linux 20.1 Mikah
+Linux kernel: 5.7.19-2-MANJARO
+Driver: intel_pstate
+Architecture: x86_64
+Processor: Intel(R) Core(TM) i7-8650U CPU @ 1.90GHz
+Cores: 8
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 4200MHz
+CPU min frequency: 400MHz
+
+CPU frequency for each core:
+
+CPU0: 3553 MHz
+CPU1: 3568 MHz
+CPU2: 3752 MHz
+CPU3: 3592 MHz
+CPU4: 3596 MHz
+CPU5: 3626 MHz
+CPU6: 3701 MHz
+CPU7: 3558 MHz
+
+Temperature for each physical core:
+
+CPU0 temp: 87°C
+CPU1 temp: 87°C
+CPU2 temp: 87°C
+CPU3 temp: 85°C
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+Setting to use: "performance" governor
+Setting to use: "balance_performance" EPP
+
+Total CPU usage: 12.1 %
+Total system load: 3.31 
+
+High load, setting turbo boost: on
+
+-------------------------------------------------------------------------------
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>@marc0der I think it's because of turbo boost is set?
+@AdnanHodzic how do you think? 
+
+turbo boost just increases freq. High freq means high resistance -> high temperature, right?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>marc0der:</strong></p>
+                    <p>@Red-Eyed yes, but high temperature at ~95oC core temp isn't good for your machine.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>So, maybe we should disable boost on high temperature?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@marc0der  I just [released 1.3](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.3) (snap stable updated). Hence, could you please install auto-cpufreq's latest version and include output of `sudo auto-cpufreq --debug`. Also please confirm that temperatures don't get so high on snap now as they used to. As there was one error during build which I ignored which has now been addressed.
+
+And what are your (approximate) average temperatures? 
+
+@Red-Eyed 
+
+> So, maybe we should disable boost on high temperature?
+
+I think that's what we should experiment with, if one or more cores has hits >= 90% turn off turbo boost. One or more cores temp is <= 80 (turn it back on).
+
+I think we need to dial it back a bit, and make "turbo on" bit less trigger happy. Example, my current load stats:
+
+```
+Total CPU usage: 4.4 %
+Total system load: 1.35 
+
+High load, setting turbo boost: on
+```
+
+This is definitely not a "high load" on system with 8 cores, and not sure if there's need for turbo to be triggered at this point ...
+
+as I mentioned in a comment [above](https://github.com/AdnanHodzic/auto-cpufreq/issues/109#issuecomment-688667682)
+
+> I noticed similar (edge case) thing when system is running on battery in powersave mode. Since system is running at minimum resources to preserve power, load will (sometimes) become high. But if you just let it briefly run at full power/speed it'll lower the load and then resources could be back to powersave.
+
+This should be implemented also. Turbo is off, load is really high (while CPU is low), turn turbo boost on, load is low again, turn turbo off again.
+
+What we have is great, but I think next step in auto-cpufreq's evolution is to make turbo on/off triggers more refined and have them change states more often based on various (new) different factors which are not included now.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>@AdnanHodzic actually, I don't have any idea, why turbo boost is enabled, when the goal is to save power?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> @AdnanHodzic actually, I don't have any idea, why turbo boost is enabled, when the goal is to save power?
+
+Well, when it's in performance mode (charging) and then it's more easily triggered. In my case above laptop is charging.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>marc0der:</strong></p>
+                    <p>@AdnanHodzic I've now installed the latest snap version 1.3 and will monitor it closely.
+
+> I think that's what we should experiment with, if one or more cores has hits >= 90% turn off turbo boost. One or more cores temp is <= 80 (turn it back on).
+
+This sounds like a good first stab at solving the problem to make it less trigger-happy as you say.
+
+Keep up the good work, this tool has great potential for linux laptop warriors like myself.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>marc0der:</strong></p>
+                    <p>This is the output for the snap version 1.3. Core temperatures still ocassionally venture into the >= 90oC territory, but generally stays within 80-90oC.
+
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Manjaro Linux UNKNOWN version
+Linux kernel: 5.7.19-2-MANJARO
+Processor: Intel(R) Core(TM) i7-8650U CPU @ 1.90GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 4200MHz
+CPU min frequency: 400MHz
+
+CPU frequency for each core:
+
+CPU0: 4039 MHz
+CPU1: 3992 MHz
+CPU2: 3672 MHz
+CPU3: 3939 MHz
+CPU4: 3745 MHz
+CPU5: 3778 MHz
+CPU6: 3869 MHz
+CPU7: 3852 MHz
+
+Temperature for each physical core:
+
+CPU0 temp: 87°C
+CPU1 temp: 83°C
+CPU2 temp: 87°C
+CPU3 temp: 83°C
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+Setting to use: "balance_performance" EPP
+
+Total CPU usage: 4.3 %
+Total system load: 1.69 
+
+High load, setting turbo boost: on
+
+-------------------------------------------------------------------------------
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> This is the output for the snap version 1.3. Core temperatures still ocassionally venture into the >= 90oC territory, but generally stays within 80-90oC.
+> 
+> ```
+> -------------------------------------------------------------------------------
+> 
+> Linux distro: Manjaro Linux UNKNOWN version
+> Linux kernel: 5.7.19-2-MANJARO
+> Processor: Intel(R) Core(TM) i7-8650U CPU @ 1.90GHz
+> Cores: 8
+> Architecture: x86_64
+> Driver: intel_pstate
+> 
+> ------------------------------ Current CPU states ------------------------------
+> 
+> CPU max frequency: 4200MHz
+> CPU min frequency: 400MHz
+> 
+> CPU frequency for each core:
+> 
+> CPU0: 4039 MHz
+> CPU1: 3992 MHz
+> CPU2: 3672 MHz
+> CPU3: 3939 MHz
+> CPU4: 3745 MHz
+> CPU5: 3778 MHz
+> CPU6: 3869 MHz
+> CPU7: 3852 MHz
+> 
+> Temperature for each physical core:
+> 
+> CPU0 temp: 87°C
+> CPU1 temp: 83°C
+> CPU2 temp: 87°C
+> CPU3 temp: 83°C
+> 
+> ---------------------------- CPU frequency scaling ----------------------------
+> 
+> Battery is: charging
+> 
+> Setting to use: "performance" governor
+> Setting to use: "balance_performance" EPP
+> 
+> Total CPU usage: 4.3 %
+> Total system load: 1.69 
+> 
+> High load, setting turbo boost: on
+> 
+> -------------------------------------------------------------------------------
+> ```
+
+@marc0der 
+
+This is much better, I would say even totally acceptable. I made a another[ release in meantime (1.3.1)](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.3.1). 
+
+On it I experimented bit with overheating, it turns out that turning "turbo boost off" won't do anything (as expected). But simple hack you could do next time CPU temperature gets really high (95°C territory). Could you simply pull the unplug it from the charger? This will force it to switch to "powersave" governor and I'm curious if this will lower the temperature for you (while speed should still remain the same thanks to turbo being on). 
+
+And next time could you also please include output of `sudo auto-cpufreq --debug`? Thanks</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>marc0der:</strong></p>
+                    <p>Temperatures are still up in the stratosphere with 1.3.1, so will need to wait until this is fixed properly before I can really use this day-to-day.
+Here is the debug output as requested:
+
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Manjaro Linux UNKNOWN version
+Linux kernel: 5.7.19-2-MANJARO
+
+Snap package: yes
+
+Python: 3.8.2
+psutil package: 5.7.2
+platform package: 1.0.8
+click package: 7.1.2
+distro package 1.5.0
+
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.09 %
+
+Processor: Intel(R) Core(TM) i7-8650U CPU @ 1.90GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 4200 MHz
+CPU min frequency: 400 MHz
+
+CPU frequency for each core:
+
+CPU0: 4076 MHz
+CPU1: 3901 MHz
+CPU2: 4037 MHz
+CPU3: 4011 MHz
+CPU4: 4038 MHz
+CPU5: 3948 MHz
+CPU6: 4134 MHz
+CPU7: 3498 MHz
+
+CPU usage per each core:
+
+CPU0: 12.0 %
+CPU1: 8.2 %
+CPU2: 9.2 %
+CPU3: 11.0 %
+CPU4: 56.4 %
+CPU5: 12.1 %
+CPU6: 18.0 %
+CPU7: 23.2 %
+
+Temperature for each physical core:
+
+CPU0 temp: 96°C
+CPU1 temp: 81°C
+CPU2 temp: 76°C
+CPU3 temp: 78°C
+
+Total CPU usage: 10.3 %
+Total system load: 0.99 
+
+Currently using: performance governor
+Currently turbo boost is: on
+-------------------------------------------------------------------------------
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>@marc0der 
+High CPU temperature means a weak cooler system.
+
+`auto-cpufreq` just legally changes CPU configuration.
+On my desktop, I run heavy tasks (Deep Learning training) for days with performance scheduler and with turbo boost on, and it is under 70°C.
+Also, I use my laptop and didn't get high temperatures, and even if I would get high temp - it's not because of `auto-cpufreq`, but because of bad cooler system.
+
+@AdnanHodzic should `auto-cpufreq` be responsible for temperature thresholds?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>And also let me know how this works, and if it's not too much to ask include before and after debug output.
+
+> But simple hack you could do next time CPU temperature gets really high (95°C territory). Could you simply pull the unplug it from the charger? This will force it to switch to "powersave" governor and I'm curious if this will lower the temperature for you (while speed should still remain the same thanks to turbo being on).
+
+As if this works as I suspect it might ...
+
+> > I think that's what we should experiment with, if one or more cores has hits >= 90% turn off turbo boost. One or more cores temp is <= 80 (turn it back on).
+> 
+> This sounds like a good first stab at solving the problem to make it less trigger-happy as you say.
+> 
+> Keep up the good work, this tool has great potential for linux laptop warriors like myself.
+
+I'd simply switch governors back and forth (instead of turbo) once certain temperature has been reached. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>marc0der:</strong></p>
+                    <p>@Red-Eyed so you are saying that the Lenovo Carbon X1 is a badly designed laptop with a bad cooler system? I think not.
+I compile Scala on my laptop every day and it never overheats. The moment I try to perform intensive tasks like this with auto-cpufreq enabled the cores overheat. The problem is clearly not with my laptop...
+
+@AdnanHodzic no probs, I'll include before and after debug logs next time I do this.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@Red-Eyed 
+
+> Also, I use my laptop and didn't get high temperatures, and even if I would get high temp - it's not because of `auto-cpufreq`, but because of bad cooler system.
+
+When not running CPU intensive tasks, my X1 Carbon (7th gen) will go as low as 48°C. But then if I'm stressing the CPU to the max, it'll go as high as 95°C (which for me, is expected). 
+
+Laptops definitely don't have as good cooling systems as desktops. This topic always reminds me of [MacBook Pro with Intel i9](https://www.youtube.com/watch?v=Dx8J125s4cg) not being able to reach even close to its max clock speed due to its chassis design.
+
+> @AdnanHodzic should `auto-cpufreq` be responsible for temperature thresholds?
+
+TBH, I'm not sure, doing this might be going down the rabbit hole. But I'm definitely willing to experiment to see how things can be further optimized. If doing things mentioned in my last comment would improve overheating problem, without compromising anything else `auto-cpufreq` currently does ... then I don't see a reason why not to implement it ...
+
+> @AdnanHodzic no probs, I'll include before and after debug logs next time I do this.
+
+@marc0der thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@marc0der  I made some [changes in turbo-lover](https://github.com/AdnanHodzic/auto-cpufreq/tree/turbo-lover) branch, you can get them by installing `auto-cpufreq` from snap beta channel:
+
+```
+sudo snap install auto-cpufreq --beta
+```
+
+Now it's using more conservative settings and turbo isn't triggered as easily as before. Let me know how it works for you.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>marc0der:</strong></p>
+                    <p>@AdnanHodzic I'm giving it a try and will report back about what my findings are.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>After thoroughly testing changes for few days, I've merged them with `master` branch and made [1.3.2 release](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.3.2). These changes have also been promoted to snap `stable` channel. 
+
+If you've been using beta channel you can switch to stable by running:
+
+```
+sudo snap switch --channel=stable auto-cpufreq
+```
+
+@marc0der I'm closing the issue as I'm sure it'll solve your problem. A lot of points which were discussed here that could be improved have been implemented. Temperatures have also been dropped drastically in my case although I didn't think of this as a problem. This was also confirmed in #118 
+
+I'm still interested in hearing your feedback when you get a chance, and please re-open the issue if the problem persists.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@marc0der update: you were the first one to report this problem, over time I also got couple of more similar comments which got me paying closer attention to the overheating problem. After analyzing this for more then a month I noticed I had the same problem you were experiencing (although my was lot less severe then yours).
+
+I noticed that CPU temperatures would be lot higher when turbo was enabled. For me this problem was happening with and without auto-cpufreq as long as turbo was enabled. 
+
+Either way, I believe overheating problem has been addressed as part of [v1.5.0 release](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.5.0). My laptop's batter has never lasted this long, geekbench results have never been higher, meanwhile laptop remains as cool and quiet as possible at the same time.
+
+Would love to hear your feedback!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>marc0der:</strong></p>
+                    <p>Hey @AdnanHodzic, thanks for the update! 
+
+I'll most certainly give it another spin over the next few days. I've just received my new laptop, a Dell XPS 13, and have installed Debian Bullseye with auto-cpufreq. At first glance, things are looking good, although it seems like turbo mode is always on even when on battery. This is even true when the machine is completely idle. Is this expected, or should turbo mode be off? Let me know if I can send you any more info.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@marc0der as always excellent observations. I just [release v1.5.1](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.5.1) which should address issue you were mentioning. Give it a try and let me know how it works for you.
+
+In case something isn't working as expected, please include output of:
+
+```
+sudo auto-cpufreq --debug
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>marc0der:</strong></p>
+                    <p>I've just installed v1.5.1 and it looks like the turbo mode is behaving as expected. I'll do some further testing over the next day or so and report back anything here. I'll close the issue if I have no further problems.
+
+And thanks again for investing your time in this great tool. Excellent work!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>marc0der:</strong></p>
+                    <p>I've done some testing today with `v1.5.1` while working and still seeing some inconsistencies:
+
+When the laptop is on the power supply, the governor is set to _performance_ with turbo boost _on_. However, the CPU frequency always remains around 1300MHz.
+
+The specification for my CPU states that turbo mode should see frequencies of around 3900MHz under load. I tested this by compiling a sizable Rust project where all CPUs were blazing at near 100% capacity for around 10 minutes. The temperature does stay low at around 60oC, but it would still be nice to benefit from the higher CPU frequencies of turbo mode under such high loads. WDYT?
+
+Here's a dump of the log:
+
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Debian GNU/Linux UNKNOWN version
+Linux kernel: 5.9.0-4-amd64
+Processor: Intel(R) Core(TM) i7-1065G7 CPU @ 1.30GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 1300 MHz
+CPU min frequency: 400 MHz
+
+         Usage  Temperature  Frequency
+CPU0:    96.0%     61 °C     1300 MHz
+CPU1:   100.0%     61 °C     1300 MHz
+CPU2:   100.0%     61 °C     1300 MHz
+CPU3:    98.0%     61 °C     1300 MHz
+CPU4:    98.0%     61 °C     1300 MHz
+CPU5:   100.0%     61 °C     1300 MHz
+CPU6:   100.0%     61 °C     1300 MHz
+CPU7:    99.0%     61 °C     1300 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+Setting to use: "balance_performance" EPP
+
+Total CPU usage: 98.9 %
+Total system load: 9.12
+Average temp. of all cores: 61.0 °C
+
+High CPU load
+setting turbo boost: on
+
+-------------------------------------------------------------------------------
+```
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> And thanks again for investing your time in this great tool. Excellent work!
+
+Thanks!
+
+> When the laptop is on the power supply, the governor is set to performance with turbo boost on. However, the CPU frequency 
+> always remains around 1300MHz.
+
+This is weird and definitively shouldn't happen. As now in v1.5.0 [if charging and it detects >= 20% CPU usage](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/source/core.py#L476) it should go to the maximum it's capable off.
+
+I think the problem is probably related to i7-1065G7 support on 4.9 Linux kernel (or some BIOS setting?). As from what I see here, it's maximum frequency seems to be capped at 1300MHz.
+
+Could you please do me a favor and create a new issue for this? Since this one was related to over heating and that seems to be fixed now.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>marc0der:</strong></p>
+                    <p>I rebooted the system and the problem seems to have been resolved now.
+I'm closing this issue as the overheating has definitely been resolved now. Thanks!</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

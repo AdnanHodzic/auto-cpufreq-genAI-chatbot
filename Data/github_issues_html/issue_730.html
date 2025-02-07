@@ -1,0 +1,305 @@
+
+        <html>
+        <head>
+            <title>Issue #730: auto-cpufreq is not using config at all</title>
+        </head>
+        <body>
+            <h1>auto-cpufreq is not using config at all</h1>
+            <p><strong>Issue #730</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Error output:
+```text
+Add/paste error output in case of failed installation or other failing component
+```
+well, `--stats` output:
+```sh
+❯ sudo auto-cpufreq --stats
+
+Using settings defined in /home/offeex/.config/auto-cpufreq/auto-cpufreq.conf file
+
+Note: You can quit stats mode by pressing "ctrl+c"
+		"auto-cpufreq" is about to refresh ...
+		Executed on: July 02 (Tuesday) - 18:18:02
+
+-------------------------------------------------------------------------------
+
+Linux distro: CachyOS Linux rolling n/a
+Linux kernel: 6.9.7-3-cachyos
+Processor: AMD Ryzen 5 5600H with Radeon Graphics
+Cores: 12
+Architecture: x86_64
+Driver: amd-pstate-epp
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3301 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0     12.2%        43 °C      1902 MHz
+CPU1      6.9%        43 °C      1676 MHz
+CPU2     14.3%        43 °C      1701 MHz
+CPU3     15.2%        43 °C      1878 MHz
+CPU4      9.1%        43 °C      2096 MHz
+CPU5      2.0%        43 °C       400 MHz
+CPU6      7.1%        43 °C      2096 MHz
+CPU7     17.9%        43 °C      2096 MHz
+CPU8     12.4%        43 °C      1674 MHz
+CPU9      6.1%        43 °C      1847 MHz
+CPU10     12.5%        43 °C      1700 MHz
+CPU11     10.1%        43 °C      1724 MHz
+
+CPU fan speed: 2156 RPM
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: discharging
+
+Setting to use: "powersave" governor
+Setting to use: "balance_power" EPP
+
+Total CPU usage: 9.7 %
+Total system load: 1.69
+Average temp. of all cores: 43.00 °C
+
+Load optimal (load average: 1.69, 1.43, 0.82)
+setting turbo boost: off
+
+-------------------------------------------------------------------------------
+```
+
+cpupower output:
+```sh
+❯ sudo cpupower frequency-info
+analyzing CPU 8:
+  driver: amd-pstate-epp
+  CPUs which run at the same hardware frequency: 8
+  CPUs which need to have their frequency coordinated by software: 8
+  maximum transition latency:  Cannot determine or is not supported.
+  hardware limits: 400 MHz - 3.30 GHz
+  available cpufreq governors: performance powersave
+  current policy: frequency should be within 400 MHz and 3.30 GHz.
+                  The governor "powersave" may decide which speed to use
+                  within this range.
+  current CPU frequency: Unable to call hardware
+  current CPU frequency: 2.10 GHz (asserted by call to kernel)
+  boost state support:
+    Supported: yes
+    Active: no
+    AMD PSTATE Highest Performance: 166. Maximum Frequency: 4.28 GHz.
+    AMD PSTATE Nominal Performance: 128. Nominal Frequency: 3.30 GHz.
+    AMD PSTATE Lowest Non-linear Performance: 43. Lowest Non-linear Frequency: 1.11 GHz.
+    AMD PSTATE Lowest Performance: 16. Lowest Frequency: 400 MHz.
+```
+
+and finally the config:
+```sh
+# preferred governor
+governor = powersave
+
+# EPP: see available preferences by running: cat /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_available_preferences
+energy_performance_preference = power
+
+# minimum cpu frequency (in kHz)
+# example: for 800 MHz = 800000 kHz --> scaling_min_freq = 800000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly
+scaling_min_freq = 800000
+
+# maximum cpu frequency (in kHz)
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# example: for 1GHz = 1000 MHz = 1000000 kHz -> scaling_max_freq = 1000000
+# to use this feature, uncomment the following line and set the value accordingly
+scaling_max_freq = 2500000
+
+# turbo boost setting (always, auto, or never)
+turbo = never
+
+# battery charging threshold
+# reference: https://github.com/AdnanHodzic/auto-cpufreq/#battery-charging-thresholds
+enable_thresholds = false
+# start_threshold = 20
+# stop_threshold = 80
+
+ideapad_laptop_conservation_mode = false
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```sh
+❯ sudo auto-cpufreq --debug
+
+Using settings defined in /home/offeex/.config/auto-cpufreq/auto-cpufreq.conf file
+
+-------------------------------------------------------------------------------
+
+Linux distro: CachyOS Linux rolling n/a
+Linux kernel: 6.9.7-3-cachyos
+Processor: AMD Ryzen 5 5600H with Radeon Graphics
+Cores: 12
+Architecture: x86_64
+Driver: amd-pstate-epp
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3301 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0     15.8%        43 °C      1674 MHz
+CPU1      4.0%        43 °C      1861 MHz
+CPU2     12.2%        43 °C      2095 MHz
+CPU3     14.1%        43 °C      1974 MHz
+CPU4     11.1%        43 °C      1733 MHz
+CPU5      2.0%        43 °C      2093 MHz
+CPU6     12.2%        43 °C      2003 MHz
+CPU7     14.4%        43 °C      1647 MHz
+CPU8     12.2%        43 °C      2094 MHz
+CPU9      7.1%        43 °C      2093 MHz
+CPU10     12.5%        43 °C      1985 MHz
+CPU11      9.2%        43 °C      1677 MHz
+
+CPU fan speed: 2156 RPM
+
+auto-cpufreq version: 1 (git: )
+
+Python: 3.12.4
+psutil package: 5.9.8
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.23 %
+
+Total CPU usage: 9.3 %
+Total system load: 1.63
+Average temp. of all cores: 43.00 °C
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>offeex:</strong></p>
+                    <p>hello?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> hello?
+
+You do realize this project is managed by people who do this in their free time and that[ we're looking for developers and maintainers](https://github.com/AdnanHodzic/auto-cpufreq#looking-for-developers-and-co-maintainers)? 
+
+> Using settings defined in /home/offeex/.config/auto-cpufreq/auto-cpufreq.conf file
+
+[Config file should be in /etc/auto-cpufreq.conf ](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#3-auto-cpufreq-config-file)and as of recent changes in code changes made to be will be picked up immidiately as the file is saved. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>offeex:</strong></p>
+                    <p>> You do realize this project is managed by people who do this in their free time and that[ we're looking for developers and maintainers](https://github.com/AdnanHodzic/auto-cpufreq#looking-for-developers-and-co-maintainers)?
+
+oh, sorry, forgor about that one
+
+> [Config file should be in /etc/auto-cpufreq.conf ](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#3-auto-cpufreq-config-file)and as of recent changes in code changes made to be will be picked up immidiately as the file is saved.
+
+well, i've tried to pass `--config`, that didn't help. In the end, everything comes to that bug when i have `ideapad-laptop` kernel module on, and the program tries to set thresholds (even tho i didn't specify in config to)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>>  In the end, everything comes to that bug when i have ideapad-laptop kernel module on, and the program tries to set thresholds (even tho i didn't specify in config to)
+
+@PurpleWazard as someone who implemented this functionality, does this make more sense to you?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>Some laptops even tho they use these supported kernel modules they still don't have the interface paths needed so. For more information could you give us  the output of:
+ls /sys/class/power_supply/BAT0/
+
+And
+
+auto-cpufreq --debug</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>offeex:</strong></p>
+                    <p>```
+❯ /bin/ls /sys/class/power_supply/BAT0/
+alarm           device              hwmon1        power_now      subsystem   voltage_min_design
+capacity        energy_full         manufacturer  present        technology  voltage_now
+capacity_level  energy_full_design  model_name    serial_number  type
+cycle_count     energy_now          power         status         uevent
+```
+
+```
+❯ sudo auto-cpufreq --debug
+[sudo] password for offeex:
+
+Using settings defined in /home/offeex/.config/auto-cpufreq/auto-cpufreq.conf file
+could not get value from conservation mode
+
+-------------------------------- Battery Info ---------------------------------
+
+battery count = 1
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/site-packages/auto_cpufreq/battery_scripts/ideapad_laptop.py", line 92, in ideapad_laptop_print_thresholds
+    with open(f'/sys/class/power_supply/BAT{b}/charge_start_threshold', 'r') as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/sys/class/power_supply/BAT0/charge_start_threshold'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/sbin/auto-cpufreq", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/usr/lib/python3.12/site-packages/click/core.py", line 1157, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/site-packages/click/core.py", line 1078, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/site-packages/click/core.py", line 1434, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/site-packages/click/core.py", line 783, in invoke
+    return __callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/site-packages/auto_cpufreq/bin/auto_cpufreq.py", line 169, in main
+    battery_get_thresholds()
+  File "/usr/lib/python3.12/site-packages/auto_cpufreq/battery_scripts/battery.py", line 42, in battery_get_thresholds
+    ideapad_laptop_print_thresholds()
+  File "/usr/lib/python3.12/site-packages/auto_cpufreq/battery_scripts/ideapad_laptop.py", line 101, in ideapad_laptop_print_thresholds
+    print(f"ERROR: failed to read battery thresholds: {e}")
+                                                       ^
+NameError: name 'e' is not defined
+```</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

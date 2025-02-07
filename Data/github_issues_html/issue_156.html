@@ -1,0 +1,76 @@
+
+        <html>
+        <head>
+            <title>Issue #156: Proposal to rethink the logging domain</title>
+        </head>
+        <body>
+            <h1>Proposal to rethink the logging domain</h1>
+            <p><strong>Issue #156</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Something that seems somewhat unclear is how logging is defined in auto-cpufreq.
+
+Usually, we would speak of a logger as a component that appends discrete lines of information to some appender. For instance, think of tailing the logs of a docker container. Each line contains a timestamp and represents an event that occurred on the system.
+Here is an example of the logs of my local mongodb container:
+```
+docker logs --follow mongo
+2021-01-23T15:31:39.949+0000 I NETWORK  [HostnameCanonicalizationWorker] Starting hostname canonicalization worker
+2021-01-23T15:31:39.950+0000 I NETWORK  [initandlisten] waiting for connections on port 27017
+```
+This is something very valuable to have and on modern Linux systems all flow to the system logs. These, in turn, are managed by `journalctl`.
+
+What we are referring to as logs in auto-cpufreq are actually not logs at all, but rather a status report or stats page. It reminds me a bit of the docker `stats` command, which gives a running update of the containers that are up for a given host. On my machine:
+```
+$ docker stats
+CONTAINER ID   NAME      CPU %     MEM USAGE / LIMIT     MEM %     NET I/O   BLOCK I/O         PIDS
+e84adeaeae00   mongo     0.29%     35.29MiB / 30.95GiB   0.11%     0B / 0B   30.7MB / 53.7MB   19
+```
+
+**Proposal**
+
+I propose that we split the two concepts to clarify the domain: Having timely and important information appended to the system logs is valuable. For example, something like a change in performance governor or if a change is made to turbo boost. This will allow monitoring through `journalctl` like you would expect it to work on Linux.
+
+Secondly, it is very useful to have the stats page, but the CLI flag should probably be renamed to something like `--stats` or `--status` so that it isn't confused with logging.
+
+Lastly, it might be a great idea to do a revamp of the _stats_ page at some point. 1.5.2 had a flickering page, now 1.5.3 seems to have degraded back to an inconsistent rolling effect. It would be great if we could have something that stays at the top of the page, that doesn't flicker and doesn't accumulate file resources. This will result in a far better user experience IMO.
+
+In summary:
+* introduce proper logging that logs to system logs
+* change name of `--log` to `--stats` (or `--status`)
+* revamp the rendering of the status page
+
+Hope this all sounds reasonable and that I'm not being too upfront, but I believe that such things are what makes an already great tool stand out even more. As always, I'm happy to get involved with everything by contributing towards this.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Hi @marc0der, another great proposal :) I'm sorry I didn't get a chance to reply to this earlier,
+
+I like this idea, only thing that I would propose is  leave `--log` flag there for awhile, informing users that now they should use `--stats`. 
+
+> Lastly, it might be a great idea to do a revamp of the _stats_ page at some point. 1.5.2 had a flickering page, now 1.5.3 seems to have degraded back to an inconsistent rolling effect. It would be great if we could have something that stays at the top of the page, that doesn't flicker and doesn't accumulate file resources. This will result in a far better user experience IMO.
+
++1, we had a long discussion as part of #148 if expand `scripts/auto-cpufreq.service` resolved comment discussion. But I agree that we need to stay consistent with this. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>marc0der:</strong></p>
+                    <p>No probs at all. Now that the first PR is merged I'll begin looking at the logging part of this proposal.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@marc0der JFYI, I've added [execution timestamp for to `--stats`](https://github.com/AdnanHodzic/auto-cpufreq/commit/d062ca940ffc6764b4072f727e3aba8ef938ca01), I refereed to it as[ part of your last PR](https://github.com/AdnanHodzic/auto-cpufreq/pull/160#issuecomment-771967853), so I thought why not just add it myself :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Since I'm very limited with available time to do this myself, if you or anyone else wants to give it a try in implementing this functionality, please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

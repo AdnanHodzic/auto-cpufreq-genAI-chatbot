@@ -1,0 +1,95 @@
+
+        <html>
+        <head>
+            <title>Issue #91: AUR installer issues</title>
+        </head>
+        <body>
+            <h1>AUR installer issues</h1>
+            <p><strong>Issue #91</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hi there, thanks for the latest update.
+However after updating it, my CPU Governor suddenly got stuck on performance with AC plugged in and couldnt be reverted. So I purged the software and installed again. If I run auto-cpufreq-install tho the installation fails with a copy error with a wrong path to the auto-cpufreq.service file. 
+
+Missing file in /usr/local/share/auto-cpufreq/scripts
+
+If I copy it manually there, it works, but then the service fails to start on a missing file: 
+
+```
+auto-cpufreq.service: Failed at step EXEC spawning /usr/local/bin/auto-cpufreq
+```
+
+Seems like some linking errors.
+
+If I install via " auto-cpufreq --install " setup will break not finding the auto-cpufreq-install.sh nor the auto-cpufreq-remove.sh in /usr/local/auto-cpufreq. 
+
+Putting it all manually where it belongs, does work, yet on AC plugged in the CPU governor is now always on performance for me and only ever enters powersave on battery.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>crian:</strong></p>
+                    <p>Don't run the install command after you installed the AUR package.
+Just enable the systemd service.
+If you want to remove the package, do it via pacman.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Let's continue this discussion in #84 (as I find this issue to be its duplicate in a sense).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>[README ](https://github.com/AdnanHodzic/auto-cpufreq)updated, I hope this clarifies any confusion. Please submit a new PR if you think otherwise. 
+
+@ntropy83 I apologize for discussion you were involved to be part of, and I hope your problem has been resolved. If this is not the case please re-open this issue.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ntropy83:</strong></p>
+                    <p>All good that worked out. Meanwhile I dug a bit into the code and know more now how it is working. Python is pretty new to me but intresting. :)
+
+I have modified the code for me, so the cpu stays on powersave with AC plugged in as well. This is better for this hell of a Coffee Lake Refresh ++ intel of mine that runs pretty hot real quick. :)
+
+One last thing for the Readme: systemctl enable auto-cpufreq would make it availiable between restarts and symlink it to systemd. The start command does only launch it for the current session. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> All good that worked out. Meanwhile I dug a bit into the code and know more now how it is working. Python is pretty new to me but intresting. :)
+
+:+1: 
+
+> I have modified the code for me, so the cpu stays on powersave with AC plugged in as well. This is better for this hell of a Coffee Lake Refresh ++ intel of mine that runs pretty hot real quick. :)
+
+Soon enough a settings file will allow you to do this kind of modifications, once work in #26 is done. 
+
+> One last thing for the Readme: systemctl enable auto-cpufreq would make it availiable between restarts and symlink it to systemd. The start command does only launch it for the current session.
+
+Didn't think it was necessary to mention that to Arch users :wink: Regardless, I've updated [Arch section of README once again](https://github.com/AdnanHodzic/auto-cpufreq#aur-package-archmanjaro-linux) and pointed what could be permanent solution to this problem in: #96 
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>drws:</strong></p>
+                    <p>The question how to properly clean up if `auto-cpufreq --install` was accidentially ran is remaining. If Arch is kept as an exampe, is it enough to remove the package and install it properly again or is there anything else that needs to be done?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>You accidentally ran `auto-cpufreq --install`? Run `auto-cpufreq --remove` and it's gone. These things are [thoroughly explained.](https://github.com/AdnanHodzic/auto-cpufreq#auto-cpufreq-modes-and-options)
+
+Also removing the package should remove both auto-cpufreq and running install.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>drws:</strong></p>
+                    <p>I was going through the docs but missed it somehow. Thank you for clearing it up!</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

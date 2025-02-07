@@ -1,0 +1,63 @@
+
+        <html>
+        <head>
+            <title>Pull Request #350: Stop power-profiles-daemon in live mode</title>
+        </head>
+        <body>
+            <h1>Stop power-profiles-daemon in live mode</h1>
+            <p><strong>Pull Request #350</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>When using `auto-cpufreq --live` we did only display a warning about the conflict with `power-profiles-daemon`.
+It now actually stops it in live mode, and starts it when live mode is exited.
+
+Also added a check to see if `powerprofilesctl` exists.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Great stuff, but it's still using `gnome_power_detect` function which prints out:
+
+```
+----------------------------------- Warning -----------------------------------
+
+Detected running GNOME Power Profiles daemon service!
+This daemon might interfere with auto-cpufreq and should be disabled.
+
+Steps to perform this action using auto-cpufreq: power_helper script:
+git clone https://github.com/AdnanHodzic/auto-cpufreq.git
+cd auto-cpufreq/auto_cpufreq
+python3 power_helper.py --gnome_power_disable
+```
+
+When now it should use `gnome_power_detect_install` function which message should now be customized to:
+
+```
+print("Detected running GNOME Power Profiles daemon service!")
+print("This daemon might interfere with auto-cpufreq and has been disabled.\n")
+print('Disabled daemon is not automatically disabled in "monitor" mode and')
+print("will be enabled after auto-cpufreq is removed or stopped.")    
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Pushed the changes like suggested.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Great, as always thank you for your awesome work and contribution! </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Changes are live as part of [1.9.1 release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

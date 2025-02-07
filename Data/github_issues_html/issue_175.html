@@ -1,0 +1,66 @@
+
+        <html>
+        <head>
+            <title>Issue #175: question: which TLP settings are recommended?</title>
+        </head>
+        <body>
+            <h1>question: which TLP settings are recommended?</h1>
+            <p><strong>Issue #175</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>> Just disable governor and turbo boost settings of TLP, then you’re fine.
+
+source: https://www.reddit.com/r/linux/comments/ejxx9f/github_autocpufreq_automatic_cpu_speed_power/fd4y36k/
+
+Is this what I need for boost?
+```
+        CPU_BOOST_ON_AC=0
+        CPU_BOOST_ON_BAT=0
+```
+
+For the governor I'm not sure. In the doc https://linrunner.de/tlp/settings/processor.html , I see how to set a specific governor but not how to tell TLP to leave the governor alone.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>`auto-cpufreq` has all the necessary functionality to do this on your behalf automatically. Hence, I will not recommend settings you should use as part of TLP. I also believe auto-cpufreq has gotten to stage where that's the only tool you should use. While it'll continue to work with other tools, for best optimizations and experience you should solely use auto-cpufreq. I'll also make sure to update ReadMe with this information in upcoming days.
+
+I would also suggest to move this question to [auto-cpufreq Discussions](https://github.com/AdnanHodzic/auto-cpufreq/discussions).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Silejonu:</strong></p>
+                    <p>@AdnanHodzic The ReadMe still shows:
+
+> Please note: this tool doesn't conflict and [works great in tandem with TLP](https://www.reddit.com/r/linux/comments/ejxx9f/github_autocpufreq_automatic_cpu_speed_power/fd4y36k/).
+
+I understood it as "you should install TLP in tandem with auto-cpufreq, and it will automatically configure TLP to not conflict with cpufreq". I suppose this could use an update, correct?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> @AdnanHodzic The ReadMe still shows:
+> 
+> > Please note: this tool doesn't conflict and [works great in tandem with TLP](https://www.reddit.com/r/linux/comments/ejxx9f/github_autocpufreq_automatic_cpu_speed_power/fd4y36k/).
+> 
+> I understood it as "you should install TLP in tandem with auto-cpufreq, and it will automatically configure TLP to not conflict with cpufreq". I suppose this could use an update, correct?
+
+That's absolutely not what "this tool doesn't conflict and works great in tandem with TLP." means, and I have no idea how you managed to interpret it as you did.
+
+TLP and auto-cpufreq don't have any relations, and auto-cpufreq will not (automatically) configure other tools like TLP. auto-cpufreq has it's own set of parameters which it automatically sets and configures based on what it's reading from your system resource usage.
+
+I just updated README with following:
+
+_Please note: auto-cpufreq aims to replace TLP and after you install auto-cpufreq it's recommended to remove TLP. However, if for some reason you still need/want TLP installed and running auto-cpufreq doesn't conflict and [works great in tandem with TLP](https://github.com/AdnanHodzic/auto-cpufreq/discussions/176)._
+
+If this doesn't make it clear I don't know what will. 
+
+From now I'll ignore any future comments in this issue as it's not a place for discussion as that's why [discussions page](https://github.com/AdnanHodzic/auto-cpufreq/discussions/176) was created.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

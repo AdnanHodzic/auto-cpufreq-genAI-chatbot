@@ -1,0 +1,72 @@
+
+        <html>
+        <head>
+            <title>Issue #126: auto-cpufreq.service could not be found</title>
+        </head>
+        <body>
+            <h1>auto-cpufreq.service could not be found</h1>
+            <p><strong>Issue #126</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:###
+I get this when I issue this command:  sudo systemctl status auto-cpufreq.service
+Unit auto-cpufreq.service could not be found.
+
+### System information:###
+sudo auto-cpufreq --debug
+
+Linux distro: KDE neon 5.19
+Linux kernel: 5.4.0-48-generic
+Snap package: yes
+Python: 3.8.2
+psutil package: 5.7.2
+platform package: 1.0.8
+click package: 7.1.2
+distro package 1.5.0
+Battery is: discharging
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.12 %
+Procesor: Intel(R) Core(TM) i7-4710MQ CPU @ 2.50GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+------------------------------ Current CPU states ------------------------------
+CPU max frequency: 2500 MHz
+CPU min frequency: 800 MHz
+         Usage  Temperature  Frequency
+CPU0:     3.9%     53 °C     1626 MHz
+CPU1:     1.0%     53 °C     1625 MHz
+CPU2:     3.0%     50 °C     1656 MHz
+CPU3:     0.0%     50 °C     1607 MHz
+CPU4:     4.0%     48 °C     1627 MHz
+CPU5:     0.0%     48 °C     1649 MHz
+CPU6:     3.0%     50 °C     1412 MHz
+CPU7:     2.0%     50 °C     1657 MHz
+Total CPU usage: 1.4 %
+Total system load: 1.13 
+Currently using: powersave governor
+Currently turbo boost is: off
+
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Way to check if auto-cpufreq daemon/service is running on snap is different: 
+`systemctl status snap.auto-cpufreq.service.service`
+
+I also [updated ReadMe with this info](https://github.com/AdnanHodzic/auto-cpufreq#install---auto-cpufreq-daemon).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>jurgen-74:</strong></p>
+                    <p>Great!! thx</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

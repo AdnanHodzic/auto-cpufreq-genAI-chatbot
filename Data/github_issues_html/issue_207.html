@@ -1,0 +1,134 @@
+
+        <html>
+        <head>
+            <title>Issue #207: How to start auto-cpufreq on boot (Pop)</title>
+        </head>
+        <body>
+            <h1>How to start auto-cpufreq on boot (Pop)</h1>
+            <p><strong>Issue #207</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+
+```
+Autostart
+```
+Hi, 
+
+I've installed auto-cpufreq via 
+
+`git clone https://github.com/AdnanHodzic/auto-cpufreq.git
+cd auto-cpufreq && sudo ./auto-cpufreq-installer`
+
+I can run auto-cpufreq with sudo but how do I start it each time on boot? The instructions aren't very clear, maybe put it at the end of .bashrc ?
+
+
+---
+
+### System information:
+```
+Paste here output of the auto-cpufreq --debug
+```~/auto-cpufreq  on master  sudo auto-cpufreq --debug                       1 х  at 15:22:58 
+
+-------------------------------------------------------------------------------
+
+Linux distro: Pop!_OS 20.10 groovy
+Linux kernel: 5.11.11-051111-generic
+Processor: Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2600 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  0.0%     36 °C      900 MHz
+CPU1:	  1.0%     38 °C     2600 MHz
+CPU2:	  1.0%     34 °C     2600 MHz
+CPU3:	  1.0%     33 °C     2600 MHz
+CPU4:	  2.0%     36 °C     2600 MHz
+CPU5:	  0.0%     38 °C     2600 MHz
+CPU6:	  2.0%     34 °C     2600 MHz
+CPU7:	  6.1%     33 °C     2600 MHz
+
+auto-cpufreq version:
+Git commit: 92e9940
+
+Python: 3.8.6
+psutil package: 5.7.2
+platform package: 1.0.8
+click package: 7.1.2
+distro package 1.5.0
+
+Computer type: Laptop
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.12 %
+
+Total CPU usage: 1.2 %
+Total system load: 1.2
+Average temp. of all cores: 35.25 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+
+---
+
+
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Have you [read the ReadMe which explains this](https://github.com/AdnanHodzic/auto-cpufreq#install---auto-cpufreq-daemon) before declaring that instructions aren't clear? </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>aindriu80:</strong></p>
+                    <p>Yes, I did, but I only saw some instructions for "AUR package (Arch/Manjaro Linux)", I am running Pop OS which is basically Ubuntu and the following instructions didn't work
+`
+systemctl start auto-cpufreq `to start the service. 
+
+Unit auto-cpufreq.service could not be found.
+
+
+`systemctl status auto-cpufreq `to see the status of service, 
+
+Unit auto-cpufreq.service could not be found.
+
+
+`systemctl enable auto-cpufreq` for service to persist running accross reboots.
+
+Failed to enable unit: Unit file auto-cpufreq.service does not exist.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Nowhere did I make a reference to AUR, I gave a link which pointed to [Install - auto-cpufreq daemon](https://github.com/AdnanHodzic/auto-cpufreq#install---auto-cpufreq-daemon).
+
+Once you [install auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq#installing-auto-cpufreq), all you need to do is have it running on boot is: `sudo auto-cpufreq --install`. If you're having trouble following this refer to: https://www.youtube.com/watch?v=QkYRpVEEIlg in which I go over all the modes. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>aindriu80:</strong></p>
+                    <p>I ran that command `sudo auto-cpufreq --install` but couldn't establish that the service was installed, I was a bit confused after installing from the binaries, anyway I watched your video and can can see that it is installed as a service now:
+
+`sudo systemctl is-enabled auto-cpufreq.service` -> enabled
+![LShPZNI](https://user-images.githubusercontent.com/8885837/120672855-94729400-c48a-11eb-8ecb-2a570db05aaf.png)
+
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

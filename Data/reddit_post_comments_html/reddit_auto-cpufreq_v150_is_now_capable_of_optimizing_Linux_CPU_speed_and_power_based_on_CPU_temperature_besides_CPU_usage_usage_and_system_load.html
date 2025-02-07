@@ -1,0 +1,104 @@
+<html><head><title>auto-cpufreq v1.5.0: is now capable of optimizing Linux CPU speed and power based on CPU temperature (besides CPU usage usage and system load).</title></head><body><h1>auto-cpufreq v1.5.0: is now capable of optimizing Linux CPU speed and power based on CPU temperature (besides CPU usage usage and system load).</h1><p><em>Posted by u/ahodzic</em> on 2020-12-06 19:36:24</p><div><strong>Score:</strong> 48</div><div><strong>Content:</strong><br>https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.5.0</div><hr><h2>Comments</h2><ul><li><strong>u/Sabayon82:</strong> <div class="md"><p>On desktop with no battery, auto-cpufreq v1.5.0 still reports battery as discharging and uses powersave governor.  Is this a feature or a bug?</p>
+</div><br><small>Score: 10 | Posted on 2020-12-07 02:38:03</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>It&#39;s <a href="https://github.com/AdnanHodzic/auto-cpufreq/issues/127">a bug</a>, it&#39;s interesting because some people don&#39;t have this problem on desktops and some do.</p>
+</div><br><small>Score: 4 | Posted on 2020-12-07 08:34:41</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/Sabayon82:</strong> <div class="md"><p>It&#39;s good to hear that it&#39;s not all desktops.  I&#39;ll continue to search around and see if it&#39;s some other package I have installed conflicting with auto-cpufreq.  Keep up the good work ahodzic, loving auto-cpufreq on my laptops.</p>
+</div><br><small>Score: 3 | Posted on 2020-12-07 15:37:34</small></li><ul></ul></ul></ul><li><strong>u/flag_to_flag:</strong> <div class="md"><p>I thought that TLP was doing pretty much the same: when I&#39;m running on battery, the CPU clocks at its maximum frequency only under very heavy load and under a regular load it tends to clock at lower frequencies (and temperatures) than when I&#39;m running on AC.</p>
+</div><br><small>Score: 5 | Posted on 2020-12-07 08:57:33</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>As a long time ex TLP user I made this tool to replace TLP, problem with TLP is what triggered me to start <a href="https://foolcontrol.org/?p=3124">working on auto-cpufreq as described on my blog post</a>.</p>
+
+<p>I also believe I explain some of it further in &quot;<a href="https://www.youtube.com/watch?v=HI3tFa8TIwI">Increase Your Linux Laptop Battery Life With AUTO-CPUFREQ</a>&quot; youtube video.</p>
+</div><br><small>Score: 6 | Posted on 2020-12-07 09:04:10</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/flag_to_flag:</strong> <div class="md"><p>Thank you for the links :)</p>
+
+<p>I&#39;m gonna try your tool, the possibility of not having to manually tuning the frequencies is too attractive lol </p>
+
+<p>I appreciate the live mode, for sure it encourages the users to at least test the software on their system.</p>
+
+<p>P.s.: your GitHub page is very interesting too.</p>
+</div><br><small>Score: 3 | Posted on 2020-12-07 12:25:53</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Thanks! I&#39;d like to think I come up with some interesting projects from time to time, so please feel free to follow me on Github :)</p>
+</div><br><small>Score: 2 | Posted on 2020-12-07 20:37:55</small></li><ul></ul></ul></ul></ul><li><strong>u/VegetableMonthToGo:</strong> <div class="md"><p>Just for more information, where can I read up in how the CPU management works?</p>
+</div><br><small>Score: 3 | Posted on 2020-12-07 07:41:59</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/flag_to_flag:</strong> <div class="md"><p>Don&#39;t hate me please. <a href="https://www.github.com/AdnanHodzic/auto-cpufreq/tree/master/source/core.py">Here</a> you can find the python script that analyses the CPU usage and makes the changes. It&#39;s very well written and it&#39;s pretty clear how it works, give it a read :)</p>
+
+<p>TL;DR: when some values exceeds the set thresholds, the appropriate changes are made.</p>
+</div><br><small>Score: 5 | Posted on 2020-12-07 08:55:10</small></li><ul></ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>A lot of it is described on &quot;<a href="https://github.com/AdnanHodzic/auto-cpufreq/#why-do-i-need-auto-cpufreq">Why do I need auto-cpufreq</a>&quot; and I also explain a lot of it on <a href="https://www.youtube.com/watch?v=QkYRpVEEIlg">auto-cpufreq Yotube video</a>.</p>
+
+<p>Besides this, it&#39;s open source so code is there, and it&#39;s all available as <a href="https://github.com/AdnanHodzic/auto-cpufreq/blob/master/source/core.py">part of core</a> and you&#39;re more welcome to contribute to it if you think something could be improved or done differently.</p>
+</div><br><small>Score: 2 | Posted on 2020-12-07 08:38:17</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/danuker:</strong> <div class="md"><blockquote>
+<p>with its own set of problems, like losing turbo boost</p>
+</blockquote>
+
+<p>I believe TurboBoost was designed to accelerate CPU aging. It&#39;s thermal cycling on steroids.</p>
+</div><br><small>Score: 0 | Posted on 2020-12-07 14:29:51</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ouyawei:</strong> <div class="md"><p>Is CPU aging really an issue?
+I&#39;ve never had a CPU fail and I tend to rock older hardware (currently on a i7-3770).</p>
+</div><br><small>Score: 1 | Posted on 2020-12-07 15:39:38</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/danuker:</strong> <div class="md"><p>I admit that other things usually break first (looking at SSDs, GPUs, and laptop hinges). But I like keeping my hardware FOREVER.</p>
+
+<p>Edit: I guess what you&#39;re saying is sort of invalidating my previous comment, given that none of my CPUs have actually detectably failed.</p>
+</div><br><small>Score: 1 | Posted on 2020-12-07 15:50:03</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/hoeding:</strong> <div class="md"><p>Speaking as someone who has been overclocking every CPU they&#39;ve used daily for over 20 years, don&#39;t give cpu longevity a single thought. It&#39;s going to be electrolytic capacitors or mechanical failure(fans, hinges, HDDs) destroying your gear in nearly every case.</p>
+</div><br><small>Score: 2 | Posted on 2020-12-09 11:27:03</small></li><ul></ul></ul></ul></ul></ul></ul><li><strong>u/Jannik2099:</strong> <div class="md"><p>I have a hard time believing this is useful when you have schedutil (especially on EAS platforms or intel p-state as of 5.8) - any benchmarks on that?</p>
+</div><br><small>Score: 1 | Posted on 2020-12-07 16:26:11</small></li><ul></ul><li><strong>u/h0twheels:</strong> <div class="md"><blockquote>
+<p>After I started monitoring my resources, I realized that CPU was capped at 1800MHz.</p>
+</blockquote>
+
+<p>Your issue was that HW decoding wasn&#39;t used. I run my i5 at 1ghz and can still decode just fine. Set up TLP so it lowers clocks on battery, on the GPU too.</p>
+
+<p>Dynamic clocking sounds great to try but I&#39;m not sure that it&#39;s really saving all that much battery. Higher clocks at load always pulled more watts and capping them was the solution. The time saved going fast vs using lower clocks longer hasn&#39;t been proved one way or the other from what I&#39;ve seen.</p>
+</div><br><small>Score: 0 | Posted on 2020-12-07 16:26:45</small></li><ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>It&#39;s <a href="https://github.com/AdnanHodzic/auto-cpufreq/issues/127">a bug</a>, it&#39;s interesting because some people don&#39;t have this problem on desktops and some do.</p>
+</div><br><small>Score: 4 | Posted on 2020-12-07 08:34:41</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/Sabayon82:</strong> <div class="md"><p>It&#39;s good to hear that it&#39;s not all desktops.  I&#39;ll continue to search around and see if it&#39;s some other package I have installed conflicting with auto-cpufreq.  Keep up the good work ahodzic, loving auto-cpufreq on my laptops.</p>
+</div><br><small>Score: 3 | Posted on 2020-12-07 15:37:34</small></li><ul></ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>As a long time ex TLP user I made this tool to replace TLP, problem with TLP is what triggered me to start <a href="https://foolcontrol.org/?p=3124">working on auto-cpufreq as described on my blog post</a>.</p>
+
+<p>I also believe I explain some of it further in &quot;<a href="https://www.youtube.com/watch?v=HI3tFa8TIwI">Increase Your Linux Laptop Battery Life With AUTO-CPUFREQ</a>&quot; youtube video.</p>
+</div><br><small>Score: 6 | Posted on 2020-12-07 09:04:10</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/flag_to_flag:</strong> <div class="md"><p>Thank you for the links :)</p>
+
+<p>I&#39;m gonna try your tool, the possibility of not having to manually tuning the frequencies is too attractive lol </p>
+
+<p>I appreciate the live mode, for sure it encourages the users to at least test the software on their system.</p>
+
+<p>P.s.: your GitHub page is very interesting too.</p>
+</div><br><small>Score: 3 | Posted on 2020-12-07 12:25:53</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Thanks! I&#39;d like to think I come up with some interesting projects from time to time, so please feel free to follow me on Github :)</p>
+</div><br><small>Score: 2 | Posted on 2020-12-07 20:37:55</small></li><ul></ul></ul></ul><li><strong>u/flag_to_flag:</strong> <div class="md"><p>Don&#39;t hate me please. <a href="https://www.github.com/AdnanHodzic/auto-cpufreq/tree/master/source/core.py">Here</a> you can find the python script that analyses the CPU usage and makes the changes. It&#39;s very well written and it&#39;s pretty clear how it works, give it a read :)</p>
+
+<p>TL;DR: when some values exceeds the set thresholds, the appropriate changes are made.</p>
+</div><br><small>Score: 5 | Posted on 2020-12-07 08:55:10</small></li><ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>A lot of it is described on &quot;<a href="https://github.com/AdnanHodzic/auto-cpufreq/#why-do-i-need-auto-cpufreq">Why do I need auto-cpufreq</a>&quot; and I also explain a lot of it on <a href="https://www.youtube.com/watch?v=QkYRpVEEIlg">auto-cpufreq Yotube video</a>.</p>
+
+<p>Besides this, it&#39;s open source so code is there, and it&#39;s all available as <a href="https://github.com/AdnanHodzic/auto-cpufreq/blob/master/source/core.py">part of core</a> and you&#39;re more welcome to contribute to it if you think something could be improved or done differently.</p>
+</div><br><small>Score: 2 | Posted on 2020-12-07 08:38:17</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/danuker:</strong> <div class="md"><blockquote>
+<p>with its own set of problems, like losing turbo boost</p>
+</blockquote>
+
+<p>I believe TurboBoost was designed to accelerate CPU aging. It&#39;s thermal cycling on steroids.</p>
+</div><br><small>Score: 0 | Posted on 2020-12-07 14:29:51</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ouyawei:</strong> <div class="md"><p>Is CPU aging really an issue?
+I&#39;ve never had a CPU fail and I tend to rock older hardware (currently on a i7-3770).</p>
+</div><br><small>Score: 1 | Posted on 2020-12-07 15:39:38</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/danuker:</strong> <div class="md"><p>I admit that other things usually break first (looking at SSDs, GPUs, and laptop hinges). But I like keeping my hardware FOREVER.</p>
+
+<p>Edit: I guess what you&#39;re saying is sort of invalidating my previous comment, given that none of my CPUs have actually detectably failed.</p>
+</div><br><small>Score: 1 | Posted on 2020-12-07 15:50:03</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/hoeding:</strong> <div class="md"><p>Speaking as someone who has been overclocking every CPU they&#39;ve used daily for over 20 years, don&#39;t give cpu longevity a single thought. It&#39;s going to be electrolytic capacitors or mechanical failure(fans, hinges, HDDs) destroying your gear in nearly every case.</p>
+</div><br><small>Score: 2 | Posted on 2020-12-09 11:27:03</small></li><ul></ul></ul></ul></ul></ul><li><strong>u/Sabayon82:</strong> <div class="md"><p>It&#39;s good to hear that it&#39;s not all desktops.  I&#39;ll continue to search around and see if it&#39;s some other package I have installed conflicting with auto-cpufreq.  Keep up the good work ahodzic, loving auto-cpufreq on my laptops.</p>
+</div><br><small>Score: 3 | Posted on 2020-12-07 15:37:34</small></li><ul></ul><li><strong>u/flag_to_flag:</strong> <div class="md"><p>Thank you for the links :)</p>
+
+<p>I&#39;m gonna try your tool, the possibility of not having to manually tuning the frequencies is too attractive lol </p>
+
+<p>I appreciate the live mode, for sure it encourages the users to at least test the software on their system.</p>
+
+<p>P.s.: your GitHub page is very interesting too.</p>
+</div><br><small>Score: 3 | Posted on 2020-12-07 12:25:53</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Thanks! I&#39;d like to think I come up with some interesting projects from time to time, so please feel free to follow me on Github :)</p>
+</div><br><small>Score: 2 | Posted on 2020-12-07 20:37:55</small></li><ul></ul></ul><li><strong>u/danuker:</strong> <div class="md"><blockquote>
+<p>with its own set of problems, like losing turbo boost</p>
+</blockquote>
+
+<p>I believe TurboBoost was designed to accelerate CPU aging. It&#39;s thermal cycling on steroids.</p>
+</div><br><small>Score: 0 | Posted on 2020-12-07 14:29:51</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ouyawei:</strong> <div class="md"><p>Is CPU aging really an issue?
+I&#39;ve never had a CPU fail and I tend to rock older hardware (currently on a i7-3770).</p>
+</div><br><small>Score: 1 | Posted on 2020-12-07 15:39:38</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/danuker:</strong> <div class="md"><p>I admit that other things usually break first (looking at SSDs, GPUs, and laptop hinges). But I like keeping my hardware FOREVER.</p>
+
+<p>Edit: I guess what you&#39;re saying is sort of invalidating my previous comment, given that none of my CPUs have actually detectably failed.</p>
+</div><br><small>Score: 1 | Posted on 2020-12-07 15:50:03</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/hoeding:</strong> <div class="md"><p>Speaking as someone who has been overclocking every CPU they&#39;ve used daily for over 20 years, don&#39;t give cpu longevity a single thought. It&#39;s going to be electrolytic capacitors or mechanical failure(fans, hinges, HDDs) destroying your gear in nearly every case.</p>
+</div><br><small>Score: 2 | Posted on 2020-12-09 11:27:03</small></li><ul></ul></ul></ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>Thanks! I&#39;d like to think I come up with some interesting projects from time to time, so please feel free to follow me on Github :)</p>
+</div><br><small>Score: 2 | Posted on 2020-12-07 20:37:55</small></li><ul></ul><li><strong>u/ouyawei:</strong> <div class="md"><p>Is CPU aging really an issue?
+I&#39;ve never had a CPU fail and I tend to rock older hardware (currently on a i7-3770).</p>
+</div><br><small>Score: 1 | Posted on 2020-12-07 15:39:38</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/danuker:</strong> <div class="md"><p>I admit that other things usually break first (looking at SSDs, GPUs, and laptop hinges). But I like keeping my hardware FOREVER.</p>
+
+<p>Edit: I guess what you&#39;re saying is sort of invalidating my previous comment, given that none of my CPUs have actually detectably failed.</p>
+</div><br><small>Score: 1 | Posted on 2020-12-07 15:50:03</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/hoeding:</strong> <div class="md"><p>Speaking as someone who has been overclocking every CPU they&#39;ve used daily for over 20 years, don&#39;t give cpu longevity a single thought. It&#39;s going to be electrolytic capacitors or mechanical failure(fans, hinges, HDDs) destroying your gear in nearly every case.</p>
+</div><br><small>Score: 2 | Posted on 2020-12-09 11:27:03</small></li><ul></ul></ul></ul><li><strong>u/danuker:</strong> <div class="md"><p>I admit that other things usually break first (looking at SSDs, GPUs, and laptop hinges). But I like keeping my hardware FOREVER.</p>
+
+<p>Edit: I guess what you&#39;re saying is sort of invalidating my previous comment, given that none of my CPUs have actually detectably failed.</p>
+</div><br><small>Score: 1 | Posted on 2020-12-07 15:50:03</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/hoeding:</strong> <div class="md"><p>Speaking as someone who has been overclocking every CPU they&#39;ve used daily for over 20 years, don&#39;t give cpu longevity a single thought. It&#39;s going to be electrolytic capacitors or mechanical failure(fans, hinges, HDDs) destroying your gear in nearly every case.</p>
+</div><br><small>Score: 2 | Posted on 2020-12-09 11:27:03</small></li><ul></ul></ul><li><strong>u/hoeding:</strong> <div class="md"><p>Speaking as someone who has been overclocking every CPU they&#39;ve used daily for over 20 years, don&#39;t give cpu longevity a single thought. It&#39;s going to be electrolytic capacitors or mechanical failure(fans, hinges, HDDs) destroying your gear in nearly every case.</p>
+</div><br><small>Score: 2 | Posted on 2020-12-09 11:27:03</small></li><ul></ul></ul></body></html>

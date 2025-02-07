@@ -1,0 +1,245 @@
+
+        <html>
+        <head>
+            <title>Issue #357: Overheating CPU and fan running wild while using any game on Steam</title>
+        </head>
+        <body>
+            <h1>Overheating CPU and fan running wild while using any game on Steam</h1>
+            <p><strong>Issue #357</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Overall auto-cpufreq seems to work pretty well, I had CPUs overheating all the time before using it.
+
+Only now if I launch ANY game on Steam (3D or simple graphics 2D doesn't matters), the CPUs overheat to the max once more as if auto-cpufreq wasn't taken into account.
+
+### System information:
+```
+System:    Host: Talisman Kernel: 5.13.0-27-generic x86_64 bits: 64 Desktop: Xfce 4.16.0 
+           Distro: Linux Mint 20.3 Una 
+Machine:   Type: Laptop System: Apple product: MacBookPro11,1 v: 1.0 
+           serial: <superuser/root required> 
+           Mobo: Apple model: Mac-189A3D4F975D5FFC v: MacBookPro11,1 
+           serial: <superuser/root required> UEFI: Apple 
+           v: MBP111.88Z.0146.B00.1804111138 date: 04/11/2018 
+Battery:   ID-1: BAT0 charge: 76.9 Wh condition: 78.2/74.8 Wh (105%) 
+CPU:       Topology: Dual Core model: Intel Core i7-4578U bits: 64 type: MT MCP 
+           L2 cache: 4096 KiB 
+           Speed: 800 MHz min/max: 750/3001 MHz Core speeds (MHz): 1: 800 2: 800 3: 800 
+           4: 800 
+Graphics:  Device-1: Intel Haswell-ULT Integrated Graphics driver: i915 v: kernel 
+           Display: x11 server: X.Org 1.20.13 driver: intel resolution: 1680x1050~60Hz 
+           OpenGL: renderer: Mesa DRI Intel Iris Graphics 5100 (HSW GT3) 
+           v: 4.5 Mesa 21.3.4 - kisak-mesa PPA 
+Audio:     Device-1: Intel Haswell-ULT HD Audio driver: snd_hda_intel 
+           Device-2: Intel 8 Series HD Audio driver: snd_hda_intel 
+           Device-3: Broadcom and subsidiaries 720p FaceTime HD Camera driver: N/A 
+           Sound Server: ALSA v: k5.13.0-27-generic 
+Network:   Device-1: Broadcom and subsidiaries BCM4360 802.11ac Wireless Network Adapter 
+           driver: wl 
+           IF: wlp3s0 state: up mac: 80:e6:50:1f:6a:fc 
+           IF-ID-1: ipv6leakintrf0 state: unknown speed: N/A duplex: N/A 
+           mac: 7a:87:11:29:72:97 
+           IF-ID-2: proton0 state: unknown speed: 10 Mbps duplex: full mac: N/A 
+Drives:    Local Storage: total: 610.18 GiB used: 244.04 GiB (40.0%) 
+           ID-1: /dev/sda vendor: Apple model: SSD SM0512F size: 465.92 GiB 
+           ID-2: /dev/sdb type: USB model: General USB Flash Disk size: 28.91 GiB 
+           ID-3: /dev/sdc type: USB vendor: SanDisk model: USB 3.2Gen1 size: 57.30 GiB 
+           ID-4: /dev/sdd type: USB model: SMI USB DISK size: 58.05 GiB 
+Partition: ID-1: / size: 458.00 GiB used: 198.92 GiB (43.4%) fs: ext4 dev: /dev/sda2 
+Sensors:   System Temperatures: cpu: 52.0 C mobo: N/A 
+           Fan Speeds (RPM): N/A 
+Info:      Processes: 346 Uptime: 1d 21h 10m Memory: 15.54 GiB used: 6.30 GiB (40.6%) 
+           Shell: bash inxi: 3.0.38 
+```
+
+Output of auto-cpufreq --debug while everything works alright:
+
+```
+Using settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------------------------------------------------------
+
+Linux distro: Linux Mint 20.3 una
+Linux kernel: 5.13.0-27-generic
+Processor: Intel(R) Core(TM) i7-4578U CPU @ 3.00GHz
+Cores: 4
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3001 MHz
+CPU min frequency: 750 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  7.1%     50 °C      800 MHz
+CPU1:	  7.9%     51 °C      750 MHz
+CPU2:	  7.1%     50 °C      750 MHz
+CPU3:	  6.0%     51 °C      750 MHz
+
+auto-cpufreq version:
+fatal: not a git repository (or any of the parent directories): .git
+CalledProcessError(128, ['git', 'describe', '--always'])
+
+Python: 3.8.10
+psutil package: 5.5.1
+platform package: 1.0.8
+click package: 7.0
+distro package 1.4.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.13 %
+
+Total CPU usage: 11.0 %
+Total system load: 2.61
+Average temp. of all cores: 50.5 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+```
+
+Output while running a game (Sproggywood, a 2D turn-based game) on Steam:
+
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Linux Mint 20.3 una
+Linux kernel: 5.13.0-27-generic
+Processor: Intel(R) Core(TM) i7-4578U CPU @ 3.00GHz
+Cores: 4
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3001 MHz
+CPU min frequency: 750 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	 58.3%     85 °C      750 MHz
+CPU1:	 51.0%     86 °C      800 MHz
+CPU2:	 57.0%     85 °C      800 MHz
+CPU3:	 59.4%     86 °C      800 MHz
+
+auto-cpufreq version:
+fatal: not a git repository (or any of the parent directories): .git
+CalledProcessError(128, ['git', 'describe', '--always'])
+
+Python: 3.8.10
+psutil package: 5.5.1
+platform package: 1.0.8
+click package: 7.0
+distro package 1.4.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.13 %
+
+Total CPU usage: 66.6 %
+Total system load: 5.57
+Average temp. of all cores: 85.5 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+
+```
+
+As soon as I exit the game the fan turns silent again and CPUs cools down:
+
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Linux Mint 20.3 una
+Linux kernel: 5.13.0-27-generic
+Processor: Intel(R) Core(TM) i7-4578U CPU @ 3.00GHz
+Cores: 4
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3001 MHz
+CPU min frequency: 750 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	 10.2%     59 °C      800 MHz
+CPU1:	 15.7%     60 °C      750 MHz
+CPU2:	  9.2%     59 °C      750 MHz
+CPU3:	  9.2%     60 °C      750 MHz
+
+auto-cpufreq version:
+fatal: not a git repository (or any of the parent directories): .git
+CalledProcessError(128, ['git', 'describe', '--always'])
+
+Python: 3.8.10
+psutil package: 5.5.1
+platform package: 1.0.8
+click package: 7.0
+distro package 1.4.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.13 %
+
+Total CPU usage: 11.9 %
+Total system load: 2.1
+Average temp. of all cores: 59.5 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+```
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Just [released v1.9.2](https://github.com/AdnanHodzic/auto-cpufreq/releases) which adds ability to change power governor used by default with auto-cpufreq from `balanced` to `performance` [using power_helper.py script](https://github.com/AdnanHodzic/auto-cpufreq/#1-power_helperpy-script). Curious to hear if you still have same problem if you switch to `performance` governor?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>magikfingerz:</strong></p>
+                    <p>> Just [released v1.9.2](https://github.com/AdnanHodzic/auto-cpufreq/releases) which adds ability to change power governor used by default with auto-cpufreq from `balanced` to `performance` [using power_helper.py script](https://github.com/AdnanHodzic/auto-cpufreq/#1-power_helperpy-script). Curious to hear if you still have same problem if you switch to `performance` governor?
+
+I have too the issue with cpu temp and games and I think the problem is in this section in core.py file:
+![image](https://user-images.githubusercontent.com/8901435/161410773-51232aa8-b73e-4151-b1c4-41993a4d45a3.png)
+
+As you can see in line 829, when the cpuload is higher than 20 it turns on the turbo boost, but I think it should check the average temp too before enable turbo boost, I made this little modification locally on my system and is currently working excellent, no more overheating when using games:
+
+            # high cpu usage trigger
+            if (cpuload >= 20 and avg_all_core_temp < 70) :
+                print("setting turbo boost: on")
+                turbo(True)
+
+This is a very simple solution that worked for me, not sure if will work for all. I hope it helps.
+
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I always advise people to [make their own code contributions](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) if they have a good idea how certain things should be done.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

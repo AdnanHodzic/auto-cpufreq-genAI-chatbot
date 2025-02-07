@@ -1,0 +1,109 @@
+
+        <html>
+        <head>
+            <title>Issue #352: PKGBUILD failed to build Version 1.9.1</title>
+        </head>
+        <body>
+            <h1>PKGBUILD failed to build Version 1.9.1</h1>
+            <p><strong>Issue #352</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>It's again not possible to build the PKGBUILD for Arch Linux or Based Systems:
+I think this is the thing which prevent building the PKGBUILD?
+`/usr/lib/python3.10/site-packages/setuptools/installer.py:27: SetuptoolsDeprecationWarning: setuptools.installer is deprecated. Requirements should be satisfied by a PEP 517 installer.
+`
+
+
+### Error output:
+```
+    ~/Downloads  sudo chrootbuild -p auto-cpufreq                                                                          ✔  8s  
+
+:: Package(s) to build:
+   - auto-cpufreq
+
+:: Configure branch [unstable]
+
+:: Update chroot file system
+:: Synchronizing package databases...
+ core is up to date
+ extra is up to date
+ community is up to date
+ multilib is up to date
+:: Starting full system upgrade...
+ there is nothing to do
+validating keys: 
+gpg: directory '/build/.gnupg' created
+gpg: keybox '/build/.gnupg/pubring.kbx' created
+==> Making package: auto-cpufreq 1.9.1-1 (Sun 09 Jan 2022 05:53:41 PM UTC)
+==> Checking runtime dependencies...
+==> Checking buildtime dependencies...
+==> Retrieving sources...
+  -> Updating auto-cpufreq git repo...
+Fetching origin
+  -> Found auto-cpufreq.service
+==> Validating source files with sha256sums...
+    auto-cpufreq ... Skipped
+    auto-cpufreq.service ... Passed
+==> Extracting sources...
+  -> Creating working copy of auto-cpufreq git repo...
+Cloning into 'auto-cpufreq'...
+done.
+Switched to a new branch 'makepkg'
+==> Starting prepare()...
+==> Starting pkgver()...
+==> Starting build()...
+/usr/lib/python3.10/site-packages/setuptools/installer.py:27: SetuptoolsDeprecationWarning: setuptools.installer is deprecated. Requirements should be satisfied by a PEP 517 installer.
+  warnings.warn(
+WARNING: The wheel package is not available.
+/usr/bin/python: No module named pip
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/site-packages/setuptools/installer.py", line 82, in fetch_build_egg
+    subprocess.check_call(cmd)
+  File "/usr/lib/python3.10/subprocess.py", line 369, in check_call
+    raise CalledProcessError(retcode, cmd)
+subprocess.CalledProcessError: Command '['/usr/bin/python', '-m', 'pip', '--disable-pip-version-check', 'wheel', '--no-deps', '-w', '/tmp/tmpk0weq0vo', '--quiet', 'setuptools-git-versioning']' returned non-zero exit status 1.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/build/auto-cpufreq/src/auto-cpufreq/setup.py", line 18, in <module>
+    setup(
+  File "/usr/lib/python3.10/site-packages/setuptools/__init__.py", line 152, in setup
+    _install_setup_requires(attrs)
+  File "/usr/lib/python3.10/site-packages/setuptools/__init__.py", line 147, in _install_setup_requires
+    dist.fetch_build_eggs(dist.setup_requires)
+  File "/usr/lib/python3.10/site-packages/setuptools/dist.py", line 806, in fetch_build_eggs
+    resolved_dists = pkg_resources.working_set.resolve(
+  File "/usr/lib/python3.10/site-packages/pkg_resources/__init__.py", line 771, in resolve
+    dist = best[req.key] = env.best_match(
+  File "/usr/lib/python3.10/site-packages/pkg_resources/__init__.py", line 1056, in best_match
+    return self.obtain(req, installer)
+  File "/usr/lib/python3.10/site-packages/pkg_resources/__init__.py", line 1068, in obtain
+    return installer(requirement)
+  File "/usr/lib/python3.10/site-packages/setuptools/dist.py", line 877, in fetch_build_egg
+    return fetch_build_egg(self, req)
+  File "/usr/lib/python3.10/site-packages/setuptools/installer.py", line 84, in fetch_build_egg
+    raise DistutilsError(str(e)) from e
+distutils.errors.DistutilsError: Command '['/usr/bin/python', '-m', 'pip', '--disable-pip-version-check', 'wheel', '--no-deps', '-w', '/tmp/tmpk0weq0vo', '--quiet', 'setuptools-git-versioning']' returned non-zero exit status 1.
+==> ERROR: A failure occurred in build().
+    Aborting...
+==> ERROR: Building package [auto-cpufreq] failed.
+      Cleaning up.
+
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>pheiduck:</strong></p>
+                    <p>I missed the line, I added python-pip as makedep and it builds again:
+`/usr/bin/python: No module named pip`</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

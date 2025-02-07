@@ -1,0 +1,233 @@
+
+        <html>
+        <head>
+            <title>Issue #348: autocpu-freq with non integrated battery laptop</title>
+        </head>
+        <body>
+            <h1>autocpu-freq with non integrated battery laptop</h1>
+            <p><strong>Issue #348</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hi, I've non integrated battery laptop. I noticed that autocpu-freq also switches governors when my battery isn't plugged, what's the benefits from that ?!?
+ 
+Also, with my non integrated battery laptop, when I unplug my battery it says "Charging" ?? It should says Unplugged instead....</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>I'm not really sure if I understand what the problem is. But "Charging" just means you are connected to a power outlet. If you would run it on a desktop pc without battery it would also say "Charging". 
+
+So maybe it's not the correct term to be used there.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@molitona please include output of `sudo auto-cpufreq --debug`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>molitona:</strong></p>
+                    <p>> I'm not really sure if I understand what the problem is. But "Charging" just means you are connected to a power outlet. If you would run it on a desktop pc without battery it would also say "Charging".
+> 
+> So maybe it's not the correct term to be used there.
+
+Yeah, that's what I said. The word is misleading...</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>molitona:</strong></p>
+                    <p>> @molitona please include output of `sudo auto-cpufreq --debug`
+
+
+Linux distro: Arch Linux  
+Linux kernel: 5.15.12-arch1-1
+Processor: Intel(R) Core(TM) i5-5250U CPU @ 1.60GHz
+Cores: 4
+Architecture: x86_64
+Driver: intel_cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1500 MHz
+CPU min frequency: 500 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  4.0%     44 °C     1500 MHz
+CPU1:	  7.1%     44 °C     1496 MHz
+CPU2:	  6.8%     44 °C     1500 MHz
+CPU3:	  3.0%     44 °C     1497 MHz
+
+auto-cpufreq version:
+Version         : 1.9.0-1
+
+Python: 3.10.1
+psutil package: 5.9.0
+platform package: 1.0.8
+click package: 8.0.3
+distro package 1.6.0
+
+Computer type: Laptop
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.21 %
+
+Total CPU usage: 5.0 %
+Total system load: 1.36
+Average temp. of all cores: 44.0 °C 
+
+Currently using: performance governor
+Currently turbo boost is: off
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Are there any other problems then displaying charging without a battery plugged in?
+You are on a power outlet on that moment right?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>molitona:</strong></p>
+                    <p>Yeah, I'm not using my battery when I run that command.
+
+As I mentioned, I dunno why autocpu-freq is working when I'm not plugging my battery. I noticed that max cpu freq goes sometimes to 1500 then back to 2700 which caused my fun to run a lot.
+
+Jan 8, 2022, 11:05 by ***@***.***:
+
+>
+>
+>
+>
+>
+> Are there any other problems then displaying charging without a battery plugged in?
+>  You are on a power outlet on that moment right?
+>
+>
+>
+>
+> —
+> Reply to this email directly, > view it on GitHub <https://github.com/AdnanHodzic/auto-cpufreq/issues/348#issuecomment-1007941637>> , or > unsubscribe <https://github.com/notifications/unsubscribe-auth/AIPC4MIPO3YVRDWNAZ6CWY3UVAD7BANCNFSM5LO6QAHA>> .
+> Triage notifications on the go with GitHub Mobile for > iOS <https://apps.apple.com/app/apple-store/id1477376905?ct=notification-email&mt=8&pt=524675>>  or > Android <https://play.google.com/store/apps/details?id=com.github.android&referrer=utm_campaign%3Dnotification-email%26utm_medium%3Demail%26utm_source%3Dgithub>> . 
+> You are receiving this because you were mentioned.> Message ID: > <AdnanHodzic/auto-cpufreq/issues/348/1007941637> @> github> .> com>
+>
+>
+></p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>You can use the config file to change your governor and turbo options to fine tune auto-cpufreq
+
+Normally if you are not on battery, auto-cpufreq with run at max performance using the `performance` governor. And when you are on battery it will set the `powersave` governor. This sounds like intended behavior to me.
+
+Changing the message to, `AC is: connected/disconnected` instead of `Battery is: charching/discharging` will not change this behavior.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>molitona:</strong></p>
+                    <p>Yeah, But the max frequency switches between 1500 and 2700 on power outlet, is that normal ?
+Shouldn't the max freq stay at 2700 when I'm not using my battery ?
+
+Jan 8, 2022, 11:43 by ***@***.***:
+
+>
+>
+>
+>
+> You can use the config file to change your governor.
+>
+>
+> Normally if you are not on battery, auto-cpufreq with run at max performance using the > performance>  governor. And when you are on battery it will set the > powersave>  governor. This sounds like intended behavior to me.
+>
+>
+>
+> —
+> Reply to this email directly, > view it on GitHub <https://github.com/AdnanHodzic/auto-cpufreq/issues/348#issuecomment-1007952965>> , or > unsubscribe <https://github.com/notifications/unsubscribe-auth/AIPC4MKQ7NQB6QRR526UA6TUVAIMBANCNFSM5LO6QAHA>> .
+> Triage notifications on the go with GitHub Mobile for > iOS <https://apps.apple.com/app/apple-store/id1477376905?ct=notification-email&mt=8&pt=524675>>  or > Android <https://play.google.com/store/apps/details?id=com.github.android&referrer=utm_campaign%3Dnotification-email%26utm_medium%3Demail%26utm_source%3Dgithub>> . 
+> You are receiving this because you were mentioned.> Message ID: > <AdnanHodzic/auto-cpufreq/issues/348/1007952965> @> github> .> com>
+>
+>
+></p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>In the message you posted above you see that the turbo is off when running 1500mhz. So the baseclock of your cpu is 1500mhz. When load is high and the turbo goes on, it will speed up to 2700mhz I assume.
+
+My system is 1800mhz baseclock, and only goes to 3200mhz or higher when the turbo kicks in. It all just seems normal to me.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>molitona:</strong></p>
+                    <p>Ah, ok I forgot about turbo.
+But, what exactly changing governors do then (what they manipulate in background, if you have an idea) ?
+
+Jan 8, 2022, 11:54 by ***@***.***:
+
+>
+>
+>
+>
+> In the message you posted above you see that the turbo is off when running 1500mhz. So the baseclock of your cpu is 1500mhz. When load is high and the turbo goes on, it will speed up to 2700mhz I assume.
+>
+>
+> My system is 1800mhz baseclock, and only goes to 3200mhz or higher when the turbo kicks in. It all just seems normal to me.
+>
+>
+>
+> —
+> Reply to this email directly, > view it on GitHub <https://github.com/AdnanHodzic/auto-cpufreq/issues/348#issuecomment-1007954220>> , or > unsubscribe <https://github.com/notifications/unsubscribe-auth/AIPC4MOJEFXUDZCIR4FBSXTUVAJVDANCNFSM5LO6QAHA>> .
+> Triage notifications on the go with GitHub Mobile for > iOS <https://apps.apple.com/app/apple-store/id1477376905?ct=notification-email&mt=8&pt=524675>>  or > Android <https://play.google.com/store/apps/details?id=com.github.android&referrer=utm_campaign%3Dnotification-email%26utm_medium%3Demail%26utm_source%3Dgithub>> . 
+> You are receiving this because you were mentioned.> Message ID: > <AdnanHodzic/auto-cpufreq/issues/348/1007954220> @> github> .> com>
+>
+>
+></p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>You can read more about the governors in this documentation from the linux kernel
+https://www.kernel.org/doc/html/latest/admin-guide/pm/cpufreq.html#generic-scaling-governors</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>molitona:</strong></p>
+                    <p>Ah, good when I saw max freq jumps from 1500 to 2700 I thought autocpu-freq is working when I'm on outlet power. I forget about Turbo...
+
+I noticed that on battery cpu cores current freqs are lower, thus they're scaling them...
+
+Thanks, for help. Hope, you found a solution to fun problem.
+
+
+Jan 8, 2022, 12:00 by ***@***.***:
+
+>
+>
+>
+>
+>
+> You can read more about the governors in this documentation from the linux kernel
+>  > https://www.kernel.org/doc/html/latest/admin-guide/pm/cpufreq.html#generic-scaling-governors
+>
+>
+>
+>
+> —
+> Reply to this email directly, > view it on GitHub <https://github.com/AdnanHodzic/auto-cpufreq/issues/348#issuecomment-1007954978>> , or > unsubscribe <https://github.com/notifications/unsubscribe-auth/AIPC4MIWH7QPGUMARX4LRDTUVAKOXANCNFSM5LO6QAHA>> .
+> Triage notifications on the go with GitHub Mobile for > iOS <https://apps.apple.com/app/apple-store/id1477376905?ct=notification-email&mt=8&pt=524675>>  or > Android <https://play.google.com/store/apps/details?id=com.github.android&referrer=utm_campaign%3Dnotification-email%26utm_medium%3Demail%26utm_source%3Dgithub>> . 
+> You are receiving this because you were mentioned.> Message ID: > <AdnanHodzic/auto-cpufreq/issues/348/1007954978> @> github> .> com>
+>
+>
+>
+
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

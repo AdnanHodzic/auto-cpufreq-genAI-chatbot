@@ -1,0 +1,116 @@
+
+        <html>
+        <head>
+            <title>Discussion #402: UNderclocking to the point of slowing down and heats up cpu much more while charging after installation than before installation of auto-cpufreq</title>
+        </head>
+        <body>
+            <h1>UNderclocking to the point of slowing down and heats up cpu much more while charging after installation than before installation of auto-cpufreq</h1>
+            <p><strong>Discussion #402</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>It used to set my min frequency to 600 mHz before. but alond with prolonged use it set to 400mHz and laptop has been slowing down too much. when on battery the cpu is underclocked so severely that whole functioning of the laptop slows down massively and the clock speed doesnt rise according to need and its stuck in 'powersaver' governer and 400gHz even when running intensive apps.
+---------------------------------------------
+MY temperature issues while charging the laptop are:
+---------------------------------------------
+This is my terminal data before installing the auto-cpufreq:
+Linux distro: Ubuntu 22.04 Jammy Jellyfish
+Linux kernel: 5.15.0-35-generic
+Processor: AMD Ryzen 7 5800H with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: amd-pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3201 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  7.7%     51 °C     3168 MHz
+CPU1:	  0.0%     51 °C     3201 MHz
+CPU2:	  5.1%     51 °C     3201 MHz
+CPU3:	  5.9%     51 °C     3201 MHz
+CPU4:	  0.0%     51 °C     3201 MHz
+CPU5:	  7.1%     51 °C     3201 MHz
+CPU6:	  3.0%     51 °C     3201 MHz
+CPU7:	  8.0%     51 °C     3201 MHz
+CPU8:	  8.0%     51 °C     3201 MHz
+CPU9:	  4.0%     51 °C     3201 MHz
+CPU10:	100.0%     51 °C     3169 MHz
+CPU11:	  6.0%     51 °C     3201 MHz
+CPU12:	  0.0%     51 °C     3201 MHz
+CPU13:	  7.1%     51 °C     3201 MHz
+CPU14:	  1.0%     51 °C     3201 MHz
+CPU15:	  5.0%     51 °C     3201 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Currently using: performance governor
+Suggesting use of "performance" governor
+
+Total CPU usage: 7.5 %
+Total system load: 1.05
+Average temp. of all cores: 50.75 °C 
+
+High CPU load
+suggesting to set turbo boost: on
+Currently turbo boost is: off
+------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------
+---------------------------------------------
+This is my terminal data after installing the auto-cpufreq: 
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4463 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  1.0%     75 °C     4463 MHz
+CPU1:	  0.0%     75 °C     4463 MHz
+CPU2:	  0.0%     75 °C     4463 MHz
+CPU3:	  0.0%     75 °C     4463 MHz
+CPU4:	  0.0%     75 °C     4463 MHz
+CPU5:	  0.0%     75 °C     4463 MHz
+CPU6:	  1.0%     75 °C     4463 MHz
+CPU7:	  1.0%     75 °C     4463 MHz
+CPU8:	  1.0%     75 °C     4463 MHz
+CPU9:	  0.0%     75 °C     4463 MHz
+CPU10:	  0.0%     75 °C     4000 MHz
+CPU11:	  0.0%     75 °C     4463 MHz
+CPU12:	  0.0%     75 °C     4463 MHz
+CPU13:	  0.0%     75 °C     4463 MHz
+CPU14:	100.0%     75 °C     4463 MHz
+CPU15:	  0.0%     75 °C     3926 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+
+Total CPU usage: 10.2 %
+Total system load: 1.46
+Average temp. of all cores: 74.88 °C 
+
+High CPU load
+Optimal total CPU usage: 10.2 %, high average core temp: 74.875 °C
+setting turbo boost: off
+
+Hope the problem is resolved asap and managed in better way. It worked just perfect a week ago now it is going all crazy by overheating while charging and lagging while on battery.
+
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@prazwalayyyyyyyy seems like the same issue in #398 </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

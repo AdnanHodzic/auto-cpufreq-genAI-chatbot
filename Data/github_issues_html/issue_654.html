@@ -1,0 +1,89 @@
+
+        <html>
+        <head>
+            <title>Issue #654: Disabling CPU cores crashes the daemon.</title>
+        </head>
+        <body>
+            <h1>Disabling CPU cores crashes the daemon.</h1>
+            <p><strong>Issue #654</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>This bug was discovered in #603. 
+Running `echo 0 | sudo tee /sys/devices/system/cpu/cpuN/online` (where N is any integer greater than 0) causes the daemon to crash
+
+This can be reproduced by running the command then running `systemctl status auto-cpufreq` or `auto-cpufreq --stats`
+
+I'm going to look into this and hopefully open a PR to resolve this issue. </p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Unfortunately, this looks like an upstream bug in `psutil`
+https://github.com/giampaolo/psutil/issues/2254
+
+So this isn't something we can fix. The issue on the psutil repo has had little activity as well. If I have some time, I might delve into the psutil source code and see if I can open a PR over there</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Ok i've submitted a PR on the psutil repo that should fix this.
+https://github.com/giampaolo/psutil/pull/2376
+
+I imagine it will take some time for this to merge and make it into a release so we just have to wait.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Congrats on getting it merged!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>astonish-g:</strong></p>
+                    <p>Thank you so much beeing nice enough to fix this issue! Now I changed my laptop, and have one with AMD Ryzen 8845HS. I will try this, but for now I am getting higher watt useage compared to my old one. I am still trying to find the issue, before I will try this fix. Thank you again!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Svenum:</strong></p>
+                    <p>Hi,
+I do not know if this is the right place, but I do not want to open an new issue only for this question. 
+Is there a way to set CPU-Core-Count via the config file? I want to set my core count to 4 if on battery and to 16 if on AC.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Its not currently possible. 
+1. because it hasn't been implemented
+2. this bug is still in upstream as the merged PR has not made its way into a release yet so disabling a cpu core will crash auto-cpufreq</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Nolicx:</strong></p>
+                    <p>Hey there, i've been using this tool for about the past week and i think it's great.
+While searching for a way to disable cores i've found this issue and seen a few other issues and discussions regariding this feature.
+I would love to implement it, as soon as the upstream issue has been fixed. 
+Is there anything i should do besides the implementation and the creation of a pull request?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>@Nolicx 
+I'm glad auto-cpufreq has been useful for you.
+
+If you're interested in adding it, I think its a good idea and shouldn't be too difficult.
+Although we don't know when a new release for psutil will happen, it should be possible to swap the PyPi release directly with the Github source  (from the commit of the patch I made) in the meantime
+Consider joining our [Discord server](https://discord.com/invite/Sjauxtj6kH) if you want to discuss anything.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>>Although we don't know when a new release for psutil will happen, it should be possible to swap the PyPi release directly with the Github source (from the commit of the patch I made) in the meantime
+
+Went ahead and did this. 5e17ee3</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

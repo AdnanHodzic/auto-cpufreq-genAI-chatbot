@@ -1,0 +1,61 @@
+
+        <html>
+        <head>
+            <title>Discussion #243: What are the implications of disabling intel_pstate?</title>
+        </head>
+        <body>
+            <h1>What are the implications of disabling intel_pstate?</h1>
+            <p><strong>Discussion #243</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I saw in the readme that if one has problems with CPU frequencies and is running under `intel_pstate` then one ought to disable it. 
+
+I will gladly disable it, but I don't know what I will be missing out if I do. I looked online and couldn't find whether or not this would also affect me while dualbooting Windows.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>You can always enable it back to `intel_pstate` if you're not happy with things are on `acpi-cpufreq`.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>luni3359:</strong></p>
+                    <p>I've tried it out and it works like a charm, but that's not what I was asking for. I was afraid of having to change grub every time I wanted to reboot. I did some very unscientific testing yesterday and I couldn't really notice whether or not this affected Windows. I've come to the conclusion that GRUB_CMDLINE_LINUX_DEFAULT only applies to Linux booting.
+
+Thank you for making this software, I think it really should be included in the kernel by default one way or another, especially with the upcoming release of the Steam Deck.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I've tried it out and it works like a charm, but that's not what I was asking for. I was afraid of having to change grub every time I wanted to reboot. I did some very unscientific testing yesterday and I couldn't really notice whether or not this affected Windows. I've come to the conclusion that GRUB_CMDLINE_LINUX_DEFAULT only applies to Linux booting.
+
+Of course it doesn't affect Windows, you're editing Linux settings here.
+
+> Thank you for making this software, I think it really should be included in the kernel by default one way or another, especially with the upcoming release of the Steam Deck.
+
+Most welcome, please consider donating to the project and sharing the word!
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>mueslimak3r:</strong></p>
+                    <p>I'm also interested in details about the implications of having `intel_pstate` enabled/disabled. I couldn't find much info elsewhere.
+From reading about `intel_pstate` here:
+https://www.kernel.org/doc/html/v4.19/admin-guide/pm/intel_pstate.html
+
+it looks like `intel_pstate` interacts with `cpufreq` and, similar to other applications like `TLP`, `powertop`, and `power-profiles-daemon`, could interfere with/overwrite any changes `auto-cpufreq` attempts to make.
+
+Is that an accurate assessment of why disabling `intel_pstate` is recommended?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>It's not recommended to disable `intel_pstate`, it's simply suggested as an option if you're encountering problems as described in [Troubleshooting](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting) section.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

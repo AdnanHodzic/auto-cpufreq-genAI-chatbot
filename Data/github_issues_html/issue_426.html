@@ -1,0 +1,98 @@
+
+        <html>
+        <head>
+            <title>Issue #426: CPU not scaling down to set freq in config file</title>
+        </head>
+        <body>
+            <h1>CPU not scaling down to set freq in config file</h1>
+            <p><strong>Issue #426</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? Yes
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)? 
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)? Yes
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)? Yes
+
+### System information:
+
+```
+Using settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 22.04.1 LTS (Jammy Jellyfish)
+Linux kernel: 5.15.0-46-generic
+Processor: 11th Gen Intel(R) Core(TM) i5-11300H @ 3.10GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1800 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  2.0%     42 °C     3100 MHz
+CPU1:	  0.0%     40 °C     3100 MHz
+CPU2:	  0.0%     39 °C     1092 MHz
+CPU3:	  3.9%     38 °C     3100 MHz
+CPU4:	  0.0%     42 °C     3100 MHz
+CPU5:	  0.0%     40 °C     3100 MHz
+CPU6:	  0.0%     39 °C     3100 MHz
+CPU7:	  0.0%     38 °C     3100 MHz
+
+auto-cpufreq version: (Snap) 1.9.5
+
+Python: 3.10.4
+psutil package: 5.9.1
+platform package: 1.0.8
+click package: 8.1.3
+distro package: 1.7.0
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.15 %
+
+Total CPU usage: 0.5 %
+Total system load: 0.10
+Average temp. of all cores: 39.75 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+
+```
+
+Hi Adnan,
+
+I've installed and configured auto-cpufreq via Snap. Although I've seem to run into the issue that the CPU actually isn't scaling down to my set freq in the config file (see debug output). Any tips on how I can remedy this?
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ThomasMW:</strong></p>
+                    <p>I didn't actually switch to ```acpi-cpufreq```, I'll show myself out.
+
+Thanks for the great tool!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>r100-stack:</strong></p>
+                    <p>> I didn't actually switch to `acpi-cpufreq`, I'll show myself out.
+
+In case someone else is having the same problem, how to change to `acpi-cpufreq` is mentioned in https://github.com/AdnanHodzic/auto-cpufreq/#troubleshooting</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

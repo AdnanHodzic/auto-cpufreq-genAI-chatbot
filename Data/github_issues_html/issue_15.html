@@ -1,0 +1,42 @@
+
+        <html>
+        <head>
+            <title>Issue #15: psutil has no attribute 'sensors_battery'</title>
+        </head>
+        <body>
+            <h1>psutil has no attribute 'sensors_battery'</h1>
+            <p><strong>Issue #15</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Even after I fix errors due to the fact that certain distros don't have /usr/lib/systemd/system/ and instead have /lib/systemd/system/, I still encounter error with psutil.
+![Screenshot from 2020-01-06 12-16-50](https://user-images.githubusercontent.com/20578676/71800632-9e6a4a80-307e-11ea-83af-2bdb46c34a66.png)
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Exorust:</strong></p>
+                    <p>Turns out ubuntu 16.04 ships with older version of psutil when you use, `sudo apt install python3 python3-distro python3-psutil python3-click -y`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Yes, that's correct, could you please try upgrading both using pip3 by running:
+
+`sudo pip3 install --upgrade psutil`
+
+And let me know if the problem still persits after this?
+
+I'm also going to update README with this information</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Since I also [updated README with this information](https://github.com/AdnanHodzic/auto-cpufreq#requirements-installation-for-debianubuntu-and-their-derivatives), I'm closing the story. Feel free to re-open it if the issue persists.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

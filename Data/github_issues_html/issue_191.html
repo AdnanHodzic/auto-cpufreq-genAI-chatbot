@@ -1,0 +1,122 @@
+
+        <html>
+        <head>
+            <title>Issue #191: Unnecessary disk io with custom cpufreqctl</title>
+        </head>
+        <body>
+            <h1>Unnecessary disk io with custom cpufreqctl</h1>
+            <p><strong>Issue #191</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Upon doing some profiling on my computer to reduce ssd wear, I noticed that this tool continuously writes to `/usr/bin/cpufreqctl.auto-cpufreq` every refresh cycle. This seems unnecessary, and I'm a little unsure about the negative impacts of this.
+
+Would it be possible to only install the custom script one time, as part of the setup process, and then leave it there? I'm not sure why it's not, could this be a bug?
+
+Many thanks!</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Is this is the still the case [1.6.4](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.6.4)? 
+
+@marc0der considering your involvement with this one, any thoughts? </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>marc0der:</strong></p>
+                    <p>@AdnanHodzic the work I did only introduced a parallel version of this executable but did nothing in terms of how it is used or placed on the file system. I can take a look to see if this can be optimised further.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@marc0der I know, please don't take this the wrong way :) 
+
+I noticed increase in issues related to `cpufreqctl.auto-cpufreq` (although I don't see any reason for it). Hence I'm trying to eliminate false positives and attempting to figure out what the real cause is.
+
+@theol0403 please confirm if this is still the problem with 1.6.4</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>theol0403:</strong></p>
+                    <p>At the time of reporting, I was installing from the latest git commit, so I think so.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> At the time of reporting, I was installing from the latest git commit, so I think so.
+
+Could you please include output of:
+```
+sudo auto-cpufreq --debug
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>theol0403:</strong></p>
+                    <p>```
+✗ sudo auto-cpufreq --debug
+
+-------------------------------------------------------------------------------
+
+Linux distro: Fedora 34
+Linux kernel: 5.11.7-300.fc34.x86_64
+Processor: Intel(R) Core(TM) i7-8550U CPU @ 1.80GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1800 MHz
+CPU min frequency: 400 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0:    28.0%     57 °C     1800 MHz
+CPU1:     4.0%     58 °C     2000 MHz
+CPU2:     4.0%     55 °C     2000 MHz
+CPU3:    10.1%     57 °C     2000 MHz
+CPU4:     5.1%     57 °C     2000 MHz
+CPU5:    15.0%     58 °C     2000 MHz
+CPU6:     2.0%     55 °C     2000 MHz
+CPU7:     8.9%     57 °C     2000 MHz
+
+auto-cpufreq version:
+Git commit: e1409aa
+
+Python: 3.9.2
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 7.1.2
+distro package 1.5.0
+
+Computer type: Convertible
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.07 %
+
+Total CPU usage: 14.0 %
+Total system load: 1.43
+Average temp. of all cores: 56.75 °C
+
+Currently using: performance governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Added [Troubleshooting section to README on how to change CPU management driver](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting).
+
+Could you please give this a try as I believe it could potentially resolve your problem. If it doesn't please feel free to re-open this issue.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

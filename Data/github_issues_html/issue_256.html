@@ -1,0 +1,29 @@
+
+        <html>
+        <head>
+            <title>Issue #256: Testing</title>
+        </head>
+        <body>
+            <h1>Testing</h1>
+            <p><strong>Issue #256</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I think it would be really useful to test auto-cpufreq on a set of (system state, config, expected action) tuples. This would help to check cases like https://github.com/AdnanHodzic/auto-cpufreq/pull/255. `core.py` could be refactored to expose an easy-to-test API like
+```python
+state = get_system_state()
+action = get_action(state, config)
+execute(action)
+```</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Sounds like a good idea. Please give it a try and submit a PR and I'll be glad to review your changes. Of course, you'll be given credit once the changes are merged just as you were with [v1.7.1 release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

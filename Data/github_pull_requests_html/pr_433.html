@@ -1,0 +1,83 @@
+
+        <html>
+        <head>
+            <title>Pull Request #433: Switch to the properly maintained AUR package</title>
+        </head>
+        <body>
+            <h1>Switch to the properly maintained AUR package</h1>
+            <p><strong>Pull Request #433</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>The package at https://aur.archlinux.org/packages/auto-cpufreq-git which has been linked in readme is out of date since long & is actually abondoned . https://aur.archlinux.org/packages/auto-cpufreq is the one being maintained properly at the moment
+
+Also , at the time of writing this the auto-cpufreq-git package doesn't even compile anymore</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>SunkenHero:</strong></p>
+                    <p>At first, a little typo in your comment(First and second link are the same).
+The compile error could be my fault because i recently made an pull request.
+You can try to comment 1149-1151 in /auto-cpufreq/core.py out and then reinstall the package.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I'm aware that AUR package has been abandoned (#388), and there are many bug reports about it and new ones like #434 coming in. But since I don't use Arch (based) distro I really have no interest in maintaining it as I'm too busy with other things.
+
+@xd003 could you please make the changes proposed by @SunkenHero so we can merge this change. Thanks</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>xd003:</strong></p>
+                    <p>Just to update my findings , there's no error if i install auto-cpufreq manully using the installer script - https://github.com/AdnanHodzic/auto-cpufreq#auto-cpufreq-installer . So the issue seems to be somewhere within the auto-cpufreq-git package itself . So i would assume ideally changes need to be done in there & not really in this repo ? Here's the traceback just in case - https://www.klgrth.io/paste/onscc </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Just to update my findings , there's no error if i install auto-cpufreq manully using the installer script - https://github.com/AdnanHodzic/auto-cpufreq#auto-cpufreq-installer . So the issue seems to be somewhere within the auto-cpufreq-git package itself . So i would assume ideally changes need to be done in there & not really in this repo ? Here's the traceback just in case - https://www.klgrth.io/paste/onscc
+
+Thanks for checking. Yes, in this case it's definitely problem which should be addressed on AUR package maintainers side.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>xd003:</strong></p>
+                    <p>I am not really familiar with Arch Package builds , so i have mentioned in readme to use the binary package for releases & the Installer script if someone needs latest changes until the git package has a active maintainer</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>SunkenHero:</strong></p>
+                    <p>So i really got no idea how AUR packages work and what they really are, but your commit looks good and if it fixes the problem it would be good to get merged
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@xd003 one small change request from my side.
+
+Could you please:
+
+Set these 2 to be on the same line:
+> [Binary Package](https://aur.archlinux.org/packages/auto-cpufreq) (For the latest binary release on github)
+> [Git Package](https://aur.archlinux.org/packages/auto-cpufreq-git)(For the latest commits/changes )
+
+Remove empty space before ,/. `has issues .` & `maintaining it ,` and add `.` at the end of sentence here `latest changes`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>xd003:</strong></p>
+                    <p>Looks good to me now </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Looks good to me now
+
+Good stuff, thank you for your contribution and you'll be credited for you work as part of upcoming 1.9.6.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

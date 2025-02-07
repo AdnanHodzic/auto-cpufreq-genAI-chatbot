@@ -1,0 +1,134 @@
+
+        <html>
+        <head>
+            <title>Issue #490: auto-cpufreq fails to run if cpufreq app is installed</title>
+        </head>
+        <body>
+            <h1>auto-cpufreq fails to run if cpufreq app is installed</h1>
+            <p><strong>Issue #490</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted?  Yes
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)? No, i'm using fedora
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)? yes
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)? yes
+
+### Error output:
+```
+sudo auto-cpufreq --monitor
+
+Note: You can quit monitor mode by pressing "ctrl+c"
+
+-------------------------------------------------------------------------------
+
+Linux distro: Fedora Linux 37 Workstation Edition
+Linux kernel: 6.1.9-666.rog.fc37.x86_64
+Processor: AMD Ryzen 7 6800HS with Radeon Graphics
+Cores: 12
+Architecture: x86_64
+Driver: acpi-cpufreq
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.9.7+9912f9d8', 'auto-cpufreq')
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/pkg_resources/__init__.py", line 672, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/pkg_resources/__init__.py", line 1479, in run_script
+    exec(script_code, namespace, namespace)
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/auto_cpufreq-1.9.7+9912f9d8-py3.11.egg/EGG-INFO/scripts/auto-cpufreq", line 225, in <module>
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/click/core.py", line 1130, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/click/core.py", line 1055, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/click/core.py", line 1404, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/click/core.py", line 760, in invoke
+    return __callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/auto_cpufreq-1.9.7+9912f9d8-py3.11.egg/EGG-INFO/scripts/auto-cpufreq", line 106, in main
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/auto_cpufreq-1.9.7+9912f9d8-py3.11.egg/auto_cpufreq/core.py", line 1124, in sysinfo
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/psutil/__init__.py", line 1864, in cpu_freq
+    ret = _psplatform.cpu_freq()
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/psutil/_pslinux.py", line 742, in cpu_freq
+    raise NotImplementedError(
+NotImplementedError: can't find current frequency file
+
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+sudo auto-cpufreq --debug
+
+-------------------------------------------------------------------------------
+
+Linux distro: Fedora Linux 37 Workstation Edition
+Linux kernel: 6.1.9-666.rog.fc37.x86_64
+Processor: AMD Ryzen 7 6800HS with Radeon Graphics
+Cores: 12
+Architecture: x86_64
+Driver: acpi-cpufreq
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.9.7+9912f9d8', 'auto-cpufreq')
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/pkg_resources/__init__.py", line 672, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/pkg_resources/__init__.py", line 1479, in run_script
+    exec(script_code, namespace, namespace)
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/auto_cpufreq-1.9.7+9912f9d8-py3.11.egg/EGG-INFO/scripts/auto-cpufreq", line 225, in <module>
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/click/core.py", line 1130, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/click/core.py", line 1055, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/click/core.py", line 1404, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/click/core.py", line 760, in invoke
+    return __callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/auto_cpufreq-1.9.7+9912f9d8-py3.11.egg/EGG-INFO/scripts/auto-cpufreq", line 159, in main
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/auto_cpufreq-1.9.7+9912f9d8-py3.11.egg/auto_cpufreq/core.py", line 1124, in sysinfo
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/psutil/__init__.py", line 1864, in cpu_freq
+    ret = _psplatform.cpu_freq()
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/psutil/_pslinux.py", line 742, in cpu_freq
+    raise NotImplementedError(
+NotImplementedError: can't find current frequency file
+
+```
+
+I installed cpufreq gnome extension https://extensions.gnome.org/extension/1082/cpufreq/ .
+ After that auto-cpufreq has stopped working
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Both programs essentially do the same thing
+
+cpufreq works by allowing the user to manually control their CPU frequencies, turbo, etc...
+The idea behind auto-cpufreq is that the user doesn't have to manually control this stuff, so the program will do it for you, hence the **auto** in the name.
+
+In this case, you should choose which program you prefer and remove the other one. If you are interested in the GUI of cpufreq, you might be interested to know that this is being worked on in PR #486 </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,46 @@
+
+        <html>
+        <head>
+            <title>Issue #197: auto-cpufreq folder installed to Home folder</title>
+        </head>
+        <body>
+            <h1>auto-cpufreq folder installed to Home folder</h1>
+            <p><strong>Issue #197</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Apologies, first time Github comment, and newbie Linux user. I recently installed auto-cpufreq from the auto-cpufreq-installer from the readme. I noticed that it created an auto-cpufreq folder in my Home folder. Is there anyway to remove/move the folder without losing functionality to auto-cpufreq? 
+
+BTW I am on Pop_OS! 20.10 on a Thinkpad T490 if that provides more context.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Yes, uninstall auto-cpufreq, move the directory where you want it to reside permanently and then perform install from there. That's if you're using `auto-cpufreq-installer`, you can also install [using Snap](https://github.com/AdnanHodzic/auto-cpufreq#snap-store) and then you don't have to worry about this. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>dropestein:</strong></p>
+                    <p>Hi! About this same question: what is the proper way to completely uninstall it?
+I tried `sudo auto-cpufreq --remove`, but I still see the `auto-cpufreq` available in my terminal.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Hi! About this same question: what is the proper way to completely uninstall it?
+> I tried `sudo auto-cpufreq --remove`, but I still see the `auto-cpufreq` available in my terminal.
+
+If `sudo auto-cpufreq --remove` is not available, then it means that auto-cpufreq package has not been installed. 
+
+If you installed it using Snap package, you can remove it using: `sudo snap remove auto-cpufreq`
+
+If you installed it using the auto-cpufreq-installer, you can remove it by getting to location where you cloned auto-cpufreq git repo and running: `sudo /auto-cpufreq-installer --uninstall` 
+
+ If it doesn't please feel free to re-open this issue.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

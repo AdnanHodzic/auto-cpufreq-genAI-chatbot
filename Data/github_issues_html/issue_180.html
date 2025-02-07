@@ -1,0 +1,81 @@
+
+        <html>
+        <head>
+            <title>Issue #180: (Fedora33) cupfreq-installer seems to install all but command auto-cpufreq returns "command not found"</title>
+        </head>
+        <body>
+            <h1>(Fedora33) cupfreq-installer seems to install all but command auto-cpufreq returns "command not found"</h1>
+            <p><strong>Issue #180</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+```text
+bash: auto-cpufreq: command not found...
+```
+---
+
+### System information:
+```text
+bash: auto-cpufreq: command not found...
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Shogu:</strong></p>
+                    <p>Hi!
+
+On Fedora 33, using installer and git source, everything seems to be installed correctly if i trust terminal, but commands fails 
+I read same issue with snap package on Fedora.
+
+Note that snapd install works fine, but i prefer not to use Snap wich enables a new service and downloads hundreds of Mo.
+
+Any idea? Thanks a lot!
+
+Ugo - France</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Hi Ugo,
+
+Yes, this is a known issue on Fedora & Snap package, please see second paragraph of "Please note" section for Fedora users as part of [Installing auto-cpufreq from Snap store](https://github.com/AdnanHodzic/auto-cpufreq#snap-store).
+
+Since it's a known issue and there's no permanent solution for it now, I'll close the issue, feel free to re-open it if this doesn't solve your problem.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Shogu:</strong></p>
+                    <p>Thanks Adnan.
+
+But on l'y Fedora this trouble appears with installer script, not with Snap.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>You install auto-cpufreq with auto-cpufreq-installer and you run it and you get `bash: auto-cpufreq: command not found...`?
+
+Can you provide `auto-cpufreq --debug` output?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Shogu:</strong></p>
+                    <p>Thanks a lot for spending time for me and for the Linux community!
+
+I tried again after yesterday fails and - do not know why cause i used same commands in shell using terminal memory - 
+ TADAM! Today everything runs fine (except ctrl-c in terminal but i do not mind)
+
+Sorry for the false alert.
+
+Greetings from France!
+
+Shogu</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

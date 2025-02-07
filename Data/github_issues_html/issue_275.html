@@ -1,0 +1,228 @@
+
+        <html>
+        <head>
+            <title>Issue #275: Systemd not auto starting on boot and being killed after some time if manully started</title>
+        </head>
+        <body>
+            <h1>Systemd not auto starting on boot and being killed after some time if manully started</h1>
+            <p><strong>Issue #275</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+```text
+Nov 10 18:25:02 fedora systemd[1]: Started auto-cpufreq - Automatic CPU speed & power optimizer for Linux.
+Nov 10 18:25:03 fedora python3[6051]: detected unhandled Python exception in '/usr/local/bin/auto-cpufreq'
+Nov 10 18:25:03 fedora auto-cpufreq[6051]: Traceback (most recent call last):
+Nov 10 18:25:03 fedora auto-cpufreq[6051]:   File "/usr/local/bin/auto-cpufreq", line 4, in <module>
+Nov 10 18:25:03 fedora auto-cpufreq[6051]:     __import__('pkg_resources').run_script('auto-cpufreq==1.0', 'auto-cpufreq')
+Nov 10 18:25:03 fedora auto-cpufreq[6051]:   File "/usr/lib/python3.10/site-packages/pkg_resources/__init__.py", line 3243, in <module>
+Nov 10 18:25:03 fedora auto-cpufreq[6051]:     def _initialize_master_working_set():
+Nov 10 18:25:03 fedora auto-cpufreq[6051]:   File "/usr/lib/python3.10/site-packages/pkg_resources/__init__.py", line 3226, in _call_aside
+Nov 10 18:25:03 fedora auto-cpufreq[6051]:     f(*args, **kwargs)
+Nov 10 18:25:03 fedora auto-cpufreq[6051]:   File "/usr/lib/python3.10/site-packages/pkg_resources/__init__.py", line 3255, in _initialize_master_working_set
+Nov 10 18:25:03 fedora auto-cpufreq[6051]:     working_set = WorkingSet._build_master()
+Nov 10 18:25:03 fedora auto-cpufreq[6051]:   File "/usr/lib/python3.10/site-packages/pkg_resources/__init__.py", line 568, in _build_master
+Nov 10 18:25:03 fedora auto-cpufreq[6051]:     ws.require(__requires__)
+Nov 10 18:25:03 fedora auto-cpufreq[6051]:   File "/usr/lib/python3.10/site-packages/pkg_resources/__init__.py", line 886, in require
+Nov 10 18:25:03 fedora auto-cpufreq[6051]:     needed = self.resolve(parse_requirements(requirements))
+Nov 10 18:25:03 fedora auto-cpufreq[6051]:   File "/usr/lib/python3.10/site-packages/pkg_resources/__init__.py", line 772, in resolve
+Nov 10 18:25:03 fedora auto-cpufreq[6051]:     raise DistributionNotFound(req, requirers)
+Nov 10 18:25:03 fedora auto-cpufreq[6051]: pkg_resources.DistributionNotFound: The 'auto-cpufreq==1.0' distribution was not found and is required by the application
+Nov 10 18:25:03 fedora systemd[1]: auto-cpufreq.service: Main process exited, code=exited, status=1/FAILURE
+Nov 10 18:25:03 fedora systemd[1]: auto-cpufreq.service: Failed with result 'exit-code'.
+Nov 10 18:53:56 fedora systemd[1]: Started auto-cpufreq - Automatic CPU speed & power optimizer for Linux.
+Nov 10 18:53:56 fedora python3[8948]: detected unhandled Python exception in '/usr/local/bin/auto-cpufreq'
+Nov 10 18:53:56 fedora auto-cpufreq[8948]: Traceback (most recent call last):
+Nov 10 18:53:56 fedora auto-cpufreq[8948]:   File "/usr/local/bin/auto-cpufreq", line 4, in <module>
+Nov 10 18:53:56 fedora auto-cpufreq[8948]:     __import__('pkg_resources').run_script('auto-cpufreq==1.0', 'auto-cpufreq')
+Nov 10 18:53:56 fedora auto-cpufreq[8948]:   File "/usr/lib/python3.10/site-packages/pkg_resources/__init__.py", line 3243, in <module>
+Nov 10 18:53:56 fedora auto-cpufreq[8948]:     def _initialize_master_working_set():
+Nov 10 18:53:56 fedora auto-cpufreq[8948]:   File "/usr/lib/python3.10/site-packages/pkg_resources/__init__.py", line 3226, in _call_aside
+Nov 10 18:53:56 fedora auto-cpufreq[8948]:     f(*args, **kwargs)
+Nov 10 18:53:56 fedora auto-cpufreq[8948]:   File "/usr/lib/python3.10/site-packages/pkg_resources/__init__.py", line 3255, in _initialize_master_working_set
+Nov 10 18:53:56 fedora auto-cpufreq[8948]:     working_set = WorkingSet._build_master()
+Nov 10 18:53:56 fedora auto-cpufreq[8948]:   File "/usr/lib/python3.10/site-packages/pkg_resources/__init__.py", line 568, in _build_master
+Nov 10 18:53:56 fedora auto-cpufreq[8948]:     ws.require(__requires__)
+Nov 10 18:53:56 fedora auto-cpufreq[8948]:   File "/usr/lib/python3.10/site-packages/pkg_resources/__init__.py", line 886, in require
+Nov 10 18:53:56 fedora auto-cpufreq[8948]:     needed = self.resolve(parse_requirements(requirements))
+Nov 10 18:53:56 fedora auto-cpufreq[8948]:   File "/usr/lib/python3.10/site-packages/pkg_resources/__init__.py", line 772, in resolve
+Nov 10 18:53:56 fedora auto-cpufreq[8948]:     raise DistributionNotFound(req, requirers)
+Nov 10 18:53:56 fedora auto-cpufreq[8948]: pkg_resources.DistributionNotFound: The 'auto-cpufreq==1.0' distribution was not found and is required by the application
+Nov 10 18:53:56 fedora systemd[1]: auto-cpufreq.service: Main process exited, code=exited, status=1/FAILURE
+Nov 10 18:53:56 fedora systemd[1]: auto-cpufreq.service: Failed with result 'exit-code'.
+Nov 10 18:54:21 fedora systemd[1]: Started auto-cpufreq - Automatic CPU speed & power optimizer for Linux.
+Nov 10 18:54:22 fedora python3[8987]: detected unhandled Python exception in '/usr/local/bin/auto-cpufreq'
+Nov 10 18:54:22 fedora auto-cpufreq[8987]: Traceback (most recent call last):
+Nov 10 18:54:22 fedora auto-cpufreq[8987]:   File "/usr/local/bin/auto-cpufreq", line 4, in <module>
+Nov 10 18:54:22 fedora auto-cpufreq[8987]:     __import__('pkg_resources').run_script('auto-cpufreq==1.0', 'auto-cpufreq')
+Nov 10 18:54:22 fedora auto-cpufreq[8987]:   File "/usr/lib/python3.10/site-packages/pkg_resources/__init__.py", line 3243, in <module>
+Nov 10 18:54:22 fedora auto-cpufreq[8987]:     def _initialize_master_working_set():
+Nov 10 18:54:22 fedora auto-cpufreq[8987]:   File "/usr/lib/python3.10/site-packages/pkg_resources/__init__.py", line 3226, in _call_aside
+Nov 10 18:54:22 fedora auto-cpufreq[8987]:     f(*args, **kwargs)
+Nov 10 18:54:22 fedora auto-cpufreq[8987]:   File "/usr/lib/python3.10/site-packages/pkg_resources/__init__.py", line 3255, in _initialize_master_working_set
+Nov 10 18:54:22 fedora auto-cpufreq[8987]:     working_set = WorkingSet._build_master()
+Nov 10 18:54:22 fedora auto-cpufreq[8987]:   File "/usr/lib/python3.10/site-packages/pkg_resources/__init__.py", line 568, in _build_master
+Nov 10 18:54:22 fedora auto-cpufreq[8987]:     ws.require(__requires__)
+Nov 10 18:54:22 fedora auto-cpufreq[8987]:   File "/usr/lib/python3.10/site-packages/pkg_resources/__init__.py", line 886, in require
+Nov 10 18:54:22 fedora auto-cpufreq[8987]:     needed = self.resolve(parse_requirements(requirements))
+Nov 10 18:54:22 fedora auto-cpufreq[8987]:   File "/usr/lib/python3.10/site-packages/pkg_resources/__init__.py", line 772, in resolve
+Nov 10 18:54:22 fedora auto-cpufreq[8987]:     raise DistributionNotFound(req, requirers)
+Nov 10 18:54:22 fedora auto-cpufreq[8987]: pkg_resources.DistributionNotFound: The 'auto-cpufreq==1.0' distribution was not found and is required by the application
+Nov 10 18:54:22 fedora systemd[1]: auto-cpufreq.service: Main process exited, code=exited, status=1/FAILURE
+Nov 10 18:54:22 fedora systemd[1]: auto-cpufreq.service: Failed with result 'exit-code'.
+Nov 10 18:57:57 fedora systemd[1]: Started auto-cpufreq - Automatic CPU speed & power optimizer for Linux.
+Nov 10 19:21:18 fedora systemd[1]: Stopping auto-cpufreq - Automatic CPU speed & power optimizer for Linux...
+Nov 10 19:21:19 fedora systemd[1]: auto-cpufreq.service: Deactivated successfully.
+Nov 10 19:21:19 fedora systemd[1]: Stopped auto-cpufreq - Automatic CPU speed & power optimizer for Linux.
+Nov 10 19:21:19 fedora systemd[1]: auto-cpufreq.service: Consumed 10.460s CPU time.
+
+
+
+```
+
+---
+
+### System information:
+```text
+Linux distro: Fedora Linux 35 
+Linux kernel: 5.14.16-301.fc35.x86_64
+Processor: AMD Ryzen 5 4600H with Radeon Graphics
+Cores: 12
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3000 MHz
+CPU min frequency: 1400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  8.2%     38 °C     1400 MHz
+CPU1:	  3.0%     38 °C     3000 MHz
+CPU2:	  7.1%     38 °C     1412 MHz
+CPU3:	  5.0%     38 °C     3000 MHz
+CPU4:	  6.1%     38 °C     1400 MHz
+CPU5:	  4.1%     38 °C     1400 MHz
+CPU6:	  2.0%     38 °C     1400 MHz
+CPU7:	  4.9%     38 °C     1400 MHz
+CPU8:	  3.0%     38 °C     1400 MHz
+CPU9:	  1.0%     38 °C     1400 MHz
+CPU10:	  3.0%     38 °C     1400 MHz
+CPU11:	  4.0%     38 °C     1400 MHz
+
+auto-cpufreq version:
+fatal: not a git repository (or any of the parent directories): .git
+CalledProcessError(128, ['git', 'describe', '--always'])
+
+Python: 3.10.0
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 8.0.1
+distro package 1.6.0
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.29 %
+
+Total CPU usage: 4.8 %
+Total system load: 1.53
+Average temp. of all cores: 37.5 °C 
+
+Currently using: schedutil governor
+Currently turbo boost is: on
+
+
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>titulebolide:</strong></p>
+                    <p>Same issue, also on Fedora 35
+Apparently it is an issue with pkg_resources being very old and deprecated
+https://github.com/mtkennerly/dunamai/issues/28
+https://setuptools.pypa.io/en/latest/pkg_resources.html</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>titulebolide:</strong></p>
+                    <p>Edit : Upgrading autocpufreq just by installing it again fixed the error</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>KnightKrusty:</strong></p>
+                    <p>@titulebolide 
+
+are you sure? i reinstalled it but that didnt fixed it for me...
+
+have you restarted your device and then checked? and
+manually starting the service make it active for few minutes and then kill it self. so make sure to check the service after 5 to 10 mintues later.
+
+
+
+
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>titulebolide:</strong></p>
+                    <p>Actually when I reinstalled it I trid to have it removed (when it asked me what to do), and the error popped again. Then I launched again the installator and have it to install and it worked this time</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>KnightKrusty:</strong></p>
+                    <p>@titulebolide  ohh ok, I will try and update here if it fixes the issue..</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I've noticed this as well on other distros, in case like above, best course of action is to uninstall auto-cpufreq and all Python dependencies mentioned in [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto-cpufreq-installer) and then re-install auto-cpufreq which will also re-install necessary dependencies.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>KnightKrusty:</strong></p>
+                    <p>@titulebolide @AdnanHodzic 
+
+Was not able to update regarding the reinstall and if it fixed my issue.. so in my case reinstalled didnt fixed the issue but read few similar post in  issue i found out that service is being killed by gnome power profile daemon..
+
+> Yeah, stopping & masking the gnome power profile daemon should fix your problem.
+> 
+> ```
+> systemctl stop power-profiles-daemon
+> ```
+> 
+> Followed by
+> 
+> ```
+> systemctl mask power-profiles-daemon
+> ```
+> 
+> Then either reboot or start auto-cpufreq
+> 
+> ```
+> systemctl start auto-cpufreq
+> ```
+
+
+
+here is there link to that post.. https://github.com/AdnanHodzic/auto-cpufreq/issues/277#issuecomment-967797641
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I've made some changes which will resolve this problem automatically without any workarounds, for more info please refer to #277 and let's continue the discussion there.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,27 @@
+
+        <html>
+        <head>
+            <title>Discussion #547: Per core governor setting (optional)</title>
+        </head>
+        <body>
+            <h1>Per core governor setting (optional)</h1>
+            <p><strong>Discussion #547</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I wonder if a (optional) per core governor setting would be useful, this way one could for example set 2 cores to ondemand and 6 cores to powersave when on battery, perhaps prolonging battery life? I am unsure how the Linux scheduler would behave in this scenario, if it is aware and takes into account the core's governor when deciding where to put a task. 
+
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>It is (kind of) possible to set individual core governors, but the scheduler and cpu scaling run independently of each other i,e the scheduler has no idea what governor is being used. Linux already uses the `schedutil` governor by default, which adjusts the frequency according to the current demand for resources.
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

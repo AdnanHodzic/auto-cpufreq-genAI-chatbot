@@ -1,0 +1,59 @@
+
+        <html>
+        <head>
+            <title>Issue #61: Single Core / Battery status / cp stat</title>
+        </head>
+        <body>
+            <h1>Single Core / Battery status / cp stat</h1>
+            <p><strong>Issue #61</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hey there,
+
+I like your tool very much and gave it some testing. On Geekbench 5 I score on the Multi Core test about the same, as when I set my system manually to its maximum. Yet the Single Core test only yields 3/4 of the result. Turbo Boost stays off and the cpu never goes beyond its base frequency then.
+
+Second thing: the log constantly reports that my battery is discharging, even when the ACPI is on-line. Therefore it says it always puts the governor to powersave. Maybe only a logging error since the Multi Core test was good in the benchmark.
+
+Third thing: upon calling the log I get this error:
+cp: der Aufruf von stat für '/usr/local/share/auto-cpufreq/scripts/cpufreqctl.sh' ist nicht möglich: Datei oder Verzeichnis nicht gefunden
+cp: call of stat for '/usr....' is not possible: File or directory not found
+Looks like something isnt copied the right way.
+
+Here are my specs for reference:
+
+![image](https://user-images.githubusercontent.com/3176329/88467383-d3cd6d00-ced6-11ea-9b2a-8d3e079be0fb.png)
+
+Would be great, if you find the time to look into it. :)
+
+Thx and greetings
+~ent
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Great, thank you! 
+
+Many new changes have been implemented as part of 1.2 release and I believe your problem is solved. 
+
+Install latest version using snap package:
+
+```
+sudo snap install auto-cpufreq
+```
+
+or pull the latest changes and run:
+
+```
+sudo ./auto-cpufreq-installer
+```
+
+In case this doesn't solve your problem, please feel free to re-open this issue.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

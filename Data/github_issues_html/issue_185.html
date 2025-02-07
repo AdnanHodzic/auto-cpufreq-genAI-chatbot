@@ -1,0 +1,271 @@
+
+        <html>
+        <head>
+            <title>Issue #185: FileNotFoundError: [Errno 2] No such file or directory: '/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_gov ernors'</title>
+        </head>
+        <body>
+            <h1>FileNotFoundError: [Errno 2] No such file or directory: '/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_gov ernors'</h1>
+            <p><strong>Issue #185</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Cli input was ``~/auto-cpufreq$ sudo auto-cpufreq --monitor``
+Installed with the git installer.
+
+### Error output:
+```text
+
+Traceback (most recent call last):
+  File "/usr/local/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.0', 'auto-cpufreq')
+  File "/usr/local/lib/python3.7/dist-packages/pkg_resources/__init__.py", line 651, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/usr/local/lib/python3.7/dist-packages/pkg_resources/__init__.py", line 1455, in run_script
+    exec(script_code, namespace, namespace)
+  File "/usr/local/lib/python3.7/dist-packages/auto_cpufreq-1.0-py3.7.egg/EGG-INFO/scripts/auto-cpufreq", line 151,                                                            in <module>
+  File "/usr/local/lib/python3.7/dist-packages/click/core.py", line 764, in __call__
+    return self.main(*args, **kwargs)
+  File "/usr/local/lib/python3.7/dist-packages/click/core.py", line 717, in main
+    rv = self.invoke(ctx)
+  File "/usr/local/lib/python3.7/dist-packages/click/core.py", line 956, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/usr/local/lib/python3.7/dist-packages/click/core.py", line 555, in invoke
+    return callback(*args, **kwargs)
+  File "/usr/local/lib/python3.7/dist-packages/auto_cpufreq-1.0-py3.7.egg/EGG-INFO/scripts/auto-cpufreq", line 68,                                                            in main
+  File "/usr/local/lib/python3.7/dist-packages/auto_cpufreq-1.0-py3.7.egg/auto_cpufreq/core.py", line 306, in gov_c                                                           heck
+  File "/usr/local/lib/python3.7/dist-packages/auto_cpufreq-1.0-py3.7.egg/auto_cpufreq/core.py", line 159, in get_a                                                           vail_gov
+  File "/usr/lib/python3.7/pathlib.py", line 1199, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+  File "/usr/lib/python3.7/pathlib.py", line 1186, in open
+    opener=self._opener)
+  File "/usr/lib/python3.7/pathlib.py", line 1039, in _opener
+    return self._accessor.open(self, flags, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_gov                                                           ernors'
+```
+---
+
+### System information:
+```text
+
+Linux distro: Debian GNU/Linux 10 buster
+Linux kernel: 5.4.89+
+Processor: Intel(R) Xeon(R) CPU @ 2.00GHz
+Cores: 2
+Architecture: x86_64
+Driver: /bin/sh: cpufreqctl.auto-cpufreq: command not found
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 0 MHz
+CPU min frequency: 0 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0:     6.1%    nan °C     2000 MHz
+CPU1:     5.1%    nan °C     2000 MHz
+
+auto-cpufreq version:
+Git commit: cb5be01
+
+Python: 3.7.3
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 7.0
+distro package 1.5.0
+
+Computer type: Other
+Traceback (most recent call last):
+  File "/usr/local/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.0', 'auto-cpufreq')
+  File "/usr/local/lib/python3.7/dist-packages/pkg_resources/__init__.py", line 651, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/usr/local/lib/python3.7/dist-packages/pkg_resources/__init__.py", line 1455, in run_script
+    exec(script_code, namespace, namespace)
+  File "/usr/local/lib/python3.7/dist-packages/auto_cpufreq-1.0-py3.7.egg/EGG-INFO/scripts/auto-cpufreq", line 151, in <module>
+  File "/usr/local/lib/python3.7/dist-packages/click/core.py", line 764, in __call__
+    return self.main(*args, **kwargs)
+  File "/usr/local/lib/python3.7/dist-packages/click/core.py", line 717, in main
+    rv = self.invoke(ctx)
+  File "/usr/local/lib/python3.7/dist-packages/click/core.py", line 956, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/usr/local/lib/python3.7/dist-packages/click/core.py", line 555, in invoke
+    return callback(*args, **kwargs)
+  File "/usr/local/lib/python3.7/dist-packages/auto_cpufreq-1.0-py3.7.egg/EGG-INFO/scripts/auto-cpufreq", line 104, in main
+  File "/usr/local/lib/python3.7/dist-packages/auto_cpufreq-1.0-py3.7.egg/auto_cpufreq/core.py", line 143, in charging
+  File "/usr/local/lib/python3.7/dist-packages/psutil/__init__.py", line 2288, in sensors_battery
+    return _psplatform.sensors_battery()
+  File "/usr/local/lib/python3.7/dist-packages/psutil/_pslinux.py", line 1398, in sensors_battery
+    bats = [x for x in os.listdir(POWER_SUPPLY_PATH) if x.startswith('BAT') or
+FileNotFoundError: [Errno 2] No such file or directory: '/sys/class/power_supply'
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@marc0der since you implemented parallel `cpufreqctl`, it seems like it's missing in this case. Any idea on this one?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>marc0der:</strong></p>
+                    <p>Hi @AdnanHodzic,
+
+Are we sure that this is related to my change? What I see from this error is that the following file path is missing and can't be read when running `--monitor` mode:
+
+```
+FileNotFoundError: [Errno 2] No such file or directory: '/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_gov
+```
+
+Also, running the debug, I see that this file is missing/not accessible:
+
+```
+FileNotFoundError: [Errno 2] No such file or directory: '/sys/class/power_supply'
+```
+
+Do you think that my change might have caused it? It seems like it might be a red herring. WDYT?
+```
+Driver: /bin/sh: cpufreqctl.auto-cpufreq: command not found
+```
+
+That said, I could be totally wrong and I'm happy to look at why that line is being printed if you like.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@marc0der I'm not absolutely sure your change introduced it, but I think it's possible. 
+
+> That said, I could be totally wrong and I'm happy to look at why that line is being printed if you like.
+
+If you have time to look into this that would be great. Think it might be both things.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>marc0der:</strong></p>
+                    <p>@AdnanHodzic, I think something else might be going on here. I just tried installing `auto-cpufreq` on my machine bare metal using the installer script, and I get no such error. I also checked, and the parallel `cpufreqctl` is found in exactly the place where it should be at `/usr/bin/cpufreqctl.auto-cpufreq`.
+
+I also notice an ancient kernel version ( 5.4.89+, my machine is currently at 5.10.19-1). Might this be the cause of the error that these paths have perhaps changed in later kernel versions?
+
+@Avnsx, would you mind sharing the exact steps that you took when installing the tool? Could you also let us know if the following file paths are present and accessible by the root user on your machine?
+```
+/sys/class/power_supply
+/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+/usr/bin/cpufreqctl.auto-cpufreq
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I also notice an ancient kernel version ( 5.4.89+, my machine is currently at 5.10.19-1). Might this be the cause of the error that these paths have perhaps changed in later kernel versions?
+
+@marc0der not sure about the kernel, reporting from 5.4.0 and I get no such errors. I also might think that for Xeon paths to these 2 might be different:
+
+```
+/sys/class/power_supply
+/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+```
+
+Need @Avnsx to confirm this of course.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@Avnsx new changes have been made as part of [1.6.3 release](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.6.3) which could potentially solve your problem, could you try it out?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Avnsx:</strong></p>
+                    <p>> @Avnsx new changes have been made as part of [1.6.3 release](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.6.3) which could potentially solve your problem, could you try it out?
+
+new verison:
+```python
+root@~/auto-cpufreq# sudo auto-cpufreq --monitor
+
+Note: You can quit monitor mode by pressing "ctrl+c"
+
+-------------------------------------------------------------------------------
+
+Traceback (most recent call last):
+  File "/usr/local/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.0', 'auto-cpufreq')
+  File "/usr/local/lib/python3.7/dist-packages/pkg_resources/__init__.py", line 651, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/usr/local/lib/python3.7/dist-packages/pkg_resources/__init__.py", line 1455, in run_script
+    exec(script_code, namespace, namespace)
+  File "/usr/local/lib/python3.7/dist-packages/auto_cpufreq-1.0-py3.7.egg/EGG-INFO/scripts/auto-cpufreq", line 151, in <module>
+  File "/usr/local/lib/python3.7/dist-packages/click/core.py", line 764, in __call__
+    return self.main(*args, **kwargs)
+  File "/usr/local/lib/python3.7/dist-packages/click/core.py", line 717, in main
+    rv = self.invoke(ctx)
+  File "/usr/local/lib/python3.7/dist-packages/click/core.py", line 956, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/usr/local/lib/python3.7/dist-packages/click/core.py", line 555, in invoke
+    return callback(*args, **kwargs)
+  File "/usr/local/lib/python3.7/dist-packages/auto_cpufreq-1.0-py3.7.egg/EGG-INFO/scripts/auto-cpufreq", line 68, in main
+  File "/usr/local/lib/python3.7/dist-packages/auto_cpufreq-1.0-py3.7.egg/auto_cpufreq/core.py", line 351, in gov_check
+  File "/usr/local/lib/python3.7/dist-packages/auto_cpufreq-1.0-py3.7.egg/auto_cpufreq/core.py", line 179, in get_avail_gov
+  File "/usr/lib/python3.7/pathlib.py", line 1199, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+  File "/usr/lib/python3.7/pathlib.py", line 1186, in open
+    opener=self._opener)
+  File "/usr/lib/python3.7/pathlib.py", line 1039, in _opener
+    return self._accessor.open(self, flags, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors'
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Avnsx:</strong></p>
+                    <p>Also it's whatever as I don't really see a point in further bothering, thanks anyways</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@Avnsx you had this problem with 1.6.3? 
+
+If this is the case can you include output of:
+
+```
+auto-cpufreq --debug
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shenhong96:</strong></p>
+                    <p>I seems to find my error are the same so i posted it here, let me know if i get into the wrong places. 
+Hardware: 
+Corei5 6300U
+8GB Ram
+Elementary OS
+
+1. Install with installer package from git clone with exact instruction from github page.
+2. Installer has problem with folder permission on .cache/pip but i eliminated it by specifying "sudo -H" during install.
+3. launch the program with _sudo auto-cpufreq_  or just _auto-cpufreq_ gets me the same error as below
+
+> Traceback (most recent call last):
+  File "/usr/local/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.0', 'auto-cpufreq')
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 658, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 1445, in run_script
+    exec(script_code, namespace, namespace)
+  File "/usr/local/lib/python3.6/dist-packages/auto_cpufreq-1.0-py3.6.egg/EGG-INFO/scripts/auto-cpufreq", line 25, in <module>
+  File "/usr/lib/python3/dist-packages/click/decorators.py", line 170, in decorator
+    _param_memo(f, OptionClass(param_decls, **attrs))
+  File "/usr/lib/python3/dist-packages/click/core.py", line 1460, in __init__
+    Parameter.__init__(self, param_decls, type=type, **attrs)
+TypeError: __init__() got an unexpected keyword argument 'hidden'
+
+
+Any idea what can i do? (**SOLVED!!**)
+
+I'm not sure if it's a elementary OS issue but i saw someone reporting the issue elsewhere and the solution they provide is to remove 3 packages with below command:
+`sudo apt remove -y python3-psutil python3-click python3-distro`
+
+Then proceed the normal installation procedure again, it worked!</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,135 @@
+
+        <html>
+        <head>
+            <title>Issue #17: Error: Couldn't find any of the necessary scaling governors. AMD CPU possibly not supported?</title>
+        </head>
+        <body>
+            <h1>Error: Couldn't find any of the necessary scaling governors. AMD CPU possibly not supported?</h1>
+            <p><strong>Issue #17</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I got this error while running the tool with a AMD Ryzen 7 PRO 3700U cpu. 
+
+If this error is indeed caused because the AMD cpu isn't supported, might I suggest updating the README to reflect this? If this isn't what's causing the error I'd have to look more into it and I'd gladly provide any needed information.
+
+Output of `sudo tlp-stat -p`
+```
+--- TLP 1.2.2 --------------------------------------------
+
++++ Processor
+CPU model      = AMD Ryzen 7 PRO 3700U w/ Radeon Vega Mobile Gfx
+
+/sys/devices/system/cpu/cpu0/cpufreq/scaling_driver    = acpi-cpufreq
+/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor  = ondemand
+/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors = ondemand performance schedutil 
+/sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq  =  1400000 [kHz]
+/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq  =  2300000 [kHz]
+/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies = 2300000 1700000 1400000 [kHz]
+
+(Idem for the remaining seven cores)
+
+/sys/devices/system/cpu/cpufreq/boost                  = 1
+
+x86_energy_perf_policy: unsupported CPU.
+
+/sys/module/workqueue/parameters/power_efficient       = N
+/proc/sys/kernel/nmi_watchdog                          = 0
+
++++ Undervolting
+PHC kernel not available.
+```</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>When I was making this tool I was strictly targeting Intel, as I didn't have any AMD CPU's to test it. Either way thank you for updating me about this. I've [updated the ReadMe](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/README.md#running-auto-cpufreq-on-amd-cpu-andor-desktopserverss) accordingly.
+
+As a goal to extend this tool for AMD as well, could you please confirm that in AMD's case, "ondemand" acts like "powersave" for Intel?
+
+And please correct me if I'm wrong, but it seems you have following governors: `ondemand performance schedutil`?
+
+`sudo tlp-stat -p` shows it, but you can also verify by running: `sudo cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>sandersantema:</strong></p>
+                    <p>> As a goal to extend this tool for AMD as well, could you please confirm that in AMD's case, "ondemand" acts like "powersave" for Intel?
+ 
+What exactly do you mean by this? Do you want to know whether the governors are practically equal? I would need to look into it. I might be able to find something about that on that on the internet, but if would like me to test things on my hardware I would need to have some more info. 
+
+> And please correct me if I'm wrong, but it seems you have following governors: `ondemand performance schedutil`?
+> `sudo tlp-stat -p` shows it, but you can also verify by running: `sudo cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors`
+
+No, you're right but unfortunately it seems auto-cpufreq doesn't recognise them. `sudo cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors` puts out the same thing.
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>>> As a goal to extend this tool for AMD as well, could you please confirm that in AMD's case, "ondemand" acts like "powersave" for Intel?
+> 
+> What exactly do you mean by this? Do you want to know whether the governors are practically equal? I would need to look into it. I might be able to find something about that on that on the internet, but if would like me to test things on my hardware I would need to have some more info.
+
+From my knowledge of AMD CPU's (which is limited), I think `ondemand` acts and does same thing `powersave` does on Intel CPU's. I asked just in case you knew this information, but since you don't it's fine don't sweat it.
+
+I need one last thing from you, based on which I'd like to make experimental support for AMD, which you could help me by testing it on your hardware. We'll do this in "live" mode which won't make any permanent changes to your computer. So no harm will be done.
+
+In `auto-cpufreq/scripts` directory, could you run:
+
+`./cpufreqctl --driver` and tell me what output do you get?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>sandersantema:</strong></p>
+                    <p>Thank you for your interest in supporting AMD. `auto-cpufreq/scripts/cpufreqctl.sh --driver` outputs `acpi-cpufreq`. 
+
+Assuming the AMD beta support will not lead to hardware damage I'd be willing to test it out :) </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rur0:</strong></p>
+                    <p>Hi
+I'm also trying to run this program on a Ryzen 7 3700U CPU and getting the same error.
+
+it looks like I only have access to "performance" and "schedutil" governors.
+```bash
+$ cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors                            
+performance schedutil
+```
+
+to add, I am using kernel 5.4.6-2
+
+Thanks</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>marc-vdm:</strong></p>
+                    <p>@rur0 that is true, anything older than AMD 4000 (which is yet to be launched) does only have 2 power states available in any OS. AMD 4000 series cpus [will have more power states](https://www.pcworld.com/article/3530289/ryzen-4000-cpus-amd-zen-2-laptops.html) available. 
+
+However, I don`t think this is a reason not to add functionality for any <4000 family ryzen cpus. 
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>alkapwn3d:</strong></p>
+                    <p>cpu: Intel i3 M 370
+
+getting the same error. I only have performance and schedutil governors as well.
+
+would love to see what this does for my laptop performance</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>@sandersantema , I could try to create branch for you that could solve your problem (just add switching from `performance` to `schedutil`).  
+Will you able to test it?</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

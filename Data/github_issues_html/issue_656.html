@@ -1,0 +1,177 @@
+
+        <html>
+        <head>
+            <title>Issue #656: KeyError on updating auto-cpufreq during exhausted GitHub API calls</title>
+        </head>
+        <body>
+            <h1>KeyError on updating auto-cpufreq during exhausted GitHub API calls</h1>
+            <p><strong>Issue #656</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>## Problem
+
+When calling `sudo auto-cpufreq --update` during exhausted GitHub API calls, it results in an error. A better approach would be to let the user know about the exhausted API calls and inform them. These situations can commonly occur when using auto-cpufreq in workspaces or colleges with shared WiFi.
+
+## Temporary Fix
+
+For other having the same issue, the fix would be to temporarily switch to alternate network provider/VPN for a change.
+
+## Useful Info
+
+Here is a sample response for call to `https://api.github.com/repos/AdnanHodzic/auto-cpufreq/releases/latest`
+```json
+{
+  "message": "API rate limit exceeded for x.x.x.x. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)",
+  "documentation_url": "https://docs.github.com/rest/overview/resources-in-the-rest-api#rate-limiting"
+}
+```
+
+### Error output:
+```text
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/click/core.py", line 1157, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/click/core.py", line 1078, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/click/core.py", line 1434, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/click/core.py", line 783, in invoke
+    return __callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/auto_cpufreq/bin/auto_cpufreq.py", line 257, in main
+    is_new_update = check_for_update()
+                    ^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/auto_cpufreq/core.py", line 183, in check_for_update
+    latest_version =  latest_release["tag_name"]
+                      ~~~~~~~~~~~~~~^^^^^^^^^^^^
+KeyError: 'tag_name'
+```
+---
+
+### System information:
+<details>
+<summary>Click to expand</summary>
+
+```
+
+-------------------------------------------------------------------------------
+
+Linux distro: EndeavourOS rolling rolling
+Linux kernel: 6.7.5-arch1-1
+Processor: AMD Ryzen 5 5600H with Radeon Graphics
+Cores: 12
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3300 MHz
+CPU min frequency: 1200 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      4.0%        43 °C      1200 MHz
+CPU1      3.0%        43 °C      1198 MHz
+CPU2      1.0%        43 °C      1197 MHz
+CPU3      0.0%        43 °C      1200 MHz
+CPU4      4.1%        43 °C      1200 MHz
+CPU5      0.0%        43 °C      1198 MHz
+CPU6      3.0%        43 °C      1200 MHz
+CPU7      2.0%        43 °C      1200 MHz
+CPU8      3.1%        43 °C      1200 MHz
+CPU9      1.0%        43 °C      1194 MHz
+CPU10      2.0%        43 °C      1198 MHz
+CPU11      3.0%        43 °C      1200 MHz
+
+CPU fan speed: 0 RPM
+
+auto-cpufreq version: 2.2.0 (git: b4c5276)
+
+Python: 3.11.7
+psutil package: 5.9.8
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.19 %
+
+Total CPU usage: 3.5 %
+Total system load: 1.21
+Average temp. of all cores: 43.00 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+
+
+```
+
+</details>
+
+----
+edit: IP removed :sweat_smile: 
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rootCircle:</strong></p>
+                    <p>We can possibly add few checks at https://github.com/AdnanHodzic/auto-cpufreq/blob/b4c5276feb49ad97323f18b288904a0e1e84956e/auto_cpufreq/core.py#L183 to fix it up!
+
+Using \<dict\>.get() and then checking if `tag_name` is None or not, and/or match `message` key (with/without regex) if it is about exhausted API in GitHub.
+
+
+I currently have exams coming by, so if anyone else want volunteer for it, then please go for it :smile:  </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rootCircle:</strong></p>
+                    <p>To reproduce this, one can manually exhaust their API keys, (don't worry it will automatically reset in 1 hr). Please however don't abuse this!
+
+```bash
+for i in $(seq 0 60); do 
+curl -fsSL https://api.github.com/repos/AdnanHodzic/auto-cpufreq/releases/latest
+done
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Thanks for finding this. Should now give an error message after the PR merge</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>msmafra:</strong></p>
+                    <p>> To reproduce this, one can manually exhaust their API keys, (don't worry it will automatically reset in 1 hr). Please however don't abuse this!
+> 
+> ```shell
+> for i in $(seq 0 60); do 
+> curl -fsSL https://api.github.com/repos/AdnanHodzic/auto-cpufreq/releases/latest
+> done
+> ```
+
+To not deal with the api, not sure if would be usefull:
+
+`curl -fsSL https://github.com/AdnanHodzic/auto-cpufreq/tags | grep -E " Link\">" | grep -Eo "v[0-9]{1,}.[0-9]{1,}.[0-9]{1,}" | uniq`
+
+or for the latest
+
+`curl -fsSL https://github.com/AdnanHodzic/auto-cpufreq/tags | grep -E " Link\">" | grep -Eom 1 "v[0-9]{1,}.[0-9]{1,}.[0-9]{1,}" | uniq`</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

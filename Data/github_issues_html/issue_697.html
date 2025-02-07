@@ -1,0 +1,96 @@
+
+        <html>
+        <head>
+            <title>Issue #697: Computer shuts down even if the battery is at 90</title>
+        </head>
+        <body>
+            <h1>Computer shuts down even if the battery is at 90</h1>
+            <p><strong>Issue #697</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? Yes, there isn't one like it
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)? no, it's not about the instalation
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)? yes and the solution doesn't seem to be there
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)? yes, the issue has nothing to do with troubleshooting
+
+### System information:
+
+Computer: MSI Stealth 15M
+
+Add/paste output of:
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 22.04 Jammy Jellyfish
+Linux kernel: 6.5.0-28-generic
+Processor: 11th Gen Intel(R) Core(TM) i7-11375H @ 3.30GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3300 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      6.0%        42 °C       614 MHz
+CPU1      0.0%        41 °C       944 MHz
+CPU2      4.0%        40 °C       400 MHz
+CPU3      1.1%        40 °C      2358 MHz
+CPU4      0.0%        42 °C       707 MHz
+CPU5      1.0%        41 °C       400 MHz
+CPU6      1.0%        40 °C      1364 MHz
+CPU7      2.0%        40 °C       815 MHz
+
+auto-cpufreq version: 2.0.0 (git: 64b11ab0)
+
+Python: 3.10.12
+psutil package: 5.9.5
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.8.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.19 %
+
+Total CPU usage: 2.8 %
+Total system load: 0.28
+Average temp. of all cores: 40.75 °C 
+
+Currently using: performance governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+
+
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+My issue is that the computer shuts down even if the battery percentage is high. I'll explain, there are some cases in which this happens. The first case is when I have my computer on balanced mode and I just boot it, it can have like a 40%-60% of battery or less and after finishing the boot, it gives me a notification of "battery level critical, plug-in before the computer is turned off" and if I don't plug it after some 30 sec. it turns off. I think this might happen because the "auto-cpufreq" sees that the booting is taking a lot of CPU and estimates that if it continues to use this much CPU it will turn off in a short amount of time and it turns off the computer. 
+On the other hand, we have the other issue which I don't know if it's related or not, which is when the pc gives me the message to "plug-in" the charge and I don't do it, it truns off, instead of going into suspend mode.
+I know that this might be a auto-cpufreq problem because it started when I installed it.
+
+Is it related to auto-cpu-freq? is there a way in which I could solve it? 
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>Try disabling the auto-cpufreq service then try removing it and see it the problem is still there. When your pc says you battery is to low it's probably the bios giving that error. Check your bios settings.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing the issue due to inactivity. </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

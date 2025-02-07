@@ -1,0 +1,38 @@
+
+        <html>
+        <head>
+            <title>Issue #146: How are distros supposed to deal with the log file?</title>
+        </head>
+        <body>
+            <h1>How are distros supposed to deal with the log file?</h1>
+            <p><strong>Issue #146</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I'm creating a NixOS module at NixOS/nixpkgs#109065, and the topic of the log file came up. The problem is that there is no automatic way to clear the file and the file grows by 2KB every 5 seconds. Also the log file has to exist before hand, otherwise the service doesn't start. We are confused about how do deal with the log file since it continually grows in size and there isn't an automatic way to clear it.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I think simplest way to empty the log would be to either add functionality to clear contents of this file as part of [countdown function](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/source/core.py#L294).
+
+Or, create a new function which would deal with clearing logs contents, and could be called [subsequently after countdown](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/bin/auto-cpufreq#L80) function.
+
+Please feel free to submit a PR regarding this, and I would gladly review it.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Technical27:</strong></p>
+                    <p> @AdnanHodzic PR at #148</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@Technical27 thanks, added comments</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,76 @@
+
+        <html>
+        <head>
+            <title>Issue #240: Permission Error</title>
+        </head>
+        <body>
+            <h1>Permission Error</h1>
+            <p><strong>Issue #240</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>After snap installation, I get this error:
+
+### Error output:
+```sudo auto-cpufreq
+Traceback (most recent call last):
+  File "/snap/auto-cpufreq/71/bin/auto-cpufreq", line 14, in <module>
+    from auto_cpufreq.core import *
+  File "/snap/auto-cpufreq/71/lib/python3.8/site-packages/auto_cpufreq/core.py", line 66, in <module>
+    dist_name = distro.id()
+  File "/snap/auto-cpufreq/71/lib/python3.8/site-packages/distro.py", line 204, in id
+    return _distro.id()
+  File "/snap/auto-cpufreq/71/lib/python3.8/site-packages/distro.py", line 694, in id
+    distro_id = self.os_release_attr('id')
+  File "/snap/auto-cpufreq/71/lib/python3.8/site-packages/distro.py", line 894, in os_release_attr
+    return self._os_release_info.get(attribute, '')
+  File "/snap/auto-cpufreq/71/lib/python3.8/site-packages/distro.py", line 556, in __get__
+    ret = obj.__dict__[self._fname] = self._f(obj)
+  File "/snap/auto-cpufreq/71/lib/python3.8/site-packages/distro.py", line 932, in _os_release_info
+    with open(self.os_release_file) as release_file:
+PermissionError: [Errno 13] Permission denied: '/etc/os-release'
+
+```
+---
+
+### System information:
+Pop!OS_21.04
+Microsoft Surface Book 2
+
+``auto-cpufreq --debug
+Traceback (most recent call last):
+  File "/snap/auto-cpufreq/71/bin/auto-cpufreq", line 14, in <module>
+    from auto_cpufreq.core import *
+  File "/snap/auto-cpufreq/71/lib/python3.8/site-packages/auto_cpufreq/core.py", line 66, in <module>
+    dist_name = distro.id()
+  File "/snap/auto-cpufreq/71/lib/python3.8/site-packages/distro.py", line 204, in id
+    return _distro.id()
+  File "/snap/auto-cpufreq/71/lib/python3.8/site-packages/distro.py", line 694, in id
+    distro_id = self.os_release_attr('id')
+  File "/snap/auto-cpufreq/71/lib/python3.8/site-packages/distro.py", line 894, in os_release_attr
+    return self._os_release_info.get(attribute, '')
+  File "/snap/auto-cpufreq/71/lib/python3.8/site-packages/distro.py", line 556, in __get__
+    ret = obj.__dict__[self._fname] = self._f(obj)
+  File "/snap/auto-cpufreq/71/lib/python3.8/site-packages/distro.py", line 932, in _os_release_info
+    with open(self.os_release_file) as release_file:
+PermissionError: [Errno 13] Permission denied: '/etc/os-release'
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>urfolomeus:</strong></p>
+                    <p>I got this error too when installing from Snap on Pop!OS 21.04. I was able to work around by installing with [git instead](https://github.com/AdnanHodzic/auto-cpufreq#auto-cpufreq-installer).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Thank you for the assistance @urfolomeus, closing the issue.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

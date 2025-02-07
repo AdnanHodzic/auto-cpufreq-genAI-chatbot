@@ -1,0 +1,40 @@
+
+        <html>
+        <head>
+            <title>Issue #158: fix problem in desktops where there is nothing in /sys/class/power_su…</title>
+        </head>
+        <body>
+            <h1>fix problem in desktops where there is nothing in /sys/class/power_su…</h1>
+            <p><strong>Issue #158</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>fixes #127
+on some desktop pc there is nothing in /sys/class/power_supply
+
+and this caused desktops to in powersave
+
+desktops should be on performance</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Unfortunately while this might've fixed problems on desktops. With these changes my laptop (Lenovo X1 Carbon) is constantly reporting that `Battery is: charging` whether this is true or not. 
+
+There are couple of ways you could do this, you first want to make check if you're on laptop or desktop. Easiest way to do this is by running: `hostnamectl status | grep Chassis | cut -f2 -d ":" | tr -d ' '`
+
+If laptop it'll return `laptop` otherwise it should be `desktop`.
+
+Alternatively, see what's done as part of ["charging" function](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto_cpufreq/core.py#L114) and potentially utilize what's being done in `ac_state` or `battery_info` to make similiar kind of check. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>PR continued in #162</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

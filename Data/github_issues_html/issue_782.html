@@ -1,0 +1,127 @@
+
+        <html>
+        <head>
+            <title>Issue #782: Network connection time out causes it to crash silently</title>
+        </head>
+        <body>
+            <h1>Network connection time out causes it to crash silently</h1>
+            <p><strong>Issue #782</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? yes
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)? n/a
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)? n/a
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)? yes and n/a
+
+### Error output:
+```text
+Oct 12 14:00:48 nixos systemd[1]: Started auto-cpufreq - Automatic CPU speed & power optimizer for Linux.
+Oct 12 14:00:49 nixos auto-cpufreq[2021]: /nix/store/4bj2kxdm1462fzcc2i2s4dn33g2angcc-bash-5.2p32/bin/sh: line 1: getent: command not found
+Oct 13 13:18:38 nixos auto-cpufreq[1865]: Traceback (most recent call last):
+Oct 13 13:18:38 nixos auto-cpufreq[1865]:   File "/nix/store/sfl09j5iasfj71jfcylnnsh1zgbif00s-python3.12-auto-cpufreq-2.3.0/bin/..auto-cpufreq-wrapped-wrapped", line 9, in <module>
+Oct 13 13:18:38 nixos auto-cpufreq[1865]:     sys.exit(main())
+Oct 13 13:18:38 nixos auto-cpufreq[1865]:              ^^^^^^
+Oct 13 13:18:38 nixos auto-cpufreq[1865]:   File "/nix/store/3k6fxb2pr96xdv5nbhcd50hfzhg4vq2b-python3.12-click-8.1.7/lib/python3.12/site-packages/click/core.py", line 1157, in __call__
+Oct 13 13:18:38 nixos auto-cpufreq[1865]:     return self.main(*args, **kwargs)
+Oct 13 13:18:38 nixos auto-cpufreq[1865]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Oct 13 13:18:38 nixos auto-cpufreq[1865]:   File "/nix/store/3k6fxb2pr96xdv5nbhcd50hfzhg4vq2b-python3.12-click-8.1.7/lib/python3.12/site-packages/click/core.py", line 1078, in main
+Oct 13 13:18:38 nixos auto-cpufreq[1865]:     rv = self.invoke(ctx)
+Oct 13 13:18:38 nixos auto-cpufreq[1865]:          ^^^^^^^^^^^^^^^^
+Oct 13 13:18:38 nixos auto-cpufreq[1865]:   File "/nix/store/3k6fxb2pr96xdv5nbhcd50hfzhg4vq2b-python3.12-click-8.1.7/lib/python3.12/site-packages/click/core.py", line 1434, in invoke
+Oct 13 13:18:38 nixos auto-cpufreq[1865]:     return ctx.invoke(self.callback, **ctx.params)
+Oct 13 13:18:38 nixos auto-cpufreq[1865]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Oct 13 13:18:38 nixos auto-cpufreq[1865]:   File "/nix/store/3k6fxb2pr96xdv5nbhcd50hfzhg4vq2b-python3.12-click-8.1.7/lib/python3.12/site-packages/click/core.py", line 783, in invoke
+Oct 13 13:18:38 nixos auto-cpufreq[1865]:     return __callback(*args, **kwargs)
+Oct 13 13:18:38 nixos auto-cpufreq[1865]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Oct 13 13:18:38 nixos auto-cpufreq[1865]:   File "/nix/store/sfl09j5iasfj71jfcylnnsh1zgbif00s-python3.12-auto-cpufreq-2.3.0/lib/python3.12/site-packages/auto_cpufreq/bin/auto_cpufreq.py", line 85, in main
+Oct 13 13:18:38 nixos auto-cpufreq[1865]:     set_autofreq()
+Oct 13 13:18:38 nixos auto-cpufreq[1865]:   File "/nix/store/sfl09j5iasfj71jfcylnnsh1zgbif00s-python3.12-auto-cpufreq-2.3.0/lib/python3.12/site-packages/auto_cpufreq/core.py", line 1017, in set_autofreq
+Oct 13 13:18:38 nixos auto-cpufreq[1865]:     elif charging():
+Oct 13 13:18:38 nixos auto-cpufreq[1865]:          ^^^^^^^^^^
+Oct 13 13:18:38 nixos auto-cpufreq[1865]:   File "/nix/store/sfl09j5iasfj71jfcylnnsh1zgbif00s-python3.12-auto-cpufreq-2.3.0/lib/python3.12/site-packages/auto_cpufreq/core.py", line 279, in charging
+Oct 13 13:18:38 nixos auto-cpufreq[1865]:     val = str(f.read()[:-1])
+Oct 13 13:18:38 nixos auto-cpufreq[1865]:               ^^^^^^^^
+Oct 13 13:18:38 nixos auto-cpufreq[1865]: TimeoutError: [Errno 110] Connection timed out
+```
+---
+
+### System information:
+
+Add/paste output of: `auto-cpufreq --debug`
+
+```
+-------------------------------------------------------------------------------
+
+Linux distro: NixOS 24.11 Vicuna
+Linux kernel: 6.10.3
+Processor: 11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz
+Cores: 8
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2401 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      6.0%        26 °C       400 MHz
+CPU1      1.0%        26 °C       400 MHz
+CPU2      6.1%        27 °C       993 MHz
+CPU3      1.0%        27 °C       764 MHz
+CPU4      6.1%        27 °C       400 MHz
+CPU5      3.0%        27 °C      1300 MHz
+CPU6      5.0%        28 °C       657 MHz
+CPU7      7.8%        28 °C       400 MHz
+
+auto-cpufreq version: 2.3.0
+Git commit: v2.3.0
+
+Python: 3.12.4
+psutil package: 6.0.0
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: /nix/store/4bj2kxdm1462fzcc2i2s4dn33g2angcc-bash-5.2p32/bin/sh: line 1: dmidecode: command not found
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.3 %
+
+Total CPU usage: 3.6 %
+Total system load: 1.28
+Average temp. of all cores: 27.00 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+---
+
+I think auto-cpufreq is trying to check if there is new updates occasionally and crash when there is less than ideal network connectivity (e.g. public WIFI with captive portal not yet approved by the network will result in time out) at that time and stops working properly (you can tell by running `auto-cpufreq --stats` that does not refresh) but `systemctl status auto-cpufreq.service` reports active and remains actually ineffective.
+
+I believe this could be fixed by a combination of 2 methods (either or both):
+- a. prevent the failure of the update check to propagate its failure state into its core functionality 
+- b. let it crash all the way so systemd will restart it on failure
+
+### Why I think this issue should be addressed
+Laptops (which auto-cpufreq is enhancing the experience of) will meet frequent changes of the network stability as it tends to travel between places.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+            </div>
+        </body>
+        </html>
+        

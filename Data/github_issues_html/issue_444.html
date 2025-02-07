@@ -1,0 +1,91 @@
+
+        <html>
+        <head>
+            <title>Issue #444: Package is not working</title>
+        </head>
+        <body>
+            <h1>Package is not working</h1>
+            <p><strong>Issue #444</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+### Error output:
+```text
+![image](https://user-images.githubusercontent.com/90268212/197457327-fa4fc258-b742-4d2f-8738-5d457f42b10c.png)
+Add/paste error output in case of failed installation or other failing component
+
+```
+---
+
+### System information:
+..............                                     lexilominite@L0M1N1T3R 
+            ..,;:ccc,.                             ---------------------- 
+          ......''';lxO.                           OS: Kali GNU/Linux Rolling x86_64 
+.....''''..........,:ld;                           Host: ROG Zephyrus G14 GA401II_GA401II 1.0 
+           .';;;:::;,,.x,                          Kernel: 5.19.0-kali2-amd64 
+      ..'''.            0Xxoc:,.  ...              Uptime: 18 mins 
+  ....                ,ONkc;,;cokOdc',.            Packages: 5293 (dpkg), 7 (snap) 
+ .                   OMo           ':ddo.          Shell: zsh 5.9 
+                    dMc               :OO;         Resolution: 1920x1080 
+                    0M.                 .:o.       DE: Xfce 4.16 
+                    ;Wd                            WM: Xfwm4 
+                     ;XO,                          WM Theme: Everblush-xfwm 
+                       ,d0Odlc;,..                 Theme: Everblush [GTK2/3] 
+                           ..',;:cdOOd::,.         Icons: Nordzy-cyan-dark-MOD [GTK2/3] 
+                                    .:d;.':;.      Terminal: terminator 
+                                       'd,  .'     CPU: AMD Ryzen 7 4800HS with Radeon Graphics (16) @ 2.900GHz 
+                                         ;l   ..   GPU: AMD ATI 04:00.0 Renoir 
+                                          .o       GPU: NVIDIA GeForce GTX 1650 Ti Mobile 
+                                            c      Memory: 2589MiB / 15417MiB 
+                                            .'
+                                             .                             
+                                                                           
+
+
+
+Add/paste output of:
+
+```
+└─$ auto-cpufreq --debug
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.9.6+ff72e1e0', 'auto-cpufreq')
+  File "/opt/auto-cpufreq/venv/lib/python3.10/site-packages/pkg_resources/__init__.py", line 672, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/opt/auto-cpufreq/venv/lib/python3.10/site-packages/pkg_resources/__init__.py", line 1460, in run_script
+    raise ResolutionError(
+pkg_resources.ResolutionError: Script 'scripts/auto-cpufreq' not found in metadata at '/opt/auto-cpufreq/auto_cpufreq.egg-info'
+                                                                                                                            
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+I installed autocpu freq without snap and it is showing some python error
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+
+There's no reply if you tried using the installer in case snap package failed and vice versa. 
+
+In meantime closing the issue due to inactivity.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

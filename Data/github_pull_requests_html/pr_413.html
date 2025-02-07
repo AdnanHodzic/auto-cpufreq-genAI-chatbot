@@ -1,0 +1,99 @@
+
+        <html>
+        <head>
+            <title>Pull Request #413: Catch exception in call to psutil .cmdline()</title>
+        </head>
+        <body>
+            <h1>Catch exception in call to psutil .cmdline()</h1>
+            <p><strong>Pull Request #413</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>There's a race condition where processes might disappear while filtering. The uncaught exception causes a crash.
+
+See the following stack trace:
+Traceback (most recent call last):
+  File "/usr/bin/auto-cpufreq", line 226, in <module>
+    main()
+  File "/usr/lib/python3.10/site-packages/click/core.py", line 1130, in __call__
+    return self.main(*args, **kwargs)
+  File "/usr/lib/python3.10/site-packages/click/core.py", line 1055, in main
+    rv = self.invoke(ctx)
+  File "/usr/lib/python3.10/site-packages/click/core.py", line 1404, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/usr/lib/python3.10/site-packages/click/core.py", line 760, in invoke
+    return __callback(*args, **kwargs)
+  File "/usr/bin/auto-cpufreq", line 117, in main
+    running_daemon()
+  File "/usr/lib/python3.10/site-packages/auto_cpufreq/core.py", line 1190, in running_daemon
+    if is_running("auto-cpufreq", "--daemon"):
+  File "/usr/lib/python3.10/site-packages/auto_cpufreq/core.py", line 1175, in is_running
+    for s in filter(lambda x: program in x, p.cmdline()):
+  File "/usr/lib/python3.10/site-packages/psutil/__init__.py", line 684, in cmdline
+    return self._proc.cmdline()
+  File "/usr/lib/python3.10/site-packages/psutil/_pslinux.py", line 1668, in wrapper
+    raise NoSuchProcess(self.pid, self._name)
+psutil.NoSuchProcess: process no longer exists (pid=669342)
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Nice catch and thank your contribution, but there's one problem. 
+
+On `master` branch changes, if auto-cpufreq daemon is installed (`sudo auto-cpufreq --install`), and I subsequently run: 
+
+```
+sudo auto-cpufreq --live   
+
+Using settings defined in /etc/auto-cpufreq.conf file
+
+Note: You can quit live mode by pressing "ctrl+c"
+
+------------------------ auto-cpufreq running ------------------------------
+
+ERROR: auto-cpufreq is running in daemon mode.
+
+Make sure to stop the daemon before running with --live or --monitor mode
+```
+
+or 
+
+```
+sudo auto-cpufreq --monitor
+
+Using settings defined in /etc/auto-cpufreq.conf file
+
+Note: You can quit monitor mode by pressing "ctrl+c"
+
+------------------------ auto-cpufreq running ------------------------------
+
+ERROR: auto-cpufreq is running in daemon mode.
+
+Make sure to stop the daemon before running with --live or --monitor mode
+
+-------------------------------------------------------------------------------
+```
+
+But with your changes, if daemon is installed I won't get any of these errors and then we'll have duplicate (live, mointor) instance of auto-cpufreq running which will be counter productive.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>zoitrok:</strong></p>
+                    <p>Looks like I was overcomplicating it a bit. I'm not so familiar with python nor lambdas.
+
+This amended commit seems to do what it's supposed to with daemon running and trying a live session. (and probably as fast as the original function).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Great, these changes make lot more sense! I also noticed there's a bug (unrelated to your PR) where user will be able to run multiple instances of `sudo auto-cpufreq --live`.
+
+Again, thank you for your contribution and you made it at the perfect moment as today or tomorrow I'll make a new release in which of course you'll be credited for you work.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

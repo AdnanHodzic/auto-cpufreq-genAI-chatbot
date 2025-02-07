@@ -1,0 +1,571 @@
+
+        <html>
+        <head>
+            <title>Pull Request #349: Set Balanced mode on power-profiles-daemon</title>
+        </head>
+        <body>
+            <h1>Set Balanced mode on power-profiles-daemon</h1>
+            <p><strong>Pull Request #349</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>When we disable the `power-profiles-daemon` if it's in "Power saver" mode, we can loose some performance. As it will not max out the turbo. As seen in the following tests below. 
+
+We can only set this mode when the `power-profiles-daemon` is actually running. We always disable `power-profiles-daemon` on installation, and if it's running before we disable it, we first set it to "Balanced".
+
+```stress --cpu 16 --io 4 --vm 4 --timeout 60``` after I installed `auto-cpufreq` when `power-profiles-daemon` was first set to "Power saver"
+```
+Linux distro: Fedora Linux 35 
+Linux kernel: 5.15.12-200.fc35.x86_64
+Processor: AMD Ryzen 7 4800U with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1800 MHz
+CPU min frequency: 1400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	100.0%     69 °C     2226 MHz
+CPU1:	100.0%     69 °C     2226 MHz
+CPU2:	100.0%     69 °C     2216 MHz
+CPU3:	100.0%     69 °C     2226 MHz
+CPU4:	 99.0%     69 °C     2227 MHz
+CPU5:	100.0%     69 °C     2227 MHz
+CPU6:	100.0%     69 °C     2227 MHz
+CPU7:	 99.0%     69 °C     2227 MHz
+CPU8:	100.0%     69 °C     2227 MHz
+CPU9:	100.0%     69 °C     2227 MHz
+CPU10:	100.0%     69 °C     2227 MHz
+CPU11:	100.0%     69 °C     2227 MHz
+CPU12:	100.0%     69 °C     2227 MHz
+CPU13:	100.0%     69 °C     2227 MHz
+CPU14:	100.0%     69 °C     2227 MHz
+CPU15:	100.0%     69 °C     2227 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+
+Total CPU usage: 99.9 %
+Total system load: 17.19
+Average temp. of all cores: 68.875 °C
+
+High CPU load
+setting turbo boost: on
+```
+
+
+```stress --cpu 16 --io 4 --vm 4 --timeout 60``` after I installed `auto-cpufreq` when `power-profiles-daemon` was first set to "Balanced"
+```
+Linux distro: Fedora Linux 35 
+Linux kernel: 5.15.12-200.fc35.x86_64
+Processor: AMD Ryzen 7 4800U with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1800 MHz
+CPU min frequency: 1400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	100.0%     99 °C     3219 MHz
+CPU1:	100.0%     99 °C     3219 MHz
+CPU2:	100.0%     99 °C     3219 MHz
+CPU3:	100.0%     99 °C     3219 MHz
+CPU4:	100.0%     99 °C     3219 MHz
+CPU5:	100.0%     99 °C     3219 MHz
+CPU6:	100.0%     99 °C     3219 MHz
+CPU7:	100.0%     99 °C     3219 MHz
+CPU8:	100.0%     99 °C     3218 MHz
+CPU9:	100.0%     99 °C     3218 MHz
+CPU10:	100.0%     99 °C     3218 MHz
+CPU11:	100.0%     99 °C     3218 MHz
+CPU12:	 97.0%     99 °C     3218 MHz
+CPU13:	100.0%     99 °C     3218 MHz
+CPU14:	100.0%     99 °C     3218 MHz
+CPU15:	100.0%     99 °C     3218 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+
+Total CPU usage: 99.8 %
+Total system load: 17.88
+Average temp. of all cores: 99.0 °C
+
+High CPU load
+setting turbo boost: on
+```
+
+I did add the change to ```gnome_power_disable_live()``` but we don't actually use that at the moment. We currently only throw a warning to the user when in live mode.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I wasn't expecting you to be this fast! 
+
+This is great, I'm doing the same thing I was doing today without these changes, and my computer was literally choking, now it's smooth sailing. 
+
+I did notice some weird things, where when I ran: `stress --cpu 8 --io 4 --vm 4 --timeout 60`, my frequencies were scaled down, then what they would be running at their "normal" workload which is in >= 2000Mhz range.
+
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 21.10 impish
+Linux kernel: 5.13.0-23-generic
+Processor: Intel(R) Core(TM) i7-8565U CPU @ 1.80GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4600 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	 98.0%     61 °C     1400 MHz
+CPU1:	100.0%     60 °C     1400 MHz
+CPU2:	100.0%     60 °C     1400 MHz
+CPU3:	100.0%     62 °C     1400 MHz
+CPU4:	 99.0%     61 °C     1400 MHz
+CPU5:	100.0%     60 °C     1400 MHz
+CPU6:	100.0%     60 °C     1400 MHz
+CPU7:	100.0%     62 °C     1400 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+
+Total CPU usage: 99.2 %
+Total system load: 14.3
+Average temp. of all cores: 60.75 °C
+
+High CPU load
+setting turbo boost: on
+
+-------------------------------------------------------------------------------
+
+			"auto-cpufreq" refresh in: 5
+```
+
+Let me know if you any other ideas, but Iet's merge these changes now as they definitely fix a major regression. Then I'll keep an eye on it and see if my frequencies keep getting scaled down under incredibly heavy low.
+
+>I did add the change to gnome_power_disable_live() but we don't actually use that at the moment. We currently only throw a >warning to the user when in live mode.
+
+We probably should start using it for live mode as well, as live should represent how system will behave after install. But I guess it can be done as part of separate change if necessary. 
+
+**Update**
+
+I forgot to add as part of this change it would be a good idea to have a check which verifies `powerprofilesctl` is present before proceeding.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Will make another PR with those changes.
+
+About that freqencies, I'm not sure, did you try use performance instead of balanced before disabling?
+I did not test that, because I already maxed out my system on balanced.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Will make another PR with those changes.
+
+:+1: 
+
+> About that freqencies, I'm not sure, did you try use performance instead of balanced before disabling? I did not test that, because I already maxed out my system on balanced.
+
+I did, but then I'm getting different errors like:
+
+```
+result = self.dbus_proxy.call_sync(self.method_name, arg_variant,
+gi.repository.GLib.Error: g-dbus-error-quark: GDBus.Error:org.freedesktop.DBus.Error.Failed: Profile 'performance' is inhibited (0)
+```
+
+I think the reason for this is because I'm running on GNOME 40.4 and things are bit different when it comes to GNOME Power profiles, it's not like on 41 where you can switch between them. 
+
+But I'll keep an eye on this and let's see if anyone else comes with this problem, as it's confirmed that running stress will scale down frequencies, but otherwise if load is not that high they'll spike above >2000Mhz which was rarely the case before. It also might be that auto-cpufreq is doing the scale down since it detected high temperatures, although it shouldn't in case CPU usage is above certain percentage.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Changes are live as part of [1.9.1 release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>
+> On my machine it works laughing.
+
+My favorite phrase :smile: 
+
+TL;DR update: it's all seems to be fine.
+
+---
+
+Below is long version of all of my observation and how I came to conclusion above:
+
+Installed using auto-cpufreq-installer, `sudo auto-cpufreq --debug` output:
+
+```
+Using settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 22.04 Jammy Jellyfish
+Linux kernel: 5.15.0-47-generic
+Processor: Intel(R) Core(TM) i7-8565U CPU @ 1.80GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1800 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  7.1%     49 °C     2000 MHz
+CPU1:	  1.0%     49 °C     2000 MHz
+CPU2:	 13.0%     49 °C     1800 MHz
+CPU3:	  1.0%     49 °C     2000 MHz
+CPU4:	  6.9%     49 °C     2000 MHz
+CPU5:	  0.0%     49 °C     2000 MHz
+CPU6:	  1.0%     49 °C     2000 MHz
+CPU7:	  1.0%     49 °C     2000 MHz
+
+CPU fan speed: 3033 RPM
+
+auto-cpufreq version: 1.9.5 (git: ac0a4b5e)
+
+Python: 3.10.4
+psutil package: 5.9.2
+platform package: 1.0.8
+click package: 8.1.3
+distro package: 1.7.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.15 %
+
+Total CPU usage: 1.5 %
+Total system load: 2.00
+Average temp. of all cores: 49.00 °C 
+
+Currently using: performance governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```
+Contents of `cat /etc/auto-cpufreq.conf` file:
+
+```
+# settings for when connected to a power source
+[charger]
+# see available governors by running: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+# preferred governor.
+governor = performance
+
+# minimum cpu frequency (in kHz)
+# example: for 800 MHz = 800000 kHz --> scaling_min_freq = 800000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly
+# scaling_min_freq = 800000
+
+# maximum cpu frequency (in kHz)
+# example: for 1GHz = 1000 MHz = 1000000 kHz -> scaling_max_freq = 1000000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly
+# scaling_max_freq = 1000000
+
+# turbo boost setting. possible values: always, auto, never
+turbo = auto
+
+# settings for when using battery power
+[battery]
+# see available governors by running: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+# preferred governor
+governor = powersave
+
+# minimum cpu frequency (in kHz)
+# example: for 800 MHz = 800000 kHz --> scaling_min_freq = 800000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly
+# scaling_min_freq = 800000
+
+# maximum cpu frequency (in kHz)
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# example: for 1GHz = 1000 MHz = 1000000 kHz -> scaling_max_freq = 1000000
+# to use this feature, uncomment the following line and set the value accordingly
+# scaling_max_freq = 1000000
+
+# turbo boost setting. possible values: always, auto, never
+turbo = auto
+```
+
+Found out that once it starts outputting `CPU fan speed: 0 RPM`, even auto-cpufreq daemon reinstall (first `--remove` followed by `--install`) won't fix it, and even after reboot it'll still display 0 RPM.
+
+But, after I do `auto-cpufreq --remove` followed by reboot, and then do `sudo auto-cpufreq --install` again, 0 RPM will be outputed properly, example `auto-cpufreq --stats` output:
+
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 22.04 Jammy Jellyfish
+Linux kernel: 5.15.0-47-generic
+Processor: Intel(R) Core(TM) i7-8565U CPU @ 1.80GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4600 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	 42.7%     63 °C     2000 MHz
+CPU1:	 13.0%     62 °C     2000 MHz
+CPU2:	  6.1%     62 °C     2300 MHz
+CPU3:	 20.8%     64 °C     2300 MHz
+CPU4:	 16.7%     63 °C     2000 MHz
+CPU5:	 22.3%     62 °C     2000 MHz
+CPU6:	 24.5%     62 °C     2000 MHz
+CPU7:	 30.1%     64 °C     2000 MHz
+
+CPU fan speed: 3112 RPM
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging (99%)
+
+Setting to use: "performance" governor
+
+Total CPU usage: 26.0 %
+Total system load: 4.66
+Average temp. of all cores: 62.75 °C 
+
+High CPU load
+setting turbo boost: on
+
+-------------------------------------------------------------------------------
+
+		"auto-cpufreq" is about to refresh ...
+		Executed on: September 10 (Saturday) - 21:29:28
+```
+
+I initially thought 0 RPM would happen after my laptop suspends, but then I just left it run for a bit and noticed it was reset to 0 again just 5 minutes later:
+
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 22.04 Jammy Jellyfish
+Linux kernel: 5.15.0-47-generic
+Processor: Intel(R) Core(TM) i7-8565U CPU @ 1.80GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 800 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  7.6%     49 °C      800 MHz
+CPU1:	  2.0%     49 °C     2000 MHz
+CPU2:	  4.0%     49 °C     2000 MHz
+CPU3:	  5.0%     50 °C     2000 MHz
+CPU4:	 16.5%     49 °C     2000 MHz
+CPU5:	  5.2%     49 °C     2000 MHz
+CPU6:	  7.0%     49 °C     2000 MHz
+CPU7:	  8.9%     50 °C     2000 MHz
+
+CPU fan speed: 2279 RPM
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging (100%)
+
+Setting to use: "performance" governor
+
+Total CPU usage: 5.1 %
+Total system load: 1.71
+Average temp. of all cores: 49.25 °C 
+
+Load optimal
+setting turbo boost: off
+
+-------------------------------------------------------------------------------
+
+		"auto-cpufreq" is about to refresh ...
+		Executed on: September 10 (Saturday) - 21:34:48
+
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 22.04 Jammy Jellyfish
+Linux kernel: 5.15.0-47-generic
+Processor: Intel(R) Core(TM) i7-8565U CPU @ 1.80GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 800 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	 10.5%     49 °C     2000 MHz
+CPU1:	 20.6%     49 °C     2000 MHz
+CPU2:	 18.0%     49 °C      800 MHz
+CPU3:	 20.2%     50 °C      800 MHz
+CPU4:	  5.2%     49 °C     2000 MHz
+CPU5:	  8.2%     49 °C     2000 MHz
+CPU6:	 11.8%     49 °C     2000 MHz
+CPU7:	 11.0%     50 °C     2000 MHz
+
+CPU fan speed: 0 RPM
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging (100%)
+
+Setting to use: "performance" governor
+
+Total CPU usage: 13.7 %
+Total system load: 1.58
+Average temp. of all cores: 49.25 °C 
+
+Load optimal
+setting turbo boost: off
+
+-------------------------------------------------------------------------------
+
+		"auto-cpufreq" is about to refresh ...
+		Executed on: September 10 (Saturday) - 21:34:52
+```
+
+But it seems like it's not a problem after all as after I run: `stress --cpu 8 --io 4 --vm 4 --timeout 90` to stress the CPU again to get those fans rotating, they will start rotating again. I just find it weird that they will shut off completely and so fast.
+
+
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 22.04 Jammy Jellyfish
+Linux kernel: 5.15.0-47-generic
+Processor: Intel(R) Core(TM) i7-8565U CPU @ 1.80GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4600 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	100.0%     63 °C     1400 MHz
+CPU1:	100.0%     62 °C     1400 MHz
+CPU2:	100.0%     62 °C     1400 MHz
+CPU3:	100.0%     64 °C     1400 MHz
+CPU4:	100.0%     63 °C     1400 MHz
+CPU5:	100.0%     62 °C     1400 MHz
+CPU6:	100.0%     62 °C     1400 MHz
+CPU7:	100.0%     64 °C     1400 MHz
+
+CPU fan speed: 3188 RPM
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging (100%)
+
+Setting to use: "performance" governor
+
+Total CPU usage: 100.0 %
+Total system load: 12.94
+Average temp. of all cores: 62.75 °C 
+
+High CPU load
+setting turbo boost: on
+
+-------------------------------------------------------------------------------
+
+		"auto-cpufreq" is about to refresh ...
+		Executed on: September 10 (Saturday) - 21:38:42
+```
+
+However, noticed something else and would like to hear if you're experiencing this problem. What we see from my last output, while my cores are all 100% used while they are being stressed, frequency of all of those cores is only set to 1400Mhz (max is 4600Mhz).
+
+But if I install auto-cpufreq damemon using performance mode (`--install_performance`) then the cores will spike up and this is literally the reason why I introduced this mode, so I guess there might be no problem there either. It also seems like my fans never shut down in `--install_performance` (never went down below >= 2000 range), which makes sense as this mode is lot more aggressive and will use more power as [explained on ReadMe](https://github.com/AdnanHodzic/auto-cpufreq#1-power_helperpy-script).
+
+In you're interested, more references in #305 & #349
+
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 22.04 Jammy Jellyfish
+Linux kernel: 5.15.0-47-generic
+Processor: Intel(R) Core(TM) i7-8565U CPU @ 1.80GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4600 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	100.0%     95 °C     3122 MHz
+CPU1:	100.0%     92 °C     3122 MHz
+CPU2:	100.0%     96 °C     3122 MHz
+CPU3:	100.0%     97 °C     3122 MHz
+CPU4:	100.0%     95 °C     3122 MHz
+CPU5:	100.0%     92 °C     3122 MHz
+CPU6:	100.0%     96 °C     3122 MHz
+CPU7:	100.0%     97 °C     3122 MHz
+
+CPU fan speed: 4076 RPM
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging (100%)
+
+Setting to use: "performance" governor
+
+Total CPU usage: 100.0 %
+Total system load: 5.71
+Average temp. of all cores: 95.00 °C 
+
+High CPU load
+setting turbo boost: on
+
+-------------------------------------------------------------------------------
+
+		"auto-cpufreq" is about to refresh ...
+		Executed on: September 10 (Saturday) - 21:42:53
+
+-------------------------------------------------------------------------------
+```</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

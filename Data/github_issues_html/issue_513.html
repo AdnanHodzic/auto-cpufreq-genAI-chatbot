@@ -1,0 +1,26 @@
+
+        <html>
+        <head>
+            <title>Issue #513: Check for CPU label if no coretemps</title>
+        </head>
+        <body>
+            <h1>Check for CPU label if no coretemps</h1>
+            <p><strong>Issue #513</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>If the individual core temps are not available this will attempt to use the sensor labeled "CPU" before falling back to the first sensor in the dictionary. The first sensor in my case was not the CPU.  
+
+This relates to this issue: https://github.com/AdnanHodzic/auto-cpufreq/issues/498</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>LGTM, thank you for your contribution, you'll be given credit for your work as part of upcoming release.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

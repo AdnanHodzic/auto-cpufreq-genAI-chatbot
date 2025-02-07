@@ -1,0 +1,189 @@
+
+        <html>
+        <head>
+            <title>Issue #574: cant open auto-cpufreq in a fresh installed kubuntu</title>
+        </head>
+        <body>
+            <h1>cant open auto-cpufreq in a fresh installed kubuntu</h1>
+            <p><strong>Issue #574</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+### Error output:
+```text
+Add/paste error output in case of failed installation or other failing component
+```
+![image](https://github.com/AdnanHodzic/auto-cpufreq/assets/12445095/429b9d62-68b7-4cdc-bfde-e822aca5f010)
+
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+
+➜  auto-cpufreq git:(master) ✗ auto-cpufreq --debug
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.9.9+9f132bdc.post6.dirty', 'auto-cpufreq')
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/pkg_resources/__init__.py", line 3248, in <module>
+    @_call_aside
+     ^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/pkg_resources/__init__.py", line 3223, in _call_aside
+    f(*args, **kwargs)
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/pkg_resources/__init__.py", line 3261, in _initialize_master_working_set
+    working_set = WorkingSet._build_master()
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/pkg_resources/__init__.py", line 617, in _build_master
+    ws.require(__requires__)
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/pkg_resources/__init__.py", line 956, in require
+    needed = self.resolve(parse_requirements(requirements))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/pkg_resources/__init__.py", line 815, in resolve
+    dist = self._resolve_dist(
+           ^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.11/site-packages/pkg_resources/__init__.py", line 856, in _resolve_dist
+    raise DistributionNotFound(req, requirers)
+pkg_resources.DistributionNotFound: The 'PyGObject' distribution was not found and is required by auto-cpufreq
+
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Hi, please update to the latest version and try again</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>atimeofday:</strong></p>
+                    <p>Exact same issue with latest version on Fedora Silverblue. Advice / questions for further diagnosis?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>I wasn't able to reproduce this in Ubuntu
+
+> Exact same issue with latest version on Fedora Silverblue. Advice / questions for further diagnosis?
+
+I tried testing in a docker container and it wasn't able to work. I know we have had issues with Silverblue in the past. I know very little about Silverblue but it seems it doesn't use yum which auto-cpufreq tries to use to install the necessary dependencies. I was unsuccessful getting the packages to install in the docker container with `rpm-ostree`
+
+I might try Silverblue in a VM and see if that works better. @atimeofday If you want to take a look, [here](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto-cpufreq-installer#L147C24-L147C24) is the function in the installer that handles package installs</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>atimeofday:</strong></p>
+                    <p>@shadeyg56 Silverblue is "immutable" / container-native Fedora. Everything that can be run in a container - is. Flatpak, distrobox, then local filesystem, then layering apps/dependencies into the base image with rpm-ostree as a last resort.
+
+Auto-cpufreq was patched to install in a local fallback location instead of the top-level, write-protected /usr, which appears to still be the case. However, that does not account for the new dependencies. Would it be possible to install auto-cpufreq and its dependencies in a distrobox (docker) container, and manage the host hardware from there?
+
+I see that function has some instructions for new-distro-support PRs - I can open one up separate from this if necessary. I missed that and the dependencies list during installation because it detected Fedora. I think that function is enough of a lead that I can ask some experts on that sort of containerization from the Universal Blue project, which is technically how I'm using Silverblue.
+
+Thanks for that link!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>> Would it be possible to install auto-cpufreq and its dependencies in a distrobox (docker) container, and manage the host hardware from there?
+
+Yes, using distrobox would probably be your best alternative. As far as I know, this should work but am not 100% sure since auto-cpufreq requires a system service and I'm not sure how distrobox handles that.
+
+> I see that function has some instructions for new-distro-support PRs - I can open one up separate from this if necessary. I missed that and the dependencies list during installation because it detected Fedora
+
+Yes, its pretty trivial to add new distros. The main issue I see is when looking at `/etc/os-release` it only shows the distro as Fedora rawhide. Is there anyway for the script to distinguish a standard Fedora install from a Silverblue install?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>eret9616:</strong></p>
+                    <p>@shadeyg56 
+![image](https://github.com/AdnanHodzic/auto-cpufreq/assets/12445095/ec801d56-05af-4e07-b92c-6e9ab10fe748)
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>atimeofday:</strong></p>
+                    <p>@hh9515 I believe I saw a series of additional manual setup steps for the snap package. Have you tried using the installer script instead?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>@hh9515 yeah agreeing with that the other guy said, if you look at [this part](https://github.com/AdnanHodzic/auto-cpufreq#snap-store) of the README that recommends installing from the repo with the installer script. We aren't really actively working on or testing the Snap package much anymore.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Thunder-Ultra:</strong></p>
+                    <p>@hh9515 
+
+The Last line in the output clearly declares the missing python Package PyGObject as follows :
+`
+pkg_resources.DistributionNotFound: The 'PyGObject' distribution was not found and is required by auto-cpufreq
+`
+
+Which can be installed in either of the two ways. Linux Safe way is using the system package manager. But the alternaive uses the python package manger (pip) which is known to cause issues with the system package manager.
+
+So, you can install it in the linux 🐧 safe way using the following command
+```
+sudo apt install python3-gi python3-gi-cairo gir1.2-gtk-4.0
+```
+
+Or, if u want the alternative 🛑 way, the following command will help (Try only if the above command doesn't work)
+```
+sudo apt install libgirepository1.0-dev gcc libcairo2-dev pkg-config python3-dev gir1.2-gtk-4.0
+pip install pycairo
+pip install PyGObject
+```
+
+Links : https://pygobject.readthedocs.io/en/latest/getting_started.html#ubuntu-logo-ubuntu-debian-logo-debian
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@rootCircle since you added initial support for pyproject.toml as part of #576 do you have any opinions on this, same thing with #601?
+
+@Thunder-Ultra my preferred solution and direction we're going in with this project is to have .deb or i.e .rpm packages as part each releases and ideally have auto-cpufreq as part of Debian repositories for which there's already an [auto-cpufreq Debian RFP](https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1053294). | Other reference: #157
+
+Then you'd intrinsically down this path: 
+
+> So, you can install it in the linux 🐧 safe way using the following command
+> 
+> ```
+> sudo apt install python3-gi python3-gi-cairo gir1.2-gtk-4.0
+> ```
+
+Because all of these packages would be listed as part of dependencies when auto-cpufreq is build and would be installed when auto-cpufreq is installed. Then after installation you'd immediately have auto-cpufreq CLI ready to go or auto-cpufreq icon/desktop entry if you wanted to install it using GUI.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rootCircle:</strong></p>
+                    <p>> @rootCircle since you added initial support for pyproject.toml as part of https://github.com/AdnanHodzic/auto-cpufreq/pull/576 do you have any opinions on this, same thing with https://github.com/AdnanHodzic/auto-cpufreq/issues/601?
+
+I don't have much conceptual idea about immutable OS(Fedora Silverblue in general), but specifying external dependencies is still not supported yet with pyproject.toml! [See RFC](https://peps.python.org/pep-0725/). If implemented soon, it can offload lots of installation script work to minimum. Till then installation script or [this](https://pygobject.readthedocs.io/en/latest/devguide/dev_environ.html) can help!
+Even then, I am not sure if that can fix #601 in general. 
+
+Packaging might help a lot in current case for general users! :heavy_plus_sign: 
+
+This might be helpful by the way [Installing packages to /opt or /usr/local (Silverblue)](https://docs.fedoraproject.org/en-US/fedora-silverblue/troubleshooting/#_installing_packages_to_opt_or_usrlocal)</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

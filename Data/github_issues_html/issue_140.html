@@ -1,0 +1,71 @@
+
+        <html>
+        <head>
+            <title>Issue #140: crash running application</title>
+        </head>
+        <body>
+            <h1>crash running application</h1>
+            <p><strong>Issue #140</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+```text
+Traceback (most recent call last):
+  File "/usr/local/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.0', 'auto-cpufreq')
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 658, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 1445, in run_script
+    exec(script_code, namespace, namespace)
+  File "/usr/local/lib/python3.6/dist-packages/auto_cpufreq-1.0-py3.6.egg/EGG-INFO/scripts/auto-cpufreq", line 22, in <module>
+  File "/usr/lib/python3/dist-packages/click/decorators.py", line 170, in decorator
+    _param_memo(f, OptionClass(param_decls, **attrs))
+  File "/usr/lib/python3/dist-packages/click/core.py", line 1460, in __init__
+    Parameter.__init__(self, param_decls, type=type, **attrs)
+TypeError: __init__() got an unexpected keyword argument 'hidden'
+
+```
+---
+
+### System information:
+```text
+Traceback (most recent call last):
+  File "/usr/local/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.0', 'auto-cpufreq')
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 658, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 1445, in run_script
+    exec(script_code, namespace, namespace)
+  File "/usr/local/lib/python3.6/dist-packages/auto_cpufreq-1.0-py3.6.egg/EGG-INFO/scripts/auto-cpufreq", line 22, in <module>
+  File "/usr/lib/python3/dist-packages/click/decorators.py", line 170, in decorator
+    _param_memo(f, OptionClass(param_decls, **attrs))
+  File "/usr/lib/python3/dist-packages/click/core.py", line 1460, in __init__
+    Parameter.__init__(self, param_decls, type=type, **attrs)
+TypeError: __init__() got an unexpected keyword argument 'hidden'
+
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Please include output of: `sudo auto-cpufreq --debug`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closed to due inactivity. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>JMS55:</strong></p>
+                    <p>Make sure to run with sudo</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

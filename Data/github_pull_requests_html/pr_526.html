@@ -1,0 +1,302 @@
+
+        <html>
+        <head>
+            <title>Pull Request #526: Update feature added</title>
+        </head>
+        <body>
+            <h1>Update feature added</h1>
+            <p><strong>Pull Request #526</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>As discussed in issue #341 the commit changes are hereby elaborately described:
+- update using `sudo ./auto-cpufreq-installer` and `sudo auto-cpufreq --update`
+- version number will update automatically everytime the package is updated to the latest release
+- some functions that have not been defined (showing warnings) have been commented and bypassed 
+- when updated using installer:
+       -- it removes the package and clones with latest release
+- when updated using `--update` mode, the package can be found in $HOME directory 
+- README.md updated
+ 
+
+Please let me know if changes are required.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>On first look these changes look good! But I would like to spend some more time in review and just testing how well it works under different scenarios.
+
+In meantime, there's a conflict with README now. Let's resolve this conflict and and since 1.9.8 version is being mention let's set it to 1.9.9 as these changes will be part of the new release. 
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>cosmos1721:</strong></p>
+                    <p>Although i have tried my best to find bugs and work on it,
+but YES you are right, please let me know if there's anything I need to work with. 
+There were some functions in if-else cases that weren't defined or might have been commented down by some developer for some reason. can you please check on that, in case it affects the overall functioning?
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>**1:** Actually, after thinking about this, let's put this back to 1.9.8 as part of README. As right after these changes are merged with `master` I won't be making an immediate release, although these changes will be announced as part of 1.9.9 release. As having a release doesn't impact any changes made here, and if there are new commits to the branch, `update` feature should fetch them for whoever installed using auto-cpufreq-installer.
+
+**2:** Can you confirm that following this logic, only new releases will be "caught", and not any new git commit? As I think this could be really useful for people running auto-cpufreq installed using auto-cpufreq-installer, as there are periods where I don't make a release and there are a lot of changes (commits) that are made to `master` branch in meantime.
+
+> There were some functions in if-else cases that weren't defined or might have been commented down by some developer for some reason. can you please check on that, in case it affects the overall functioning?
+
+**3:** Sorry, I didn't understand this part?
+
+
+**4:** I also left comments/questions in rest of the pull request which I would like to address. 
+
+**5:** However, one big thing that's missing here is that `--update` functionality will not work if package is installed using snap or AUR package (which will be updated automatically by OS). Hence, what I suggest you do is catch this case with [something like this](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/bin/auto-cpufreq#L205C11-L205C11), so in this case it would return something like: 
+
+```
+sudo auto-cpufreq --update
+Updates are available,
+Current version: v1.9.8
+Latest version: v1.9.8
+
+Detected auto-cpufreq was installed using snap or AUR package, please update using package managers, i.e: `sudo snap refresh auto-cpufreq`.  
+```
+
+As without this currently it returns something like this, and similar case will be with AUR probably as it's mixing up package install with source install:
+
+```
+sudo auto-cpufreq --update
+Updates are available,
+Current version: v
+Latest version: v1.9.8
+Note that your previous custom settings might be erased with the following update
+Do you want to update auto-cpufreq to the latest release? [y/n]: y
+
+----------------------------------- Warning -----------------------------------
+
+Unable to detect state of GNOME Power Profiles daemon service!
+Now it's recommended to enable this service.
+
+Steps to perform this action using auto-cpufreq: power_helper script:
+git clone https://github.com/AdnanHodzic/auto-cpufreq.git
+cd auto-cpufreq/auto_cpufreq
+python3 power_helper.py --gnome_power_enable
+
+Reference: https://github.com/AdnanHodzic/auto-cpufreq#configuring-auto-cpufreq
+
+------------------------- auto-cpufreq daemon removed -------------------------
+
+auto-cpufreq successfully removed.
+
+-------------------------------------------------------------------------------
+
+/home/ahodzic
+Cloning the latest release to the home directory:  
+/home/ahodzic
+Traceback (most recent call last):
+  File "/snap/auto-cpufreq/x1/bin/auto-cpufreq", line 254, in <module>
+    main()
+  File "/snap/auto-cpufreq/x1/lib/python3.10/site-packages/click/core.py", line 1130, in __call__
+    return self.main(*args, **kwargs)
+  File "/snap/auto-cpufreq/x1/lib/python3.10/site-packages/click/core.py", line 1055, in main
+    rv = self.invoke(ctx)
+  File "/snap/auto-cpufreq/x1/lib/python3.10/site-packages/click/core.py", line 1404, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/snap/auto-cpufreq/x1/lib/python3.10/site-packages/click/core.py", line 760, in invoke
+    return __callback(*args, **kwargs)
+  File "/snap/auto-cpufreq/x1/bin/auto-cpufreq", line 244, in main
+    new_update()
+  File "/home/ahodzic/code/auto-cpufreq/auto_cpufreq/core.py", line 194, in new_update
+    run(["git", "clone", "https://github.com/AdnanHodzic/auto-cpufreq.git"])
+  File "/usr/lib/python3.10/subprocess.py", line 501, in run
+    with Popen(*popenargs, **kwargs) as process:
+  File "/usr/lib/python3.10/subprocess.py", line 969, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/usr/lib/python3.10/subprocess.py", line 1845, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: 'git'
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>cosmos1721:</strong></p>
+                    <p>1. as mentioned above in conversation related to snap *beta, since I'll revert back to those changes
+
+2. the snippet works like this  
+    - fetches https://api.github.com/repos/AdnanHodzic/auto-cpufreq/releases/latest to '.json'
+    - the second variable finds   "tag_name": "v1.9.8"  from the dictionary which I believe can only be changed when a new release is made 
+    
+3.  please refer to line 453 in my merge i.e. 'gnome_power_svc_disable_performance' in core.py line 88 in bin/auto-cpufreq i.e. 'daemon_not_found()' like these  which weren't affecting the code but showing warning signs "NotDefined' 
+
+4. I'll surely look into it
+
+5. thanks for your insights, since I was unable to understand how snapcarft and the files related to AUR worked. I'll make necessary changes and push it in some time for sure.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> 1. as mentioned above in conversation related to snap *beta, since I'll revert back to those changes
+
+Sounds good.
+
+> 2. the snippet works like this
+>    
+>    * fetches https://api.github.com/repos/AdnanHodzic/auto-cpufreq/releases/latest to '.json'
+>    * the second variable finds   "tag_name": "v1.9.8"  from the dictionary which I believe can only be changed when a new release is made
+
+Thanks for confirming, that's how I also interpreted the changes. Regardless, I still this is great functionality that's missing, regarding getting alerted on every new commit might not be of interest to everyone anyways as most of those are in "dev" state until actual release is made.
+
+> 3. please refer to line 453 in my merge i.e. 'gnome_power_svc_disable_performance' in core.py line 88 in bin/auto-cpufreq i.e. 'daemon_not_found()' like these  which weren't affecting the code but showing warning signs "NotDefined'
+
+What do you do exactly to replicate this? As I didn't come across this during my testing.
+
+> 4. I'll surely look into it
+> 5. thanks for your insights, since I was unable to understand how snapcarft and the files related to AUR worked. I'll make necessary changes and push it in some time for sure.
+
+Great, looking forward to you updates!
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@cosmos1721 in meantime, please ping me if there are updates as I sometimes miss certain notifications and definitely wouldn't miss anything on this one here :) </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>cosmos1721:</strong></p>
+                    <p>Yes there are updates but due to some personal reasons, i was unable to continue till now . Will be started soon.
+I'll let you know as soon as it completes.
+By the way, can you tell me how do I test the project in AUR env without booting up my machine with it</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Yes there are updates but due to some personal reasons, i was unable to continue till now . Will be started soon. I'll let you know as soon as it completes. 
+
+No worries take your time! 
+
+> By the way, can you tell me how do I test the project in AUR env without booting up my machine with it
+
+Regarding Snap, it's very simple, you could literally add `if os.getenv("PKG_MARKER") == "SNAP":` and that will do it ([more examples](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/bin/auto-cpufreq#L206)).
+
+Regarding AUR, I don't use it or maintain it so I don't know the answer to that. 
+
+It could definitely be done based on how auto-cpufreq-installer works and based on paths, but it's bit more complicated. Hence, what I propose is just do it for Snap for now, then when someone tries using `update` flag with AUR and reports an issue, we can ask him/her to help us debug it and then we can extend it for AUR in future.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>cosmos1721:</strong></p>
+                    <p>> Regarding AUR, I don't use it or maintain it so I don't know the answer to that.
+> 
+> It could definitely be done based on how auto-cpufreq-installer works and based on paths, but it's bit more complicated. Hence, what I propose is just do it for Snap for now, then when someone tries using `update` flag with AUR and reports an issue, we can ask him/her to help us debug it and then we can extend it for AUR in future.
+
+okay
+but still let me try if I can work on it, 
+I've an idea: I can run a container and then work on it. i know its quite hectic but it works till I get any alternative</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> but still let me try if I can work on it,
+I've an idea: I can run a container and then work on it. i know its quite hectic but it works till I get any alternative
+
+Love the enthusiasms and desire to do things right :) 
+
+>I've an idea: I can run a container and then work on it. i know its quite hectic but it works till I get any alternative
+
+If you want to go down this path, container would be an option or you could also spin up Arch based distro in a VM with i.e VirtualBox</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>cosmos1721:</strong></p>
+                    <p>> > but still let me try if I can work on it,
+> > I've an idea: I can run a container and then work on it. i know its quite hectic but it works till I get any alternative
+> 
+> Love the enthusiasms and desire to do things right :)
+> 
+> > I've an idea: I can run a container and then work on it. i know its quite hectic but it works till I get any alternative
+> 
+> If you want to go down this path, container would be an option or you could also spin up Arch based distro in a VM with i.e VirtualBox
+
+thanks
+
+> If you want to go down this path, container would be an option or you could also spin up Arch based distro in a VM with i.e VirtualBox
+
+will see which one is easier to work with without consuming necessary resources </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>cosmos1721:</strong></p>
+                    <p>> @cosmos1721 in meantime, please ping me if there are updates as I sometimes miss certain notifications and definitely wouldn't miss anything on this one here :)
+
+certain updates have been made, although ive made changes as per the requirements, but i was unable to perform 'snapd' and aur based tests. can you please run the tests and can you please guide me though the process (if there are any bugs)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@cosmos1721 I made some comments, it all lgtm, except the package manager part snap and aur which is still broken.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> @cosmos1721 I made some comments, it all lgtm, except the package manager part snap and aur which is still broken.
+
+Because comments are sometimes hard to follow, what remains to be done is:
+
+1. Snap package will still continue with `update` and will output errors, `if os.getenv("PKG_MARKER") == "SNAP":` didn't catch it while it definitely should, maybe move it one level higher? [Related.](https://github.com/AdnanHodzic/auto-cpufreq/commit/e2d0b4ea2b9195198579c04e729dc8caa309ebdd#r120670980)
+2. Try the check[ suggestion I made for AUR. ](https://github.com/AdnanHodzic/auto-cpufreq/commit/e2d0b4ea2b9195198579c04e729dc8caa309ebdd#r120671926) (this is not as important as snap, since AUR is not maintained by me)
+3. Update the setup.py ([mentioned in 1](https://github.com/AdnanHodzic/auto-cpufreq/commit/e2d0b4ea2b9195198579c04e729dc8caa309ebdd#r120670980).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I finally got time to take a proper look and I see what you did wrong here, you were calling `verify_update()` which should also have its own `if os.getenv("PKG_MARKER") == "SNAP":`. 
+
+Hence, instead of:
+
+```
+elif update:
+  verify_update()
+  ans = input ("Do you want to update auto-cpufreq to the latest release? [y/n]: ")
+  valid_options = ['y', 'Y', 'yes', 'YES', 'Yes']
+  if ans.lower() in valid_options:
+      root_check()
+      if os.getenv("PKG_MARKER") == "SNAP":
+          print ("Detected auto-cpufreq was installed using snap")
+          run("snap refresh auto-cpufreq")
+          print("please update using package managers next time, i.e: `sudo snap refresh auto-cpufreq`.")
+...
+```
+
+Please correct this same code block to look like this:
+
+```
+elif update:
+    root_check()
+    if os.getenv("PKG_MARKER") == "SNAP":
+        print ("Detected auto-cpufreq was installed using snap package.")
+        print("Please update by running: `sudo snap refresh auto-cpufreq`")
+    else:
+        verify_update()
+        ans = input ("Do you want to update auto-cpufreq to the latest release? [y/n]: ")
+        valid_options = ['y', 'Y', 'yes', 'YES', 'Yes']
+        if ans.lower() in valid_options:
+...
+```
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>cosmos1721:</strong></p>
+                    <p>re-opening pull request
+please check and let me know if there's anything I need to work on.
+there are certain alterations that will be committed shortly</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

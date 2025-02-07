@@ -1,0 +1,169 @@
+
+        <html>
+        <head>
+            <title>Issue #685: auto-cpufreq locks up on Fedora/Gnome</title>
+        </head>
+        <body>
+            <h1>auto-cpufreq locks up on Fedora/Gnome</h1>
+            <p><strong>Issue #685</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I'm getting frequent lockups when running on Fedora 40 and Gnome 46. Seems to happen occasionally after wake from sleep (or at least that is when I notice it).
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted?  **Yes, did not find anything relevant**
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)? **I am on Fedora, so I don't use snaps**
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)? **No, not familar with this and not sure what I would configure**
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)? **Did not see anything relevant to this issue**
+
+### Error output:
+
+![image](https://github.com/AdnanHodzic/auto-cpufreq/assets/81476/d7f2fd25-62c5-47d4-a7e8-39165c225fdb)
+
+
+### System information:
+
+Output from `auto-cpufreq --debug`:
+
+```
+Linux distro: Fedora Linux 40 Workstation Edition
+Linux kernel: 6.8.7-300.fc40.x86_64
+Processor: AMD Ryzen 7 7840U w/ Radeon  780M Graphics
+Cores: 16
+Architecture: x86_64
+Driver: amd-pstate-epp
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 6076 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      4.9%        50 °C      2235 MHz
+CPU1      0.0%        50 °C      2236 MHz
+CPU2      2.0%        50 °C      2746 MHz
+CPU3      1.0%        50 °C      2445 MHz
+CPU4      2.0%        50 °C      1681 MHz
+CPU5      2.0%        50 °C      2297 MHz
+CPU6      4.0%        50 °C      1089 MHz
+CPU7      3.0%        50 °C      1173 MHz
+CPU8      2.0%        50 °C      1273 MHz
+CPU9      1.0%        50 °C      1730 MHz
+CPU10      5.9%        50 °C      1281 MHz
+CPU11      3.0%        50 °C       554 MHz
+CPU12      4.0%        50 °C       556 MHz
+CPU13      2.0%        50 °C       586 MHz
+CPU14      2.0%        50 °C       622 MHz
+CPU15      0.0%        50 °C       590 MHz
+
+auto-cpufreq version: 2.2.0 (git: 8bb7478)
+
+Python: 3.12.2
+psutil package: 5.9.8
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.05 %
+
+Total CPU usage: 3.0 %
+Total system load: 2.35
+Average temp. of all cores: 49.62 °C
+
+Currently using: powersave governor
+CPU turbo is controlled by amd-pstate-epp driver
+Currently turbo boost is: off
+```
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@shadeyg56 now that it's brought up I also experience  this on Ubuntu. Can you reproduce?
+
+@fonnesbeck silverlining is that only GUI component freezes, daemon continues running in background. You can verify by running `auto-cpufreq -stats` in Terminal next time this happens.
+
+In meantime since template issue was ignored and wasn't filled out, making this issue invalid for project developers or I to act on.
+
+Hence, please properly filled out requested fields.
+
+Reference:
+
+### Fill out informtion requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+### Error output:
+```text
+Add/paste error output in case of failed installation or other failing component
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+auto-cpufreq --debug
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>fonnesbeck:</strong></p>
+                    <p>Apologies, added template fields to report.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>I'm unable to reproduce this on NixOS. I installed and tested on GNOME as well, on both X11 and Wayland. The GNOME version on Nix is currently 45.5 so maybe its a GNOME 46 issue? Does this issue occur on any other desktop environments?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> The GNOME version on Nix is currently 45.5 so maybe its a GNOME 46 issue?
+
+No, I had this problem with previous GNOME version (wayland)s, since the release of v2.0 that introduced GUI component, I just never bothered reporting it.
+
+Until we had logging for `auto-cpufreq-gtk`, which I just ran in terminal to see if it'll return anything once it freezes, only thing we can do is [what I suggested in 677](https://github.com/AdnanHodzic/auto-cpufreq/issues/677#issuecomment-2067655626) to try catching what happens excatly. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Until we had logging for `auto-cpufreq-gtk`, which I just ran in terminal to see if it'll return anything once it freezes
+
+Only output I got from `auto-cpufreq-gtk` after running it in terminal after suspend is: `Killed`. Please note, this will only happen if you leave it running after extended period of time.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Heavygrass:</strong></p>
+                    <p>Hi Guys,
+I also experience GUI freeze on Cinnamon 6.0.4 (default in Ubuntu 24.04.1 LTS), which usually starts every time after a few minutes of GUI restart. 
+E.g. "Governor override" horizontal buttons stop working and cores usage is frozen.
+After restart GUI usually works for about a minute or so.
+
+grep auto-cpufreq-gtk /var/log/syslog 
+gives nothing.
+
+Let me suggest to **add an option to GUI to generate verbose log**, so that we could share it here to help developers.
+GUI shows autocpufreq v2.4.0, python 3.12.13.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

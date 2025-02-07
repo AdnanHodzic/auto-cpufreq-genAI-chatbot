@@ -1,0 +1,79 @@
+
+        <html>
+        <head>
+            <title>Issue #635: Avoid hardcoded paths pointing to uncommon paths </title>
+        </head>
+        <body>
+            <h1>Avoid hardcoded paths pointing to uncommon paths </h1>
+            <p><strong>Issue #635</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Have you tried?
+
+Not applicable
+
+### Error output:
+
+Not applicable
+
+### System information:
+
+Add/paste output of:
+
+```
+Linux distro: Gentoo 2.14 n/a
+Linux kernel: 6.7.2-gentoo-r1-x86_64
+Processor: Intel(R) Core(TM) i7-6700 CPU @ 3.40GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+```
+
+---
+
+While fixing the package of this program for Gentoo I noticed that there are a lot of hardcoded paths pointing to /opt or even /usr/local. This makes it harder to package this program as all the paths has to be corrected before installing it. It would be nice if it could be changed so it's more friendly to package.
+
+Thank you.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Hi, since you made a suggestion for how to potentially fix this issue, I would encourage you to please give it a try and [create a PR/contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>stkw0:</strong></p>
+                    <p>Thank you. Unfortunately there are some things I am not sure about how to fix it and I don't have enough baggage to do it. For example I see that now the systemd service use a virtual environment installed in /opt. From the point of view of Linux distributions installing installing such a virtual environment is undesirable, but I don't know the reasoning behind that. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> For example I see that now the systemd service use a virtual environment installed in /opt. From the point of view of Linux distributions installing installing such a virtual environment is undesirable, but I don't know the reasoning behind that.
+
+As someone who used to be a Debian package maintainer and don't see a problem with this approach, I would like to hear why is this undesirable?
+
+For reasoning and logic you can refer to following PR's: #326, #263 & original bug report #196</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>stkw0:</strong></p>
+                    <p>Probably you already know it, but to summarize, having a virtual env installed in /opt is as good as having bundled dependencies. It has security implications and makes it harder to update the package and his dependencies. Each linux distribution has its's own document where they usually reiterate that this things should be avoided, eg: https://wiki.gentoo.org/wiki/Why_not_bundle_dependencies</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>This is a design decision that will not change from my side.
+
+If you want to make these changes please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+In meantime closing the issue.
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,67 @@
+
+        <html>
+        <head>
+            <title>Issue #790: [Feature Request] Option to Configure Network Power Management</title>
+        </head>
+        <body>
+            <h1>[Feature Request] Option to Configure Network Power Management</h1>
+            <p><strong>Issue #790</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+Ans: Yes, no prior issue found
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+Ans: Yes
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+Ans: Yes
+---
+Currently, auto-cpufreq automatically disables the network connection after a period of inactivity. While this behavior can save power, it can be disruptive for users who need consistent network connectivity. Most laptops come with a dedicated network button/shortcut for users who prefer manual control, and as mentioned on [Discord](https://discord.com/channels/1158239366251020361/1158252850841919498/1303086261736706078), Adnan has encouraged submitting feature request for it too.
+
+- Default behavior is fine. However, there is a need to give users options to customize it.
+
+### Current Behavior
+- Network connection is automatically disabled after a period of inactivity
+- Forces manual reconnection by clicking on the network again
+- Happens even when actively using the system (e.g., watching cached videos)
+
+### Requested Feature
+Add configuration options in the auto-cpufreq config file to:
+- Disable automatic network power management completely
+- Configure the inactivity timeout period
+- Potentially add different settings for battery vs AC power
+
+### Few Use Cases
+1. Watching streamed content with buffered/cached data
+2. Waiting for background downloads or updates
+3. Applications that require constant connectivity (like chat apps)
+
+### Why This Matters
+The current behavior can be disruptive for users who need consistent network connectivity, especially in scenarios where the network appears inactive but is actually needed for maintaining connection state.
+
+### Suggested Implementation Example
+Add new configuration options in the config file:
+```ini
+[network]
+# Enable/disable network power management
+enable_power_saving = true
+
+# Time in seconds before network is considered inactive
+inactivity_timeout = 300
+
+# Different settings for charger/battery
+# If not specified, will use enable_power_saving value
+charger_power_saving = false
+battery_power_saving = true
+```
+
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+            </div>
+        </body>
+        </html>
+        

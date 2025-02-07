@@ -1,0 +1,250 @@
+
+        <html>
+        <head>
+            <title>Issue #204: Warning: Changing CPU turbo is not supported. Skipping.</title>
+        </head>
+        <body>
+            <h1>Warning: Changing CPU turbo is not supported. Skipping.</h1>
+            <p><strong>Issue #204</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+```text
+Battery is: charging
+
+Setting to use: "performance" governor
+
+Total CPU usage: 6.2 %
+Total system load: 1.33
+Average temp. of all cores: 44.0 °C
+
+Load optimal
+setting turbo boost: off
+Warning: Changing CPU turbo is not supported. Skipping.
+```
+---
+
+### System information:
+```text
+-------------------------------------------------------------------------------
+
+Linux distro: Manjaro Linux 21.0.5 Ornara
+Linux kernel: 5.12.2-1-MANJARO
+Processor: Intel(R) Core(TM) i5-8250U CPU @ 1.60GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1600 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  1.0%     42 °C     1800 MHz
+CPU1:	  0.0%     41 °C     1800 MHz
+CPU2:	  4.0%     44 °C     1800 MHz
+CPU3:	  0.0%     42 °C     1800 MHz
+CPU4:	  2.0%     42 °C     1800 MHz
+CPU5:	  0.0%     41 °C     1800 MHz
+CPU6:	  0.0%     44 °C     1600 MHz
+CPU7:	  1.0%     42 °C     1800 MHz
+
+auto-cpufreq version:
+
+
+Python: 3.9.5
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 7.1.2
+distro package 1.5.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.14 %
+
+Total CPU usage: 0.4 %
+Total system load: 1.15
+Average temp. of all cores: 42.25 °C 
+
+Currently using: performance governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+
+```
+---
+
+
+
+Why Turbo Boost is not supported, Am I missing something? or I need to overload my lap?
+
+
+Intel® Core™ i5-8250U CPU @ 1.60GHz × 8 (Turbo Boost up to 3.40 GHz)
+
+
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>It gives you that message because neither `/sys/devices/system/cpu/intel_pstate/no_turbo` nor `/sys/devices/system/cpu/cpufreq/boost` are detected.
+
+Can you give me output of `ls -al /sys/devices/system/cpu/`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>RiemaruKarurosu:</strong></p>
+                    <p> ```shell
+total 0
+drwxr-xr-x 18 root root    0 jun  1 14:14 .
+drwxr-xr-x 10 root root    0 jun  1 14:14 ..
+drwxr-xr-x  9 root root    0 jun  1 14:14 cpu0
+drwxr-xr-x  9 root root    0 jun  1 14:14 cpu1
+drwxr-xr-x  9 root root    0 jun  1 14:14 cpu2
+drwxr-xr-x  9 root root    0 jun  1 14:14 cpu3
+drwxr-xr-x  9 root root    0 jun  1 14:14 cpu4
+drwxr-xr-x  9 root root    0 jun  1 14:14 cpu5
+drwxr-xr-x  9 root root    0 jun  1 14:14 cpu6
+drwxr-xr-x  9 root root    0 jun  1 14:14 cpu7
+drwxr-xr-x 10 root root    0 jun  1 14:15 cpufreq
+drwxr-xr-x  2 root root    0 jun  1 14:15 cpuidle
+drwxr-xr-x  2 root root    0 jun  1 14:18 hotplug
+drwxr-xr-x  2 root root    0 jun  1 14:15 intel_pstate
+-r--r--r--  1 root root 4096 jun  1 14:18 isolated
+-r--r--r--  1 root root 4096 jun  1 14:18 kernel_max
+drwxr-xr-x  2 root root    0 jun  1 14:15 microcode
+-r--r--r--  1 root root 4096 jun  1 14:18 modalias
+-r--r--r--  1 root root 4096 jun  1 14:18 offline
+-r--r--r--  1 root root 4096 jun  1 14:14 online
+-r--r--r--  1 root root 4096 jun  1 14:18 possible
+drwxr-xr-x  2 root root    0 jun  1 14:18 power
+-r--r--r--  1 root root 4096 jun  1 14:18 present
+drwxr-xr-x  2 root root    0 jun  1 14:18 smt
+-rw-r--r--  1 root root 4096 jun  1 14:14 uevent
+drwxr-xr-x  2 root root    0 jun  1 14:18 vulnerabilities
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>So `/sys/devices/system/cpu/intel_pstate` is there after all, can you please provide me with output of: 
+`ls -al /sys/devices/system/cpu/intel_pstate`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>RiemaruKarurosu:</strong></p>
+                    <p>```shell
+total 0
+drwxr-xr-x  2 root root    0 jun  1 17:32 .
+drwxr-xr-x 18 root root    0 jun  1 17:31 ..
+-rw-r--r--  1 root root 4096 jun  1 17:32 hwp_dynamic_boost
+-rw-r--r--  1 root root 4096 jun  1 17:32 max_perf_pct
+-rw-r--r--  1 root root 4096 jun  1 17:32 min_perf_pct
+-rw-r--r--  1 root root 4096 jun  1 17:38 no_turbo
+-r--r--r--  1 root root 4096 jun  1 17:38 num_pstates
+-rw-r--r--  1 root root 4096 jun  1 17:38 status
+-r--r--r--  1 root root 4096 jun  1 17:38 turbo_pct
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Dejee98:</strong></p>
+                    <p>Same here my turbo-boost isn't working either.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>raocodes:</strong></p>
+                    <p>I did some testing and I think this issue is due to the way my laptop's BIOS is configured. On boot up, when the temperature of the laptop is low turbo - boost is supported and my i5-8520u boots till 3.4Ghz:
+
+![image](https://user-images.githubusercontent.com/22570553/121673631-b7c2c200-cace-11eb-99d1-28388a4713f2.png)
+
+However a few seconds after boosting, the temperature rises and the system disables turbo boost support:
+
+![image](https://user-images.githubusercontent.com/22570553/121673966-1e47e000-cacf-11eb-9680-7432de7c4d96.png)
+
+When this happens autocpu-freq starts giving the error "Warning: Changing CPU turbo is not supported. Skipping.".
+
+Eventually as the system cools down it is once again able to turbo and autocpu-freq is able to enable and disable turbo without a problem: 
+
+![image](https://user-images.githubusercontent.com/22570553/121674106-41728f80-cacf-11eb-8aec-0c885df5ebc2.png)
+
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>FPSUsername:</strong></p>
+                    <p>At what temperature does your CPU run to have boost enabled? My XPS-15 9560 runs at ~50C when doing browsing and such on the low fan speeds (2500RPM). Not sure if it's like that in Windows as well.
+
+Edit:
+Disabled the program and now not only do the frequencies drop when the load is low, it also has turbo boost (above 50C core temperature).
+
+```
+❯ sudo cpupower frequency-info
+analyzing CPU 0:
+  driver: acpi-cpufreq
+  CPUs which run at the same hardware frequency: 0
+  CPUs which need to have their frequency coordinated by software: 0
+  maximum transition latency: 10.0 us
+  hardware limits: 800 MHz - 2.80 GHz
+  available frequency steps:  2.80 GHz, 2.80 GHz, 2.70 GHz, 2.50 GHz, 2.40 GHz, 2.20 GHz, 2.10 GHz, 1.90 GHz, 1.70 GHz, 1.60 GHz, 1.50 GHz, 1.40 GHz, 1.20 GHz, 1.10 GHz, 900 MHz, 800 MHz
+  available cpufreq governors: conservative ondemand userspace powersave performance schedutil
+  current policy: frequency should be within 800 MHz and 2.80 GHz.
+                  The governor "schedutil" may decide which speed to use
+                  within this range.
+  current CPU frequency: 800 MHz (asserted by call to hardware)
+  boost state support:
+    Supported: yes
+    Active: yes
+```
+```
+❯ sensors
+iwlwifi_1-virtual-0
+Adapter: Virtual device
+temp1:        +46.0°C  
+
+dell_smm-virtual-0
+Adapter: Virtual device
+fan1:        2501 RPM
+fan2:        2498 RPM
+
+BAT0-acpi-0
+Adapter: ACPI interface
+in0:          12.73 V  
+curr1:       1000.00 uA 
+
+coretemp-isa-0000
+Adapter: ISA adapter
+Package id 0:  +51.0°C  (high = +100.0°C, crit = +100.0°C)
+Core 0:        +50.0°C  (high = +100.0°C, crit = +100.0°C)
+Core 1:        +51.0°C  (high = +100.0°C, crit = +100.0°C)
+Core 2:        +50.0°C  (high = +100.0°C, crit = +100.0°C)
+Core 3:        +49.0°C  (high = +100.0°C, crit = +100.0°C)
+
+pch_skylake-virtual-0
+Adapter: Virtual device
+temp1:        +56.5°C  
+
+acpitz-acpi-0
+Adapter: ACPI interface
+temp1:        +25.0°C  (crit = +107.0°C)
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Added [Troubleshooting section to README on how to change CPU management driver](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting).
+
+Could you please give this a try as I believe it will resolve your problem. If it doesn't please feel free to re-open this issue.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

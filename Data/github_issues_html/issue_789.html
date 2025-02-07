@@ -1,0 +1,39 @@
+
+        <html>
+        <head>
+            <title>Issue #789: Improve systemd service management</title>
+        </head>
+        <body>
+            <h1>Improve systemd service management</h1>
+            <p><strong>Issue #789</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>systemd 220(released in 2015) [supports the "--now" switch.](https://github.com/systemd/systemd/blob/e37701a8cd2db1e67d28bcf337467d8efc6de41e/NEWS#L13992-L13995)
+
+When this switch is present, the units that are enabled will also be started, and the ones disabled also stopped.
+
+This is a good opportunity to remove some unnecessary lines of code and improve code readability.
+We can start and stop services with just one single command:
+~~~
+systemctl enable/disable --now <service-name>
+~~~
+
+Also, systemctl daemon-reload is not really necessary when disabling/enabling a service.
+
+Let me know if you notice any unintended side effects or if you have any feedback in general!
+
+
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Good catch! LGTM & thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

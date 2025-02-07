@@ -1,0 +1,203 @@
+
+        <html>
+        <head>
+            <title>Discussion #176: Which TLP settings are recommended?</title>
+        </head>
+        <body>
+            <h1>Which TLP settings are recommended?</h1>
+            <p><strong>Discussion #176</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Continuing https://github.com/AdnanHodzic/auto-cpufreq/issues/175 I would also like to know what TLP settings are recommended. 
+
+Quoting @AdnanHodzic:
+> auto-cpufreq has all the necessary functionality to do this on your behalf automatically. Hence, I will not recommend settings you should use as part of TLP. I also believe auto-cpufreq has gotten to stage where that's the only tool you should use. While it'll continue to work with other tools, for best optimizations and experience you should solely use auto-cpufreq. I'll also make sure to update ReadMe with this information in upcoming days.
+
+What do you mean by *auto-cpufreq has gotten to stage where that's the only tool you should use*? Is this with regards to the CPU-related TPU settings, or generally? I am asking because TLP does much more than just control the CPU (e.g. audio, disks, graphics, network, PCIe, radio, USB).
+
+Some clarification would be helpful on this. Thank you.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>When I started this project, I was also using TLP side by side with auto-cpufreq. But over the year, a lot of things have been implemented and improved in terms of battery life, CPU-related settings and generally speaking that the only tool I use nowadays is auto-cpufreq. Hence, since I don't use TLP anymore I personally can't suggest which TLP settings you should use. In simple terms, if I was making car XY, I can recommend things for XY car and not which settings you should use as part of car AB :)
+
+But, I would definitely be curious to hear which TLP settings are used by those who use auto-cpufreq and TLP in tandem. Especially since there's a request for auto-cpufreq settings file as well #26 </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>peterdieleman:</strong></p>
+                    <p>Hi Adnan, 
+
+First of all, I've only recently discovered your tool, and I think it works great :)
+
+I'm working on writing a little guide on how quickly (~30 min) set up a linux laptop to achieve decent battery life. I think a lot of guides either miss specifics, leaving you to do the googling, or focus on settings that only make marginal improvements. 
+
+I think TLP is still very useful as it also allows control of antennas (wifi/bluetooth) when disconnecting form AC, and all other kinds of configurables. The way I would recommend to have these two tools installed alongside each other is to have all CPU related settings in TLP disabled, apart from `CPU_MAX_PERF_ON_BAT` (in the case you have an intel cpu that supports this), or `CPU_SCALING_MAX_FREQUENCY_ON_BAT` (in the case you don't).
+
+From what I can see `auto-cpufreq` still respects these limits set by TLP. This can be useful when running longer cpu intensive tasks on battery, as I have tuned my `CPU_MAX_PERF_ON_BAT` parameter so that my laptop can still run them without having to turn on any fans.
+
+Thoughts?
+
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Hi @peterdieleman great to hear that and thank you for your comments :)
+
+As I replied to @zsolt-donca I don't use TLP anymore (I only have auto-cpufreq), so I can't guarantee which settings work the best and I don't have any particular thoughts on this. If you're suggesting these settings work the best, can you confirm this @zsolt-donca? 
+
+What I would like the most is if we had a verified settings that work the best in combination of TLP & auto-cpufreq. Then if we get an answer here I would update project README pointing to these settings for the TLP/auto-cpufreq users.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>DietrichChristopeit:</strong></p>
+                    <p>Hello,
+
+just to throw in my 2 cents of experience:
+
+I got the best results with Intels DPTF version 9.0... for CHROME BOOKS (works perfectly on (L)Ubuntu as well) in tandem with auto-cpufreq.
+
+1. I went to the [01.org's dptf Project on github](https://github.com/intel/dptf)
+2. Did as the very good install instructions say
+3. rebootet
+4. permanently switched off TLP and thermald
+5. switched on auto-cpufreq
+
+Result: 
+- Very good responsiveness (the system runs much faster)
+- Fan almost always off
+- If it turns on the RPM stepping is much better (one can see it in the description of DPTF, that the operate a lot on the PID)
+- auto-cpufreq does its thing to provide the necessary  short term extra power, without, the system is a bit more conservative in terms of providing MHz when needed.
+
+I dont know if this anyhow helps anyone, but these are my experiences after long  times of testing the results of all possible combinations and settings.
+
+Best regards,
+
+Dietrich.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> permanently switched off TLP and thermald
+
+While auto-cpufreq aims to replace TLP, it's recommended to have thermald running alongside with auto-cpufreq, updated README with this info, added as part of ["Why do I need auto-cpufreq"](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/README.md#why-do-i-need-auto-cpufreq).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I just [updated README](https://github.com/AdnanHodzic/auto-cpufreq) to be more explicit about TLP usage alongside auto-cpufreq as it's leading to some unwanted results as mentioned in #297.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>cnske:</strong></p>
+                    <p>Just an additional question regarding a similar topic. @AdnanHodzic do this recommendation also apply when running tuned-adm?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ianhundere:</strong></p>
+                    <p>i'd also like to know what settings are best when using both tlp and auto-cpufreq in tandem. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>spikespaz:</strong></p>
+                    <p>Does dptf work with AMD processors? Does thermald work with AMD processors?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>spikespaz:</strong></p>
+                    <p>@peterdieleman How do you "disable" everything CPU-related? I see options, but not an on/off switch for the category.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>peterdieleman:</strong></p>
+                    <p>@spikespaz 
+
+There indeed is no single on/off switch, but I think you should at least make sure that the below variables are commented out (these might already be the default setting, I am not sure).
+
+```
+#CPU_SCALING_GOVERNOR_ON_BAT
+#CPU_SCALING_MIN_FREQ_ON_BAT
+#CPU_SCALING_MAX_FREQ_ON_BAT
+#CPU_HWP_ON_BAT
+#CPU_MIN_PERF_ON_BAT
+```
+
+The only ones I have configured are:
+```
+TLP_ENABLE=1
+...
+CPU_MAX_PERF_ON_AC=45
+CPU_MAX_PERF_ON_BAT=45
+```
+
+In my case, 45% roughly corresponds to the non-turbo boost frequency of my CPU. If I don't do this, even mildly CPU intensive tasks cause my laptop to significantly heat up and turn on the fans. This is especially true on AC, but even on AC I don't consider this to be worth the relatively minor performance benefit. You ca always manually set it to 100% in case you temporarily want maximum performance.
+
+But, YMMV, these settings are all very system dependent. I guess some people in this thread may find that just using `auto-cpufreq` and `thermald` is sufficient for them.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>spikespaz:</strong></p>
+                    <p>@peterdieleman I have an AMD ThinkPad and wanted to keep my TLP configuration for specific settings. I did my best to make sure that everything that `cpu-autofreq` takes care of is not touched by `tlp.conf` (everything is commented by default, and set to `<none>`).
+
+`CPU_MAX_PERF_ON_AC` and similar do nothing without Intel P-state. These are commented by default.
+
+For others who want to use TLP for other things such as USB/PCIE/Radio devices, here is my config which does seem to work fine. Running `cpu-autofreq --stats` shows that my system uses boost frequencies under high loads, but it is relatively hard to trigger. The processor also stays between `powersave` and `performance`, as I have asked it to. On battery, I have not yet seen the processor go above 37 degrees.
+
+```
+/etc/tlp.d/00-custom.conf
+```
+```
+TLP_ENABLE=1
+
+RADEON_DPM_PERF_LEVEL_ON_AC=high
+RADEON_DPM_PERF_LEVEL_ON_BAT=low
+
+RADEON_DPM_STATE_ON_AC=performance
+RADEON_DPM_STATE_ON_BAT=battery
+
+RADEON_POWER_PROFILE_ON_AC=high
+RADEON_POWER_PROFILE_ON_BAT=low
+
+PCIE_ASPM_ON_AC=performance
+PCIE_ASPM_ON_BAT=powersupersave
+
+DEVICES_TO_ENABLE_ON_STARTUP="wifi"
+DEVICES_TO_DISABLE_ON_STARTUP="bluetooth nfc wwan"
+DEVICES_TO_DISABLE_ON_SHUTDOWN="bluetooth nfc wifi wwan"
+DEVICES_TO_DISABLE_ON_BAT_NOT_IN_USE="bluetooth nfc wifi wwan"
+
+START_CHARGE_THRESH_BAT0=94
+STOP_CHARGE_THRESH_BAT0=98
+
+DEVICES_TO_DISABLE_ON_WIFI_CONNECT="wwan"
+DEVICES_TO_DISABLE_ON_WWAN_CONNECT="wifi"
+```
+
+```
+/etc/auto-cpufreq.conf
+```
+```
+[charger]
+governor = performance
+scaling_min_freq = 1700000
+scaling_max_freq = 1700000
+turbo = auto
+
+[battery]
+governor = powersave
+scaling_min_freq = 1400000
+scaling_max_freq = 1600000
+turbo = never
+```</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

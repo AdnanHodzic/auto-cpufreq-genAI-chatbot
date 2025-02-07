@@ -1,0 +1,238 @@
+
+        <html>
+        <head>
+            <title>Issue #676: scaling_min_freq doesnt work</title>
+        </head>
+        <body>
+            <h1>scaling_min_freq doesnt work</h1>
+            <p><strong>Issue #676</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+Yes. I have found #426 but they didnt switch to acpi-cpufreq and #202 but that one was closed due to inactivity.
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+No
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+No cuz its snap only
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+Its covered there as the bullet point 'CPU not scaling to minimum/maximum frequencies' but there is no answer to this problem except for 'use acpi-cpufreq' which I am doing.
+
+### Error output:
+```text
+-------------------------------------------------------------------------------
+
+                "auto-cpufreq" is about to refresh ...
+                Executed on: April 07 (Sunday) - 17:19:33
+
+-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux  
+Linux kernel: 6.8.4-zen1-1-zen
+Processor: AMD Ryzen 7 5700U with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1800 MHz
+CPU min frequency: 1400 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0      0.0%        45 °C      1400 MHz
+CPU1      0.0%        45 °C      1400 MHz
+CPU2      1.0%        45 °C      1397 MHz
+CPU3      4.0%        45 °C      1397 MHz
+CPU4      1.0%        45 °C      1397 MHz
+CPU5      0.0%        45 °C      1400 MHz
+CPU6      2.0%        45 °C      1400 MHz
+CPU7      1.0%        45 °C      1400 MHz
+CPU8      0.0%        45 °C      1397 MHz
+CPU9      2.0%        45 °C      1400 MHz
+CPU10      2.0%        45 °C      1400 MHz
+CPU11      0.0%        45 °C      1397 MHz
+CPU12      0.0%        45 °C      1400 MHz
+CPU13      0.0%        45 °C      1400 MHz
+CPU14      1.0%        45 °C      1400 MHz
+CPU15      0.0%        45 °C      1400 MHz
+
+CPU fan speed: 3684 RPM
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Setting to use: "powersave" governor
+Warning: governor overwritten using `--force` flag.
+Not setting EPP (not supported by system)
+
+Total CPU usage: 1.4 %
+Total system load: 0.59
+Average temp. of all cores: 45.00 °C 
+
+Configuration file disables turbo boost
+setting turbo boost: off
+
+-------------------------------------------------------------------------------
+
+                "auto-cpufreq" is about to refresh ...^C
+
+```
+
+Here is my /etc/auto-cpufreq
+
+```
+
+# settings for when connected to a power source
+[charger]
+# see available governors by running: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+# preferred governor
+governor = performance
+
+# EPP: see available preferences by running: cat /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_available_preferences
+energy_performance_preference = performance
+
+# minimum cpu frequency (in kHz)
+# example: for 800 MHz = 800000 kHz --> scaling_min_freq = 800000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly
+ scaling_min_freq = 800000
+
+# maximum cpu frequency (in kHz)
+# example: for 1GHz = 1000 MHz = 1000000 kHz -> scaling_max_freq = 1000000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly
+ scaling_max_freq = 3000000
+
+# turbo boost setting. possible values: always, auto, never
+turbo = auto
+
+# settings for when using battery power
+[battery]
+# see available governors by running: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+# preferred governor
+governor = powersave
+
+# EPP: see available preferences by running: cat /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_available_preferences
+energy_performance_preference = power
+
+# minimum cpu frequency (in kHz)
+# example: for 800 MHz = 800000 kHz --> scaling_min_freq = 800000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly
+ scaling_min_freq = 400000
+
+# maximum cpu frequency (in kHz)
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# example: for 1GHz = 1000 MHz = 1000000 kHz -> scaling_max_freq = 1000000
+# to use this feature, uncomment the following line and set the value accordingly
+ scaling_max_freq = 1800000
+
+# turbo boost setting (always, auto, or never)
+turbo = never
+
+# battery charging threshold
+# reference: https://github.com/AdnanHodzic/auto-cpufreq/#battery-charging-thresholds
+#enable_thresholds = true
+#start_threshold = 20
+#stop_threshold = 80
+
+
+```
+
+---
+
+### System information:
+Here is my /etc/default/grub
+
+GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 initcall_blacklist=amd_pstate_init amd_pstate.enable=0"
+
+
+Add/paste output of:
+
+```
+sudo auto-cpufreq --debug          
+
+Using settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux  
+Linux kernel: 6.8.4-zen1-1-zen
+Processor: AMD Ryzen 7 5700U with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1800 MHz
+CPU min frequency: 1400 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0      4.0%        43 °C      1397 MHz
+CPU1      0.0%        43 °C      1398 MHz
+CPU2      5.3%        43 °C      1400 MHz
+CPU3      0.0%        43 °C      1400 MHz
+CPU4      2.0%        43 °C      1400 MHz
+CPU5      2.0%        43 °C      1400 MHz
+CPU6      2.0%        43 °C      1400 MHz
+CPU7      0.0%        43 °C      1400 MHz
+CPU8      2.0%        43 °C      1398 MHz
+CPU9      3.0%        43 °C      1400 MHz
+CPU10      2.0%        43 °C      1400 MHz
+CPU11      0.0%        43 °C      1397 MHz
+CPU12      4.1%        43 °C      1397 MHz
+CPU13      0.0%        43 °C      1400 MHz
+CPU14      4.1%        43 °C      1397 MHz
+CPU15      0.0%        43 °C      1400 MHz
+
+CPU fan speed: 3641 RPM
+
+auto-cpufreq version: Version         : 2.2.0-2
+
+Python: 3.11.8
+psutil package: 5.9.8
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.38 %
+
+Total CPU usage: 0.4 %
+Total system load: 0.24
+Average temp. of all cores: 43.00 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+I have set  scaling_min_freq = 800000 in /etc/auto-coufreq.conf but its ignoring it. (I have also tried it with  scaling_min_freq = 400000 but I have had the same outcome). When I used amd-pstate it went down to 400Mhz so I know that my cpu is able to go that low.
+
+I installed auto-cpufreq via the aur.
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>`acpi-cpufreq` doesn't expose as many processor states as `amd-pstate`. 
+To see the available frequencies, run `cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_available_frequencies`</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

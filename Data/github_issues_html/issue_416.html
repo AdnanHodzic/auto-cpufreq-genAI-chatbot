@@ -1,0 +1,48 @@
+
+        <html>
+        <head>
+            <title>Issue #416: [Feature Request] manual-cpufreq</title>
+        </head>
+        <body>
+            <h1>[Feature Request] manual-cpufreq</h1>
+            <p><strong>Issue #416</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I would like the option to create configuration profiles and be able to switch between those profiles, for instance on a powersaving profile I could set both AC and Battery to use the powersaving governor but on a performance profile I could maybe set AC to performance and leave battery on powersaving.
+
+Or alternatively it would be sufficient to be able to manually set it to the battery profile or the ac profile rather than leaving it fully automated (like TLP allows).</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Have you seen [configuring auto-cpufreq section of the Readme](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)? In particular the [2: auto-cpufreq config file section](https://github.com/AdnanHodzic/auto-cpufreq/#2-auto-cpufreq-config-file)? </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Rabcor:</strong></p>
+                    <p>@AdnanHodzic yes, it only allows you to set profiles for when you're plugged in and when you're on battery, it does not allow you to create custom profiles, and there is no way to force auto-cpufreq to use the battery profile when plugged in or vice versa as far as I can tell.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>That's incorrect, if you set:
+
+```
+[charger]
+# see available governors by running: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+# preferred governor.
+governor = powersave
+```
+as part of [auto-cpufreq config](https://github.com/AdnanHodzic/auto-cpufreq/#2-auto-cpufreq-config-file) file, you'll be forcing auto-cpufreq to use "battery profile" while plugged in.
+
+That's why this config file was created, so user can customize how auto-cpufreq should act (to their liking) instead of it making all decisions for you automatically based on various criteria. 
+
+Give it a try, in meantime I'll close this issue.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

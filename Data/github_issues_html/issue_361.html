@@ -1,0 +1,105 @@
+
+        <html>
+        <head>
+            <title>Issue #361: Not reaching maximum frequencies</title>
+        </head>
+        <body>
+            <h1>Not reaching maximum frequencies</h1>
+            <p><strong>Issue #361</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>[Issue described](https://github.com/AdnanHodzic/auto-cpufreq/issues/359#issuecomment-1030686772) as part of #359.
+
+@bobslept instead of hijacking #359 I've made this as a separate issue. 
+
+I made changes as part of [max_performance](https://github.com/AdnanHodzic/auto-cpufreq/tree/max_performance) branch which address above mentioned problem. What I did can best described in newly added section of README [Configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/tree/max_performance#configuring-auto-cpufreq). 
+
+I might be bit over engineered, but this setup works for both auto-cpufreq installer and Snap packages. Since you originally made power-profiles-daemon `balanced` related changes as part of #349, I wanted to hear if you have any additional comments/suggestions before I merge this with `master`.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I just found out with current code changes on `max_perfromance` branch, this works perfectly if Snap package is installed. 
+
+However, if auto-cpufreq was installed using auto-cpufreq-installer,  when `sudo python3 power_helper.py --gnome_power_enable` is run so `sudo python3 power_helper.py --gnome_power_disable performance` can be run. 
+
+Immediately after `--gnome_power_enable` is run, auto-cpufreq will stop working. Only way to make it work would be when this parameter is run to kill `/opt/auto-cpufreq/venv/bin/python /opt/auto-cpufreq/venv/bin/auto-cpufreq --daemon`, or `auto-cpufreq --remove`. Then after `--gnome_power_disable performance/balanced` is run to run `/opt/auto-cpufreq/venv/bin/python /opt/auto-cpufreq/venv/bin/auto-cpufreq --daemon` again or `auto-cpufreq --install`.
+
+Currently I'm more aligned towards stopping/starting `/opt/auto-cpufreq/venv/bin/python /opt/auto-cpufreq/venv/bin/auto-cpufreq --daemon`. Only concern that I have is I don't know if this will work with AUR package.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Yeah it seems to work on my end. With me starting the service by hand again. If you stop/start it via systemctl it would work on aur packages to.
+
+I'm not sure how it works out when performance mode is not available on the system. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> If you stop/start it via systemctl it would work on aur packages to.
+
+Problem I have is as soon as I manually or in code as part of function start auto-cpufreq service, if running power-profiles-daemon automatically gets stopped/disabled. Hence this is making it very hard to implement on non Snap-ed installs.
+
+ > I'm not sure how it works out when performance mode is not available on the system.
+
+I'd make additional check for this before proceeding with performance. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@bobslept I just pushed changes which should work great on both snap and non snap installs. I revamped how (`systemctl`) services are detected/enabled/disabled and I made few more checks (i.e if performance governor is present) and improvements.
+
+Please take a look/give it a run and let me know if it works well on your side, as I want to make a release with these changes tomorrow.
+
+Thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Just ran `max_performance` branch.
+
+Seems to work on my end. Running `auto-cpufreq --install` will install with balanced profile and `auto-cpufreq --install_performance` will install with performance profile.
+
+Only now `auto-cpufreq --stats` will ask for a password from sudo, if ignored it will just show the stats. 
+https://github.com/AdnanHodzic/auto-cpufreq/blob/9e5384d0440fd84529e3731bb532271327d87ff3/auto_cpufreq/power_helper.py#L36
+The line above seems to be responsible for that behavior. Which is run at all times when the `power_helper.py` is imported or used as standalone script. 
+
+If I use it as standalone script, which needs sudo already, I'm getting error that snap command is not found. 
+`sudo: snap: command not found`
+
+After looking a bit closer I also see the snap not found message in other places, which totally make sense ofcourse. On `--install` or `--remove` for example.
+
+Other than that, I didn't notice any problems.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Thanks for the feedback!
+ 
+> https://github.com/AdnanHodzic/auto-cpufreq/blob/9e5384d0440fd84529e3731bb532271327d87ff3/auto_cpufreq/power_helper.py#L36
+> 
+> The line above seems to be responsible for that behavior. Which is run at all times when the `power_helper.py` is imported or used as standalone script.
+
+ I've removed `sudo` from mentioned line.
+
+> If I use it as standalone script, which needs sudo already, I'm getting error that snap command is not found.
+> `sudo: snap: command not found`
+>
+> After looking a bit closer I also see the snap not found message in other places, which totally make sense ofcourse. On `--install` or `--remove` for example.
+
+> `sudo: snap: command not found` 
+
+because of `>/dev/null 2>&1` part of that line none of that should be returned. During testing as part of development process I purposely misspelled `snap` which should return similar type of behavior (as i.e: `sna` doesn't exist), but it all worked fine and condition was still as it was supposed to be.
+
+> Other than that, I didn't notice any problems.
+
+Great, thanks for testing it on your side again. [v1.9.2 has been released](https://github.com/AdnanHodzic/auto-cpufreq/releases) which closes this issue.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

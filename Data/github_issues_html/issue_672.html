@@ -1,0 +1,55 @@
+
+        <html>
+        <head>
+            <title>Issue #672: Add load from user config in XDG_CONFIG_HOME if available</title>
+        </head>
+        <body>
+            <h1>Add load from user config in XDG_CONFIG_HOME if available</h1>
+            <p><strong>Issue #672</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>This update introduces the flexibility to load the configuration file from multiple locations, prioritizing user preferences and system standards. Previously, the configuration was strictly read from a hardcoded system path (`/etc/auto-cpufreq.conf`). Now, the application first checks if the user has specified a configuration file path via command line arguments. If not, it looks for a configuration file in the user's config directory (`$XDG_CONFIG_HOME/auto-cpufreq/auto-cpufreq.conf`). If neither is found, it defaults to the original system-wide configuration file.
+
+This allows users to add their auto-cpufreq configuration to their dotfiles.
+
+In addition, since providing a config file path via `--config` is now an explicit choice, an error is raised if this path is not a valid file.
+
+### Old behavior
+```sh
+auto-cpufreq --stats # Looks for config in "/etc/auto-cpufreq.conf"
+auto-cpufreq --config <CONFIG> --stats # Looks for config in <CONFIG>
+auto-cpufreq --config <INVALID_PATH> --stats  # No error/warning
+```
+
+### New behavior
+```sh
+auto-cpufreq --stats # Looks for config in (A) "$XDG_CONFIG_HOME/auto-cpufreq/auto-cpufreq.conf" then (B) "/etc/auto-cpufreq.conf"
+auto-cpufreq --config <CONFIG> --stats # Looks for config in <CONFIG>
+auto-cpufreq --config <INVALID_PATH> --stats  # Error
+```
+
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> It might be best to merge this PR to a different branch and then I can handle the merge myself.
+
+@shadeyg56, yes let's do this. As I said in PM, I'm out traveling for work for next 2 weeks and don't have my personal laptop with me to test/look into this properly. 
+
+Hence please feel free to merge it if it makes sense to you.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Looks good! I'm merging this into the `config-conflict` branch and I will merge these changes into #663 so that all of it can be merged into `master` at the same time.
+
+Thanks for your contribution. You'll be credited as part of the next [release](https://github.com/adnanhodzic/auto-cpufreq/releases)</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,279 @@
+
+        <html>
+        <head>
+            <title>Issue #295: On Battery, auto-cpufreq overides gamemode's governor to powersave instead of performance</title>
+        </head>
+        <body>
+            <h1>On Battery, auto-cpufreq overides gamemode's governor to powersave instead of performance</h1>
+            <p><strong>Issue #295</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Gamemode sets the governor to performance when a game is launched which is useful as some games are unplayable (low fps) in powersave governor (though this feature is only relevant on battery since AC is set to performance anyways). 
+
+On battery auto-cpufreq seems to constantly set the governor to powersave (around every 4-5 seconds) even after launching a game with gamemode. This results in games unable to be run in performance governor while on battery with auto-cpufreq unless I configure it to use performance while on battery which defeats its purpose.
+
+It's not really a big deal since I mostly play games while connected to AC but it is very noticeable when I disconnect the AC to battery mode whilst in the middle of a game. </p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> On battery auto-cpufreq seems to constantly set the governor to powersave (around every 4-5 seconds) even after launching a game with gamemode. This results in games unable to be run in performance governor while on battery with auto-cpufreq unless I configure it to use performance while on battery which defeats its purpose.
+
+If understand correctly, when you [configure auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq#configuring-auto-cpufreq), then everything is working as expected?
+
+I think best option to have is to be able to configure the behavior you want. Other option would be to detect when Gamemode is activated and act accordingly in automated manner (suspend auto-cpufreq functionality and let Gamemode do all the work while it's active?).
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>The issue is when governor is set to powersave on battery, the governor reverts to powersave if changed by gamemode:
+```
+[battery]
+# see available governors by running: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+# preferred governor
+governor = powersave
+```
+Gamemode seems to set the governor to performance once on game launch where  auto-cpufreq then overides gamemode's governor to powersave. Each time I use cpupower-gui to change it back to performance,   auto-cpufreq reverts it back to powersave after 4-5 seconds. (I originally used gamemode for TLP, since it sets the governor to powersave on battery but allows gamemode to change it to performance while running a game )
+
+The ideal behavior is as you suggested:
+> Other option would be to detect when Gamemode is activated and act accordingly in automated manner (suspend auto-cpufreq functionality and let Gamemode do all the work while it's active?).
+
+ though it only needs to suspend the governor feature of auto-cpufreq since its other features (scaling) is still useful. The specific unwanted behavior is that auto-cpufreq overrides gamemode's governor to powersave every 4-5 seconds.
+
+If I set governor = performance on battery, the issue is not present  as it is in performance governor all the time on battery which defeats its power saving purpose.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Could you install just [released v1.8.0 ](https://github.com/AdnanHodzic/auto-cpufreq/releases)as maybe there was a conflict between GNOME Power profiles and auto-cpufreq running together which resulted in overheating?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>In [1.8.2 release](https://github.com/AdnanHodzic/auto-cpufreq/releases) new changes have been included which change how charging states are detected. Would love to hear if this changes anything in your case?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>Same issue is still present in 1.8.2, on battery auto-frequency always overrides CPU governor to power save every 4-5 seconds hence gamemode can't set the governor to performance while running games on battery power. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@zespire thank you for your confirmation!
+
+@bobslept I think this might be another case as it's done for TLP and GNOME Power profiles. Except in this case if `gamemode` is detected for the time being auto-cpufreq daemon should be paused/disabled so these two are not conflicting ... thoughts?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>An possible idea is to set gamemode as profile like [charger] and [battery] so when it detects gamemode, it switches to [gamemode] profile instead of being in [battery] profile. This way it's also more configurable where setting [gamemode] governor = performance will resolve its conflict with [battery] profile . When gamemode is off, it switches back to [charger] or [battery] etc. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Well I have no clue what gamemode is, so maybe you can provide me a link or something where I can read more about it?
+Is it this [gamemode](https://github.com/FeralInteractive/gamemode) we are talking about?
+
+And then you want something like this configured and used if we detect gamemode is active? 
+```
+[gamemode]
+governor = performance
+turbo = always
+```
+
+If I read this correct, it's an always on daemon which switches settings when running a certain game. So it's also running without gaming, but doesn't change the settings then. I'm not sure how we would detect it actually being "active" instead of "waiting" on a game to be played. 
+
+What does `gamemoded -s` gives you for results? (If we are talking about the same gamemode)
+`Query the status of gamemode for process. When no PID given, queries the status globally`
+
+I'm not really sure if I like the idea. Because it means we have to constantly check if there is a game running in gamemode. The GNOME and TLP ones are just one time checks.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>Yes, it's the correct gamemode where gamemoded -s shows "gamemode is inactive" when not running games launched with gamemode. It does show "gamemode is active" whilst running a game with gamemode.
+
+Regarding constantly checking if game is running in gamemode, I have to launch games with "gamemoderun  path_to_game" (in .desktop) so perhaps adding a command to switch to [gamemode] profile would be sufficient though I'm not sure how it would detect if gamemode is off after closing a game. Gamemode also offers a way to run custom scripts alongside with gamemode.
+
+The main reason of using gamemode is to set the cpu governor to performance (once on game startup) which is useful when playing games on battery power. The reason why gamemode profile is suggested is because disconnecting AC while running a game results in autocpu-freq switching to [battery] profile which sets it to powersave every 4-5 seconds.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Thank you. I see. Some games are automaticly using the gamemode already, so then you don't need `gamemoderun`
+
+That custom script, could that not be used to disable auto-cpufreq on gamestart and enable auto-cpufreq on ending a game?
+So let gamemode handle it instead of auto-cpufreq?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>That's true, is there any benefits of using auto-cpufreq alongside gamemode? The only conflicting part is the cpu governor. I guess auto-cpufreq allows you to also configure turbo boost. Perhaps it would be more useful in the future when auto-cpufreq has more configurable features etc being able to limit max frequency etc. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Well if gamemode enables options for performance, I don't think auto-cpufreq will do much extra at that moment. I would try and test it. So disable auto-cpufreq first, and test how your game is performing on gamemode only. If that works good for you. I would suggest using this option from gamemode:
+
+```
+[custom]
+; Custom scripts (executed using the shell) when gamemode starts and ends
+;start=notify-send "GameMode started"
+;    /home/me/bin/stop_ethmining.sh
+
+;end=notify-send "GameMode ended"
+;    /home/me/bin/start_ethmining.sh
+
+; Timeout for scripts (seconds). Scripts will be killed if they do not complete within this time.
+;script_timeout=10
+```
+
+There you can have a start and stop script for the auto-cpufreq daemon. Which could be as easy as:
+Be sure they are executable. you can do that with `chmod +x path/to/script.sh`
+
+```
+#!/bin/bash
+# start script
+sudo systemctl start auto-cpufreq
+```
+and
+```
+#!/bin/bash
+# stop script
+sudo systemctl stop auto-cpufreq
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> So let gamemode handle it instead of auto-cpufreq?
+
+This is exactly what I was thinking as well. Why not just disable `gamemode` when not gaming?
+
+> That's true, is there any benefits of using auto-cpufreq alongside gamemode?
+
+I would turn this question around, what are the benefits of using gamemode alongside auto-cpufreq?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Currently GameMode includes support for optimisations including:
+
+- CPU governor
+- I/O priority
+- Process niceness
+- Kernel scheduler (SCHED_ISO)
+- Screensaver inhibiting
+- GPU performance mode (NVIDIA and AMD), GPU overclocking (NVIDIA)
+
+But see my comment above. I think the stop and start script, or something like that could work really well.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>The only reason why I use gamemode is to set the CPU governor to performance while gaming (which is important since some games don't run well on powersave with much lower fps). This is most relevant on battery power since both tlp and autocpu-freq can set the CPU governor to powersave. This is only an issue in auto-cpufreq because the [battery] profiles constantly sets the CPU governor to powersave every 4-5 seconds whereas tlp does not and instead lets gamemode overrides its cpu governor to performance. 
+
+The only benefits in implementing a [gamemode] profile to run alongside gamemode is to:
+1. Resolve the CPU governor conflict which is the issue.
+2. Allow the use of auto-cpufreq features alongside gamemode:
+   -For now the only features of auto-cpufreq (according to config file) is to configure CPU governor and turboboost which isn't as important as being able to run games on performance governor whilst on [battery]
+
+ Implementing a [gamemode] profile would only be as useful when auto-cpufreq has more configurable features so at this point it shouldn't really be a priority at all.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>I'll try out an auto-cpufreq start and stop script for gamemode as the workaround to this issue but wouldn't sudo systemctl start/stop auto-cpufreq mean that I'd need to type my password every time I launch and close a game? It'd probably won't be practical since a game will launch before I'd finish typing my password. It'd also be cumbersome for games launching in fullscreen. In that case, it'd be more convenient to use alias to manually disable and enable auto-cpufreq when needed.  
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Yep you are right on typing the password thing. Not sure how that will work out in the situation you said. Without sudo part it will probably ask you for your password via GUI. Maybe that would pop up over your fullscreen. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Try this, be sure remove current auto-cpufreq installation before testing.
+```
+removed
+```
+Please let me know if this fix the issue. It should set it in performance on battery mode if gamemoded -s returns active game. 
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>_When using sudo auto-cpufreq --live:_
+Regarding gamemode detection, it doesn't seem to work correctly as I believe it detects gamemode is on at all times even when it's off.
+```
+Gamemode on: full power mode
+
+Setting to use: "performance" governor
+```
+^ It always says Gamemode on despite it being off and its governor always stays on performance.
+
+It seems that when it detects gamemode it sets the CPU governor to the same as [charger], do I need to add a [gamemode] setting in "/etc/auto-cpufreq.conf" ?
+
+
+gamemoded -s shows: `gamemode is inactive` when it's off and `gamemode is active` when it's on.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Hmm that is too bad. It should just have set the mode of `auto-cpufreq` to performance, like it would be as it was connected to a charger. 
+
+But I've been testing a little bit more. And i'm not sure how to resolve this. If I use `sudo auto-cpufreq --live` and I run `gamemode-simulate-game` it stays inactive in `auto-cpufreq` but active in `gamemoded -s`.
+
+When I run `sudo gamemode-simulate-game` it becomes active in `sudo auto-cpufreq --live` and in `sudo gamemoded -s` but inactive in `gamemoded -s`
+
+This will be even more different when running it when installed `auto-cpufreq` as daemon. Then it doesn't even get a status from `gamemoded -s` but an error. 
+
+That's why it was always on, there was no "inactive" in the error message, so it would assume it was "active" but instead it was an error about not being able to connect to dbus or something.
+
+Well long story short. I thought this was an 'easy' way to go, but even via `gamestats -s`  it isn't really as easy as it may seem to look. 
+
+Can't do anything for you at this point. Sorry.
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>No worries, the current workaround (`sudo systemctl stop auto-cpufreq` & `sudo systemctl start auto-cpufreq`) is sufficient enough for me anyways. I just made alias for those commands for conveniences. I don't really game on battery so I don't regularly encounter this issue anyways.
+
+The reasons why I don't automate it is because those commands require passwords input (sudo) hence it's not really practical. What I found out was that gamemode only sets the CPU governor to performance once on game startup hence you have up to 5 seconds to type your password or else the [battery] profile will override the governor to powersave which is a hassle especially when games launches in fullscreen. Thus, it's more practical to run those commands manually before I start a game whenever on battery power.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> The reasons why I don't automate it is because those commands require passwords input (sudo) hence it's not really practical.
+
+If you end up doing this, you can set so `sudo` doesn't ask you for password by editing `sudoers` file, on Ubuntu this process would like like (edit sudoers file, i.e: `sudo vim /etc/sudoers`)
+
+Add `NOPASSWD`
+
+```
+%sudo ALL=(ALL:ALL) NOPASSWD:ALL
+```
+
+Check how to do this for your distro and make sure to have additional terminal open where you're logged in as root in case you make a mistake, otherwise you can lock yourself out.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Just [released v1.9.2](https://github.com/AdnanHodzic/auto-cpufreq/releases) which adds ability to change power governor used by default with auto-cpufreq from `balanced` to `performance` [using power_helper.py script](https://github.com/AdnanHodzic/auto-cpufreq/#1-power_helperpy-script) which could also resolve this problem.
+
+In meantime closing the issue due to inactivity, if the problem persist please feel free to re-open the issue.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

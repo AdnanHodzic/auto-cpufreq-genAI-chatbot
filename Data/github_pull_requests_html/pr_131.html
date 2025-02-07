@@ -1,0 +1,63 @@
+
+        <html>
+        <head>
+            <title>Pull Request #131: Fixed bug in performance boost logic.</title>
+        </head>
+        <body>
+            <h1>Fixed bug in performance boost logic.</h1>
+            <p><strong>Pull Request #131</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Now boosts when max core usage is above 75% rather than max core usage close to 75%.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Good point, but why didn't you make same changes for `set_powersave` function? 
+
+Interestingly enough I've just found that if on powersave mode, and if I stress my CPU (`stress --cpu 8 --io 4 --vm 4 --timeout 45`) max frequency I get per core is only only in range: 2100-2250MHz out of max 4600MHz, i,e: 
+
+```
+CPU max frequency: 4600 MHz
+CPU min frequency: 400 MHz
+
+	 Usage  Temperature  Frequency
+CPU0:	100.0%     68 °C     2123 MHz
+CPU1:	100.0%     68 °C     2124 MHz
+CPU2:	100.0%     66 °C     2125 MHz
+CPU3:	100.0%     70 °C     2127 MHz
+CPU4:	100.0%     68 °C     2129 MHz
+CPU5:	100.0%     68 °C     2128 MHz
+CPU6:	 99.0%     66 °C     2127 MHz
+CPU7:	100.0%     70 °C     2120 MHz
+```
+
+Any idea about this?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>dfuehrer:</strong></p>
+                    <p>I didn't change the powersave logic since it has it boost when the max core usage is close to 100%.  If I changed it it would make it more like boosting when the max core usage is over 95%.
+
+I didn't notice that but it does happen on my laptop too when it is set to the shedutil governor.  My best guess is that the max cpu frequency for the power saving governors is less than the max frequency overall but i don't know why it wouldn't update based on the governor used.  I'm not very familiar with this stuff.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I didn't change the powersave logic since it has it boost when the max core usage is close to 100%. If I changed it it would make it more like boosting when the max core usage is over 95%.
+
+Make sense.
+
+> I didn't notice that but it does happen on my laptop too when it is set to the shedutil governor. My best guess is that the max cpu frequency for the power saving governors is less than the max frequency overall but i don't know why it wouldn't update based on the governor used. I'm not very familiar with this stuff.
+
+Agreed, I also think this is the reason. I'll investigate this further when I have time. 
+
+Thank you for your contribution! </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

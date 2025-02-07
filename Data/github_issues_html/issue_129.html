@@ -1,0 +1,112 @@
+
+        <html>
+        <head>
+            <title>Issue #129: Cannot install on Fedora Silverblue 32 with ./auto-cpufreq-installer</title>
+        </head>
+        <body>
+            <h1>Cannot install on Fedora Silverblue 32 with ./auto-cpufreq-installer</h1>
+            <p><strong>Issue #129</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+```text
+[joe@thinkpad-x1 auto-cpufreq]$ sudo auto-cpufreq --install
+
+--------------------- Deploying auto-cpufreq as a daemon ----------------------
+
+Traceback (most recent call last):
+  File "/usr/local/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.0', 'auto-cpufreq')
+  File "/usr/lib/python3.8/site-packages/pkg_resources/__init__.py", line 666, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/usr/lib/python3.8/site-packages/pkg_resources/__init__.py", line 1469, in run_script
+    exec(script_code, namespace, namespace)
+  File "/usr/local/lib/python3.8/site-packages/auto_cpufreq-1.0-py3.8.egg/EGG-INFO/scripts/auto-cpufreq", line 141, in <module>
+  File "/usr/local/lib/python3.8/site-packages/click/core.py", line 829, in __call__
+    return self.main(*args, **kwargs)
+  File "/usr/local/lib/python3.8/site-packages/click/core.py", line 782, in main
+    rv = self.invoke(ctx)
+  File "/usr/local/lib/python3.8/site-packages/click/core.py", line 1066, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/usr/local/lib/python3.8/site-packages/click/core.py", line 610, in invoke
+    return callback(*args, **kwargs)
+  File "/usr/local/lib/python3.8/site-packages/auto_cpufreq-1.0-py3.8.egg/EGG-INFO/scripts/auto-cpufreq", line 124, in main
+  File "/usr/local/lib/python3.8/site-packages/auto_cpufreq-1.0-py3.8.egg/source/core.py", line 218, in deploy_daemon
+  File "/usr/local/lib/python3.8/site-packages/auto_cpufreq-1.0-py3.8.egg/source/core.py", line 171, in cpufreqctl
+  File "/usr/lib64/python3.8/shutil.py", line 415, in copy
+    copyfile(src, dst, follow_symlinks=follow_symlinks)
+  File "/usr/lib64/python3.8/shutil.py", line 261, in copyfile
+    with open(src, 'rb') as fsrc, open(dst, 'wb') as fdst:
+OSError: [Errno 30] Read-only file system: '/usr/bin/cpufreqctl'
+
+```
+---
+
+### System information:
+```text
+-------------------------------------------------------------------------------
+
+Linux distro: Fedora 32 
+Linux kernel: 5.8.13-200.fc32.x86_64
+
+Build git commit: 3e712b8
+Snap package: no
+
+Python: 3.8.5
+psutil package: 5.6.7
+platform package: 1.0.8
+click package: 7.1.2
+distro package 1.4.0
+
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.14 %
+
+Procesor: Intel(R) Core(TM) i7-8565U CPU @ 1.80GHz
+Cores: 8
+Architecture: x86_64
+Driver: /bin/sh: cpufreqctl: command not found
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 4600 MHz
+CPU min frequency: 400 MHz
+
+	 Usage  Temperature  Frequency
+CPU0:	 12.1%     52 °C      800 MHz
+CPU1:	 11.2%     53 °C      800 MHz
+CPU2:	 12.1%     52 °C      800 MHz
+CPU3:	 13.3%     52 °C      800 MHz
+CPU4:	 16.2%     52 °C      800 MHz
+CPU5:	 12.0%     53 °C      800 MHz
+CPU6:	 10.2%     52 °C      800 MHz
+CPU7:	 13.1%     52 °C      800 MHz
+
+Total CPU usage: 11.2 %
+Total system load: 1.95 
+
+Currently using: /bin/sh: governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Changes have been made as part of [1.5.3 release](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.5.3) which should resolve this issue, could you please run install again? 
+
+Please re-open the issue if the issue persists. </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

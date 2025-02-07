@@ -1,0 +1,70 @@
+
+        <html>
+        <head>
+            <title>Issue #500: self-updating runit file</title>
+        </head>
+        <body>
+            <h1>self-updating runit file</h1>
+            <p><strong>Issue #500</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>This runit script should check for an update, if there is one it installs it, waits a bit and inits the daemon.
+
+A systemd servcice could be useful too.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>boredsquirrel:</strong></p>
+                    <p>currently not working, trying to find the error</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Hi,
+
+Would it make more sense to make #500 & #501 as part of a single PR? Also could you please fill me up on what exactly is the reasoning here?
+
+To check if there's an update when auto-cpufreq is being installed using auto-cpufreq-installer? I would say in most cases folks will have latest changes when they are running --install (as I'll presume they have just cloned the repo).
+
+Similar feature was requested as part of #341, as it would be great to ability to be notified and then install update once there is one.
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>boredsquirrel:</strong></p>
+                    <p>No it should work like that:
+
+1. The service is started through systemd or runit
+2. First it checks if there is an update, if yes it downloads it 
+3. if there was an update it inits the install again, so that its set up
+4. it waits 1 sec to sort things out
+5. it starts everything normally
+
+The testing command needs to be checked if it works. Also for it to run either it needs to find out in what dir it runs and store that variable somewhere, or have it in the homedir (maybe append "auto-cpufreq" to ~/.hidden to hide it).
+
+I would just put it in the .hidden file.
+
+The problem with another solution would be that it needs to be manually stopped, updated, installed and started again. This is some solution, even though probably not the best but the smallest.
+
+I wanted to keep the pulls small, so that you dont need to accept things you dont want.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Sorry for the delay @trytomakeyouprivate. In meantime, there were changes made to `auto-cpufreq-runit` file, could you please resolve these conflicts and I'll merge your changes. Thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>boredsquirrel:</strong></p>
+                    <p>hey, yes agree this is not the normal way to put everything in that service. I dont like the monopoly of systemd too (because its a single binary, not because it doesnt work or I dont want a unified Linux userspace, which is 100% needed).
+
+Closing this PR, will look at it again. If you can help make runit work please do so. And true, packaging should be external.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

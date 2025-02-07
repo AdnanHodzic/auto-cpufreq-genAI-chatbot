@@ -1,0 +1,72 @@
+
+        <html>
+        <head>
+            <title>Pull Request #531: [BUG-FIX] Fixed bug related to recurring sudo prompt for functions that even don't require it</title>
+        </head>
+        <body>
+            <h1>[BUG-FIX] Fixed bug related to recurring sudo prompt for functions that even don't require it</h1>
+            <p><strong>Pull Request #531</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>The `set_override` function is always called irrespective of the force flag is called or not. This in turn, required root checks for every flag calls, even for `auto-cpufreq --version`.
+
+To fix it, now `set_override` method is now called only if force flag is invoked.
+Also root_check is moved from core.py to the main file, to ensure consistency with previous usage of root_check in the code used earlier.
+
+Here are the specific code changes made:
+
+In auto_cpufreq/core.py:
+- Line 96: Removed the root_check call from the set_override function. This was intended to be done to comply with code template, i.e. to use root_check in the main file.
+
+In bin/auto-cpufreq:
+- Line 45: Added a root_check call before calling set_override in main program. Also, set_override is only called if force option is invoked, saving us from precious extra overheads.
+
+Fixes #530</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rootCircle:</strong></p>
+                    <p>@niksingh710</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Great stuff @rootCircle, I love clean solutions like this one! 
+
+I saw your and @niksingh710 conversation in #530 just didn't get a chance to add anything in the discussion. Also, just as a reminder if you're interested I'm still [looking for contributors to this project](https://github.com/AdnanHodzic/auto-cpufreq/discussions/312) :)
+
+I think this problem was plaguing other PR's like @shadeyg56 #486 and other PR's which I just never got to look into, so thank you for your contribution and you'll be credited for your work as part of [upcoming release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rootCircle:</strong></p>
+                    <p>> Great stuff @rootCircle, I love clean solutions like this one!
+
+Thanks :-)
+
+> Also, just as a reminder if you're interested I'm still [looking for contributors to this project](https://github.com/AdnanHodzic/auto-cpufreq/discussions/312) :)
+
+I'm definitely interested. However, my exams are approaching, so I won't be able to contribute for a week or two. But I would love to be a part of this project later on. 
+
+While my knowledge of applied stacks is somewhat limited at the moment, but I believe this opportunity will provide me ample chances to learn and enhance it in general. Having taken my initial steps into the open-source community, I am filled with excitement. I can't wait to dive deeper and contribute to this project! :smiley: 
+
+
+
+
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>No worries & take your time, and once you have time just take a [look at some guide lines here](https://github.com/AdnanHodzic/auto-cpufreq/discussions/312#discussioncomment-2450050) :) </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

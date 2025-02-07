@@ -1,0 +1,60 @@
+
+        <html>
+        <head>
+            <title>Discussion #488: FileNotFoundError when attempting install as daemon (EndeavourOS)</title>
+        </head>
+        <body>
+            <h1>FileNotFoundError when attempting install as daemon (EndeavourOS)</h1>
+            <p><strong>Discussion #488</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>First of all; I'd like to start off by saying that I've seen mention that Arch-based distros might not be the easiest to install auto-cpufreq on. So if I've completely shot myself in the foot here, I'll own up to it.
+
+As mentioned I'm on (a fresh and updated install of) EndeavourOS, Xfce4.
+
+Monitoring the system works just fine, but when trying to deploy the persistent daemon using auto-cpufreq --install, I get the exact same error as [ssnailz over at the AUR discussion for this package](https://aur.archlinux.org/packages/auto-cpufreq#comment-899438). They posted their issue on the 27th of January but still haven't gotten any replies, so I thought I'd post the problem here, and get back to them if I get any help.
+
+Here goes: 
+
+```
+--------------------- Deploying auto-cpufreq as a daemon ----------------------
+
+* Turn off bluetooth on boot [skipping] (package providing bluetooth access is not present)
+
+* Deploy auto-cpufreq install script
+Traceback (most recent call last):
+  File "/usr/bin/auto-cpufreq", line 226, in <module>
+    main()
+  File "/usr/lib/python3.10/site-packages/click/core.py", line 1130, in __call__
+    return self.main(*args, **kwargs)
+  File "/usr/lib/python3.10/site-packages/click/core.py", line 1055, in main
+    rv = self.invoke(ctx)
+  File "/usr/lib/python3.10/site-packages/click/core.py", line 1404, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/usr/lib/python3.10/site-packages/click/core.py", line 760, in invoke
+    return __callback(*args, **kwargs)
+  File "/usr/bin/auto-cpufreq", line 203, in main
+    deploy_daemon()
+  File "/usr/lib/python3.10/site-packages/auto_cpufreq/core.py", line 357, in deploy_daemon
+    shutil.copy(SCRIPTS_DIR / "auto-cpufreq-install.sh", "/usr/bin/auto-cpufreq-install")
+  File "/usr/lib/python3.10/shutil.py", line 417, in copy
+    copyfile(src, dst, follow_symlinks=follow_symlinks)
+  File "/usr/lib/python3.10/shutil.py", line 254, in copyfile
+    with open(src, 'rb') as fsrc:
+FileNotFoundError: [Errno 2] No such file or directory: '/usr/share/auto-cpufreq/scripts/auto-cpufreq-install.sh'
+```
+
+Any and all help is greatly appreciated!</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Please read the [AUR Section](https://github.com/AdnanHodzic/auto-cpufreq/#aur) of the README and try that</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,114 @@
+
+        <html>
+        <head>
+            <title>Issue #212: Unit auto-cpufreq.service could not be found.</title>
+        </head>
+        <body>
+            <h1>Unit auto-cpufreq.service could not be found.</h1>
+            <p><strong>Issue #212</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+```text
+Unit auto-cpufreq.service could not be found.
+```
+---
+
+### System information:
+```text
+
+-------------------------------------------------------------------------------
+
+Linux distro: Garuda Linux Soaring Spotted-Eagle
+Linux kernel: 5.12.13-zen1-1-zen
+Processor: AMD Ryzen 5 3550H with Radeon Vega Mobile Gfx
+Cores: 8
+Architecture: x86_64
+Driver: /bin/sh: line 1: cpufreqctl.auto-cpufreq: command not found
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2100 MHz
+CPU min frequency: 1400 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0:     9.3%     81 °C     2100 MHz
+CPU1:     5.1%     81 °C     2353 MHz
+CPU2:    13.1%     81 °C     2100 MHz
+CPU3:    12.2%     81 °C     2100 MHz
+CPU4:    11.0%     81 °C     2100 MHz
+CPU5:     6.0%     81 °C     2100 MHz
+CPU6:    11.0%     81 °C     2100 MHz
+CPU7:     4.1%     81 °C     2100 MHz
+
+auto-cpufreq version:
+fatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+Traceback (most recent call last):
+File "/usr/bin/auto-cpufreq", line 4, in <module>
+__import__('pkg_resources').run_script('auto-cpufreq==1.0', 'auto-cpufreq')
+File "/usr/lib/python3.9/site-packages/pkg_resources/__init__.py", line 651, in run_script
+self.require(requires)[0].run_script(script_name, ns)
+File "/usr/lib/python3.9/site-packages/pkg_resources/__init__.py", line 1455, in run_script
+exec(script_code, namespace, namespace)
+File "/usr/lib/python3.9/site-packages/auto_cpufreq-1.0-py3.9.egg/EGG-INFO/scripts/auto-cpufreq", line 151, in <module>
+File "/usr/lib/python3.9/site-packages/click/core.py", line 1137, in __call__
+return self.main(*args, **kwargs)
+File "/usr/lib/python3.9/site-packages/click/core.py", line 1062, in main
+rv = self.invoke(ctx)
+File "/usr/lib/python3.9/site-packages/click/core.py", line 1404, in invoke
+return ctx.invoke(self.callback, **ctx.params)
+File "/usr/lib/python3.9/site-packages/click/core.py", line 763, in invoke
+return __callback(*args, **kwargs)
+File "/usr/lib/python3.9/site-packages/auto_cpufreq-1.0-py3.9.egg/EGG-INFO/scripts/auto-cpufreq", line 99, in main
+File "/usr/lib/python3.9/site-packages/auto_cpufreq-1.0-py3.9.egg/auto_cpufreq/core.py", line 83, in app_version
+File "/usr/lib/python3.9/subprocess.py", line 424, in check_output
+return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+File "/usr/lib/python3.9/subprocess.py", line 528, in run
+raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['git', 'describe', '--always']' returned non-zero exit status 128.
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>jaikhuranna:</strong></p>
+                    <p>someone please</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>I use the snap version and it works just fine. If you are installing from source, I guess the author of this project himself might need to see this in order to help you.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>graceyudhaaa:</strong></p>
+                    <p>i found out that the service name isn't running as auto-cpufreq.service 
+
+```
+$ systemctl | grep auto-cpufreq
+snap.auto-cpufreq.service.service                                                        loaded active     running   Service for snap application auto-cpufreq.service                                                     
+```
+
+so for example to enable the service use this command
+```
+$ systemctl enable snap.auto-cpufreq.service.service 
+```
+
+edit: i just realize it's written on the readme</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Could you install it using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq#snap-store)? As it runs in a container and isolates its Python env from your env. so you shouldn't experience Python related errors.
+
+@utk-dev also confirmed it works fine with him with snap. In meantime I'm closing the issue, please re-open it if the problem persists.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

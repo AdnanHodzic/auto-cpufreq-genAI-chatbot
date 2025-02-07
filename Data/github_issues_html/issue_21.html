@@ -1,0 +1,366 @@
+
+        <html>
+        <head>
+            <title>Issue #21: AttributeError: 'NoneType' object has no attribute 'power_plugged'</title>
+        </head>
+        <body>
+            <h1>AttributeError: 'NoneType' object has no attribute 'power_plugged'</h1>
+            <p><strong>Issue #21</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>My laptop is fully charged, and connected to the socket, and when run `auto-cpufreq --log` see the following error:
+
+```
+Traceback (most recent call last):
+  File "/usr/bin/auto-cpufreq", line 437, in <module>
+    cli()
+  File "/usr/lib/python3/dist-packages/click/core.py", line 764, in __call__
+    return self.main(*args, **kwargs)
+  File "/usr/lib/python3/dist-packages/click/core.py", line 717, in main
+    rv = self.invoke(ctx)
+  File "/usr/lib/python3/dist-packages/click/core.py", line 956, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/usr/lib/python3/dist-packages/click/core.py", line 555, in invoke
+    return callback(*args, **kwargs)
+  File "/usr/bin/auto-cpufreq", line 401, in cli
+    set_autofreq()
+  File "/usr/bin/auto-cpufreq", line 243, in set_autofreq
+    bat_state = p.sensors_battery().power_plugged
+AttributeError: 'NoneType' object has no attribute 'power_plugged'
+```</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Exorust:</strong></p>
+                    <p>This is similar to issue #16 </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I think these problems could be related to using older package version for "psuti"l which were installed from apt repos:
+
+`sudo pip3 show psutil | grep -i version`
+
+Recommended version should be >= 5.5.1
+
+Hence, could you please try upgrading both using pip3 by running:
+
+`sudo pip3 install --upgrade psutil`
+
+And let me know if the problem still persits after this?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Exorust:</strong></p>
+                    <p>I verified the version of psutil running on my machine is 5.6.7 (on the sudo)
+
+On further testing manually, I believe there is some kind of discontinuity when the plug is either added or pulled. Running psutil via python3 shell seems to give the correct output both before and after.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>zshamrock:</strong></p>
+                    <p>Still the same. The current version indeed was `5.5.1`, I upgraded it to `5.6.7`, and still encounter this error immediately after the plug is attached, well waiting until the battery is fully charged first.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@Exorust that's the most confusing part. 
+
+@zshamrock can you tell me what do you get when you run (as root):
+
+```
+python3
+import psutil
+psutil.sensors_battery().power_plugged
+```
+If not charging you should get: "False"
+
+And can both of you tell me what Linux distro are you using, and what "driver" does "auto-cpufreq" return when you run it?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>zshamrock:</strong></p>
+                    <p>It returns `False`. Although can't test at the moment with the plug attached.
+
+Regards the distro, this is what I am using:
+
+```
+$ uname -a
+Linux precision 4.19.0-6-amd64 #1 SMP Debian 4.19.67-2+deb10u2 (2019-11-11) x86_64 GNU/Linux
+$ lsb_release -a
+No LSB modules are available.
+Distributor ID: Debian
+Description:    Debian GNU/Linux 10 (buster)
+Release:        10
+Codename:       buster
+
+$ cat /etc/debian_version 
+10.2
+```
+
+And driver is `intel_pstate`.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Right, okay could you please return the output of:
+
+````
+python3
+import psutil
+psutil.sensors_battery().power_plugged
+```
+
+once you get a chance to charge it, I want to compare those two.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>zshamrock:</strong></p>
+                    <p>Will do.
+Again some more of the methods of the `psutil`:
+
+```
+>>> psutil.sensors_battery()
+sbattery(percent=77.05137570002435, secsleft=4937, power_plugged=False)
+>>> psutil.sensors_fans()
+{'dell_smm': [sfan(label='', current=4902), sfan(label='', current=4921)]}
+>>> psutil.sensors_temperatures()
+{'acpitz': [shwtemp(label='', current=25.0, high=107.0, critical=107.0)], 'pch_cannonlake': [shwtemp(label='', current=57.0, high=None, critical=None)], 'coretemp': [shwtemp(label='Package id 0', current=82.0, high=100.0, critical=100.0), shwtemp(label='Core 0', current=77.0, high=100.0, critical=100.0), shwtemp(label='Core 1', current=77.0, high=100.0, critical=100.0), shwtemp(label='Core 2', current=82.0, high=100.0, critical=100.0), shwtemp(label='Core 3', current=77.0, high=100.0, critical=100.0), shwtemp(label='Core 4', current=78.0, high=100.0, critical=100.0), shwtemp(label='Core 5', current=79.0, high=100.0, critical=100.0)], 'iwlwifi': [shwtemp(label='', current=44.0, high=None, critical=None)]}
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>zshamrock:</strong></p>
+                    <p>Now charging, and this is the output:
+
+```
+>>> psutil.sensors_battery()
+sbattery(percent=22.04772339907475, secsleft=<BatteryTime.POWER_TIME_UNLIMITED: -2>, power_plugged=True)
+```
+
+Will give it a try when the battery is fully charged.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>krnr:</strong></p>
+                    <p>my distro doesn't return anything on `sensors_battery()` at all!
+
+```
+  uname -a
+Linux mx 4.15.0-1-amd64 #1 SMP Debian 4.15.4-1~mx17+1 (2018-02-23) x86_64 GNU/Linux
+```
+```
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import psutil
+>>> psutil.__version__
+'5.6.7'
+>>> psutil.sensors_battery()
+>>> 
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>zshamrock:</strong></p>
+                    <p>Ok, and this is the output when the battery is fully charged
+```
+>>> import psutil
+>>> psutil.sensors_battery()
+sbattery(percent=100.0, secsleft=<BatteryTime.POWER_TIME_UNLIMITED: -2>, power_plugged=True)
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Please correct me if I'm wrong, but @validatedev did you have this same problem?
+
+@zshamrock could you please try by running with [changes which are made as part of this PR ](https://github.com/AdnanHodzic/auto-cpufreq/pull/25)and let me know if this does anything for you? 
+
+Thanks</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>zshamrock:</strong></p>
+                    <p>I've tried to run `psutil.sensor_battery()` continuously and plug on and off the AC, and in some cases `sensors_battery()` output was empty:
+
+(see this line `>>> psutil.sensors_battery() // <-- Here it didn't report back any output structure` below)
+
+```
+>>> psutil.sensors_battery()
+sbattery(percent=100.0, secsleft=29570400, power_plugged=False)
+>>> psutil.sensors_battery()
+sbattery(percent=100.0, secsleft=8482, power_plugged=False)
+>>> psutil.sensors_battery()
+sbattery(percent=100.0, secsleft=8482, power_plugged=False)
+>>> psutil.sensors_battery()
+sbattery(percent=100.0, secsleft=7398, power_plugged=False)
+>>> psutil.sensors_battery()
+sbattery(percent=100.0, secsleft=7398, power_plugged=False)
+>>> psutil.sensors_battery()
+sbattery(percent=100.0, secsleft=7069, power_plugged=False)
+>>> psutil.sensors_battery()
+sbattery(percent=100.0, secsleft=<BatteryTime.POWER_TIME_UNLIMITED: -2>, power_plugged=True)
+>>> psutil.sensors_battery()
+sbattery(percent=100.0, secsleft=<BatteryTime.POWER_TIME_UNLIMITED: -2>, power_plugged=True)
+>>> psutil.sensors_battery()
+sbattery(percent=100.0, secsleft=<BatteryTime.POWER_TIME_UNLIMITED: -2>, power_plugged=True)
+>>> psutil.sensors_battery()
+sbattery(percent=100.0, secsleft=<BatteryTime.POWER_TIME_UNLIMITED: -2>, power_plugged=True)
+>>> psutil.sensors_battery()
+sbattery(percent=100.0, secsleft=29570400, power_plugged=False)
+>>> psutil.sensors_battery()
+sbattery(percent=100.0, secsleft=8348, power_plugged=False)
+>>> psutil.sensors_battery()
+sbattery(percent=100.0, secsleft=8252, power_plugged=False)
+>>> psutil.sensors_battery()
+sbattery(percent=100.0, secsleft=8252, power_plugged=False)
+>>> psutil.sensors_battery()
+sbattery(percent=100.0, secsleft=8166, power_plugged=False)
+>>> psutil.sensors_battery()
+sbattery(percent=100.0, secsleft=8166, power_plugged=False)
+>>> psutil.sensors_battery()
+sbattery(percent=100.0, secsleft=7940, power_plugged=False)
+>>> psutil.sensors_battery()
+sbattery(percent=99.48867786705624, secsleft=7463, power_plugged=False)
+>>> psutil.sensors_battery()
+sbattery(percent=99.48867786705624, secsleft=<BatteryTime.POWER_TIME_UNLIMITED: -2>, power_plugged=True)
+>>> psutil.sensors_battery() // <-- Here it didn't report back any output structure
+>>> psutil.sensors_battery()
+sbattery(percent=100.0, secsleft=<BatteryTime.POWER_TIME_UNLIMITED: -2>, power_plugged=True)
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>validatedev:</strong></p>
+                    <p>> Please correct me if I'm wrong, but @validatedev did you have this same problem?
+> 
+> @zshamrock could you please try by running with [changes which are made as part of this PR ](https://github.com/AdnanHodzic/auto-cpufreq/pull/25)and let me know if this does anything for you?
+> 
+> Thanks
+
+Yes that is the issue that I fixed on the PR. There is a bug on psutil.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>loxK:</strong></p>
+                    <p>The PR fixes the issue for me (Ubuntu 19.10 - 5.3.0-26-generic)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Exorust:</strong></p>
+                    <p>This fixes the problem when you connect and disconnect the charger, but when the laptop is suspended, the problem arises again.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>validatedev:</strong></p>
+                    <p>> This fixes the problem when you connect and disconnect the charger, but when the laptop is suspended, the problem arises again.
+
+Can you share the output of the ‘auto-cpufreq —log’ when that happens? You are using the https://github.com/AdnanHodzic/auto-cpufreq/pull/25 , right?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Exorust:</strong></p>
+                    <p>Yes I am here is the output: [`auto-cpufreq —log` doesn't work on my machine]
+
+```
+$   systemctl status auto-cpufreq -n20
+● auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux
+   Loaded: loaded (/etc/systemd/system/auto-cpufreq.service; enabled; vendor preset: enabled)
+   Active: failed (Result: exit-code) since Sat 2020-01-11 21:37:50 IST; 29min ago
+ Main PID: 4760 (code=exited, status=1/FAILURE)
+
+Jan 11 21:37:50 Exorust-Inspiron-5558 python3[4760]: ---------------------------- CPU frequency scaling ----------------------------
+Jan 11 21:37:50 Exorust-Inspiron-5558 python3[4760]: Traceback (most recent call last):
+Jan 11 21:37:50 Exorust-Inspiron-5558 python3[4760]:   File "/usr/bin/auto-cpufreq", line 446, in <module>
+Jan 11 21:37:50 Exorust-Inspiron-5558 python3[4760]:     cli()
+Jan 11 21:37:50 Exorust-Inspiron-5558 python3[4760]:   File "/usr/local/lib/python3.5/dist-packages/click/core.py", line 764, in __call__
+Jan 11 21:37:50 Exorust-Inspiron-5558 python3[4760]:     return self.main(*args, **kwargs)
+Jan 11 21:37:50 Exorust-Inspiron-5558 python3[4760]:   File "/usr/local/lib/python3.5/dist-packages/click/core.py", line 717, in main
+Jan 11 21:37:50 Exorust-Inspiron-5558 python3[4760]:     rv = self.invoke(ctx)
+Jan 11 21:37:50 Exorust-Inspiron-5558 python3[4760]:   File "/usr/local/lib/python3.5/dist-packages/click/core.py", line 956, in invoke
+Jan 11 21:37:50 Exorust-Inspiron-5558 python3[4760]:     return ctx.invoke(self.callback, **ctx.params)
+Jan 11 21:37:50 Exorust-Inspiron-5558 python3[4760]:   File "/usr/local/lib/python3.5/dist-packages/click/core.py", line 555, in invoke
+Jan 11 21:37:50 Exorust-Inspiron-5558 python3[4760]:     return callback(*args, **kwargs)
+Jan 11 21:37:50 Exorust-Inspiron-5558 python3[4760]:   File "/usr/bin/auto-cpufreq", line 410, in cli
+Jan 11 21:37:50 Exorust-Inspiron-5558 python3[4760]:     set_autofreq()
+Jan 11 21:37:50 Exorust-Inspiron-5558 python3[4760]:   File "/usr/bin/auto-cpufreq", line 252, in set_autofreq
+Jan 11 21:37:50 Exorust-Inspiron-5558 python3[4760]:     bat_state = p.sensors_battery().power_plugged
+Jan 11 21:37:50 Exorust-Inspiron-5558 python3[4760]: AttributeError: 'NoneType' object has no attribute 'power_plugged'
+Jan 11 21:37:50 Exorust-Inspiron-5558 systemd[1]: auto-cpufreq.service: Main process exited, code=exited, status=1/FAILURE
+Jan 11 21:37:50 Exorust-Inspiron-5558 systemd[1]: auto-cpufreq.service: Unit entered failed state.
+Jan 11 21:37:50 Exorust-Inspiron-5558 systemd[1]: auto-cpufreq.service: Failed with result 'exit-code'.
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>validatedev:</strong></p>
+                    <p>> Yes I am here is the output: [`auto-cpufreq —log` doesn't work on my machine]
+> 
+> ```
+> $   systemctl status auto-cpufreq -n20
+> ● auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux
+>    Loaded: loaded (/etc/systemd/system/auto-cpufreq.service; enabled; vendor preset: enabled)
+>    Active: failed (Result: exit-code) since Sat 2020-01-11 21:37:50 IST; 29min ago
+>  Main PID: 4760 (code=exited, status=1/FAILURE)
+> 
+> Jan 11 21:37:50 Exorust-Inspiron-5558 python3[4760]: ---------------------------- CPU frequency scaling ----------------------------
+> Jan 11 21:37:50 Exorust-Inspiron-5558 python3[4760]: Traceback (most recent call last):
+> Jan 11 21:37:50 Exorust-Inspiron-5558 python3[4760]:   File "/usr/bin/auto-cpufreq", line 446, in <module>
+> Jan 11 21:37:50 Exorust-Inspiron-5558 python3[4760]:     cli()
+> Jan 11 21:37:50 Exorust-Inspiron-5558 python3[4760]:   File "/usr/local/lib/python3.5/dist-packages/click/core.py", line 764, in __call__
+> Jan 11 21:37:50 Exorust-Inspiron-5558 python3[4760]:     return self.main(*args, **kwargs)
+> Jan 11 21:37:50 Exorust-Inspiron-5558 python3[4760]:   File "/usr/local/lib/python3.5/dist-packages/click/core.py", line 717, in main
+> Jan 11 21:37:50 Exorust-Inspiron-5558 python3[4760]:     rv = self.invoke(ctx)
+> Jan 11 21:37:50 Exorust-Inspiron-5558 python3[4760]:   File "/usr/local/lib/python3.5/dist-packages/click/core.py", line 956, in invoke
+> Jan 11 21:37:50 Exorust-Inspiron-5558 python3[4760]:     return ctx.invoke(self.callback, **ctx.params)
+> Jan 11 21:37:50 Exorust-Inspiron-5558 python3[4760]:   File "/usr/local/lib/python3.5/dist-packages/click/core.py", line 555, in invoke
+> Jan 11 21:37:50 Exorust-Inspiron-5558 python3[4760]:     return callback(*args, **kwargs)
+> Jan 11 21:37:50 Exorust-Inspiron-5558 python3[4760]:   File "/usr/bin/auto-cpufreq", line 410, in cli
+> Jan 11 21:37:50 Exorust-Inspiron-5558 python3[4760]:     set_autofreq()
+> Jan 11 21:37:50 Exorust-Inspiron-5558 python3[4760]:   File "/usr/bin/auto-cpufreq", line 252, in set_autofreq
+> Jan 11 21:37:50 Exorust-Inspiron-5558 python3[4760]:     bat_state = p.sensors_battery().power_plugged
+> Jan 11 21:37:50 Exorust-Inspiron-5558 python3[4760]: AttributeError: 'NoneType' object has no attribute 'power_plugged'
+> Jan 11 21:37:50 Exorust-Inspiron-5558 systemd[1]: auto-cpufreq.service: Main process exited, code=exited, status=1/FAILURE
+> Jan 11 21:37:50 Exorust-Inspiron-5558 systemd[1]: auto-cpufreq.service: Unit entered failed state.
+> Jan 11 21:37:50 Exorust-Inspiron-5558 systemd[1]: auto-cpufreq.service: Failed with result 'exit-code'.
+> ```
+
+Interesting. I have thought that I changed all of the power plugged thingies to power package. Will look at it. Which distro are you using?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>validatedev:</strong></p>
+                    <p>Are you sure my PR has been used? At line 252 my PR is using `bat_state = power.PowerManagement().get_providing_power_source_type()` instead of `bat_state = p.sensors_battery().power_plugged` .</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>validatedev:</strong></p>
+                    <p>Just want to be sure, try the https://github.com/validatedev/auto-cpufreq , it includes all commits + my PR. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>PR #25 has been merged with master.
+
+> This fixes the problem when you connect and disconnect the charger, but when the laptop is suspended, the problem arises again.
+
+@Exorust correct me if I'm wrong, but you're saying that after suspend `auto-cpufreq` will stop working and that's the output you'll get?
+
+Please pull the latest changes and confirm if this is the case, otherwise I'll close this issue.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Exorust:</strong></p>
+                    <p>The latest changes seem to be working. I have been running it for almost 20 hours and it seems to be stable.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Great, in that I'm close this issue.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

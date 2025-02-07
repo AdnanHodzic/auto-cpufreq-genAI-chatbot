@@ -1,0 +1,142 @@
+
+        <html>
+        <head>
+            <title>Issue #527: FileNotFoundError: [Errno 2] No such file or directory: '/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors'</title>
+        </head>
+        <body>
+            <h1>FileNotFoundError: [Errno 2] No such file or directory: '/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors'</h1>
+            <p><strong>Issue #527</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>
+### Have I tried?
+
+- yes, i have tried Searching through existing/closed issues. Found two similar ones. [first one](https://github.com/AdnanHodzic/auto-cpufreq/issues/185),  [second one](https://github.com/AdnanHodzic/auto-cpufreq/issues/233) but they didn't lead to a solution.
+- installation didn't fail.
+- I tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq), but it all converges on the same problem. (FileNotFoundError: [Errno 2] No such file or directory: '/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors')
+- I tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting). None of them had anything to do with my problem.
+
+### Error output:
+```
+sudo auto-cpufreq --install
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.9.8+3dcf2fd8', 'auto-cpufreq')
+  File "/opt/auto-cpufreq/venv/lib/python3.8/site-packages/pkg_resources/__init__.py", line 666, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/opt/auto-cpufreq/venv/lib/python3.8/site-packages/pkg_resources/__init__.py", line 1469, in run_script
+    exec(script_code, namespace, namespace)
+  File "/opt/auto-cpufreq/venv/lib/python3.8/site-packages/auto_cpufreq-1.9.8+3dcf2fd8-py3.8.egg/EGG-INFO/scripts/auto-cpufreq", line 225, in <module>
+  File "/opt/auto-cpufreq/venv/lib/python3.8/site-packages/click/core.py", line 1130, in __call__
+    return self.main(*args, **kwargs)
+  File "/opt/auto-cpufreq/venv/lib/python3.8/site-packages/click/core.py", line 1055, in main
+    rv = self.invoke(ctx)
+  File "/opt/auto-cpufreq/venv/lib/python3.8/site-packages/click/core.py", line 1404, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/opt/auto-cpufreq/venv/lib/python3.8/site-packages/click/core.py", line 760, in invoke
+    return __callback(*args, **kwargs)
+  File "/opt/auto-cpufreq/venv/lib/python3.8/site-packages/auto_cpufreq-1.9.8+3dcf2fd8-py3.8.egg/EGG-INFO/scripts/auto-cpufreq", line 201, in main
+  File "/opt/auto-cpufreq/venv/lib/python3.8/site-packages/auto_cpufreq-1.9.8+3dcf2fd8-py3.8.egg/auto_cpufreq/core.py", line 463, in gov_check
+  File "/opt/auto-cpufreq/venv/lib/python3.8/site-packages/auto_cpufreq-1.9.8+3dcf2fd8-py3.8.egg/auto_cpufreq/core.py", line 286, in get_avail_gov
+  File "/usr/lib/python3.8/pathlib.py", line 1236, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+  File "/usr/lib/python3.8/pathlib.py", line 1222, in open
+    return io.open(self, mode, buffering, encoding, errors, newline,
+  File "/usr/lib/python3.8/pathlib.py", line 1078, in _opener
+    return self._accessor.open(self, flags, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors'
+
+```
+---
+
+### System information:
+
+and here's the output from 'auto-cpufreq --debug':
+
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Zorin OS 16 focal
+Linux kernel: 5.15.0-75-generic
+Processor: Intel(R) Celeron(R) CPU          530  @ 1.73GHz
+Cores: 1
+Architecture: x86_64
+Driver: cat: /sys/devices/system/cpu/cpu0/cpufreq/scaling_driver: No such file or directory
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 0 MHz
+CPU min frequency: 0 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      3.0%        48 °C      1729 MHz
+
+auto-cpufreq version: 1.9.8 (git: 3dcf2fd8)
+
+Python: 3.8.10
+psutil package: 5.9.5
+platform package: 1.0.8
+click package: 8.1.3
+distro package: 1.8.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 1.09 %
+
+Total CPU usage: 0.0 %
+Total system load: 0.22
+Average temp. of all cores: 48.00 °C 
+
+Currently using: cat: governor
+Warning: CPU turbo is not available
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+
+```
+
+I have tried to describe the situation in as much detail as possible. There is however not much to to say,Because I have LITERALLY tried everything. Almost everything requires me to run 'sudo auto-cpufreq --install' But I can't do it because of reasons I've already said. And anything that doesn't need that has nothing to do with my problem.
+
+well, I expected for it just to install and be fine (I don't think I have to say this). I tried configuring it, installing through snap and git. Every other configuring step requires me to run 'sudo auto-cpufreq --install', which as I said, i can't do.
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I'm curious because [I made some changes made how driver is handled in 1.9.8](https://github.com/AdnanHodzic/auto-cpufreq/commit/3dcf2fd837584b5e4481b5a9f23438d65a507502), could you please try installing 1.9.7 and verify if you have the same issue?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Rafalsitar:</strong></p>
+                    <p>I have tried 1.9.7.
+Having the same error, the error output is the same.
+**Is my processor just too old?**
+**Also, if my processor is THIS old maybe an even older version would work, have you made some changes how the driver is handled BEFORE 1.9.8?**</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>zoitrok:</strong></p>
+                    <p>The Celeron 530 does not support speedstep nor turbo boost. This is just lack of hardware support.
+
+Auto-cpufreq could perhaps give a bit more guiding error message when trying to run it on unsupported hardware.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>zoitrok:</strong></p>
+                    <p>@Rafalsitar could you paste the output from `lscpu` and or `cat /proc/cpuinfo`? I suspect this could be detected globally through the lack of some fields there.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing due to inactivity.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

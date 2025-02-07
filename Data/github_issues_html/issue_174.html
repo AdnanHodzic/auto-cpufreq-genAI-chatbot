@@ -1,0 +1,230 @@
+
+        <html>
+        <head>
+            <title>Issue #174: Scaling CPU cores based on CPU usage/uptime/other indicators</title>
+        </head>
+        <body>
+            <h1>Scaling CPU cores based on CPU usage/uptime/other indicators</h1>
+            <p><strong>Issue #174</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>The cpu frequency is lower than the minimum scaling frequency and doesn't increase on load, but on power supply the cpu reaches the max turbo boost frequency on full load
+
+```shell
+$ cat /sys/devices/system/cpu/cpu0/cpufreq/bios_limit 
+2375000
+```
+
+<details open>
+    <summary>System information(Battery):</summary>
+
+    -------------------------------------------------------------------------------
+
+    Linux distro: Arch Linux  
+    Linux kernel: 5.10.13-arch1-2
+    Processor: AMD Ryzen 5 4500U with Radeon Graphics
+    Cores: 6
+    Architecture: x86_64
+    Driver: acpi-cpufreq
+
+    ------------------------------ Current CPU stats ------------------------------
+
+    CPU max frequency: 2375 MHz
+    CPU min frequency: 1400 MHz
+
+    Core    Usage   Temperature     Frequency
+    CPU0:     3.0%     40 °C     1397 MHz
+    CPU1:     9.5%     40 °C     1397 MHz
+    CPU2:    13.0%     40 °C     1397 MHz
+    CPU3:     0.0%     40 °C     1397 MHz
+    CPU4:     2.0%     40 °C     1397 MHz
+    CPU5:     2.0%     40 °C     1397 MHz
+
+    auto-cpufreq version:
+    Version         : 1.6.1.r214.984cf65-1
+
+    Python: 3.9.1
+    psutil package: 5.8.0
+    platform package: 1.0.8
+    click package: 7.1.2
+    distro package 1.5.0
+
+    Computer type: Notebook
+    Battery is: discharging
+
+    auto-cpufreq system resource consumption:
+    cpu usage: 0.0 %
+    memory use: 0.21 %
+
+    Total CPU usage: 5.4 %
+    Total system load: 0.8
+    Average temp. of all cores: 39.5 °C 
+
+    Currently using: powersave governor
+    Currently turbo boost is: off
+
+    -------------------------------------------------------------------------------
+</details>
+
+<details>
+    <summary>At full load(Battery):</summary>
+
+    ------------------------------ Current CPU stats ------------------------------
+
+    CPU max frequency: 2375 MHz
+    CPU min frequency: 1400 MHz
+
+    Core    Usage   Temperature     Frequency
+    CPU0:   100.0%     43 °C     1397 MHz
+    CPU1:   100.0%     43 °C     1397 MHz
+    CPU2:   100.0%     43 °C     1397 MHz
+    CPU3:   100.0%     43 °C     1397 MHz
+    CPU4:   100.0%     43 °C     1397 MHz
+    CPU5:   100.0%     43 °C     1397 MHz
+
+    Battery is: discharging
+
+    auto-cpufreq system resource consumption:
+    cpu usage: 0.0 %
+    memory use: 0.21 %
+
+    Total CPU usage: 99.8 %
+    Total system load: 2.33
+    Average temp. of all cores: 42.875 °C 
+
+    Currently using: powersave governor
+    Currently turbo boost is: on
+    -------------------------------------------------------------------------------
+</details>
+
+<details>
+    <summary>At normal load(Power):</summary>
+
+    ------------------------------ Current CPU stats ------------------------------
+
+    CPU max frequency: 2375 MHz
+    CPU min frequency: 1400 MHz
+
+    Core    Usage   Temperature     Frequency
+    CPU0:     2.0%     40 °C     2176 MHz
+    CPU1:     3.0%     40 °C     3009 MHz
+    CPU2:     2.0%     40 °C     1935 MHz
+    CPU3:     3.1%     40 °C     2191 MHz
+    CPU4:    10.3%     40 °C     2306 MHz
+    CPU5:     3.0%     40 °C     1934 MHz
+
+    Battery is: charging
+
+    auto-cpufreq system resource consumption:
+    cpu usage: 0.0 %
+    memory use: 0.21 %
+
+    Total CPU usage: 2.7 %
+    Total system load: 0.5
+    Average temp. of all cores: 39.625 °C 
+
+    Currently using: performance governor
+    Currently turbo boost is: on
+    ------------------------------------------------------------------------------
+</details>
+
+<details>
+    <summary>At full load(Power):</summary>
+
+    ------------------------------ Current CPU stats ------------------------------
+
+    CPU max frequency: 2375 MHz
+    CPU min frequency: 1400 MHz
+
+    Core    Usage   Temperature     Frequency
+    CPU0:    98.0%     64 °C     3987 MHz
+    CPU1:   100.0%     64 °C     3987 MHz
+    CPU2:   100.0%     64 °C     3987 MHz
+    CPU3:   100.0%     64 °C     3985 MHz
+    CPU4:   100.0%     64 °C     3985 MHz
+    CPU5:   100.0%     64 °C     3985 MHz
+
+    Battery is: charging
+
+    auto-cpufreq system resource consumption:
+    cpu usage: 0.0 %
+    memory use: 0.21 %
+
+    Total CPU usage: 100.0 %
+    Total system load: 5.18
+    Average temp. of all cores: 63.5 °C 
+
+    Currently using: performance governor
+    Currently turbo boost is: on
+    -------------------------------------------------------------------------------
+</details></p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@librewish  guess governor on charging has been fixed now, but it seems now it won't trigger turbo boost? </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>What people want is
+ they want to scale frequency even on battery to performance 
+While depending on load
+When no load they want powersave</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>sainak:</strong></p>
+                    <p>> What people want is
+> they want to scale frequency even on battery to performance
+> While depending on load
+> When no load they want powersave
+
+Is this the expected behaviour on battery? cause the stats show turbo boost on so I thought that it would scale the frequency to handle the increased load.
+
+A question though is the scaling frequency depended on the governor?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>Yes frequency scaling is dependent on governor
+Powersave governor always try to keep frequency at minimum even on highest load so you will never use your pc at its full or even half its potential 
+While performance governor tries to keep frequency at maximum </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>sainak:</strong></p>
+                    <p>Hmm then switching to conservative governor with load on battery would be more appropriate 
+https://wiki.archlinux.org/index.php/CPU_frequency_scaling#Scaling_governors</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>sainak:</strong></p>
+                    <p>I was wondering if it'll be good to scale only  a few cores to higher performance governor for battery and performance?
+will the operating system distribute more demanding tasks to the cores with higher frequencies? 
+
+Edit: It doesn't assign heavy tasks to cores with higher performance governor.
+
+But it would be nice if auto-cpufreq changed the governor on individual cores that are running at high usage like  > 80%</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>There was a discussion regarding this in #69, or to put one such setting to settings file #26. If we go down this route I'm of an opinion that this is done automatically based on i.e: really low cpu usage/uptime and on battery.
+
+I'll change title of this bug/issue report, so I keep it in mind for future.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Added [Troubleshooting section to README on how to change CPU management driver](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting).
+
+Could you please give this a try as I believe it will resolve your problem. If it doesn't please feel free to re-open this issue.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

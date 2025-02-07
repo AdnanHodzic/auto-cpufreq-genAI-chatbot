@@ -1,0 +1,96 @@
+
+        <html>
+        <head>
+            <title>Issue #446: Warning: Changing CPU turbo is not supported. Skipping.</title>
+        </head>
+        <body>
+            <h1>Warning: Changing CPU turbo is not supported. Skipping.</h1>
+            <p><strong>Issue #446</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>The installation was successful, but unfortunately a warning appeared, "**Warning: Changing CPU turbo is not supported. Skipping.**" 
+[Intel officially stated that this cpu does not support turbo boost](https://www.intel.sg/content/www/xa/en/products/sku/81209/intel-core-i34170t-processor-3m-cache-3-20-ghz/specifications.html?countrylabel=Asia%20Pacific), so the logic of your application is correct. Then, the question I am concerned about now is whether the automatic adjustment of the cpu can still be effectively performed in this case?
+```
+root@debian:~# auto-cpufreq --version
+
+-------------------------------------------------------------------------------
+
+Linux distro: Debian GNU/Linux 11 bullseye
+Linux kernel: 5.10.0-19-amd64
+auto-cpufreq version: 1.9.6 (git: ff72e1e0)
+```
+
+-------------------------------------------------------------------------------
+```
+-------------------------------------------------------------------------------
+
+                "auto-cpufreq" is about to refresh ...
+                Executed on: October 27 (Thursday) - 10:21:39
+
+-------------------------------------------------------------------------------
+
+Linux distro: Debian GNU/Linux 11 bullseye
+Linux kernel: 5.10.0-19-amd64
+Processor: Intel(R) Core(TM) i3-4170 CPU @ 3.70GHz
+Cores: 4
+Architecture: x86_64
+Driver: intel_cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3700 MHz
+CPU min frequency: 800 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0:     0.0%     29 °C     3692 MHz
+CPU1:     1.0%     30 °C     3693 MHz
+CPU2:     0.0%     29 °C     3693 MHz
+CPU3:     1.0%     30 °C     3703 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Setting to use: "performance" governor
+
+Total CPU usage: 0.5 %
+Total system load: 0.13
+Average temp. of all cores: 29.50 °C 
+
+Load optimal
+setting turbo boost: off
+Warning: Changing CPU turbo is not supported. Skipping.
+```
+```
+root@debian:~# dmesg |grep -i "turbo\|boost"
+[214105.359062] intel_pstate: Turbo disabled by BIOS or unavailable on processor
+root@debian:~# 
+```
+```
+Advanced Technologies
+Intel® Turbo Boost Technology No
+```
+![图片](https://user-images.githubusercontent.com/96408692/198181828-263b03eb-a486-4ed3-9db4-94514ccc8384.png)</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>SunkenHero:</strong></p>
+                    <p>Looks like its all working. Your CPU is scaling up to 3.70GHz, because you are in performance mode. If you set it in the config file right, your CPU should scale down to save battery life, if you run on battery.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>vinograd-cyber:</strong></p>
+                    <p>> Looks like its all working. Your CPU is scaling up to 3.70GHz, because you are in performance mode. If you set it in the config file right, your CPU should scale down to save battery life, if you run on battery.
+
+Oh great, the software is amazing, I will keep following it. thanks for your help.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing the issue since problem seems to be resolved.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

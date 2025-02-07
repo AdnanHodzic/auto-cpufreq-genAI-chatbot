@@ -1,0 +1,109 @@
+
+        <html>
+        <head>
+            <title>Issue #647: Battery conservation_mode?</title>
+        </head>
+        <body>
+            <h1>Battery conservation_mode?</h1>
+            <p><strong>Issue #647</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I don't know if battery charge thresholds limit works on my laptop, I have lenovo legion and in modules I have ideapad_laptop instead of ideapad_acpi. But i have battery conservation mode and can switch it here:
+
+echo 1 > /sys/bus/platform/drivers/ideapad_acpi/VPC2004\:00/conservation_mode
+
+Is it possible to add this toggle to config file and cli key for switching? TLP had this option.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>yea i could do that. however i wont be able to test it so ill need your help with that.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>[Here](https://wiki.archlinux.org/title/Laptop/Lenovo#Battery_conservation_mode) is a link to the Arch wiki that has a good explanation of Conservation mode</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>fridrichgood:</strong></p>
+                    <p>> yea i could do that. however i wont be able to test it so ill need your help with that.
+
+Ok, i will be happy to help.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>hey so it took a little longer than i thought. here is my repo https://github.com/PurpleWazard/auto-cpufreq/tree/master do you mind trying it out?
+
+to install run auto-cpufreq-installer with sudo
+run tests with sudo auto-cpufreq --live or --monitor 
+in /etc/auto-cpufreq.conf add the options under [battery]
+
+test 1 
+#enable_thresholds = true
+#start_threshold = 20
+#stop_threshold = 80
+#ideapad_laptop_conservation_mode = true
+
+test 2
+enable_thresholds = true
+#start_threshold = 20
+#stop_threshold = 80
+ideapad_laptop_conservation_mode = true
+
+test 3
+enable_thresholds = true
+start_threshold = 20
+stop_threshold = 80
+ideapad_laptop_conservation_mode = true
+
+test 4
+enable_thresholds = true
+start_threshold = 20
+stop_threshold = 80
+ideapad_laptop_conservation_mode = false
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lavendercolor:</strong></p>
+                    <p>Custom threshold setting not working for me on Lenovo Ideapad. I guess only the default conservation mode value of 60 is supported?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>fridrichgood:</strong></p>
+                    <p>> Custom threshold setting not working for me on Lenovo Ideapad. I guess only the default conservation mode value of 60 is supported?
+
+Yes. Battery stops charging around 58-60%</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>fridrichgood:</strong></p>
+                    <p>> hey so it took a little longer than i thought. here is my repo https://github.com/PurpleWazard/auto-cpufreq/tree/master do you mind trying it out?
+> 
+> to install run auto-cpufreq-installer with sudo run tests with sudo auto-cpufreq --live or --monitor in /etc/auto-cpufreq.conf add the options under [battery]
+> 
+> test 1 #enable_thresholds = true #start_threshold = 20 #stop_threshold = 80 #ideapad_laptop_conservation_mode = true
+> 
+> test 2 enable_thresholds = true #start_threshold = 20 #stop_threshold = 80 ideapad_laptop_conservation_mode = true
+> 
+> test 3 enable_thresholds = true start_threshold = 20 stop_threshold = 80 ideapad_laptop_conservation_mode = true
+> 
+> test 4 enable_thresholds = true start_threshold = 20 stop_threshold = 80 ideapad_laptop_conservation_mode = false
+
+Conservation mode works as expected. Thresholds ignored, battery charging above stop_threshold, but i think it normal for my hardware.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>fridrichgood:</strong></p>
+                    <p>@PurpleWazard Thank you for your work. I close this issue.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

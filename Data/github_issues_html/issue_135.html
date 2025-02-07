@@ -1,0 +1,27 @@
+
+        <html>
+        <head>
+            <title>Issue #135: Improves opensuse detection</title>
+        </head>
+        <body>
+            <h1>Improves opensuse detection</h1>
+            <p><strong>Issue #135</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hi, I managed to create a VM and install opensuse leap, so I made this changes to install auto-cpufreq without errors:
+* Adds detection of openSUSE Leap by using a regexp when checking for the distribution ID.
+* Adds `python3-devel` and `gcc` packages to be installed with zypper, as a new OS Leap install does not include them, they are also added to tumbleweed to be sure they are present (and for symmetry, too).
+* Changes the bash comment to include both Tumbleweed and Leap version of openSUSE.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Great stuff! Thank you for your contribution!</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

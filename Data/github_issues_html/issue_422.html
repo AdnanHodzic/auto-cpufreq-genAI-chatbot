@@ -1,0 +1,150 @@
+
+        <html>
+        <head>
+            <title>Issue #422: stats outputting wrong number of CPU core count</title>
+        </head>
+        <body>
+            <h1>stats outputting wrong number of CPU core count</h1>
+            <p><strong>Issue #422</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hello, I've been using auto-cpufreq for a while now and it works fine. But recently when I checked `auto-cpufreq --stats` it incorrectly displays the number of CPU core I have on my computer. I have an AMD ryzen 5 5500U processor which has 6 cores and 12 threads. But the stats says it is 16. It also mentions disabled CPUs from 12 to 15.
+It doesn't seem to affect the functionality of the program but the count is incorrect. output of  `--debug` is provided below
+
+### System information:
+
+-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux  
+Linux kernel: 5.19.1-arch2-1
+Processor: AMD Ryzen 5 5500U with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2100 MHz
+CPU min frequency: 1400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  1.0%     38 °C     1588 MHz
+CPU1:	  0.0%     38 °C     2100 MHz
+CPU2:	  0.0%     38 °C     2100 MHz
+CPU3:	  0.0%     38 °C     2100 MHz
+CPU4:	  0.0%     38 °C     1397 MHz
+CPU5:	  1.0%     38 °C     2100 MHz
+CPU6:	  0.0%     38 °C     2100 MHz
+CPU7:	  0.0%     38 °C     2100 MHz
+CPU8:	  0.0%     38 °C     2096 MHz
+CPU9:	  0.0%     38 °C     2100 MHz
+CPU10:	  0.0%     38 °C     2100 MHz
+CPU11:	  0.0%     38 °C     2100 MHz
+
+Disabled CPUs: 12,13,14,15
+
+auto-cpufreq version: Version         : 1.9.5-1
+
+Python: 3.10.5
+psutil package: 5.9.1
+platform package: 1.0.8
+click package: 8.1.3
+distro package: 1.7.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.33 %
+
+Total CPU usage: 0.3 %
+Total system load: 0.26
+Average temp. of all cores: 37.75 °C 
+
+Currently using: performance governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+
+Additional info: package installed from AUR</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Is the count correct when using different AMD driver? Reference: #398</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>pzerone:</strong></p>
+                    <p>> Is the count correct when using different AMD driver? Reference: #398
+
+Hello, thanks for the reply. My current kernel is not built with amd_pstate. Im holding back on using it since it still need some work from what I have read.
+
+That said, I looked at the source code of auto-cpufreq and saw the command used for getting the number of cores is nproc --all. On my machine, running this command returns 16 and there is a file /sys/devices/system/cpu/offline which contains 12-15. This means it's probably not an issue with auto-cpufreq and something to do with my machine.
+
+I've created a forum discussion over at archlinux and there are others with the similar nproc output as mine. I can post the update here if there is any progress on this. Or since it is not related to this program, I can close this issue if that is needed</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I looked at the source code of auto-cpufreq and saw the command used for getting the number of cores is nproc --all. On my machine, running this command returns 16 and there is a file /sys/devices/system/cpu/offline which contains 12-15. This means it's probably not an issue with auto-cpufreq and something to do with my machine.
+
+This used to be handled differently with psutil Python library, but it was changed in meantime IIRC.
+
+Either way, if you have an idea how to improve this please consider making [code contribution](https://github.com/AdnanHodzic/auto-cpufreq#code-contribution)! </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>zoitrok:</strong></p>
+                    <p>We're looking up the number of cores using ["nproc --all"](https://github.com/AdnanHodzic/auto-cpufreq/blob/8fbb5ea624071c781c29eea731ff645c59d75b47/auto_cpufreq/core.py#L1075). It seems like that command is returning the number of threads and not cores. I think just a plain `nproc` should do the trick.
+
+On my Intel i7-8550U I get
+```
+$ nproc --all
+8
+```
+(which is correct)
+
+On my AMD Ryzen 7 3700U I get
+```
+$ nproc --all
+16
+```
+(which is incorrect)
+
+A plain `nproc` with no parameters shows 8 on both my systems (which is correct).
+
+The GNU help for nproc says
+```
+‘--all’
+     Print the number of installed processors on the system, which may
+     be greater than the number online or available to the current
+     process.  The ‘OMP_NUM_THREADS’ or ‘OMP_THREAD_LIMIT’ environment
+     variables are not honored in this case. 
+```I think there might be some tech debt in nproc that freely mixes the terms processors/cores/units/threads.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>zoitrok:</strong></p>
+                    <p>Suggested fix in PR #423 </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@PROBUBBLE01 changes made in #423 by @zoitrok have been merged with `master`, could you pull the latest changes and confirm if everything works as expected now? Thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>pzerone:</strong></p>
+                    <p>running plain `nproc` on my system returns the number of threads, which is 12. Looked up the specification of @zoitrok 's CPUs , both of them has 4 cores and 8 threads, but `nproc`  and  `nproc --all` returns 8 on the intel CPU while on AMD, `nproc --all`  returns 16 and `nproc` returns 8.
+
+I'm not sure if `nproc` deals with AMD and intel CPUs differently but it is visible that on AMD CPUs, `nproc --all`  returns wrong count. #423 does the job, everything looks good and works as expected.  Also, can confirm, latest changes returns 12 as the CPU count and `disabled CPUs` are gone.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

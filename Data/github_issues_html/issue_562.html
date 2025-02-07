@@ -1,0 +1,33 @@
+
+        <html>
+        <head>
+            <title>Issue #562: Is the frequency in the config file the base clock or is it the effective clock frequency?</title>
+        </head>
+        <body>
+            <h1>Is the frequency in the config file the base clock or is it the effective clock frequency?</h1>
+            <p><strong>Issue #562</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>There is no error per say but I wanted to have clarification on what the frequency in the config file represents.
+
+I'm using an i7-11800H. For this chip, the base clock can go up to 2.3GHz, but after the multiplier is applied, the net clock can go much higher (around 4.8GHz). So should I set `scaling_max_freq` to `2300000` or should I set it to `4800000`?</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>If your base of[ 2.3Ghz is same as mine of 1.8Ghz,](https://camo.githubusercontent.com/e33ce653f12f4933bdd769ddae47708cd77bd6685dbaf3a3676b2e62f743f857/687474703a2f2f666f6f6c636f6e74726f6c2e6f72672f77702d636f6e74656e742f75706c6f6164732f323032332f30392f6175746f2d637075667265712d76322d6775692e706e67) and max is 4.8Ghz as it is 4.6Ghz for me, then yes `scaling_max_freq` should probably be set to `4800000`. 
+
+Closing this issue, since it's not an issue and should instead be asked as part of [Discussion section.](https://github.com/AdnanHodzic/auto-cpufreq/discussions)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Setu-Gupta:</strong></p>
+                    <p>Thanks for the clarification</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

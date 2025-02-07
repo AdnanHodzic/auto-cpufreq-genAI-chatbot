@@ -1,0 +1,64 @@
+
+        <html>
+        <head>
+            <title>Issue #707: Nix package broken after requests update</title>
+        </head>
+        <body>
+            <h1>Nix package broken after requests update</h1>
+            <p><strong>Issue #707</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>The Commit https://github.com/AdnanHodzic/auto-cpufreq/commit/2b09bf7543ee181c5e5b30358cef0e1603d5fd79 broke the nix package. On Nix the newest verison of requests is 2.31.0.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Can you provide more information because it looks like the checks passed. What exactly is happening? A bump in the `poetry.lock` shouldn't affect the Nix flake</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Svenum:</strong></p>
+                    <p>```console
+warning: input 'nixos-hardware' has an override for a non-existent input 'nixpkgs'                                                                                                                                                                                                                                                                   
+building the system configuration...                                                                                                                                                                                                                                                                                                                 
+warning: input 'nixos-hardware' has an override for a non-existent input 'nixpkgs'                                                                                                                                                                                                                                                                   
+error: builder for '/nix/store/2b07kvhzgdx0fc4gzz09ixfvimmkpgy1-python3.11-auto-cpufreq-2.3.0.drv' failed with exit code 1;                                                                                                                                                                                                                          
+       last 25 log lines:                                                                                                                                                                                                                                                                                                                            
+       > source root is alwf5z8m8v2jyqvhnf42889v6qdc6dc7-source                                                                                                                                                                                                                                                                                      
+       > setting SOURCE_DATE_EPOCH to timestamp 315619200 of file alwf5z8m8v2jyqvhnf42889v6qdc6dc7-source/snap/snapcraft.yaml                                                                                                                                                                                                                        
+       > Running phase: patchPhase                                                                                                                                                                                                                                                                                                                   
+       > applying patch /nix/store/nlmyiyrdz7klcflh72rvd45njmmi4zbl-prevent-install-and-copy.patch                                                                                                                                                                                                                                                   
+       > patching file auto_cpufreq/core.py                                                                                                                                                                                                                                                                                                          
+       > Hunk #1 succeeded at 391 (offset 41 lines).                                                                                                                                                                                                                                                                                                 
+       > Hunk #2 succeeded at 424 (offset 41 lines).                                                                                                                                                                                                                                                                                                 
+       > Hunk #3 succeeded at 465 (offset 41 lines).                                                                                                                                                                                                                                                                                                 
+       > substituteStream(): WARNING: '--replace' is deprecated, use --replace-{fail,warn,quiet}. (file 'auto_cpufreq/core.py')                                                                                                                                                                                                                      
+       > Running phase: updateAutotoolsGnuConfigScriptsPhase                                                                                                                                                                                                                                                                                         
+       > Running phase: configurePhase                                                                                                                                                                                                                                                                                                               
+       > no configure script, doing nothing                                                                                                                                                                                                                                                                                                          
+       > Running phase: buildPhase                                                                                                                                                                                                                                                                                                                   
+       > Executing pypaBuildPhase                                                                                                                                                                                                                                                                                                                    
+       > Setting POETRY_DYNAMIC_VERSIONING_BYPASS to 2.3.0                                                                                                                                                                                                                                                                                           
+       > Creating a wheel...                                                                                                                                                                                                                                                                                                                         
+       > * Getting build dependencies for wheel...                                                                                                                                                                                                                                                                                                   
+       > * Building wheel...                                                                                                                                                                                                                                                                                                                         
+       > Successfully built auto_cpufreq-2.3.0-py3-none-any.whl                                                                                                                                                                                                                                                                                      
+       > Finished creating a wheel...                                                                                                                                                                                                                                                                                                                
+       > Finished executing pypaBuildPhase                                                                                                                                                                                                                                                                                                           
+       > Running phase: pythonRuntimeDepsCheckHook                                                                                                                                                                                                                                                                                                   
+       > Executing pythonRuntimeDepsCheck                                                                                                                                                                                                                                                                                                            
+       > Checking runtime dependencies for auto_cpufreq-2.3.0-py3-none-any.whl                                                                                                                                                                                                                                                                       
+       >   - requests<3.0.0,>=2.32.0 not satisfied by version 2.31.0                                                                                                                                                                                                                                                                                 
+       For full logs, run 'nix log /nix/store/2b07kvhzgdx0fc4gzz09ixfvimmkpgy1-python3.11-auto-cpufreq-2.3.0.drv'.                                                                                                                                                                                                                                   
+error: 1 dependencies of derivation '/nix/store/i7vfq970yapsw4724rgb4in20fw17qd8-system-path.drv' failed to build                                                                                                                                                                                                                                    
+error: 1 dependencies of derivation '/nix/store/4a5vifpxb5miw7y5ns94ifs0fyzzmnzh-unit-auto-cpufreq.service.drv' failed to build                                                                                                                                                                                                                      
+error: 1 dependencies of derivation '/nix/store/s1zcfd1vngm93ka6bvjp68jp223zv5mq-nixos-system-Yon-24.05.20240519.6c0b7a9.drv' failed to build
+```</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

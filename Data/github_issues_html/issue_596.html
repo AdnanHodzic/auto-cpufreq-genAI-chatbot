@@ -1,0 +1,297 @@
+
+        <html>
+        <head>
+            <title>Issue #596: sudo auto-cpufreq --install</title>
+        </head>
+        <body>
+            <h1>sudo auto-cpufreq --install</h1>
+            <p><strong>Issue #596</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>hi, how can I resolve these two errors?in the first error disabling the daemon and restarting doesn't solve it.
+
+# sudo auto-cpufreq --install
+
+ERROR: auto-cpufreq is running in daemon mode.
+
+Make sure to stop the daemon before running with --live or --monitor mode
+
+#sudo auto-cpufreq --force=performance
+
+Traceback (most recent call last):Traceback (most recent call last):
+  File "/usr/bin/auto-cpufreq", line 269, in <module>
+    main()
+  File "/usr/lib/python3.11/site-packages/click/core.py", line 1157, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/site-packages/click/core.py", line 1078, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/site-packages/click/core.py", line 1434, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/site-packages/click/core.py", line 783, in invoke
+    return __callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/bin/auto-cpufreq", line 50, in main
+    set_override(force) # Calling set override, only if force has some values
+    ^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/site-packages/auto_cpufreq/core.py", line 105, in set_override
+    with open(governor_override_state, "wb") as store:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/opt/auto-cpufreq/override.pickle'
+  File "/usr/bin/auto-cpufreq", line 269, in <module>
+    main()
+  File "/usr/lib/python3.11/site-packages/click/core.py", line 1157, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/site-packages/click/core.py", line 1078, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/site-packages/click/core.py", line 1434, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/site-packages/click/core.py", line 783, in invoke
+    return __callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/bin/auto-cpufreq", line 50, in main
+    set_override(force) # Calling set override, only if force has some values
+    ^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/site-packages/auto_cpufreq/core.py", line 105, in set_override
+    with open(governor_override_state, "wTraceback (most recent call last):
+  File "/usr/bin/auto-cpufreq", line 269, in <module>
+    main()
+  File "/usr/lib/python3.11/site-packages/click/core.py", line 1157, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/site-packages/click/core.py", line 1078, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/site-packages/click/core.py", line 1434, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/site-packages/click/core.py", line 783, in invoke
+    return __callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/bin/auto-cpufreq", line 50, in main
+    set_override(force) # Calling set override, only if force has some values
+    ^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/site-packages/auto_cpufreq/core.py", line 105, in set_override
+    with open(governor_override_state, "wb") as store:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/opt/auto-cpufreq/override.pickle'b") as store:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^Traceback (most recent call last):
+  File "/usr/bin/auto-cpufreq", line 269, in <module>
+    main()
+  File "/usr/lib/python3.11/site-packages/click/core.py", line 1157, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/site-packages/click/core.py", line 1078, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/site-packages/click/core.py", line 1434, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/site-packages/click/core.py", line 783, in invoke
+    return __callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/bin/auto-cpufreq", line 50, in main
+    set_override(force) # Calling set override, only if force has some values
+    ^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/site-packages/auto_cpufreq/core.py", line 105, in set_override
+    with open(governor_override_state, "wb") as store:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/opt/auto-cpufreq/override.pickle'
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>You can't install the daemon because it is already running. You would have to run `sudo auto-cpufreq --remove`
+
+As far as the other goes, we'll need more info from the `auto-cpufreq --debug` command</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>skiss0:</strong></p>
+                    <p>#sudo auto-cpufreq --remove
+
+auto-cpufreq daemon is not installed.
+sudo auto-cpufreq --debug
+
+#sudo auto-cpufreq --debug
+
+Linux distro: Arch Linux rolling n/a
+Linux kernel: 6.5.9-arch2-1
+Processor: Intel(R) Core(TM) i5-4200U CPU @ 1.60GHz
+Cores: 4
+Architecture: x86_64
+Driver: intel_cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2600 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      2.0%        38 °C      2314 MHz
+CPU1      1.0%        38 °C      2571 MHz
+CPU2      2.0%        38 °C      2295 MHz
+CPU3      4.0%        38 °C       800 MHz
+
+auto-cpufreq version: Versione                  : 2.0.0-3
+
+Python: 3.11.5
+psutil package: 5.9.6
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.8.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.91 %
+
+Total CPU usage: 0.8 %
+Total system load: 0.51
+Average temp. of all cores: 38.00 °C
+
+Currently using: schedutil governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+
+#sudo auto-cpufreq --force=powersave
+
+------------------------ auto-cpufreq not running ------------------------------
+
+ERROR: auto-cpufreq is not running in daemon mode.
+
+Make sure to run "sudo auto-cpufreq --install" first
+
+-------------------------------------------------------------------------------
+
+#systemctl enable auto-cpufreq
+
+Created symlink /etc/systemd/system/multi-user.target.wants/auto-cpufreq.service → /usr/lib/systemd/system/auto-cpufreq.service.
+
+
+#systemctl stop auto-cpufreq
+#sudo auto-cpufreq --live
+
+Note: You can quit live mode by pressing "ctrl+c"
+
+-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux rolling n/a
+Linux kernel: 6.5.9-arch2-1
+Processor: Intel(R) Core(TM) i5-4200U CPU @ 1.60GHz
+Cores: 4
+Architecture: x86_64
+Driver: intel_cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2600 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      1.0%        38 °C      2500 MHz
+CPU1      2.0%        38 °C      2457 MHz
+CPU2      1.0%        39 °C      2295 MHz
+CPU3      4.0%        39 °C      2322 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+
+Total CPU usage: 1.5 %
+Total system load: 0.31
+Average temp. of all cores: 38.50 °C
+
+Load optimal (load average: 0.31, 0.38, 0.35)
+setting turbo boost: off
+
+-------------------------------------------------------------------------------
+
+		"auto-cpufreq" is about to refresh ...
+		Executed on: November 09 (Thursday) - 16:48:09
+
+-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux rolling n/a
+Linux kernel: 6.5.9-arch2-1
+Processor: Intel(R) Core(TM) i5-4200U CPU @ 1.60GHz
+Cores: 4
+Architecture: x86_64
+Driver: intel_cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2200 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      1.0%        38 °C      2195 MHz
+CPU1      2.0%        38 °C      2195 MHz
+CPU2      0.0%        38 °C      2195 MHz
+CPU3      4.0%        38 °C      2195 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+
+Total CPU usage: 1.5 %
+Total system load: 0.36
+Average temp. of all cores: 38.00 °C
+
+High CPU load (load average: 0.36, 0.39, 0.36)
+setting turbo boost: on
+
+-------------------------------------------------------------------------------
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Yeah something seems off with your install. Did you install auto-cpufreq from the AUR or the installer script?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>skiss0:</strong></p>
+                    <p>aur/auto-cpufreq 2.0.0-3 (+61 2.08)
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>When using the AUR package, you don't have to run `sudo auto-cpufreq --install` as it installs the service automatically, but you might have to run `systemctl enable --now auto-cpufreq.service` 
+
+With that said, the AUR package is not officially maintained so its decently prone to issues. If you'd like you can clone this repo (or download the latest release) and use the installer script rather than using the AUR</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>skiss0:</strong></p>
+                    <p>--------------------------------- Root check ----------------------------------
+
+ERROR:
+
+Must be run root for this functionality to work, i.e:
+sudo auto-cpufreq
+
+-------------------------------------------------------------------------------
+thanks I solved it by installing cpupower-gui</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

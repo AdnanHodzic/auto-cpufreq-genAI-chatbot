@@ -1,0 +1,100 @@
+
+        <html>
+        <head>
+            <title>Issue #637: add battery charge thresholds</title>
+        </head>
+        <body>
+            <h1>add battery charge thresholds</h1>
+            <p><strong>Issue #637</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>hello, ive been using auto-cpufreq since i moved from TLP however i miss being able to set charge thresholds to prolong battery health. i would like to add this feature to auto-cpufreq, this allows you to set charge thresholds to support laptops. currently this only supports lenovo laptops and thinkpads however other laptops can be added easily. this feature is by default turned off users who want to use it will have to specify.
+
+to change and enable the battery thresholds add these lines to /etc/auto-cpufreq.conf under [battery]
+
+enable_thresholds = true
+start_threshold = 0 
+stop_threshold = 100
+
+default thresholds are 0 and 100
+
+auto-cpufreq --daemon will set the charge thresholds on boot
+auto-cpufreq --monitor will set and print the charge thresholds once 
+
+there was an issue with --live so i remove it from live. 
+
+this feture requires the correct kernel modules to be loaded to identify the laptop type. example for thinkpads the thinkpad_acpi must be listed in `lsmod | grep thinkpad_acpi`  to add the thinkpad module to thinkpads run `modprobe thinkpad_acpi`
+
+there may be some bugs however i fixed all the ones i could find. 
+
+this is also my first pull request, suggestions are appreciated.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>i found a bug with reading values from the conf file im currently working on it</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>From code POV, it LGTM. 
+
+I have 2 small requests:
+
+
+**1:** 
+
+Only thing I would ask for is to update `auto-cpufreq.conf-example` file with commented examples, i.e:
+
+```
+# Add battery charging threshold (currently only available to Lenovo)
+#enable_thresholds = true
+#start_threshold = 0
+#stop_threshold = 100
+```
+
+and update README file accordingly, maybe also add this part, just rephrase it if needed:
+
+> this feture requires the correct kernel modules to be loaded to identify the laptop type. example for thinkpads the >thinkpad_acpi must be listed in lsmod | grep thinkpad_acpi to add the thinkpad module to thinkpads run modprobe >thinkpad_acpi
+
+**2:**
+
+Code wise, it would be good if `stop_threshold = 80` following change was made, it would stop charging at 80%, as currently if 80 is set, it'll stop charging at 79%. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Yeah, LGTM as well. Of course, I can't test it since I do not have a Thinkpad laptop, but it seems to be working.
+
+> and update README file accordingly,
+
+This was going to be my main comment. We should include a new section in the README about battery thresholds including instructions, list of supported devices, and information on how to request that your device be added. I don't mind doing this myself since you might be as familiar with the structure of the README file. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>> Code wise, it would be good if `stop_threshold = 80` following change was made, it would stop charging at 80%, as currently if 80 is set, it'll stop charging at 79%.
+
+from what im understanding is when you set stop threshold to 80 your battery says it stops at 79% instead?  this could be your windows manager or desktop environment, ive noticed when reading battery percentage  is could be + or - 1% 
+
+or it could be that there is always a small load on the battery when its pluged in. this could be battery controllers, bios, lenovo stuff? example on my thinkpad with battery thresholds set while plugged in the battery percentage dropped ~7% over the course of  3 hours 
+my suggestion to your problem is set the stop threshold to 81 
+
+as for the readme and conf example sure i can add it and shadyg56 if you would like to help me out that would be great!
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Clear, let's merge this and @shadeyg56 I hope you will create a follow up PR to update the README.
+
+@PurpleWazard  thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

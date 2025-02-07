@@ -1,0 +1,185 @@
+
+        <html>
+        <head>
+            <title>Issue #753: [Feature] Xbox controller's battery makes it switch to battery profile</title>
+        </head>
+        <body>
+            <h1>[Feature] Xbox controller's battery makes it switch to battery profile</h1>
+            <p><strong>Issue #753</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? ✅
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)? ❌
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)? ✅
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)? ✅
+
+### Error output:
+```text
+Add/paste error output in case of failed installation or other failing component
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+auto-cpufreq --debug
+
+Using settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------------------------------------------------------
+
+Linux distro: Garuda Linux Soaring BirdOfPrey
+Linux kernel: 6.10.0-zen1-2-zen
+Processor: Intel(R) Core(TM) i7-8700K CPU @ 3.70GHz
+Cores: 12
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3700 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      8.2%        37 °C       800 MHz
+CPU1     14.9%        37 °C       800 MHz
+CPU2      3.0%        37 °C       800 MHz
+CPU3     14.0%        37 °C       800 MHz
+CPU4      6.0%        38 °C       800 MHz
+CPU5      9.3%        36 °C       800 MHz
+CPU6     10.0%        37 °C       800 MHz
+CPU7      6.0%        37 °C       800 MHz
+CPU8      4.0%        37 °C       800 MHz
+CPU9      8.9%        37 °C       800 MHz
+CPU10      5.1%        38 °C       801 MHz
+CPU11      7.9%        36 °C       800 MHz
+
+CPU fan speed: 91 RPM
+
+CPU fan speed: 0 RPM
+
+auto-cpufreq version: Version         : 2.3.0-1
+
+Python: 3.12.4
+psutil package: 6.0.0
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: Desktop
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.12 %
+
+Total CPU usage: 2.0 %
+Total system load: 1.55
+Average temp. of all cores: 44.17 °C
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+---
+
+Few months ago I have copied default config from readme to my conf file on my desktop pc and only changed turboboost to always. I was playing games in Windows vm with xbox wireless adapter passed to it back then. 
+
+Last week I tried gaming natively on Linux and installed xone driver (xone-dkms in aur) which reports battery level of controller. I then tried playing FS22 (pretty CPU intensive) and it worked great (90-130 fps)... until I connected controller and fps dropped to 30. Then I tried connecting it with wire and it worked normally (because controller doesn't report battery usage when plugged). I noticed that cpu frequency was a bit low (800 MHz). Then I went to look at output of `auto-cpufreq status` and saw that it is using powersave governor and that (controller's) battery was discharging.
+
+In debug output I noticed that program detects computer type. Why doesn't it then just ignore the battery entry in config if desktop type is detected?
+
+I tried connecting my motorcycle helmet intercom to pc and its battery wasn't detected in auto-cpufreq.
+
+Then I looked into `/sys/class/power_supply` and found that xone has made an entry named `gip0.0`
+Contents of uevent to help you filter it out:
+```
+DEVTYPE=power_supply
+POWER_SUPPLY_NAME=gip0.0
+POWER_SUPPLY_TYPE=Battery
+POWER_SUPPLY_STATUS=Discharging
+POWER_SUPPLY_CAPACITY_LEVEL=High
+POWER_SUPPLY_SCOPE=Device
+POWER_SUPPLY_MODEL_NAME=Microsoft Xbox Controller
+```</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>huh thats weird but makes sense. for the time being try overriding the Governor in the auto-cpufreq gui. this will keep the cpu at full performance even when on battery.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>In addition to what @PurpleWazard said, alternatively you can also [use --force flag](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#2---force-governor-override), or [config file](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#3-auto-cpufreq-config-file).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Seems we need more intelligent battery checking [here](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto_cpufreq/core.py#L245).
+We could add `gip0.0` to the power supply ignore list that is defined at the top of the file, but it would be nice to have a solution that keeps this from happening again</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>timrosu:</strong></p>
+                    <p>@shadeyg56 That would be the best solution. And maybe you could also ignore all batteries if desktop is detected + possible override in conf file (in case of ups).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>timrosu:</strong></p>
+                    <p>@AdnanHodzic I made battery portion of config the same as charger as soon as I found out that auto-cpufreq is impacting performance. But it would be nice to have a way to filter out batteries. I haven't yet tested it with xone driver on laptop, but I suspect it would go into battery mode if I connect a controller to a charging laptop.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@timrosu appended "feature", until one of the contributors or I get a chance to take a look at this. If you or anyone else wants to give it a try in implementing this functionality, please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>so my idea to fix this is to add an section the the config file where you can ignore specified batteries however then all will be included by default. is this the way this should be inplmented or wanted? or should we just hard code to ingore /sys/class/power_supply/gip* ?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>timrosu:</strong></p>
+                    <p>@PurpleWazard I think it would be best to add option to add batteries to ignore in config file and then show this option in readme. Names of problematic batteries could be included by default in conf file and ignoring enabled.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>@timrosu I submitted a PR wanna try it out</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> @timrosu I submitted a PR wanna try it out
+
+Please check if #760 fixes your problem, or if any additional changes need to be made before merging it.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>timrosu:</strong></p>
+                    <p>@PurpleWazard Great. It works.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>timrosu:</strong></p>
+                    <p>@AdnanHodzic I think it's good as it is (apart from spelling mistake in config comment).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

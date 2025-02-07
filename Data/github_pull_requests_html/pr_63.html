@@ -1,0 +1,125 @@
+
+        <html>
+        <head>
+            <title>Pull Request #63: Added support for AMD. More refactoring</title>
+        </head>
+        <body>
+            <h1>Added support for AMD. More refactoring</h1>
+            <p><strong>Pull Request #63</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>fixes #17
+
+- Added get_avail_powersave() (and performance).
+  This function returns the most energy(and performance) efficient governor.
+  This should fix AMD issue when powersave is not available
+  but "ondemand" or "schedutil" are present
+
+- Cleaned up and refactored.
+  Added more convenient util functions.
+  Also made it more pythonic, reduced subprocess calls, made it more modular
+
+- Added support for setting turbo boost for AMD and Intel (intel_pstate and cpufreq driver)
+
+- Tested on Intel and AMD machines and it works fine
+    - It at least doesn't  fail
+    - performance/powersave is 
+    - turbo is switching on high CPU load.
+
+- It needs more testing</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>@AdnanHodzic  please, don't review it. Just tried it on amd and have issues.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>@AdnanHodzic now I tested it on AMD and fixed all related errors.
+Didn't test snap version, as I have POP! OS
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>I would suggest to "squash merge" as I did a lot of garbage commits that should not be displayed in the master :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I'll definitely squash it before merging, so no worries about how many commits you make :)
+
+However, I have problem testing the changes:
+
+```
+git checkout -b "Red-Eyed-fix_\#17_amd" "master"
+fatal: 'Red-Eyed-fix_\#17_amd' is not a valid branch name.
+git checkout -b "Red-Eyed:fix_#17_amd" "master"
+fatal: 'Red-Eyed:fix_#17_amd' is not a valid branch name.
+```
+
+Could you maybe change the branch name so it doesn't have `#` in it (which I think is the problem with `bash`)?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>yep, 1 min</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>recreated #67 </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>@AdnanHodzic thanks for mentioned me in Release Notes!
+I would change description for AMD: `acpitz` -> [k10temp](https://www.kernel.org/doc/Documentation/hwmon/k10temp)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> @AdnanHodzic thanks for mentioned me in Release Notes!
+
+Of course! I had to find a way to thank you for the effort you put into this release :)
+
+> I would change description for AMD: `acpitz` -> [k10temp](https://www.kernel.org/doc/Documentation/hwmon/k10temp)
+
+Updated. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>fernando-inf:</strong></p>
+                    <p>Not function whit AMD V1605B:
+
+`$ sudo auto-cpufreq --live
+
+Note: You can quit live mode by pressing "ctrl+c"
+
+----------------------------------- Warning -----------------------------------
+
+Detected running GNOME Power Profiles daemon service!
+This daemon might interfere with auto-cpufreq and has been disabled.
+
+This daemon is not automatically disabled in "monitor" mode and
+will be enabled after auto-cpufreq is removed.
+
+
+-------------------------------------------------------------------------------
+
+
+------------------ Checking for necessary scaling governors -------------------
+
+ERROR:
+
+Couldn't find any of the necessary scaling governors.
+`</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

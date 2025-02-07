@@ -1,0 +1,155 @@
+
+        <html>
+        <head>
+            <title>Issue #236: Python "hidden" parameter error after install</title>
+        </head>
+        <body>
+            <h1>Python "hidden" parameter error after install</h1>
+            <p><strong>Issue #236</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+```text
+Traceback (most recent call last):
+  File "/usr/local/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.0', 'auto-cpufreq')
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 658, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 1445, in run_script
+    exec(script_code, namespace, namespace)
+  File "/usr/local/lib/python3.6/dist-packages/auto_cpufreq-1.0-py3.6.egg/EGG-INFO/scripts/auto-cpufreq", line 25, in <module>
+  File "/usr/lib/python3/dist-packages/click/decorators.py", line 170, in decorator
+    _param_memo(f, OptionClass(param_decls, **attrs))
+  File "/usr/lib/python3/dist-packages/click/core.py", line 1460, in __init__
+    Parameter.__init__(self, param_decls, type=type, **attrs)
+TypeError: __init__() got an unexpected keyword argument 'hidden'
+[auto-cpufreq_issue-with-hidden-parameter.txt](https://github.com/AdnanHodzic/auto-cpufreq/files/7027887/auto-cpufreq_issue-with-hidden-parameter.txt)
+
+```
+---
+
+### System information:
+```text
+Traceback (most recent call last):
+  File "/usr/local/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.0', 'auto-cpufreq')
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 658, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 1445, in run_script
+    exec(script_code, namespace, namespace)
+  File "/usr/local/lib/python3.6/dist-packages/auto_cpufreq-1.0-py3.6.egg/EGG-INFO/scripts/auto-cpufreq", line 26, in <module>
+  File "/usr/lib/python3/dist-packages/click/decorators.py", line 170, in decorator
+    _param_memo(f, OptionClass(param_decls, **attrs))
+  File "/usr/lib/python3/dist-packages/click/core.py", line 1460, in __init__
+    Parameter.__init__(self, param_decls, type=type, **attrs)
+TypeError: __init__() got an unexpected keyword argument 'hidden'
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Could you provide `sudo auto-cpufreq --debug` output? 
+
+I assume you installed using [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq#auto-cpufreq-installer), did you try installing using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq#snap-store)?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>jim-baker:</strong></p>
+                    <p>root@lt-558:/home/jbaker/auto-cpufreq# auto-cpufreq --debug
+
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 18.04 bionic
+Linux kernel: 5.4.0-81-generic
+Processor: Intel(R) Core(TM) i7-8850H CPU @ 2.60GHz
+Cores: 12
+Architecture: x86_64
+Driver: /bin/sh: 1: cpufreqctl.auto-cpufreq: not found
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2600 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  5.7%     46 °C     2600 MHz
+CPU1:	  0.0%     46 °C     2600 MHz
+CPU2:	  2.0%     47 °C     2600 MHz
+CPU3:	 60.6%     50 °C     2600 MHz
+CPU4:	  0.0%     47 °C     2600 MHz
+CPU5:	  0.0%     45 °C     2600 MHz
+CPU6:	  1.0%     46 °C     2600 MHz
+CPU7:	  0.0%     46 °C     2600 MHz
+CPU8:	  1.0%     47 °C     2600 MHz
+CPU9:	  0.0%     50 °C     2600 MHz
+CPU10:	  0.0%     47 °C     2600 MHz
+CPU11:	 63.6%     45 °C     2600 MHz
+
+auto-cpufreq version:
+Git commit: 33b5c4d
+
+Python: 3.6.9
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 6.7
+distro package 1.6.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.07 %
+
+Total CPU usage: 1.5 %
+Total system load: 0.91
+Average temp. of all cores: 46.833333333333336 °C 
+
+Currently using: /bin/sh: governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+
+root@lt-558:/home/jbaker/auto-cpufreq# 
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>jim-baker:</strong></p>
+                    <p>Here's the debug output. Sorry for not posting correctly the first time.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>jim-baker:</strong></p>
+                    <p>Sure.I posted it on girhub.Thanks!Sent from my Galaxy
+-------- Original message --------From: Adnan Hodzic ***@***.***> Date: 8/22/21  16:11  (GMT-05:00) To: AdnanHodzic/auto-cpufreq ***@***.***> Cc: jim-baker ***@***.***>, Author ***@***.***> Subject: Re: [AdnanHodzic/auto-cpufreq] Python "hidden" parameter error after install (#236) 
+Could you provide sudo auto-cpufreq --debug output?
+I assume you installed using auto-cpufreq-installer, did you try installing using Snap package?
+
+—You are receiving this because you authored the thread.Reply to this email directly, view it on GitHub, or unsubscribe.Triage notifications on the go with GitHub Mobile for iOS or Android.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Since you're using Ubuntu anyways simply install it using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq#snap-store)?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>jim-baker:</strong></p>
+                    <p>I suppose... But I really don't like snap...What's wrong with my workaround?Just curious  -- because it "works" but I don't know what side effects it may create?Thanks for taking the time to respond. Sent from my Galaxy
+-------- Original message --------From: Adnan Hodzic ***@***.***> Date: 8/23/21  03:04  (GMT-05:00) To: AdnanHodzic/auto-cpufreq ***@***.***> Cc: jim-baker ***@***.***>, State change ***@***.***> Subject: Re: [AdnanHodzic/auto-cpufreq] Python "hidden" parameter error after install (#236) 
+Since you're using Ubuntu anyways simply install it using Snap package?
+
+—You are receiving this because you modified the open/close state.Reply to this email directly, view it on GitHub, or unsubscribe.Triage notifications on the go with GitHub Mobile for iOS or Android.
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

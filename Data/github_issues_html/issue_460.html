@@ -1,0 +1,182 @@
+
+        <html>
+        <head>
+            <title>Issue #460: Use usr/local/bin instead of usr/bin for Silverblue and other immutable OSs</title>
+        </head>
+        <body>
+            <h1>Use usr/local/bin instead of usr/bin for Silverblue and other immutable OSs</h1>
+            <p><strong>Issue #460</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Fixes #394 </p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Great stuff and thank you for your contribution! </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>For future references: This should make it also compatible with OpenSUSE MicroOS and other immutable operating systems.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>SunkenHero:</strong></p>
+                    <p>Great work.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@gimbles while reviewing #459 I noticed a particular regression introduced with this PR. 
+
+Namely, prior to these changes if you perform an install auto-cpufreq with `sudo ./auto-cpufreq-installer --install` followed by installation of daemon `sudo auto-cpufreq --install`, then you decide to remove everything with `sudo ./auto-cpufreq-installer --remove` you'll get following output:
+
+```
+sudo ./auto-cpufreq-installer --remove 
+
+--------------------- Removing auto-cpufreq daemon ----------------------
+
+* Turn on bluetooth on boot
+
+----------------------------------- Warning -----------------------------------
+
+Detected GNOME Power Profiles daemon service is stopped!
+This service will now be enabled and started again.
+
+* Enabling GNOME power profiles
+Removed "/etc/systemd/system/power-profiles-daemon.service".
+Created symlink /etc/systemd/system/graphical.target.wants/power-profiles-daemon.service → /lib/systemd/system/power-profiles-daemon.service.
+
+------------------ Running auto-cpufreq daemon removal script ------------------
+
+* Stopping auto-cpufreq daemon (systemd) service
+
+* Disabling auto-cpufreq daemon (systemd) at boot
+Removed "/etc/systemd/system/multi-user.target.wants/auto-cpufreq.service".
+
+* Removing auto-cpufreq daemon (systemd) unit file
+
+* Reloading systemd manager configuration
+reset failed
+
+------------------------- auto-cpufreq daemon removed -------------------------
+
+auto-cpufreq successfully removed.
+
+-------------------------------------------------------------------------------
+
+
+-------------------------------------------------------------------------------
+
+auto-cpufreq tool and all its supporting files successfully removed.
+
+-------------------------------------------------------------------------------
+```
+
+However, after these changes have been merged if you do the same steps as mentioned above, you'll only be presented with:
+
+```
+sudo ./auto-cpufreq-installer --remove 
+
+-------------------------------------------------------------------------------
+
+auto-cpufreq tool and all its supporting files successfully removed.
+
+-------------------------------------------------------------------------------
+```
+
+I'd really like if same more verbose removal output was brought back as it gives more clarity to user on what happened. Can you please create a new PR for this? Thank you</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>I don't really have an idea on why this regression is caused.
+
+I didn't even touch the installer, just replaced a few paths in core.py </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I don't really have an idea on why this regression is caused.
+> 
+> I didn't even touch the installer, just replaced a few paths in core.py
+
+@gimbles I know, I'm also baffled myself. But have tracked it down where d77c1de commit (one before these changes were merged) doesn't have this behavior. 
+
+@SunkenHero can you confirm if you have this problem as well?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>abvee:</strong></p>
+                    <p>The installer script just evaluates and runs `/usr/local/bin/auto-cpufreq --remove` when it tests that `auto-cpufreq-remove` exists. 
+
+If this test fails, then it's likely that nothing is removed and the function silently goes on to print `auto-cpufreq tool and all its supporting files successfully removed.` 
+
+This would also explain the lack of messages.
+
+We should add a check in the installer to see if the test is successful or not, which would also help in debugging this particular issue. So something like this:
+
+```
+  if [ -f $srv_remove ]; then
+    eval $tool_proc_rm
+  else
+  	separator
+	printf "Failed to uninstall"
+	separator
+	return 1;
+  fi
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> We should add a check in the installer to see if the test is successful or not, which would also help in debugging this particular issue. So something like this:
+> 
+> ```
+>   if [ -f $srv_remove ]; then
+>     eval $tool_proc_rm
+>   else
+>   	separator
+> 	printf "Failed to uninstall"
+> 	separator
+> 	return 1;
+>   fi
+> ```
+
+@abvee please give it a try and needless to say create a PR if you're successful :)
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>abvee:</strong></p>
+                    <p>> @abvee please give it a try and needless to say create a PR if you're successful :)
+
+I have some code, but I'm a bit lost on what to do with it. It's my first time actually contributing to a repository, so I'm not sure what best practice here is..... do I make a fork of @gimbles repository or just a new branch and PR on my own fork that includes my installer changes ?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@abvee you would create a PR from auto-cpufreq `master` branch. Changes made in this PR by @gimbles have already been merged.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>abvee:</strong></p>
+                    <p>> @abvee you would create a PR from auto-cpufreq master branch. Changes made in this PR by @gimbles have already been merged.
+
+But what about the changes I have made to the installer in #459 that have not been merged yet ? Do I modify the original install script and let you do the merging ? Sorry for all the unrelated questions, couldn't find any proper answers on google :(</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> But what about the changes I have made to the installer in https://github.com/AdnanHodzic/auto-cpufreq/pull/459 that have not been merged yet ? Do I modify the original install script and let you do the merging ?
+
+Don't worry about it, I'll merge it as soon as this regression has been fixed. Reason why I didn't merge it yet is I'm trying to reduce entropy around this issue. </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

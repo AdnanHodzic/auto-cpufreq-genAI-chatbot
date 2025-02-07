@@ -1,0 +1,74 @@
+
+        <html>
+        <head>
+            <title>Issue #627: Ignore "Device or resource busy" error message when writing value</title>
+        </head>
+        <body>
+            <h1>Ignore "Device or resource busy" error message when writing value</h1>
+            <p><strong>Issue #627</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Potential fix for the issue described in #563 by ignoring "write error: Device or resource busy" error message when writing a value.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Thank you for the PR, since these changes seem strictly AMD oriented, I've asked [on auto-cpufreq discord channel](https://discord.gg/Sjauxtj6kH) if someone could test these changes.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Tresillo2017:</strong></p>
+                    <p>Tried on my laptop with a Ryzen 7 and looks like it's not apearing anymore on journalctl but I have the same problem where on auto-cpufreq it shows that it can set EPP because it not supported
+![image](https://github.com/AdnanHodzic/auto-cpufreq/assets/56476330/96bbabc3-4dcf-46ff-9140-b7a02fa02fd4)
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@Tresillo2017 this issue was fixed with #631 can you make sure you have pulled the latest changes on `master` branch? </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>I'm not sure this is related to #631 since that was a fix for Intel CPUs.
+
+You're using the `acpi-cpufreq` driver which does not support EPP, so this is not a bug. If you would like EPP support, you'll need to switch to using `amd-pstate-epp`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Tresillo2017:</strong></p>
+                    <p>> I'm not sure this is related to #631 since that was a fix for Intel CPUs.
+> 
+> You're using the `acpi-cpufreq` driver which does not support EPP, so this is not a bug. If you would like EPP support, you'll need to switch to using `amd-pstate-epp`
+
+And how can I do that? By not typing anything into the grub parameters?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> > I'm not sure this is related to #631 since that was a fix for Intel CPUs.
+> > You're using the `acpi-cpufreq` driver which does not support EPP, so this is not a bug. If you would like EPP support, you'll need to switch to using `amd-pstate-epp`
+> 
+> And how can I do that? By not typing anything into the grub parameters?
+
+Explained as part of: https://github.com/AdnanHodzic/auto-cpufreq/#troubleshooting</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Tresillo2017:</strong></p>
+                    <p>> > > I'm not sure this is related to #631 since that was a fix for Intel CPUs.
+> > > You're using the `acpi-cpufreq` driver which does not support EPP, so this is not a bug. If you would like EPP support, you'll need to switch to using `amd-pstate-epp`
+> > 
+> > And how can I do that? By not typing anything into the grub parameters?
+> 
+> Explained as part of: https://github.com/AdnanHodzic/auto-cpufreq/#troubleshooting
+
+That was a really quick reply, thx for that. And now it's working as supposed, let's se if my battery life improves I was getting 3-4h of battery life out of the box on a thinkpad e16 amd.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

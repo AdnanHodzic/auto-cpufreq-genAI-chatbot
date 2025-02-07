@@ -1,0 +1,62 @@
+
+        <html>
+        <head>
+            <title>Issue #60: UserWarning: Unable to read properties of /sys/class/power_supply/hidpp_battery_0: [Errno 2]</title>
+        </head>
+        <body>
+            <h1>UserWarning: Unable to read properties of /sys/class/power_supply/hidpp_battery_0: [Errno 2]</h1>
+            <p><strong>Issue #60</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hi,
+
+With a fresh install today, I get this when I launch auto-cpufreq
+
+```
+$ sudo auto-cpufreq 
+/usr/local/lib/python3.6/dist-packages/power/linux.py:100: UserWarning: Unable to read properties of /sys/class/power_supply/hidpp_battery_0: [Errno 2] No such file or directory: '/sys/class/power_supply/hidpp_battery_0/present'
+  warnings.warn("Unable to read properties of {path}: {error}".format(path=supply_path, error=str(e)))
+Traceback (most recent call last):
+  File "/usr/local/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.0', 'auto-cpufreq')
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 658, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 1445, in run_script
+    exec(script_code, namespace, namespace)
+  File "/usr/local/lib/python3.6/dist-packages/auto_cpufreq-1.0-py3.6.egg/EGG-INFO/scripts/auto-cpufreq", line 20, in <module>
+  File "/usr/lib/python3/dist-packages/click/decorators.py", line 170, in decorator
+    _param_memo(f, OptionClass(param_decls, **attrs))
+  File "/usr/lib/python3/dist-packages/click/core.py", line 1460, in __init__
+    Parameter.__init__(self, param_decls, type=type, **attrs)
+TypeError: __init__() got an unexpected keyword argument 'hidden'
+```
+Context:
+- DELL XPS 13 / i7-8550U
+- Ubuntu 18.04.4</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Many new changes have been implemented as part of 1.2 release and I believe your problem is solved. 
+
+Install latest version using snap package:
+
+```
+sudo snap install auto-cpufreq
+```
+
+or pull the latest changes and run:
+
+```
+sudo ./auto-cpufreq-installer
+```
+
+In case this doesn't solve your problem, please feel free to re-open this issue.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

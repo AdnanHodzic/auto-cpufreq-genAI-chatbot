@@ -1,0 +1,188 @@
+
+        <html>
+        <head>
+            <title>Discussion #613: GUI won't run</title>
+        </head>
+        <body>
+            <h1>GUI won't run</h1>
+            <p><strong>Discussion #613</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I'm on EndeavourOS and KDE Plasma.  I installed auto-cpufreq from the AUR and installed/started it in the terminal.  But the GUI won't run.  The app icon shows for a second or two and then disappears with no error message.  There were some 'fail' messages on first install (python?), so I uninstalled/reinstalled, no fails the second time.  I couldn't find any other posts describing this.  Any tips on tracking down the problem?</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Tagging @MusicalArtist12 as a AUR maintainer. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>MusicalArtist12:</strong></p>
+                    <p>My guess is the .desktop files didn't copy from the AUR build. They need to because packaging Python for arch Linux is weird. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>doorbuster:</strong></p>
+                    <p>I copied auto-cpufreq-gtk.desktop from the scripts folder in the zip file to /usr/share/auto-cpufreq/scripts and that didn't do it.  There was a .desktop file in the snaps folder but I assume that's for the snaps version.  Am I on the right track?  I'm new-ish to linux, so speak plainly, please. ;)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>MusicalArtist12:</strong></p>
+                    <p>just double checking, you're installing using `makepkg` right? make sure you're also using the `auto-cpufreq` AUR package, not `auto-cpufreq-git` AUR package.
+
+if both of those cases are true, try running `auto-cpufreq-gtk` in the command line. there should be more output there. 
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>doorbuster:</strong></p>
+                    <p>Yes, the auto-cpufreq AUR package.  I used yay to install.  When I run auto-cpufreq-gtk, the prompt returns after 2 seconds of nothing, with the auto-cpufreq icon flashing in the task manager for about 1/2 second.  No output or error message of any kind.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>MusicalArtist12:</strong></p>
+                    <p>wierd, could you remove the package and reinstall, and post the install log from yay? I don't have much to go off of currently. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>doorbuster:</strong></p>
+                    <p>Did that, same behavior.  /var/log/auto-cpufreq.log is empty.  /var/log/pacman.log has this:
+[2023-12-11T11:39:29-0500] [ALPM] transaction started
+[2023-12-11T11:39:29-0500] [ALPM] installed python-distro (1.8.0-3)
+[2023-12-11T11:39:29-0500] [ALPM] installed python-mako (1.2.4-3)
+[2023-12-11T11:39:29-0500] [ALPM] installed python-markdown (3.5.1-1)
+[2023-12-11T11:39:29-0500] [ALPM] installed gobject-introspection (1.78.1-1)
+[2023-12-11T11:39:29-0500] [ALPM] installed python-click (8.1.7-1)
+[2023-12-11T11:39:29-0500] [ALPM] transaction completed
+[2023-12-11T11:39:29-0500] [ALPM] running '30-systemd-update.hook'...
+[2023-12-11T11:39:29-0500] [ALPM] running '90-packagekit-refresh.hook'...
+[2023-12-11T11:39:29-0500] [PACMAN] Running 'pacman -D -q --asdeps --config /etc/pacman.conf -- gobject-introspection python-click python-distro'
+[2023-12-11T11:39:32-0500] [PACMAN] Running 'pacman -U --config /etc/pacman.conf -- /home/dave/.cache/yay/auto-cpufreq/auto-cpufreq-2.1.0-4-any.pkg.tar.zst'
+[2023-12-11T11:39:36-0500] [ALPM] transaction started
+[2023-12-11T11:39:36-0500] [ALPM] installed auto-cpufreq (2.1.0-4)
+[2023-12-11T11:39:36-0500] [ALPM-SCRIPTLET] 
+[2023-12-11T11:39:36-0500] [ALPM-SCRIPTLET] auto-cpufreq 2.1.0-4 installed
+[2023-12-11T11:39:36-0500] [ALPM-SCRIPTLET] 
+[2023-12-11T11:39:36-0500] [ALPM-SCRIPTLET] Important notice: the daemon installer provided does not work, instead run the following command:
+[2023-12-11T11:39:36-0500] [ALPM-SCRIPTLET] 
+[2023-12-11T11:39:36-0500] [ALPM-SCRIPTLET] systemctl enable --now auto-cpufreq
+[2023-12-11T11:39:36-0500] [ALPM-SCRIPTLET] 
+[2023-12-11T11:39:36-0500] [ALPM-SCRIPTLET] To view live log, run:
+[2023-12-11T11:39:36-0500] [ALPM-SCRIPTLET] 
+[2023-12-11T11:39:36-0500] [ALPM-SCRIPTLET] auto-cpufreq --stats
+[2023-12-11T11:39:36-0500] [ALPM-SCRIPTLET] 
+[2023-12-11T11:39:36-0500] [ALPM-SCRIPTLET] If the GNOME Power Profiles daemon is installed, it must be masked manually as it conflicts with auto-cpufreq.service:
+[2023-12-11T11:39:36-0500] [ALPM-SCRIPTLET] 
+[2023-12-11T11:39:36-0500] [ALPM-SCRIPTLET] sudo systemctl mask power-profiles-daemon.service
+[2023-12-11T11:39:36-0500] [ALPM-SCRIPTLET] 
+[2023-12-11T11:39:36-0500] [ALPM] transaction completed
+[2023-12-11T11:39:36-0500] [ALPM] running '30-systemd-update.hook'...
+[2023-12-11T11:39:36-0500] [ALPM] running '90-packagekit-refresh.hook'...
+[2023-12-11T11:39:36-0500] [ALPM] running 'update-desktop-database.hook'...
+[2023-12-11T11:39:36-0500] [PACMAN] Running 'pacman -D -q --asexplicit --config /etc/pacman.conf -- auto-cpufreq'
+
+If there are other log files I don't know about them.  auto-cpufreq is running; maybe getting the gui to run is more trouble than it's worth...  :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>MusicalArtist12:</strong></p>
+                    <p>it doesn't say anything when you run auto-cpufreq-gtk in the console? because at that point it might be a driver issue. 
+
+like for me i get:
+```
+[julia@Julia-Yoga ~]$ auto-cpufreq-gtk
+Gtk-Message: 13:18:45.295: Failed to load module "colorreload-gtk-module"
+Gtk-Message: 13:18:45.296: Failed to load module "window-decorations-gtk-module"
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>doorbuster:</strong></p>
+                    <p>Nothing at all.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>MusicalArtist12:</strong></p>
+                    <p>can you run `$ which auto-cpufreq-gtk` for me and send me the output? </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>doorbuster:</strong></p>
+                    <p>➜ which auto-cpufreq-gtk  
+/usr/bin/auto-cpufreq-gtk
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>doorbuster:</strong></p>
+                    <p>Here's the contents of that file:
+
+```
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+import re
+import sys
+from auto_cpufreq.bin.auto_cpufreq_gtk import main
+if __name__ == "__main__":
+     sys.argv[0] = re.sub(r"(-script\.pyw|\.exe)?$", "", sys.argv[0])
+     sys.exit(main())
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>MusicalArtist12:</strong></p>
+                    <p>i'm curious, try running `python /usr/bin/auto-cpufreq-gtk`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>doorbuster:</strong></p>
+                    <p>Same thing happens.  No output.  I tried Python alone, it starts.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>MusicalArtist12:</strong></p>
+                    <p>i'm stumped at the moment, i'll let you know if i think of something. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>doorbuster:</strong></p>
+                    <p>Just updated to the latest.  Though I'd report that the GUI is still not working.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>cire0x:</strong></p>
+                    <p>yep, the gui is not working. I have the same OS as OP</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>doorbuster:</strong></p>
+                    <p>Same behavior after updating to 2.3.0 yesterday.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>MusicalArtist12:</strong></p>
+                    <p>does this happen if you use the installer provided by this repo? if so, then this might be a larger problem...</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>doorbuster:</strong></p>
+                    <p>As for me, I've only ever installed it with yay from the AUR. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>MusicalArtist12:</strong></p>
+                    <p>Try using the installer provided by this repo/as documented in the readme (not with yay), and let me know what happens</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>doorbuster:</strong></p>
+                    <p>Followed instructions, and GUI now starts.  Thanks!  (Sure prefer the convenience of the AUR, though.)</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

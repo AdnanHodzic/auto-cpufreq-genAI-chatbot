@@ -1,0 +1,149 @@
+
+        <html>
+        <head>
+            <title>Issue #752: Add support for setting "Platform Profile"</title>
+        </head>
+        <body>
+            <h1>Add support for setting "Platform Profile"</h1>
+            <p><strong>Issue #752</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Allow overriding/setting [Platform Profile](https://www.kernel.org/doc/html/latest/userspace-api/sysfs-platform_profile.html) on supported platform for battery and charger profiles. Setting this profile could help avoid throttling issues in high performance mode on charging profile (like throttling due to lap-mode on ThinkPads) and save some power in battery mode if firmware supports.
+
+Support for setting this in TLP: https://linrunner.de/tlp/settings/platform.html#platform-profile-on-ac-bat
+
+Closes #468 </p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>This is great and a true game changer, as it resolved throttling issues I had on my X1 Carbon! Added a single comment, if you could address it that'd be great.
+
+I'm also thinking it would be amazing if this could be extended so Platform Profiles would be used by default even if they are not defined in config file (if they exist on users system).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Also, I've been using Linux for 20+ years, but I never seen load this high :grin: 
+
+So this bit troubling when on `powersave` governor, with using `balanced` platform profile (with `low-power` its even worse). Can you confirm you something similiar?
+
+```
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: discharging
+
+Setting to use: "powersave" governor
+Setting to use: "power" EPP
+Setting to use: "balanced" Platform Profile
+
+Total CPU usage: 19.6 %
+Total system load: 229.18
+Average temp. of all cores: 53.00 °C 
+
+High CPU load (load average: 229.25, 216.40, 159.20)
+Optimal total CPU usage: 19.6%, high average core temp: 53.0°C
+Setting turbo boost: off
+```
+
+After plugging in computer back in power, load cleared up and got to "normal" levels in matter of minutes:
+
+```
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+Setting to use: "performance" EPP
+Setting to use: "performance" Platform Profile
+
+Total CPU usage: 9.3 %
+Total system load: 1.52
+Average temp. of all cores: 64.75 °C 
+
+Load optimal (load average: 1.52, 50.65, 103.22)
+Optimal total CPU usage: 9.3%, high average core temp: 64.75°C
+Setting turbo boost: off
+```
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>BOOTMGR:</strong></p>
+                    <p>@AdnanHodzic Thanks for having a look, I have added reference to Kernel API specs in example configs. 
+
+Regarding high load, even on low-power profile, It is normal for me on my Thinkpad L14 with 11th gen CPU.
+```
+Battery is: discharging
+
+Setting to use: "powersave" governor
+Setting to use: "power" EPP
+Setting to use: "low-power" Platform Profile
+
+Total CPU usage: 56.7 %
+Total system load: 5.13
+Average temp. of all cores: 44.75 °C
+
+High CPU load (load average: 5.13, 2.51, 1.82)
+Setting turbo boost: on
+```
+
+Are you suggesting that we set a default platform profile if the user hasn't specified one? I was considering not enforcing this for now to avoid disrupting the current user experience. However, if you feel differently, I can create a patch to enable this by default. 
+
+If we decide to go with a default setting, I would like your input on the default values for both profiles. The [ABI specs](https://github.com/torvalds/linux/blob/master/Documentation/ABI/testing/sysfs-platform_profile) list profile names but don't require any specific ones. Would it be reasonable to assume and set "performance" for the charging profile and "low-power" for the battery profile?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Regarding high load, even on low-power profile, It is normal for me on my Thinkpad L14 with 11th gen CPU.
+> 
+> ```
+> Battery is: discharging
+> 
+> Setting to use: "powersave" governor
+> Setting to use: "power" EPP
+> Setting to use: "low-power" Platform Profile
+> 
+> Total CPU usage: 56.7 %
+> Total system load: 5.13
+> Average temp. of all cores: 44.75 °C
+> 
+> High CPU load (load average: 5.13, 2.51, 1.82)
+> Setting turbo boost: on
+> ```
+
+After throughout testing, for on battery settings, this works best for me and keeps my load at minimum:
+
+```
+[battery]
+# see available governors by running: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+# preferred governor
+governor = powersave
+
+# EPP: see available preferences by running: cat /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_available_preferences
+energy_performance_preference = power
+
+platform_profile = default
+```
+
+But I guess everyone's mileage might and will vary. 
+
+> Are you suggesting that we set a default platform profile if the user hasn't specified one? I was considering not enforcing this for now to avoid disrupting the current user experience. However, if you feel differently, I can create a patch to enable this by default.
+
+I'm going to merge these changes, this will be a great feature to have with upcoming release. 
+
+What I was trying to say, it would be great that Platform Profiles are included in auto-cpufreq "by default", so if user doesn't enable it in auto-cpufreq.conf file they would still use it. To play it safe I would probably go with default settings? We would need to be testing to establish what is the best profile to go with it. As on battery I go with "default" but on power I go with "performance". 
+
+Either way, that's why it's the best to introduce these kind of changes with config file, as people can they play with it first, and we can determine what works the best for everyone. I also asked everyone on [auto-cpufreq Discord community](https://discord.com/channels/1158239366251020361/1158239367337349164/1269569844102299761) to give it a try so we can get as much data as possible.
+
+Thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases) and I look forward to a new PR to have PP on by default :) 
+
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

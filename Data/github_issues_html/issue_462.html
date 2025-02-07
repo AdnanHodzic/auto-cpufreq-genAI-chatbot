@@ -1,0 +1,96 @@
+
+        <html>
+        <head>
+            <title>Issue #462: Fix for Regression in #460</title>
+        </head>
+        <body>
+            <h1>Fix for Regression in #460</h1>
+            <p><strong>Issue #462</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>The uninstall script was checking old locations (`/usr/bin/<file>`) that were changed by @gimbles
+
+When the check to see if `/usr/bin/auto-cpufreq-remove` existed failed (since it's now at `/usr/local/bin/auto-cpufreq-remove`), the removal didn't occur fully and the installer silently goes on until the  success message is wrongly printed.
+
+Just adding  a check for this should make it work now
+
+However, people who downloaded older versions of `auto-cpufreq` will still have those scripts at the old locations (in `/usr/bin`), so I added some variables with an `_old` suffix so people cloning a new repo and running the script can still uninstall their old versions of `auto-cpufreq`.
+
+We could also use `/usr/local/bin` for only Silverblue, which is something I can work on later, but this should fix the script for now.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>SunkenHero:</strong></p>
+                    <p>I quickly looked over it and it looks like everything should work.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> The uninstall script was checking old locations (`/usr/bin/<file>`) that were changed by @gimbles
+> 
+> When the check to see if `/usr/bin/auto-cpufreq-remove` existed failed (since it's now at `/usr/local/bin/auto-cpufreq-remove`), the removal didn't occur fully and the installer silently goes on until the success message is wrongly printed.
+> 
+> Just adding a check for this should make it work now
+> 
+> However, people who downloaded older versions of `auto-cpufreq` will still have those scripts at the old locations (in `/usr/bin`), so I added some variables with an `_old` suffix so people cloning a new repo and running the script can still uninstall their old versions of `auto-cpufreq`.
+
+Great thinking!
+
+> We could also use `/usr/local/bin` for only Silverblue, which is something I can work on later, but this should fix the script for now.
+
+Yea, for now it's fine and I don't mind keeping it under `/usr/local/bin`, as it would be good to have paths as unified as possible.
+
+Regarding your commit, you have a syntax error, please change line 192 to from:
+
+```
+  if [ -f $srv_remove -o -f $srv_remove_old]; then
+```
+
+to:
+
+```
+  if [ -f $srv_remove -o -f $srv_remove_old ]; then
+```
+
+I also get following error when I try to remove (older then this PR) auto-cpufreq installed from current `master` branch:
+
+```
+sudo ./auto-cpufreq-installer --remove
+
+-------------------------------------------------------------------------------
+Couldn't remove the auto-cpufreq daemon
+/usr/bin/auto-cpufreq-remove or /usr/bin/auto-cpufreq-remove do not exist.
+```
+
+and I'll run into some issue as part of your branch `abvee-460-regression` (even if prior to `--remove` I do `sudo ./auto-cpufreq-installer --remove`) whether auto-cpufreq daemon is installed or not ...</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>abvee:</strong></p>
+                    <p>> Regarding your commit, you have a syntax error, please change line 192 to from:
+
+My bad, I'll fix it
+
+> I also get following error when I try to remove (older then this PR) auto-cpufreq installed from current master branch:
+
+Like the idiot I am, I forgot to add `local` to the path. I just tested it, it should work now</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Perfect, and thank you for your contribution! </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>abvee:</strong></p>
+                    <p>> Perfect, and thank you for your contribution!
+
+Thanks :D</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

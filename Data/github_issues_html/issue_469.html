@@ -1,0 +1,164 @@
+
+        <html>
+        <head>
+            <title>Issue #469: Seems to not be creating essential files /sys/devices/system/cpu/cpu0/cpufreq/scaling_driver: No such file or directory</title>
+        </head>
+        <body>
+            <h1>Seems to not be creating essential files /sys/devices/system/cpu/cpu0/cpufreq/scaling_driver: No such file or directory</h1>
+            <p><strong>Issue #469</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+### Error output:
+```text
+Add/paste error output in case of failed installation or other failing component
+[ryanh@rpc-nb ~]$ sudo auto-cpufreq --install
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.9.7+1c9ff32a.post1.dirty', 'auto-cpufreq')
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/pkg_resources/__init__.py", line 672, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/pkg_resources/__init__.py", line 1479, in run_script
+    exec(script_code, namespace, namespace)
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/auto_cpufreq-1.9.7+1c9ff32a.post1.dirty-py3.11.egg/EGG-INFO/scripts/auto-cpufreq", line 226, in <module>
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/click/core.py", line 1130, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/click/core.py", line 1055, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/click/core.py", line 1404, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/click/core.py", line 760, in invoke
+    return __callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/auto_cpufreq-1.9.7+1c9ff32a.post1.dirty-py3.11.egg/EGG-INFO/scripts/auto-cpufreq", line 202, in main
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/auto_cpufreq-1.9.7+1c9ff32a.post1.dirty-py3.11.egg/auto_cpufreq/core.py", line 441, in gov_check
+  File "/opt/auto-cpufreq/venv/lib64/python3.11/site-packages/auto_cpufreq-1.9.7+1c9ff32a.post1.dirty-py3.11.egg/auto_cpufreq/core.py", line 260, in get_avail_gov
+  File "/usr/lib64/python3.11/pathlib.py", line 1058, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.11/pathlib.py", line 1044, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+auto-cpufreq --debug
+sudo auto-cpufreq --debug
+
+-------------------------------------------------------------------------------
+
+Linux distro: Nobara Linux 37 Thirty Seven
+Linux kernel: 6.0.18-301.fsync.fc37.x86_64
+Processor: AMD Ryzen 7 1700 Eight-Core Processor
+Cores: 16
+Architecture: x86_64
+Driver: cat: /sys/devices/system/cpu/cpu0/cpufreq/scaling_driver: No such file or directory
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 0 MHz
+CPU min frequency: 0 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  0.0%     50 °C     3200 MHz
+CPU1:	  1.0%     50 °C     3200 MHz
+CPU2:	  1.0%     50 °C     3200 MHz
+CPU3:	  0.0%     50 °C     3200 MHz
+CPU4:	  1.0%     50 °C     3200 MHz
+CPU5:	  1.0%     50 °C     3200 MHz
+CPU6:	  3.1%     50 °C     2851 MHz
+CPU7:	  0.0%     50 °C     3200 MHz
+CPU8:	  2.0%     50 °C     2594 MHz
+CPU9:	  1.0%     50 °C     2663 MHz
+CPU10:	  8.1%     50 °C     3200 MHz
+CPU11:	  0.0%     50 °C     3200 MHz
+CPU12:	  0.0%     50 °C     3200 MHz
+CPU13:	  1.0%     50 °C     2777 MHz
+CPU14:	  1.0%     50 °C     3200 MHz
+CPU15:	  0.0%     50 °C     3200 MHz
+
+auto-cpufreq version: 1.9.7 (git: 1c9ff32a.post1.dirty)
+
+Python: 3.11.1
+psutil package: 5.9.4
+platform package: 1.0.8
+click package: 8.1.3
+distro package: 1.8.0
+
+Computer type: Desktop
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.16 %
+
+Total CPU usage: 2.9 %
+Total system load: 0.65
+Average temp. of all cores: 49.85 °C 
+
+Currently using: cat: governor
+Warning: CPU turbo is not available
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+---
+
+auto-cpufreq is packaged and installed by default in Nobara. When it didn't work (same issue), I uninstalled it and reinstalled by cloning into the git repo and running the install script. I still get this issue. I have searched extensively though nobara and your own issues and haven't found any resolution to this problem other than on person who had it because they were installing in a VM (I am on bare metal). https://github.com/AdnanHodzic/auto-cpufreq/issues/387
+
+I have also created a thread about this on Nobara's discord however no replies so far https://discord.com/channels/110175050006577152/1062906444577505291
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Have you tried looking into #464 and #398?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Sgaytor:</strong></p>
+                    <p>> Have you tried looking into #464 and #398?
+
+Unfortunately this did not help. I edited and remade my grub config to disable AMD P-state however this resulted in the same error as before. The auto-cpufreq installer seems to be not creating the necessary files in my /sys/ directory. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>siddharthkumarjha:</strong></p>
+                    <p>To my limited knowledge isn't the file ```/sys/devices/system/cpu/cpu0/cpufreq/scaling_driver``` supposed to be created by kernel? (I could be wrong). I looked online for your issue and it seems like a BIOS or module problem. Try this thread maybe you will find your answer here:
+[https://bbs.archlinux.org/viewtopic.php?pid=1107422#p1107422](url)
+[https://www.pantz.org/software/cpufreq/usingcpufreqonlinux.html](url)
+[https://forum.endeavouros.com/t/how-to-use-amd-p-state-in-linux-5-17/25247/80?page=5](url)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing this issue due to inactivity. </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

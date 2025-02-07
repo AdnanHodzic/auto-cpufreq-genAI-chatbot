@@ -1,0 +1,321 @@
+
+        <html>
+        <head>
+            <title>Issue #323: PopOS pull request Snap permission denied</title>
+        </head>
+        <body>
+            <h1>PopOS pull request Snap permission denied</h1>
+            <p><strong>Issue #323</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I just made the pull request that fixed #276 but after updating through the Snap repository, I get this:
+
+
+```
+Warning: Cannot get distro name
+Pop!_OS detected
+Pop!_OS uses a symbolic link for the os-release file, this causes issues and can be fixed by converting to a hard link
+Attempting to change symlink to hard link for /etc/os-release -> /etc/pop-os/os-release
+Continue? [y/N] y
+Creating hard link for /etc/os-release
+sh: 1: sudo: Permission denied
+sh: 1: sudo: Permission denied
+```
+After some searching, it seems that Snap has issues running sudo from `os.system`. You may want to remove PR #311 and release 1.8.2 until this issue is resolved</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>emilyastranova:</strong></p>
+                    <p>I'll be at work all day, it's weird that it worked for me in my testing environment but not after pulling from the Snap repository this morning. Sorry for the faulty PR, if I get off of work today and this is not resolved then I will fix it myself</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>I see, snap container does it's job when touching the files I think. Thanks for reporting this.
+
+@AdnanHodzic maybe you know if this can be fixed, or that we have to exclude this option when running from inside snap.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>During #276 review process I somehow overlooked that this would be a problem when auto-cpufreq is installed as a Snap package. As in this case, auto-cpufreq is running as part of a container and doesn't have access to host system files. Hence, I just sent a [request for system-files interfaces (hardlink to /etc/os-release)](https://forum.snapcraft.io/t/request-for-system-files-interfaces-hardlink-to-etc-os-release-for-auto-cpufreq/28015) with my proposal how this problem should be fixed. 
+
+After this request is approved I would push proposed changes to `snap/snapcraft.yaml`, updating existing (or create a new) snap package release and problem would be fixed. In meantime, let's see what Canonical staff says regarding this request.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>@tyleraharrison I have one question. If you make this hardlink yourself, outside the snap. And then run the snap. Do you get the same error? 
+
+Are we 100% sure that hardlink `/etc/pop-os/os-release` solve the issue when using a snap? Before we do all kind of stuff to make an hardlink that in the end doesn't even fix the permission denied error.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>emilyastranova:</strong></p>
+                    <p>@bobslept Yes, I confirmed that even with the Snap install, doing the hard link manually fixes it for me. PopOS is my daily driver</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>> @bobslept Yes, I confirmed that even with the Snap install, doing the hard link manually fixes it for me. PopOS is my daily driver
+
+Ok, thank you :+1: 
+Just wanted to be sure :smile: 
+
+If we really have issues creating this stuff from snap context, we could always print a message that they have to create the hardlink themselfs with instructions and then exit. Instead of the automatic route. We will see what happends. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> If we really have issues creating this stuff from snap context, we could always print a message that they have to create the hardlink themselfs with instructions and then exit. Instead of the automatic route. We will see what happends.
+
+I was about to say this in my original message. In case [Canonical denies my request](https://forum.snapcraft.io/t/request-for-system-files-interfaces-hardlink-to-etc-os-release-for-auto-cpufreq/28015) since `/etc/os-release` is not a file own by auto-cpufreq. A simple change where if Snap and Pop OS is detected outputs how to do this manually.
+
+@tyleraharrison if you want you can already make these changes, as I'm planning to release v1.9.0 in next following days. In case changes are accepted by Canonical it'll be easy to remove the custom message what to do manually.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>emilyastranova:</strong></p>
+                    <p>I am writing a solution right now</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>emilyastranova:</strong></p>
+                    <p>@AdnanHodzic How does this look? Also what is your preferred way to detect if this is a Snap or not?
+
+If the program is not a Snap:
+```
+Warning: Cannot get distro name
+Pop!_OS detected
+Pop!_OS uses a symbolic link for the os-release file, this causes issues and can be fixed by converting to a hard link
+You can change the symbolic link to a hard link for /etc/os-release -> /etc/pop-os/os-release
+Continue? [y/N] y
+
+Backing up /etc/os-release to /etc/os-release-backup
+Creating hard link for /etc/os-release
+
+Checking to see if solution worked...
+Success!
+```
+
+If the program is a Snap:
+```
+Warning: Cannot get distro name
+Pop!_OS detected
+Pop!_OS uses a symbolic link for the os-release file, this causes issues and can be fixed by converting to a hard link
+You can change the symbolic link to a hard link for /etc/os-release -> /etc/pop-os/os-release
+Continue? [y/N] y
+
+Snap install detected, you must manually run the following commands in another terminal:
+
+Backup the /etc/os-release file:
+sudo mv /etc/os-release /etc/os-release-backup
+
+Press [Enter] to continue...
+
+Create hard link to /etc/os-release:
+sudo ln /etc/pop-os/os-release /etc/os-release
+
+Press [Enter] to continue...
+
+Checking to see if solution worked...
+Success!
+```
+
+In the event the solution did not work:
+```
+Backing up /etc/os-release to /etc/os-release-backup
+Creating hard link for /etc/os-release
+
+Checking to see if solution worked...
+Failed, aborting...
+```
+
+If the OS cannot be read and the operating system is NOT PopOS:
+```
+Warning: Cannot get distro name
+Check /etc/os-release permissions and make sure it is not a symbolic link
+Aborting...
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>emilyastranova:</strong></p>
+                    <p>Feel free to add the Snap detection and any other changes to this pull request, it does not have the detection in it's current state, just a dummy variable. I also added the ability for the program to check if the solution was successful and continue instead of continuing without dist_name being set</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>emilyastranova:</strong></p>
+                    <p>Also, with those plugs just now committed to 1.9.0, will this still build for others if they pull it right now since Canonical hasn't implemented this yet?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Isn't it a snap only issue? After reading this comment from #240
+> I got this error too when installing from Snap on Pop!OS 21.04. I was able to work around by installing with [git instead](https://github.com/AdnanHodzic/auto-cpufreq#auto-cpufreq-installer).
+
+I've installed a VM with PopOS and the `distro` package from a python shell works just fine without changes.
+If so it would be lot easier. On permission denied, detect file exists, detect snap, print solution.
+
+I think snap detection is like this:
+```
+if os.getenv("PKG_MARKER") == "SNAP":
+   # we are in snap package
+```
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@tyleraharrison proposed solution how the output would look like good, but @bobslept also summarized it perfectly in his last message. 
+
+> Also, with those plugs just now committed to 1.9.0, will this still build for others if they pull it right now since Canonical hasn't implemented this yet?
+
+No, since those plugs were not approved by Canonical, 1.9.0 release upload to beta channel didn't go through and it triggered a manual review by one of the staff members. As part of feedback I pointed out that request has been made for this and [linked](https://forum.snapcraft.io/t/request-for-system-files-interfaces-hardlink-to-etc-os-release-for-auto-cpufreq/28015) to that request for whoever reviews it from their side can see it.
+
+TL:DR: 1.9.0 hasn't been released anywhere yet. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Let's go and just print a message then. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>emilyastranova:</strong></p>
+                    <p>If it's OK I believe this issue can be closed and potentially revisited if Canonical responds</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> If it's OK I believe this issue can be closed and potentially revisited if Canonical responds
+
+They will respond, but I'm pretty sure they will deny the request, as `/etc/os-release` is not a solely auto-cpufreq owned file. 
+
+Regardless, until we hear it from them I'm closing the issue as changes are live as part of [v1.9.0 release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> If it's OK I believe this issue can be closed and potentially revisited if Canonical responds
+
+@tyleraharrison response from Canonical is [here](https://forum.snapcraft.io/t/request-for-system-files-interfaces-hardlink-to-etc-os-release-for-auto-cpufreq/28015), seems like there is a way to get this working properly with Pop OS.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>How does this response from Canonical change the fact that we cannot follow the soft link from the "readable" /etc/os-release?
+
+First result is with hardlink, second is with default softlink
+```
+beep@pop-os:~/auto-cpufreq$ snap run --shell auto-cpufreq
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+ 
+beep@pop-os:/home/beep/auto-cpufreq$ cat /var/lib/snapd/hostfs/etc/os-release
+NAME="Pop!_OS"
+VERSION="20.04 LTS"
+ID=pop
+ID_LIKE="ubuntu debian"
+PRETTY_NAME="Pop!_OS 20.04 LTS"
+VERSION_ID="20.04"
+HOME_URL="https://pop.system76.com"
+SUPPORT_URL="https://support.system76.com"
+BUG_REPORT_URL="https://github.com/pop-os/pop/issues"
+PRIVACY_POLICY_URL="https://system76.com/privacy"
+VERSION_CODENAME=focal
+UBUNTU_CODENAME=focal
+LOGO=distributor-logo-pop-os
+beep@pop-os:/home/beep/auto-cpufreq$ cat /var/lib/snapd/hostfs/etc/os-release
+cat: /var/lib/snapd/hostfs/etc/os-release: Permission denied
+beep@pop-os:/home/beep/auto-cpufreq$ 
+ ```
+Am I missing something? Or do you mean open an issue on their github to request if they want to hardlink the file by default.
+Or did they approve to make the hardlink from snap?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@bobslept that's a valid question, I asked them to clarify.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>emilyastranova:</strong></p>
+                    <p>Awaiting clarification</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Well I have left a message on the PopOS issue tracker about our issue.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Thanks @bobslept, based on your answer I assume you saw the clarification :slightly_smiling_face: @tyleraharrison see the last [message](https://forum.snapcraft.io/t/request-for-system-files-interfaces-hardlink-to-etc-os-release-for-auto-cpufreq/28015/3).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>emilyastranova:</strong></p>
+                    <p>That was a very verbose "no you can't" but I like that. Is there a way to just read the PopOS release file instead of modifying the link? We could just point it to /usr/lib/os-release</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Well that doesn't work on a SNAP package. That gives us the information of the snap container, and not host info. At least it gives different results on my side.
+
+On the host
+```
+beep@pop-os:~$ cat /usr/lib/os-release
+NAME="Pop!_OS"
+VERSION="20.04 LTS"
+ID=pop
+ID_LIKE="ubuntu debian"
+PRETTY_NAME="Pop!_OS 20.04 LTS"
+VERSION_ID="20.04"
+HOME_URL="https://pop.system76.com"
+SUPPORT_URL="https://support.system76.com"
+BUG_REPORT_URL="https://github.com/pop-os/pop/issues"
+PRIVACY_POLICY_URL="https://system76.com/privacy"
+VERSION_CODENAME=focal
+UBUNTU_CODENAME=focal
+LOGO=distributor-logo-pop-os
+```
+Inside a snap shell
+```
+beep@pop-os:/home/beep$ cat /usr/lib/os-release
+NAME="Ubuntu Core"
+VERSION="20"
+ID=ubuntu-core
+PRETTY_NAME="Ubuntu Core 20"
+VERSION_ID="20"
+HOME_URL="https://snapcraft.io/"
+BUG_REPORT_URL="https://bugs.launchpad.net/snappy/"
+```
+
+Regarding to [distro package docs](https://distro.readthedocs.io/en/latest/#distro.LinuxDistribution), we could maybe specify `/etc/pop-os/os-release` as argument if we have read access on that file from a SNAP. 
+
+But my snap skills are to limited for quickly testing this stuff.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>emilyastranova:</strong></p>
+                    <p>That was a typo, I meant /etc/pop-os/os-release</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Let's just leave it as is for now, it's waste of energy and time especially since we implemented a workaround. 
+
+I also left this [as a reply,](https://forum.snapcraft.io/t/request-for-system-files-interfaces-hardlink-to-etc-os-release-for-auto-cpufreq/28015/7?u=ahodzic) and they have already started not approving it as I previously predicted:
+
+> They will respond, but I'm pretty sure they will deny the request, as `/etc/os-release` is not a solely auto-cpufreq owned file.
+
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

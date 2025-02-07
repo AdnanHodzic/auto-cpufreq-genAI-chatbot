@@ -1,0 +1,111 @@
+
+        <html>
+        <head>
+            <title>Issue #373: Error during installation.</title>
+        </head>
+        <body>
+            <h1>Error during installation.</h1>
+            <p><strong>Issue #373</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+```
+Error: Command '['/opt/auto-cpufreq/venv/bin/python3', '-Im', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.
+./auto-cpufreq-installer: line 42: /opt/auto-cpufreq/venv/bin/activate: No such file or directory
+```
+---
+
+### System information:
+
+```
+Linux distro: Debian Linux (Sid)
+Linux kernel: 5.16.0-1-amd64
+Processor: Intel Core i3-10110U
+Cores: 2
+Architecture: x86_64
+Driver: intel_pstate
+```
+
+#### Without providing requested information your issue might be ignored!
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Can you give me exact sequence of commands you ran that lead to this? 
+
+```
+Error: Command '['/opt/auto-cpufreq/venv/bin/python3', '-Im', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.
+./auto-cpufreq-installer: line 42: /opt/auto-cpufreq/venv/bin/activate: No such file or directory
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>peebowo:</strong></p>
+                    <p>```pablo@debian-nvme:~/Git-Repos$ git clone https://github.com/AdnanHodzic/auto-cpufreq
+Cloning into 'auto-cpufreq'...
+remote: Enumerating objects: 1589, done.
+remote: Counting objects: 100% (460/460), done.
+remote: Compressing objects: 100% (228/228), done.
+remote: Total 1589 (delta 264), reused 340 (delta 193), pack-reused 1129
+Receiving objects: 100% (1589/1589), 333.62 KiB | 990.00 KiB/s, done.
+Resolving deltas: 100% (790/790), done.
+pablo@debian-nvme:~/Git-Repos$ cd auto-cpufreq/
+pablo@debian-nvme:~/Git-Repos/auto-cpufreq$ sudo ./auto-cpufreq-installer 
+[sudo] password for pablo: 
+
+-------------------------- auto-cpufreq installer -----------------------------
+
+Welcome to auto-cpufreq tool installer.
+
+Options:
+
+[I]nstall
+[R]emove
+[Q]uit
+
+Select a key: [i/r/q]: I
+
+-------------------------------------------------------------------------------
+
+Detected Debian based distribution
+
+-------------------------------------------------------------------------------
+
+Setting up Python environment
+
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+dmidecode is already the newest version (3.3-3).
+python3-pip is already the newest version (22.0.2+dfsg-1).
+python3-dev is already the newest version (3.9.8-1).
+python3-venv is already the newest version (3.9.8-1).
+python3-setuptools is already the newest version (59.6.0-1.2).
+0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+
+Installing necessary Python packages
+
+Error: Command '['/opt/auto-cpufreq/venv/bin/python3', '-Im', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.
+./auto-cpufreq-installer: line 42: /opt/auto-cpufreq/venv/bin/activate: No such file or directory
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Something seems wrong with your Python environment, I suggest you install it using a [Snap package](https://github.com/AdnanHodzic/auto-cpufreq#snap-store). </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>peebowo:</strong></p>
+                    <p>Snap package seems to work. Thanks.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

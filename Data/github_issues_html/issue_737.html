@@ -1,0 +1,401 @@
+
+        <html>
+        <head>
+            <title>Issue #737: Not detecting correct CPU Max frequency and ignoring config file</title>
+        </head>
+        <body>
+            <h1>Not detecting correct CPU Max frequency and ignoring config file</h1>
+            <p><strong>Issue #737</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? Yes
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)? N/A
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)? Yes
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)? Yes
+
+### Error output:
+```text
+Add/paste error output in case of failed installation or other failing component
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+auto-cpufreq --debug
+```
+
+```
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3400 MHz
+CPU min frequency: 400 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0      1.0%        54 °C      3400 MHz
+CPU1      1.0%        55 °C      3400 MHz
+CPU2      4.0%        58 °C      3400 MHz
+CPU3      3.0%        53 °C      3400 MHz
+CPU4      3.1%        54 °C      3400 MHz
+CPU5      6.1%        55 °C      3400 MHz
+CPU6      2.0%        58 °C      3400 MHz
+CPU7      2.0%        53 °C      3400 MHz
+
+auto-cpufreq version: 2.3.0 (git: 432883a)
+
+Python: 3.12.4
+psutil package: 5.9.8
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.42 %
+
+Total CPU usage: 3.5 %
+Total system load: 0.85
+Average temp. of all cores: 55.00 °C 
+
+Currently using: performance governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+```
+
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+The output of `auto-cpufreq --debug` reports that the max CPU frequency is 3400Mhz, but the output of `auto-cpufreq --stats` says  that it's 1600Mhz( The max frequency without turbo boost). If  `scaling_max_freq` or `scaling_min_freq` value in the config file is greater than the CPU max frequency of   `auto-cpufreq --stats` , the config file is ignored, and the GUI App only shows "Battery is: Charging".
+
+### Expected Behaviour
+It should use the real CPU Max frequency(3400Mhz) as the limit and not the max without turbo
+
+### Proof
+```
+auto-cpufreq --stats
+```
+
+```
+Linux distro: Arch Linux  
+Linux kernel: 6.9.9-arch1-1
+Processor: Intel(R) Core(TM) i5-8250U CPU @ 1.60GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1600 MHz
+CPU min frequency: 400 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0      0.0%        47 °C      1600 MHz
+CPU1      4.0%        47 °C       400 MHz
+CPU2     20.6%        49 °C      1600 MHz
+CPU3      2.0%        46 °C      1599 MHz
+CPU4      0.0%        47 °C      1601 MHz
+CPU5      0.0%        47 °C      1600 MHz
+CPU6      1.0%        49 °C      1598 MHz
+CPU7      0.0%        46 °C      1600 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+Setting to use: "performance" EPP
+Given value for 'scaling_max_freq' is not within the allowed frequencies 400000-1600000 kHz
+```
+### auto-cpufreq.conf
+```
+# settings for when connected to a power source
+[charger]
+# see available governors by running: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+# preferred governor.
+governor = performance
+
+# EPP: see available preferences by running: cat /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_available_preferences
+energy_performance_preference = performance
+
+# minimum cpu frequency (in kHz)
+# example: for 800 MHz = 800000 kHz --> scaling_min_freq = 800000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly
+scaling_min_freq = 1800000
+
+# maximum cpu frequency (in kHz)
+# example: for 1GHz = 1000 MHz = 1000000 kHz -> scaling_max_freq = 1000000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly
+scaling_max_freq = 2600000
+
+# turbo boost setting. possible values: always, auto, never
+turbo = always
+
+# settings for when using battery power
+[battery]
+# see available governors by running: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+# preferred governor
+governor = powersave
+
+# EPP: see available preferences by running: cat /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_available_preferences
+energy_performance_preference = power
+
+# minimum cpu frequency (in kHz)
+# example: for 800 MHz = 800000 kHz --> scaling_min_freq = 800000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly
+scaling_min_freq = 1800000
+
+# maximum cpu frequency (in kHz)
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# example: for 1GHz = 1000 MHz = 1000000 kHz -> scaling_max_freq = 1000000
+# to use this feature, uncomment the following line and set the value accordingly
+scaling_max_freq = 2600000
+
+# turbo boost setting. possible values: always, auto, never
+turbo = always
+
+# experimental 
+
+# Add battery charging threshold (currently only available to Lenovo)
+# checkout README.md for more info
+
+# enable thresholds true or false
+#enable_thresholds = true
+#
+# start threshold (0 is off ) can be 0-99
+#start_threshold = 0
+#
+# stop threshold (100 is off) can be 1-100
+#stop_threshold = 100
+```
+
+![Captura de imagem_20240713_162530](https://github.com/user-attachments/assets/7bc3a984-a656-4ec0-89d4-3786a2d2d9a9)
+---
+
+### Additional Information
+
+### Output of `cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq`: `1600000`
+### Output of `cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq`: `3400000`
+
+I'm using msr-tools to edit the CPU registers to enable turbo boost, since the option is not present in my Bios. Without it the turbo would be permanently disabled, and if I use the `acpi-cpufreq` driver the turbo works, but it doesn't expose the real max frequency of the CPU, and therefore I can't limit it.
+Also I'm using a notebook, but I removed the battery since it died
+
+
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>LDrawe:</strong></p>
+                    <p>I've made a [fork](https://github.com/AdnanHodzic/auto-cpufreq/compare/master...LDrawe:auto-cpufreq:master) and edited `cpufreqctl.sh`. Instead of getting the CPU Max Frequency from `/sys/devices/system/cpu/cpu*/cpufreq/cpuinfo_max_freq`, it gets from `/sys/devices/system/cpu/cpu*/cpufreq/scaling_max_freq`. As mentioned above, `scaling_max_freq` gets the actual max frequency. By doing so it works correctly:
+![Captura de imagem_20240713_172149](https://github.com/user-attachments/assets/09674854-e459-462a-ab6f-5c63302abbcf)
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> If scaling_max_freq or scaling_min_freq value in the config file is greater than the CPU max frequency of auto-cpufreq --stats , the config file is ignored, and the GUI App only shows "Battery is: Charging".
+
+This is unfortunately true, and something I was aware of. As like you I would prefer to have I'd like to have `scaling_min_freq = 1800000` (1800Mhz), but instead I'll might see a message like i.e with `--stats`:
+
+>Given value for 'scaling_min_freq' is not within the allowed frequencies 400000-4600000 kHz
+
+So I'd have to set it to `400000` instead, but I also found a way I can make this message dissapear even with `1800000` if I restart auto-cpufreq daemon after making changes to auto-cpufreq.conf
+
+```
+systemctl stop auto-cpufreq 
+systemctl start auto-cpufreq 
+```
+
+But even then I might see them go to 800Mhz instead when 1800 should be the `scaling_min_freq`. If I leave `turbo = auto` instead of `turbo = always` where indeed then it never goes under 1800.
+
+I never had the problem you had, as my max frequencies were always reached. I will even get same values for both:
+
+> Output of cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq: 1600000
+> Output of cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq: 3400000
+
+Where in my case these values are the same:
+
+```
+cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq
+4600000
+cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+4600000
+```
+
+But I also see you're limiting the `scaling_max_freq`, why are you doing this?
+
+> scaling_max_freq = 2600000
+
+> I've made a [fork](https://github.com/AdnanHodzic/auto-cpufreq/compare/master...LDrawe:auto-cpufreq:master) and edited cpufreqctl.sh
+
+I would encourage you to [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases), as if it fixes an issue it's def worth having.
+
+But can you share are you values before and after the changes? Because for me they are all the same between max & min:
+
+```
+cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_min_freq
+400000
+400000
+400000
+400000
+400000
+400000
+400000
+400000
+cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_max_freq 
+4600000
+4600000
+4600000
+4600000
+4600000
+4600000
+4600000
+4600000
+cat /sys/devices/system/cpu/cpu*/cpufreq/cpuinfo_max_freq
+4600000
+4600000
+4600000
+4600000
+4600000
+4600000
+4600000
+4600000
+cat /sys/devices/system/cpu/cpu*/cpufreq/cpuinfo_min_freq
+400000
+400000
+400000
+400000
+400000
+400000
+400000
+400000
+```
+
+And finally just wanted to add that both my min & max frequency are correctly identified in both `--stats` and `--debug`, i.e:
+
+```
+Linux distro: Ubuntu 24.04 Noble Numbat
+Linux kernel: 6.8.0-38-generic
+Processor: Intel(R) Core(TM) i7-8565U CPU @ 1.80GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4600 MHz
+CPU min frequency: 1800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      2.0%        64 °C      4210 MHz
+CPU1      4.0%        63 °C      1800 MHz
+CPU2      9.0%        61 °C      4515 MHz
+CPU3      6.0%        63 °C      4111 MHz
+CPU4      4.0%        64 °C      1800 MHz
+CPU5      5.1%        63 °C      4583 MHz
+CPU6      3.0%        61 °C      4433 MHz
+CPU7      3.9%        63 °C      1800 MHz
+
+CPU fan speed: 3412 RPM
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+Setting to use: "performance" EPP
+
+Total CPU usage: 4.7 %
+Total system load: 1.08
+Average temp. of all cores: 62.75 °C 
+
+Configuration file enforces turbo boost
+setting turbo boost: on
+
+-------------------------------------------------------------------------------
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Also some potentially related EPP changes to this issue were merged with #738</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>LDrawe:</strong></p>
+                    <p>> But even then I might see them go to 800Mhz instead when 1800 should be the scaling_min_freq. If I leave turbo = auto instead of turbo = always where indeed then it never goes under 1800.
+
+Interesting. Maybe when the CPU enter turbo state it's exposing these frequencies to the system? That would explain why setting to "always" it would never go down 1800, as this frequency is always available. I will try this and report back.
+
+>But I also see you're limiting the scaling_max_freq, why are you doing this?
+
+Mainly because of temps and fan noise. When gaming it would almost always reach 3.4GHz and increase the temperature to the thermal limit of 100°, to then throttle down to 400mhz because of these high temps, even tough I'm not playing heavy or CPU intensive games. . Even on desktop it reaches 85° on normal use, along with the noisy fans. I found that between 2.1 - 2.7Ghz is the sweet spot, where I can get stable FPS, frametime and good temps.
+
+> I would encourage you to [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases), as if it fixes an issue it's def worth having.
+
+That would be super cool! I can make a PR with these changes I've made if you want, as it should get a ""more accurate"" info.From what I've seen shouldn't be a problem as for most systems these values are the same, and it would now cover these weird cases(like mine) where they aren't.
+
+> But can you share are you values before and after the changes? Because for me they are all the same between max & min
+
+Sure, here you go:
+Before
+```
+# I will keep only 1 value in each command, as they're all the same, to keep this shorter
+cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_min_freq
+400000
+
+cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_max_freq 
+3400000
+
+cat /sys/devices/system/cpu/cpu*/cpufreq/cpuinfo_max_freq
+1600000
+
+cat /sys/devices/system/cpu/cpu*/cpufreq/cpuinfo_min_freq
+400000
+```
+
+After
+
+```
+cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_min_freq
+1800000
+
+cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_max_freq 
+2600000
+
+cat /sys/devices/system/cpu/cpu*/cpufreq/cpuinfo_max_freq
+1600000
+
+cat /sys/devices/system/cpu/cpu*/cpufreq/cpuinfo_min_freq
+400000
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>LDrawe:</strong></p>
+                    <p>I'm no expert with GUI's,but I can try giving it a look into this problem when the value(s) is not within the allowed frequencies, maybe auto-setting the `max` and/or `min` to default in the script when they surpass the limits. But I would need to see why the GUI refuses to show anything else in these cases.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>That would be great, @shadeyg56 is the one who originally introduced GUI, so if you have some questions he might be able to help. We're also all hanging around in [auto-cpufreq Discord community.](https://discord.gg/Sjauxtj6kH)</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

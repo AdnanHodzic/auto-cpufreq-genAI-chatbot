@@ -1,0 +1,41 @@
+
+        <html>
+        <head>
+            <title>Issue #651: Fix SyntaxWarning in objects.py</title>
+        </head>
+        <body>
+            <h1>Fix SyntaxWarning in objects.py</h1>
+            <p><strong>Issue #651</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hi. I'm trying to package auto-cpufreq to Void Linux. Void Linux byte compiles python packages. A common annoyance that is commonly seen when byte compiling is warnings about unknown escape sequences. This exact warning happens when installing auto-cpufreq:
+
+```
+./usr/lib/python3.12/site-packages/auto_cpufreq/gui/objects.py:35: SyntaxWarning: invalid escape sequence '\('
+  return getoutput("echo \(Snap\) $SNAP_VERSION")
+./usr/lib/python3.12/site-packages/auto_cpufreq/gui/objects.py:35: SyntaxWarning: invalid escape sequence '\('
+  return getoutput("echo \(Snap\) $SNAP_VERSION")
+```
+
+(The warning got doubled for some reason. This is probably Void's fault, not auto-cpufreq's. But it makes it twice as annoying.)
+
+I fix this issue in this PR by using a raw string literal.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Great, thank you!
+You'll be credited as part of the next release</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>meator:</strong></p>
+                    <p>Well, I have contributed a single character to the repo so far. I don't really expect any recognition for that. But thanks!</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

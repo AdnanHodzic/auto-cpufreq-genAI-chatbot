@@ -1,0 +1,101 @@
+
+        <html>
+        <head>
+            <title>Issue #187: Fix location of auto-cpufreq in service descriptor.</title>
+        </head>
+        <body>
+            <h1>Fix location of auto-cpufreq in service descriptor.</h1>
+            <p><strong>Issue #187</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>This fixes a bug that causes the systemd service to go into a failed state because the `auto-cpufreq` script can't be found.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>LGTM, but before we merge, can you confirm that you have the same (weird) problem. Namely if I install auto-cpufreq using the installer, and then install it and run:
+
+```
+auto-cpufreq --stats
+
+Note: You can quit stats mode by pressing "ctrl+c"
+```
+
+I don't get anything else besides that. It works fine on Snap-ed installed of same source code. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>marc0der:</strong></p>
+                    <p>I just installed it again from the `auto-cpufreq-installer` to make sure and it works perfectly for me.
+
+Regarding the weirdness that you saw: the stats command initially does hang for 1 second but then renders fine without issues.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I just installed it again from the `auto-cpufreq-installer` to make sure and it works perfectly for me.
+> 
+> Regarding the weirdness that you saw: the stats command initially does hang for 1 second but then renders fine without issues.
+
+Yea, it's just weird. Tried it on another laptop and no problems whatsoever.
+
+Either way, thank you for your contribution! </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>theol0403:</strong></p>
+                    <p>On Fedora 34, I had to revert this commit for the tool to work. Otherwise, the stats command did not print any information.
+
+```
+which auto-cpufreq
+/usr/local/bin/auto-cpufreq
+```
+
+I'm not sure if I'm missing something obvious here but running the installer script, then installing the service, leads to this non-working state.
+
+Thanks for the great tool btw!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> On Fedora 34, I had to revert this commit for the tool to work. Otherwise, the stats command did not print any information.
+> 
+> ```
+> which auto-cpufreq
+> /usr/local/bin/auto-cpufreq
+> ```
+> 
+> I'm not sure if I'm missing something obvious here but running the installer script, then installing the service, leads to this non-working state.
+> 
+> Thanks for the great tool btw!
+
+Thank you for your input @theol0403!
+
+@marc0der this confirms problem I was experiencing, please let me know if you have any additional input on this or how to resolve this issue, otherwise I'll have to revert this change. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>marc0der:</strong></p>
+                    <p>I've had a further look, and it seems like there are some discrepancies in the distros as to where the files are copied to. The fix I did seems to work on Arch but breaks on other distros like Fedora.
+
+I've now [raised a new PR](https://github.com/AdnanHodzic/auto-cpufreq/pull/190) that reverts the change to the systemd unit file and customises it for Arch in the installer script.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@marc0der thanks! It works for me. 
+
+Could @theol0403 you confirm #187 works for you as well? Changes are already live as part of [1.6.4 release](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.6.4).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>theol0403:</strong></p>
+                    <p>Seems to work for me. Many thanks!</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

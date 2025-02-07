@@ -1,0 +1,79 @@
+
+        <html>
+        <head>
+            <title>Issue #284: intel_cpufreq driver powersave governor is locked at 800 MHZ. please use schedutil governor for battery.</title>
+        </head>
+        <body>
+            <h1>intel_cpufreq driver powersave governor is locked at 800 MHZ. please use schedutil governor for battery.</h1>
+            <p><strong>Issue #284</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>https://www.reddit.com/r/linux/comments/ihdozd/linux_kernel_58_defaults_to_passive_mode_for/
+
+I can confirm the bug is still present for Intel_cpufreq powersave governor. I wasted some time making a conf file for auto-cpufreq so that the governor is changed to schedutil while laptop is on battery but auto-cpufreq seem to ignore the conf file I made so I just activated the intel_pstate driver for my CPU by editing GRUB but it seems this method of using schedutil governor of Intel_cpufreq is better for battery so would appreciate updating the software to use schedutil governor for CPUs which default to Intel_cpufreq driver instead of powersave governor due to this bug.
+
+Doing gaming while using battery is having significant improvement for me after changing the driver to Intel_pstate. Half Life went from 25 to 60 FPS.
+
+CPU is Pentium N4200 Apollo Lake. Distro is KDE Neon User Edition.
+
+I installed auto-cpufreq using snap.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AnonPol:</strong></p>
+                    <p>After reading [ArchWiki article on CPU Frequency Scaling](https://wiki.archlinux.org/title/CPU_frequency_scaling#Scaling_governors) it seems this is not bug. The cpufreq driver on powersave governor sets the CPU statically to the lowest frequency within the borders of "scaling_min_freq" and "scaling_max_freq" and "intel_cpufreq" driver seems to be same. The powersave (and performance) governor of "intel_pstate" driver is actually schedutil/on-demand governor of cpufreq driver and allows CPU to scale frequency dynamically according to current load and doesn't lock CPU frequency to lowest like cpufreq powersave governor does. My suggestion is to use schedutil governor for AMD and Intel CPU's (which is having intel_cpufreq driver by default) while device is in battery as powersave governor of  cpufreq driver is locking CPU to lowest frequency and not allowing to scale up during intensive activities. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>noodlejetski:</strong></p>
+                    <p>> My suggestion is to use schedutil governor for AMD and Intel CPU's (which is having intel_cpufreq driver by default) while device is in battery
+
+you can set your preferred governor for charging and battery using the config file. there's an example of such file in the readme.
+
+> as powersave governor of cpufreq driver is locking CPU to lowest frequency and not allowing to scale up during intensive activities.
+
+isn't that what this tool is supposed to mitigate in the first place? it monitors the CPU load and decides whether or not to allow turboboost for more demanding tasks while on battery.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AnonPol:</strong></p>
+                    <p>> > My suggestion is to use schedutil governor for AMD and Intel CPU's (which is having intel_cpufreq driver by default) while device is in battery
+> 
+> you can set your preferred governor for charging and battery using the config file. there's an example of such file in the readme.
+
+I already tried to do it but auto-cpufreq was not respecting the config file I made and was still using powersave governor while on battery and performance governor while charging.
+> 
+> > as powersave governor of cpufreq driver is locking CPU to lowest frequency and not allowing to scale up during intensive activities.
+> 
+> isn't that what this tool is supposed to mitigate in the first place? it monitors the CPU load and decides whether or not to allow turboboost for more demanding tasks while on battery.
+
+My CPU doesn't support Turbo Boost so I can't test whether the cpufreq powersave governor allows the CPU to go beyond minimum frequency when turbo boost is enabled but you could test it if you want to. Disable intel_pstate if you are on CPU that has intel_pstate driver by default and do something intensive while on battery and check if frequency is going beyond minimum frequency.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>noodlejetski:</strong></p>
+                    <p>> I already tried to do it but auto-cpufreq was not respecting the config file I made and was still using powersave governor while on battery and performance governor while charging.
+
+have you double checked that the .conf file is properly named and in a proper location, *and* restarted the auto-cpufreq service after creating/modifying the file?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AnonPol:</strong></p>
+                    <p>> > I already tried to do it but auto-cpufreq was not respecting the config file I made and was still using powersave governor while on battery and performance governor while charging.
+> 
+> have you double checked that the .conf file is properly named and in a proper location, _and_ restarted the auto-cpufreq service after creating/modifying the file?
+
+It's too late to do that. I wasted too much time trying to get auto-cpufreq to respect config file that I uninstalled it and switched to TLP and set TLP's config file to use schedutil for my CPU (Kernel default was on-demand governor) and after doing it the CPU governor I am using for now battery and charging is schedutil. I switched from on-demand to schedutil because the kernel documentation was saying that it using less cpu context switches relative to on-demand governor so more battery life I assume. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>In that case I'm closing this issue.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

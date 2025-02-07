@@ -1,0 +1,76 @@
+
+        <html>
+        <head>
+            <title>Issue #265: [BUG] A few concern and errors in Void Linux.</title>
+        </head>
+        <body>
+            <h1>[BUG] A few concern and errors in Void Linux.</h1>
+            <p><strong>Issue #265</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>https://github.com/AdnanHodzic/auto-cpufreq/blob/893ed43bdfc414d4116c9b51dd4e03504fad2959/auto-cpufreq-installer#L133
+
+`-Sy` option should be enough for syncing the repositories and yes (no-confirm). That `-u` parameter buggs me, to update whole system while installing the package.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Animeshz:</strong></p>
+                    <p>At the same time there are a few errors on fresh install of Void Linux:
+
+```bash
+--------------------- Deploying auto-cpufreq as a daemon ----------------------
+
+* Turn off bluetooth on boot
+
+ERROR:
+Was unable to turn off bluetooth on boot
+FileNotFoundError(2, 'No such file or directory')
+
+* Deploy auto-cpufreq install script
+
+* Deploy auto-cpufreq remove script
+
+------------------ Running auto-cpufreq daemon install script ------------------
+/usr/bin/auto-cpufreq-install: line 40: separator: command not found
+
+* Deploy auto-cpufreq runit unit file
+
+* Creating symbolic link (/var/service/auto-cpufreq -> /etc/sv/auto-cpufreq)
+
+* Stopping auto-cpufreq daemon (runit) service
+warning: auto-cpufreq: unable to open supervise/ok: file does not exist
+
+* Starting auto-cpufreq daemon (runit) service
+warning: auto-cpufreq: unable to open supervise/ok: file does not exist
+warning: auto-cpufreq: unable to open supervise/ok: file does not exist
+
+----------------- auto-cpufreq daemon installed and running -----------------
+
+To view live stats, run:
+auto-cpufreq --stats
+
+To disable and remove auto-cpufreq daemon, run:
+sudo auto-cpufreq --remove
+
+-------------------------------------------------------------------------------
+```
+
+Specifically `Was unable to turn off bluetooth on boot` and `/usr/bin/auto-cpufreq-install: line 40: separator: command not found`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Could you please create a PR with fix for this problem and I'd make sure to credit you as part of the [next release](https://github.com/AdnanHodzic/auto-cpufreq/releases)? Thanks</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Animeshz:</strong></p>
+                    <p>Okay, I'll try in a few hours :)</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

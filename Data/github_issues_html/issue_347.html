@@ -1,0 +1,221 @@
+
+        <html>
+        <head>
+            <title>Issue #347: Fixed the --version command when installed from source</title>
+        </head>
+        <body>
+            <h1>Fixed the --version command when installed from source</h1>
+            <p><strong>Issue #347</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Closes #344
+
+The command only worked when running it inside the git repository.
+
+Now, it works from everywhere, and the version is constructed using the latest git tag and the SHA (8 first symbols) of the latest commit, which may help with further debugging in future issues (since when installing from source you don't install a fixed version).
+
+To do so, I have included [this setuptools plugin](https://github.com/dolfinus/setuptools-git-versioning). The template for the versioning [can be changed](https://setuptools-git-versioning.readthedocs.io/en/latest/schemas/index.html) by modifying the options in `setup.py`, but IMO this is a good approach, since, as I previously said, the version is constructed with the latest Git tag as well as the SHA of the latest commit, which may come in handy for debugging future specific issues.
+
+Waiting for your feedback!</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Changes, look great!  Before I merge this, couple of questions.
+
+1. Would it be possible for output to be: `auto-cpufreq version: 1.9.0 (git: e913d095)`, as I think it would make more sense?
+
+2. For snap package, could an exception be made where it would print out  whatever number is defined after `version:` line from `auto-cpufreq/snap/snapcraft.yaml` file and also include i.e: `(git: e913d095)`?
+
+Snap can be detected by using:
+
+```
+if os.getenv("PKG_MARKER") == "SNAP":
+# code here ...
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>I really like this, very nice! :+1: 
+
+Does this method also work on a release.tar.gz?
+
+Tested on 1.9.0 tar.gz and not seems happy.
+```
+WARNING: The wheel package is not available.
+WARNING: The wheel package is not available.
+WARNING: The wheel package is not available.
+WARNING: The wheel package is not available.
+WARNING: The wheel package is not available.
+fatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+/home/sjaak/Downloads/auto-cpufreq-1.9.0/.eggs/setuptools_git_versioning-1.8.0-py3.10.egg/setuptools_git_versioning.py:147: UserWarning: `version_config` option is deprecated since setuptools-git-versioning v1.8.0 and will be dropped in v2.0.0
+Please rename it to `setuptools_git_versioning`
+```
+
+Changing it to `setuptools_git_versioning` in setup.py will remove the deprecated warning. But still has the wheel package warnings. 
+
+Version will return `auto-cpufreq version: 0.0.1` That's something to keep in mind then.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ariasmn:</strong></p>
+                    <p>@AdnanHodzic 
+> Changes, look great! Before I merge this, couple of questions.
+> 
+> 1. Would it be possible for output to be: `auto-cpufreq version: 1.9.0 (git: e913d095)`, as I think it would make more sense?
+> 2. For snap package, could an exception be made where it would print out  whatever number is defined after `version:` line from `auto-cpufreq/snap/snapcraft.yaml` file and also include i.e: `(git: e913d095)`?
+> 
+> Snap can be detected by using:
+> 
+> ```
+> if os.getenv("PKG_MARKER") == "SNAP":
+> # code here ...
+> ```
+1. Not a problem, that can be easily changed.
+2. That's hard. I'm not very fond of Snap, but I have been trying to build and test using a Snapcraft docker image. However, I see that the current implementation (with just the changes I made) throw some errors that make the snap build fail. Can you confirm?
+Also, getting the current git commit has to be done in build time. I don't really know how the snap build process works, but you can set the version to be "git", [inside the snapcraft.yaml](https://snapcraft.io/docs/snapcraft-yaml-reference). It uses `git describe`, so I don't think output can be customized sadly.
+
+@bobslept 
+> I really like this, very nice! +1
+> 
+> Does this method also work on a release.tar.gz?
+> 
+> Tested on 1.9.0 tar.gz and not seems happy.
+> 
+> ```
+> WARNING: The wheel package is not available.
+> WARNING: The wheel package is not available.
+> WARNING: The wheel package is not available.
+> WARNING: The wheel package is not available.
+> WARNING: The wheel package is not available.
+> fatal: not a git repository (or any parent up to mount point /)
+> Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+> /home/sjaak/Downloads/auto-cpufreq-1.9.0/.eggs/setuptools_git_versioning-1.8.0-py3.10.egg/setuptools_git_versioning.py:147: UserWarning: `version_config` option is deprecated since setuptools-git-versioning v1.8.0 and will be dropped in v2.0.0
+> Please rename it to `setuptools_git_versioning`
+> ```
+> 
+> Changing it to `setuptools_git_versioning` in setup.py will remove the deprecated warning. But still has the wheel package warnings.
+> 
+> Version will return `auto-cpufreq version: 0.0.1` That's something to keep in mind then.
+
+It needs to have a Git repository metadata inside. Since the tar.gz are packaged without the Git repository info, it would not work. A [version_callback](https://setuptools-git-versioning.readthedocs.io/en/latest/options/version_callback.html) could be set to get around this.
+
+Also, after testing the Snap builds, I think that this approach might not be the best (?). I don't know if the Snap build can be fixed, but if not, another approach should be taken...</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@ariasmn 
+
+> 1. Not a problem, that can be easily changed.
+
+Then, please push these changes, I want to merge this PR and make a new release :slightly_smiling_face: 
+
+> 2\. That's hard. I'm not very fond of Snap, but I have been trying to build and test using a Snapcraft docker image. However, I see that the current implementation (with just the changes I made) throw some errors that make the snap build fail. Can you confirm?
+>     Also, getting the current git commit has to be done in build time. I don't really know how the snap build process works, but you can set the version to be "git", [inside the snapcraft.yaml](https://snapcraft.io/docs/snapcraft-yaml-reference). It uses `git describe`, so I don't think output can be customized sadly.
+
+Yea, I thought this would be the case, but we don't need this as we already have a way to get Snap package version. Before I wrote my previous comment, I built a Snap package with your changes and it all worked fine. If you want to try it yourself you can [follow instructions I outlined](https://github.com/AdnanHodzic/auto-cpufreq/pull/326#issuecomment-999690600) for @bobslept but you can also leave part of testing Snap package to me.
+
+I don't have a problem with leaving current version format to be part of Snap package. As this version will have the source code information based on which that Snap was built. Just make sure to incorporate version information you implemented with `app_version` function on line 112 of core.py. Hence if it was a Snap package, perfect output would be, i,e:
+
+
+```
+auto-cpufreq version: 1.9.0 (git: e913d095)
+Snap version: 1.9.0
+```
+
+As you see in `app_version` function, snap package version is outputted by:
+```
+print(getoutput("echo Snap: $SNAP_VERSION"))
+```
+
+@bobslept btw, I just made minor change how snap version is outputted in `auto-cpufreq --debug` and I've noticed driver field is not interpreted properly, is this the case for you as well? 
+
+```
+Driver: /bin/sh: 1: cpufreqctl.auto-cpufreq: not found
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>> @bobslept btw, I just made minor change how snap version is outputted in `auto-cpufreq --debug` and I've noticed driver field is not interpreted properly, is this the case for you as well?
+> 
+> ```
+> Driver: /bin/sh: 1: cpufreqctl.auto-cpufreq: not found
+> ```
+
+Yes, same for me.
+Fix is in here #351</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ariasmn:</strong></p>
+                    <p>> @ariasmn
+> 
+> > 1. Not a problem, that can be easily changed.
+> 
+> Then, please push these changes, I want to merge this PR and make a new release slightly_smiling_face
+> 
+> > 2. That's hard. I'm not very fond of Snap, but I have been trying to build and test using a Snapcraft docker image. However, I see that the current implementation (with just the changes I made) throw some errors that make the snap build fail. Can you confirm?
+> > Also, getting the current git commit has to be done in build time. I don't really know how the snap build process works, but you can set the version to be "git", [inside the snapcraft.yaml](https://snapcraft.io/docs/snapcraft-yaml-reference). It uses `git describe`, so I don't think output can be customized sadly.
+> 
+> Yea, I thought this would be the case, but we don't need this as we already have a way to get Snap package version. Before I wrote my previous comment, I built a Snap package with your changes and it all worked fine. If you want to try it yourself you can [follow instructions I outlined](https://github.com/AdnanHodzic/auto-cpufreq/pull/326#issuecomment-999690600) for @bobslept but you can also leave part of testing Snap package to me.
+> 
+> I don't have a problem with leaving current version format to be part of Snap package. As this version will have the source code information based on which that Snap was built. Just make sure to incorporate version information you implemented with `app_version` function on line 112 of core.py. Hence if it was a Snap package, perfect output would be, i,e:
+> 
+> ```
+> auto-cpufreq version: 1.9.0 (git: e913d095)
+> Snap version: 1.9.0
+> ```
+> 
+> As you see in `app_version` function, snap package version is outputted by:
+> 
+> ```
+> print(getoutput("echo Snap: $SNAP_VERSION"))
+> ```
+
+@AdnanHodzic
+
+So, I updated the PR as you can see. Let me guide you through the changes and why I took this approach.
+
+I updated the way the `--version` outputs when a Git commit is linked, like you wanted to.
+Now, the version is set in the `setup.py`. This should solve the problem when using the command from a tar.gz release (FYI @bobslept ).
+
+Now, about Snap. I followed your instructions and could test all the changes (thanks for that!). As you can see, some changes have been made to the `snapcraft.yaml` file. This is just to get the version from the `setup.py` file so you don't have to change it twice in two different files.
+
+On the other hand, getting the Snap package to output the latest Git commit is possible, but I don't think it makes sense.
+Something like [this](https://github.com/snapcrafters/obs-studio/blob/master/snap/snapcraft.yaml#L592) can be done easily, so the version is like `{tag}.{sha}`, but the version would have the SHA of the commit when using the `snap list` command, as well as in the [Snap Store](https://snapcraft.io/auto-cpufreq). In my opinion, this makes the release number uglier, and, since you control the Snap releases, you already know which commit is the latest in the current Snap build (correct me if I'm wrong).
+
+Give me some feedback and let me know if I didn't explain myself well enough.
+
+EDIT: Sorry about the force-pushing, wanted to correct the commit title</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@ariasmn could you please resolve the conflict before I do the final review? Thank you</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ariasmn:</strong></p>
+                    <p>@AdnanHodzic Done, let me know if you need something</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@ariasmn LGTM and outstanding work, thank you for your contribution and I hope to see more of your PR in future :slightly_smiling_face: </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Changes are live as part of [1.9.1 release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

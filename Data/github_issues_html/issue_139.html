@@ -1,0 +1,83 @@
+
+        <html>
+        <head>
+            <title>Issue #139: KeyError: 'coretemp'</title>
+        </head>
+        <body>
+            <h1>KeyError: 'coretemp'</h1>
+            <p><strong>Issue #139</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I hope this info is enough, I can share with you more info if you need it. Also, my distro (PCLinuxOS) is not using systemd, maybe that can be relevant.
+
+### Error output:
+```text
+
+Temperature for each physical core:
+
+Traceback (most recent call last):
+  File "/usr/bin/auto-cpufreq", line 446, in <module>
+    cli()
+  File "/usr/local/lib64/python3.6/site-packages/click/core.py", line 829, in __call__
+    return self.main(*args, **kwargs)
+  File "/usr/local/lib64/python3.6/site-packages/click/core.py", line 782, in main
+    rv = self.invoke(ctx)
+  File "/usr/local/lib64/python3.6/site-packages/click/core.py", line 1066, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/usr/local/lib64/python3.6/site-packages/click/core.py", line 610, in invoke
+    return callback(*args, **kwargs)
+  File "/usr/bin/auto-cpufreq", line 409, in cli
+    sysinfo()
+  File "/usr/bin/auto-cpufreq", line 347, in sysinfo
+    print("CPU" + str(core_num) + " temp: {:.0f}".format(core_temp['coretemp'][core_num].current) + "°C")
+KeyError: 'coretemp'
+
+```
+---
+
+### System information:
+```text
+----------------------------- System information ------------------------------
+
+Linux distro: PCLinuxOS 2020 PCLinuxOS
+Linux kernel: 5.9.10-pclos1
+Driver: intel_cpufreq
+Architecture: x86_64
+Processor: Intel(R) Core(TM) i5-3230M CPU @ 2.60GHz
+Cores: 4
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 
+3200 MHz
+
+CPU frequency for each core:
+
+CPU0: 2736 MHz
+CPU1: 2765 MHz
+CPU2: 2770 MHz
+CPU3: 2733 MHz
+
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Didn't you open this same bug/issue (#14) which was fixed?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>racuna:</strong></p>
+                    <p>Yes, the same. My bad, I forget about it. 
+
+I just update the script, but the problem remains the same. Sorry to duplicate de issue. </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

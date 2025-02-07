@@ -1,0 +1,31 @@
+
+        <html>
+        <head>
+            <title>Pull Request #28: set_powersave performance enhancement</title>
+        </head>
+        <body>
+            <h1>set_powersave performance enhancement</h1>
+            <p><strong>Pull Request #28</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>now set_powersave only turns on turbo boost when all 1m load avg is higher than all available cores instead of 4 cores, this should work better for a broader range of cpus.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Makes sense. Might be a smart thing to do same or similar thing for performance mode as well.
+
+````
+    # conditions for setting turbo in performance
+    if load1m > 1:
+````
+
+Regardless, thank you for your contribution!</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

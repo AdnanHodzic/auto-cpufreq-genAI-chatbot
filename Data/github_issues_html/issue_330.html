@@ -1,0 +1,39 @@
+
+        <html>
+        <head>
+            <title>Issue #330: Added missing package Debian based venv</title>
+        </head>
+        <body>
+            <h1>Added missing package Debian based venv</h1>
+            <p><strong>Issue #330</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>When install from git using the `auto-cpufreq-installer` I noticed the follow error on a Debian based distro:
+```
+The virtual environment was not created successfully because ensurepip is not
+available.  On Debian/Ubuntu systems, you need to install the python3-venv
+package using the following command.
+ 
+    apt install python3.8-venv
+```
+
+Added that package to the debian based installer packages.
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Excellent catch! `python3-venv` is the dummy package that should be installed, but I see you set that so :+1: </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Changes live as part of [v1.9.0 release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,414 @@
+
+        <html>
+        <head>
+            <title>Issue #792: [NixOS] ERROR: failed to read battery BAT1 thresholds: CalledProcessError(1, ['cat', '/sys/class/power_supply/BAT1/charge_start_threshold'])</title>
+        </head>
+        <body>
+            <h1>[NixOS] ERROR: failed to read battery BAT1 thresholds: CalledProcessError(1, ['cat', '/sys/class/power_supply/BAT1/charge_start_threshold'])</h1>
+            <p><strong>Issue #792</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Summary
+
+I'm encountering an error with battery threshold settings on my Lenovo Yoga Slim 7 Pro X (14IAH7). The system fails to read battery threshold values, resulting in the error below.
+
+### Laptop Model
+
+Lenovo Yoga Slim 7 Pro X (14IAH7)
+
+### Error output:
+
+```text
+cat: /sys/class/power_supply/BAT1/charge_start_threshold: No such file or directory
+ERROR: failed to read battery BAT1 thresholds: CalledProcessError(1, ['cat', '/sys/class/power_supply/BAT1/charge_start_threshold'])
+```
+
+### System information:
+
+```text
+-------------------------------- Battery Info ---------------------------------
+
+battery count = 1
+cat: /sys/class/power_supply/BAT1/charge_start_threshold: No such file or directory
+ERROR: failed to read battery BAT1 thresholds: CalledProcessError(1, ['cat', '/sys/class/power_supply/BAT1/charge_start_threshold'])
+
+-------------------------------------------------------------------------------
+
+Linux distro: NixOS 24.11 Vicuna
+Linux kernel: 6.11.7
+Processor: 12th Gen Intel(R) Core(TM) i7-12700H
+Cores: 20
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2300 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      1.0%        45 °C      1131 MHz
+CPU1      3.0%        45 °C       400 MHz
+CPU2      1.0%        46 °C       400 MHz
+CPU3      0.0%        46 °C       400 MHz
+CPU4      8.0%        44 °C       463 MHz
+CPU5      0.0%        44 °C       400 MHz
+CPU6      2.0%        45 °C       429 MHz
+CPU7      0.0%        45 °C       400 MHz
+CPU8      1.0%        43 °C       400 MHz
+CPU9      0.0%        43 °C       400 MHz
+CPU10      3.0%        42 °C       701 MHz
+CPU11      0.0%        42 °C       400 MHz
+CPU12      2.0%        45 °C       598 MHz
+CPU13      4.0%        45 °C       603 MHz
+CPU14      3.0%        45 °C      1110 MHz
+CPU15      3.0%        45 °C       400 MHz
+CPU16      1.0%        44 °C       400 MHz
+CPU17      9.1%        44 °C       400 MHz
+CPU18      5.9%        45 °C       554 MHz
+CPU19      2.0%        45 °C       628 MHz
+
+auto-cpufreq version: 2.4.0
+
+Python: 3.12.7
+psutil package: 6.0.0
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: /nix/store/mm0pa3z7kk6jh1i9rkxqxjqmd8h1qpxf-bash-5.2p37/bin/sh: line 1: dmidecode: command not found
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.23 %
+
+Total CPU usage: 0.8 %
+Total system load: 0.63
+Average temp. of all cores: 44.40 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```
+
+### Config
+
+```nix
+{
+  programs.auto-cpufreq = {
+    enable = true;
+    settings = {
+      charger = {
+        governor = "performance";
+        energy_performance_preference = "performance";
+        turbo = "auto";
+      };
+      battery = {
+        governor = "powersave";
+        energy_performance_preference = "power";
+        turbo = "auto";
+        enable_thresholds = true;
+        ideapad_laptop_conservation_mode = true;
+      };
+    };
+  };
+}
+```
+
+### Kernel Modules
+
+```text
+Module                  Size  Used by
+snd_seq_dummy          12288  0
+snd_hrtimer            12288  1
+snd_seq               110592  7 snd_seq_dummy
+snd_seq_device         16384  1 snd_seq
+rfcomm                102400  16
+af_packet              65536  2
+ccm                    20480  9
+algif_aead             12288  0
+crypto_null            16384  1 algif_aead
+des3_ede_x86_64        45056  0
+cbc                    12288  0
+des_generic            12288  0
+libdes                 20480  2 des_generic,des3_ede_x86_64
+md4                    12288  0
+xt_conntrack           12288  2
+nf_conntrack          204800  1 xt_conntrack
+cmac                   12288  3
+nf_defrag_ipv6         24576  1 nf_conntrack
+algif_hash             12288  1
+nf_defrag_ipv4         12288  1 nf_conntrack
+algif_skcipher         12288  1
+af_alg                 32768  7 algif_hash,algif_skcipher,algif_aead
+bnep                   28672  2
+ip6t_rpfilter          12288  1
+ipt_rpfilter           12288  1
+xt_pkttype             12288  2
+xt_LOG                 16384  2
+nf_log_syslog          24576  2
+xt_tcpudp              16384  3
+nft_compat             24576  11
+nf_tables             380928  153 nft_compat
+sch_fq_codel           20480  1
+msr                    12288  0
+loop                   45056  0
+tun                    69632  0
+tap                    32768  0
+macvlan                36864  0
+bridge                401408  0
+stp                    12288  1 bridge
+llc                    16384  2 bridge,stp
+acpi_call              12288  0
+snd_ctl_led            24576  0
+snd_soc_skl_hda_dsp    24576  4
+snd_soc_hdac_hdmi      45056  1 snd_soc_skl_hda_dsp
+snd_soc_intel_hda_dsp_common    16384  1 snd_soc_skl_hda_dsp
+snd_sof_probes         24576  0
+snd_hda_codec_hdmi     98304  1
+snd_hda_codec_realtek   212992  1
+snd_hda_codec_generic   110592  1 snd_hda_codec_realtek
+snd_hda_scodec_component    20480  1 snd_hda_codec_realtek
+snd_soc_dmic           12288  1
+snd_sof_pci_intel_tgl    16384  0
+snd_sof_pci_intel_cnl    20480  1 snd_sof_pci_intel_tgl
+snd_sof_intel_hda_generic    40960  2 snd_sof_pci_intel_tgl,snd_sof_pci_intel_cnl
+soundwire_intel        81920  1 snd_sof_intel_hda_generic
+soundwire_cadence      45056  1 soundwire_intel
+mousedev               24576  0
+joydev                 24576  0
+snd_sof_intel_hda_common   200704  3 snd_sof_intel_hda_generic,snd_sof_pci_intel_tgl,snd_sof_pci_intel_cnl
+snd_soc_hdac_hda       28672  1 snd_sof_intel_hda_common
+snd_sof_intel_hda_mlink    36864  3 soundwire_intel,snd_sof_intel_hda_common,snd_sof_intel_hda_generic
+snd_sof_intel_hda      20480  2 snd_sof_intel_hda_common,snd_sof_intel_hda_generic
+snd_sof_pci            24576  3 snd_sof_intel_hda_generic,snd_sof_pci_intel_tgl,snd_sof_pci_intel_cnl
+snd_sof_xtensa_dsp     16384  1 snd_sof_intel_hda_generic
+intel_uncore_frequency    12288  0
+snd_sof               458752  6 snd_sof_pci,snd_sof_intel_hda_common,snd_sof_intel_hda_generic,snd_sof_probes,snd_sof_intel_hda,snd_sof_pci_intel_cnl
+intel_uncore_frequency_common    16384  1 intel_uncore_frequency
+x86_pkg_temp_thermal    16384  0
+intel_powerclamp       20480  0
+nls_iso8859_1          12288  1
+snd_sof_utils          16384  1 snd_sof
+snd_soc_acpi_intel_match   110592  3 snd_sof_intel_hda_generic,snd_sof_pci_intel_tgl,snd_sof_pci_intel_cnl
+nls_cp437              16384  1
+coretemp               16384  0
+soundwire_generic_allocation    12288  1 soundwire_intel
+vfat                   24576  1
+snd_soc_acpi           16384  2 snd_soc_acpi_intel_match,snd_sof_intel_hda_generic
+soundwire_bus         143360  3 soundwire_intel,soundwire_generic_allocation,soundwire_cadence
+iwlmvm                659456  0
+fat                   106496  1 vfat
+kvm_intel             434176  0
+snd_soc_avs           233472  0
+snd_soc_hda_codec      28672  1 snd_soc_avs
+snd_hda_ext_core       36864  7 snd_soc_avs,snd_soc_hda_codec,snd_sof_intel_hda_common,snd_soc_hdac_hdmi,snd_soc_hdac_hda,snd_sof_intel_hda_mlink,snd_sof_intel_hda
+kvm                  1372160  1 kvm_intel
+snd_soc_core          450560  10 snd_soc_avs,snd_soc_hda_codec,soundwire_intel,snd_sof,snd_sof_intel_hda_common,snd_soc_hdac_hdmi,snd_soc_hdac_hda,snd_sof_probes,snd_soc_dmic,snd_soc_skl_hda_dsp
+mac80211             1622016  1 iwlmvm
+snd_compress           28672  3 snd_soc_avs,snd_soc_core,snd_sof_probes
+ac97_bus               12288  1 snd_soc_core
+snd_pcm_dmaengine      16384  1 snd_soc_core
+snd_hda_intel          65536  0
+nvidia_drm            139264  5
+snd_intel_dspcfg       40960  5 snd_soc_avs,snd_hda_intel,snd_sof,snd_sof_intel_hda_common,snd_sof_intel_hda_generic
+crct10dif_pclmul       12288  1
+crc32_pclmul           12288  0
+snd_intel_sdw_acpi     16384  2 snd_intel_dspcfg,snd_sof_intel_hda_generic
+polyval_clmulni        12288  0
+hid_multitouch         36864  0
+snd_hda_codec         217088  10 snd_hda_codec_generic,snd_soc_avs,snd_hda_codec_hdmi,snd_soc_hda_codec,snd_hda_intel,snd_hda_codec_realtek,snd_soc_intel_hda_dsp_common,snd_soc_hdac_hda,snd_sof_intel_hda,snd_soc_skl_hda_dsp
+polyval_generic        12288  1 polyval_clmulni
+ptp                    45056  1 iwlmvm
+ghash_clmulni_intel    16384  0
+sha512_ssse3           53248  0
+nvidia_modeset       1671168  3 nvidia_drm
+processor_thermal_device_pci    16384  0
+pps_core               32768  1 ptp
+sha256_ssse3           32768  0
+processor_thermal_device    20480  1 processor_thermal_device_pci
+hid_generic            12288  0
+xe                   3084288  0
+libarc4                12288  1 mac80211
+uvcvideo              180224  2
+btusb                  77824  0
+sha1_ssse3             32768  0
+processor_thermal_wt_hint    12288  2 processor_thermal_device_pci,processor_thermal_device
+cmdlinepart            16384  0
+snd_hda_core          147456  13 snd_hda_codec_generic,snd_soc_avs,snd_hda_codec_hdmi,snd_soc_hda_codec,snd_hda_intel,snd_hda_ext_core,snd_hda_codec,snd_hda_codec_realtek,snd_soc_intel_hda_dsp_common,snd_sof_intel_hda_common,snd_soc_hdac_hdmi,snd_soc_hdac_hda,snd_sof_intel_hda
+aesni_intel           122880  10
+btrtl                  32768  1 btusb
+videobuf2_vmalloc      20480  1 uvcvideo
+processor_thermal_rfim    24576  1 processor_thermal_device
+nvidia_uvm           3837952  0
+iTCO_wdt               16384  0
+gf128mul               16384  2 polyval_generic,aesni_intel
+uvc                    12288  1 uvcvideo
+spi_nor               163840  0
+intel_rapl_msr         20480  0
+btintel                69632  1 btusb
+snd_hwdep              20480  1 snd_hda_codec
+processor_thermal_rapl    16384  1 processor_thermal_device
+crypto_simd            16384  1 aesni_intel
+videobuf2_memops       16384  1 videobuf2_vmalloc
+intel_pmc_bxt          16384  1 iTCO_wdt
+iwlwifi               577536  1 iwlmvm
+intel_rapl_common      53248  2 intel_rapl_msr,processor_thermal_rapl
+cryptd                 28672  3 crypto_simd,ghash_clmulni_intel
+drm_gpuvm              45056  1 xe
+btbcm                  24576  1 btusb
+mtd                   106496  3 spi_nor,cmdlinepart
+snd_pcm               188416  13 snd_soc_avs,snd_hda_codec_hdmi,snd_hda_intel,snd_hda_codec,soundwire_intel,snd_sof,snd_sof_intel_hda_common,snd_soc_hdac_hdmi,snd_compress,snd_soc_core,snd_sof_utils,snd_hda_core,snd_pcm_dmaengine
+watchdog               49152  1 iTCO_wdt
+intel_lpss_pci         28672  0
+mei_hdcp               28672  0
+ucsi_acpi              16384  0
+drm_exec               12288  2 drm_gpuvm,xe
+mei_pxp                20480  0
+processor_thermal_wt_req    12288  1 processor_thermal_device
+btmtk                  32768  1 btusb
+intel_ish_ipc          36864  0
+videobuf2_v4l2         40960  1 uvcvideo
+intel_lpss             12288  1 intel_lpss_pci
+rapl                   20480  0
+bluetooth            1073152  44 btrtl,btmtk,btintel,btbcm,bnep,btusb,rfcomm
+videodev              393216  2 videobuf2_v4l2,uvcvideo
+typec_ucsi             73728  1 ucsi_acpi
+gpu_sched              65536  1 xe
+i2c_i801               40960  0
+intel_cstate           20480  0
+snd_timer              49152  3 snd_seq,snd_hrtimer,snd_pcm
+igen6_edac             36864  0
+intel_ishtp            86016  1 intel_ish_ipc
+mei_me                 57344  2
+spi_intel_pci          12288  0
+i2c_mux                16384  1 i2c_i801
+idma64                 20480  0
+snd                   151552  25 snd_ctl_led,snd_hda_codec_generic,snd_seq,snd_seq_device,snd_hda_codec_hdmi,snd_hwdep,snd_hda_intel,snd_hda_codec,snd_hda_codec_realtek,snd_sof,snd_timer,snd_soc_hdac_hdmi,snd_compress,snd_soc_core,snd_pcm
+typec                 114688  1 typec_ucsi
+videobuf2_common       94208  4 videobuf2_vmalloc,videobuf2_v4l2,uvcvideo,videobuf2_memops
+drm_suballoc_helper    12288  1 xe
+i2c_hid_acpi           12288  0
+processor_thermal_power_floor    12288  2 processor_thermal_device_pci,processor_thermal_device
+intel_uncore          262144  0
+cfg80211             1384448  3 iwlmvm,iwlwifi,mac80211
+mc                     90112  6 videodev,videobuf2_v4l2,uvcvideo,videobuf2_common
+mei                   200704  5 mei_hdcp,mei_pxp,mei_me
+crc16                  12288  1 bluetooth
+spi_intel              36864  1 spi_intel_pci
+nvidia_wmi_ec_backlight    12288  0
+soundcore              16384  2 snd_ctl_led,snd
+i2c_smbus              20480  1 i2c_i801
+wmi_bmof               12288  0
+8250_pci               73728  0
+virt_dma               16384  1 idma64
+edac_core             110592  1 igen6_edac
+drm_ttm_helper         16384  2 nvidia_drm,xe
+tiny_power_button      12288  0
+thermal                28672  0
+processor_thermal_mbox    12288  4 processor_thermal_power_floor,processor_thermal_wt_req,processor_thermal_rfim,processor_thermal_wt_hint
+roles                  16384  1 typec_ucsi
+i2c_hid                45056  1 i2c_hid_acpi
+int3403_thermal        16384  0
+hid                   266240  3 i2c_hid,hid_multitouch,hid_generic
+fan                    28672  0
+battery                28672  0
+button                 28672  0
+intel_pmc_core        122880  0
+int340x_thermal_zone    16384  2 int3403_thermal,processor_thermal_device
+int3400_thermal        24576  0
+intel_vsec             20480  1 intel_pmc_core
+acpi_thermal_rel       20480  1 int3400_thermal
+intel_hid              28672  0
+pmt_telemetry          16384  1 intel_pmc_core
+pinctrl_tigerlake      28672  0
+acpi_tad               20480  0
+pmt_class              16384  1 pmt_telemetry
+acpi_pad               24576  0
+input_leds             12288  0
+ac                     16384  0
+evdev                  28672  35
+nvidia              77529088  38 nvidia_uvm,nvidia_modeset
+mac_hid                12288  0
+serio_raw              16384  0
+fuse                  204800  5
+efi_pstore             12288  0
+configfs               69632  1
+nfnetlink              20480  3 nft_compat,nf_tables
+zram                   40960  1
+dmi_sysfs              24576  0
+ip_tables              28672  0
+x_tables               53248  8 xt_conntrack,ip6t_rpfilter,nft_compat,xt_LOG,xt_tcpudp,ipt_rpfilter,xt_pkttype,ip_tables
+dm_mod                217088  0
+dax                    53248  1 dm_mod
+btrfs                2142208  1
+blake2b_generic        24576  0
+libcrc32c              12288  3 nf_conntrack,btrfs,nf_tables
+crc32c_generic         12288  0
+xor                    20480  1 btrfs
+raid6_pq              122880  1 btrfs
+xhci_pci               24576  0
+i915                 4513792  27
+xhci_pci_renesas       24576  1 xhci_pci
+thunderbolt           569344  0
+nvme                   65536  2
+crc32c_intel           16384  2
+xhci_hcd              389120  1 xhci_pci
+rtc_cmos               28672  1
+nvme_core             241664  3 nvme
+nvme_auth              24576  1 nvme_core
+tpm_crb                28672  0
+tpm_tis                16384  0
+tpm_tis_core           32768  1 tpm_tis
+atkbd                  40960  0
+libps2                 24576  1 atkbd
+vivaldi_fmap           12288  1 atkbd
+ideapad_laptop         69632  0
+sparse_keymap          12288  2 intel_hid,ideapad_laptop
+i8042                  57344  1 ideapad_laptop
+platform_profile       12288  1 ideapad_laptop
+rfkill                 40960  10 iwlmvm,bluetooth,ideapad_laptop,cfg80211
+led_class              20480  5 snd_hda_codec_generic,videodev,input_leds,iwlmvm,ideapad_laptop
+serio                  28672  4 serio_raw,atkbd,i8042
+i2c_algo_bit           20480  2 xe,i915
+drm_buddy              24576  2 xe,i915
+video                  81920  5 nvidia_wmi_ec_backlight,ideapad_laptop,xe,i915,nvidia_modeset
+wmi                    32768  4 video,nvidia_wmi_ec_backlight,wmi_bmof,ideapad_laptop
+backlight              28672  6 video,nvidia_wmi_ec_backlight,ideapad_laptop,xe,i915,nvidia_modeset
+ttm                   102400  3 drm_ttm_helper,xe,i915
+intel_gtt              24576  1 i915
+drm_display_helper    262144  2 xe,i915
+cec                    73728  3 drm_display_helper,xe,i915
+efivarfs               28672  1
+tpm                   139264  3 tpm_tis,tpm_crb,tpm_tis_core
+rng_core               20480  1 tpm
+libaescfb              12288  1 tpm
+ecdh_generic           16384  3 bluetooth,tpm
+ecc                    40960  1 ecdh_generic
+autofs4                61440  0
+```
+
+### Issue Description:
+
+This issue appears to stem from a missing `/sys/class/power_supply/BAT1/charge_start_threshold` file, which causes an error when attempting to read or set the battery threshold. Consequently, battery conservation mode cannot be activated. Adding `ideapad_laptop_conservation_mode = true` to the configuration did not resolve the issue, and loading the `ideapad_laptop` kernel module also did not have any effect.
+
+### Expected Behavior:
+
+The battery threshold file should be accessible and adjustable, allowing battery conservation mode to activate as expected.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Relates to #741, #765, #794
+
+Since [project is looking for contributors](https://github.com/AdnanHodzic/auto-cpufreq#looking-for-developers-and-co-maintainers) if you or anyone else wants to give it a try in implementing this functionality, please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

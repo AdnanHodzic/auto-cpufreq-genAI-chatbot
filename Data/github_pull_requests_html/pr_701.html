@@ -1,0 +1,21 @@
+
+        <html>
+        <head>
+            <title>Pull Request #701: Nix: fix duplicated package</title>
+        </head>
+        <body>
+            <h1>Nix: fix duplicated package</h1>
+            <p><strong>Pull Request #701</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I noticed when messing with my Nix config, that there were 2 versions of `auto-cpufreq` being installed, which didn't seem right. Took a look at our Nix module, and noticed it was pulling in the outdated version of `auto-cpufreq` from the `nixpkgs` repo alongside the git version
+
+This is just a simple fix to stop it from pulling the unnecessary package and dependencies </p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+            </div>
+        </body>
+        </html>
+        

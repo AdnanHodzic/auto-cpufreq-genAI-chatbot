@@ -1,0 +1,36 @@
+
+        <html>
+        <head>
+            <title>Issue #58: Instruction on how to check daemon status when auto-cpufreq is installed using snap</title>
+        </head>
+        <body>
+            <h1>Instruction on how to check daemon status when auto-cpufreq is installed using snap</h1>
+            <p><strong>Issue #58</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hi, I would recommend updating your web page and other auto-cpufreq material with the correct instructions on how to check daemon status when snap was used to install auto-cpufreq. The instructions currently posted are not working in that scenario.
+
+auto-cpufreq is amazing, thanks for your time!</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Thank you for your kind words!
+
+When you install `auto-cpufreq` using snap package, you can check daemon status using:
+
+```
+systemctl status snap.auto-cpufreq.service.service
+```
+
+Also there's just been released a [major new release](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/1.2), so make sure to upgrade :)
+
+Closing the issue, please feel free to re-open it if it doesn't address your question.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,41 @@
+
+        <html>
+        <head>
+            <title>Issue #332: Improve charging detection function</title>
+        </head>
+        <body>
+            <h1>Improve charging detection function</h1>
+            <p><strong>Issue #332</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>The list of items in power_supply is now sorted. This way the AC is 'always' on top, and checked first. What I noticed is that internal supplies are always use uppercase, and inserted devices all use lowercase. 
+
+So if this theory is correct the AC and internal battery will always be checked first. 
+
+I also noticed the "scope" file under the hid device with battery. Maybe that file could help identify if an battery is from some other device or not. Will see in future bug reports if that is correct and maybe use that.
+
+If this still not works correctly I've implement an ignorelist. Where we can easily add items or parts of the string from devices we want to be ignored. 
+
+Currently in the ignore list is the "hidpp_battery" that came up in every issue so far.
+
+It's just an improvement of what we already have.
+
+Fixes #331</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Great stuff, thanks you for taking care of this so quickly!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Changes live as part of [v1.9.0 release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

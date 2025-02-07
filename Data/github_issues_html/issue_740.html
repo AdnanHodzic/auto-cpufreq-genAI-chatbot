@@ -1,0 +1,251 @@
+
+        <html>
+        <head>
+            <title>Issue #740: [Support Request] Fail to start auto-cpufreq in NixOS with flake installation</title>
+        </head>
+        <body>
+            <h1>[Support Request] Fail to start auto-cpufreq in NixOS with flake installation</h1>
+            <p><strong>Issue #740</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+### Error output:
+
+```text
+Add/paste error output in case of failed installation or other failing component
+```
+
+See the systemd logs below.
+
+---
+
+### System information:
+
+Add/paste output of:
+
+```bash
+auto-cpufreq --debug
+```
+
+```console
+-------------------------------- Battery Info ---------------------------------
+
+battery count = 1
+BAT0 start threshold = 0
+BAT0 start threshold = 99
+
+-------------------------------------------------------------------------------
+
+Linux distro: NixOS 24.11 Vicuna
+Linux kernel: 6.9.9-cachyos
+Processor: Intel(R) Core(TM) Ultra 7 155H
+Cores: 22
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4800 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      0.0%        50 °C      3343 MHz
+CPU1      0.0%        50 °C       400 MHz
+CPU2      0.0%        44 °C       400 MHz
+CPU3      0.0%        44 °C       400 MHz
+CPU4      0.0%        45 °C       400 MHz
+CPU5      0.0%        45 °C       400 MHz
+CPU6      1.0%        44 °C       400 MHz
+CPU7      1.0%        44 °C       400 MHz
+CPU8      0.0%        45 °C      1665 MHz
+CPU9      0.0%        45 °C       400 MHz
+CPU10      0.0%        46 °C      1958 MHz
+CPU11      0.0%        46 °C       400 MHz
+CPU12      0.0%        46 °C       400 MHz
+CPU13      0.0%        45 °C       400 MHz
+CPU14      0.0%        46 °C       400 MHz
+CPU15      1.0%        47 °C       400 MHz
+CPU16      0.0%        45 °C      1624 MHz
+CPU17      0.0%        45 °C       400 MHz
+CPU18      0.0%        45 °C      1154 MHz
+CPU19      0.0%        45 °C       400 MHz
+CPU20      0.0%        48 °C       400 MHz
+CPU21      0.0%        48 °C       400 MHz
+
+CPU fan speed: 5760 RPM
+
+auto-cpufreq version: 2.3.0
+
+Python: 3.12.4
+psutil package: 5.9.8
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.12 %
+
+Total CPU usage: 0.1 %
+Total system load: 0.62
+Average temp. of all cores: 45.82 °C
+
+Currently using: powersave governor
+Currently turbo boost is: on
+```
+
+---
+
+Systemd logs
+
+```bash
+sudo journalctl -xefu auto-cpufreq.service
+```
+
+```console
+Jul 16 20:49:03 nixos-x1-carbon auto-cpufreq[2642]: Traceback (most recent call last):
+Jul 16 20:49:03 nixos-x1-carbon auto-cpufreq[2642]:   File "/nix/store/5c3dd40xs3qcgdfsnxipq0p6q257v8d5-python3.12-auto-cpufreq-2.3.0/bin/..auto-cpufreq-wrapped-wrapped", line 9, in <module>
+Jul 16 20:49:03 nixos-x1-carbon auto-cpufreq[2642]:     sys.exit(main())
+Jul 16 20:49:03 nixos-x1-carbon auto-cpufreq[2642]:              ^^^^^^
+Jul 16 20:49:03 nixos-x1-carbon auto-cpufreq[2642]:   File "/nix/store/km5k1j2wffwn6wbyxnibd0w0yl2rcabw-python3.12-click-8.1.7/lib/python3.12/site-packages/click/core.py", line 1157, in __call__
+Jul 16 20:49:03 nixos-x1-carbon auto-cpufreq[2642]:     return self.main(*args, **kwargs)
+Jul 16 20:49:03 nixos-x1-carbon auto-cpufreq[2642]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+Jul 16 20:49:03 nixos-x1-carbon auto-cpufreq[2642]:   File "/nix/store/km5k1j2wffwn6wbyxnibd0w0yl2rcabw-python3.12-click-8.1.7/lib/python3.12/site-packages/click/core.py", line 1078, in main
+Jul 16 20:49:03 nixos-x1-carbon auto-cpufreq[2642]:     rv = self.invoke(ctx)
+Jul 16 20:49:03 nixos-x1-carbon auto-cpufreq[2642]:          ^^^^^^^^^^^^^^^^
+Jul 16 20:49:03 nixos-x1-carbon auto-cpufreq[2642]:   File "/nix/store/km5k1j2wffwn6wbyxnibd0w0yl2rcabw-python3.12-click-8.1.7/lib/python3.12/site-packages/click/core.py", line 1434, in invoke
+Jul 16 20:49:03 nixos-x1-carbon auto-cpufreq[2642]:     return ctx.invoke(self.callback, **ctx.params)
+Jul 16 20:49:03 nixos-x1-carbon auto-cpufreq[2642]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Jul 16 20:49:03 nixos-x1-carbon auto-cpufreq[2642]:   File "/nix/store/km5k1j2wffwn6wbyxnibd0w0yl2rcabw-python3.12-click-8.1.7/lib/python3.12/site-packages/click/core.py", line 783, in invoke
+Jul 16 20:49:03 nixos-x1-carbon auto-cpufreq[2642]:     return __callback(*args, **kwargs)
+Jul 16 20:49:03 nixos-x1-carbon auto-cpufreq[2642]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Jul 16 20:49:03 nixos-x1-carbon auto-cpufreq[2642]:   File "/nix/store/5c3dd40xs3qcgdfsnxipq0p6q257v8d5-python3.12-auto-cpufreq-2.3.0/lib/python3.12/site-packages/auto_cpufreq/bin/auto_cpufreq.py", line 123, in main
+Jul 16 20:49:03 nixos-x1-carbon auto-cpufreq[2642]:     battery_setup()
+Jul 16 20:49:03 nixos-x1-carbon auto-cpufreq[2642]:   File "/nix/store/5c3dd40xs3qcgdfsnxipq0p6q257v8d5-python3.12-auto-cpufreq-2.3.0/lib/python3.12/site-packages/auto_cpufreq/battery_scripts/battery.py", line 17, in battery_setup
+Jul 16 20:49:03 nixos-x1-carbon auto-cpufreq[2642]:     if lsmod("ideapad_acpi"): ideapad_acpi_setup()
+Jul 16 20:49:03 nixos-x1-carbon auto-cpufreq[2642]:        ^^^^^^^^^^^^^^^^^^^^^
+Jul 16 20:49:03 nixos-x1-carbon auto-cpufreq[2642]:   File "/nix/store/5c3dd40xs3qcgdfsnxipq0p6q257v8d5-python3.12-auto-cpufreq-2.3.0/lib/python3.12/site-packages/auto_cpufreq/battery_scripts/battery.py", line 8, in lsmod
+Jul 16 20:49:03 nixos-x1-carbon auto-cpufreq[2642]:     def lsmod(module): return module in run(['lsmod'], stdout=PIPE, stderr=PIPE, text=True).stdout
+Jul 16 20:49:03 nixos-x1-carbon auto-cpufreq[2642]:                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Jul 16 20:49:03 nixos-x1-carbon auto-cpufreq[2642]:   File "/nix/store/z7xxy35k7620hs6fn6la5fg2lgklv72l-python3-3.12.4/lib/python3.12/subprocess.py", line 548, in run
+Jul 16 20:49:03 nixos-x1-carbon auto-cpufreq[2642]:     with Popen(*popenargs, **kwargs) as process:
+Jul 16 20:49:03 nixos-x1-carbon auto-cpufreq[2642]:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Jul 16 20:49:03 nixos-x1-carbon auto-cpufreq[2642]:   File "/nix/store/z7xxy35k7620hs6fn6la5fg2lgklv72l-python3-3.12.4/lib/python3.12/subprocess.py", line 1026, in __init__
+Jul 16 20:49:03 nixos-x1-carbon auto-cpufreq[2642]:     self._execute_child(args, executable, preexec_fn, close_fds,
+Jul 16 20:49:03 nixos-x1-carbon auto-cpufreq[2642]:   File "/nix/store/z7xxy35k7620hs6fn6la5fg2lgklv72l-python3-3.12.4/lib/python3.12/subprocess.py", line 1955, in _execute_child
+Jul 16 20:49:03 nixos-x1-carbon auto-cpufreq[2642]:     raise child_exception_type(errno_num, err_msg, err_filename)
+Jul 16 20:49:03 nixos-x1-carbon auto-cpufreq[2642]: FileNotFoundError: [Errno 2] No such file or directory: 'lsmod'
+Jul 16 20:49:03 nixos-x1-carbon auto-cpufreq[2642]: Using settings defined in /nix/store/s3l0yv3507xzyjp1iij62f6yvldp4pny-auto-cpufreq.conf file
+Jul 16 20:49:03 nixos-x1-carbon systemd[1]: auto-cpufreq.service: Main process exited, code=exited, status=1/FAILURE
+```
+
+Looks like the Nix integration is somewhat broken.
+
+---
+
+My configuration
+
+```nix
+# auto-cpufreq settings
+programs.auto-cpufreq = {
+  enable = true;
+  settings = {
+    battery = {
+      governor = "powersave";
+      energy_performance_preference = "power";
+      turbo = "never";
+
+      scaling_min_freq = lib.mkDefault "400000"; # 400 MHz
+      scaling_max_freq = lib.mkDefault "1400000"; # 1400 MHz, or 1.4 GHz
+
+      enable_thresholds = true;
+      start_threshold = 0;
+      stop_threshold = 80;
+    };
+
+    charger = {
+      governor = "performance";
+      turbo = "auto";
+      energy_performance_preference = "performance";
+    };
+  };
+};
+```</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Tagging Nix maintainer @shadeyg56 
+
+It's possible that something was broken as part of #736 as [we never got a confirmation from him that changes](https://github.com/AdnanHodzic/auto-cpufreq/pull/736#pullrequestreview-2178387050) made for Nix were correct. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>piyoki:</strong></p>
+                    <p>Hey @shadeyg56, any help would be greatly appreciated!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>I'll take a look, I thought this had been fixed before. Seems like a regression, so you can pin the commit prior to the PR merge (34ebd04df0fd605c6c741f834f7b2d9205999f30) for the time being</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>piyoki:</strong></p>
+                    <p>> I'll take a look, I thought this had been fixed before. Seems like a regression, so you can pin the commit prior to the PR merge ([34ebd04](https://github.com/AdnanHodzic/auto-cpufreq/commit/34ebd04df0fd605c6c741f834f7b2d9205999f30)) for the time being
+
+Thanks for the kind reply. I can confirm that the suggested commit works as expected.
+
+![image](https://github.com/user-attachments/assets/926ca1f4-063b-4020-940a-4fb668d89833)
+
+Also, many thanks for your support! Let's keep this issue open then.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I'll take a look, I thought this had been fixed before. Seems like a regression, so you can pin the commit prior to the PR merge ([34ebd04](https://github.com/AdnanHodzic/auto-cpufreq/commit/34ebd04df0fd605c6c741f834f7b2d9205999f30)) for the time being
+
+@TheChilledBuffalo could you plese look into this since your changes introduced this? Thank you</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>TheChilledBuffalo:</strong></p>
+                    <p>@AdnanHodzic This issue only happens on NixOS, right? I'm not exactly sure what could be causing this because I don't use Nix...</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@TheChilledBuffalo seems like it, since OS used in user report is: 
+> Linux distro: NixOS 24.11 Vicuna
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>You should be able to unpin and update your flake.lock now. Apologies for the delay</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>piyoki:</strong></p>
+                    <p>Yep, I can confirm that it is working as expected. Appreciate your help, @shadeyg56
+
+![image](https://github.com/user-attachments/assets/f519d99e-80ad-4e9f-bfb0-d5ed3ef90ece)</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

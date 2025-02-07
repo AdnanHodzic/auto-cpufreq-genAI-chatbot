@@ -1,0 +1,59 @@
+
+        <html>
+        <head>
+            <title>Issue #303: Verify the use of supported init systems.</title>
+        </head>
+        <body>
+            <h1>Verify the use of supported init systems.</h1>
+            <p><strong>Issue #303</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>When installing on a old Gentoo machine, I found the following issue. Gentoo doesn't use runit, so it would assume it's systemd. Which was not correct. Added an extra check to see if its actually systemd instead of runit, otherwise give unsupported message. 
+
+```
+sudo auto-cpufreq --install
+
+--------------------- Deploying auto-cpufreq as a daemon ----------------------
+
+* Turn off bluetooth on boot [skipping] (package providing bluetooth access is not present)
+
+* Deploy auto-cpufreq install script
+
+* Deploy auto-cpufreq remove script
+
+------------------ Running auto-cpufreq daemon install script ------------------
+
+* Unsupported init system detected, could not install the daemon
+
+
+* Please open an issue on https://github.com/AdnanHodzic/auto-cpufreq
+
+
+----------------- auto-cpufreq daemon installed and running -----------------
+
+To view live stats, run:
+auto-cpufreq --stats
+
+To disable and remove auto-cpufreq daemon, run:
+sudo auto-cpufreq --remove
+
+-------------------------------------------------------------------------------
+
+
+```
+The message is maybe not really nice, because it still says it's installed and running afterwards. 
+
+I tested this change on the `non-systemd-gnome-power` branch otherwise it didn't run at all. So I think that is good to go!</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Looks great, thank you for your contribution and looking forward to seeing more of them! :)</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

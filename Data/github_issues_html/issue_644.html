@@ -1,0 +1,104 @@
+
+        <html>
+        <head>
+            <title>Issue #644: Update README with new battery thresholds feature </title>
+        </head>
+        <body>
+            <h1>Update README with new battery thresholds feature </h1>
+            <p><strong>Issue #644</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Apologies for the mess in the last attempt I made lol. The rebase went horribly wrong.
+
+Added a new section for the battery thresholds as discussed in #637 </p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>Some thing you will want to add is  the stop charge threshold can not be below 65 ( at least with thinkpad_acpi ) I've had errors having it lower than 65
+
+Edit: I'll try this test again just to make sure</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>>  the stop charge threshold can not be below 65 ( at least with thinkpad_acpi )
+
+Hm, I can't find any documentation on this, so maybe this needs to be explored further?
+Would you mind sharing the errors you get?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>I started building a test however I won't be able to finish it until tonight I'll reply back with results </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>So it seems my test is working without issue so I'm going to do some investigating </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Maybe it would also be a good idea to first merge #645 ?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Agreed.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>#645 merged, added a few comments, nothing major other then that LGTM! 
+
+Let's wait for @PurpleWazard to finish with:
+
+> So it seems my test is working without issue so I'm going to do some investigating
+
+and if he doesn't have any additional comments we're ready to merge.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>It all looks good to me @AdnanHodzic suggested that we clarify that --live doesn't call the battery functions. 
+Is was because I had having issues when I ran --live with the battery functions however since I've rewritten the battery scripts I tested it with --live and I haven't had an issue.
+
+I can add that change before or after the new release if needed</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@PurpleWazard I would rather have it before and hence part of 2.2.0 release. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>It is done</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Removed this comment because this is now addressed with merge of #646
+
+>Would also be good to include https://github.com/AdnanHodzic/auto-cpufreq/pull/645#issuecomment-1942159310. Maybe as a last line for this section to say something like: "Please note: only --monitor and --stats have battery threshold function"
+>
+>Or maybe it could be omitted, my only concern is that folks will ask it as a question. Alternatively it could be added as a comment for config file as part of battery threshold?
+
+@shadeyg56 then let's add those 2 links I suggested and it's ready to merge.
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>LGTM, thank you for your contribution will make sure to make this PR as part of release notes for 2.2.0.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

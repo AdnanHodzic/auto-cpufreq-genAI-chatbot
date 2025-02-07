@@ -1,0 +1,217 @@
+
+        <html>
+        <head>
+            <title>Issue #532: CPU limits seem to be applied erratically/max limit is ignored on battery power </title>
+        </head>
+        <body>
+            <h1>CPU limits seem to be applied erratically/max limit is ignored on battery power </h1>
+            <p><strong>Issue #532</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted?  
+    - Yes, I see [one other issue](https://github.com/AdnanHodzic/auto-cpufreq/issues/529) that seems to be describing something similar to what I am dealing with, just on a different OS
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+    - Installation did not fail, and only passed one error regarding Bluetooth which I had already manually disabled.
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+    - I tried to use the `--force=powersave` flag, but it did not seem to help and the CPU frequency kept surpassing max limit.
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+    - Yes, changing the intel_pstate did not help and actually made made the frequency be locked to 2900MHz, no matter if it was plugged in or not.
+
+### Error output:
+```text
+No official errors were reported.
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```bash
+localhost:/home/jkimsey # auto-cpufreq --debug
+
+-------------------------------------------------------------------------------
+
+Linux distro: openSUSE Tumbleweed 20230627 n/a
+Linux kernel: 6.3.9-1-default
+Processor: 11th Gen Intel(R) Core(TM) i7-1185G7 @ 3.00GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1200 MHz
+CPU min frequency: 400 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0      3.1%        41 °C      3000 MHz
+CPU1      2.0%        40 °C      3000 MHz
+CPU2      3.0%        37 °C      1088 MHz
+CPU3      0.0%        40 °C      3000 MHz
+CPU4      2.0%        41 °C       998 MHz
+CPU5      1.0%        40 °C      1036 MHz
+CPU6      2.9%        37 °C      3000 MHz
+CPU7      0.0%        40 °C      3000 MHz
+
+CPU fan speed: 0 RPM
+
+auto-cpufreq version: 1.9.8 (git: 486a9a6d)
+
+Python: 3.11.3
+psutil package: 5.9.5
+platform package: 1.0.8
+click package: 8.1.3
+distro package: 1.8.0
+
+Computer type: Convertible
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.08 %
+
+Total CPU usage: 0.5 %
+Total system load: 1.77
+Average temp. of all cores: 39.50 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+
+```
+
+The issue seems to be that on battery, in the `powersave` governor, the max frequency limit is completely ignored. Turbo-boosting does seem to be followed, as it only does so under a heavy workload, but otherwise does not do so while on battery power. However, for the regular CPU frequency max limit, it seems to be completely ignored, even when sitting on the desktop. This effect is noticeable, as the battery drain (after removing TLP on a fresh install of OpenSuse Tumbleweed) is rather significant. I'm not sure why this is happening, as when I used Pop!_OS with Gnome, I used an extension to manually control frequencies and it worked as expected. Now it wasn't auto-cpufreq, but it does/should mean it's not a hardware incompatibility either. The fact that turbo-boosting seems to follow the rules set for it means it's at least partially working. Just not sure what else to try?
+
+Hopefully it's just an error on my end and not a bug related to using it with OpenSuse Tumbleweed with KDE, or something like 
+that.
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>JoshuaKimsey:</strong></p>
+                    <p>Oh hey, side note too, as I'm not sure this fully counts as a bug? But on OpenSuse Tumbleweed, you can't actually run `auto-cpufreq` with `sudo`. I actually have to enter into root user mode with `sudo su` to be able to execute stuff with auto-cpufreq. No clue if it's related to the larger issue above, but thought it was worth mentioning as it's kinda... weird? 
+
+Here's a read out of what it looks like when I try it without and with sudo
+
+```bash
+jkimsey@localhost:~> auto-cpufreq --stats
+
+--------------------------------- Root check ----------------------------------
+
+ERROR:
+
+Must be run root for this functionality to work, i.e: 
+sudo auto-cpufreq
+
+-------------------------------------------------------------------------------
+
+jkimsey@localhost:~> sudo auto-cpufreq --stats
+sudo: auto-cpufreq: command not found
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@JoshuaKimsey regarding `sudo`, fixes were just fixed as part of #531 so make sure you have the latest changes. Although it's a different issue, I'm wondering if this has anything to do with what @aluva reported in #525 ...</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rootCircle:</strong></p>
+                    <p>@JoshuaKimsey Seems like you are probably using `intel_pstate` drivers, which has some trouble as mentioned in [README](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/README.md)
+>  high CPU temperatures
+    CPU not scaling to minimum/maximum frequencies
+    suboptimal CPU performance
+
+To fix it try following [this guide](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting), if that works. :-)
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>JoshuaKimsey:</strong></p>
+                    <p>@AdnanHodzic I actually saw that issue, and I wasn't entirely sure if it was related or not, since OpenSuse Tumbleweed and Debian 12 are about as different as can be. But it could be that there is a connected issue between them with regards to `auto-cpufreq` working right.
+
+@rootCircle Yeah, definitely using the pstate drivers. I actually did try reverting back to the older driver, apologies I should have mentioned that in my issue thread above. It didn't seem to make `auto-cpufreq` work any better than it had before, but it did make Tumbleweed act somewhat oddly. Specifically it kept hanging up when trying to restart until something timed out. I could just lower the timeout length to make that process short, but I'm typically not a fan of that since it's not fixing an underlying issue causing it. It also seemed to behave weirdly while using that, as it would switch to performance mode when plugged in, but changed to some sort of `schedutil` (iirc) when on battery, and `auto-cpufreq` didn't seem to affect it.
+
+I did have to revert back to using `tlp` (which actually came pre-installed with Tumbleweed surprisingly), as the battery drain made my laptop almost unusable. However, here in a couple of days I will try `auto-cpufreq` again, and I'll also do so with the pstate driver disabled. That way, I can grab debug info from it, so y'all can hopefully work on whatever issues are causing it to misbehave. :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>JoshuaKimsey:</strong></p>
+                    <p>Ok, sorry for the delay in getting back here. I switched my disabled my `intel_pstate` driver like @rootCircle said to do. So far it's not ramping up to 4GHz like it did before. Instead it's stuck at 2901MHz for the maximum, and 400 for the minimum, whether plugged in with performance or on battery, which switched the state manager to "schedutil" instead f powersaver.
+
+I tried to use the config file to override this, but that didn't seem to work as it ignored any of the preferences I put in there, even though `auto-cpufreq --stats` says its loaded. So I'm not sure what's going on? Below are the screenshots with it plugged in and on battery power. BTW @AdnanHodzic, I still seem to have to use `sudo su` to access auto-cpufreq, as `sudo` still can't find it as a valid command. That could just be an OpenSUse thing maybe?
+
+Plugged in
+![Screenshot_20230823_043738-1](https://github.com/AdnanHodzic/auto-cpufreq/assets/22421310/9f98f428-8d24-41e9-9763-33b9236902ce)
+
+Battery
+![Screenshot_20230823_043810](https://github.com/AdnanHodzic/auto-cpufreq/assets/22421310/8a39a504-9d42-4d50-b3d6-c7d5747d34d4)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>JoshuaKimsey:</strong></p>
+                    <p>Actually, I have noticed something. It may actually be following the config file settings. Even though it doesn't explicitly say it, I see when it's on battery with the `schedutil` manager, it's basically always staying below 1200MHz, which is what I had set it to in the config file (and might be the default to begin with). I'm not 100% sure on that though, and it does seem to still occasionally go back up to the 2901MHz, but it's less frequent than when on performance mode. Below is a screenshot of the config file I use.  I set the minimum to 100MHz, even though I know the minimum is likely 400MHz, so I'm not surprised to still see that. But yeah, be curious whether what's up with the permanent display of 2901MHz on it in both modes, and what `schedutil` is for the battery power. Also be happy to give any other info needed to help figure this out. :)
+
+![Screenshot_20230823_045032](https://github.com/AdnanHodzic/auto-cpufreq/assets/22421310/4ca0b940-bc0c-4c7b-8136-03e3793cc2f4)
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>JoshuaKimsey:</strong></p>
+                    <p>Ok, so possibly confirmation it may be more of a graphical bug than an actual core issue. I just loaded up a 4K video on YouTube to stress test with Performance mode on AC power, and it happily exceeds the 2901MHz maximum it shows. Now, unfortunately, it also seems to do so on Battery power with the `schedutil` mode. So... I'm not sure what to make of this? Screenshots below to show what I mean. It's maybe somewhat less likely to go as high while unplugged, but that's really hard to tell as it fluctuates a lot, so I can't say objectively it's doing that. 
+
+Plugged in
+![Screenshot_20230823_045712](https://github.com/AdnanHodzic/auto-cpufreq/assets/22421310/67a53bb8-6da2-46fa-964d-3f61790465c0)
+
+Battery
+![Screenshot_20230823_045940](https://github.com/AdnanHodzic/auto-cpufreq/assets/22421310/a06e5d69-956d-48be-b019-c0560a86ad89)
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>One suggestion from my side, when you make changes to config file, if you do a reboot and then check the stats, does it work as expected or it's the same thing?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>JoshuaKimsey:</strong></p>
+                    <p>@AdnanHodzic Fascinatingly, I just checked and the daemon was actually uninstalled, which is odd. Perhaps when doing some updates it uninstalled or something? Not sure when it happened, but I did notice my battery draining really fast just tonight, so maybe that's when it uninstalled itself. But after reinstalling the daemon, it now works as it should on battery power, with the limits set properly and showing. Now oddly because I never defined the plugged-in state in the config file, it's still defaulting back to showing a max of 2901MHz, so I may need to set that manually too. I'm curious if it actually sets it properly, or if I'll need to uninstall the daemon and re-install it again to make it take. I'll let you know when I what I find out.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>JoshuaKimsey:</strong></p>
+                    <p>Ok, now I think I figured it out. It seems like I had the frequency set too high for the max performance on charger thing, so it was defaulting back to the max of 2901MHz, which also led to some unstable behavior where it kept closing the daemon and I had to reinstall it each time. Oddly I thought the base clock of my processor was higher than 2901MHz, but I may be wrong. Need to look that up probably. Actually I know it was, cause with the pstate driver enabled it showed 4000MHz as the default max on that screen. So this may be a potential error/bug with calculating that max value?
+
+But with that, it now seems to be running correctly otherwise. Screenshot below for what I finally figured out.
+
+One thing I discovered is I had accidentally left a space before the min and max frequency settings for the charger profile, so instead of reading those variables separately, it was trying to read the entire performance governor as "perfornace set_min_freq=x set_max_freq=y". However, it didn't give any indication the power governor was definitely a wrong value. So maybe that should be included in an error check for that?
+
+But yes, now I think I've got everything settled with this. It's working great (and definitely more smoothly than TLP), and definitely sticking with it. Will let y'all know if I run into anymore bugs or issues. :)
+
+The error message saying its out of range:
+![Screenshot_20230904_211150](https://github.com/AdnanHodzic/auto-cpufreq/assets/22421310/4fa1c381-c0c6-4058-9701-0663072547c8)
+
+New terminal output with everything working correctly:
+![Screenshot_20230904_211301](https://github.com/AdnanHodzic/auto-cpufreq/assets/22421310/6207cb04-82be-4b78-b015-352d381d18fa)
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Awesome, glad you managed to figure it out :) </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

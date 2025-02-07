@@ -1,0 +1,71 @@
+
+        <html>
+        <head>
+            <title>Issue #652: add conservation mode to lenovo laptops</title>
+        </head>
+        <body>
+            <h1>add conservation mode to lenovo laptops</h1>
+            <p><strong>Issue #652</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>this PR adds conservation mode and support to lenovo_laptop compatible laptops for conservation mode add the following line to auto-cpufreq.conf 
+
+`ideapad_laptop_conservation_mode = true`</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I went through the code and it LGTM, but I do have few questions/remarks:
+
+In `/sys/bus/platform/drivers/ideapad_acpi/VPC2004:00/conservation_mode"` lines what does `VPC2004:00` refer to in this case?  Maybe it makes sense to make it a variable in case this list extends, or if it's for particular model to make a regex so it catches more cases with same line of code?
+
+I also tested it and I didn't see any problems, even if I add `ideapad_laptop_conservation_mode = true` on X1 Carbon. Which leads me to my remarks and first one of them being:
+
+1. Can you please tell me what is this option exactly for and is only for IdeaPad?
+
+2. With this info could you please update README, [config file](https://github.com/AdnanHodzic/auto-cpufreq/#3-auto-cpufreq-config-file) and/or [battery charging threshold](https://github.com/AdnanHodzic/auto-cpufreq/?tab=readme-ov-file#battery-charging-thresholds) part? As if it's not clear to me, not sure how it will be clear for other folks.
+
+3. I'll squash the commits when merging this change, so it won't matter. But I would suggest you focus on giving more thought for your commit messages. It'll make it easier to go/look through commits later on and I think it's a great practice. Hence I suggest to take a look at [How to Write a Git Commit Message](https://cbea.ms/git-commit/) article, as it helped me and something I have in my bookmarks for years. 
+
+Thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>yeah i can do that and sorry about the confusion ill try to make my commit better im still new to this whole git thing  :grinning:. 
+
+to be honest i have no idea what `/sys/bus/platform/drivers/ideapad_acpi/VPC2004:00/conservation_mode` entails its the least cryptic path ive found online and it was suggested by a user in a bug report asking for lenovo ideapad_laptop support. i cant test it on my own because i dont have an ideapad and would have to ask others for more info on it. i understand it might have issues with the snap package tho i really dont know.
+
+as for what conservation mode from my understanding is it lowers the charge thresholds and other  stuff to prolong battery health as long as possible for example you leave you laptop plugged in for a long time or for storage.
+
+and yes ill follow up with an update to the readme and thanks for the link for better git commit messages my bad.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>msmafra:</strong></p>
+                    <p>That path is used on [LLL](https://github.com/johnfanv2/LenovoLegionLinux) (LenovoLegionLinux), a project to add fan control, power modes, fan curves etc. It has a kernel patch and also a GUI. The conservation mode can be activated with the gui or cli,  I use it on my Lenovo Legion 5i: 
+This file has reference to that path:
+https://github.com/johnfanv2/LenovoLegionLinux/blob/main/python/legion_linux/legion_linux/legion.py</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@PurpleWazard I also have an IdeaPad so I could test it myself, as long as I know what I'm testing :) </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>LGTM! Thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>weilbith:</strong></p>
+                    <p>So any further details what this actually does in practice? What should I be able to observe using this? 🙂 </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

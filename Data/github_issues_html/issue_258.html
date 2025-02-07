@@ -1,0 +1,81 @@
+
+        <html>
+        <head>
+            <title>Issue #258: My driver is `/usr/bin/env: ‘bash\r’: No such file or directory`</title>
+        </head>
+        <body>
+            <h1>My driver is `/usr/bin/env: ‘bash\r’: No such file or directory`</h1>
+            <p><strong>Issue #258</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### System information:
+```text
+-------------------------------------------------------------------------------
+
+Linux distro: Fedora 34 
+Linux kernel: 5.14.11-200.fc34.x86_64
+Processor: AMD Ryzen 5 3500U with Radeon Vega Mobile Gfx
+Cores: 8
+Architecture: x86_64
+Driver: /usr/bin/env: ‘bash\r’: No such file or directory
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2100 MHz
+CPU min frequency: 1400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  5.1%     48 °C     1400 MHz
+CPU1:	  2.0%     48 °C     1400 MHz
+CPU2:	  6.0%     48 °C     1400 MHz
+CPU3:	  7.1%     48 °C     1400 MHz
+CPU4:	  4.0%     48 °C     1400 MHz
+CPU5:	  4.0%     48 °C     1364 MHz
+CPU6:	  5.0%     48 °C     1400 MHz
+CPU7:	  3.0%     48 °C     1400 MHz
+
+auto-cpufreq version:
+Git commit: 4509d07
+
+Python: 3.9.7
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 8.0.3
+distro package 1.5.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.38 %
+
+Total CPU usage: 4.8 %
+Total system load: 1.0
+Average temp. of all cores: 48.5 °C 
+
+Currently using: /usr/bin/env: governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>What happens if you install auto-cpufreq using [snap package](https://github.com/AdnanHodzic/auto-cpufreq#snap-store)?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing the issue due to inactivity, if the problem persist please feel free to re-open the issue.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,40 @@
+
+        <html>
+        <head>
+            <title>Issue #711: Code refactoring</title>
+        </head>
+        <body>
+            <h1>Code refactoring</h1>
+            <p><strong>Issue #711</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Batteries
+- Use `find` command to determine the batteries (makes it compatible with a larger range of machines)
+
+Config
+- Add `$XDG_CONFIG_HOME/auto-cpufreq.conf` detection
+- Listen the file, not the directory (listen the directory can cause security problem)
+
+Init system
+- Add Antix, Devuan for runnit
+- Add init system command
+
+Installer:
+- Add/remove automatically conf file in `/etc/auto-cpufreq.conf`
+- Add `-i` and `-r` options
+
+Others
+- Add global variables
+- Add output with color
+- Auto run in root
+- Change the method to detect the distro (using `cat`, it bypasses the symbolic link problem)
+- Clean the code
+- Remove `--log` option</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+            </div>
+        </body>
+        </html>
+        

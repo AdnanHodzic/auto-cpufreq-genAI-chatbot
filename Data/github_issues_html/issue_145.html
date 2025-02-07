@@ -1,0 +1,263 @@
+
+        <html>
+        <head>
+            <title>Issue #145: Ryzen 4750U not showing temperature output with no error</title>
+        </head>
+        <body>
+            <h1>Ryzen 4750U not showing temperature output with no error</h1>
+            <p><strong>Issue #145</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hey, my CPU temperature doesn't seem to be reported on auto-cpufreq on my Ryzen 7 4750U ThinkPad T14 on Manjaro KDE kernel 5.9.16-1. s-tui seems to work just fine tho, so does ZenMonitor. I do not get an error in auto-cpufreq despite the temperature clearly being not displayed, compared to #14.
+
+### Error output:
+```text
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+
+Total CPU usage: 16.4 %
+Total system load: 3.48
+Average temp. of all cores: nan °C
+```
+---
+
+### System information:
+```text
+-------------------------------------------------------------------------------
+
+Linux distro: Manjaro Linux 20.2.1 Nibia
+Linux kernel: 5.9.16-1-MANJARO
+Processor: AMD Ryzen 7 PRO 4750U with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 1700 MHz
+CPU min frequency: 1400 MHz
+
+	 Usage  Temperature  Frequency
+CPU0:	 11.1%    nan °C     2779 MHz
+CPU1:	  7.1%    nan °C     2590 MHz
+CPU2:	 14.1%    nan °C     2691 MHz
+CPU3:	  2.1%    nan °C     2728 MHz
+CPU4:	 10.1%    nan °C     3048 MHz
+CPU5:	  8.2%    nan °C     3377 MHz
+CPU6:	 16.2%    nan °C     2351 MHz
+CPU7:	  9.9%    nan °C     3071 MHz
+CPU8:	 10.9%    nan °C     3340 MHz
+CPU9:	  4.1%    nan °C     3203 MHz
+CPU10:	  9.3%    nan °C     3148 MHz
+CPU11:	 12.6%    nan °C     3157 MHz
+CPU12:	  8.3%    nan °C     3173 MHz
+CPU13:	  4.0%    nan °C     2832 MHz
+CPU14:	 10.3%    nan °C     3295 MHz
+CPU15:	  4.2%    nan °C     3193 MHz
+
+fatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+Snap package: no
+
+Python: 3.9.1
+psutil package: 5.7.3
+platform package: 1.0.8
+click package: 7.1.2
+distro package 1.5.0
+
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.04 %
+
+Total CPU usage: 7.0 %
+Total system load: 3.25
+Average temp. of all cores: nan °C
+
+Currently using: performance governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@Red-Eyed since I know you have an AMD, does any of this ring a bell for you?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>So, `psutil` shows temperature for some AMD, for some it doesn't.
+For my AMD it shows temperature, but for others, I had to set values to NaN in cases when it doesn't provide cpu temp</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>@JJGadgets, as we don't have Ryzen 4750U, would be nice to know, where is located the actual temperature for Ryzen 4750U ?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>@AdnanHodzic  If I remember right, there was a cmd option "--debug" which shows `psutil`'s output. This would help to look at `psutil`'s dict </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>@JJGadgets can you execute these commands (**without** `sudo`) and post the output here?
+```bash
+python3 -m pip install psutil --user
+python3 -c "import psutil; import pprint; pprint.pprint(psutil.sensors_temperatures())"
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>tpeacock19:</strong></p>
+                    <p>I ran into this issue with Ryzen 7 4750U ThinkPad T14 on Arch Linux. Zenmonitor replaced the k10temp module with zenpower which I do not believe works with auto-cpufreq. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>JJGadgets:</strong></p>
+                    <p>> @JJGadgets can you execute these commands (**without** `sudo`) and post the output here?
+> 
+> ```shell
+> python3 -m pip install psutil --user
+> python3 -c "import psutil; import pprint; pprint.pprint(psutil.sensors_temperatures())"
+> ```
+
+Hey, sorry I have been a bit busy lately, all replies may also be delayed but I’ll try my best to keep up.
+
+Just as an update: I’m currently on my PopOS install in a lecture where I don’t have auto-cpufreq installed right now, I’ll boot into Manjaro in a few hours once I’m out and report back.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>JJGadgets:</strong></p>
+                    <p>> @JJGadgets, as we don't have Ryzen 4750U, would be nice to know, where is located the actual temperature for Ryzen 4750U ?
+
+ZenMonitor and s-tui appear to be accurate.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>> > @JJGadgets, as we don't have Ryzen 4750U, would be nice to know, where is located the actual temperature for Ryzen 4750U ?
+> 
+> ZenMonitor and s-tui appear to be accurate.
+
+Sorry, I didn't mean tools, I meant, which place of `sysfs` the temperature is located in?
+Sure, if you know what the `sysfs` is.
+
+Anyway, executing that command will help, and you can do that on any modern distro (the latest pop os is fine), it doesn't matter</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>tpeacock19:</strong></p>
+                    <p>When  Zenmonitor is installed I get the following:
+
+```bash
+❯ python3 -c "import psutil; import pprint; pprint.pprint(psutil.sensors_temperatures())"
+{'amdgpu': [shwtemp(label='edge', current=40.0, high=None, critical=None)],
+ 'iwlwifi_1': [shwtemp(label='', current=49.0, high=None, critical=None)],
+ 'nvme': [shwtemp(label='Composite', current=29.85, high=76.85, critical=79.85)],
+ 'thinkpad': [shwtemp(label='', current=51.0, high=None, critical=None),
+              shwtemp(label='', current=0.0, high=None, critical=None),
+              shwtemp(label='', current=66.0, high=None, critical=None),
+              shwtemp(label='', current=0.0, high=None, critical=None),
+              shwtemp(label='', current=0.0, high=None, critical=None),
+              shwtemp(label='', current=0.0, high=None, critical=None),
+              shwtemp(label='', current=0.0, high=None, critical=None),
+              shwtemp(label='', current=0.0, high=None, critical=None),
+              shwtemp(label='', current=0.0, high=None, critical=None),
+              shwtemp(label='', current=0.0, high=None, critical=None),
+              shwtemp(label='', current=0.0, high=None, critical=None),
+              shwtemp(label='', current=0.0, high=None, critical=None),
+              shwtemp(label='', current=0.0, high=None, critical=None),
+              shwtemp(label='', current=0.0, high=None, critical=None),
+              shwtemp(label='', current=0.0, high=None, critical=None)],
+ 'zenpower': [shwtemp(label='Tdie', current=51.25, high=95.0, critical=95.0),
+              shwtemp(label='Tctl', current=51.25, high=None, critical=None)]}
+```
+
+When you uninstall Zenmonitor and install lm_sensors, it workts with auto-cpufreq and shows the below:
+
+```bash
+❯ python3 -c "import psutil; import pprint; pprint.pprint(psutil.sensors_temperatures())"
+{'amdgpu': [shwtemp(label='edge', current=40.0, high=None, critical=None)],
+ 'iwlwifi_1': [shwtemp(label='', current=53.0, high=None, critical=None)],
+ 'k10temp': [shwtemp(label='Tctl', current=50.75, high=None, critical=None),
+             shwtemp(label='Tdie', current=50.75, high=None, critical=None)],
+ 'nvme': [shwtemp(label='Composite', current=30.85, high=76.85, critical=79.85)],
+ 'thinkpad': [shwtemp(label='', current=40.0, high=None, critical=None),
+              shwtemp(label='', current=0.0, high=None, critical=None),
+              shwtemp(label='', current=66.0, high=None, critical=None),
+              shwtemp(label='', current=0.0, high=None, critical=None),
+              shwtemp(label='', current=0.0, high=None, critical=None),
+              shwtemp(label='', current=0.0, high=None, critical=None),
+              shwtemp(label='', current=0.0, high=None, critical=None),
+              shwtemp(label='', current=0.0, high=None, critical=None),
+              shwtemp(label='', current=0.0, high=None, critical=None),
+              shwtemp(label='', current=0.0, high=None, critical=None),
+              shwtemp(label='', current=0.0, high=None, critical=None),
+              shwtemp(label='', current=0.0, high=None, critical=None),
+              shwtemp(label='', current=0.0, high=None, critical=None),
+              shwtemp(label='', current=0.0, high=None, critical=None),
+              shwtemp(label='', current=0.0, high=None, critical=None)]}
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>Thank you @tpeacock19 , according to your output, I made a fix!
+Can you check it out?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>tpeacock19:</strong></p>
+                    <p>I'm unsure which of these fixes is correct, but using this commit 000a1c2e801fc55b30a9042a4a637c88351b07ef does indeed work.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>tpeacock19:</strong></p>
+                    <p>Actually, it throws an error unless it is changed to the below:
+
+Shows 16 CPU.
+```python
+        elif "zenpower" in core_temp:
+            # https://github.com/AdnanHodzic/auto-cpufreq/issues/145#issuecomment-763294009
+            temp_per_cpu = [core_temp["zenpower"][0].current] * online_cpu_count
+
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>> Actually, it throws an error unless it is changed to the below:
+> 
+> Shows 16 CPU.
+> 
+> ```python
+>         elif "zenpower" in core_temp:
+>             # https://github.com/AdnanHodzic/auto-cpufreq/issues/145#issuecomment-763294009
+>             temp_per_cpu = [core_temp["zenpower"][0].current] * online_cpu_count
+> ```
+
+Oh I see, I used very old branch, and then just merged my changes to upstream
+Updated</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Changes have been merged with master, new [1.5.3 release](https://github.com/AdnanHodzic/auto-cpufreq/releases) will be released shorty, after which these changes will also be propagated to AUR and snap packages.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

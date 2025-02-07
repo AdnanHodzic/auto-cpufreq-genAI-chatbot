@@ -1,0 +1,170 @@
+
+        <html>
+        <head>
+            <title>Issue #112: CPU frequency scaling frozen in auto-cpufreq --log</title>
+        </head>
+        <body>
+            <h1>CPU frequency scaling frozen in auto-cpufreq --log</h1>
+            <p><strong>Issue #112</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I noticed that while using `auto-cpufreq --log`, in the section CPU frequency scaling, total CPU usage and total system load remain the same after every refresh. I tried restarting the system but, after that, the load and the turbo boost settings seems also to be frozen. From the debugging output it seems that turbo boost is always on at the moment, even though the load is not high. The problem also persist when using the battery. So I don't know if it's only a matter of displaying correctly the log or if it affects the CPU frequency scaling itself and/or turbo boost settings.
+
+### `auto-cpufreq --log` output:
+```
+Linux distro: Fedora 32 
+Linux kernel: 5.8.7-200.fc32.x86_64
+Processor: Intel(R) Core(TM) i5-3320M CPU @ 2.60GHz
+Cores: 4
+Architecture: x86_64
+Driver: intel_cpufreq
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 3300MHz
+CPU min frequency: 1200MHz
+
+CPU frequency for each core:
+
+CPU0: 2164 MHz
+CPU1: 2797 MHz
+CPU2: 2488 MHz
+CPU3: 2015 MHz
+
+Temperature for each physical core:
+
+CPU0 temp: 50°C
+CPU1 temp: 47°C
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+
+Total CPU usage: 100.0 %
+Total system load: 0.91 
+
+High load, setting turbo boost: on
+```
+
+---
+
+### System information:
+```
+Linux distro: Fedora 32 
+Linux kernel: 5.8.7-200.fc32.x86_64
+
+Build git commit: 6f729ed
+Snap package: no
+
+Python: 3.8.5
+psutil package: 5.6.7
+platform package: 1.0.8
+click package: 7.1.2
+distro package 1.4.0
+
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.12 %
+
+Processor: Intel(R) Core(TM) i5-3320M CPU @ 2.60GHz
+Cores: 4
+Architecture: x86_64
+Driver: intel_cpufreq
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 3300MHz
+CPU min frequency: 1200MHz
+
+CPU frequency for each core:
+
+CPU0: 2751 MHz
+CPU1: 2798 MHz
+CPU2: 2133 MHz
+CPU3: 2610 MHz
+
+Temperature for each physical core:
+
+CPU0 temp: 49°C
+CPU1 temp: 49°C
+
+Total CPU usage: 1.5 %
+Total system load: 0.09 
+
+Currently using: performance governor
+Currently turbo boost is: on
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>No, output in both `--log` and `--debug` should reflect actual turbo status. The reason behind this might be because `intel_cpufreq` driver is being used on your system, hence I don't think it's reading turbo state correctly since for `intel_pstate` turbo is on different location. 
+
+Do you have any idea why `intel_cpufreq` is being used on your system? On Intel i7 `intel_pstate` is being used by default for me. 
+
+Can you share output of:
+
+```
+cat /sys/devices/system/cpu/intel_pstate/no_turbo
+cat /sys/devices/system/cpu/cpufreq/boost
+```
+
+@Red-Eyed what driver is used for you on AMD?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>smarambas:</strong></p>
+                    <p>> Do you have any idea why `intel_cpufreq` is being used on your system?
+
+I'm trying to understand why, without much success.
+
+### `cat /sys/devices/system/cpu/intel_pstate/no_turbo` output:
+```
+1
+```
+### `cat /sys/devices/system/cpu/cpufreq/boost` output:
+```
+cat: /sys/devices/system/cpu/cpufreq/boost: No such file or directory
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> > Do you have any idea why `intel_cpufreq` is being used on your system?
+> 
+> I'm trying to understand why, without much success.
+> 
+> ### `cat /sys/devices/system/cpu/intel_pstate/no_turbo` output:
+> ```
+> 1
+> ```
+> 
+> ### `cat /sys/devices/system/cpu/cpufreq/boost` output:
+> ```
+> cat: /sys/devices/system/cpu/cpufreq/boost: No such file or directory
+> ```
+
+This validates my prediction. 
+
+I think it would be easiest if you used `intel_pstate`. Normally it should be automatically enabled/loaded. I'm not sure how comfortable you are editing `grub.cfg`, there are some resources [how to disable it on Fedora](https://unix.stackexchange.com/questions/121410/setting-cpu-governor-to-on-demand-or-conservative). Maybe try to figure out a way how to enable it?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>smarambas:</strong></p>
+                    <p>> Maybe try to figure out a way how to enable it?
+
+I will try, thanks for the help.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

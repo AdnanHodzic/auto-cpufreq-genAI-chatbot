@@ -1,0 +1,60 @@
+
+        <html>
+        <head>
+            <title>Issue #297: [Suggestion] Add configuration options based on temperature</title>
+        </head>
+        <body>
+            <h1>[Suggestion] Add configuration options based on temperature</h1>
+            <p><strong>Issue #297</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>It would be helpful if there was a way to reduce to `powersave` when the CPU is above a certain temperature to prevent overheating.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Might be an interesting feature to have indeed, but could you please try out latest changes? With [release of 1.8.0](https://github.com/AdnanHodzic/auto-cpufreq/releases) I think overheating should be drastically lowered to non existent now.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>MithicSpirit:</strong></p>
+                    <p>I am still having issues of very high temps when performance governor + boost clock while charging (though this may be related to me using tlp to set the CPU max frequency, I'll do some more testing on this later).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I just updated this portion of [project readme](https://github.com/AdnanHodzic/auto-cpufreq) to be more explicit about TLP. "Please note: auto-cpufreq aims to replace TLP in terms of functionality and after you install auto-cpufreq _it's recommended to remove TLP_. If both are used for same functionality, i.e: to set CPU frequencies it'll lead to unwanted results like overheating. Hence, only use [both tools in tandem](https://github.com/AdnanHodzic/auto-cpufreq/discussions/176) if you know what you're doing."
+
+However. However, if for some reason you still need/want TLP installed and running auto-cpufreq doesn't conflict and works great in tandem with TLP.
+
+> though this may be related to me using tlp to set the CPU max frequency, I'll do some more testing on this later)
+
+I'm sure TLP is the reason, you have a conflict between auto-cpufreq and TLP on who's going to set what.
+
+FYI @bobslept if you're looking for something to do, it would be useful to extend functionality introduced in [power_helper](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto_cpufreq/power_helper.py) for GNOME power profiles and extend it to TLP. So if it's detected that TLP is running that a user get's a message that he should probably remove it, otherwise they could get unwanted results.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>MithicSpirit:</strong></p>
+                    <p>Disabling tlp has fixed the issue, though now I can't control the maximum allowed frequency when not charging, which somewhat decreases my battery life. So I think that there should be another option in the config to allow specifying the maximum (and maybe minimum) frequencies. 
+I can open another issue for this if you want.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Disabling tlp has fixed the issue,
+
+[With release of 1.8.1](https://github.com/AdnanHodzic/auto-cpufreq/releases) user will get a warning message if auto-cpufreq detects TLP is running in background.
+
+> though now I can't control the maximum allowed frequency when not charging, which somewhat decreases my battery life. So I think that there should be another option in the config to allow specifying the maximum (and maybe minimum) frequencies.
+> I can open another issue for this if you want.
+
+Yes, please do, in meantime I'll close this one.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

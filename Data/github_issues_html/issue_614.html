@@ -1,0 +1,204 @@
+
+        <html>
+        <head>
+            <title>Issue #614: auto-cpufreq GUI refuses to open</title>
+        </head>
+        <body>
+            <h1>auto-cpufreq GUI refuses to open</h1>
+            <p><strong>Issue #614</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? Yes
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)? Yes
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)? No
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)? No
+
+### Error output:
+```text
+19:03:22 gnome-shell: Timelines with detached actors are not supported
+19:03:17 systemd: gnome-launched-auto-cpufreq-gtk.desktop-11080.scope: Succeeded.
+19:03:17 auto-cpufreq-gt: SyntaxError: invalid syntax
+19:03:17 auto-cpufreq-gt: SyntaxError: invalid syntax
+19:03:17 auto-cpufreq-gt:           ^
+19:03:17 auto-cpufreq-gt:     match override:
+19:03:17 auto-cpufreq-gt:   File "/opt/auto-cpufreq/venv/lib/python3.8/site-packages/auto_cpufreq/gui/objects.py", line 94
+19:03:17 auto-cpufreq-gt:     from auto_cpufreq.gui.objects import RadioButtonView, SystemStatsLabel, CPUFreqStatsLabel, CurrentGovernorBox, DropDownMenu, DaemonNotRunningView, UpdateDialog
+19:03:17 auto-cpufreq-gt:   File "/opt/auto-cpufreq/venv/lib/python3.8/site-packages/auto_cpufreq/gui/app.py", line 17, in <module>
+19:03:17 auto-cpufreq-gt:     from auto_cpufreq.gui.app import ToolWindow
+19:03:17 auto-cpufreq-gt:   File "/opt/auto-cpufreq/venv/lib/python3.8/site-packages/auto_cpufreq/bin/auto_cpufreq_gtk.py", line 11, in <module>
+19:03:17 auto-cpufreq-gt:     from auto_cpufreq.bin.auto_cpufreq_gtk import main
+19:03:17 auto-cpufreq-gt:   File "/opt/auto-cpufreq/venv/bin/auto-cpufreq-gtk", line 5, in <module>
+19:03:17 auto-cpufreq-gt: Traceback (most recent call last):
+19:03:17 systemd: Started Application launched by gnome-shell.
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Zorin OS 16 focal
+Linux kernel: 5.15.0-91-generic
+Processor: 11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1200 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      8.2%        46 °C      2800 MHz
+CPU1     16.3%        49 °C      2800 MHz
+CPU2     12.1%        47 °C      2800 MHz
+CPU3     10.3%        47 °C      1090 MHz
+CPU4     16.8%        46 °C      2800 MHz
+CPU5     10.2%        49 °C      1031 MHz
+CPU6     10.8%        47 °C      2800 MHz
+CPU7     10.0%        47 °C      2800 MHz
+
+CPU fan speed: 0 RPM
+
+auto-cpufreq version: 2.1.0 (git: c523f51)
+
+Python: 3.8.10
+psutil package: 5.9.6
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.8.0
+
+Computer type: Convertible
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.07 %
+
+Total CPU usage: 11.0 %
+Total system load: 1.16
+Average temp. of all cores: 47.25 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+
+```
+
+When I read about auto-cpufreq, I was only aware of the snap package and installed it. Afterwards, I noticed that I can't run the GUI version due to snap's sandbox limitations. So, I removed the snap version, cloned the git version and ran the installer.
+
+Now, the auto-cpufreq icon is available amongst my programs, but nothing happens when I click on it. For all intents and purposes, it seems to be running just fine, but reading those errors in the application log just irks me to no end.
+
+Would be great if somebody could chime in who has a deeper understanding of the inner workings. 😊
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Hello, this looks like an error caused by having too low of a Python version. Please update Python, run the installer and try again</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>OddSquirrel:</strong></p>
+                    <p>Hi @shadeyg56, thanks for getting back to me. Unfortunately, 3.8.10 is the current max my Distribution offers and going by related forum posts it's not advisable to go beyond.
+
+Would you happen to know what particular version is required? I looked around, but I couldn't see it mentioned anywhere. 🤔</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>If you can't get newer python version with your distro I suggest you start using pyenv: https://github.com/pyenv/pyenv and just install latest version (i.e: 3.12)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Tuxman2:</strong></p>
+                    <p>Hello,
+
+I have the same problem. But in my case, I'm on Fedora 39 with the last python version (3.12). After I installed auto-cpufreq with the installer (source version), I had the gui, but now, each time I launch the software through the application grid under Gnome 45, nothing happens.
+
+Regards.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>OddSquirrel:</strong></p>
+                    <p>Thanks for chiming in @AdnanHodzic & @Tuxman2!
+
+I'm gonna look into pyenv. Still odd that Tuxman2 has the same problem with the recent version of Python, though. 🤔</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>GrabowskiDev:</strong></p>
+                    <p>Hi
+
+I also have a similar issue, however for me the GUI doesn't open when I'm not connected to the internet (as soon as I connect to the internet I can open the GUI through Gnome grid app menu).
+
+I've installed auto-cpufreq with auto-cpufreq-installer
+Running Fedora Linux 39, Gnome 45.1, Wayland, Kernel Linux 5.19.10-200.fc36.x86_64
+EDIT: Running Python 3.12.0</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@shadeyg56 any idea why this might be the case?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>hingen:</strong></p>
+                    <p>> Hi
+> 
+> I also have a similar issue, however for me the GUI doesn't open when I'm not connected to the internet (as soon as I connect to the internet I can open the GUI through Gnome grid app menu).
+> 
+> I've installed auto-cpufreq with auto-cpufreq-installer Running Fedora Linux 39, Gnome 45.1, Wayland, Kernel Linux 5.19.10-200.fc36.x86_64 EDIT: Running Python 3.12.0
+
+Not sure if this is the same issue but I'm able to reproduce what you're describing.
+
+Suspect it might be caused by the following lines of execution:
+[handle_update](https://github.com/AdnanHodzic/auto-cpufreq/blob/fe296206462f204c3abb9d73e005fccd8c8a6bb6/auto_cpufreq/bin/auto_cpufreq_gtk.py#L18) > [check_for_update](https://github.com/AdnanHodzic/auto-cpufreq/blob/fe296206462f204c3abb9d73e005fccd8c8a6bb6/auto_cpufreq/gui/app.py#L84) > [exit(1)](https://github.com/AdnanHodzic/auto-cpufreq/blob/fe296206462f204c3abb9d73e005fccd8c8a6bb6/auto_cpufreq/core.py#L181)
+
+If that is the case, wonder if a failed update check should `return False` instead of call an `exit(1)`. 
+
+If it is indeed a separate issue, might want to create a separate issue for it</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Considering changes proposed by @hingen in #629 are now merged with `master` branch. @OddSquirrel can you confirm if this fixes the problem once you pull the latest changes?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>OddSquirrel:</strong></p>
+                    <p>> @OddSquirrel can you confirm if this fixes the problem once you pull the latest changes?
+
+Yes, @AdnanHodzic, please excuse the delayed response. Everything is working just fine now. Thank you for your time.
+
+Mind you, I also switched from Zorin OS 16 (based on Ubuntu 20.04 Focal Fossa) to Zorin OS 17 (based on Ubuntu 22.04 Jammy Jellyfish), so that might have played a role as well.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Closing issue.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>BrightKingsley:</strong></p>
+                    <p>I downgraded from Zorin OS 17 to 16, cause I was experiencing freezing issues, but the GUI worked fine wile I was on 17. Currently on 16 and it doesn't work.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

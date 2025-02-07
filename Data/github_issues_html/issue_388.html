@@ -1,0 +1,130 @@
+
+        <html>
+        <head>
+            <title>Issue #388: aur package throws an error on auto-cpufreq --install</title>
+        </head>
+        <body>
+            <h1>aur package throws an error on auto-cpufreq --install</h1>
+            <p><strong>Issue #388</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+```text
+--------------------- Deploying auto-cpufreq as a daemon ----------------------
+
+* Turn off bluetooth on boot [skipping] (package providing bluetooth access is not present)
+
+* Deploy auto-cpufreq install script
+Traceback (most recent call last):
+  File "/usr/bin/auto-cpufreq", line 226, in <module>
+    main()
+  File "/usr/lib/python3.10/site-packages/click/core.py", line 1130, in __call__
+    return self.main(*args, **kwargs)
+  File "/usr/lib/python3.10/site-packages/click/core.py", line 1055, in main
+    rv = self.invoke(ctx)
+  File "/usr/lib/python3.10/site-packages/click/core.py", line 1404, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/usr/lib/python3.10/site-packages/click/core.py", line 760, in invoke
+    return __callback(*args, **kwargs)
+  File "/usr/bin/auto-cpufreq", line 203, in main
+    deploy_daemon()
+  File "/usr/lib/python3.10/site-packages/auto_cpufreq/core.py", line 358, in deploy_daemon
+    shutil.copy(SCRIPTS_DIR / "auto-cpufreq-install.sh", "/usr/bin/auto-cpufreq-install")
+  File "/usr/lib/python3.10/shutil.py", line 417, in copy
+    copyfile(src, dst, follow_symlinks=follow_symlinks)
+  File "/usr/lib/python3.10/shutil.py", line 254, in copyfile
+    with open(src, 'rb') as fsrc:
+FileNotFoundError: [Errno 2] No such file or directory: '/usr/share/auto-cpufreq/scripts/auto-cpufreq-install.sh'
+
+```
+---
+
+### System information:
+```
+Using settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------------------------------------------------------
+
+Linux distro: EndeavourOS rolling rolling
+Linux kernel: 5.17.1-zen1-1-zen
+Processor: AMD Ryzen 5 5500U with Radeon Graphics
+Cores: 12
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2100 MHz
+CPU min frequency: 1400 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0:     0.0%     37 °C     1400 MHz
+CPU1:     0.0%     37 °C     1400 MHz
+CPU2:     0.0%     37 °C     1400 MHz
+CPU3:     1.0%     37 °C     1400 MHz
+CPU4:     1.0%     37 °C     2349 MHz
+CPU5:     0.0%     37 °C     2100 MHz
+CPU6:     0.0%     37 °C     1400 MHz
+CPU7:     0.0%     37 °C     1400 MHz
+CPU8:     0.0%     37 °C     2100 MHz
+CPU9:     1.0%     37 °C     2100 MHz
+CPU10:    0.0%     37 °C     1400 MHz
+CPU11:    0.0%     37 °C     1469 MHz
+
+auto-cpufreq version: 1.9.3 (git: ae1f53c7.post1.dirty)
+
+Python: 3.10.4
+psutil package: 5.9.0
+platform package: 1.0.8
+click package: 8.1.2
+distro package: 1.7.0
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.21 %
+
+Total CPU usage: 0.3 %
+Total system load: 0.099609375
+Average temp. of all cores: 37.375 °C
+
+Currently using: schedutil governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+
+```</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>sarmong:</strong></p>
+                    <p>Same here</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Unfortunately I don't maintain the AUR package so I can't help, besides referring you to [AUR related part of project's README.](https://github.com/AdnanHodzic/auto-cpufreq/#aur-package-archmanjaro-linux)
+
+ People who used to maintain the AUR package are no longer replying when I ping them, but from last I know something had to be [done with AUR itself](https://aur.archlinux.org/packages/auto-cpufreq#comment-843224). 
+
+Also look for solved issues where [aur package ](https://github.com/AdnanHodzic/auto-cpufreq/issues?q=is%3Aissue+is%3Aall+aur+package)was mentioned, I hope this helps and please let me know if you have any updates on this as it would be great to update README with this info.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>VAISHAKH-GK:</strong></p>
+                    <p>In Aur package --install doesn't work instead you can start it using systemd `sudo systemctl enable --now auto-cpufreq`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>xd003:</strong></p>
+                    <p>I think this issue could be closed since ```auto-cpufreq --install``` is not even meant to be used with the arch package as the installation part has already been done by installing the package & only needs systemd commands which has already been mentioned in README @AdnanHodzic </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,228 @@
+
+        <html>
+        <head>
+            <title>Issue #168: Use `psutil` in conjuction with `dmidecode` to determine `ac_state`</title>
+        </head>
+        <body>
+            <h1>Use `psutil` in conjuction with `dmidecode` to determine `ac_state`</h1>
+            <p><strong>Issue #168</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>this one uses psutil to check if device has battery 
+if it does then it will check if battery is charging 
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ThePoorPilot:</strong></p>
+                    <p>Glad to see you've got this implementation set up. I seems like a more foolproof solution(although we'll have to see how good psutil is). Now all there is to do is to see what Adnan thinks.
+
+I did learn that dmidecode(SMBIOS) has multiple more possible chassis types than hostnamectl, so when "laptop" was only replaced with "notebook," that seems to have caused the immediate problem for most users.
+
+That's all irrelevant now, as we now have proof the chassis approach isn't suitable because of existing edge cases.
+
+This has been a long journey, but hopefully third time is the charm!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I like this idea, but I think I thought of an ideal solution for this problem.
+
+Let's not let an overwhelming input on [my today's Tweet](https://twitter.com/fooctrl/status/1357230198857564160) go to waste. I've just pushed changes to master [master branch](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto_cpufreq/core.py#L122).
+
+We use this, as these are the most common cases for the `sudo dmidecode --string chassis-type` laptop users. But, there were also bunch of laptop users whose computers' reported as `Desktop` or `Other`, i.e:
+
+https://twitter.com/AUNaseef/status/1357252666028679169 - Desktop
+https://twitter.com/pakerte/status/1357253007235194887 - Desktop
+https://twitter.com/yoeight/status/1357273497542737921 - Desktop
+https://twitter.com/TheDarkTrancer/status/1357281401511542789 - Desktop
+https://twitter.com/CaliphAlexander/status/1357314460449452033 - Desktop
+https://twitter.com/devylawyer/status/1357320246063955968 - Other
+https://twitter.com/mydjey/status/1357247248074162178 - Other
+https://twitter.com/LokiC3b/status/1357234945765367809 - Desktop
+
+So what I was thinking of doing is, add another layer of verification for cases we are not sure (like the ones above), example:
+
+```
+if computer_type in [ "Notebook", "Laptop", "Convertible", "Portable" ]:
+    # AC adapter states: 0, 1, unknown
+    ac_info = getoutput(f"grep . {power_dir}A*/online").splitlines()
+    # if there's one ac-adapter on-line, ac_state is True
+    ac_state = any(['1' in ac.split(':')[-1] for ac in ac_info])
+else:
+        has_battery = psutil.sensors_battery() is not None
+        if has_battery == True:
+            power_pluggedin = psutil.sensors_battery().power_plugged
+            if power_pluggedin == True:
+                ac_state = True
+            else:
+                ac_state = False
+        else:
+            ac_state = True
+```
+
+With this approach, we make it bulletproof of env auto-cpufreq is running on is either desktop or laptop, thoughts?
+            
+            </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>yeah its good
+
+just one question 
+some laptops have very low base frequency ie 400 mhz 
+and and on powersave it crawls 
+dont know what can be done </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ThePoorPilot:</strong></p>
+                    <p>@AdnanHodzic 
+
+Sounds like a good plan, as it combines both approaches!
+
+For those weird cases where a laptop reads as a desktop, it should still detect the battery and read off of it.
+Now in order to default to ac_state = true the device has to pass two tests: one for chassis type and one for battery.
+
+As far as @librewish 's issue, I don't think that relates to this particular problem.
+Perhaps an option could be made to allow users to set min_clock or baseclock on laptops.
+
+I would think such a thing would warrant its own command, something like auto-cpufreq --min_clock x.
+
+All that would require is some sort of input that can replace the min_clock variable.
+I don't know exactly how to do that, but for programming geniuses like yourselves, it should be fairly rudimentary. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> yeah its good
+
+Okay, can you then make these changes as part of this commit?
+
+> just one question
+> some laptops have very low base frequency ie 400 mhz
+> and and on powersave it crawls
+> dont know what can be done
+
+Let's finish this story first to keep our scope focused, and then we can take care of this as part of next PR. 
+
+I think the best idea in cases with such low frequency would be (when discharging) to set them to `powersave` governor but at the same time enable `turbo`. So basically it would be running at full maximum speed, while it would try to save power.
+
+Initially I was thinking of adding frequency limits as part of #26, as initially it might be too complicated to do this automatically. Although, doing this automatically would be the best way to go about it.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ThePoorPilot:</strong></p>
+                    <p>As far as addressing the ac_state issues, I think this pull request now has everything.
+
+@Librewish added a new commit with the changes your proposed.
+
+All that's left is to test to make sure everything works as expected.
+
+As you said, we should probably address the other issue @librewish bought up in a separate pull request than this one.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@ThePoorPilot thanks for the heads up, this and other changes I was also working on are now live as part of: [1.6.0](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.6.0) :partying_face: 
+
+@librewish good stuff, thanks for your contribution! </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Haptein:</strong></p>
+                    <p>It seems this pr introduced a regression, since it doesn't take into account possible cases were ac adapter (#234 ) and/or battery info isn't reported correctly due to firmware/kernel issues (as mentioned in #124 ).
+
+I honestly don't trust psutil too much with these edge cases, was there a reason or problem that using psutil in particular fixed? Sorry, I'm a bit out of the loop here. I'd like to propose a fix but I'm not sure what the desired path would be (psutil or no psutil), although frankly speaking, as far as I can see reverting this changes should do it.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ThePoorPilot:</strong></p>
+                    <p>@Haptein 
+psutil is used as a backup here in case dmidecode cannot detect chassis type or it mistakes chassis type (such as GPD laptop identifying as a "Desktop"). Psutil is not completely trusted
+
+I believe the code has changed substantially since this commit. This issue took 3 pull requests to find a workable solution, not a perfect solution.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Haptein:</strong></p>
+                    <p>The charging detection function hasn't changed, are we maybe talking about different branches?
+
+I guess what I want to know is, what problem did using chassis info solve? The old behaviour was to check both ac and battery info (assuming some pc's show "unknown" values  sometimes or devices don't even show up: #85, #108, #124) and the only failing case (as far as I can see) was when both battery and ac info was unavailable.
+
+I could propose we do the same thing while also using the chassis info but I can't see why the things added in this pr are needed.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ThePoorPilot:</strong></p>
+                    <p>@Haptein 
+
+The chassis detection is meant to solve the issue of running auto-cpufreq on desktops.
+On desktops, the files used to determine AC state and battery info do not exist.
+By default, this would cause auto-cpufreq to use the "powersave" governor on desktops, resulting in a the cpu to be pegged at very low clock speeds. In some cases, users we're throttled at 400 MHz.
+
+Auto-cpufreq does see limited desktop usage, but it was still a substantial  enough problem to warrant a fix. At one time, a distro (Garuda Linux) shipped with autocpu-freq by default which caused performance for many users.
+
+If you will note, the "charging" or "discharging" state is still detected from file as a first option with this variable "ac_state = any(['1' in ac.split(':')[-1] for ac in ac_info])"
+
+I guess what might be causing confusion here is that it appears battery_state is replaced with a new variable called ac_state in this pull request.
+
+Reading from /sys/class/power_supply/ is still the most reliable and is still used as the first option in detection. The less sure methods, like psutil, are only used if that method fails.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ThePoorPilot:</strong></p>
+                    <p>Although there could be the edge case in which a device detects as an incorrect chassis type (like Desktop), but could still work with the first method.
+
+Reading it more closely, the GPD Win(which incorrectly identifies as a desktop) would be subject to psutil instead of reading from /sys/class/power_supply, even if that method would work. Perhaps a reasonable change would be checking to see if /sys/class/power_supply provides information before jumping to chassis detection.
+
+The issue is every time we tried simple solutions like that, we'd run into different edge cases. It's almost an impossible problem to get perfect.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Haptein:</strong></p>
+                    <p>@ThePoorPilot 
+
+> The chassis detection is meant to solve the issue of running auto-cpufreq on desktops.
+
+The dmidecode solution sounds nice to me in theory, but I'm a bit worried since it seems not to be very reliable. Why not simply treat the case where no battery AND no ac-adapter is found as a desktop computer? I don't know about Desktop cases where a battery/ac-adapter is present, but maybe there are some weird setups (?).
+
+> If you will note, the "charging" or "discharging" state is still detected from file as a first option with this variable "ac_state = any(['1' in ac.split(':')[-1] for ac in ac_info])"
+
+I know, I wrote that. But I'm not insisting on using this method either.  Last time I read psutil's implementation they were making some hard assumptions about these files that conflicted with some edge cases we observed before.
+
+> Reading from /sys/class/power_supply/ is still the most reliable and is still used as the first option in detection. The less sure methods, like psutil, are only used if that method fails.
+
+The issues I mentioned before have returned because with this pr we only read battery info ONLY if chassis wasn't one of the portable chassis types. We used to read both (and also read battery in a more reliable way imo) and use all available info.
+
+> The issue is every time we tried simple solutions like that, we'd run into different edge cases. It's almost an impossible problem to get perfect.
+
+The struggle with all these edge cases is real haha, but I think in practice we should focus on all the info that's available and always assume the worst (like some info being incomplete). Maybe something like getting all info first and then following some sort of decision tree that's not too complicated.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ThePoorPilot:</strong></p>
+                    <p>@Haptein 
+
+If you'd like to give this a rework, you could see what you can come up with and make a pull request. You'll just have to wait until @AdnanHodzic is available to troubleshoot and approve that pull request.
+
+I remember last time he was really busy and this issue was substantially more complicated than initially anticipated. It's basically a whole can of worms.
+
+When I worked on this project, I knew basically nothing about Python. I still don't know much about Python, but I've since done some shell scripting, so I have at least a decent notion of how to read python code.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@Haptein @ThePoorPilot I apologize for such delayed reply as I've been rather busy lately. 
+
+Is there some PR that I've missed? If there are new ideas or ways auto-cpufreq could be improved, please submit your PR's, always happy to review those! Needless to say, Open Source is a great way to learn new things/programming languages :)</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

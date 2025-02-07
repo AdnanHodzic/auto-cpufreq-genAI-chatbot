@@ -1,0 +1,187 @@
+
+        <html>
+        <head>
+            <title>Issue #92: deploy_daemon() disables Bluetooth regardless of using laptop on AC</title>
+        </head>
+        <body>
+            <h1>deploy_daemon() disables Bluetooth regardless of using laptop on AC</h1>
+            <p><strong>Issue #92</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Why hardcoding Bluetooth disable in deploy_daemon() ?
+I use BT extensively when on AC (my keyboard and mouse are BT) and deploying auto-cpufreq just cut the "cord" out of my keyb/mice regardless of using AC.
+Please remove hardcoded disable or make it an option for AC/batt.
+Thanks
+
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>Yep, sounds reasonable.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I think best idea in this case would be to prompt an user during install if he wants bluetooth disabled (at boot). Default action being "yes" in case of no reply as most of user don't care if bluetooth is disabled on their startup. 
+
+With this approach, in case of parametrized run it could be something like:
+
+```
+sudo auto-cpufreq --install --bluetooth-enabled
+```
+
+I also extensively use bluetooth headphones, but I'm not as annoyed/disrupted when bluetooth is disabled on boot.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>davidpaige:</strong></p>
+                    <p>Why not a config file to control settings like bluetooth?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Yes, in the end I think it's the best if this is handled as part of #26 </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>congdo:</strong></p>
+                    <p>Should disabling bluetooth be part of auto-**cpufreq**</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Acsigen:</strong></p>
+                    <p>I cannot turn the bluetooth back on after installing auto-cpufreq on Fedora 33 x64</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@Acsigen if you go to "settings/control center" > "bluetooth" you can't toggle it back on?
+
+When you install auto-cpufreq, bluetooth is **only** disabled at boot, you can toggle it on whenever you want.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Acsigen:</strong></p>
+                    <p>@AdnanHodzic no, I can't turn it on at all. The only way I managed to turn it on was to disable the daemon and reboot the OS.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lazarosgogos:</strong></p>
+                    <p>Is this fixed ? I would like to be able to choose bluetooth  to be on on boot.. Any help ?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>hapearso:</strong></p>
+                    <p>I was able to get a around this issue on Pop! OS 21.04.  After installing auto-cpufreq, I reverted the change that the install process did that disables bluetooth on startup.  To do this edit the file
+
+`sudo vi /etc/bluetooth/main.conf`
+
+and set the AutoEnable flag to true:  `AutoEnable=true`
+
+Save the file, restart your machine and bluetooth should work as expected with auto-cpufreq running as intended in the background.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@hapearso could you please make your changes and submit a [pull request](https://github.com/AdnanHodzic/auto-cpufreq/pulls) which I'll be glad to review. If your changes are accepted you'll be credited as part of [releases page](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+Thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>pastaq:</strong></p>
+                    <p>I'm curious as to why this utility disables bluetooth at all. While I get that the goal of the tool is to have no compromises for battery longevity and performance, this seems like scope creep outside what the utility should be responsible for. In my use case this is actually preventing me from using what would otherwise be an excellent utility. I have an Aya Neo 2021 Pro handheld gaming device with ChimeraOS installed. As this was originally designed as a windows handheld, all power management utilities compatible with the device are unavailable. ChimeraOS does not have or really need a DE to run as it uses steamcompmgr and steam in big picture mode. In this case there would be no way to enable bluetooth headphones as there isn't a button in steam BPM to override this. 
+
+IMO this shouldn't be a part auto-cpufreq conceptually, but rather another power optimization package of some kind. Based on the package description and expected use case this seems like unexpected behavior. If it absolutely must be part of the utility then it should need to be explicitly enabled with the install flag I.E. ```--install --disable-bt-boot ``` or as a y/N option during install defaulted to no. Things like this that are outside of scope, not described, and not consented to are a bad user experience and not in keeping with the *nix philosophy of minimalist modular software. 
+
+I'm willing to put in a PR to change this but I would like some more discussion/direction from this community before I put in the work. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I'm curious as to why this utility disables bluetooth at all. While I get that the goal of the tool is to have no compromises for battery longevity and performance, this seems like scope creep outside what the utility should be responsible for.
+
+Logic on why this is done is as simple as this. Nowdays every new Linux install comes with bluetooth enabled, if you disable bluetooth it won't persists across reboots. 
+
+Having bluetooth disabled will preserve battery, otherwise it'll keep scanning for new devices. Hence, auto-cpufreq *only disables bluetooth on boot*, if you wish to turn it on later at any time there's no problem with that. 
+
+> I'm willing to put in a PR to change this but I would like some more discussion/direction from this community before I put in the work.
+
+I do value every contribution, but I would only put it other way around:
+
+>If it absolutely must be part of the utility then it should need to be explicitly enabled with the install flag I.E. --install --disable-bt-boot or as a y/N option during install defaulted to no.
+
+Where we could have `--install --disable-bt-boot` but I would have it default to `yes`, if unattended or if this parameter wasn't used.
+
+It would also be a good idea to have this simply documented somewhere because I thought tool outputting "Turn off bluetooth on boot" is enough of an explanation.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>pastaq:</strong></p>
+                    <p>
+> Logic on why this is done is as simple as this. Nowdays every new Linux install comes with bluetooth enabled, if you disable bluetooth it won't persists across reboots.
+> 
+> Having bluetooth disabled will preserve battery, otherwise it'll keep scanning for new devices. Hence, auto-cpufreq _only disables bluetooth on boot_, if you wish to turn it on later at any time there's no problem with that.
+
+It still has nothing to do with cpufreq's functionality though. Again, I see that its a parallel enhancement, but seems out of place for this package. Its also only not an issue if you can turn it back on with a click through a DE. The use case I'm describing is not just for my personal use, but deployed as part of the system image for ChimeraOS, which doesn't have a DE and many installs don't even use a keyboard. This behavior will cause users to submit bug reports that their peripherals no longer work if we use what could arguably be an otherwise very useful package.
+
+> Where we could have --install --disable-bt-boot but I would have it default to yes, if unattended or if this parameter wasn't used.
+
+Many image builders, including my use case, install packages using unattended installers via a manifest. This wont really solve that problem.
+ 
+
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Its also only not an issue if you can turn it back on with a click through a DE.
+
+You can do this, so don't think this is an issue. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>pastaq:</strong></p>
+                    <p>The distro I'm talking about doesn't include a DE and never will, so I can't do that. If you read my post you would already know that. Anyway, I ran some benchmarks and auto-cpufreq performs worse than the schedutil built in to the kernel since 5.10, so its irrelevant. Good luck.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>jmcelroy01:</strong></p>
+                    <p>> I was able to get a around this issue on Pop! OS 21.04. After installing auto-cpufreq, I reverted the change that the install process did that disables bluetooth on startup. To do this edit the file
+>
+> `sudo vi /etc/bluetooth/main.conf`
+
+On Opensuse TW, that line wasn't present in my file for some reason, but going into bluetooth settings - configure let me set it back to enable on login. 
+
+I second the idea to have an option for this in the config file/as part of the install process, since it's clearly tangential to the main purpose of a cpu frequency limiter. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing the issue due to inactivity, for anyone still interested in having this functionality let's continue this discussion in #451 </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Mark3xtrm:</strong></p>
+                    <p>> I was able to get a around this issue on Pop! OS 21.04. After installing auto-cpufreq, I reverted the change that the install process did that disables bluetooth on startup. To do this edit the file
+> 
+> `sudo vi /etc/bluetooth/main.conf`
+> 
+> and set the AutoEnable flag to true: `AutoEnable=true`
+> 
+> Save the file, restart your machine and bluetooth should work as expected with auto-cpufreq running as intended in the background.
+
+For me, it didn't fix the issue, and bluetooth still doesn't start at boot. Strangely, the flag is on `true` yet, when I reboot. Is there a way to tell auto-cpufreq that it mustn't disable bluetooth?
+
+Edit: I rebooted again, and now it seems to work. I suggest @AdnanHodzic to add a toggle or an installation option for this. Like
+`let bluetooth continue to start automatically at startup`</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,86 @@
+
+        <html>
+        <head>
+            <title>Pull Request #45: Add the feature that makes EPP changeable </title>
+        </head>
+        <body>
+            <h1>Add the feature that makes EPP changeable </h1>
+            <p><strong>Pull Request #45</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>And that feature fixes the conflict with TLP in terms of `energy_performance_preference` value.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>validatedev:</strong></p>
+                    <p>`energy_performance_preference=performance` causes a lot of heating issues, so I set this value to `balance_performance`.
+
+`0` implies the best performance, pushes the clock to the upper limit, always.
+`255` produces the best power efficiency, pulls the clock to the lowest value that processor has been capable, again, always.
+
+```
+performance=0
+balance_performance=128
+balance_power=192
+power=255
+default=depends on the chip
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Please correct me if I'm wrong, but should `s.run("cpufreqctl --epp --set=balance_power", shell=True)` and `s.run("cpufreqctl --epp --set=balance_performance", shell=True)`  only be executed when TLP is running?
+
+Or these are useful settings even if TLP isn't running?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>validatedev:</strong></p>
+                    <p>The second one. These are the settings that not just the overrides TLP's settings, but enables the new power efficiency-performance balance options.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Nice! Okay good to know because I was about to make changes that this is only applied if `auto-cpufreq` detects `tlp start` is running.
+
+Let me test it out, and I'll want to make some minor changes regarding `cpufreqctl.sh` deployment and I'll get back to you.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@validatedev I made some and pushed some changes but for some reason this resulted in creating another branch in your forked repo:
+
+```
+git push --set-upstream origin validatedev-fix-conflict-with-TLP
+Enumerating objects: 7, done.
+Counting objects: 100% (7/7), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (4/4), done.
+Writing objects: 100% (4/4), 679 bytes | 679.00 KiB/s, done.
+Total 4 (delta 2), reused 0 (delta 0)
+remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
+remote: 
+remote: Create a pull request for 'validatedev-fix-conflict-with-TLP' on GitHub by visiting:
+remote:      https://github.com/validatedev/auto-cpufreq/pull/new/validatedev-fix-conflict-with-TLP
+remote: 
+To https://github.com/validatedev/auto-cpufreq.git
+ * [new branch]      validatedev-fix-conflict-with-TLP -> validatedev-fix-conflict-with-TLP
+Branch 'validatedev-fix-conflict-with-TLP' set up to track remote branch 'validatedev-fix-conflict-with-TLP' from 'origin'.
+```
+
+Changes [can be seen here](https://github.com/validatedev/auto-cpufreq/commit/ee61af9923e489e77ff3c98ccca045cc0426be8e). 
+
+Could you merge changes from this new branch to this PR branch? Or just set that branch new target to be merged with my `master`?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>validatedev:</strong></p>
+                    <p>@AdnanHodzic Done!</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

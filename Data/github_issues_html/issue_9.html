@@ -1,0 +1,89 @@
+
+        <html>
+        <head>
+            <title>Issue #9: energy_performance_preference doesn't change</title>
+        </head>
+        <body>
+            <h1>energy_performance_preference doesn't change</h1>
+            <p><strong>Issue #9</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>TLP can, but auto-cpufreq doesn't.
+Example:
+```
++++ Processor
+CPU model      = Intel(R) Core(TM) i5-8265U CPU @ 1.60GHz
+
+/sys/devices/system/cpu/cpu0/cpufreq/scaling_driver    = intel_pstate
+/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor  = powersave
+/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors = performance powersave
+/sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq  =   400000 [kHz]
+/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq  =  1600000 [kHz]
+/sys/devices/system/cpu/cpu0/cpufreq/energy_performance_preference = balance_power
+/sys/devices/system/cpu/cpu0/cpufreq/energy_performance_available_preferences = default performance balance_performance balance_power power 
+```
+I removed the auto-cpufreq and configure TLP again. Without TLP, `energy_performance_preference = balance_performance`. scaling_governor is changing without any issue.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I think these problems could be related to using older package version for "psuti"l which were installed from apt repos:
+
+`sudo pip3 show psutil | grep -i version`
+
+Recommended version should be >= 5.5.1
+
+Hence, could you please try upgrading both using pip3 by running:
+
+`sudo pip3 install --upgrade psutil`
+
+And let me know if the problem still persits after this?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>validatedev:</strong></p>
+                    <p>It still persist. Didn't change anything.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Okay, then I'm misunderstanding what the problem is. Could you please elaborate what exactly the problem is?
+
+Thanks</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>validatedev:</strong></p>
+                    <p>Well, I rethink about that situation and the thing that I'm talking about is not the bug, but missing the feature but don't think that this program supposed to do that. Let me explain the situation with detail. There is an option in TLP which changes the energy_performance_preference setting and energy_perf_policy setting. You can see these settings with `sudo tlp-stat` command. I mean the program doesn't touch these settings but that is just missing, not the bug.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Right, is this related to [PR you created and then closed](https://github.com/AdnanHodzic/auto-cpufreq/pull/24)?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>validatedev:</strong></p>
+                    <p>> Right, is this related to [PR you created and then closed](https://github.com/AdnanHodzic/auto-cpufreq/pull/24)?
+
+Nope, this is a different case. The closed PR which is referenced by you is the older version of  https://github.com/AdnanHodzic/auto-cpufreq/pull/25 , there is a bug on psutil and I had tried going around that issue, but eventually I found a better solution which works flawlessly. The issue which we’re on should be a feature, not the bug because we didn’t touch any of the options that I referred before.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>What happens if you run [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq#installing-auto-cpufreq)?
+
+I also released [ `auto-cpufreq` to Snap store](https://snapcraft.io/auto-cpufreq/) which would definitely fix your problem. But as [I stated for full functionality](https://github.com/AdnanHodzic/auto-cpufreq#snap-store) `auto-cpufreq` needs snapd version 2.4.4 which is currently only available in Ubuntu 20.04.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>validatedev:</strong></p>
+                    <p>I'm using 20.04, tried the snap package, and I'd gladly say that the problem has been fixed! Thanks for your effort!</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,1082 @@
+
+        <html>
+        <head>
+            <title>Issue #713: [ThinkBook] FileNotFoundError: [Errno 2] No such file or directory: '/sys/class/power_supply/BAT0/charge_start_threshold'</title>
+        </head>
+        <body>
+            <h1>[ThinkBook] FileNotFoundError: [Errno 2] No such file or directory: '/sys/class/power_supply/BAT0/charge_start_threshold'</h1>
+            <p><strong>Issue #713</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+Tried all relevant suggestions
+
+### Error output:
+```text
+
+-------------------------------- Battery Info ---------------------------------
+
+battery count = 1
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/site-packages/auto_cpufreq/battery_scripts/ideapad_laptop.py", line 92, in ideapad_laptop_print_thresholds
+    with open(f'/sys/class/power_supply/BAT{b}/charge_start_threshold', 'r') as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/sys/class/power_supply/BAT0/charge_start_threshold'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/bin/auto-cpufreq", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/usr/lib/python3.12/site-packages/click/core.py", line 1157, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/site-packages/click/core.py", line 1078, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/site-packages/click/core.py", line 1434, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/site-packages/click/core.py", line 783, in invoke
+    return __callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/site-packages/auto_cpufreq/bin/auto_cpufreq.py", line 157, in main
+    battery_get_thresholds()
+  File "/usr/lib/python3.12/site-packages/auto_cpufreq/battery_scripts/battery.py", line 42, in battery_get_thresholds
+    ideapad_laptop_print_thresholds()
+  File "/usr/lib/python3.12/site-packages/auto_cpufreq/battery_scripts/ideapad_laptop.py", line 101, in ideapad_laptop_print_thresholds
+    print(f"ERROR: failed to read battery thresholds: {e}")
+                                                       ^
+NameError: name 'e' is not defined
+```
+---
+
+### System information:
+
+Add/paste output of:
+(same error)
+```
+-------------------------------- Battery Info ---------------------------------
+
+battery count = 1
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/site-packages/auto_cpufreq/battery_scripts/ideapad_laptop.py", line 92, in ideapad_laptop_print_thresholds
+    with open(f'/sys/class/power_supply/BAT{b}/charge_start_threshold', 'r') as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/sys/class/power_supply/BAT0/charge_start_threshold'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/bin/auto-cpufreq", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/usr/lib/python3.12/site-packages/click/core.py", line 1157, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/site-packages/click/core.py", line 1078, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/site-packages/click/core.py", line 1434, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/site-packages/click/core.py", line 783, in invoke
+    return __callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/site-packages/auto_cpufreq/bin/auto_cpufreq.py", line 169, in main
+    battery_get_thresholds()
+  File "/usr/lib/python3.12/site-packages/auto_cpufreq/battery_scripts/battery.py", line 42, in battery_get_thresholds
+    ideapad_laptop_print_thresholds()
+  File "/usr/lib/python3.12/site-packages/auto_cpufreq/battery_scripts/ideapad_laptop.py", line 101, in ideapad_laptop_print_thresholds
+    print(f"ERROR: failed to read battery thresholds: {e}")
+                                                       ^
+NameError: name 'e' is not defined
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+---
+Looks like my device is incorrectly identified as an ideapad laptop. I am thinking maybe there just isnt support for my device, I believe it is a pretty new variant. 
+ThinkBook 14 Gen 7 
+Intel Core Ultra i7
+Upower info
+```
+ upower -i /org/freedesktop/UPower/devices/battery_BAT0
+  native-path:          BAT0
+  vendor:               Sunwoda
+  model:                L22D4PE0
+  serial:               2512
+  power supply:         yes
+  updated:              Mon 27 May 2024 09:20:02 AM CEST (3 seconds ago)
+  has history:          yes
+  has statistics:       yes
+  battery
+    present:             yes
+    rechargeable:        yes
+    state:               discharging
+    warning-level:       none
+    energy:              50.66 Wh
+    energy-empty:        0 Wh
+    energy-full:         61.94 Wh
+    energy-full-design:  60 Wh
+    energy-rate:         11.186 W
+    voltage:             16.597 V
+    charge-cycles:       5
+    time to empty:       4.5 hours
+    percentage:          81%
+    capacity:            100%
+    technology:          lithium-polymer
+    icon-name:          'battery-full-symbolic'
+  History (charge):
+    1716794372	81.000	discharging
+  History (rate):
+    1716794402	11.186	discharging
+    1716794372	12.989	discharging
+    1716794342	10.837	discharging
+    1716794312	10.391	discharging
+```
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>Auto CPU freq identifies laptops based on the currently running Kernel modules could you share the output of lsmod and your laptop model?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>kralle333:</strong></p>
+                    <p>> Auto CPU freq identifies laptops based on the currently running Kernel modules could you share the output of lsmod and your laptop model?
+
+Model:
+ThinkBook 14 Gen 7
+[https://www.lenovo.com/dk/da/p/laptops/thinkbook/thinkbook-series/lenovo-thinkbook-14-gen-7-(14-inch-intel)/21mrcto1wwdk1](url)
+
+lsmod:
+```
+Module                  Size  Used by
+snd_seq_dummy          12288  0
+snd_hrtimer            12288  1
+snd_seq               131072  7 snd_seq_dummy
+rfcomm                102400  4
+snd_seq_device         16384  1 snd_seq
+ccm                    20480  9
+cmac                   12288  3
+algif_hash             12288  1
+snd_ctl_led            24576  0
+algif_skcipher         12288  1
+ledtrig_audio          12288  1 snd_ctl_led
+snd_soc_skl_hda_dsp    24576  4
+af_alg                 36864  6 algif_hash,algif_skcipher
+xe                   2732032  0
+snd_soc_hdac_hdmi      49152  1 snd_soc_skl_hda_dsp
+snd_sof_probes         28672  0
+snd_soc_intel_hda_dsp_common    16384  1 snd_soc_skl_hda_dsp
+drm_gpuvm              49152  1 xe
+drm_exec               12288  2 drm_gpuvm,xe
+snd_hda_codec_hdmi     98304  1
+gpu_sched              69632  1 xe
+snd_hda_codec_realtek   204800  1
+drm_suballoc_helper    12288  1 xe
+snd_hda_codec_generic   114688  1 snd_hda_codec_realtek
+drm_ttm_helper         12288  1 xe
+snd_soc_dmic           12288  1
+snd_hda_scodec_component    20480  1 snd_hda_codec_realtek
+bnep                   36864  2
+uvcvideo              176128  8
+videobuf2_vmalloc      20480  1 uvcvideo
+uvc                    12288  1 uvcvideo
+videobuf2_memops       16384  1 videobuf2_vmalloc
+videobuf2_v4l2         45056  1 uvcvideo
+videobuf2_common       98304  4 videobuf2_vmalloc,videobuf2_v4l2,uvcvideo,videobuf2_memops
+btusb                  86016  0
+btrtl                  32768  1 btusb
+btintel                65536  1 btusb
+btbcm                  24576  1 btusb
+btmtk                  12288  1 btusb
+bluetooth            1122304  34 btrtl,btmtk,btintel,btbcm,bnep,btusb,rfcomm
+ecdh_generic           16384  2 bluetooth
+snd_sof_pci_intel_mtl    12288  0
+snd_sof_intel_hda_common   262144  1 snd_sof_pci_intel_mtl
+soundwire_intel        81920  1 snd_sof_intel_hda_common
+snd_sof_intel_hda_mlink    36864  2 soundwire_intel,snd_sof_intel_hda_common
+soundwire_cadence      49152  1 soundwire_intel
+snd_sof_intel_hda      24576  1 snd_sof_intel_hda_common
+snd_sof_pci            24576  2 snd_sof_pci_intel_mtl,snd_sof_intel_hda_common
+snd_sof_xtensa_dsp     16384  1 snd_sof_intel_hda_common
+snd_sof               466944  4 snd_sof_pci,snd_sof_intel_hda_common,snd_sof_probes,snd_sof_intel_hda
+intel_uncore_frequency    12288  0
+snd_sof_utils          16384  1 snd_sof
+intel_uncore_frequency_common    16384  1 intel_uncore_frequency
+snd_soc_hdac_hda       28672  1 snd_sof_intel_hda_common
+x86_pkg_temp_thermal    16384  0
+intel_powerclamp       20480  0
+snd_hda_ext_core       36864  5 snd_sof_intel_hda_common,snd_soc_hdac_hdmi,snd_soc_hdac_hda,snd_sof_intel_hda_mlink,snd_sof_intel_hda
+snd_soc_acpi_intel_match   102400  2 snd_sof_pci_intel_mtl,snd_sof_intel_hda_common
+coretemp               20480  0
+soundwire_generic_allocation    12288  1 soundwire_intel
+snd_soc_acpi           16384  2 snd_soc_acpi_intel_match,snd_sof_intel_hda_common
+soundwire_bus         143360  3 soundwire_intel,soundwire_generic_allocation,soundwire_cadence
+iwlmvm                720896  0
+kvm_intel             430080  0
+joydev                 24576  0
+snd_soc_core          483328  8 soundwire_intel,snd_sof,snd_sof_intel_hda_common,snd_soc_hdac_hdmi,snd_soc_hdac_hda,snd_sof_probes,snd_soc_dmic,snd_soc_skl_hda_dsp
+mousedev               24576  0
+i915                 4329472  40
+kvm                  1396736  1 kvm_intel
+snd_compress           28672  2 snd_soc_core,snd_sof_probes
+ac97_bus               12288  1 snd_soc_core
+crct10dif_pclmul       12288  1
+snd_pcm_dmaengine      16384  1 snd_soc_core
+mac80211             1609728  1 iwlmvm
+crc32_pclmul           12288  0
+polyval_clmulni        12288  0
+snd_hda_intel          65536  0
+polyval_generic        12288  1 polyval_clmulni
+gf128mul               16384  1 polyval_generic
+snd_intel_dspcfg       40960  3 snd_hda_intel,snd_sof,snd_sof_intel_hda_common
+drm_buddy              20480  2 xe,i915
+ghash_clmulni_intel    16384  0
+snd_intel_sdw_acpi     16384  2 snd_sof_intel_hda_common,snd_intel_dspcfg
+libarc4                12288  1 mac80211
+i2c_algo_bit           20480  2 xe,i915
+sha512_ssse3           53248  0
+snd_hda_codec         225280  8 snd_hda_codec_generic,snd_hda_codec_hdmi,snd_hda_intel,snd_hda_codec_realtek,snd_soc_intel_hda_dsp_common,snd_soc_hdac_hda,snd_sof_intel_hda,snd_soc_skl_hda_dsp
+ttm                   110592  3 drm_ttm_helper,xe,i915
+sha256_ssse3           36864  0
+snd_hda_core          151552  11 snd_hda_codec_generic,snd_hda_codec_hdmi,snd_hda_intel,snd_hda_ext_core,snd_hda_codec,snd_hda_codec_realtek,snd_soc_intel_hda_dsp_common,snd_sof_intel_hda_common,snd_soc_hdac_hdmi,snd_soc_hdac_hda,snd_sof_intel_hda
+sha1_ssse3             32768  0
+drm_display_helper    274432  2 xe,i915
+processor_thermal_device_pci    16384  0
+aesni_intel           360448  10
+snd_hwdep              20480  1 snd_hda_codec
+processor_thermal_device    24576  1 processor_thermal_device_pci
+crypto_simd            16384  1 aesni_intel
+processor_thermal_wt_hint    16384  2 processor_thermal_device_pci,processor_thermal_device
+iwlwifi               602112  1 iwlmvm
+snd_pcm               212992  12 snd_hda_codec_hdmi,snd_hda_intel,snd_hda_codec,soundwire_intel,snd_sof,snd_sof_intel_hda_common,snd_soc_hdac_hdmi,snd_compress,snd_soc_core,snd_sof_utils,snd_hda_core,snd_pcm_dmaengine
+hid_multitouch         32768  0
+cec                    94208  3 drm_display_helper,xe,i915
+cryptd                 28672  3 crypto_simd,ghash_clmulni_intel
+ideapad_laptop         57344  0
+e1000e                372736  0
+processor_thermal_rfim    28672  1 processor_thermal_device
+iTCO_wdt               16384  0
+snd_timer              53248  3 snd_seq,snd_hrtimer,snd_pcm
+mei_gsc_proxy          16384  0
+intel_gtt              28672  1 i915
+vfat                   24576  1
+ucsi_acpi              12288  0
+intel_pmc_bxt          16384  1 iTCO_wdt
+rapl                   20480  0
+hid_generic            12288  0
+think_lmi              36864  0
+platform_profile       12288  1 ideapad_laptop
+processor_thermal_rapl    16384  1 processor_thermal_device
+intel_rapl_msr         20480  0
+iTCO_vendor_support    12288  1 iTCO_wdt
+typec_ucsi             73728  1 ucsi_acpi
+intel_cstate           20480  0
+spi_nor               172032  0
+lenovo_ymc             24576  0
+fat                   110592  1 vfat
+firmware_attributes_class    12288  1 think_lmi
+wmi_bmof               12288  0
+intel_rapl_common      45056  2 intel_rapl_msr,processor_thermal_rapl
+snd                   159744  25 snd_ctl_led,snd_hda_codec_generic,snd_seq,snd_seq_device,snd_hda_codec_hdmi,snd_hwdep,snd_hda_intel,snd_hda_codec,snd_hda_codec_realtek,snd_sof,snd_timer,snd_soc_hdac_hdmi,snd_compress,snd_soc_core,snd_pcm
+video                  77824  3 ideapad_laptop,xe,i915
+ptp                    45056  2 iwlmvm,e1000e
+ov13b10                24576  0
+mei_me                 61440  1
+cfg80211             1376256  3 iwlmvm,iwlwifi,mac80211
+intel_uncore          262144  0
+pcspkr                 12288  0
+mtd                   110592  3 spi_nor
+intel_lpss_pci         24576  0
+processor_thermal_wt_req    12288  1 processor_thermal_device
+v4l2_fwnode            32768  1 ov13b10
+typec                 114688  1 typec_ucsi
+i2c_i801               45056  0
+processor_thermal_power_floor    12288  2 processor_thermal_device_pci,processor_thermal_device
+thunderbolt           569344  0
+pps_core               32768  1 ptp
+intel_lpss             12288  1 intel_lpss_pci
+soundcore              16384  2 snd_ctl_led,snd
+mei                   208896  3 mei_gsc_proxy,mei_me
+intel_vpu             282624  0
+v4l2_async             32768  2 v4l2_fwnode,ov13b10
+i2c_smbus              20480  1 i2c_i801
+intel_pmc_core        122880  0
+int3403_thermal        16384  0
+igen6_edac             36864  0
+processor_thermal_mbox    12288  4 processor_thermal_power_floor,processor_thermal_wt_req,processor_thermal_rfim,processor_thermal_wt_hint
+idma64                 20480  0
+roles                  16384  1 typec_ucsi
+rfkill                 40960  8 iwlmvm,bluetooth,ideapad_laptop,cfg80211
+int340x_thermal_zone    16384  2 int3403_thermal,processor_thermal_device
+videodev              397312  9 v4l2_async,v4l2_fwnode,videobuf2_v4l2,uvcvideo,ov13b10
+intel_vsec             20480  1 intel_pmc_core
+pmt_telemetry          16384  1 intel_pmc_core
+i2c_hid_acpi           12288  0
+intel_hid              28672  0
+int3400_thermal        20480  0
+i2c_hid                40960  1 i2c_hid_acpi
+mc                     94208  10 v4l2_async,videodev,videobuf2_v4l2,uvcvideo,videobuf2_common,ov13b10
+wmi                    36864  5 video,wmi_bmof,ideapad_laptop,lenovo_ymc,think_lmi
+acpi_tad               20480  0
+sparse_keymap          12288  3 intel_hid,ideapad_laptop,lenovo_ymc
+acpi_thermal_rel       20480  1 int3400_thermal
+acpi_pad               24576  0
+pmt_class              16384  1 pmt_telemetry
+pinctrl_meteorlake     28672  2
+mac_hid                12288  0
+pkcs8_key_parser       12288  0
+crypto_user            20480  0
+loop                   45056  0
+dm_mod                229376  0
+nfnetlink              20480  1
+ip_tables              36864  0
+x_tables               69632  1 ip_tables
+ext4                 1183744  1
+crc32c_generic         12288  0
+crc16                  12288  2 bluetooth,ext4
+mbcache                16384  1 ext4
+jbd2                  221184  1 ext4
+rtsx_pci_sdmmc         36864  0
+serio_raw              20480  0
+mmc_core              282624  1 rtsx_pci_sdmmc
+atkbd                  40960  0
+nvme                   65536  2
+libps2                 20480  1 atkbd
+vivaldi_fmap           12288  1 atkbd
+nvme_core             258048  3 nvme
+xhci_pci               24576  0
+crc32c_intel           16384  2
+spi_intel_pci          12288  0
+rtsx_pci              147456  1 rtsx_pci_sdmmc
+i8042                  57344  1 ideapad_laptop
+xhci_pci_renesas       24576  1 xhci_pci
+nvme_auth              28672  1 nvme_core
+spi_intel              36864  1 spi_intel_pci
+serio                  28672  4 serio_raw,atkbd,i8042
+
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>So it looks like you have the ideapad_laptop kernel module. 
+
+That's why it thinks you have a ideapad 
+
+I looked online but I haven't been able to find if that module is compatible with your laptop or a compatable module. I would suggest you try the same.
+
+And just wondering does the path /sys/class/power_supply/ exist? And whats in it?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>kralle333:</strong></p>
+                    <p>> So it looks like you have the ideapad_laptop kernel module.
+> 
+> That's why it thinks you have a ideapad
+> 
+> I looked online but I haven't been able to find if that module is compatible with your laptop or a compatable module. I would suggest you try the same.
+> 
+> And just wondering does the path /sys/class/power_supply/ exist? And whats in it?
+
+this is the ls(d) for that dir:
+```
+lrwxrwxrwx root root 0 B Tue May 28 23:46:54 2024 ADP1 ⇒ ../../devices/pci0000:00/0000:00:1f.0/PNP0C09:00/ACPI0003:00/power_supply/ADP1
+lrwxrwxrwx root root 0 B Tue May 28 23:46:54 2024 BAT0 ⇒ ../../devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/device:16/PNP0C09:00/PNP0C0A:00/power_supply/BAT0
+lrwxrwxrwx root root 0 B Tue May 28 23:47:05 2024 ucsi-source-psy-USBC000:001 ⇒ ../../devices/platform/USBC000:00/power_supply/ucsi-source-psy-USBC000:001
+lrwxrwxrwx root root 0 B Tue May 28 23:47:05 2024 ucsi-source-psy-USBC000:002 ⇒ ../../devices/platform/USBC000:00/power_supply/ucsi-source-psy-USBC000:002
+```
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>kralle333:</strong></p>
+                    <p>and the BAT0 directory:
+```
+.rw-r--r-- root root 4.0 KB Tue May 28 23:59:38 2024 alarm
+.r--r--r-- root root 4.0 KB Tue May 28 23:47:05 2024 capacity
+.r--r--r-- root root 4.0 KB Tue May 28 23:59:38 2024 capacity_level
+.r--r--r-- root root 4.0 KB Tue May 28 23:47:05 2024 cycle_count
+lrwxrwxrwx root root   0 B  Tue May 28 23:59:38 2024 device ⇒ ../../../PNP0C0A:00
+.r--r--r-- root root 4.0 KB Tue May 28 23:47:05 2024 energy_full
+.r--r--r-- root root 4.0 KB Tue May 28 23:47:05 2024 energy_full_design
+.r--r--r-- root root 4.0 KB Tue May 28 23:46:57 2024 energy_now
+drwxr-xr-x root root   0 B  Tue May 28 23:46:54 2024 hwmon2
+.r--r--r-- root root 4.0 KB Tue May 28 23:48:47 2024 manufacturer
+.r--r--r-- root root 4.0 KB Tue May 28 23:48:47 2024 model_name
+drwxr-xr-x root root   0 B  Tue May 28 23:59:38 2024 power
+.r--r--r-- root root 4.0 KB Tue May 28 23:46:57 2024 power_now
+.r--r--r-- root root 4.0 KB Tue May 28 23:46:57 2024 present
+.r--r--r-- root root 4.0 KB Tue May 28 23:48:47 2024 serial_number
+.r--r--r-- root root 4.0 KB Tue May 28 23:46:57 2024 status
+lrwxrwxrwx root root   0 B  Tue May 28 23:46:54 2024 subsystem ⇒ ../../../../../../../../../class/power_supply
+.r--r--r-- root root 4.0 KB Tue May 28 23:48:47 2024 technology
+.r--r--r-- root root 4.0 KB Tue May 28 23:46:56 2024 type
+.rw-r--r-- root root 4.0 KB Tue May 28 23:46:54 2024 uevent
+.r--r--r-- root root 4.0 KB Tue May 28 23:48:47 2024 voltage_min_design
+.r--r--r-- root root 4.0 KB Tue May 28 23:47:05 2024 voltage_now
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Angel-Karasu:</strong></p>
+                    <p>The problem is that BAT0 is a symbolic link, I've tried a solution, you can wait for it to be validated or install manually with `git clone -b origin https://github.com/Angel-Karasu/auto-cpufreq.git` and follow the installation guide</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Angel-Karasu:</strong></p>
+                    <p>PR #716 is merged which should fix the issue, if problem persists, please feel free to re-open it</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>kralle333:</strong></p>
+                    <p>@Angel-Karasu 
+I see this issue when I run `auto-cpufreq --monitor`.
+```
+Note: You can quit monitor mode by pressing "ctrl+c"
+could not get value from conservation mode
+
+-------------------------------- Battery Info ---------------------------------
+
+battery count = 1
+BAT0 start threshold = cat: /sys/class/power_supply/BAT0/charge_start_threshold: No such file or directory
+BAT0 start threshold = cat: /sys/class/power_supply/BAT0/charge_stop_threshold: No such file or directory
+```
+I assume its related?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>offeex:</strong></p>
+                    <p>got the same issue:
+
+❯ sudo auto-cpufreq --config ~/.config/auto-cpufreq/auto-cpufreq.conf --debug
+
+```sh
+Using settings defined in /home/offeex/.config/auto-cpufreq/auto-cpufreq.conf file
+could not get value from conservation mode
+
+-------------------------------- Battery Info ---------------------------------
+
+battery count = 1
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/site-packages/auto_cpufreq/battery_scripts/ideapad_laptop.py", line 92, in ideapad_laptop_print_thresholds
+    with open(f'/sys/class/power_supply/BAT{b}/charge_start_threshold', 'r') as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/sys/class/power_supply/BAT0/charge_start_threshold'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/sbin/auto-cpufreq", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/usr/lib/python3.12/site-packages/click/core.py", line 1157, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/site-packages/click/core.py", line 1078, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/site-packages/click/core.py", line 1434, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/site-packages/click/core.py", line 783, in invoke
+    return __callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/site-packages/auto_cpufreq/bin/auto_cpufreq.py", line 169, in main
+    battery_get_thresholds()
+  File "/usr/lib/python3.12/site-packages/auto_cpufreq/battery_scripts/battery.py", line 42, in battery_get_thresholds
+    ideapad_laptop_print_thresholds()
+  File "/usr/lib/python3.12/site-packages/auto_cpufreq/battery_scripts/ideapad_laptop.py", line 101, in ideapad_laptop_print_thresholds
+    print(f"ERROR: failed to read battery thresholds: {e}")
+                                                       ^
+NameError: name 'e' is not defined
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Armadillidiid:</strong></p>
+                    <p>Just encountered this issue on a Lenovo Ideapad. Can this issue be reopened, please? </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@PurpleWazard might know more about this ...</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>kralle333:</strong></p>
+                    <p>Had a look at the code and I have some questions:
+- the start/stop threshold files are not present on my machine. Should they?
+- if yes: should auto-cpu-freq create them if they are found to be missing?
+- if `enable_thresholds` is disabled in config, we probably don't want to print these thresholds to the user?
+
+also small thing :) start_threshold is written twice instead of start followed by stop:
+```
+BAT0 start threshold = cat: /sys/class/power_supply/BAT0/charge_start_threshold: No such file or directory
+BAT0 -->start threshold<-- = cat: /sys/class/power_supply/BAT0/charge_stop_threshold: No such file or directory
+```
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Angel-Karasu:</strong></p>
+                    <p>> got the same issue:
+> 
+> ❯ sudo auto-cpufreq --config ~/.config/auto-cpufreq/auto-cpufreq.conf --debug
+> 
+> ```shell
+> Using settings defined in /home/offeex/.config/auto-cpufreq/auto-cpufreq.conf file
+> could not get value from conservation mode
+> 
+> -------------------------------- Battery Info ---------------------------------
+> 
+> battery count = 1
+> Traceback (most recent call last):
+>   File "/usr/lib/python3.12/site-packages/auto_cpufreq/battery_scripts/ideapad_laptop.py", line 92, in ideapad_laptop_print_thresholds
+>     with open(f'/sys/class/power_supply/BAT{b}/charge_start_threshold', 'r') as f:
+>          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> FileNotFoundError: [Errno 2] No such file or directory: '/sys/class/power_supply/BAT0/charge_start_threshold'
+> 
+> During handling of the above exception, another exception occurred:
+> 
+> Traceback (most recent call last):
+>   File "/sbin/auto-cpufreq", line 8, in <module>
+>     sys.exit(main())
+>              ^^^^^^
+>   File "/usr/lib/python3.12/site-packages/click/core.py", line 1157, in __call__
+>     return self.main(*args, **kwargs)
+>            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   File "/usr/lib/python3.12/site-packages/click/core.py", line 1078, in main
+>     rv = self.invoke(ctx)
+>          ^^^^^^^^^^^^^^^^
+>   File "/usr/lib/python3.12/site-packages/click/core.py", line 1434, in invoke
+>     return ctx.invoke(self.callback, **ctx.params)
+>            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   File "/usr/lib/python3.12/site-packages/click/core.py", line 783, in invoke
+>     return __callback(*args, **kwargs)
+>            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   File "/usr/lib/python3.12/site-packages/auto_cpufreq/bin/auto_cpufreq.py", line 169, in main
+>     battery_get_thresholds()
+>   File "/usr/lib/python3.12/site-packages/auto_cpufreq/battery_scripts/battery.py", line 42, in battery_get_thresholds
+>     ideapad_laptop_print_thresholds()
+>   File "/usr/lib/python3.12/site-packages/auto_cpufreq/battery_scripts/ideapad_laptop.py", line 101, in ideapad_laptop_print_thresholds
+>     print(f"ERROR: failed to read battery thresholds: {e}")
+>                                                        ^
+> NameError: name 'e' is not defined
+> ```
+
+This problem has been patches with #716 </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Angel-Karasu:</strong></p>
+                    <p>> @Angel-Karasu I see this issue when I run `auto-cpufreq --monitor`.
+> 
+> ```
+> Note: You can quit monitor mode by pressing "ctrl+c"
+> could not get value from conservation mode
+> 
+> -------------------------------- Battery Info ---------------------------------
+> 
+> battery count = 1
+> BAT0 start threshold = cat: /sys/class/power_supply/BAT0/charge_start_threshold: No such file or directory
+> BAT0 start threshold = cat: /sys/class/power_supply/BAT0/charge_stop_threshold: No such file or directory
+> ```
+> 
+> I assume its related?
+
+Problem patches in #742 </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Thank you @Angel-Karasu! #742 merged with `master` branch, please pull the latest changes, re-install auto-cpufreq and re-open the issue if issue persist.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>kralle333:</strong></p>
+                    <p>Not completely solved, because those files are not actually allowed to be created in that folder (sorry for my incorrect suggestion), but this is not really an issue. I might just fix it myself later.
+
+```
+
+battery count = 1
+/sys/class/power_supply/BAT0/charge_start_threshold file missing! creating file
+ERROR: when checking for threshold files:  Exception('failed to create battery start_threshold threshold: ', 'TypeError("\'<\' not supported between instances of \'str\' and \'int\'")')
+BAT0 start threshold = cat: /sys/class/power_supply/BAT0/charge_start_threshold: No such file or directory
+BAT0 stop threshold = cat: /sys/class/power_supply/BAT0/charge_stop_threshold: No such file or directory
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Armadillidiid:</strong></p>
+                    <p>I'm still encountering the same issue. I updated using yay and restarted the service, but it didn't resolve the issue. As @kralle333 mentioned, manually creating the files is also not possible due to permission restrictions.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> manually creating the files is also not possible due to permission restrictions.
+
+Unfortunately you need to have permissions to to create `/etc/auto-cpufreq.conf `</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Armadillidiid:</strong></p>
+                    <p>> > manually creating the files is also not possible due to permission restrictions.
+> 
+> Unfortunately you need to have permissions to to create `/etc/auto-cpufreq.conf `
+
+I'm not talking about the config file at  `/etc/auto-cpufreq.conf `, I mean the battery threshold files under `/sys/class/power_supply/BAT0/`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@PurpleWazard should this be re-opened?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Qianxilihulu:</strong></p>
+                    <p>i think thinkbook is more or less rebranded ideapad but not exactly ideapad. 
+I'm using thinkbook too, and there isn't _charge_start_threshold_ under /sys/class/power_supply/BAT0. 
+
+what you can do with thinkbook is most present in /sys/bus/platform/drivers/ideapad_acpi/VPC2004:00/, such as fn lock, conservation mode and always on usb, which can be toggled on Windows using Lenovo Vantage as well.
+What's not able on Windows, however, such as fan curve and battery threshold, is not available on linux as well. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ajayd-san:</strong></p>
+                    <p>Can this be reopened? I'm getting this issue on a lenovo legion.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Issue re-opened, but as @PurpleWazard announced on [auto-cpufreq Discord community](https://discord.com/channels/1158239366251020361/1158239367337349164/1279513754085621822).
+
+As original implementer of this functionality, since he doesn't have time to look into this problem, if you or anyone else wants to look into this problem and contribute to the project (create a PR with fix), you will be credited for your work as [part of future releases](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>MirceaMx:</strong></p>
+                    <p>Having the same issue - lenovo legion</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>glenkusuma:</strong></p>
+                    <p>Edit: i install auto-cpu-freq using AUR (auto-cpufreq-2.3.0.tar.gz)
+I am having similar issue using :
+Legion 5-15ITH6 Laptop (Lenovo) - Type 82JK
+
+Processor: 11th Gen Intel(R) Core(TM) i7-11800H (16) @ 4.60 GHz
+Graphics: NVIDIA GeForce RTX 3050 Ti 4GB GDDR6
+Battery:  80Wh battery, 230W Slim Tip power adapter
+
+Upower info
+```txt
+# upower -i /org/freedesktop/UPower/devices/battery_BAT0   
+  native-path:          BAT0
+  vendor:               SMP
+  model:                L20M4PC1
+  serial:               1660
+  power supply:         yes
+  updated:              Sun 08 Sep 2024 02:30:02 PM WIB (7 seconds ago)
+  has history:          yes
+  has statistics:       yes
+  battery
+    present:             yes
+    rechargeable:        yes
+    state:               pending-charge
+    warning-level:       none
+    energy:              61.67 Wh
+    energy-empty:        0 Wh
+    energy-full:         72.55 Wh
+    energy-full-design:  80 Wh
+    energy-rate:         0 W
+    voltage:             16.524 V
+    charge-cycles:       467
+    percentage:          85%
+    capacity:            90.6875%
+    technology:          lithium-polymer
+    icon-name:          'battery-full-charging-symbolic'
+```
+auto-cpufreq --live
+```bash
+# auto-cpufreq --live
+
+Note: You can quit live mode by pressing "ctrl+c"
+could not get value from conservation mode
+
+-------------------------------- Battery Info ---------------------------------
+
+battery count = 1
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/site-packages/auto_cpufreq/battery_scripts/ideapad_laptop.py", line 92, in ideapad_laptop_print_thresholds
+    with open(f'/sys/class/power_supply/BAT{b}/charge_start_threshold', 'r') as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/sys/class/power_supply/BAT0/charge_start_threshold'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/bin/auto-cpufreq", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/usr/lib/python3.12/site-packages/click/core.py", line 1157, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/site-packages/click/core.py", line 1078, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/site-packages/click/core.py", line 1434, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/site-packages/click/core.py", line 783, in invoke
+    return __callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/site-packages/auto_cpufreq/bin/auto_cpufreq.py", line 123, in main
+    battery_get_thresholds()
+  File "/usr/lib/python3.12/site-packages/auto_cpufreq/battery_scripts/battery.py", line 42, in battery_get_thresholds
+    ideapad_laptop_print_thresholds()
+  File "/usr/lib/python3.12/site-packages/auto_cpufreq/battery_scripts/ideapad_laptop.py", line 101, in ideapad_laptop_print_thresholds
+    print(f"ERROR: failed to read battery thresholds: {e}")
+                                                       ^
+NameError: name 'e' is not defined
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>glenkusuma:</strong></p>
+                    <p>> This seems like an identical issue as in #765 and issue was solved in #750 however PR with fix was never submitted ... hence if anyone would like to give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+from https://github.com/AdnanHodzic/auto-cpufreq/issues/741#issuecomment-2333273513
+
+**I install auto-cpufreq using the latest [v2.4.0 release](https://github.com/AdnanHodzic/auto-cpufreq/commit/a42e8fb51e08059411d52451141cac86f1bc788a) from source code (git clone) method  and can confirm it works!**
+
+here are my zsh output:
+1. checking compatibility without installing using `auto-cpufreq --live`
+```bash
+➜  auto-cpufreq git:(master) sudo auto-cpufreq --live
+Note: You can quit live mode by pressing "ctrl+c"
+conservation mode is on
+
+-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux  
+Linux kernel: 6.10.8-arch1-1
+Processor: 11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz
+Cores: 16
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2300 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      0.0%        38 °C       800 MHz
+CPU1      1.0%        39 °C      2152 MHz
+CPU2      2.0%        37 °C       800 MHz
+CPU3      3.9%        32 °C       800 MHz
+CPU4      1.0%        36 °C       800 MHz
+CPU5      1.0%        38 °C      1818 MHz
+CPU6      1.0%        37 °C       800 MHz
+CPU7      0.0%        38 °C      1696 MHz
+CPU8      0.0%        38 °C      1685 MHz
+CPU9      0.0%        39 °C       830 MHz
+CPU10      0.0%        37 °C       800 MHz
+CPU11      1.0%        32 °C       800 MHz
+CPU12      0.0%        36 °C       800 MHz
+CPU13      1.0%        38 °C      2261 MHz
+CPU14      1.0%        37 °C       800 MHz
+CPU15      0.0%        38 °C       800 MHz
+
+CPU fan speed: 1761 RPM
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+Setting to use: "performance" EPP
+
+Total CPU usage: 1.0 %
+Total system load: 0.59
+Average temp. of all cores: 36.88 °C 
+
+Load optimal (load average: 0.59, 0.56, 0.56)
+Optimal total CPU usage: 1.0%, high average core temp: 36.875°C
+Setting turbo boost: off
+-------------------------------------------------------------------------------
+
+		"auto-cpufreq" is about to refresh ...
+		Executed on: Sun Sep  8 03:14:08 PM WIB 2024
+
+-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux  
+Linux kernel: 6.10.8-arch1-1
+Processor: 11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz
+Cores: 16
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2300 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      2.0%        40 °C      1094 MHz
+CPU1      0.0%        40 °C       880 MHz
+CPU2      0.0%        38 °C       800 MHz
+CPU3      0.0%        32 °C       800 MHz
+CPU4      2.0%        36 °C      1049 MHz
+CPU5      1.0%        37 °C       974 MHz
+CPU6      0.0%        37 °C       800 MHz
+CPU7      0.0%        37 °C       800 MHz
+CPU8      1.0%        40 °C       800 MHz
+CPU9      7.8%        40 °C       800 MHz
+CPU10      1.0%        38 °C      1100 MHz
+CPU11      1.0%        32 °C       862 MHz
+CPU12      1.0%        36 °C       918 MHz
+CPU13      3.0%        37 °C      1087 MHz
+CPU14      2.0%        37 °C       861 MHz
+CPU15      1.0%        37 °C       941 MHz
+
+CPU fan speed: 1761 RPM
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: discharging
+
+Setting to use: "powersave" governor
+Setting to use: "balance_power" EPP
+
+Total CPU usage: 1.9 %
+Total system load: 0.65
+Average temp. of all cores: 37.12 °C 
+
+Load optimal (load average: 0.65, 0.58, 0.56)
+Optimal total CPU usage: 1.9%, high average core temp: 37.125°C
+Setting turbo boost: off
+
+-------------------------------------------------------------------------------
+
+		"auto-cpufreq" is about to refresh .
+```
+2. installing auto-cpufreq [v2.4.0 release](https://github.com/AdnanHodzic/auto-cpufreq/commit/a42e8fb51e08059411d52451141cac86f1bc788a) from source code (git clone) method 
+```bash
+➜  auto-cpufreq git:(master) sudo auto-cpufreq --install
+
+--------------------- Deploying auto-cpufreq as a daemon ----------------------
+
+* Turn off bluetooth on boot (can be turned on any time later on!)
+
+* Deploy auto-cpufreq install script
+
+* Deploy auto-cpufreq remove script
+There was a problem, couldn't determine GNOME Power Profiles Daemon
+
+─────────────────────────────────────────────────── Running auto-cpufreq daemon install script ───────────────────────────────────────────────────
+
+Deploying auto-cpufreq systemd unit file
+
+* Reloading systemd manager configuration
+
+* Starting auto-cpufreq daemon (systemd) service
+
+* Enabling auto-cpufreq daemon (systemd) at boot
+Created symlink '/etc/systemd/system/multi-user.target.wants/auto-cpufreq.service' → '/etc/systemd/system/auto-cpufreq.service'.
+
+----------------- auto-cpufreq daemon installed and running -----------------
+
+To view live stats, run:
+auto-cpufreq --stats
+
+auto-cpufreq makes all decisions automatically, if you would like to
+configure certain setting to your own liking, please refer to:
+https://github.com/AdnanHodzic/auto-cpufreq#configuring-auto-cpufreq
+
+To disable and remove auto-cpufreq daemon, run:
+sudo auto-cpufreq --remove
+
+-------------------------------------------------------------------------------
+```
+3. checking systemctl auto-cpufreq demon status
+```bash
+➜  auto-cpufreq git:(master) sudo systemctl status auto-cpufreq 
+● auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux
+     Loaded: loaded (/etc/systemd/system/auto-cpufreq.service; enabled; preset: disabled)
+     Active: active (running) since Sun 2024-09-08 15:15:36 WIB; 7min ago
+ Invocation: 5c8e17390c0b4035a85bd59b3e40a1cd
+   Main PID: 904602 (python)
+      Tasks: 2 (limit: 18900)
+     Memory: 19.7M (peak: 23.1M)
+        CPU: 14.838s
+     CGroup: /system.slice/auto-cpufreq.service
+             └─904602 /opt/auto-cpufreq/venv/bin/python /opt/auto-cpufreq/venv/bin/auto-cpufreq --daemon
+
+Sep 08 15:15:36 archlegion systemd[1]: Started auto-cpufreq - Automatic CPU speed & power optimizer for Linux.
+```
+4. checking auto-cpufreq stats
+```bash
+➜  auto-cpufreq git:(master) sudo auto-cpufreq --stats          
+
+Note: You can quit stats mode by pressing "ctrl+c"
+conservation mode is on
+Linux distro: Arch Linux  
+Linux kernel: 6.10.8-arch1-1
+Processor: 11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz
+Cores: 16
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2300 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      2.0%        39 °C      2184 MHz
+CPU1      2.0%        39 °C      2215 MHz
+CPU2      2.1%        37 °C       801 MHz
+CPU3      4.0%        32 °C      2278 MHz
+CPU4      2.0%        37 °C      2064 MHz
+CPU5      0.0%        38 °C      1089 MHz
+CPU6      2.0%        39 °C      1127 MHz
+CPU7      1.0%        38 °C       800 MHz
+CPU8      3.0%        39 °C      1207 MHz
+CPU9      3.0%        39 °C      2274 MHz
+CPU10      1.0%        37 °C      1695 MHz
+CPU11      1.0%        32 °C      1309 MHz
+CPU12      0.0%        37 °C      1291 MHz
+CPU13      2.0%        38 °C      1013 MHz
+CPU14      1.0%        39 °C      1191 MHz
+CPU15      2.9%        38 °C       800 MHz
+
+CPU fan speed: 1767 RPM
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: discharging
+
+Setting to use: "powersave" governor
+Setting to use: "balance_power" EPP
+
+Total CPU usage: 5.2 %
+Total system load: 0.71
+Average temp. of all cores: 37.38 °C 
+
+Load optimal (load average: 0.71, 0.76, 0.65)
+Optimal total CPU usage: 5.2%, high average core temp: 37.375°C
+Setting turbo boost: off
+
+-------------------------------------------------------------------------------
+
+		"auto-cpufreq" is about to refresh ...
+		Executed on: Sun Sep  8 03:23:08 PM WIB 2024
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Can anyone else besides @glenkusuma confirm that v2.4.0 released fixed this issue for them?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>benjezzy:</strong></p>
+                    <p>@AdnanHodzic I'm running `2.4.0.1` on my Lenovo Ideapad Pro 5 and still having issues. 
+
+```
+❯ sudo auto-cpufreq --stats 
+
+Note: You can quit stats mode by pressing "ctrl+c"
+
+-------------------------------- Battery Info ---------------------------------
+
+battery count = 1
+cat: /sys/class/power_supply/BAT0/charge_start_threshold: No such file or directory
+ERROR: failed to read battery BAT0 thresholds: CalledProcessError(1, ['cat', '/sys/class/power_supply/BAT0/charge_start_threshold'])
+-------------------------------------------------------------------------------
+
+Linux distro: Manjaro Linux 24.0.8 Wynsdey
+Linux kernel: 6.11.0-rc4-7-MANJARO
+Processor: AMD Ryzen 7 7840HS with Radeon 780M Graphics
+Cores: 16
+Architecture: x86_64
+Driver: amd-pstate-epp
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3801 MHz
+CPU min frequency: 400 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0      0.0%        33 °C       400 MHz
+CPU1      1.0%        33 °C       400 MHz
+CPU2     12.0%        33 °C      2319 MHz
+CPU3     29.7%        33 °C       400 MHz
+CPU4      3.0%        33 °C       400 MHz
+CPU5      0.0%        33 °C      1867 MHz
+CPU6      5.0%        33 °C       400 MHz
+CPU7      0.0%        33 °C       400 MHz
+CPU8      0.0%        33 °C       400 MHz
+CPU9      0.0%        33 °C       400 MHz
+CPU10      1.0%        33 °C       400 MHz
+CPU11      1.0%        33 °C       400 MHz
+CPU12      2.0%        33 °C       400 MHz
+CPU13      0.0%        33 °C       400 MHz
+CPU14      9.1%        33 °C      2329 MHz
+CPU15      0.0%        33 °C       400 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: discharging
+
+Setting to use: "powersave" governor
+Setting to use: "balance_power" EPP
+
+Total CPU usage: 0.7 %
+Total system load: 1.16
+Average temp. of all cores: 33.00 °C 
+
+Load optimal (load average: 1.16, 1.12, 1.16)
+Optimal total CPU usage: 0.7%, high average core temp: 33.0°C
+Setting turbo boost: off
+
+-------------------------------------------------------------------------------
+
+                "auto-cpufreq" is about to refresh ...
+
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Qianxilihulu:</strong></p>
+                    <p>> Can anyone else besides @glenkusuma confirm that v2.4.0 released fixed this issue for them? 
+
+Yes, it's working properly on my ThinkBook laptop
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>HarshalRathore:</strong></p>
+                    <p>For me this file does not exists `/sys/class/power_supply/BAT0/charge_start_threshold` but this file does `/sys/class/power_supply/BAT0/charge_control_end_threshold` if i simply do 
+``` 
+echo 60 | sudo tee /sys/class/power_supply/BAT0/charge_control_end_threshold 
+``` 
+my laptop's battery charging is limited at 60%. Mine is a asus ROG series laptop.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

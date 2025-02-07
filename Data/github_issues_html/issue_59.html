@@ -1,0 +1,262 @@
+
+        <html>
+        <head>
+            <title>Issue #59: Permission denied on Snap 2.44.3+20.04</title>
+        </head>
+        <body>
+            <h1>Permission denied on Snap 2.44.3+20.04</h1>
+            <p><strong>Issue #59</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hi!
+
+Using `auto-cpufreq --log` after a successful `sudo auto-cpufreq --install`, I get the following error:
+
+```console
+⋊> ~ auto-cpufreq --log
+
+-------------------------------- Daemon check ---------------------------------
+
+ERROR:
+
+Daemon not enabled, must run install first, i.e:
+sudo auto-cpufreq --install
+
+-------------------------------------------------------------------------------
+
+
+----------------------------- System information ------------------------------
+
+Traceback (most recent call last):
+  File "/snap/auto-cpufreq/5/bin/auto-cpufreq", line 108, in <module>
+    main()
+  File "/snap/auto-cpufreq/5/lib/python3.6/site-packages/click/core.py", line 829, in __call__
+    return self.main(*args, **kwargs)
+  File "/snap/auto-cpufreq/5/lib/python3.6/site-packages/click/core.py", line 782, in main
+    rv = self.invoke(ctx)
+  File "/snap/auto-cpufreq/5/lib/python3.6/site-packages/click/core.py", line 1066, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/snap/auto-cpufreq/5/lib/python3.6/site-packages/click/core.py", line 610, in invoke
+    return callback(*args, **kwargs)
+  File "/snap/auto-cpufreq/5/bin/auto-cpufreq", line 39, in main
+    sysinfo()
+  File "/snap/auto-cpufreq/5/lib/python3.6/site-packages/source/core.py", line 351, in sysinfo
+    searchfile = open("/var/lib/snapd/hostfs/etc/os-release", "r")
+PermissionError: [Errno 13] Permission denied: '/var/lib/snapd/hostfs/etc/os-release'
+```
+
+Tried the command with `sudo`, same result.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Could you please tell me which distribution/release are you running?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Booteille:</strong></p>
+                    <p>Sure!
+
+Pop_OS! 20.04</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Will look into this. Until I resolve this issue, I would suggest to use [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq#auto-cpufreq-installer)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Booteille:</strong></p>
+                    <p>That's what I finally did.
+
+Thank you!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I would be interested in hearing if you still have this problem with snap as as part of new (unreleased) release/beta:
+
+```
+sudo snap install auto-cpufreq --beta
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Booteille:</strong></p>
+                    <p>Hi! It seems to work properly now. Thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>@AdnanHodzic Unfortunately, it still throws the same error on POP OS 20.04
+![photo_2020-08-06_14-03-49](https://user-images.githubusercontent.com/11485451/89524723-be691480-d7ed-11ea-95c3-bc5e1d729375.jpg)
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@Red-Eyed which version of `snapd` do you have?
+
+It's weird that it's still happening for you and not for @Booteille
+
+Could you try running following and reporting if same problem is still there:
+```
+sudo snap remove --purge auto-cpufreq
+sudo snap install auto-cpufreq --beta
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>Yeah, it's weird
+```
+➜  ~ sudo snap remove --purge auto-cpufreq
+[sudo] password for redeyed: 
+auto-cpufreq removed
+➜  ~ sudo snap remove --purge auto-cpufreq
+➜  ~ sudo snap install auto-cpufreq --beta
+auto-cpufreq (beta) 1.2 from Adnan Hodzic (fooctrl) installed
+➜  ~ sudo auto-cpufreq                   
+
+-------------------------------- auto-cpufreq ---------------------------------
+
+Automatic CPU speed & power optimizer for Linux
+
+Example usage:
+auto-cpufreq --monitor
+
+-----
+
+Usage: auto-cpufreq [OPTIONS]
+
+Options:
+  --monitor             Monitor and suggest CPU optimizations
+  --live                Monitor and make suggested CPU optimizations
+  --install / --remove  Install/remove daemon for automatic CPU optimizations
+  --log                 View live CPU optimization log made by daemon
+  --help                Show this message and exit.
+
+-------------------------------------------------------------------------------
+
+➜  ~ sudo auto-cpufreq --monitor
+
+----------------------------- System information ------------------------------
+
+Traceback (most recent call last):
+  File "/snap/auto-cpufreq/6/bin/auto-cpufreq", line 111, in <module>
+    main()
+  File "/snap/auto-cpufreq/6/lib/python3.6/site-packages/click/core.py", line 829, in __call__
+    return self.main(*args, **kwargs)
+  File "/snap/auto-cpufreq/6/lib/python3.6/site-packages/click/core.py", line 782, in main
+    rv = self.invoke(ctx)
+  File "/snap/auto-cpufreq/6/lib/python3.6/site-packages/click/core.py", line 1066, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/snap/auto-cpufreq/6/lib/python3.6/site-packages/click/core.py", line 610, in invoke
+    return callback(*args, **kwargs)
+  File "/snap/auto-cpufreq/6/bin/auto-cpufreq", line 66, in main
+    sysinfo()
+  File "/snap/auto-cpufreq/6/lib/python3.6/site-packages/source/core.py", line 400, in sysinfo
+    searchfile = open("/var/lib/snapd/hostfs/etc/os-release", "r")
+PermissionError: [Errno 13] Permission denied: '/var/lib/snapd/hostfs/etc/os-release'
+➜  ~ sudo auto-cpufreq --debug  
+Usage: auto-cpufreq [OPTIONS]
+Try 'auto-cpufreq --help' for help.
+
+Error: no such option: --debug
+➜  ~ snap --version
+snap    2.45.2
+snapd   2.45.2
+series  16
+pop     20.04
+kernel  5.4.0-7634-generic
+➜  ~ 
+➜  ~ sudo auto-cpufreq --debug
+➜  ~ sudo snap run auto-cpufreq --debug
+Usage: auto-cpufreq [OPTIONS]
+Try 'auto-cpufreq --help' for help.
+
+Error: no such option: --debug
+➜  ~ sudo snap run auto-cpufreq --monitor
+
+----------------------------- System information ------------------------------
+
+Traceback (most recent call last):
+  File "/snap/auto-cpufreq/6/bin/auto-cpufreq", line 111, in <module>
+    main()
+  File "/snap/auto-cpufreq/6/lib/python3.6/site-packages/click/core.py", line 829, in __call__
+    return self.main(*args, **kwargs)
+  File "/snap/auto-cpufreq/6/lib/python3.6/site-packages/click/core.py", line 782, in main
+    rv = self.invoke(ctx)
+  File "/snap/auto-cpufreq/6/lib/python3.6/site-packages/click/core.py", line 1066, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/snap/auto-cpufreq/6/lib/python3.6/site-packages/click/core.py", line 610, in invoke
+    return callback(*args, **kwargs)
+  File "/snap/auto-cpufreq/6/bin/auto-cpufreq", line 66, in main
+    sysinfo()
+  File "/snap/auto-cpufreq/6/lib/python3.6/site-packages/source/core.py", line 400, in sysinfo
+    searchfile = open("/var/lib/snapd/hostfs/etc/os-release", "r")
+PermissionError: [Errno 13] Permission denied: '/var/lib/snapd/hostfs/etc/os-release'
+➜  ~ which auto-cpufreq
+/snap/bin/auto-cpufreq
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>Also, I don't see `--debug` option
+but AFAIK it should be present, isn't it?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Also, I don't see `--debug` option
+> but AFAIK it should be present, isn't it?
+
+You're right, I just pushed another revision.
+
+Could you retry running: 
+
+```
+sudo snap remove --purge auto-cpufreq
+sudo snap install auto-cpufreq --beta
+```
+
+again?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>Yeah, I've tried
+same error with permission denied. but `--debug` option is present
+also, `inxi` is not installed
+
+Maybe, let's just wrap distribution into try...except block and catch Permission denied
+and could you please install inxi in snap?
+
+If you want, I can add handling of PermissionDenied</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>check it out: #75 
+just hot fix to make a new release as distro name doesn't affect on main functionality, but with this fix we can make a new release</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>@AdnanHodzic can I build snap locally and install it locally?
+I want to find out the problem on pop os</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>Sorry, I'm asking about "how can I test snap builds" ?
+maybe you could give me some tutorials?</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

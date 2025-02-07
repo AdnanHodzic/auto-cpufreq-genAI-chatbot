@@ -1,0 +1,924 @@
+
+        <html>
+        <head>
+            <title>Issue #368: sh: 1: snap: not found</title>
+        </head>
+        <body>
+            <h1>sh: 1: snap: not found</h1>
+            <p><strong>Issue #368</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I have installed `auto-cpufreq` using [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq#auto-cpufreq-installer) on a Lenovo Thinkpad X260 running Linux Mint 20.3. I have disabled the [intel_pstate](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting) driver.
+
+
+Although it does seem to be running normally, I get an error message claiming that snap cannot be found when running `auto-cpufreq --stats`, `auto-cpufreq --debug` or `systemctl status auto-cpufreq`.
+
+Linux Mint, unlike other Ubuntu derivatives, does not ship with snap.
+
+Is snap required for this program to run? If not, is there a way to remove this message?
+
+### Error output:
+```
+sh: 1: snap: not found
+```
+---
+
+### Systemd service status:
+#### Although the message does appear, the program continues to run normally. It can be seen running in `htop` as well.
+```
+$ systemctl status auto-cpufreq
+● auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux
+     Loaded: loaded (/etc/systemd/system/auto-cpufreq.service; enabled; vendor preset: enabled)
+     Active: active (running) since Sat 2022-02-26 18:24:38 CET; 30min ago
+   Main PID: 837 (python)
+      Tasks: 1 (limit: 9258)
+     Memory: 20.9M
+     CGroup: /system.slice/auto-cpufreq.service
+             └─837 /opt/auto-cpufreq/venv/bin/python /opt/auto-cpufreq/venv/bin/auto-cpufreq --daemon
+
+Feb 26 18:24:38 X260 systemd[1]: Started auto-cpufreq - Automatic CPU speed & power optimizer for Linux.
+Feb 26 18:24:39 X260 python[887]: sh: 1: snap: not found
+```
+
+### Stats output comparison:
+#### a) web browsing on battery
+```
+$ auto-cpufreq --stats
+sh: 1: snap: not found
+[...]
+Battery is: discharging
+
+Setting to use: "powersave" governor
+
+Total CPU usage: 26.6 %
+Total system load: 1.35
+Average temp. of all cores: 45.0 °C
+
+High CPU load
+setting turbo boost: on
+```
+#### b) idle on charger
+```
+$ auto-cpufreq --stats
+sh: 1: snap: not found
+[...]
+Battery is: charging
+
+Setting to use: "performance" governor
+
+Total CPU usage: 0.0 %
+Total system load: 0.17
+Average temp. of all cores: 37.5 °C
+
+Load optimal
+setting turbo boost: off
+```
+
+---
+
+### System information:
+
+```
+$ sudo auto-cpufreq --debug
+sh: 1: snap: not found
+
+-------------------------------------------------------------------------------
+
+Linux distro: Linux Mint 20.3 Una
+Linux kernel: 5.13.0-30-generic
+Processor: Intel(R) Core(TM) i5-6200U CPU @ 2.30GHz
+Cores: 4
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2300 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  0.0%     35 °C     2300 MHz
+CPU1:	  0.0%     37 °C     2300 MHz
+CPU2:	  1.0%     35 °C     2300 MHz
+CPU3:	  0.0%     37 °C     2300 MHz
+
+auto-cpufreq version: 1.9.2 (git: f65dba36)
+
+Python: 3.8.10
+psutil package: 5.9.0
+platform package: 1.0.8
+click package: 8.0.4
+distro package: 1.7.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.27 %
+
+Total CPU usage: 0.0 %
+Total system load: 0.0
+Average temp. of all cores: 36.0 °C 
+
+Currently using: performance governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```
+
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I've just pushed changes which will fix this problem and are on `snap_detect_improve` branch, it all works great on my side but could you also check that all works from your side as well before I merge this with `master`?
+
+You can do this from dir you cloned auto-cpufreq to, i.e:
+
+```
+sudo ./auto-cpufreq-installer --remove
+git fetch
+git checkout snap_detect_improve
+sudo ./auto-cpufreq-installer --install
+sudo auto-cpufreq --stats
+```
+
+Thanks</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ryouze:</strong></p>
+                    <p>It does not seem to work on my end. I have tried reinstalling it several times. I have also rebooted my machine.
+By "does not seem to work", I mean that the `sh: 1: snap: not found` message still appears.
+Edit: typo.
+
+### Full output:
+```
+$ sudo ./auto-cpufreq-installer --remove
+sh: 1: snap: not found
+
+--------------------- Removing auto-cpufreq daemon ----------------------
+
+* Turn on bluetooth on boot
+
+----------------------------------- Warning -----------------------------------
+
+Detected GNOME Power Profiles daemon service is stopped!
+This service will now be enabled and started again.
+
+* Enabling GNOME power profiles
+Unit power-profiles-daemon.service does not exist, proceeding anyway.
+Failed to start power-profiles-daemon.service: Unit power-profiles-daemon.service not found.
+Failed to enable unit: Unit file power-profiles-daemon.service does not exist.
+
+------------------ Running auto-cpufreq daemon removal script ------------------
+
+* Stopping auto-cpufreq daemon (systemd) service
+
+* Disabling auto-cpufreq daemon (systemd) at boot
+Removed /etc/systemd/system/multi-user.target.wants/auto-cpufreq.service.
+
+* Removing auto-cpufreq daemon (systemd) unit file
+
+* Reloading systemd manager configuration
+reset failed
+
+------------------------- auto-cpufreq daemon removed -------------------------
+
+auto-cpufreq successfully removed.
+
+-------------------------------------------------------------------------------
+
+
+-------------------------------------------------------------------------------
+
+auto-cpufreq tool and all its supporting files successfully removed.
+
+-------------------------------------------------------------------------------
+```
+
+```
+$ git fetch
+```
+
+```
+$ git checkout snap_detect_improve 
+Branch 'snap_detect_improve' set up to track remote branch 'snap_detect_improve' from 'origin'.
+Switched to a new branch 'snap_detect_improve'
+```
+
+```
+$ git branch
+  master
+* snap_detect_improve
+```
+
+```
+$ sudo ./auto-cpufreq-installer --install
+
+-------------------------------------------------------------------------------
+
+Detected Debian based distribution
+
+-------------------------------------------------------------------------------
+
+Setting up Python environment
+
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+dmidecode is already the newest version (3.2-3).
+python3-dev is already the newest version (3.8.2-0ubuntu2).
+python3-setuptools is already the newest version (45.2.0-1).
+python3-venv is already the newest version (3.8.2-0ubuntu2).
+python3-pip is already the newest version (20.0.2-5ubuntu1.6).
+0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+
+Installing necessary Python packages
+
+Collecting pip
+  Using cached pip-22.0.3-py3-none-any.whl (2.1 MB)
+Installing collected packages: pip
+  Attempting uninstall: pip
+    Found existing installation: pip 20.0.2
+    Uninstalling pip-20.0.2:
+      Successfully uninstalled pip-20.0.2
+Successfully installed pip-22.0.3
+Requirement already satisfied: setuptools in /opt/auto-cpufreq/venv/lib/python3.8/site-packages (from -r requirements.txt (line 1)) (44.0.0)
+Collecting psutil
+  Using cached psutil-5.9.0-cp38-cp38-manylinux_2_12_x86_64.manylinux2010_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl (283 kB)
+Collecting click
+  Using cached click-8.0.4-py3-none-any.whl (97 kB)
+Collecting distro
+  Using cached distro-1.7.0-py3-none-any.whl (20 kB)
+Installing collected packages: psutil, distro, click
+Successfully installed click-8.0.4 distro-1.7.0 psutil-5.9.0
+
+-------------------------------------------------------------------------------
+
+installing auto-cpufreq tool
+
+WARNING: The wheel package is not available.
+WARNING: The wheel package is not available.
+WARNING: The wheel package is not available.
+WARNING: The wheel package is not available.
+WARNING: The wheel package is not available.
+running install
+running bdist_egg
+running egg_info
+writing auto_cpufreq.egg-info/PKG-INFO
+writing dependency_links to auto_cpufreq.egg-info/dependency_links.txt
+writing requirements to auto_cpufreq.egg-info/requires.txt
+writing top-level names to auto_cpufreq.egg-info/top_level.txt
+reading manifest file 'auto_cpufreq.egg-info/SOURCES.txt'
+writing manifest file 'auto_cpufreq.egg-info/SOURCES.txt'
+installing library code to build/bdist.linux-x86_64/egg
+running install_lib
+running build_py
+copying auto_cpufreq/power_helper.py -> build/lib/auto_cpufreq
+creating build/bdist.linux-x86_64/egg
+creating build/bdist.linux-x86_64/egg/auto_cpufreq
+copying build/lib/auto_cpufreq/core.py -> build/bdist.linux-x86_64/egg/auto_cpufreq
+copying build/lib/auto_cpufreq/__init__.py -> build/bdist.linux-x86_64/egg/auto_cpufreq
+copying build/lib/auto_cpufreq/power_helper.py -> build/bdist.linux-x86_64/egg/auto_cpufreq
+copying build/lib/auto_cpufreq/tlp_stat_parser.py -> build/bdist.linux-x86_64/egg/auto_cpufreq
+byte-compiling build/bdist.linux-x86_64/egg/auto_cpufreq/core.py to core.cpython-38.pyc
+byte-compiling build/bdist.linux-x86_64/egg/auto_cpufreq/__init__.py to __init__.cpython-38.pyc
+byte-compiling build/bdist.linux-x86_64/egg/auto_cpufreq/power_helper.py to power_helper.cpython-38.pyc
+byte-compiling build/bdist.linux-x86_64/egg/auto_cpufreq/tlp_stat_parser.py to tlp_stat_parser.cpython-38.pyc
+creating build/bdist.linux-x86_64/egg/EGG-INFO
+installing scripts to build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+running install_scripts
+running build_scripts
+creating build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+copying build/scripts-3.8/auto-cpufreq -> build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+changing mode of build/bdist.linux-x86_64/egg/EGG-INFO/scripts/auto-cpufreq to 755
+copying auto_cpufreq.egg-info/PKG-INFO -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying auto_cpufreq.egg-info/SOURCES.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying auto_cpufreq.egg-info/dependency_links.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying auto_cpufreq.egg-info/requires.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying auto_cpufreq.egg-info/top_level.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying auto_cpufreq.egg-info/zip-safe -> build/bdist.linux-x86_64/egg/EGG-INFO
+creating 'dist/auto_cpufreq-1.9.2+7ab6f9ce-py3.8.egg' and adding 'build/bdist.linux-x86_64/egg' to it
+removing 'build/bdist.linux-x86_64/egg' (and everything under it)
+Processing auto_cpufreq-1.9.2+7ab6f9ce-py3.8.egg
+Copying auto_cpufreq-1.9.2+7ab6f9ce-py3.8.egg to /opt/auto-cpufreq/venv/lib/python3.8/site-packages
+Adding auto-cpufreq 1.9.2+7ab6f9ce to easy-install.pth file
+Installing auto-cpufreq script to /opt/auto-cpufreq/venv/bin
+
+Installed /opt/auto-cpufreq/venv/lib/python3.8/site-packages/auto_cpufreq-1.9.2+7ab6f9ce-py3.8.egg
+Processing dependencies for auto-cpufreq==1.9.2+7ab6f9ce
+Searching for setuptools==44.0.0
+Best match: setuptools 44.0.0
+Adding setuptools 44.0.0 to easy-install.pth file
+Installing easy_install script to /opt/auto-cpufreq/venv/bin
+
+Using /opt/auto-cpufreq/venv/lib/python3.8/site-packages
+Searching for psutil==5.9.0
+Best match: psutil 5.9.0
+Adding psutil 5.9.0 to easy-install.pth file
+
+Using /opt/auto-cpufreq/venv/lib/python3.8/site-packages
+Searching for distro==1.7.0
+Best match: distro 1.7.0
+Adding distro 1.7.0 to easy-install.pth file
+Installing distro script to /opt/auto-cpufreq/venv/bin
+
+Using /opt/auto-cpufreq/venv/lib/python3.8/site-packages
+Searching for click==8.0.4
+Best match: click 8.0.4
+Adding click 8.0.4 to easy-install.pth file
+
+Using /opt/auto-cpufreq/venv/lib/python3.8/site-packages
+Finished processing dependencies for auto-cpufreq==1.9.2+7ab6f9ce
+writing list of installed files to 'files.txt'
+
+-------------------------------------------------------------------------------
+
+auto-cpufreq tool successfully installed.
+
+For list of options, run:
+auto-cpufreq
+
+-------------------------------------------------------------------------------
+```
+Correct me if I'm wrong but the `wheel` package does not seem to be installed with the venv: `WARNING: The wheel package is not available.`
+
+```
+$ sudo auto-cpufreq --stats
+sh: 1: snap: not found
+
+Note: You can quit stats mode by pressing "ctrl+c"
+
+----------------------------- auto-cpufreq stats ------------------------------
+
+ERROR: auto-cpufreq stats are missing.
+
+Make sure to run: "auto-cpufreq --install" first
+
+-------------------------------------------------------------------------------
+
+```
+
+```
+$ auto-cpufreq --install
+sh: 1: snap: not found
+
+--------------------------------- Root check ----------------------------------
+
+ERROR:
+
+Must be run root for this functionality to work, i.e: 
+sudo auto-cpufreq
+
+-------------------------------------------------------------------------------
+
+```
+Perhaps `sudo` could be added in the `Make sure to run: "auto-cpufreq --install" first`  message.
+
+```
+$ sudo !!
+sudo auto-cpufreq --install
+sh: 1: snap: not found
+
+--------------------- Deploying auto-cpufreq as a daemon ----------------------
+
+* Turn off bluetooth on boot
+
+* Deploy auto-cpufreq install script
+
+* Deploy auto-cpufreq remove script
+
+------------------ Running auto-cpufreq daemon install script ------------------
+
+* Deploy auto-cpufreq systemd unit file
+
+* Reloading systemd manager configuration
+
+* Stopping auto-cpufreq daemon (systemd) service
+
+* Starting auto-cpufreq daemon (systemd) service
+
+* Enabling auto-cpufreq daemon (systemd) service at boot
+Created symlink /etc/systemd/system/multi-user.target.wants/auto-cpufreq.service → /etc/systemd/system/auto-cpufreq.service.
+
+----------------- auto-cpufreq daemon installed and running -----------------
+
+To view live stats, run:
+auto-cpufreq --stats
+
+To disable and remove auto-cpufreq daemon, run:
+sudo auto-cpufreq --remove
+
+-------------------------------------------------------------------------------
+
+```
+
+```
+$ sudo auto-cpufreq --stats
+sh: 1: snap: not found
+
+Note: You can quit stats mode by pressing "ctrl+c"
+
+-------------------------------------------------------------------------------
+
+Linux distro: Linux Mint 20.3 Una
+Linux kernel: 5.13.0-30-generic
+Processor: Intel(R) Core(TM) i5-6200U CPU @ 2.30GHz
+Cores: 4
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2300 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  1.0%     42 °C     2300 MHz
+CPU1:	  1.0%     44 °C     2300 MHz
+CPU2:	  0.0%     42 °C     2300 MHz
+CPU3:	  0.0%     44 °C     2300 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+Setting maximum CPU frequency to 2301 Mhz
+
+Total CPU usage: 0.5 %
+Total system load: 0.54
+Average temp. of all cores: 43.0 °C
+
+Load optimal
+setting turbo boost: off
+
+-------------------------------------------------------------------------------
+
+			"auto-cpufreq" refresh in: 1
+		Executed on: February 27 (Sunday) - 19:31:22
+
+-------------------------------------------------------------------------------
+```
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Okay, I made new set of changes, could you please give it another try?
+
+```
+sudo ./auto-cpufreq-installer --remove
+git fetch
+git checkout snap_detect_improve
+sudo ./auto-cpufreq-installer --install
+sudo auto-cpufreq --stats
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ryouze:</strong></p>
+                    <p>The problem still persists.
+
+If you have some time to spare, perhaps you could try testing it on [Linux Mint](https://linuxmint.com/) through VM since it is guaranteed to have no snap dependencies whatsoever. If not, please consider adding a `--no-snap` argument or a toggle to the interactive installer. That way, any issues with the automatic detection could be manually resolved by the user.
+
+```
+$ sudo ./auto-cpufreq-installer --remove
+sh: 1: snap: not found
+
+--------------------- Removing auto-cpufreq daemon ----------------------
+
+* Turn on bluetooth on boot
+
+----------------------------------- Warning -----------------------------------
+
+Detected GNOME Power Profiles daemon service is stopped!
+This service will now be enabled and started again.
+
+* Enabling GNOME power profiles
+Unit power-profiles-daemon.service does not exist, proceeding anyway.
+Failed to start power-profiles-daemon.service: Unit power-profiles-daemon.service not found.
+Failed to enable unit: Unit file power-profiles-daemon.service does not exist.
+
+------------------ Running auto-cpufreq daemon removal script ------------------
+
+* Stopping auto-cpufreq daemon (systemd) service
+
+* Disabling auto-cpufreq daemon (systemd) at boot
+Removed /etc/systemd/system/multi-user.target.wants/auto-cpufreq.service.
+
+* Removing auto-cpufreq daemon (systemd) unit file
+
+* Reloading systemd manager configuration
+reset failed
+
+------------------------- auto-cpufreq daemon removed -------------------------
+
+auto-cpufreq successfully removed.
+
+-------------------------------------------------------------------------------
+
+
+-------------------------------------------------------------------------------
+
+auto-cpufreq tool and all its supporting files successfully removed.
+
+-------------------------------------------------------------------------------
+```
+
+```
+$ git fetch
+remote: Enumerating objects: 4, done.
+remote: Counting objects: 100% (4/4), done.
+remote: Total 4 (delta 3), reused 4 (delta 3), pack-reused 0
+Unpacking objects: 100% (4/4), 844 bytes | 844.00 KiB/s, done.
+From https://github.com/AdnanHodzic/auto-cpufreq
+ + 7ab6f9c...5df978f snap_detect_improve -> origin/snap_detect_improve  (forced update)
+```
+
+```
+$ git checkout snap_detect_improve
+Branch 'snap_detect_improve' set up to track remote branch 'snap_detect_improve' from 'origin'.
+Switched to a new branch 'snap_detect_improve'
+```
+
+```
+$ git branch
+  master
+* snap_detect_improve
+```
+
+```
+$ sudo ./auto-cpufreq-installer --install
+
+-------------------------------------------------------------------------------
+
+Detected Debian based distribution
+
+-------------------------------------------------------------------------------
+
+Setting up Python environment
+
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+dmidecode is already the newest version (3.2-3).
+python3-dev is already the newest version (3.8.2-0ubuntu2).
+python3-setuptools is already the newest version (45.2.0-1).
+python3-venv is already the newest version (3.8.2-0ubuntu2).
+python3-pip is already the newest version (20.0.2-5ubuntu1.6).
+0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+
+Installing necessary Python packages
+
+Collecting pip
+  Using cached pip-22.0.3-py3-none-any.whl (2.1 MB)
+Installing collected packages: pip
+  Attempting uninstall: pip
+    Found existing installation: pip 20.0.2
+    Uninstalling pip-20.0.2:
+      Successfully uninstalled pip-20.0.2
+Successfully installed pip-22.0.3
+Requirement already satisfied: setuptools in /opt/auto-cpufreq/venv/lib/python3.8/site-packages (from -r requirements.txt (line 1)) (44.0.0)
+Collecting psutil
+  Using cached psutil-5.9.0-cp38-cp38-manylinux_2_12_x86_64.manylinux2010_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl (283 kB)
+Collecting click
+  Using cached click-8.0.4-py3-none-any.whl (97 kB)
+Collecting distro
+  Using cached distro-1.7.0-py3-none-any.whl (20 kB)
+Installing collected packages: psutil, distro, click
+Successfully installed click-8.0.4 distro-1.7.0 psutil-5.9.0
+
+-------------------------------------------------------------------------------
+
+installing auto-cpufreq tool
+
+WARNING: The wheel package is not available.
+WARNING: The wheel package is not available.
+WARNING: The wheel package is not available.
+WARNING: The wheel package is not available.
+WARNING: The wheel package is not available.
+running install
+running bdist_egg
+running egg_info
+writing auto_cpufreq.egg-info/PKG-INFO
+writing dependency_links to auto_cpufreq.egg-info/dependency_links.txt
+writing requirements to auto_cpufreq.egg-info/requires.txt
+writing top-level names to auto_cpufreq.egg-info/top_level.txt
+reading manifest file 'auto_cpufreq.egg-info/SOURCES.txt'
+writing manifest file 'auto_cpufreq.egg-info/SOURCES.txt'
+installing library code to build/bdist.linux-x86_64/egg
+running install_lib
+running build_py
+copying auto_cpufreq/power_helper.py -> build/lib/auto_cpufreq
+creating build/bdist.linux-x86_64/egg
+creating build/bdist.linux-x86_64/egg/auto_cpufreq
+copying build/lib/auto_cpufreq/core.py -> build/bdist.linux-x86_64/egg/auto_cpufreq
+copying build/lib/auto_cpufreq/__init__.py -> build/bdist.linux-x86_64/egg/auto_cpufreq
+copying build/lib/auto_cpufreq/power_helper.py -> build/bdist.linux-x86_64/egg/auto_cpufreq
+copying build/lib/auto_cpufreq/tlp_stat_parser.py -> build/bdist.linux-x86_64/egg/auto_cpufreq
+byte-compiling build/bdist.linux-x86_64/egg/auto_cpufreq/core.py to core.cpython-38.pyc
+byte-compiling build/bdist.linux-x86_64/egg/auto_cpufreq/__init__.py to __init__.cpython-38.pyc
+byte-compiling build/bdist.linux-x86_64/egg/auto_cpufreq/power_helper.py to power_helper.cpython-38.pyc
+byte-compiling build/bdist.linux-x86_64/egg/auto_cpufreq/tlp_stat_parser.py to tlp_stat_parser.cpython-38.pyc
+creating build/bdist.linux-x86_64/egg/EGG-INFO
+installing scripts to build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+running install_scripts
+running build_scripts
+creating build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+copying build/scripts-3.8/auto-cpufreq -> build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+changing mode of build/bdist.linux-x86_64/egg/EGG-INFO/scripts/auto-cpufreq to 755
+copying auto_cpufreq.egg-info/PKG-INFO -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying auto_cpufreq.egg-info/SOURCES.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying auto_cpufreq.egg-info/dependency_links.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying auto_cpufreq.egg-info/requires.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying auto_cpufreq.egg-info/top_level.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying auto_cpufreq.egg-info/zip-safe -> build/bdist.linux-x86_64/egg/EGG-INFO
+creating 'dist/auto_cpufreq-1.9.2+5df978f3-py3.8.egg' and adding 'build/bdist.linux-x86_64/egg' to it
+removing 'build/bdist.linux-x86_64/egg' (and everything under it)
+Processing auto_cpufreq-1.9.2+5df978f3-py3.8.egg
+Copying auto_cpufreq-1.9.2+5df978f3-py3.8.egg to /opt/auto-cpufreq/venv/lib/python3.8/site-packages
+Adding auto-cpufreq 1.9.2+5df978f3 to easy-install.pth file
+Installing auto-cpufreq script to /opt/auto-cpufreq/venv/bin
+
+Installed /opt/auto-cpufreq/venv/lib/python3.8/site-packages/auto_cpufreq-1.9.2+5df978f3-py3.8.egg
+Processing dependencies for auto-cpufreq==1.9.2+5df978f3
+Searching for setuptools==44.0.0
+Best match: setuptools 44.0.0
+Adding setuptools 44.0.0 to easy-install.pth file
+Installing easy_install script to /opt/auto-cpufreq/venv/bin
+
+Using /opt/auto-cpufreq/venv/lib/python3.8/site-packages
+Searching for psutil==5.9.0
+Best match: psutil 5.9.0
+Adding psutil 5.9.0 to easy-install.pth file
+
+Using /opt/auto-cpufreq/venv/lib/python3.8/site-packages
+Searching for distro==1.7.0
+Best match: distro 1.7.0
+Adding distro 1.7.0 to easy-install.pth file
+Installing distro script to /opt/auto-cpufreq/venv/bin
+
+Using /opt/auto-cpufreq/venv/lib/python3.8/site-packages
+Searching for click==8.0.4
+Best match: click 8.0.4
+Adding click 8.0.4 to easy-install.pth file
+
+Using /opt/auto-cpufreq/venv/lib/python3.8/site-packages
+Finished processing dependencies for auto-cpufreq==1.9.2+5df978f3
+writing list of installed files to 'files.txt'
+
+-------------------------------------------------------------------------------
+
+auto-cpufreq tool successfully installed.
+
+For list of options, run:
+auto-cpufreq
+
+-------------------------------------------------------------------------------
+```
+The message `WARNING: The wheel package is not available` still appears as well.
+
+```
+$ sudo auto-cpufreq --install
+sh: 1: snap: not found
+
+--------------------- Deploying auto-cpufreq as a daemon ----------------------
+
+* Turn off bluetooth on boot
+
+* Deploy auto-cpufreq install script
+
+* Deploy auto-cpufreq remove script
+
+------------------ Running auto-cpufreq daemon install script ------------------
+
+* Deploy auto-cpufreq systemd unit file
+
+* Reloading systemd manager configuration
+
+* Stopping auto-cpufreq daemon (systemd) service
+
+* Starting auto-cpufreq daemon (systemd) service
+
+* Enabling auto-cpufreq daemon (systemd) service at boot
+Created symlink /etc/systemd/system/multi-user.target.wants/auto-cpufreq.service → /etc/systemd/system/auto-cpufreq.service.
+
+----------------- auto-cpufreq daemon installed and running -----------------
+
+To view live stats, run:
+auto-cpufreq --stats
+
+To disable and remove auto-cpufreq daemon, run:
+sudo auto-cpufreq --remove
+
+-------------------------------------------------------------------------------
+
+```
+
+```
+$ sudo auto-cpufreq --stats
+sh: 1: snap: not found
+
+Note: You can quit stats mode by pressing "ctrl+c"
+
+-------------------------------------------------------------------------------
+
+Linux distro: Linux Mint 20.3 Una
+Linux kernel: 5.13.0-30-generic
+Processor: Intel(R) Core(TM) i5-6200U CPU @ 2.30GHz
+Cores: 4
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2301 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  0.0%     31 °C     2301 MHz
+CPU1:	  0.0%     31 °C     2300 MHz
+CPU2:	  1.0%     31 °C     2301 MHz
+CPU3:	  0.0%     31 °C     2301 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+
+Total CPU usage: 0.5 %
+Total system load: 0.48
+Average temp. of all cores: 31.0 °C
+
+Load optimal
+setting turbo boost: off
+
+-------------------------------------------------------------------------------
+
+			"auto-cpufreq" refresh in: 1^C
+Aborted!
+```
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> If not, please consider adding a `--no-snap` argument or a toggle to the interactive installer. That way, any issues with the automatic detection could be manually resolved by the user.
+
+Thanks for suggestion, but it doesn't work like that, tool is smart enough to automatically detect which environment it's running in so no need to pass any arguments. This problem in particular was introduced as part of [1.9.2 release ](https://github.com/AdnanHodzic/auto-cpufreq/releases) and was even mentioned by @bobslept when I asked to test things as part of #361.
+
+> If you have some time to spare, perhaps you could try testing it on [Linux Mint](https://linuxmint.com/) through VM since it is guaranteed to have no snap dependencies whatsoever. 
+
+No I do not have any additional time to spare, as for months I've been looking for [co-maintaners/developers to help out with the workload this project requires](https://github.com/AdnanHodzic/auto-cpufreq/discussions/312), which keeps falling on deaf ears.
+
+Hence as always I encourage you and everyone else willing to address problem to [submit code contribution](https://github.com/AdnanHodzic/auto-cpufreq#code-contribution), as this problem should be simple to fix, I just don't have enough time to properly look into it.
+ 
+On `master` branch problem originates on line [287](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto_cpufreq/power_helper.py#L287) and 303 of power_helper.py file. So when this line is evaluated on system that doesn't have snap installed it'll output `sh: 1: snap: not found` as it does in your case.
+
+On `snap_detect_improve` branch [problem is on line 288](https://github.com/AdnanHodzic/auto-cpufreq/blob/snap_detect_improve/auto_cpufreq/power_helper.py#L288) and 320. I tested the changes by running this code where I would replace `snap` with `snax` to emulate system where snapd is not present so I should be getting same errors you're getting, but I didn't run into any errors. 
+
+In meantime I also commented following variables which were maybe getting evaluated and giving you that error again, 
+
+```
+#snap_pkg_install= os.system("snap list | grep auto-cpufreq >/dev/null 2>&1")
+#snap_exist = os.system("snap >/dev/null 2>&1")
+```
+
+To verify if this fixes it make sure to do `git pull` on `snap_detect_improve` branch. 
+
+Regardless, this is way more time I wanted to dedicate to this issue and I will be unable to make any further changes for some time. If you or anyone else wants to look into this problem and pick up where I left of in terms of changes and submit a PR as I pointed above as part of code contribution, I will be glad to look into it and further review it.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ajayd-san:</strong></p>
+                    <p>Hey, I'm on endeavourOs and i have the same issue and i don't have snap installed. What's worse is that when i do `sudo systemctl enable --now auto-cpufreq` , i can see that the script starts working but the service does not start itself after i reboot. I have to manually start it everytime to make it work.
+
+Any idea why this is happening? </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@default-303 why do you run `sudo systemctl enable --now auto-cpufreq` manually? When you run `sudo auto-cpufreq --install` it will automatically start the auto-cpufreq systemd service for you.
+
+I'm already working on fixing the `sh: 1: snap: not found` but since I don't have this problem, can you help test the changes? You can confirm this by installing auto-cpufreq from `snap_detect_improve` branch?
+
+```
+sudo ./auto-cpufreq-installer --remove
+git fetch
+git checkout snap_detect_improve
+sudo ./auto-cpufreq-installer --install
+auto-cpufreq --stats
+```
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I just verified by running changes on `snap_detect_improve` branch freshly installed Fedora 35 on another laptop (no `snapd` in sight) and auto-cpufreq works just fine and there are  no `sh: 1: snap: not found`.  I also got confirmation issue was fixed in  #372.
+
+I think @himitsuzero you didn't run pull the right changes or something, could you try again? @default-303 I'm also still waiting for your feedback. 
+
+@bobslept as someone who I ultimately trust and who has been great contributor as of lately, could you please pull these changes and let me know if you're experiencing problem mentioned above? If you also confirm it to be working fine, I'll merge this with master and make it part of 1.9.3 release. Thank you</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ryouze:</strong></p>
+                    <p>The `sh: 1: snap: not found` error message no longer appears so I can confirm that the problem was fixed. Thank you.
+
+Should I mark the issue as closed or let others confirm that the `snap_detect_improve` branch works for them as well?
+
+```
+$ git clone https://github.com/AdnanHodzic/auto-cpufreq.git
+[...]
+```
+
+```
+$ cd auto-cpufreq/
+```
+
+```
+$ git checkout snap_detect_improve
+Branch 'snap_detect_improve' set up to track remote branch 'snap_detect_improve' from 'origin'.
+Switched to a new branch 'snap_detect_improve'
+```
+
+```
+$ sudo ./auto-cpufreq-installer --install
+[...]
+```
+
+
+```
+$ auto-cpufreq --stats
+
+Note: You can quit stats mode by pressing "ctrl+c"
+
+		Executed on: March 09 (Wednesday) - 20:23:03
+
+-------------------------------------------------------------------------------
+
+Linux distro: Linux Mint 20.3 Una
+Linux kernel: 5.13.0-35-generic
+Processor: Intel(R) Core(TM) i5-6200U CPU @ 2.30GHz
+Cores: 4
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2300 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  0.0%     40 °C      400 MHz
+CPU1:	  0.0%     41 °C      900 MHz
+CPU2:	  0.0%     40 °C      400 MHz
+CPU3:	  0.0%     41 °C      400 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: discharging
+
+Setting to use: "powersave" governor
+
+Total CPU usage: 0.5 %
+Total system load: 0.44
+Average temp. of all cores: 40.5 °C
+
+Load optimal
+setting turbo boost: off
+
+-------------------------------------------------------------------------------
+
+			"auto-cpufreq" refresh in: 1
+```
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> The `sh: 1: snap: not found` error message no longer appears so I can confirm that the problem was fixed. Thank you.
+
+@himitsuzero you're welcome and thank you for confirming. 
+
+> Should I mark the issue as closed or let others confirm that the snap_detect_improve branch works for them as well?
+
+No, I'll merge these changes and make a v1.9.3 release in next couple of days, once I've done that I'll close the issue and inform everyone in this issue this has happened. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>[v1.9.3 has been released](https://github.com/AdnanHodzic/auto-cpufreq/releases) which resolves this issue.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

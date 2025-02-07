@@ -1,0 +1,154 @@
+
+        <html>
+        <head>
+            <title>Issue #452: Turbo Boost won't turn off while plugged in</title>
+        </head>
+        <body>
+            <h1>Turbo Boost won't turn off while plugged in</h1>
+            <p><strong>Issue #452</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? Yes
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)? It didn't fail.
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)? Yes, I use the configuration file in `/etc`
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)? Yes.
+
+### Error output:
+```
+Nothing failed.
+```
+---
+
+### System information:
+```
+Using settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux
+Linux kernel: 6.0.7-arch1-1
+Processor: Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz
+Cores: 12
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2600 MHz
+CPU min frequency: 800 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0:     7.1%     59 °C     4336 MHz
+CPU1:    11.2%     55 °C     4319 MHz
+CPU2:     6.0%     63 °C     4325 MHz
+CPU3:    45.5%     74 °C     4356 MHz
+CPU4:    11.7%     59 °C     4258 MHz
+CPU5:     4.1%     63 °C     4380 MHz
+CPU6:     5.0%     59 °C     4397 MHz
+CPU7:     7.9%     55 °C     4371 MHz
+CPU8:     5.9%     63 °C     4285 MHz
+CPU9:    16.0%     74 °C     4369 MHz
+CPU10:    4.0%     59 °C     4354 MHz
+CPU11:    4.1%     63 °C     4308 MHz
+
+auto-cpufreq version: Version         : 1.9.6-1
+
+Python: 3.10.8
+psutil package: 5.9.2
+platform package: 1.0.8
+click package: 8.1.3
+distro package: 1.8.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.16 %
+
+Total CPU usage: 12.0 %
+Total system load: 0.93
+Average temp. of all cores: 62.17 °C
+
+Currently using: performance governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+
+```
+---
+The issue is that whenever I do something (e.g. opening Telegram) the CPU will reach up to 5GHz, even if I disabled Turbo Boost in the configuration file.
+This is what my configuration file looks like:
+```
+# settings for when connected to a power source
+[charger]
+# see available governors by running: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+# preferred governor.
+governor = performance
+
+# minimum cpu frequency (in kHz)
+# example: for 800 MHz = 800000 kHz --> scaling_min_freq = 800000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly
+#caling_min_freq = 800000
+
+# maximum cpu frequency (in kHz)
+# example: for 1GHz = 1000 MHz = 1000000 kHz -> scaling_max_freq = 1000000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly
+scaling_max_freq = 2600000
+
+# turbo boost setting. possible values: always, auto, never
+turbo = never
+
+# settings for when using battery power
+[battery]
+# see available governors by running: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+# preferred governor
+governor = powersave
+
+# minimum cpu frequency (in kHz)
+# example: for 800 MHz = 800000 kHz --> scaling_min_freq = 800000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly
+scaling_min_freq = 800000
+
+# maximum cpu frequency (in kHz)
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# example: for 1GHz = 1000 MHz = 1000000 kHz -> scaling_max_freq = 1000000
+# to use this feature, uncomment the following line and set the value accordingly
+scaling_max_freq = 1400000
+
+# turbo boost setting. possible values: always, auto, never
+turbo = never
+```
+
+The issue is only present while the laptop is plugged in. 
+
+Output of `rdmsr -a -f 38:38 0x1a0` says that Turbo Boost is enabled also. (all 0s)
+
+A temporary solution would be to disable Turbo Boost by hand following [this page](https://askubuntu.com/questions/619875/disabling-intel-turbo-boost-in-ubuntu)</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> A temporary solution would be to disable Turbo Boost by hand following [this page](https://askubuntu.com/questions/619875/disabling-intel-turbo-boost-in-ubuntu)
+
+Since I'm very limited with available time to do this myself, if you or anyone else wants to give it a try in implementing this functionality, please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>R1D3R175:</strong></p>
+                    <p>Fixed it with #455 </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

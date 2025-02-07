@@ -1,0 +1,30 @@
+
+        <html>
+        <head>
+            <title>Pull Request #597: fix dubious ownership error in auto-cpufreq-installer</title>
+        </head>
+        <body>
+            <h1>fix dubious ownership error in auto-cpufreq-installer</h1>
+            <p><strong>Pull Request #597</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>When trying to install auto-cpufreq in Fedora 39, I got the following error: 
+
+> Detected Git repository, but failed because of dubious ownership
+
+Adding the line at the top of the install function according to https://sam.hooke.me/note/2023/08/poetry-fixing-dubious-ownership-error/ solved the error for me.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>LGTM, thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+Also it seems that this PR closes #595 </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

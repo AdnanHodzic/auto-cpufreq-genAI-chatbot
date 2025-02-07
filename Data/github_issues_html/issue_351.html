@@ -1,0 +1,43 @@
+
+        <html>
+        <head>
+            <title>Issue #351: Deploy cpufreqctl on --debug and remove via installer</title>
+        </head>
+        <body>
+            <h1>Deploy cpufreqctl on --debug and remove via installer</h1>
+            <p><strong>Issue #351</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>`cpufreqctl.auto-cpufreq` was deployed everywhere except on `auto-cpufreq --debug`. 
+
+It was only removed when it was deployed as part of the daemon install. 
+
+Now it's always removed when using the `auto-cpufreq-install --remove` option.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>I don't know what happend, but it seems that you already comitted #347 or something. Not sure if that was the plan.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Amazing stuff! Thanks for tracking this down.
+
+> I don't know what happend, but it seems that you already comitted #347 or something. Not sure if that was the plan.
+
+Another excellent catch, I pushed 2 minor changes in the meantime. It seems like I was reviewing changes on #347 branch and then made my changes on top of it and push it all. Either way changes have been reverted, since PR is still open.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Changes are live as part of [1.9.1 release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

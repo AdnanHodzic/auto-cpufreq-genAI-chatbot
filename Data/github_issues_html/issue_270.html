@@ -1,0 +1,131 @@
+
+        <html>
+        <head>
+            <title>Issue #270: auto-cpufreq-installer does not correctly replace the path to the binary in the systemd service file</title>
+        </head>
+        <body>
+            <h1>auto-cpufreq-installer does not correctly replace the path to the binary in the systemd service file</h1>
+            <p><strong>Issue #270</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+```text
+$ sudo systemctl status auto-cpufreq.service 
+× auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux
+     Loaded: loaded (/etc/systemd/system/auto-cpufreq.service; enabled; vendor preset: disabled)
+     Active: failed (Result: exit-code) since Sun 2021-10-24 19:32:38 CEST; 15s ago
+   Main PID: 3986 (code=exited, status=203/EXEC)
+        CPU: 992us
+
+oct 24 19:32:38 laptop systemd[1]: Started auto-cpufreq - Automatic CPU speed & power optimizer for Linux.
+oct 24 19:32:38 laptop systemd[3986]: auto-cpufreq.service: Failed to locate executable /usr/local/bin/auto-cpufreq: No such file or directory
+oct 24 19:32:38 laptop systemd[3986]: auto-cpufreq.service: Failed at step EXEC spawning /usr/local/bin/auto-cpufreq: No such file or directory
+oct 24 19:32:38 laptop systemd[1]: auto-cpufreq.service: Main process exited, code=exited, status=203/EXEC
+oct 24 19:32:38 laptop systemd[1]: auto-cpufreq.service: Failed with result 'exit-code'.
+```
+---
+
+### System information:
+```text
+-------------------------------------------------------------------------------
+
+Linux distro: EndeavourOS rolling rolling
+Linux kernel: 5.14.12-arch1-1
+Processor: AMD Ryzen 7 5800H with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3200 MHz
+CPU min frequency: 1200 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	 1.0%    nan °C     3200 MHz
+CPU1:	 0.0%    nan °C     3200 MHz
+CPU2:	 1.0%    nan °C     2752 MHz
+CPU3:	 0.0%    nan °C     3200 MHz
+CPU4:	 0.0%    nan °C     3200 MHz
+CPU5:	 0.0%    nan °C     3200 MHz
+CPU6:	 0.0%    nan °C     3200 MHz
+CPU7:	 0.0%    nan °C     3200 MHz
+CPU8:	 0.0%    nan °C     3200 MHz
+CPU9:	 0.0%    nan °C     3200 MHz
+CPU10:	 0.0%    nan °C     3200 MHz
+CPU11:	 0.0%    nan °C     3200 MHz
+CPU12:	 0.0%    nan °C     3200 MHz
+CPU13:	 0.0%    nan °C     3200 MHz
+CPU14:	 0.0%    nan °C     3200 MHz
+CPU15:	 0.0%    nan °C     3200 MHz
+
+auto-cpufreq version:
+Git commit: a48e919
+
+Python: 3.9.7
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 8.0.3
+distro package 1.6.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.17 %
+
+Total CPU usage: 0.4 %
+Total system load: 1.15
+Average temp. of all cores: nan °C 
+
+Currently using: performance governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```
+---
+
+This seems to be caused by this line:
+https://github.com/AdnanHodzic/auto-cpufreq/blob/a48e9193fab17134b0d6857f49a4225e44dff708/auto-cpufreq-installer#L129
+
+Which does not properly execute leaving to an unmodified `auto-cpufreq.service` file in `/usr/local/share/auto-cpufreq/scripts/auto-cpufreq.service` which I assume is then copied over when `sudo auto-cpufreq --install` is called.
+
+Manually executing `sudo sed -i 's|ExecStart=/usr/local/bin/auto-cpufreq|ExecStart=/usr/bin/auto-cpufreq|' /usr/local/share/auto-cpufreq/scripts/auto-cpufreq.service` and then `sudo auto-cpufreq --install` again fixes the issue.
+
+Edit:
+The problem seems to be that the installer *tries to replace the line* before the files are copied to begin with, though I could be wrong since I dont have much experience with reading bash.
+
+Specifically: 
+https://github.com/AdnanHodzic/auto-cpufreq/blob/a48e9193fab17134b0d6857f49a4225e44dff708/auto-cpufreq-installer#L139
+Calls
+https://github.com/AdnanHodzic/auto-cpufreq/blob/a48e9193fab17134b0d6857f49a4225e44dff708/auto-cpufreq-installer#L62
+Which copies the files *after* trying to replace the path
+https://github.com/AdnanHodzic/auto-cpufreq/blob/a48e9193fab17134b0d6857f49a4225e44dff708/auto-cpufreq-installer#L40
+
+Removing all leftovers with `sudo rm -rf /usr/local/share/auto-cpufreq` and then calling `sudo ./auto-cpufreq-installer` to simulate a clean install via git clone will get the error `sed: can't read /usr/local/share/auto-cpufreq/scripts/auto-cpufreq.service: No such file or directory`. With subsequent installs replacing the line, but then being overwritten by the new copy.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>plexxman:</strong></p>
+                    <p>I can confirm this issue. I have exactly the same system as @4JX . The solution proposed works perfectly.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@plexxman please pull the latest changes. @4JX made a contribution which fixes this issue and is now part of auto-cpufreq.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>plexxman:</strong></p>
+                    <p>Roger that, I've reinstalled pulling the latest changes and it installs perfectly and the systemd service starts up without errors, the fix works.
+
+Thank you very much to both.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

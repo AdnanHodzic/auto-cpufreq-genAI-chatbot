@@ -1,0 +1,233 @@
+
+        <html>
+        <head>
+            <title>Issue #560: issue with cpu speed when waking laptop from sleep</title>
+        </head>
+        <body>
+            <h1>issue with cpu speed when waking laptop from sleep</h1>
+            <p><strong>Issue #560</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+### Error output:
+i noticed anytime i turn my laptop on from sleep while connected to ac the cpu frequency caps at 1.8ghz when auto-cpufreq config is set to 2.9ghz max and min.  i have to unplug the charger then plug it back in for the cpu to go up to 2.9ghz. 
+---
+
+### System information:  OS: Ubuntu 22.04.3 LTS x86_64 
+         Host: HP EliteBook 840 G1 A3009DD10303 
+      Kernel: 6.2.0-33-generic 
+      Uptime: 1 hour, 5 mins 
+   Packages: 2077 (dpkg), 14 (flatpak), 17 (snap) 
+ Shell: bash 5.1.16 
+ Resolution: 1366x768 
+  DE: GNOME 42.9 
+  WM: Mutter 
+ WM Theme: Adwaita 
+  Theme: Yaru [GTK2/3] 
+ Icons: Yaru [GTK2/3] 
+    Terminal: gnome-terminal 
+     CPU: Intel i5-4300U (4) @ 2.900GHz 
+     GPU: Intel Haswell-ULT 
+         Memory: 4526MiB / 15409MiB 
+
+
+Add/paste output of:
+
+```
+auto-cpufreq --debug
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>unable to reproduce on GNOME 44.4</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>wseyi:</strong></p>
+                    <p>> unable to reproduce on GNOME 44.4
+
+im using ubuntu which has GNOME 42.9
+it happens each time it resumes from sleep, the cpu speed stays capped at 1.8ghz until i connect it to ac then it operates using the config i set</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Could you please post your config file and the output of `sudo auto-cpufreq --debug`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>wseyi:</strong></p>
+                    <p>> Could you please post your config file and the output of `sudo auto-cpufreq --debug`
+
+this is my config file 
+# settings for when connected to a power source
+[charger]
+# see available governors by running: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+# preferred governor.
+governor = performance
+
+# minimum cpu frequency (in kHz)
+# example: for 800 MHz = 800000 kHz --> scaling_min_freq = 800000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly 
+# scaling_min_freq = 2900000
+
+# maximum cpu frequency (in kHz)
+# example: for 1GHz = 1000 MHz = 1000000 kHz -> scaling_max_freq = 1000000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly
+# scaling_max_freq = 2900000
+
+# turbo boost setting. possible values: always, auto, never
+turbo = always
+
+# settings for when using battery power
+[battery]
+# see available governors by running: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+# preferred governor
+governor = powersave
+
+# minimum cpu frequency (in kHz)
+# example: for 800 MHz = 800000 kHz --> scaling_min_freq = 800000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly
+scaling_min_freq = 800000
+
+# maximum cpu frequency (in kHz)
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# example: for 1GHz = 1000 MHz = 1000000 kHz -> scaling_max_freq = 1000000
+# to use this feature, uncomment the following line and set the value accordingly
+scaling_max_freq = 1900000
+
+# turbo boost setting. possible values: always, auto, never
+turbo = never
+
+iv disabled the scaling min/max freq atm, it seems to work fine when disabled but i would like to have it at max speed always while connected to ac
+
+this is the debug output 
+
+Linux distro: Ubuntu 22.04 Jammy Jellyfish
+Linux kernel: 6.2.0-33-generic
+Processor: Intel(R) Core(TM) i5-4300U CPU @ 1.90GHz
+Cores: 4
+Architecture: x86_64
+Driver: intel_cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2900 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      2.0%        46 °C      1796 MHz
+CPU1      1.0%        46 °C      2900 MHz
+CPU2      2.0%        43 °C      1796 MHz
+CPU3      2.0%        43 °C      1796 MHz
+
+auto-cpufreq version: 1.9.9 (git: 4628b5d1)
+
+Python: 3.10.12
+psutil package: 5.9.5
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.8.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.19 %
+
+Total CPU usage: 2.5 %
+Total system load: 1.73
+Average temp. of all cores: 44.50 °C 
+
+Currently using: performance governor
+Currently turbo boost is: on
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>I'm still unable to reproduce this after using your config file. The only difference I see is our GNOME versions. I use NixOS which is on v44.4 which is not on Ubuntu LTS yet. As far as I can tell, this is not an issue with auto-cpufreq</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>wseyi:</strong></p>
+                    <p>> I'm still unable to reproduce this after using your config file. The only difference I see is our GNOME versions. I use NixOS which is on v44.4 which is not on Ubuntu LTS yet. As far as I can tell, this is not an issue with auto-cpufreq
+
+im thinking the same too, i tried using the config again, put the pc to sleep, turned it on and this is the debug readings 
+
+Linux distro: Ubuntu 22.04 Jammy Jellyfish
+Linux kernel: 6.2.0-33-generic
+Processor: Intel(R) Core(TM) i5-4300U CPU @ 1.90GHz
+Cores: 4
+Architecture: x86_64
+Driver: intel_cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2900 MHz
+CPU min frequency: 2900 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      4.9%        43 °C      1796 MHz
+CPU1      0.0%        43 °C      1796 MHz
+CPU2      1.0%        41 °C      1796 MHz
+CPU3      1.0%        41 °C      1796 MHz
+
+auto-cpufreq version: 1.9.9 (git: 4628b5d1)
+
+Python: 3.10.12
+psutil package: 5.9.5
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.8.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.19 %
+
+Total CPU usage: 2.3 %
+Total system load: 0.48
+Average temp. of all cores: 42.00 °C 
+
+Currently using: performance governor
+Currently turbo boost is: on
+
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>With latest release, changes to config file are automatically picked up: https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v2.3.0
+
+Please make sure to pull the latest changes. Closing the issue, if you still have the same problem please re-open it.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

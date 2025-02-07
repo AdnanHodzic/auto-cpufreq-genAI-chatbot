@@ -1,0 +1,50 @@
+
+        <html>
+        <head>
+            <title>Issue #304: Remove package options from cpufreqctl.sh</title>
+        </head>
+        <body>
+            <h1>Remove package options from cpufreqctl.sh</h1>
+            <p><strong>Issue #304</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>This removes the package options from the cpufreqctl.sh script. Because I believe they are not being used in this project. This to avoid confusion from people reading the source and then thinking auto-cpufreq will ship with fonts and what not.
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I originally wanted to keep `cpufreqctl.sh` as close to its original version, but now that auto-cpufreq is also using it's own version it doesn't make any sense to have functionality of this script which is not even used. 
+
+Hence, excellent catch!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Do you want me to investigate some more on the usage of this script and remove some code? I was playing very safe with only the package options.
+
+I mean the core functionality stands I guess, so no direct future usage of functions that aren't used at this point? Is that a correct assumption?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Do you want me to investigate some more on the usage of this script and remove some code? I was playing very safe with only the package options.
+
+Sure, I don't see a reason why not. However, if you're looking for something to pick up, check existing issues, there's **a lot** stuff that's low hanging fruit.
+
+> I mean the core functionality stands I guess, so no direct future usage of functions that aren't used at this point? Is that a correct assumption?
+
+Yes, just make sure to thoroughly figure how it works and what's core functionality that's used in auto-cpufreq context.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Thanks, I will take a look around! :smiley: </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

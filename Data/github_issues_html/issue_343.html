@@ -1,0 +1,140 @@
+
+        <html>
+        <head>
+            <title>Issue #343: Unable to enable auto-cpufreq to run at boot</title>
+        </head>
+        <body>
+            <h1>Unable to enable auto-cpufreq to run at boot</h1>
+            <p><strong>Issue #343</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I try running systemctl enable --now auto-cpufreq but it still does not run at boot. It only works when i start it after boot.
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>After install auto-cpufreq does this automatically for you, why do you try to do this on your own? Also include output of `sudo auto-cpufreq --debug`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ShabirK21:</strong></p>
+                    <p>I didn't realize it does it automatically, although it should not make a difference when I do it right?
+Using settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------------------------------------------------------
+
+Linux distro: EndeavourOS rolling rolling
+Linux kernel: 5.15.12-zen1-1-zen
+Processor: AMD Ryzen 7 5800H with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3200 MHz
+CPU min frequency: 1200 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0:     2.0%     46 °C     3200 MHz
+CPU1:     1.0%     46 °C     3200 MHz
+CPU2:     0.0%     46 °C     3200 MHz
+CPU3:     0.0%     46 °C     3200 MHz
+CPU4:     0.0%     46 °C     3200 MHz
+CPU5:     1.0%     46 °C     3200 MHz
+CPU6:     2.0%     46 °C     3200 MHz
+CPU7:     1.0%     46 °C     3200 MHz
+CPU8:     0.0%     46 °C     3200 MHz
+CPU9:     1.0%     46 °C     3200 MHz
+CPU10:    1.0%     46 °C     3200 MHz
+CPU11:    0.0%     46 °C     3200 MHz
+CPU12:    0.0%     46 °C     3200 MHz
+CPU13:    2.0%     46 °C     3956 MHz
+CPU14:    1.0%     46 °C     3200 MHz
+CPU15:    0.0%     46 °C     3177 MHz
+
+auto-cpufreq version:
+fatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+CalledProcessError(128, ['git', 'describe', '--always'])
+
+Python: 3.10.1
+psutil package: 5.9.0
+platform package: 1.0.8
+click package: 8.0.3
+distro package 1.6.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.12 %
+
+Total CPU usage: 1.3 %
+Total system load: 1.02
+Average temp. of all cores: 46.5 °C 
+
+Currently using: performance governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>You have access to AUR on EndeavourOS if I'm right.
+Please use the stable package from AUR.
+https://aur.archlinux.org/packages/auto-cpufreq</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ShabirK21:</strong></p>
+                    <p>Yeah i installed from AUR, im using the stable package, but it still doesn't work, it;s always off at boot. As for the git package, it gives an error when trying to enable and start it.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Yeah they didn't update the git package, so that wouldn't work indeed.
+What is the message you get from `systemctl status auto-cpufreq` after a reboot?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>I think I know what the problem is. Did a default install of EndeavourOS. Which is running power-profiles-daemon. This will kill auto-cpufreq on boot. 
+
+To fix this problem, disable power-profiles-daemon
+
+```
+sudo systemctl disable power-profiles-daemon
+sudo systemctl mask power-profiles-daemon
+```
+Now auto-cpufreq will be started on boot and not be killed by power-profiles-daemon</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ShabirK21:</strong></p>
+                    <p>That did the trick. Thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>molitona:</strong></p>
+                    <p>@AdnanHodzic 
+Does GNOME team copied what you did in auto-cpufreq to power-profiles-daemon or what ??
+Because, I've noticed same power consumption under same circumstances using powerstat command.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Replied in #345 </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

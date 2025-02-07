@@ -1,0 +1,229 @@
+
+        <html>
+        <head>
+            <title>Issue #331: Battery reported as discharging even it's not</title>
+        </head>
+        <body>
+            <h1>Battery reported as discharging even it's not</h1>
+            <p><strong>Issue #331</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I'm having problems with detection of charging state. My laptop is connected to AC and fully charged (as reported by GNOME) but still get `discharging` and `powersave` is enabled. It happend to 1.9.0 and I downgraded to 1.8.2 and still happening.
+
+### System information:
+```text
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 21.10 (Impish Indri)
+Linux kernel: 5.15.10-051510-generic
+Processor: 11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz
+Cores: 16
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2300 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  2.0%     46 °C     2300 MHz
+CPU1:	  2.0%     49 °C     2300 MHz
+CPU2:	  3.0%     45 °C     2300 MHz
+CPU3:	  5.1%     46 °C     2300 MHz
+CPU4:	  2.0%     47 °C     2300 MHz
+CPU5:	  2.0%     45 °C     1432 MHz
+CPU6:	 12.0%     48 °C     2300 MHz
+CPU7:	  3.0%     45 °C     2300 MHz
+CPU8:	  1.0%     46 °C     1268 MHz
+CPU9:	  2.0%     49 °C     2300 MHz
+CPU10:	  3.0%     45 °C     2300 MHz
+CPU11:	  1.0%     46 °C     1600 MHz
+CPU12:	  4.0%     47 °C     2300 MHz
+CPU13:	  6.0%     45 °C     1951 MHz
+CPU14:	  2.0%     48 °C     2300 MHz
+CPU15:	  5.0%     45 °C     2300 MHz
+
+auto-cpufreq version:
+Snap: 1.8.2
+
+Python: 3.8.10
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 8.0.3
+Traceback (most recent call last):
+  File "/snap/auto-cpufreq/96/bin/pip3", line 5, in <module>
+    from pip._internal.cli.main import main
+  File "/snap/auto-cpufreq/96/lib/python3.8/site-packages/pip/_internal/cli/main.py", line 10, in <module>
+    from pip._internal.cli.autocompletion import autocomplete
+  File "/snap/auto-cpufreq/96/lib/python3.8/site-packages/pip/_internal/cli/autocompletion.py", line 9, in <module>
+    from pip._internal.cli.main_parser import create_main_parser
+  File "/snap/auto-cpufreq/96/lib/python3.8/site-packages/pip/_internal/cli/main_parser.py", line 7, in <module>
+    from pip._internal.cli import cmdoptions
+  File "/snap/auto-cpufreq/96/lib/python3.8/site-packages/pip/_internal/cli/cmdoptions.py", line 24, in <module>
+    from pip._internal.exceptions import CommandError
+  File "/snap/auto-cpufreq/96/lib/python3.8/site-packages/pip/_internal/exceptions.py", line 10, in <module>
+    from pip._vendor.six import iteritems
+ModuleNotFoundError: No module named 'pip._vendor.six'
+distro package
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.05 %
+
+Total CPU usage: 2.1 %
+Total system load: 0.93
+Average temp. of all cores: 46.375 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```
+
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Thank you for your bug report.
+Could you please give me the output of the following command:
+
+```
+ls /sys/class/power_supply/*
+```
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@bobslept please take a look, thank you</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>I'm already on it :smile: </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I'm already on it 😄
+
+I think we typed that at same moment 😁 </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>@mhalano I hope this issue is the same, or somehow related to something we already tried to fix in master. So I'm really interested in the output of that command.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>mhalano:</strong></p>
+                    <p>> Thank you for your bug report. Could you please give me the output of the following command:
+> 
+> ```
+> ls /sys/class/power_supply/*
+> ```
+![image](https://user-images.githubusercontent.com/6025031/147365282-10580399-72da-44ee-a95d-1a3fda77b56c.png)
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Alright thank you very much.
+Could you now post the output of:
+```
+cat /sys/class/power_supply/ucsi*/type
+cat /sys/class/power_supply/AC*/type
+cat /sys/class/power_supply/hid*/type
+cat /sys/class/power_supply/BAT*/type
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>I think I already have a solution.
+
+Could you please try this fix.
+Be sure that current install of auto-cpufreq is removed.
+
+```
+git clone https://github.com/bobslept/auto-cpufreq.git
+cd auto-cpufreq
+git checkout power-supply-ignore-list
+sudo ./auto-cpufreq-installer --install
+sudo auto-cpufreq --live
+```
+
+To remove this from your system:
+```
+sudo ./auto-cpufreq-installer --remove
+```
+
+I hope this method works.  Fingers crossed.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>mhalano:</strong></p>
+                    <p>> cat /sys/class/power_supply/ucsi*/type
+> cat /sys/class/power_supply/AC*/type
+> cat /sys/class/power_supply/hid*/type
+> cat /sys/class/power_supply/BAT*/type
+
+![image](https://user-images.githubusercontent.com/6025031/147367348-44475342-4548-4994-9152-64d18dc5f17c.png)
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Thank you very much. Could you please test the fix I've created? </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>mhalano:</strong></p>
+                    <p>> git clone https://github.com/bobslept/auto-cpufreq.git
+> cd auto-cpufreq
+> git checkout power-supply-ignore-list
+> sudo ./auto-cpufreq-installer --install
+> sudo auto-cpufreq --live
+
+Worked like a charm. I will wait the next stable version to release this fix, test it again and then close the issue. Seems ok to you?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Yes that is oke with me. I will do pull request, so it can be in next release.
+Thank you very much for testing!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>mhalano:</strong></p>
+                    <p>> Yes that is oke with me. I will do pull request, so it can be in next release. Thank you very much for testing!
+
+Thank you very much for fixing. :) Have a nice holiday!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>> Thank you very much for fixing. :) Have a nice holiday!
+
+No problemo, you too have a nice holiday! 
+I now see that it maybe auto closes after merging into master, not sure. But if you experience the same issue on the new release you can re-open this issue.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Changes live as part of [v1.9.0 release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,74 @@
+
+        <html>
+        <head>
+            <title>Issue #162: Adjust CPU frequency scaling on desktop to run in "performance" governor</title>
+        </head>
+        <body>
+            <h1>Adjust CPU frequency scaling on desktop to run in "performance" governor</h1>
+            <p><strong>Issue #162</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>This is an updated version of the commit submitted by @librewish | PR: #158  (Fixes #127)
+
+If it detects the device is a laptop, it should default to the regular method of determining ac_state
+If the device returns any other output, it should default to ac_state=true
+
+This is my first commit on github ever. I still don't really know much about programming, but with some research, I figured it out.
+Couldn't fully test it because I had difficulty running it on arch(Garuda Linux), but I think this should work in theory.
+
+Please test it out on your thinkpad or use your more coding-oriented brain to weed out obvious problems. I got it to compile with no errors and I could run the command "auto-cpufreq", but couldn't get it to run as a system daemon.
+
+Also, sorry if this pull request is not done exactly properly, I am not very familiar with github</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@ThePoorPilot you did a great job for your first PR and I'm glad you did it for auto-cpufreq :)
+
+Change LGTM now. Since you made these changes based on @Librewish I'll make sure credit you both in [release notes for 1.5.4.](https://github.com/AdnanHodzic/auto-cpufreq/releases) which will be released later on today or tomorrow. 
+
+Thank you for both for your contribution!
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@ThePoorPilot @librewish there's a problem with using `hostnamectl` as it would require me to request additional automatically connected interface as part of Snap package. Hence, instead of reverting these changes, could one of you please make a new PR to use `dmidecode --string chassis-type` instead of `hostnamectl`?
+
+I would've made changes myself but not sure what it should return if you run it on a desktop. Running `dmidecode --string chassis-type` returns "Notebook"  for me.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>Returns "Desktop" for me</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@librewish could you please make a PR with these changes? 
+
+If it's not too much to ask to also update [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/blob/revert-162-master/auto-cpufreq-installer#L123) to also install `dmidecode` as part of dependencies for Manjaro/Arch? You're also welcome to add it for all other distros, otherwise I can do this part.
+
+After which I could make necessary Snap package changes and we could go ahead with 1.5.4 release. 
+
+@crian @yochananmarqos could one of you please add `dmidecode` as a dependency for auto-cpufreq AUR package before this release is made?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>crian:</strong></p>
+                    <p>@AdnanHodzic updated to the latest with the new dep.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> @AdnanHodzic updated to the latest with the new dep.
+
+Awesome, thanks!</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

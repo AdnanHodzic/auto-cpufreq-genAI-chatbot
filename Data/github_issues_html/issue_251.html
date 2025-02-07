@@ -1,0 +1,178 @@
+
+        <html>
+        <head>
+            <title>Issue #251: Not scaling CPU frequency</title>
+        </head>
+        <body>
+            <h1>Not scaling CPU frequency</h1>
+            <p><strong>Issue #251</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>
+CPU frequency it's not scaling properly.
+I installed the tool from the AUR. I've tried changing intel driver from GRUB but it still says `intel_pstate` and not scaling.
+
+### System information:
+```text
+-------------------------------------------------------------------------------
+
+Linux distro: ArcoLinux rolling n/a
+Linux kernel: 5.14.8-arch1-1
+Processor: 11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1400 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  8.9%     42 °C     1400 MHz
+CPU1:	100.0%     44 °C     1400 MHz
+CPU2:	  7.0%     44 °C     1400 MHz
+CPU3:	  7.1%     44 °C     1360 MHz
+CPU4:	  9.0%     42 °C     1400 MHz
+CPU5:	  4.0%     44 °C     1400 MHz
+CPU6:	 10.8%     44 °C     1303 MHz
+CPU7:	  6.0%     44 °C     1400 MHz
+
+auto-cpufreq version:
+fatal: not a git repository (or any of the parent directories): .git
+CalledProcessError(128, ['git', 'describe', '--always'])
+
+Python: 3.9.7
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 8.0.1
+/bin/sh: line 1: pip3: command not found
+distro package
+
+Computer type: Convertible
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.21 %
+
+Total CPU usage: 19.1 %
+Total system load: 1.95
+Average temp. of all cores: 43.5 °C 
+
+Currently using: performance governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>With [v1.7.0 release](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.7.0) it's now possible to manually define some of the settings instead of leaving everything to be picked up automatically. Could you try tweaking some of the [available options](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq) and report back on how that worked for you? Thanks</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Hidan0:</strong></p>
+                    <p>Hi there,
+after toggling some settings in the UEFI the driver now is 'acpi-cpufreq'.
+'--stats' is showing that my CPU cores in "powersave" are capped at 400MHz (min) except for one core (~1000MHz) but cpupower-gui is showing that all cores are running at >~1000MHz. Am I doing something wrong? </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Hi there, after toggling some settings in the UEFI the driver now is 'acpi-cpufreq'. '--stats' is showing that my CPU cores in "powersave" are capped at 400MHz (min) except for one core (~1000MHz) but cpupower-gui is showing that all cores are running at >~1000MHz. Am I doing something wrong?
+
+Could you please upgrade to [v1.7.1 ](https://github.com/AdnanHodzic/auto-cpufreq/releases)which was just released and report back if you still have the same problem? As one of the issues that was related to powersave mode. 
+
+If settings aren't picked up right automatically, I'd encourage you to [set these settings](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq) to your liking. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Hidan0:</strong></p>
+                    <p>I tried running 'sudo auto-cpufreq --config /etc/auto-cpufreq.conf' with default confing
+
+### Error output:
+```text
+--------------------- Deploying auto-cpufreq as a daemon ----------------------
+
+* Turn off bluetooth on boot
+
+* Deploy auto-cpufreq install script
+Traceback (most recent call last):
+  File "/usr/bin/auto-cpufreq", line 169, in <module>
+    main()
+  File "/usr/lib/python3.9/site-packages/click/core.py", line 1128, in __call__
+    return self.main(*args, **kwargs)
+  File "/usr/lib/python3.9/site-packages/click/core.py", line 1053, in main
+    rv = self.invoke(ctx)
+  File "/usr/lib/python3.9/site-packages/click/core.py", line 1395, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/usr/lib/python3.9/site-packages/click/core.py", line 754, in invoke
+    return __callback(*args, **kwargs)
+  File "/usr/bin/auto-cpufreq", line 149, in main
+    deploy_daemon()
+  File "/usr/lib/python3.9/site-packages/auto_cpufreq/core.py", line 312, in deploy_daemon
+    shutil.copy(
+  File "/usr/lib/python3.9/shutil.py", line 426, in copy
+    copyfile(src, dst, follow_symlinks=follow_symlinks)
+  File "/usr/lib/python3.9/shutil.py", line 265, in copyfile
+    with open(src, 'rb') as fsrc, open(dst, 'wb') as fdst:
+FileNotFoundError: [Errno 2] No such file or directory: '/usr/share/auto-cpufreq/scripts/auto-cpufreq-install.sh'
+
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I tried running 'sudo auto-cpufreq --config /etc/auto-cpufreq.conf' with default confing
+> 
+> ### Error output:
+> ```
+> --------------------- Deploying auto-cpufreq as a daemon ----------------------
+> 
+> * Turn off bluetooth on boot
+> 
+> * Deploy auto-cpufreq install script
+> Traceback (most recent call last):
+>   File "/usr/bin/auto-cpufreq", line 169, in <module>
+>     main()
+>   File "/usr/lib/python3.9/site-packages/click/core.py", line 1128, in __call__
+>     return self.main(*args, **kwargs)
+>   File "/usr/lib/python3.9/site-packages/click/core.py", line 1053, in main
+>     rv = self.invoke(ctx)
+>   File "/usr/lib/python3.9/site-packages/click/core.py", line 1395, in invoke
+>     return ctx.invoke(self.callback, **ctx.params)
+>   File "/usr/lib/python3.9/site-packages/click/core.py", line 754, in invoke
+>     return __callback(*args, **kwargs)
+>   File "/usr/bin/auto-cpufreq", line 149, in main
+>     deploy_daemon()
+>   File "/usr/lib/python3.9/site-packages/auto_cpufreq/core.py", line 312, in deploy_daemon
+>     shutil.copy(
+>   File "/usr/lib/python3.9/shutil.py", line 426, in copy
+>     copyfile(src, dst, follow_symlinks=follow_symlinks)
+>   File "/usr/lib/python3.9/shutil.py", line 265, in copyfile
+>     with open(src, 'rb') as fsrc, open(dst, 'wb') as fdst:
+> FileNotFoundError: [Errno 2] No such file or directory: '/usr/share/auto-cpufreq/scripts/auto-cpufreq-install.sh'
+> ```
+
+Once you put a config file to `/etc/auto-cpufreq.conf'`, you don't have to do anything, then just run `auto-cpufreq` and it'll be automatically picked up.
+
+But from your output above it seems like `sudo auto-cpufreq --install` is being run instead.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Just [released v1.9.2](https://github.com/AdnanHodzic/auto-cpufreq/releases) which adds ability to change power governor used by default with auto-cpufreq from `balanced` to `performance` [using power_helper.py script](https://github.com/AdnanHodzic/auto-cpufreq/#1-power_helperpy-script) which could also resolve this problem.
+
+In meantime closing the issue due to inactivity, if the problem persist please feel free to re-open the issue.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

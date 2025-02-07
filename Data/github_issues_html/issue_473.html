@@ -1,0 +1,68 @@
+
+        <html>
+        <head>
+            <title>Issue #473: Python error on any invocation of the auto-cpufreq</title>
+        </head>
+        <body>
+            <h1>Python error on any invocation of the auto-cpufreq</h1>
+            <p><strong>Issue #473</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I installed the latest version of auto-cpufreq from the AUR (binary release 1.9.7-1) on my Garuda Linux (Arch derivative) notebook (HP Elitebook with Ryzen 6800U). But any invocation of the program leads to a python error.
+
+
+I have the latest version of everything, including Python.
+ 
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+
+Yes
+
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+
+I haven't tried snaps as I have the AUR.
+
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+
+Yes
+
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+Yes
+
+
+### Error output:
+```
+Traceback (most recent call last):
+  File "/usr/bin/auto-cpufreq", line 14, in <module>
+    from auto_cpufreq.core import *
+  File "/usr/lib/python3.10/site-packages/auto_cpufreq/core.py", line 15, in <module>
+    import pkg_resources
+ModuleNotFoundError: No module named 'pkg_resources'
+
+```
+
+---
+
+### System information:
+
+I can't add the debug info because I get the Python error noted above.
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bshor:</strong></p>
+                    <p>Looks like I solved my own problem. For some reason my AUR helper didn't install python-setuptools as a dependency. Once it did, everything started working.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

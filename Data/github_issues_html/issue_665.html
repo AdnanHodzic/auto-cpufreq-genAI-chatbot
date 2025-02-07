@@ -1,0 +1,76 @@
+
+        <html>
+        <head>
+            <title>Issue #665: Intel CPU: Dell fans cycling</title>
+        </head>
+        <body>
+            <h1>Intel CPU: Dell fans cycling</h1>
+            <p><strong>Issue #665</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hey! I am facing fan cycling: fans turn off for a couple of minutes, turn on for another couple, and off again ad infinitum. This is a known issue with my system Dell Inspiron 5620. Normally they turn on when one of the CPUs reaches around 47 degrees Celsius.
+
+I resolved this with Gnome power management. Used 'power saving' the whole time. And even when in 'performance' or 'normal', the fans ran smoother. They surely got louder but in a constant manner. Not on and off again.
+
+Since using auto-cpufreq I have had this issue again. 'Powersave' mode is where I get the most cycling. 'Default' and 'Performance' make fans always on, though I think I can hear some constant speed changes.
+
+I have tried switching the driver as suggested in the Troubleshooting section but nothing changed. 
+
+Has anyone faced a similar issue and knows how to resolve it?
+
+### System information:
+Linux distro: Ubuntu 23.04 Lunar Lobster
+Linux kernel: 6.2.0-39-generic
+Processor: 12th Gen Intel(R) Core(TM) i7-1255U
+Cores: 12
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2601 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0     38.8%        44 °C       713 MHz
+CPU1     35.0%        44 °C      1560 MHz
+CPU2     20.0%        41 °C      1700 MHz
+CPU3     32.7%        41 °C      1701 MHz
+CPU4     16.3%        45 °C      1204 MHz
+CPU5     27.3%        45 °C      1200 MHz
+CPU6     31.7%        45 °C      1201 MHz
+CPU7      5.0%        45 °C      1202 MHz
+CPU8      5.9%        41 °C       400 MHz
+CPU9      2.0%        41 °C       434 MHz
+CPU10      2.1%        41 °C       584 MHz
+CPU11      9.8%        41 °C       428 MHz
+
+auto-cpufreq version: 2.2.0 (git: 215026a)
+
+Python: 3.11.4
+psutil package: 5.9.8
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.18 %
+
+Total CPU usage: 19.6 %
+Total system load: 3.07
+Average temp. of all cores: 42.83 °C 
+```
+auto-cpufreq --debug
+```</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+            </div>
+        </body>
+        </html>
+        

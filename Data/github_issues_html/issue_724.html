@@ -1,0 +1,150 @@
+
+        <html>
+        <head>
+            <title>Issue #724: /usr/local/bin/cpufreqctl.auto-cpufreq: line 98: echo: write error: Device or resource busy</title>
+        </head>
+        <body>
+            <h1>/usr/local/bin/cpufreqctl.auto-cpufreq: line 98: echo: write error: Device or resource busy</h1>
+            <p><strong>Issue #724</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? **Yes**
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)? **No**
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)? **Yes**
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)? **No**
+
+### Error output:
+```text
+sudo systemctl status auto-cpufreq.service          
+[sudo] password for abhishek: 
+● auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux
+     Loaded: loaded (/etc/systemd/system/auto-cpufreq.service; enabled; preset: disabled)
+     Active: active (running) since Thu 2024-06-20 12:59:25 IST; 7min ago
+   Main PID: 602 (python)
+      Tasks: 2 (limit: 18175)
+     Memory: 40.3M (peak: 44.8M)
+        CPU: 7.555s
+     CGroup: /system.slice/auto-cpufreq.service
+             └─602 /opt/auto-cpufreq/venv/bin/python /opt/auto-cpufreq/venv/bin/auto-cpufreq --daemon
+
+Jun 20 13:07:10 archlinux-loq python[10949]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 98: echo: write error: Device or resource busy
+Jun 20 13:07:10 archlinux-loq python[10949]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 98: echo: write error: Device or resource busy
+Jun 20 13:07:10 archlinux-loq python[10949]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 98: echo: write error: Device or resource busy
+Jun 20 13:07:10 archlinux-loq python[10949]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 98: echo: write error: Device or resource busy
+Jun 20 13:07:10 archlinux-loq python[10949]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 98: echo: write error: Device or resource busy
+Jun 20 13:07:10 archlinux-loq python[10949]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 98: echo: write error: Device or resource busy
+Jun 20 13:07:10 archlinux-loq python[10949]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 98: echo: write error: Device or resource busy
+Jun 20 13:07:10 archlinux-loq python[10949]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 98: echo: write error: Device or resource busy
+Jun 20 13:07:10 archlinux-loq python[10949]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 98: echo: write error: Device or resource busy
+Jun 20 13:07:10 archlinux-loq python[10949]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 98: echo: write error: Device or resource busy
+
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+Using settings defined in /etc/auto-cpufreq.conf file
+could not get value from conservation mode
+
+-------------------------------- Battery Info ---------------------------------
+
+battery count = 1
+BAT1 start threshold = cat: /sys/class/power_supply/BAT1/charge_start_threshold: No such file or directory
+BAT1 start threshold = cat: /sys/class/power_supply/BAT1/charge_stop_threshold: No such file or directory
+
+-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux  
+Linux kernel: 6.9.5-zen1-1-zen
+Processor: AMD Ryzen 7 7840HS w/ Radeon 780M Graphics
+Cores: 16
+Architecture: x86_64
+Driver: amd-pstate-epp
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 5137 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      5.0%        53 °C      4838 MHz
+CPU1      0.0%        53 °C      3446 MHz
+CPU2      5.1%        53 °C      4828 MHz
+CPU3      2.0%        53 °C      3219 MHz
+CPU4      3.0%        53 °C      3218 MHz
+CPU5      1.0%        53 °C      3870 MHz
+CPU6      6.1%        53 °C      4840 MHz
+CPU7     43.0%        53 °C      4838 MHz
+CPU8      4.0%        53 °C      3224 MHz
+CPU9      0.0%        53 °C      4243 MHz
+CPU10      9.0%        53 °C      4839 MHz
+CPU11      6.1%        53 °C      3472 MHz
+CPU12      2.0%        53 °C      3219 MHz
+CPU13      0.0%        53 °C       400 MHz
+CPU14      7.0%        53 °C      3479 MHz
+CPU15     17.0%        53 °C      4220 MHz
+
+auto-cpufreq version: 2.3.0 (git: 2fdb703)
+
+Python: 3.12.3
+psutil package: 5.9.8
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.22 %
+
+Total CPU usage: 7.1 %
+Total system load: 1.56
+Average temp. of all cores: 53.00 °C 
+
+Currently using: performance governor
+CPU turbo is controlled by amd-pstate-epp driver
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+
+```
+First of all I would like to acknowledge the fact that there have been multiple issues opened for this same problem, like #138 , #661 and #563 
+
+From what I gathered from those threads, this issue has been patched for Intel CPUs. But I'm using an AMD CPU and this issue is still present. And I might have a lead as to why this is happening. On Intel CPUs, having HWP active caused this issue and was patched in #147 . And it was later found that `intel_pstate` supports only the `performance` EPP when the governor is set to `performance` which was patched in #680 . And I have a feeling its the exact same issue on `amd_pstate` as well. When the governor is set to `performance`, only `performance` EPP is available as you can see in the screenshot below. By default auto-cpufreq tries to set `balance-performance` which might be causing this issue because such an EPP is not available.
+
+![image](https://github.com/AdnanHodzic/auto-cpufreq/assets/87632612/161750d3-b952-4f29-b970-26ba5d857121)
+
+So I think adding a patch similar to #680 but for `amd_pstate` this time, can be the fix for this issue. After this discussion, if this fix seems viable, I can send a PR.
+
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Considering #725 has been merged, closing the issue, if anyone runs into this problem please feel free to re-open.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>DungNg:</strong></p>
+                    <p>This code has an issue where if you use governor power and want to use other epp, you cannot change it while charging. Could you please fix this?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>TheChilledBuffalo:</strong></p>
+                    <p>Oh... I didn't notice that. Will send a PR to fix this! </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

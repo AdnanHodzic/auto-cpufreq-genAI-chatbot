@@ -1,0 +1,169 @@
+
+        <html>
+        <head>
+            <title>Issue #456: auto-cpufreq not starting</title>
+        </head>
+        <body>
+            <h1>auto-cpufreq not starting</h1>
+            <p><strong>Issue #456</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+Yes
+### Error output:
+```text
+× auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux
+     Loaded: loaded (/usr/lib/systemd/system/auto-cpufreq.service; enabled; preset: disabled)
+     Active: failed (Result: exit-code) since Sun 2022-11-13 12:04:04 IST; 6min ago
+   Duration: 1.849s
+    Process: 20391 ExecStart=/usr/bin/auto-cpufreq --daemon (code=exited, status=1/FAILURE)
+   Main PID: 20391 (code=exited, status=1/FAILURE)
+        CPU: 787ms
+
+Nov 13 12:04:04 Optiplex-790 auto-cpufreq[20391]:     return __callback(*args, **kwargs)
+Nov 13 12:04:04 Optiplex-790 auto-cpufreq[20391]:   File "/usr/bin/auto-cpufreq", line 79, in main
+Nov 13 12:04:04 Optiplex-790 auto-cpufreq[20391]:     set_autofreq()
+Nov 13 12:04:04 Optiplex-790 auto-cpufreq[20391]:   File "/usr/lib/python3.10/site-packages/auto_cpufreq/core.py", line 1002, in set_autofreq
+Nov 13 12:04:04 Optiplex-790 auto-cpufreq[20391]:     print("Battery is: charging (" + str(battery_percentage()) + "%)\n")
+Nov 13 12:04:04 Optiplex-790 auto-cpufreq[20391]:   File "/usr/lib/python3.10/site-packages/auto_cpufreq/core.py", line 262, in battery_percentage
+Nov 13 12:04:04 Optiplex-790 auto-cpufreq[20391]:     return round(psutil.sensors_battery().percent)
+Nov 13 12:04:04 Optiplex-790 auto-cpufreq[20391]: AttributeError: 'NoneType' object has no attribute 'percent'
+Nov 13 12:04:04 Optiplex-790 systemd[1]: auto-cpufreq.service: Main process exited, code=exited, status=1/FAILURE
+Nov 13 12:04:04 Optiplex-790 systemd[1]: auto-cpufreq.service: Failed with result 'exit-code'.
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+ ❯ sayed@Optiplex in ~ took 318ms
+ × sudo auto-cpufreq --debug
+[sudo] password for sayed:
+-------------------------------------------------------------------------------
+
+Linux distro: Liya 2022.11 Rolling n/a
+Linux kernel: 5.15.75-xanmod1-1.1-lts
+Processor: Intel(R) Core(TM) i5-2500 CPU @ 3.30GHz
+Cores: 4
+Architecture: x86_64
+Driver: intel_cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3700 MHz
+CPU min frequency: 1600 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  7.1%     71 °C     3700 MHz
+CPU1:	  6.9%     74 °C     3059 MHz
+CPU2:	  8.0%     71 °C     3700 MHz
+CPU3:	  7.8%     72 °C     3378 MHz
+
+auto-cpufreq version: 1.9.6
+
+Python: 3.10.8
+psutil package: 5.9.3
+platform package: 1.0.8
+click package: 8.1.3
+distro package: 1.8.0
+
+Computer type: Lunch Box
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.34 %
+
+Total CPU usage: 7.5 %
+Total system load: 1.39
+Average temp. of all cores: 72.00 °C
+
+Currently using: performance governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+```
+
+Auto-cpufreq fails to start
+Package Manager Is Pacman
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Could this be the same issue as reported in #441, could you please confirm @SunkenHero ?
+
+@mdhishamsayed in that issue [there's a fix ](https://github.com/AdnanHodzic/auto-cpufreq/issues/441#issuecomment-1312370014) which seems to fix the problem on Arch. Could you please confirm this?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>SunkenHero:</strong></p>
+                    <p>Your error message is exactly the same as shashanknimje one, you can try out the suggestions.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>mdhishamsayed:</strong></p>
+                    <p>@AdnanHodzic Good morning/afternoon/evening/night sir
+the fork by @SunkenHero works.
+I thank you for helping me, closing the issue
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>SunkenHero:</strong></p>
+                    <p>Looks like you installed a older version of auto-cpufreq, which got the old percentage code
+`return round(psutil.sensors_battery().percent)`
+Could you please try installing the newest version and tell us, if it worked.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Looks like you installed a older version of auto-cpufreq, which got the old percentage code `return round(psutil.sensors_battery().percent)` Could you please try installing the newest version and tell us, if it worked.
+
+Nice catch. I'll also re-open this issue, so people are not using that forked version as they'll miss out on new features that are added in auto-cpufreq.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>mdhishamsayed:</strong></p>
+                    <p>> 
+the version 1.9.6 was previously installed, i removed it and installed the fork version which worked
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>SunkenHero:</strong></p>
+                    <p>@mdhishamsayed  The thing is, was the 1.9.6 you installed from the release page or directly from the newest code
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>In last commit I removed the buggy battery percentage monitor, so there's no need to used forked version anymore (you were missing on latest features with it).
+
+Please pull and install latest changes and verify that everything is working as expected.
+
+@SunkenHero feel free to create a PR to add back battery percentage monitor once you fixed the problem with it.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing the issue due to inactivity. </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

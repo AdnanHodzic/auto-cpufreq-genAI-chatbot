@@ -1,0 +1,269 @@
+
+        <html>
+        <head>
+            <title>Issue #31: auto-cpufreq --log seems stopped after resume</title>
+        </head>
+        <body>
+            <h1>auto-cpufreq --log seems stopped after resume</h1>
+            <p><strong>Issue #31</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Cannot reopen https://github.com/AdnanHodzic/auto-cpufreq/issues/6 myself, so opening the issue again. After suspending and resuming the laptop causes stopping `auto-cpufreq --log` output. It freezes.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>validatedev:</strong></p>
+                    <p>Output of `systemctl status auto-cpufreq`
+```
+● auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer f>
+     Loaded: loaded (/etc/systemd/system/auto-cpufreq.service; enabled; vendor >
+     Active: active (running) since Sat 2020-01-11 11:34:22 +03; 52min ago
+   Main PID: 1811 (python3)
+      Tasks: 1 (limit: 9195)
+     Memory: 17.8M
+     CGroup: /system.slice/auto-cpufreq.service
+             └─1811 /usr/bin/python3 /usr/bin/auto-cpufreq --daemon
+
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>validatedev:</strong></p>
+                    <p>FYI, `sudo python3 auto-cpufreq.py --log` also seems stopped.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Exorust:</strong></p>
+                    <p>This is possibly because of saving the .service file in /lib directory instead of the /usr/lib directory.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>validatedev:</strong></p>
+                    <p>> This is possibly because of saving the .service file in /lib directory instead of the /usr/lib directory.
+
+Do you have have a source for that, or just an intuition?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Exorust:</strong></p>
+                    <p>Unfortunately only an intuition, I can't track down where the log is being saved. The logging info is being saved. I can verify that through, `systemctl status auto-cpufreq -n20`. But still `auto-cpufreq --log` doesn't work. 
+
+Apart from that, I have also experimented with changing the `service` file and making the following edits,
+```
+StandardOutput=append:/var/log/auto-cpufreq.log
+```
+Still no result.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@Exorust can you update me [with what I suggested](https://github.com/AdnanHodzic/auto-cpufreq/issues/6#issuecomment-573389224) in #6 </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Exorust:</strong></p>
+                    <p>The file is empty. It prints nothing.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Then something is terribly wrong. Can you tell me what distro are you using, along with Python version and version for psutil, click, power packages.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>validatedev:</strong></p>
+                    <p>That command sometimes freezes, sometimes works. Interesting.
+Tried rebooting the PC, it freezes again.
+Cannot see any log changes.
+My output of `tail -f -n 50 /var/log/auto-cpufreq.log`
+```
+----------------------------- System information ------------------------------
+
+Linux distro: Ubuntu 20.04 focal
+Linux kernel: 5.0.0-37-generic
+Driver: intel_pstate
+Architecture: x86_64
+Processor: Intel(R) Core(TM) i5-8265U CPU @ 1.60GHz
+Cores: 8
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 
+1600 MHz
+
+CPU frequency for each core:
+
+CPU0: 800 MHz
+CPU1: 800 MHz
+CPU2: 800 MHz
+CPU3: 800 MHz
+CPU4: 800 MHz
+CPU5: 800 MHz
+CPU6: 800 MHz
+CPU7: 800 MHz
+
+Temperature for each physical core:
+
+CPU0 temp: 40°C
+CPU1 temp: 37°C
+CPU2 temp: 38°C
+CPU3 temp: 38°C
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: discharging
+
+Total CPU usage: 4.4 %
+Total system load: 0.72 
+
+Setting to use: "powersave" governor
+Load optimal, setting turbo boost: off
+
+-------------------------------------------------------------------------------
+
+			"auto-cpufreq" refresh in: 3
+
+```
+
+Edit: Tried `/usr/bin/python3 /usr/bin/auto-cpufreq --daemon` and immediately it started to run and print the log into the terminal. I think there is a bug for writing the log into the selected file which is `/var/log/auto-cpufreq.log`.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>validatedev:</strong></p>
+                    <p>We can do something with the changes on the .py file. Will trying to redirect the stdout to log file directly.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>validatedev:</strong></p>
+                    <p>@AdnanHodzic Could you reproduce the issue with `systemctl restart auto-cpufreq.service` command?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>validatedev:</strong></p>
+                    <p>@Exorust Could you have a chance for trying the PR?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Exorust:</strong></p>
+                    <p>> Then something is terribly wrong. Can you tell me what distro are you using, along with Python version and version for psutil, click, power packages.
+
+I'm using Ubuntu 16.04, psutil 5.4.8, click 7.0, power 1.4 and python 3.5.2</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Can everyone who has this problem, run following:
+
+```
+sudo auto-cpufreq --remove
+git checkout -b validatedev-fix-file-log master
+git pull https://github.com/validatedev/auto-cpufreq.git fix-file-log
+sudo python3 auto-cpufreq.py --install
+auto-cpufreq --log
+```
+
+and see if you still have logs stopping after suspend/hibernate.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>smarambas:</strong></p>
+                    <p>@AdnanHodzic I had the same problem with the logs freezing but after applying @validatedev's fix it seems to work again after suspend/hibernate. Just to know, I'm using Fedora 31, python 3.7.6, psutil 5.6.3, click 7.0 and power 1.4.
+Anyway, thanks for this nice tool.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>paulhewson:</strong></p>
+                    <p>> Can everyone who has this problem, run following:
+> 
+> ```
+> sudo auto-cpufreq --remove
+> git checkout -b validatedev-fix-file-log master
+> git pull https://github.com/validatedev/auto-cpufreq.git fix-file-log
+> sudo python3 auto-cpufreq.py --install
+> auto-cpufreq --log
+> ```
+> 
+> and see if you still have logs stopping after suspend/hibernate.
+
+Hi, I have the same issue with logs here (Ubuntu 19.10 - python3 3.7.5-1).
+Tried the fix you're suggesting but I have some problems with the validatedev git repo
+
+```
+alessandro@Ale:~$ git checkout -b validatedev-fix-file-log master
+fatal: not a git repository (or any of the parent directories): .git
+alessandro@Ale:~$ git pull https://github.com/validatedev/auto-cpufreq.git fix-file-log
+fatal: not a git repository (or any of the parent directories): .git
+```
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>validatedev:</strong></p>
+                    <p>> > Can everyone who has this problem, run following:
+> > ```
+> > sudo auto-cpufreq --remove
+> > git checkout -b validatedev-fix-file-log master
+> > git pull https://github.com/validatedev/auto-cpufreq.git fix-file-log
+> > sudo python3 auto-cpufreq.py --install
+> > auto-cpufreq --log
+> > ```
+> > 
+> > 
+> > and see if you still have logs stopping after suspend/hibernate.
+> 
+> Hi, I have the same issue with logs here (Ubuntu 19.10 - python3 3.7.5-1).
+> Tried the fix you're suggesting but I have some problems with the validatedev git repo
+> 
+> ```
+> alessandro@Ale:~$ git checkout -b validatedev-fix-file-log master
+> fatal: not a git repository (or any of the parent directories): .git
+> alessandro@Ale:~$ git pull https://github.com/validatedev/auto-cpufreq.git fix-file-log
+> fatal: not a git repository (or any of the parent directories): .git
+> ```
+
+I deleted the repo. Let me create again.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>validatedev:</strong></p>
+                    <p>@paulhewson and everyone, please try this:
+```
+sudo auto-cpufreq --remove
+mkdir validatedev-auto-cpufreq
+cd validatedev-auto-cpufreq
+git clone https://github.com/validatedev/auto-cpufreq.git
+cd auto-cpufreq
+sudo python3 auto-cpufreq.py --install
+auto-cpufreq --log
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>paulhewson:</strong></p>
+                    <p>Ok, thanks, I have downloaded your repo, so now I'm going to suspend my laptop, resume it and see if logs for auto-cpufreq work.
+One curiosity: so your repo is basically this auto-cpufreq with the addition of this fix for log files, isn't it?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>validatedev:</strong></p>
+                    <p>> Ok, thanks, I have downloaded your repo, so now I'm going to suspend my laptop, resume it and see if logs for auto-cpufreq work.
+> One curiosity: so your repo is basically this auto-cpufreq with the addition of this fix for log files, isn't it?
+
+Yes, it is just this. In addition, in new version that fix has been merged (in snap branch). You can safely continue to use my repo until the new version of the program appears.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@validatedev thank you for your assistance. 
+
+@paulhewson I've merged all the changes which were made as part of `snap` package into `master`. Please pull the latest changes.
+
+Since this problem is now fixed, I'll close this bug report.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

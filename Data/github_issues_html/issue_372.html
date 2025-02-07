@@ -1,0 +1,323 @@
+
+        <html>
+        <head>
+            <title>Issue #372: sh: 1: snap: Permission denied</title>
+        </head>
+        <body>
+            <h1>sh: 1: snap: Permission denied</h1>
+            <p><strong>Issue #372</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Thanks for this great tool.
+
+Auto CPU Frequency was working fine for around 6 months for me. Suddenly a couple of days before, I got this permission denied error even after using `sudo`. I was using `sudo auto-cpufreq` fine for months and suddenly this error. It would be nice if you can do anything.
+
+### Error output:
+sh: 1: snap: Permission denied
+Add/paste error output
+```
+---
+
+### System information:
+
+HP Pavilion Laptop
+
+AMD Ryzen 5600H + Nvidia 1650 4GB + 8 GB RAM
+
+Add/paste output of:
+
+```
+auto-cpufreq --debug
+```
+
+$ sudo auto-cpufreq
+[sudo] password for deep: 
+sh: 1: snap: Permission denied
+
+-------------------------------- auto-cpufreq ---------------------------------
+
+Automatic CPU speed & power optimizer for Linux
+
+Example usage:
+auto-cpufreq --monitor
+
+-----
+
+sh: 1: snap: Permission denied
+Usage: auto-cpufreq [OPTIONS]
+
+Options:
+  --monitor             Monitor and see suggestions for CPU optimizations
+  --live                Monitor and make (temp.) suggested CPU optimizations
+  --install / --remove  Install/remove daemon for (permanent) automatic CPU
+                        optimizations
+  --stats               View live stats of CPU optimizations made by daemon
+  --config TEXT         Use config file at defined path
+  --debug               Show debug info (include when submitting bugs)
+  --version             Show currently installed version
+  --donate              Support the project
+  --help                Show this message and exit.
+
+-------------------------------------------------------------------------------
+
+
+#### Without providing requested information your issue might be ignored!
+
+---
+
+ </p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>meetdilip:</strong></p>
+                    <p>Hi, I made a Snapcraft forum topic. They can replicate the issue. Please check
+
+https://forum.snapcraft.io/t/sh-1-snap-permission-denied/29023</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Hi @meetdilip thanks for looking into this and trying to help, I've also replied on the topic you created. 
+
+This issue is closely related (if not a duplicate) to #368. There I also created a new branch and did [some work on which could potentially fix the issue](https://github.com/AdnanHodzic/auto-cpufreq/issues/368#issuecomment-1055052649), and if you have time or knowledge or time to look into this problem [please do](https://github.com/AdnanHodzic/auto-cpufreq#code-contribution) and I'll be glad to give you credit as part of new release. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>meetdilip:</strong></p>
+                    <p>Thanks @AdnanHodzic 
+
+I am not a coder though. Auto CPU Frequency was working fine for me since 21.04. Now I am using 21.10. This issue happened somewhere last week. Is there any method to use the previous version as it was working flawlessly? </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I am not a coder though. 
+
+There are other ways to [support the project](https://github.com/AdnanHodzic/auto-cpufreq#financial-donation) which no one cares about as long as others are coding :)
+
+> Auto CPU Frequency was working fine for me since 21.04. Now I am using 21.10. This issue happened somewhere last week.
+
+This has nothing to do with Ubuntu version, [as I mentioned](https://github.com/AdnanHodzic/auto-cpufreq/issues/368#issuecomment-1055052649) in #368 problem was introduced as part of [1.9.2 release](https://github.com/AdnanHodzic/auto-cpufreq/releases) which was released around that time.
+
+> Is there any method to use the previous version as it was working flawlessly?
+
+You should ask Snap folks about this, which I see you did. I just pushed v1.9.3 which is in development to Snap beta channel which should address the problem [mentioned on Snap forum](https://forum.snapcraft.io/t/sh-1-snap-permission-denied/29023/10?u=ahodzic).
+
+Please install it by running: `sudo snap install auto-cpufreq --beta` and let me know if this fixes your issue.
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>meetdilip:</strong></p>
+                    <p>This is what I got. Does it mean it is ok now? Thanks
+
+> $ sudo auto-cpufreq
+> 
+> -------------------------------- auto-cpufreq ---------------------------------
+> 
+> Automatic CPU speed & power optimizer for Linux
+> 
+> Example usage:
+> auto-cpufreq --monitor
+> 
+> -----
+> 
+> Usage: auto-cpufreq [OPTIONS]
+> 
+> Options:
+>   --monitor             Monitor and see suggestions for CPU optimizations
+>   --live                Monitor and make (temp.) suggested CPU optimizations
+>   --install / --remove  Install/remove daemon for (permanent) automatic CPU
+>                         optimizations
+>   --stats               View live stats of CPU optimizations made by daemon
+>   --config TEXT         Use config file at defined path
+>   --debug               Show debug info (include when submitting bugs)
+>   --version             Show currently installed version
+>   --donate              Support the project
+>   --help                Show this message and exit.
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>meetdilip:</strong></p>
+                    <p>Got this for --live
+![Screenshot from 2022-03-09 00-20-15](https://user-images.githubusercontent.com/6965443/157305788-95667311-6537-44cf-b4b8-8ab924e08bcc.png)
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>LGTM, run `sudo auto-cpufreq --install` and have it run everything automatically on your behalf. 
+
+Seems that latest (unreleased) changes fix the problem. After I verify this problem has also been fixed on non snap installs (#386), I'll make a new release and after I've done that I'll close this issue. As part of that I'll also inform you and instruct how to switch back to stable Snap channel. 
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>meetdilip:</strong></p>
+                    <p>Thanks a lot. I got this
+
+>$ sudo auto-cpufreq --install
+[sudo] password for deep: 
+
+> ----------------------------------- Warning -----------------------------------
+> 
+> Unable to detect state of GNOME Power Profiles daemon service!
+> This daemon might interfere with auto-cpufreq and should be disabled.
+> 
+> Steps to perform this action using auto-cpufreq: power_helper script:
+> git clone https://github.com/AdnanHodzic/auto-cpufreq.git
+> cd auto-cpufreq/auto_cpufreq
+> python3 power_helper.py --gnome_power_disable
+> 
+> ----------------------------------- Warning -----------------------------------
+> 
+> Unable to detect if you are using a TLP service!
+> This daemon might interfere with auto-cpufreq which can lead to unexpected results.
+> We strongly encourage you not to use TLP unless you really know what you are doing.
+> 
+> * Unable to turn off bluetooth on boot due to Snap package restrictions!
+> 
+> Steps to perform this action using auto-cpufreq: power_helper script:
+> python3 power_helper.py --bluetooth_boot_off
+> 
+> ----------------- auto-cpufreq daemon installed and running -----------------
+> 
+> To view live stats, run:
+> auto-cpufreq --stats
+> 
+> To disable and remove auto-cpufreq daemon, run:
+> sudo auto-cpufreq --remove
+> 
+> -------------------------------------------------------------------------------
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Great, looks like you have successful install. Warning messages are something optional you can do if you're facing issues, but nothing related to your original problem.
+
+Can I also see output of `auto-cpufreq --stats`?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>meetdilip:</strong></p>
+                    <p>$ sudo auto-cpufreq --stats
+
+> Note: You can quit stats mode by pressing "ctrl+c"
+> 
+> ----------------------------------- Warning -----------------------------------
+> 
+> Unable to detect state of GNOME Power Profiles daemon service!
+> This daemon might interfere with auto-cpufreq and should be disabled.
+> 
+> Steps to perform this action using auto-cpufreq: power_helper script:
+> git clone https://github.com/AdnanHodzic/auto-cpufreq.git
+> cd auto-cpufreq/auto_cpufreq
+> python3 power_helper.py --gnome_power_disable
+> 
+> ----------------------------------- Warning -----------------------------------
+> 
+> Unable to detect if you are using a TLP service!
+> This daemon might interfere with auto-cpufreq which can lead to unexpected results.
+> We strongly encourage you not to use TLP unless you really know what you are doing.
+> 
+> 		Executed on: March 09 (Wednesday) - 21:15:27
+> 
+> -------------------------------------------------------------------------------
+> 
+> Linux distro: Ubuntu 21.10 (Impish Indri)
+> Linux kernel: 5.13.0-28-generic
+> Processor: AMD Ryzen 5 5600H with Radeon Graphics
+> Cores: 12
+> Architecture: x86_64
+> Driver: acpi-cpufreq
+> 
+> ------------------------------ Current CPU stats ------------------------------
+> 
+> CPU max frequency: 4280 MHz
+> CPU min frequency: 1200 MHz
+> 
+> Core	Usage	Temperature	Frequency
+> CPU0:	  2.9%     52 °C     1200 MHz
+> CPU1:	  3.0%     52 °C     1200 MHz
+> CPU2:	  0.0%     52 °C     1200 MHz
+> CPU3:	  0.0%     52 °C     1200 MHz
+> CPU4:	  1.0%     52 °C     1200 MHz
+> CPU5:	  0.0%     52 °C     1200 MHz
+> CPU6:	  1.0%     52 °C     1200 MHz
+> CPU7:	  0.0%     52 °C     1200 MHz
+> CPU8:	  0.0%     52 °C     1200 MHz
+> CPU9:	  5.9%     52 °C     1200 MHz
+> CPU10:	  0.0%     52 °C     1196 MHz
+> CPU11:	  0.0%     52 °C     1200 MHz
+> 
+> ---------------------------- CPU frequency scaling ----------------------------
+> 
+> Battery is: discharging
+> 
+> Setting to use: "powersave" governor
+> 
+> Total CPU usage: 2.2 %
+> Total system load: 2.94
+> Average temp. of all cores: 52.0 °C
+> 
+> Load optimal
+> setting turbo boost: off
+> 
+> -------------------------------------------------------------------------------
+> 
+> 			"auto-cpufreq" refresh in: 1
+> 
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>LGTM, problem fixed, closing the issue. As I said, once the new release has been made I'll update this issue with how to switch back to stable release. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>[v1.9.3 has been released](https://github.com/AdnanHodzic/auto-cpufreq/releases) which resolves this issue.
+
+@meetdilip to switch back to "stable" channel of this snap package, please run `sudo snap switch --channel=stable auto-cpufreq`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>meetdilip:</strong></p>
+                    <p>Hi, Thanks
+
+> 
+> $ sudo snap switch --channel=stable auto-cpufreq
+> [sudo] password for deep: 
+> "auto-cpufreq" switched to the "latest/stable" channel
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>meetdilip:</strong></p>
+                    <p>```
+$ auto-cpufreq --version
+
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 21.10 (Impish Indri)
+Linux kernel: 5.13.0-28-generic
+auto-cpufreq version: (Snap) 1.9.3
+```
+
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

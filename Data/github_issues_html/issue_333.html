@@ -1,0 +1,265 @@
+
+        <html>
+        <head>
+            <title>Issue #333: systemd: Failed to start auto-cpufreq PKGBUILD against master 1.8.2+9+g64e3382-1</title>
+        </head>
+        <body>
+            <h1>systemd: Failed to start auto-cpufreq PKGBUILD against master 1.8.2+9+g64e3382-1</h1>
+            <p><strong>Issue #333</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+
+`× auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux Loaded: loaded (/usr/lib/systemd/system/auto-cpufreq.service; enabled; vendor preset: disabled) Active: failed (Result: exit-code) since Sat 2021-12-25 00:57:31 CET; 7s ago Process: 40468 ExecStart=/opt/auto-cpufreq/venv/bin/python /opt/auto-cpufreq/venv/bin/auto-cpufreq --daemon (code=exited, status=203/EXEC) Main PID: 40468 (code=exited, status=203/EXEC) CPU: 1ms Dez 25 00:57:31 memepad systemd[1]: auto-cpufreq.service: Main process exited, code=exited, status=203/EXEC Dez 25 00:57:31 memepad systemd[1]: auto-cpufreq.service: Failed with result 'exit-code'. Dez 25 00:57:31 memepad systemd[1]: auto-cpufreq.service: Scheduled restart job, restart counter is at 7. Dez 25 00:57:31 memepad systemd[1]: Stopped auto-cpufreq - Automatic CPU speed & power optimizer for Linux. Dez 25 00:57:31 memepad systemd[1]: auto-cpufreq.service: Start request repeated too quickly. Dez 25 00:57:31 memepad systemd[1]: auto-cpufreq.service: Failed with result 'exit-code'. Dez 25 00:57:31 memepad systemd[1]: Failed to start auto-cpufreq - Automatic CPU speed & power optimizer for Linux.`
+
+---
+inxi
+```System: Kernel: 5.15.11-1-MANJARO x86_64 bits: 64 compiler: gcc v: 11.1.0 parameters: BOOT_IMAGE=/@/boot/vmlinuz-5.15-x86_64 root=UUID=84df7f43-d6aa-4571-9158-a412f3fe011a rw rootflags=subvol=@ cryptdevice=UUID=eb105ec4-4644-4fd3-963e-d2617b6d9a8b:cryptroot apparmor=1 security=apparmor bootsplash.bootfile=/bootsplash-themes/manjaro/bootsplash Desktop: Xfce 4.16.0 tk: Gtk 3.24.29 info: xfce4-panel wm: xfwm 4.16.1 dm: LightDM 1.30.0 Distro: Manjaro Linux base: Arch Linux Machine: Type: Laptop System: LENOVO product: 2007VW1 v: ThinkPad T60 serial: <filter> Chassis: type: 10 serial: N/A Mobo: LENOVO model: 2007VW1 serial: <filter> BIOS: LENOVO v: 79ETE3WW (2.23 ) date: 09/12/2008 Battery: ID-1: BAT0 charge: 37.8 Wh (97.7%) condition: 38.7/56.2 Wh (69.0%) volts: 12.4 min: 10.8 model: Panasonic 92P1139 type: Li-ion serial: <filter> status: N/A CPU: Info: model: Intel Core2 T7200 bits: 64 type: MCP arch: Core Merom family: 6 model-id: 0xF (15) stepping: 6 microcode: 0xD1 Topology: cpus: 1x cores: 2 smt: <unsupported> cache: L1: 128 KiB desc: d-2x32 KiB; i-2x32 KiB L2: 4 MiB desc: 1x4 MiB Speed (MHz): avg: 2000 min/max: 1000/2000 base/boost: 2000/2000 scaling: driver: acpi-cpufreq governor: performance volts: 1.2 V ext-clock: 167 MHz cores: 1: 2000 2: 2000 bogomips: 7983 Flags: ht lm nx pae sse sse2 sse3 ssse3 vmx Vulnerabilities: Type: itlb_multihit status: KVM: VMX disabled Type: l1tf mitigation: PTE Inversion; VMX: EPT disabled Type: mds status: Vulnerable: Clear CPU buffers attempted, no microcode; SMT disabled Type: meltdown mitigation: PTI Type: spec_store_bypass status: Vulnerable Type: spectre_v1 mitigation: usercopy/swapgs barriers and __user pointer sanitization Type: spectre_v2 mitigation: Full generic retpoline, STIBP: disabled, RSB filling Type: srbds status: Not affected Type: tsx_async_abort status: Not affected Graphics: Device-1: AMD RV515/M54 [Mobility Radeon X1400] vendor: Lenovo Thinkpad T60 model 2007 driver: radeon v: kernel bus-ID: 01:00.0 chip-ID: 1002:7145 class-ID: 0300 Display: server: X.Org 1.21.1.2 compositor: xfwm4 v: 4.16.1 driver: loaded: ati,radeon unloaded: modesetting alternate: fbdev,vesa display-ID: :0.0 screens: 1 Screen-1: 0 s-res: 1400x1050 s-dpi: 96 s-size: 370x277mm (14.6x10.9") s-diag: 462mm (18.2") Monitor-1: LVDS res: 1400x1050 hz: 60 dpi: 117 size: 305x228mm (12.0x9.0") diag: 381mm (15") OpenGL: renderer: ATI RV515 v: 2.1 Mesa 21.3.2 direct render: Yes Audio: Device-1: Intel NM10/ICH7 Family High Definition Audio vendor: Lenovo ThinkPad R60/T60/X60 series driver: snd_hda_intel v: kernel bus-ID: 00:1b.0 chip-ID: 8086:27d8 class-ID: 0403 Sound Server-1: ALSA v: k5.15.11-1-MANJARO running: yes Sound Server-2: JACK v: 1.9.19 running: no Sound Server-3: PulseAudio v: 15.0 running: yes Sound Server-4: PipeWire v: 0.3.42 running: no Network: Device-1: Intel 82573L Gigabit Ethernet vendor: Lenovo ThinkPad T60 driver: e1000e v: kernel port: 3000 bus-ID: 02:00.0 chip-ID: 8086:109a class-ID: 0200 IF: ens2 state: down mac: <filter> Device-2: Intel PRO/Wireless 3945ABG [Golan] Network driver: iwl3945 v: in-tree:ds bus-ID: 03:00.0 chip-ID: 8086:4227 class-ID: 0280 IF: wls3 state: up mac: <filter> Drives: Local Storage: total: 111.79 GiB used: 16.69 GiB (14.9%) ID-1: /dev/sda maj-min: 8:0 vendor: Samsung model: SSD 840 EVO 120GB family: based SSDs size: 111.79 GiB block-size: physical: 512 B logical: 512 B sata: 3.1 speed: 1.5 Gb/s type: SSD serial: <filter> rev: DB6Q temp: 24 C scheme: MBR SMART: yes state: enabled health: PASSED on: 266d 5h cycles: 5031 written: 17.86 TiB Partition: ID-1: / raw-size: 111.29 GiB size: 111.29 GiB (100.00%) used: 16.69 GiB (15.0%) fs: btrfs block-size: 4096 B dev: /dev/dm-0 maj-min: 254:0 mapped: cryptroot ID-2: /home raw-size: 111.29 GiB size: 111.29 GiB (100.00%) used: 16.69 GiB (15.0%) fs: btrfs block-size: 4096 B dev: /dev/dm-0 maj-min: 254:0 mapped: cryptroot Swap: Kernel: swappiness: 60 (default) cache-pressure: 100 (default) ID-1: swap-1 type: zram size: 246.9 MiB used: 53 MiB (21.5%) priority: 32767 dev: /dev/zram0 ID-2: swap-2 type: zram size: 246.9 MiB used: 53 MiB (21.5%) priority: 32767 dev: /dev/zram1 Sensors: System Temperatures: cpu: 64.0 C mobo: 64.0 C Fan Speeds (RPM): fan-1: 0 Info: Processes: 196 Uptime: 14h 5m wakeups: 1 Memory: 1.93 GiB used: 865.4 MiB (43.8%) Init: systemd v: 250 tool: systemctl Compilers: gcc: 11.1.0 Packages: pacman: 1139 lib: 330 flatpak: 0 Shell: Zsh (sudo) v: 5.8 running-in: xfce4-terminal inxi: 3.3.11```
+
+### System information:
+
+`distro package ------------------------------------------------------------------------------- Linux distro: Manjaro Linux 21.2.0 Qonos Linux kernel: 5.15.11-1-MANJARO Processor: Intel(R) Core(TM)2 CPU T7200 @ 2.00GHz Cores: 2 Architecture: x86_64 Driver: acpi-cpufreq ------------------------------ Current CPU stats ------------------------------ CPU max frequency: 2000 MHz CPU min frequency: 1000 MHz Core Usage Temperature Frequency CPU0: 6.1% 58 °C 2000 MHz CPU1: 6.1% 60 °C 1995 MHz auto-cpufreq version: Version : 1.8.2+9+g64e3382-1 Python: 3.10.1 psutil package: 5.8.0 platform package: 1.0.8 click package: 8.0.3 Computer type: Notebook Battery is: charging auto-cpufreq system resource consumption: cpu usage: 0.0 % memory use: 0.82 % Total CPU usage: 0.0 % Total system load: 0.58 Average temp. of all cores: 59.0 °C Currently using: performance governor Warning: CPU turbo is not available Currently turbo boost is: off -------------------------------------------------------------------------------
+distro package ------------------------------------------------------------------------------- Linux distro: Manjaro Linux 21.2.0 Qonos Linux kernel: 5.15.11-1-MANJARO Processor: Intel(R) Core(TM)2 CPU T7200 @ 2.00GHz Cores: 2 Architecture: x86_64 Driver: acpi-cpufreq ------------------------------ Current CPU stats ------------------------------ CPU max frequency: 2000 MHz CPU min frequency: 1000 MHz Core Usage Temperature Frequency CPU0: 3.0% 60 °C 2000 MHz CPU1: 3.0% 61 °C 1995 MHz auto-cpufreq version: Version : 1.8.2+9+g64e3382-1 Python: 3.10.1 psutil package: 5.8.0 platform package: 1.0.8 click package: 8.0.3 Computer type: Notebook Battery is: charging auto-cpufreq system resource consumption: cpu usage: 0.0 % memory use: 0.82 % Total CPU usage: 0.0 % Total system load: 0.38 Average temp. of all cores: 60.5 °C Currently using: performance governor Warning: CPU turbo is not available Currently turbo boost is: off -------------------------------------------------------------------------------`
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>pheiduck:</strong></p>
+                    <p>1.8.2+2+g40d0671-1 is working</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Which PKGBUILD did you install?
+
+I have no idea if we provide PKGBUILDs, but what I do know is that we switched to a python virtual environment since this 6e3f45182b355fd784ad1ed1cdbe7bcef67fe8f5 commit. 
+
+And we changed our systemd service file `scripts/auto-cpufreq.service` to use the python venv.
+
+Maybe that has something todo with it?
+
+I use a clone from master, but installed via `auto-cpufreq-installer`, and it runs without any problems with systemd
+
+```
+● auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux
+     Loaded: loaded (/etc/systemd/system/auto-cpufreq.service; enabled; vendor preset: disabled)
+     Active: active (running) since Sat 2021-12-25 00:15:44 CET; 1h 32min ago
+   Main PID: 191359 (python)
+      Tasks: 1 (limit: 18360)
+     Memory: 16.3M
+        CPU: 56.249s
+     CGroup: /system.slice/auto-cpufreq.service
+             └─191359 /opt/auto-cpufreq/venv/bin/python /opt/auto-cpufreq/venv/bin/auto-cpufreq --daemon
+```
+Did a test install on manjaro with fresh clone of master and used `auto-cpufreq-installer`
+```
+beep@beep-standardpcq35ich92009 auto-cpufreq]$ uname -a
+Linux beep-standardpcq35ich92009 5.15.7-1-MANJARO #1 SMP PREEMPT Wed Dec 8 10:09:19 UTC 2021 x86_64 GNU/Linux
+[beep@beep-standardpcq35ich92009 auto-cpufreq]$ lsb_release -a
+LSB Version:	n/a
+Distributor ID:	ManjaroLinux
+Description:	Manjaro Linux
+Release:	21.2.0
+Codename:	Qonos
+[beep@beep-standardpcq35ich92009 auto-cpufreq]$ systemctl status auto-cpufreq.service 
+● auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux
+     Loaded: loaded (/etc/systemd/system/auto-cpufreq.service; enabled; vendor preset: disabled)
+     Active: active (running) since Sat 2021-12-25 02:08:24 CET; 51s ago
+   Main PID: 45454 (python)
+      Tasks: 1 (limit: 4690)
+     Memory: 15.9M
+        CPU: 1.085s
+     CGroup: /system.slice/auto-cpufreq.service
+             └─45454 /opt/auto-cpufreq/venv/bin/python /opt/auto-cpufreq/venv/bin/auto-cpufreq --daemon
+```
+So I think there is something wrong with the PKGBUILD.
+Do we provide those? @AdnanHodzic 
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>pheiduck:</strong></p>
+                    <p>There no PKGBUILD provided by this repo.:
+
+I use this one:
+
+```
+pkgname=auto-cpufreq
+pkgver=1.8.2
+pkgrel=1
+pkgdesc="Automatic Intel/AMD CPU speed & power optimizer"
+arch=('any')
+url="https://github.com/AdnanHodzic/auto-cpufreq"
+license=('LGPL3')
+depends=('dmidecode' 'lm_sensors' 'python-click' 'python-distro' 'python-psutil')
+makedepends=('git' 'python-setuptools')
+install="$pkgname.install"
+_branch=master
+source=("git+https://github.com/AdnanHodzic/auto-cpufreq.git#$_branch")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "$srcdir/$pkgname"
+  git describe --tags | sed 's/^v//;s/-/+/g'
+}
+
+prepare() {
+  cd "$srcdir/$pkgname"
+  sed -i 's|usr/local|usr|g' "scripts/$pkgname.service" auto_cpufreq/core.py
+}
+
+build() {
+  cd "$srcdir/$pkgname"
+  python setup.py build
+}
+
+package() {
+  cd "$srcdir/$pkgname"
+  python setup.py install --root="$pkgdir" --optimize=1 --skip-build
+
+  install -Dm755 scripts/cpufreqctl.sh -t "$pkgdir/usr/share/$pkgname/scripts"
+  install -Dm644 "scripts/$pkgname.service" -t "$pkgdir/usr/lib/systemd/system"
+}
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>I see. The service file you currently using is setup to use the python virtual environment. And the PKGBUILD is not installed it via the virtual environment.
+
+Try to launch `auto-cpufreq` manually first, to see if it works at the install location. Does that work?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Does this PKGBUILD work for you? If it doesn't I can not really help you. But I think it should be something like this to make it work.
+
+I think the `cat` piece in `prepare()` is the important part i've added. So it creates a service file that is compatible, and use that.
+Also changed `install -Dm644 "auto-cpufreq.service" -t "$pkgdir/usr/lib/systemd/system"` so that it actually uses the file we created.
+
+I've used the git version of aur.archlinux.org as base.
+
+```
+pkgname=auto-cpufreq-git
+pkgver=1.9.0.r288.64e3382
+pkgrel=1
+pkgdesc='Automatic CPU speed & power optimizer'
+arch=('any')
+url="https://github.com/AdnanHodzic/auto-cpufreq"
+license=('LGPL-3.0')
+depends=('python-distro' 'python-psutil' 'python-click' 'dmidecode')
+optdepends=('cpufreqctl: CPU Power Manager'
+            'gnome-shell-extension-cpufreq: CPU Power Manager for GNOME Shell')
+makedepends=('git' 'python-setuptools')
+provides=("${pkgname%-git}")
+conflicts=("${pkgname%-git}")
+install="${pkgname%-git}.install"
+source=("git+${url}.git")
+sha256sums=('SKIP')
+
+pkgver() {
+    cd "$srcdir/${pkgname%-git}"
+    local srcversion="$(grep "version: '" snap/snapcraft.yaml | cut -d "'" -f 2)"
+    printf "%s.r%s.%s" $srcversion "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+prepare() {
+    cd "$srcdir/${pkgname%-git}"
+    sed -i 's|usr/local|usr|g' "scripts/${pkgname%-git}.service" auto_cpufreq/core.py
+    cat > auto-cpufreq.service <<EOF
+[Unit]
+Description=auto-cpufreq - Automatic CPU speed & power optimizer for Linux
+After=network.target network-online.target
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/bin/auto-cpufreq --daemon
+[Install]
+WantedBy=multi-user.target
+EOF
+    
+
+}
+
+build() {
+    cd "$srcdir/${pkgname%-git}"
+    python setup.py build
+}
+
+package() {
+    cd "$srcdir/${pkgname%-git}"
+    python setup.py install --root="${pkgdir}" --optimize=1 --skip-build
+    install -Dm644 LICENSE "$pkgdir/usr/share/licenses/${pkgname%-git}/LICENSE"
+    install -Dm644 README.md "$pkgdir/usr/share/doc/${pkgname%-git}/README"
+    install -Dm755 scripts/cpufreqctl.sh -t "$pkgdir/usr/share/${pkgname%-git}/scripts"
+    install -Dm644 "auto-cpufreq.service" -t "$pkgdir/usr/lib/systemd/system"
+}
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>pheiduck:</strong></p>
+                    <p>Thank you for helping me out! @bobslept  its working again with latest commit on master :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>I have left a christmas present for the AUR maintainers, a patch for their PKGBUILDs. A headsup for the next stable package on AUR, and one for the git version. :heart: </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I have left a christmas present for the AUR maintainers, a patch for their PKGBUILDs. A headsup for the next stable package on AUR, and one for the git version. heart
+
+@bobslept awesome thanks! :slightly_smiling_face: </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>pheiduck:</strong></p>
+                    <p>Lastly I have done some cosmetic on the PKGBUILD
+```
+...
+source=("git+$url#branch=master"
+"$pkgname.service")
+sha256sums=('SKIP'
+	    'SKIP')
+
+pkgver() {
+  cd "$srcdir/$pkgname"
+  git describe --tags | sed 's/^v//;s/-/+/g'
+}
+
+prepare() {
+  cd "$srcdir/$pkgname"
+  sed -i 's|usr/local|usr|g' "scripts/$pkgname.service" auto_cpufreq/core.py
+}
+
+build() {
+  cd "$srcdir/$pkgname"
+  python setup.py build
+}
+
+package() {
+  cd "$srcdir/$pkgname"
+  python setup.py install --root="$pkgdir" --optimize=1 --skip-build
+
+  install -Dm755 scripts/cpufreqctl.sh -t "$pkgdir/usr/share/$pkgname/scripts"
+  install -Dm644 "${srcdir}/$pkgname.service" -t "$pkgdir/usr/lib/systemd/system"
+}
+```
+
+I have created the systemd service on a separate file and the PKGBUILD install it inside the srcdir. :) </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@crian are you still the maintainer of auto-cpufreq AUR package? If yes, could you please update it? Thank you</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

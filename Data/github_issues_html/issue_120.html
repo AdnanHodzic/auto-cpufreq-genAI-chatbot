@@ -1,0 +1,131 @@
+
+        <html>
+        <head>
+            <title>Issue #120: System-info fixes with offline cpus</title>
+        </head>
+        <body>
+            <h1>System-info fixes with offline cpus</h1>
+            <p><strong>Issue #120</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Partially addresses #119.
+
+Fixed total core number reporting, cpu numbering and temperatures, and now disabled cores are reported if any. Also tried sticking to the core/cpu definitions in linux topology tooling for variable naming this time.
+
+What do you think, should we report real overall max and min frequencies, or report these frequency limits for each core? 
+
+
+Current output looks like this:
+-------------------------------------------------------------------------------
+
+Linux distro: Manjaro Linux 20.1 Mikah
+Linux kernel: 5.8.6-1-MANJARO
+
+Procesor: Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz
+Cores: 12
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 4078 MHz
+CPU min frequency: 800 MHz
+
+Core	 Usage     Frequency    Temperature
+CPU0:	 23.5%      800 MHz     51 °C
+CPU1:	 23.0%      800 MHz     52 °C
+CPU3:	 21.8%     1090 MHz     51 °C
+CPU4:	 19.8%      800 MHz     51 °C
+CPU5:	 22.0%      800 MHz     51 °C
+CPU8:	 22.3%      800 MHz     49 °C
+CPU9:	 21.6%     4398 MHz     51 °C
+CPU10:	 19.8%      800 MHz     51 °C
+CPU11:	 22.5%      800 MHz     51 °C
+
+Disabled CPUs: 2,6,7
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: discharging
+
+Setting to use: "powersave" governor
+/usr/bin/cpufreqctl: line 143: echo: write error: Invalid argument
+/usr/bin/cpufreqctl: line 143: echo: write error: Invalid argument
+/usr/bin/cpufreqctl: line 143: echo: write error: Invalid argument
+/usr/bin/cpufreqctl: line 267: echo: write error: Invalid argument
+/usr/bin/cpufreqctl: line 267: echo: write error: Invalid argument
+/usr/bin/cpufreqctl: line 267: echo: write error: Invalid argument
+Setting to use: "balance_power" EPP
+
+Total CPU usage: 20.3 %
+Total system load: 2.09 
+
+High load, setting turbo boost: on
+
+-------------------------------------------------------------------------------
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Haptein:</strong></p>
+                    <p>I left the min/max frequency reporting as it was (overall min and max), but mayhaps, if this tool ever modifies per core frequency limits, reporting it as a table may be preferable. Psutil seems very unreliable when reporting stuff with disabled cpus, so I'm now reading percpu current frequencies from /proc/cpuinfo. I'm know changes should work on AMD processors as well.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I'm sorry for such delayed reply. Changes look good and reasonable to me. I think `psutil` in this case might've also been responsible for "overheating" problem which I attempted to resolve in [1.3.2 release](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.3.2).
+
+Only problem is once I build a snap out of these changes, I get an error:
+
+```
+sudo auto-cpufreq --live
+
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 20.04.1 LTS (Focal Fossa)
+Linux kernel: 5.4.0-47-generic
+
+Procesor: Intel(R) Core(TM) i7-8565U CPU @ 1.80GHz
+Traceback (most recent call last):
+  File "/snap/auto-cpufreq/x1/bin/auto-cpufreq", line 141, in <module>
+    main()
+  File "/snap/auto-cpufreq/x1/lib/python3.8/site-packages/click/core.py", line 829, in __call__
+    return self.main(*args, **kwargs)
+  File "/snap/auto-cpufreq/x1/lib/python3.8/site-packages/click/core.py", line 782, in main
+    rv = self.invoke(ctx)
+  File "/snap/auto-cpufreq/x1/lib/python3.8/site-packages/click/core.py", line 1066, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/snap/auto-cpufreq/x1/lib/python3.8/site-packages/click/core.py", line 610, in invoke
+    return callback(*args, **kwargs)
+  File "/snap/auto-cpufreq/x1/bin/auto-cpufreq", line 81, in main
+    sysinfo()
+  File "/snap/auto-cpufreq/x1/lib/python3.8/site-packages/source/core.py", line 467, in sysinfo
+    total_cpu_count = int(getoutput("nproc --all"))
+ValueError: invalid literal for int() with base 10: '/bin/sh: 1: nproc: Permission denied'
+```
+
+But, this is a problem with Snap's interface management in strict confinement. In meantime until I figure this out, could you move "Temperature" to be after "Usage" column, this way "Frequency" will be to most right. And could also grant me permissions so I could also push to this branch?
+
+Thanks</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Haptein:</strong></p>
+                    <p>I'm not familiar with snap's  interface management, would reading from /sys/devices/system/ instead of using nproc circumvent this problem?
+
+> In meantime until I figure this out, could you move "Temperature" to be after "Usage" column, this way "Frequency" will be to most right. And could also grant me permissions so I could also push to this branch?
+
+:ok_hand: :ok_hand:</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I've managed to fix snap build problems, but now the changes have been pushed into a new [Hapstein-master](https://github.com/AdnanHodzic/auto-cpufreq/tree/Haptein-master) branch. Regardless, I want to do more testing today and then I'll merge the changes with master and queue them for next 1.3.3 release.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

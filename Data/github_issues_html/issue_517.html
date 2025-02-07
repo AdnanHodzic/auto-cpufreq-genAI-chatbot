@@ -1,0 +1,76 @@
+
+        <html>
+        <head>
+            <title>Issue #517: [Improvement] Detecting offline cores (and fixing an issue caused by them)</title>
+        </head>
+        <body>
+            <h1>[Improvement] Detecting offline cores (and fixing an issue caused by them)</h1>
+            <p><strong>Issue #517</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>As a fix for the following error: `cat: /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor: No such file or directory`
+It's relatively simple:
+The reason why this occurs is because the core is offline.
+I tried adding a simple check so it checks if `cat /sys/devices/system/cpu/cpu1/online` is 1 or 0 (online and offline)
+
+Something like
+```sh
+if [ `cat $FLROOT/cpu$i/online` == "1" ]
+then
+  FLNM="$FLROOT/cpu"$i"/cpufreq/scaling_governor"
+  echo $VALUE > $FLNM
+  i=`expr $i + 1`
+fi
+```
+
+Note that `cpu0` doesn't have a `online`, so that'll need to be checked too
+
+cheers!</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>Also, I tried doing it myself but I failed, and managed to enter an infinite loop.
+Sorry I couldn't open a pull request and fix it myself</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Is this problem still present even with [1.9.8?](https://github.com/AdnanHodzic/auto-cpufreq/releases) 
+
+If you or anyone else wants to give it a try in implementing this functionality, please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+Otherwise I'll take a look at it when I get a chance. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>I'm already on the latest version:
+```
+ ~ $ sudo auto-cpufreq --version
+
+-------------------------------------------------------------------------------
+
+Linux distro: Void rolling void
+Linux kernel: 6.1.31_1
+auto-cpufreq version: 1.9.8
+
+-------------------------------------------------------------------------------
+
+ ~ $ 
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Is this related to #654 ?
+
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

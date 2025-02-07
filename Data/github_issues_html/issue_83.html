@@ -1,0 +1,257 @@
+
+        <html>
+        <head>
+            <title>Issue #83: The battery is "discharging" even when connected to power.</title>
+        </head>
+        <body>
+            <h1>The battery is "discharging" even when connected to power.</h1>
+            <p><strong>Issue #83</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+```text
+No errors
+```
+---
+
+### System information:
+```
+Manjaro
+
+System: Micro-Star product: Alpha 15 A3DD v: REV:1.0 serial: <filter> 
+           Mobo: Micro-Star model: MS-16U6 v: REV:1.0 serial: <filter> UEFI: American Megatrends v: E16U6AMS.110 
+           date: 05/20/2020 
+Battery:   ID-1: BAT1 charge: 48.0 Wh condition: 51.0/53.4 Wh (96%) 
+CPU:       Governors: performance schedutil Topology: Quad Core model: AMD Ryzen 7 3750H with Radeon Vega Mobile Gfx bits: 64 type: MT MCP L2 cache: 2048 KiB 
+           Speed: 1202 MHz min/max: 1400/2300 MHz Core speeds (MHz): 1: 1190 2: 1201 3: 1613 4: 1707 5: 1492 6: 1451 7: 1231 
+           8: 1395 
+Graphics:  Device-1: Advanced Micro Devices [AMD/ATI] Navi 14 [Radeon RX 5500/5500M / Pro 5500M] driver: amdgpu v: kernel 
+           Device-2: Advanced Micro Devices [AMD/ATI] Picasso driver: amdgpu v: kernel 
+           Display: server: X.org 1.20.8 driver: amdgpu,ati unloaded: modesetting,radeon resolution: <xdpyinfo missing> 
+           Message: Advanced graphics data unavailable for root. 
+Audio:     Device-1: Advanced Micro Devices [AMD/ATI] Navi 10 HDMI Audio driver: snd_hda_intel 
+           Device-2: Advanced Micro Devices [AMD] Raven/Raven2/FireFlight/Renoir Audio Processor driver: snd_rn_pci_acp3x 
+           Device-3: Advanced Micro Devices [AMD] Family 17h HD Audio driver: snd_hda_intel 
+           Sound Server: ALSA v: k5.8.0-1-MANJARO 
+Network:   Device-1: Realtek RTL8822CE 802.11ac PCIe Wireless Network Adapter driver: rtw_8822ce 
+           IF: wlo1 state: down mac: <filter> 
+           Device-2: Realtek driver: r8169 
+           IF: enp6s0 state: up speed: 1000 Mbps duplex: full mac: <filter> 
+Drives:    Local Storage: total: 942.70 GiB used: 122.96 GiB (13.0%) 
+           ID-1: /dev/nvme0n1 vendor: Samsung model: MZVLB512HAJQ-00000 size: 476.94 GiB 
+           ID-2: /dev/sda vendor: Crucial model: CT500MX500SSD1 size: 465.76 GiB 
+Partition: ID-1: / size: 457.16 GiB used: 122.96 GiB (26.9%) fs: ext4 dev: /dev/sda2 
+Sensors:   
+{'battery': sbattery(percent=94.12644169158479, secsleft=<BatteryTime.POWER_TIME_UNKNOWN: -1>, power_plugged=None),
+ 'fans': {'amdgpu': [sfan(label='', current=65535)]},
+ 'temperatures:': {'acpitz': [shwtemp(label='', current=56.0, high=100.0, critical=100.0)],
+                   'amdgpu': [shwtemp(label='edge', current=40.0, high=108.0, critical=108.0),
+                              shwtemp(label='junction', current=40.0, high=99.0, critical=99.0),
+                              shwtemp(label='mem', current=42.0, high=99.0, critical=99.0),
+                              shwtemp(label='edge', current=53.0, high=80.0, critical=80.0)],
+                   'k10temp': [shwtemp(label='Tctl', current=53.0, high=None, critical=None),
+                               shwtemp(label='Tdie', current=53.0, high=None, critical=None)],
+                   'nvme': [shwtemp(label='Composite', current=52.85, high=80.85, critical=81.85),
+                            shwtemp(label='Sensor 1', current=52.85, high=65261.85, critical=65261.85),
+                            shwtemp(label='Sensor 2', current=36.85, high=65261.85, critical=65261.85)]}} System Temperatures: cpu: 51.4 C mobo: N/A 
+           Fan Speeds (RPM): N/A 
+           GPU: device: amdgpu temp: 54 C fan: 65535 device: amdgpu temp: 51 C 
+Info:      Processes: 289 Uptime: 3h 40m Memory: 29.37 GiB used: 4.69 GiB (16.0%) Shell: auto-cpufreq inxi: 3.0.37
+```
+---
+
+```
+/usr/bin >>> upower -i /org/freedesktop/UPower/devices/battery_BAT1                                                                                                                                                                                    [130]
+  native-path:          BAT1
+  vendor:               MSI
+  model:                BIF0_9
+  power supply:         yes
+  updated:              pią, 7 sie 2020, 16:52:33 (16 seconds ago)
+  has history:          yes
+  has statistics:       yes
+  battery
+    present:             yes
+    rechargeable:        yes
+    state:               fully-charged
+    warning-level:       none
+    energy:              47,86 Wh
+    energy-empty:        0 Wh
+    energy-full:         50,8465 Wh
+    energy-full-design:  53,2357 Wh
+    energy-rate:         0,0465847 W
+    voltage:             12,113 V
+    percentage:          94%
+    capacity:            95,512%
+    technology:          lithium-ion
+    icon-name:          'battery-full-charged-symbolic'
+```
+
+I don't know if it's an error (translation), but according to auto-cpufreq (as I understand it), the battery is discharged even when it is plugged in. In my opinion the program can take bad values in boost management and so on (although I don't see that it would change anything).
+
+Unless I'm stupid and I misunderstand something.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>it seems that `psutil` doesn't recognize the battery state: `power_plugged=None`.
+How did u install it, did u use snap?
+
+BTW: didn't we met on [reddit](https://www.reddit.com/r/linux/comments/i4zemd/new_release_autocpufreq_automatic_cpu_speed_power/g0m3epq?utm_source=share&utm_medium=web2x) (just recognized same CPU lol)? </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>IntinteDAO:</strong></p>
+                    <p>Nope. I have MSI Alpha 15 with dual Radeon GPUs. That's why I bought it :P
+
+I install AUR version, but snap also have this problem. Ofc. this is hipotetical problem, because everything works, but I don't know if the program will go into power-saving mode.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>Oh, I see, than it's not due to the snap sandboxing.
+So, there is same bug in the `psutil` upstream
+https://github.com/giampaolo/psutil/issues/1647
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>> Nope. I have MSI Alpha 15 with dual Radeon GPUs. That's why I bought it :P
+
+I bought a laptop recently, specifically with integrated AMDGPU only :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing due to inactivity.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>YHNdnzj:</strong></p>
+                    <p>I'm running into roughly the same problem. I set my battery charge threshold to 80% using [asusctl](https://gitlab.com/asus-linux/asusctl) for everyday use. And when used with power-profiles-daemon, the battery status is `Not charging` as expected. However, with `auto-cpufreq` it keeps changing between `Discharging` (thus dropping below 80%) and `Charging` (charges back to 80%).
+
+I'm not sure if this is some sort of incompatibility between asusctl and auto-cpufreq.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I'm not sure if this is some sort of incompatibility between asusctl and auto-cpufreq.
+
+I'm thinking there's a conflict between these two, as it is for example [GNOME power profiles or TLP](https://github.com/AdnanHodzic/auto-cpufreq/#1-power_helperpy-script-snap-package-install-only) which auto-cpufreq works on disabling automatically or warning about them.
+
+Since I don't know anything about asusctl, simple way to verify this problem is to disable it and see if yo still have the same problem with auto-cpufreq ...</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>YHNdnzj:</strong></p>
+                    <p>> Since I don't know anything about asusctl, simple way to verify this problem is to disable it and see if yo still have the same problem with auto-cpufreq ...
+
+I tried, yet the problem was still around. However, it has got even weirder, that it occurs only when using USB PD adapter to charge. It doesn't trigger when using the vendor-provided power brick...
+
+Now I suspect this is a firmware problem or so. Maybe `power-profiles-daemon` carries workaround for it?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Angel-Karasu:</strong></p>
+                    <p>I've made a change to the battery charging detection, you can install manually with `git clone https://github.com/Angel-Karasu/auto-cpufreq.git` and follow the installation guide, give a feedback if it's repare this problem or not</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>IntinteDAO:</strong></p>
+                    <p>@Angel-Karasu Thanks
+
+The battery in your code have status "Not charging" however in CPU frequency scaling is an information:
+Battery is discharging
+
+```
+Battery is discharging
+
+Currently using: schedutil governor
+Suggestion: Use of "schedutil" governor
+
+Total CPU usage: 8.1%
+Total system load: 1.62
+Average temp. of all cores: 55.00°C 
+
+Load optimal (load average: 1.62, 1.65, 1.91)
+Optimal total CPU usage: 8.1%, high average core temp: 55.0°C
+Suggestion: Set turbo boost off
+Info: Currently turbo boost is on
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Angel-Karasu:</strong></p>
+                    <p>> @Angel-Karasu Thanks
+> 
+> The battery in your code have status "Not charging" however in CPU frequency scaling is an information: Battery is discharging
+> 
+> ```
+> Battery is discharging
+> 
+> Currently using: schedutil governor
+> Suggestion: Use of "schedutil" governor
+> 
+> Total CPU usage: 8.1%
+> Total system load: 1.62
+> Average temp. of all cores: 55.00°C 
+> 
+> Load optimal (load average: 1.62, 1.65, 1.91)
+> Optimal total CPU usage: 8.1%, high average core temp: 55.0°C
+> Suggestion: Set turbo boost off
+> Info: Currently turbo boost is on
+> ```
+
+Is this the result when the battery is charging ?
+When you use fastfetch/neofetch, is the battery status correct ?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>IntinteDAO:</strong></p>
+                    <p>@Angel-Karasu 
+                               Battery: 92% [AC Connected]
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Angel-Karasu:</strong></p>
+                    <p>I have changed the detection method
+Try again: https://github.com/AdnanHodzic/auto-cpufreq/issues/83#issuecomment-2143434956</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I have changed the detection method Try again: [#83 (comment)](https://github.com/AdnanHodzic/auto-cpufreq/issues/83#issuecomment-2143434956)
+
+Weren't these changes merged as part of #716 and should be available with latest changes on `master` branch?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>IntinteDAO:</strong></p>
+                    <p>> I have changed the detection method Try again: [#83 (comment)](https://github.com/AdnanHodzic/auto-cpufreq/issues/83#issuecomment-2143434956)
+
+Works :)
+
+```
+Battery is charging
+
+Currently using: schedutil governor
+Suggestion: Use of "performance" governor
+
+Total CPU usage: 30.8%
+Total system load: 1.84
+Average temp. of all cores: 64.00°C 
+
+High CPU load (load average: 1.84, 2.52, 2.59)
+Suggestion: Set turbo boost on
+Info: Currently turbo boost is on
+
+```</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

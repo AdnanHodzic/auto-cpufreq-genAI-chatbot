@@ -1,0 +1,24 @@
+
+        <html>
+        <head>
+            <title>Issue #386: Can't stop the daemon</title>
+        </head>
+        <body>
+            <h1>Can't stop the daemon</h1>
+            <p><strong>Issue #386</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I tried to stop the daemon with `service auto-cpufreq stop` and it gave me an error saying "Failed to stop auto-cpufreq.service: Unit auto-cpufreq.service not loaded." How can I load auto-cpufreq.service?</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>auto-cpufreq automatically starts the service [after install](https://github.com/AdnanHodzic/auto-cpufreq/#install---auto-cpufreq-daemon) and is stopped after uninstall.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

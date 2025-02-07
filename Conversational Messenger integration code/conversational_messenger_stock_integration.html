@@ -1,0 +1,28 @@
+<!-- Conversational Messenger "stock" integration 
+ * ToDo: add blog post title & URL 
+-->
+<link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
+<script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
+<df-messenger
+  project-id="fooctrl-REDACTED"
+  agent-id="REDACTED"
+  language-code="en"
+  max-query-length="-1"
+  allow-feedback="all">
+  <df-messenger-chat-bubble
+   chat-title="auto-cpufreq genAI chatbot">
+  </df-messenger-chat-bubble>
+</df-messenger>
+<style>
+  df-messenger {
+    z-index: 999;
+    position: fixed;
+    --df-messenger-font-color: #000;
+    --df-messenger-font-family: Roboto;
+    --df-messenger-chat-background: #E7EFFE;
+    --df-messenger-message-user-background: #C6DAFC;
+    --df-messenger-message-bot-background: #C8E6C9;
+    bottom: 16px;
+    right: 16px;
+  }
+</style>

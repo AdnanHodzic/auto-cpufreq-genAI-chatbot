@@ -1,0 +1,36 @@
+
+        <html>
+        <head>
+            <title>Discussion #710: Less battery life when auto-cpufreq is enabled</title>
+        </head>
+        <body>
+            <h1>Less battery life when auto-cpufreq is enabled</h1>
+            <p><strong>Discussion #710</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>If I execute acpi with auto-cpufeq off: (I  executed sudo auto-cpufreq --remove) I get: 
+```Battery 0: Discharging, 24%, 01:12:46 remaining```
+If I execute ```sudo auto-cpufreq --install``` and then acpi I get:
+```Battery 0: Discharging, 24%, 00:37:47 remaining```
+I have tested this multiple times and whenever I remove auto-cpufreq the battery life goes up and viceversa
+
+I think it is interesting to note that ```tlp``` has the same effect. I haven't actually tested the battery life with a timer, but I do get the impression that I get less battery life with tlp/auto-cpufreq enabled. 
+
+OS: Arch Linux x86_64
+Host: TUF Gaming FX705DY_FX705DY 1.0
+Kernel: 6.9.1-arch1-1</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>This definitely shouldn't be the case, have you tried using some of [the other drivers](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)? 
+
+If problem persists, I would just consider opening an issue.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

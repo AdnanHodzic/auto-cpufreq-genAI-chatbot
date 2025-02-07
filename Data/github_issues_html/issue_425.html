@@ -1,0 +1,124 @@
+
+        <html>
+        <head>
+            <title>Issue #425: CPU not scaling down after suspend resume</title>
+        </head>
+        <body>
+            <h1>CPU not scaling down after suspend resume</h1>
+            <p><strong>Issue #425</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out informtion requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+YES
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+YES
+
+### Error output:
+No error. But cpu freq goes to 1600 after suspend/resume for no reason although still in Powersave mode.
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+
+Using settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------------------------------------------------------
+
+Linux distro: Debian GNU/Linux 11 bullseye
+Linux kernel: 5.10.0-16-amd64
+Processor: Intel(R) Core(TM) i5-4200U CPU @ 1.60GHz
+Cores: 4
+Architecture: x86_64
+Driver: intel_cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2600 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  8.2%     43 °C     1666 MHz
+CPU1:	 10.1%     43 °C     1695 MHz
+CPU2:	  6.3%     44 °C     1684 MHz
+CPU3:	  8.2%     44 °C     1697 MHz
+
+auto-cpufreq version: 1.9.5 (git: 7573df7b)
+
+Python: 3.9.2
+psutil package: 5.9.1
+platform package: 1.0.8
+click package: 8.1.3
+distro package: 1.7.0
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.28 %
+
+Total CPU usage: 10.9 %
+Total system load: 0.88
+Average temp. of all cores: 43.50 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+
+
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+The expecpted beahviour is that the cpu stays at 800MHz after a suspend resume with no additional apps atrted etc. I just do suspend/resume and CPU freq goes from 800 to 1600.
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>hjgode:</strong></p>
+                    <p>I now switched to TLP and had the same result: CPU does not go down to 800 after suspend/resume.
+
+Then I found a post about cpufreq and intel_cpufreq and TLP and that was about disabling TLP and auto-cpufreq. Tha solved the problem.
+I now have a system (Debian 11 XFCE) that switches the CPU correctly also after suspend /resume.
+
+These are the left over running apps related to power and cpu:
+
+```
+$ps -A| grep -E "cpu|freq|pm|power"
+      8 ?        00:00:00 mm_percpu_wq
+     15 ?        00:00:00 cpuhp/0
+     16 ?        00:00:00 cpuhp/1
+     21 ?        00:00:00 cpuhp/2
+     26 ?        00:00:00 cpuhp/3
+     67 ?        00:00:00 devfreq_wq
+     73 ?        00:00:00 acpi_thermal_pm
+    415 ?        00:00:00 tpm_dev_wq
+   1088 ?        00:00:00 epmd
+   2323 ?        00:00:02 xfce4-power-man
+   2426 ?        00:00:01 upowerd
+```
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>hjgode:</strong></p>
+                    <p>Please close this issue</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

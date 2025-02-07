@@ -1,0 +1,30 @@
+
+        <html>
+        <head>
+            <title>Issue #327: Ignore hidpp_battery</title>
+        </head>
+        <body>
+            <h1>Ignore hidpp_battery</h1>
+            <p><strong>Issue #327</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>When looping through the power supply class, ignore `hidpp_battery`.
+A connected wireless mouse will report itself as a type = "battery"
+which may trick auto_cpufreq into thinking that the system is running on
+batteries.
+
+The issue above was discovered on a ThinkPad P15 running Ubuntu 20.04.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Thanks for your contribution, this issue came up yesterday in #321
+See PR #322</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

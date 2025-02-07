@@ -1,0 +1,335 @@
+
+        <html>
+        <head>
+            <title>Issue #201: [Bug - Todo] Cannot start in Linux Mint 19.1</title>
+        </head>
+        <body>
+            <h1>[Bug - Todo] Cannot start in Linux Mint 19.1</h1>
+            <p><strong>Issue #201</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+```text
+Traceback (most recent call last):
+  File "/usr/local/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.0', 'auto-cpufreq')
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 658, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 1445, in run_script
+    exec(script_code, namespace, namespace)
+  File "/usr/local/lib/python3.6/dist-packages/auto_cpufreq-1.0-py3.6.egg/EGG-INFO/scripts/auto-cpufreq", line 25, in <module>
+  File "/usr/lib/python3/dist-packages/click/decorators.py", line 170, in decorator
+    _param_memo(f, OptionClass(param_decls, **attrs))
+  File "/usr/lib/python3/dist-packages/click/core.py", line 1460, in __init__
+    Parameter.__init__(self, param_decls, type=type, **attrs)
+TypeError: __init__() got an unexpected keyword argument 'hidden'
+
+```
+---
+
+### System information:
+```text
+Paste here output of the auto-cpufreq --debug
+```
+Traceback (most recent call last):
+  File "/usr/local/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.0', 'auto-cpufreq')
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 658, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 1445, in run_script
+    exec(script_code, namespace, namespace)
+  File "/usr/local/lib/python3.6/dist-packages/auto_cpufreq-1.0-py3.6.egg/EGG-INFO/scripts/auto-cpufreq", line 25, in <module>
+  File "/usr/lib/python3/dist-packages/click/decorators.py", line 170, in decorator
+    _param_memo(f, OptionClass(param_decls, **attrs))
+  File "/usr/lib/python3/dist-packages/click/core.py", line 1460, in __init__
+    Parameter.__init__(self, param_decls, type=type, **attrs)
+TypeError: __init__() got an unexpected keyword argument 'hidden'
+![System Info](https://user-images.githubusercontent.com/19688360/120226869-b0e1b700-c265-11eb-90ff-9f0655e270be.png)
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I guess you installed it using [auto-cpufreq-installer,](https://github.com/AdnanHodzic/auto-cpufreq#auto-cpufreq-installer) what happens if you install it using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq#snap-store)?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>snr-lab:</strong></p>
+                    <p>Thanks for your response.
+
+Yes, I installed using auto-cpufreq-installer because snap is disabled by default in my system. Is there any work around for this?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I can't assist you further with your problem as it's not related to auto-cpufreq, but it turns out [enabling/installing Snap on Mint is pretty simple.](https://snapcraft.io/docs/installing-snap-on-linux-mint). Give it a try and see if problem persists with Snap.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>snr-lab:</strong></p>
+                    <p>Right now I do not want to install snap on my system. Will try once the deb or flatpack package released or better support available.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Right now I do not want to install snap on my system. Will try once the deb or flatpack package released or better support available.
+
+Support is there and this setup works for everybody else, if you want my assistance include output of what goes wrong after running `auto-cpufreq-installer`. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rscm:</strong></p>
+                    <p>Hi
+
+Exact same error here (logs and info below)
+```
+Traceback (most recent call last):
+  File "/usr/local/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.0', 'auto-cpufreq')
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 658, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 1445, in run_script
+    exec(script_code, namespace, namespace)
+  File "/usr/local/lib/python3.6/dist-packages/auto_cpufreq-1.0-py3.6.egg/EGG-INFO/scripts/auto-cpufreq", line 25, in <module>
+  File "/usr/lib/python3/dist-packages/click/decorators.py", line 170, in decorator
+    _param_memo(f, OptionClass(param_decls, **attrs))
+  File "/usr/lib/python3/dist-packages/click/core.py", line 1460, in __init__
+    Parameter.__init__(self, param_decls, type=type, **attrs)
+TypeError: __init__() got an unexpected keyword argument 'hidden'
+```
+
+**Error output**
+[error.log](https://github.com/AdnanHodzic/auto-cpufreq/files/6573741/error.log)
+
+**Debug (same output)**
+[debug.log](https://github.com/AdnanHodzic/auto-cpufreq/files/6573740/debug.log)
+
+**Installation**
+[installation.log](https://github.com/AdnanHodzic/auto-cpufreq/files/6573742/installation.log)
+
+**System Info**
+```
+$python3 --version
+Python 3.6.9
+```
+```
+$ pip3 --version
+pip 9.0.1 from /usr/lib/python3/dist-packages (python 3.6)
+```
+[neofetch.log](https://github.com/AdnanHodzic/auto-cpufreq/files/6573749/neofetch.log)
+
+![Captura de pantalla de 2021-06-01 02-04-53](https://user-images.githubusercontent.com/6588120/120274743-49843100-c27e-11eb-8a4b-0b044c3a6388.png)
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Note to myself: verify if it's potentially related to: #203</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>snr-lab:</strong></p>
+                    <p>I am attaching the output while installing.
+
+sudo ./auto-cpufreq-installer 
+[sudo] password for rahul:       
+
+-------------------------- auto-cpufreq installer -----------------------------
+
+Welcome to auto-cpufreq tool installer.
+
+Options:
+
+[I]nstall
+[R]emove
+[Q]uit
+
+Select a key: [i/r/q]: i
+
+-------------------------------------------------------------------------------
+
+Detected Debian based distribution
+
+-------------------------------------------------------------------------------
+
+Setting up Python environment
+
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+python3-setuptools is already the newest version (39.0.1-2).
+dmidecode is already the newest version (3.1-1ubuntu0.1).
+python3-dev is already the newest version (3.6.7-1~18.04).
+python3-pip is already the newest version (9.0.1-2.3~ubuntu1.18.04.4).
+The following packages were automatically installed and are no longer required:
+  libbcmail-java libbcpkix-java libfontawesomefx-java libfontbox2-java libgeronimo-validation-1.0-spec-java libgettext-commons-java libhibernate-validator-java
+  libimgscalr-java libjackson2-core-java libjackson2-jr-java libjboss-logging-java libllvm9:i386 libmetadata-extractor-java libopenjfx-java libopenjfx-jni
+  libsambox-java libsejda-eventstudio-java libsejda-injector-java libsejda-io-java libsejda-java libtwelvemonkeys-java libxmpcore-java linux-headers-4.15.0-106
+  linux-headers-4.15.0-106-generic linux-headers-4.15.0-108 linux-headers-4.15.0-108-generic linux-headers-4.15.0-109 linux-headers-4.15.0-109-generic
+  linux-headers-4.15.0-112 linux-headers-4.15.0-112-generic linux-headers-4.15.0-115 linux-headers-4.15.0-115-generic linux-headers-4.15.0-117
+  linux-headers-4.15.0-117-generic linux-headers-4.15.0-118 linux-headers-4.15.0-118-generic linux-headers-4.15.0-122 linux-headers-4.15.0-122-generic
+  linux-headers-4.15.0-126 linux-headers-4.15.0-126-generic linux-headers-4.15.0-135 linux-headers-4.15.0-135-generic linux-headers-4.15.0-136
+  linux-headers-4.15.0-136-generic linux-headers-4.15.0-137 linux-headers-4.15.0-137-generic linux-headers-4.15.0-139 linux-headers-4.15.0-139-generic
+  linux-headers-4.15.0-140 linux-headers-4.15.0-140-generic linux-headers-4.15.0-43 linux-headers-4.15.0-43-generic linux-image-4.15.0-106-generic
+  linux-image-4.15.0-108-generic linux-image-4.15.0-109-generic linux-image-4.15.0-112-generic linux-image-4.15.0-115-generic linux-image-4.15.0-117-generic
+  linux-image-4.15.0-118-generic linux-image-4.15.0-122-generic linux-image-4.15.0-126-generic linux-image-4.15.0-135-generic linux-image-4.15.0-136-generic
+  linux-image-4.15.0-137-generic linux-image-4.15.0-139-generic linux-image-4.15.0-140-generic linux-image-4.15.0-43-generic linux-modules-4.15.0-106-generic
+  linux-modules-4.15.0-108-generic linux-modules-4.15.0-109-generic linux-modules-4.15.0-112-generic linux-modules-4.15.0-115-generic linux-modules-4.15.0-117-generic
+  linux-modules-4.15.0-118-generic linux-modules-4.15.0-122-generic linux-modules-4.15.0-126-generic linux-modules-4.15.0-135-generic linux-modules-4.15.0-136-generic
+  linux-modules-4.15.0-137-generic linux-modules-4.15.0-139-generic linux-modules-4.15.0-140-generic linux-modules-4.15.0-43-generic
+  linux-modules-extra-4.15.0-106-generic linux-modules-extra-4.15.0-108-generic linux-modules-extra-4.15.0-109-generic linux-modules-extra-4.15.0-112-generic
+  linux-modules-extra-4.15.0-115-generic linux-modules-extra-4.15.0-117-generic linux-modules-extra-4.15.0-118-generic linux-modules-extra-4.15.0-122-generic
+  linux-modules-extra-4.15.0-126-generic linux-modules-extra-4.15.0-135-generic linux-modules-extra-4.15.0-136-generic linux-modules-extra-4.15.0-137-generic
+  linux-modules-extra-4.15.0-139-generic linux-modules-extra-4.15.0-140-generic linux-modules-extra-4.15.0-43-generic openjfx
+Use 'sudo apt autoremove' to remove them.
+0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+
+-------------------------------------------------------------------------------
+
+Installing necessary Python packages
+
+The directory '/home/rahul/.cache/pip/http' or its parent directory is not owned by the current user and the cache has been disabled. Please check the permissions and owner of that directory. If executing pip with sudo, you may want sudo's -H flag.
+The directory '/home/rahul/.cache/pip' or its parent directory is not owned by the current user and caching wheels has been disabled. check the permissions and owner of that directory. If executing pip with sudo, you may want sudo's -H flag.
+Requirement already satisfied: setuptools in /usr/lib/python3/dist-packages (from -r requirements.txt (line 1))
+Requirement already satisfied: psutil in /usr/lib/python3/dist-packages (from -r requirements.txt (line 2))
+Requirement already satisfied: click in /usr/lib/python3/dist-packages (from -r requirements.txt (line 3))
+Requirement already satisfied: distro in /usr/local/lib/python3.6/dist-packages (from -r requirements.txt (line 4))
+
+-------------------------------------------------------------------------------
+
+installing auto-cpufreq tool
+
+running install
+running bdist_egg
+running egg_info
+creating auto_cpufreq.egg-info
+writing auto_cpufreq.egg-info/PKG-INFO
+writing dependency_links to auto_cpufreq.egg-info/dependency_links.txt
+writing requirements to auto_cpufreq.egg-info/requires.txt
+writing top-level names to auto_cpufreq.egg-info/top_level.txt
+writing manifest file 'auto_cpufreq.egg-info/SOURCES.txt'
+reading manifest file 'auto_cpufreq.egg-info/SOURCES.txt'
+writing manifest file 'auto_cpufreq.egg-info/SOURCES.txt'
+installing library code to build/bdist.linux-x86_64/egg
+running install_lib
+running build_py
+creating build
+creating build/lib
+creating build/lib/auto_cpufreq
+copying auto_cpufreq/__init__.py -> build/lib/auto_cpufreq
+copying auto_cpufreq/core.py -> build/lib/auto_cpufreq
+creating build/bdist.linux-x86_64
+creating build/bdist.linux-x86_64/egg
+creating build/bdist.linux-x86_64/egg/auto_cpufreq
+copying build/lib/auto_cpufreq/__init__.py -> build/bdist.linux-x86_64/egg/auto_cpufreq
+copying build/lib/auto_cpufreq/core.py -> build/bdist.linux-x86_64/egg/auto_cpufreq
+byte-compiling build/bdist.linux-x86_64/egg/auto_cpufreq/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/auto_cpufreq/core.py to core.cpython-36.pyc
+creating build/bdist.linux-x86_64/egg/EGG-INFO
+installing scripts to build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+running install_scripts
+running build_scripts
+creating build/scripts-3.6
+copying and adjusting bin/auto-cpufreq -> build/scripts-3.6
+changing mode of build/scripts-3.6/auto-cpufreq from 644 to 755
+creating build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+copying build/scripts-3.6/auto-cpufreq -> build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+changing mode of build/bdist.linux-x86_64/egg/EGG-INFO/scripts/auto-cpufreq to 755
+copying auto_cpufreq.egg-info/PKG-INFO -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying auto_cpufreq.egg-info/SOURCES.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying auto_cpufreq.egg-info/dependency_links.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying auto_cpufreq.egg-info/requires.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying auto_cpufreq.egg-info/top_level.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying auto_cpufreq.egg-info/zip-safe -> build/bdist.linux-x86_64/egg/EGG-INFO
+creating dist
+creating 'dist/auto_cpufreq-1.0-py3.6.egg' and adding 'build/bdist.linux-x86_64/egg' to it
+removing 'build/bdist.linux-x86_64/egg' (and everything under it)
+Processing auto_cpufreq-1.0-py3.6.egg
+Copying auto_cpufreq-1.0-py3.6.egg to /usr/local/lib/python3.6/dist-packages
+Adding auto-cpufreq 1.0 to easy-install.pth file
+Installing auto-cpufreq script to /usr/local/bin
+
+Installed /usr/local/lib/python3.6/dist-packages/auto_cpufreq-1.0-py3.6.egg
+Processing dependencies for auto-cpufreq==1.0
+Searching for setuptools==39.0.1
+Best match: setuptools 39.0.1
+Adding setuptools 39.0.1 to easy-install.pth file
+Installing easy_install script to /usr/local/bin
+
+Using /usr/lib/python3/dist-packages
+Searching for psutil==5.4.2
+Best match: psutil 5.4.2
+Adding psutil 5.4.2 to easy-install.pth file
+
+Using /usr/lib/python3/dist-packages
+Searching for distro==1.5.0
+Best match: distro 1.5.0
+Adding distro 1.5.0 to easy-install.pth file
+Installing distro script to /usr/local/bin
+
+Using /usr/local/lib/python3.6/dist-packages
+Searching for click==6.7
+Best match: click 6.7
+Adding click 6.7 to easy-install.pth file
+
+Using /usr/lib/python3/dist-packages
+Finished processing dependencies for auto-cpufreq==1.0
+writing list of installed files to 'files.txt'
+
+-------------------------------------------------------------------------------
+
+auto-cpufreq tool successfully installed.
+
+For list of options, run:
+auto-cpufreq
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Can you try [what was suggested](https://github.com/AdnanHodzic/auto-cpufreq/issues/203#issuecomment-854073201) in #203 and does that fix the problem for you?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>UnisTorvalds:</strong></p>
+                    <p>I'm also getting this exact same error (from OP) on Mint 19.3
+Installed via the script (i.e. same steps to reproduce).
+
+System (inxi):
+CPU: Dual Core Intel Core i5-4200U (-MT MCP-) speed/min/max: 799/800/2600 MHz 
+Kernel: 5.4.0-74-generic x86_64 Up: 16d 32m Mem: 3058.2/7876.6 MiB (38.8%) 
+Storage: 111.79 GiB (87.6% used) Procs: 251 Shell: bash 4.4.20 inxi: 3.0.27 
+
+Default Mint install (i.e. no proprietary drivers)
+
+I tried what was suggested in the above comment referencing #203:
+
+> Please note: If you want to install auto-cpufreq daemon, do not run auto-cpufreq --install otherwise you'll run into an issue: #91, #96.
+> 
+> Instead run systemctl start auto-cpufreq to start the service. Run systemctl status auto-cpufreq to see the status of service, and systemctl enable auto-cpufreq for service to persist running accross reboots.
+> 
+
+But systemctl simply fails to find the service.
+`Failed to start auto-cpufreq.service: Unit auto-cpufreq.service not found.`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>So I enabled snap on a Linux Mint machine and I am happy to report that the Snap version works just fine. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> So I enabled snap on a Linux Mint machine and I am happy to report that the Snap version works just fine.
+
+Closing this issue, as reported by @utk-dev everything works fine if auto-cpufreq is installed using snap.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

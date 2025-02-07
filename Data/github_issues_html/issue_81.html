@@ -1,0 +1,387 @@
+
+        <html>
+        <head>
+            <title>Issue #81: PermissionError: [Errno 1] Operation not permitted</title>
+        </head>
+        <body>
+            <h1>PermissionError: [Errno 1] Operation not permitted</h1>
+            <p><strong>Issue #81</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+```text
+auto-cpufreq --log 
+CPU min frequency: 2300MHz
+
+CPU frequency for each core:
+
+CPU0: 2300 MHz
+CPU1: 2300 MHz
+CPU2: 2300 MHz
+CPU3: 2300 MHz
+
+Temperature for each physical core:
+
+CPU0 temp: 53°C
+CPU1 temp: 53°C
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+Setting to use: "performance" governor
+Setting to use: "balance_performance" EPP
+
+Total CPU usage: 10.6 %
+Total system load: 2.29 
+
+High load, setting turbo boost: on
+PermissionError: [Errno 1] Operation not permitted
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/snap/auto-cpufreq/14/bin/auto-cpufreq", line 115, in <module>
+    main()
+  File "/snap/auto-cpufreq/14/lib/python3.6/site-packages/click/core.py", line 829, in __call__
+    return self.main(*args, **kwargs)
+  File "/snap/auto-cpufreq/14/lib/python3.6/site-packages/click/core.py", line 782, in main
+    rv = self.invoke(ctx)
+  File "/snap/auto-cpufreq/14/lib/python3.6/site-packages/click/core.py", line 1066, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/snap/auto-cpufreq/14/lib/python3.6/site-packages/click/core.py", line 610, in invoke
+    return callback(*args, **kwargs)
+  File "/snap/auto-cpufreq/14/bin/auto-cpufreq", line 42, in main
+    set_autofreq()
+  File "/snap/auto-cpufreq/14/lib/python3.6/site-packages/source/core.py", line 402, in set_autofreq
+    set_performance()
+  File "/snap/auto-cpufreq/14/lib/python3.6/site-packages/source/core.py", line 362, in set_performance
+    turbo(True)
+  File "/snap/auto-cpufreq/14/lib/python3.6/site-packages/source/core.py", line 52, in turbo
+    f.write_text(str(int(value)) + "\n")
+  File "/snap/auto-cpufreq/14/usr/lib/python3.6/pathlib.py", line 1216, in write_text
+    return f.write(data)
+PermissionError: [Errno 1] Operation not permitted
+^C
+Aborted!
+```
+---
+
+### System information:
+```text
+auto-cpufreq --debug
+
+-------------------------------------------------------------------------------
+
+System: Notebook product: N24_25JU serial: N/A
+           Mobo: Notebook model: N24_25JU serial: N/A UEFI: American Megatrends v: 5.11 date: 03/31/2016
+Battery    BAT0: charge: 40.5 Wh 100.0% condition: 40.5/43.1 Wh (94%)
+           hidpp__3: charge: N/A condition: NA/NA Wh
+CPU:       Governors: performance powersave Dual core Intel Core i3-6100U (-MT-MCP-) cache: 3072 KB
+           clock speeds: max: 2300 MHz 1: 2297 MHz 2: 2298 MHz 3: 2293 MHz 4: 2295 MHz
+Graphics:  Card: Intel Skylake GT2 [HD Graphics 520]
+           Display Server: N/A drivers: modesetting (unloaded: fbdev,vesa) tty size: 168x41
+Audio:     Card Intel Sunrise Point-LP HD Audio driver: snd_hda_intel
+           Sound: Advanced Linux Sound Architecture v: k5.6.14-050614-generic
+Network:   Card-1: Realtek RTL8111/8168/8411 PCIE Gigabit Ethernet Controller driver: r8169
+           IF: enp1s0f1 state: down mac: <filter>
+           Card-2: Intel Wireless 8260 driver: iwlwifi
+           IF: wlp2s0 state: up mac: <filter>
+Drives:    HDD Total Size: 2120.4GB (41.8% used)
+           ID-1: /dev/sdb model: WDC_WDS120G1G0B size: 120.0GB
+           ID-2: /dev/sda model: ST2000LX001 size: 2000.4GB
+Partition: ID-1: /var/log size: 19G used: 1.2G (7%) fs: zfs dev: N/A
+           ID-2: swap-1 size: 4.29GB used: 0.00GB (0%) fs: swap dev: /dev/zd0
+           ID-3: swap-2 size: 2.15GB used: 0.00GB (0%) fs: swap dev: /dev/sdb2
+           ID-4: swap-3 size: 1.56GB used: 0.10GB (7%) fs: swap dev: /dev/zram0
+           ID-5: swap-4 size: 1.56GB used: 0.10GB (7%) fs: swap dev: /dev/zram1
+           ID-6: swap-5 size: 1.56GB used: 0.10GB (7%) fs: swap dev: /dev/zram2
+           ID-7: swap-6 size: 1.56GB used: 0.10GB (7%) fs: swap dev: /dev/zram3
+RAID:      No RAID devices: /proc/mdstat, md_mod kernel module present
+Sensors:   
+{'battery': sbattery(percent=100.0, secsleft=<BatteryTime.POWER_TIME_UNLIMITED: -2>, power_plugged=True),
+ 'fans': {},
+ 'temperatures:': {'acpitz': [shwtemp(label='', current=49.0, high=120.0, critical=120.0)],
+                   'coretemp': [shwtemp(label='Package id 0', current=52.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 0', current=47.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 1', current=52.0, high=100.0, critical=100.0),
+                                shwtemp(label='Package id 0', current=52.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 0', current=47.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 1', current=52.0, high=100.0, critical=100.0)],
+                   'iwlwifi_1': [shwtemp(label='', current=44.0, high=None, critical=None)]}} System Temperatures: cpu: 51.0C mobo: N/A
+           Fan Speeds (in rpm): cpu: N/A
+Info:      Processes: 474 Uptime: 2 days Memory: 9981.7/11899.3MB Init: systemd runlevel: 5
+           Client: Unknown python3.6 client inxi: 2.3.56
+
+-------------------------------------------------------------------------------
+```
+---
+
+## Syslog
+
+```text
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]: Linux distro: Ubuntu 20.04.1 LTS (Focal Fossa)
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]: Linux kernel: 5.6.14-050614-generic
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]: Driver: intel_pstate
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]: Architecture: x86_64
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]: Processor: Intel(R) Core(TM) i3-6100U CPU @ 2.30GHz
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]: Cores: 4
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]: ------------------------------ Current CPU states ------------------------------
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]: CPU max frequency: 2300MHz
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]: CPU min frequency: 2300MHz
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]: CPU frequency for each core:
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]: CPU0: 2300 MHz
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]: CPU1: 2300 MHz
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]: CPU2: 2300 MHz
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]: CPU3: 2300 MHz
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]: Temperature for each physical core:
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]: CPU0 temp: 53°C
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]: CPU1 temp: 53°C
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]: ---------------------------- CPU frequency scaling ----------------------------
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]: Battery is: charging
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]: Setting to use: "performance" governor
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]: Setting to use: "balance_performance" EPP
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]: Total CPU usage: 10.6 %
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]: Total system load: 2.29
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]: High load, setting turbo boost: on
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]: PermissionError: [Errno 1] Operation not permitted
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]: During handling of the above exception, another exception occurred:
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]: Traceback (most recent call last):
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]:   File "/snap/auto-cpufreq/14/bin/auto-cpufreq", line 115, in <module>
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]:     main()
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]:   File "/snap/auto-cpufreq/14/lib/python3.6/site-packages/click/core.py", line 829, in __call__
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]:     return self.main(*args, **kwargs)
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]:   File "/snap/auto-cpufreq/14/lib/python3.6/site-packages/click/core.py", line 782, in main
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]:     rv = self.invoke(ctx)
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]:   File "/snap/auto-cpufreq/14/lib/python3.6/site-packages/click/core.py", line 1066, in invoke
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]:     return ctx.invoke(self.callback, **ctx.params)
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]:   File "/snap/auto-cpufreq/14/lib/python3.6/site-packages/click/core.py", line 610, in invoke
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]:     return callback(*args, **kwargs)
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]:   File "/snap/auto-cpufreq/14/bin/auto-cpufreq", line 42, in main
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]:     set_autofreq()
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]:   File "/snap/auto-cpufreq/14/lib/python3.6/site-packages/source/core.py", line 402, in set_autofreq
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]:     set_performance()
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]:   File "/snap/auto-cpufreq/14/lib/python3.6/site-packages/source/core.py", line 362, in set_performance
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]:     turbo(True)
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]:   File "/snap/auto-cpufreq/14/lib/python3.6/site-packages/source/core.py", line 52, in turbo
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]:     f.write_text(str(int(value)) + "\n")
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]:   File "/snap/auto-cpufreq/14/usr/lib/python3.6/pathlib.py", line 1216, in write_text
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]:     return f.write(data)
+Aug  7 08:49:39 kwaadpepper-N24-25JU auto-cpufreq.service[1519481]: PermissionError: [Errno 1] Operation not permitted
+Aug  7 08:49:39 kwaadpepper-N24-25JU systemd[1]: snap.auto-cpufreq.service.service: Succeeded.
+Aug  7 08:49:39 kwaadpepper-N24-25JU tracker-store[1516511]: OK
+Aug  7 08:49:39 kwaadpepper-N24-25JU systemd[4954]: tracker-store.service: Succeeded.
+Aug  7 08:51:31 kwaadpepper-N24-25JU cpufreqd: get_class_device_attribute: couldn't open /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT0/energy_full (No such file or directory)
+Aug  7 08:51:31 kwaadpepper-N24-25JU cpufreqd: get_class_device_attribute: couldn't open /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT0/energy_now (No such file or directory)
+Aug  7 08:51:31 kwaadpepper-N24-25JU cpufreqd: get_class_device_attribute: couldn't open /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT0/power_now (No such file or directory)
+Aug  7 08:51:31 kwaadpepper-N24-25JU cpufreqd: get_class_device_attribute: couldn't open /sys/devices/pci0000:00/0000:00:14.0/usb1/1-3/1-3:1.2/0003:046D:C52B.0013/0003:046D:4072.0015/power_supply/hidpp_battery_3/energy_full (No such file or directory)
+Aug  7 08:51:31 kwaadpepper-N24-25JU cpufreqd: get_class_device_attribute: couldn't open /sys/devices/pci0000:00/0000:00:14.0/usb1/1-3/1-3:1.2/0003:046D:C52B.0013/0003:046D:4072.0015/power_supply/hidpp_battery_3/charge_full (No such file or directory)
+Aug  7 08:51:31 kwaadpepper-N24-25JU cpufreqd: acpi_battery_init        : Couldn't open hidpp_battery_3 attributes
+Aug  7 08:52:04 kwaadpepper-N24-25JU cpufreqd: get_class_device_attribute: couldn't open /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT0/energy_full (No such file or directory)
+Aug  7 08:52:04 kwaadpepper-N24-25JU cpufreqd: get_class_device_attribute: couldn't open /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT0/energy_now (No such file or directory)
+Aug  7 08:52:04 kwaadpepper-N24-25JU cpufreqd: get_class_device_attribute: couldn't open /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT0/power_now (No such file or directory)
+Aug  7 08:52:04 kwaadpepper-N24-25JU cpufreqd: get_class_device_attribute: couldn't open /sys/devices/pci0000:00/0000:00:14.0/usb1/1-3/1-3:1.2/0003:046D:C52B.0013/0003:046D:4072.0015/power_supply/hidpp_battery_3/energy_full (No such file or directory)
+Aug  7 08:52:04 kwaadpepper-N24-25JU cpufreqd: get_class_device_attribute: couldn't open /sys/devices/pci0000:00/0000:00:14.0/usb1/1-3/1-3:1.2/0003:046D:C52B.0013/0003:046D:4072.0015/power_supply/hidpp_battery_3/charge_full (No such file or directory)
+Aug  7 08:52:04 kwaadpepper-N24-25JU cpufreqd: acpi_battery_init        : Couldn't open hidpp_battery_3 attributes
+Aug  7 08:52:41 kwaadpepper-N24-25JU wpa_supplicant[2908]: wlp2s0: CTRL-EVENT-SIGNAL-CHANGE above=1 signal=-37 noise=9999 txrate=866700
+Aug  7 08:53:07 kwaadpepper-N24-25JU PackageKit: daemon quit
+Aug  7 08:53:07 kwaadpepper-N24-25JU systemd[1]: packagekit.service: Succeeded.
+Aug  7 08:54:51 kwaadpepper-N24-25JU cpufreqd: get_class_device_attribute: couldn't open /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT0/energy_full (No such file or directory)
+Aug  7 08:54:51 kwaadpepper-N24-25JU cpufreqd: get_class_device_attribute: couldn't open /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT0/energy_now (No such file or directory)
+Aug  7 08:54:51 kwaadpepper-N24-25JU cpufreqd: get_class_device_attribute: couldn't open /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT0/power_now (No such file or directory)
+Aug  7 08:54:51 kwaadpepper-N24-25JU cpufreqd: get_class_device_attribute: couldn't open /sys/devices/pci0000:00/0000:00:14.0/usb1/1-3/1-3:1.2/0003:046D:C52B.0013/0003:046D:4072.0015/power_supply/hidpp_battery_3/energy_full (No such file or directory)
+Aug  7 08:54:51 kwaadpepper-N24-25JU cpufreqd: get_class_device_attribute: couldn't open /sys/devices/pci0000:00/0000:00:14.0/usb1/1-3/1-3:1.2/0003:046D:C52B.0013/0003:046D:4072.0015/power_supply/hidpp_battery_3/charge_full (No such file or directory)
+Aug  7 08:54:51 kwaadpepper-N24-25JU cpufreqd: acpi_battery_init        : Couldn't open hidpp_battery_3 attributes
+Aug  7 08:55:47 kwaadpepper-N24-25JU cpufreqd: get_class_device_attribute: couldn't open /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT0/energy_full (No such file or directory)
+Aug  7 08:55:47 kwaadpepper-N24-25JU cpufreqd: get_class_device_attribute: couldn't open /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT0/energy_now (No such file or directory)
+Aug  7 08:55:47 kwaadpepper-N24-25JU cpufreqd: get_class_device_attribute: couldn't open /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT0/power_now (No such file or directory)
+Aug  7 08:55:47 kwaadpepper-N24-25JU cpufreqd: get_class_device_attribute: couldn't open /sys/devices/pci0000:00/0000:00:14.0/usb1/1-3/1-3:1.2/0003:046D:C52B.0013/0003:046D:4072.0015/power_supply/hidpp_battery_3/energy_full (No such file or directory)
+Aug  7 08:55:47 kwaadpepper-N24-25JU cpufreqd: get_class_device_attribute: couldn't open /sys/devices/pci0000:00/0000:00:14.0/usb1/1-3/1-3:1.2/0003:046D:C52B.0013/0003:046D:4072.0015/power_supply/hidpp_battery_3/charge_full (No such file or directory)
+```</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Kwaadpepper:</strong></p>
+                    <p>```text
+ls -la /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT0/
+total 0
+drwxr-xr-x 4 root root    0 août   7 09:00 .
+drwxr-xr-x 3 root root    0 août   7 09:00 ..
+-rw-r--r-- 1 root root 4096 août   7 09:00 alarm
+-r--r--r-- 1 root root 4096 août   7 09:00 capacity
+-r--r--r-- 1 root root 4096 août   7 09:00 capacity_level
+-r--r--r-- 1 root root 4096 août   7 09:00 charge_full
+-r--r--r-- 1 root root 4096 août   7 09:00 charge_full_design
+-r--r--r-- 1 root root 4096 août   7 09:00 charge_now
+-r--r--r-- 1 root root 4096 août   7 09:00 current_now
+-r--r--r-- 1 root root 4096 août   7 09:00 cycle_count
+lrwxrwxrwx 1 root root    0 août   7 09:00 device -> ../../../PNP0C0A:00
+drwxr-xr-x 3 root root    0 août   7 09:00 hwmon2
+-r--r--r-- 1 root root 4096 août   7 09:00 manufacturer
+-r--r--r-- 1 root root 4096 août   7 09:00 model_name
+drwxr-xr-x 2 root root    0 août   7 09:00 power
+-r--r--r-- 1 root root 4096 août   7 09:00 present
+-r--r--r-- 1 root root 4096 août   7 09:00 serial_number
+-r--r--r-- 1 root root 4096 août   7 09:00 status
+lrwxrwxrwx 1 root root    0 août   7 09:00 subsystem -> ../../../../../../class/power_supply
+-r--r--r-- 1 root root 4096 août   7 09:00 technology
+-r--r--r-- 1 root root 4096 août   7 09:00 type
+-rw-r--r-- 1 root root 4096 août   7 09:00 uevent
+-r--r--r-- 1 root root 4096 août   7 09:00 voltage_min_design
+-r--r--r-- 1 root root 4096 août   7 09:00 voltage_now*
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Kwaadpepper:</strong></p>
+                    <p>```text
+ls -la /sys/devices/pci0000:00/0000:00:14.0/usb1/1-3/1-3:1.2/0003:046D:C52B.0013/0003:046D:4072.0015/power_supply/hidpp_battery_3/
+total 0
+drwxr-xr-x 5 root root    0 août   7 08:57 .
+drwxr-xr-x 3 root root    0 août   7 08:57 ..
+-r--r--r-- 1 root root 4096 août   7 08:58 capacity_level
+lrwxrwxrwx 1 root root    0 août   7 09:02 device -> ../../../0003:046D:4072.0015
+drwxr-xr-x 3 root root    0 août   7 09:02 hwmon5
+-r--r--r-- 1 root root 4096 août   7 09:02 manufacturer
+-r--r--r-- 1 root root 4096 août   7 09:02 model_name
+-r--r--r-- 1 root root 4096 août   7 09:02 online
+drwxr-xr-x 2 root root    0 août   7 09:02 power
+lrwxrwxrwx 1 root root    0 août   7 09:02 powers -> ../../../0003:046D:4072.0015
+-r--r--r-- 1 root root 4096 août   7 09:02 scope
+-r--r--r-- 1 root root 4096 août   7 09:02 serial_number
+-r--r--r-- 1 root root 4096 août   7 09:00 status
+lrwxrwxrwx 1 root root    0 août   7 09:00 subsystem -> ../../../../../../../../../../class/power_supply
+-r--r--r-- 1 root root 4096 août   7 09:00 type
+-rw-r--r-- 1 root root 4096 août   7 09:02 uevent
+drwxr-xr-x 2 root root    0 août   7 09:02 wakeup27
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>Thank you for the report!
+The issue occurs when it tries to set `turbo boost`
+
+may you show please output of 
+`cat /sys/devices/system/cpu/intel_pstate/no_turbo`
+`cat /sys/devices/system/cpu/cpufreq/boost`
+
+and try to remove snap version and install a github version, because maybe `PermissionError` is because of `snap` container</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Kwaadpepper:</strong></p>
+                    <p>> Thank you for the report!
+
+You're welcome !
+
+```text
+cat /sys/devices/system/cpu/intel_pstate/no_turbo
+1
+```
+
+
+```text
+cat /sys/devices/system/cpu/cpufreq/boost
+cat: /sys/devices/system/cpu/cpufreq/boost: Aucun fichier ou dossier de ce type
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Kwaadpepper:</strong></p>
+                    <p>I also installed from github and the permission error is gone but I still got some errors in syslog
+
+```text
+Aug  7 22:55:09 kwaadpepper-N24-25JU kernel: [100606.523577] audit: type=1400 audit(1596833709.021:151): apparmor="STATUS" operation="profile_replace" info="same as current profile, skipping" profile="unconfined" name="snap.auto-cpufreq.service" pid=1657990 comm="apparmor_parser"
+Aug  7 22:55:09 kwaadpepper-N24-25JU kernel: [100606.525891] audit: type=1400 audit(1596833709.025:152): apparmor="STATUS" operation="profile_replace" info="same as current profile, skipping" profile="unconfined" name="snap-update-ns.auto-cpufreq" pid=1657988 comm="apparmor_parser"
+Aug  7 22:55:09 kwaadpepper-N24-25JU kernel: [100606.549319] audit: type=1400 audit(1596833709.049:153): apparmor="STATUS" operation="profile_replace" info="same as current profile, skipping" profile="unconfined" name="/snap/core/9665/usr/lib/snapd/snap-confine" pid=1657992 comm="apparmor_parser"
+Aug  7 22:55:09 kwaadpepper-N24-25JU kernel: [100606.549328] audit: type=1400 audit(1596833709.049:154): apparmor="STATUS" operation="profile_replace" info="same as current profile, skipping" profile="unconfined" name="/snap/core/9665/usr/lib/snapd/snap-confine//mount-namespace-capture-helper" pid=1657992 comm="apparmor_parser"
+Aug  7 22:55:09 kwaadpepper-N24-25JU kernel: [100606.556535] audit: type=1400 audit(1596833709.053:155): apparmor="STATUS" operation="profile_replace" info="same as current profile, skipping" profile="unconfined" name="snap.core.hook.configure" pid=1657995 comm="apparmor_parser"
+Aug  7 22:55:09 kwaadpepper-N24-25JU kernel: [100606.558477] audit: type=1400 audit(1596833709.057:156): apparmor="STATUS" operation="profile_replace" info="same as current profile, skipping" profile="unconfined" name="snap-update-ns.core" pid=1657994 comm="apparmor_parser"
+Aug  7 22:55:09 kwaadpepper-N24-25JU kernel: [100606.919078] audit: type=1400 audit(1596833709.417:157): apparmor="STATUS" operation="profile_replace" info="same as current profile, skipping" profile="unconfined" name="snap.auto-cpufreq.auto-cpufreq" pid=1658061 comm="apparmor_parser"
+Aug  7 22:55:09 kwaadpepper-N24-25JU kernel: [100606.919575] audit: type=1400 audit(1596833709.417:158): apparmor="STATUS" operation="profile_replace" info="same as current profile, skipping" profile="unconfined" name="snap.auto-cpufreq.service" pid=1658062 comm="apparmor_parser"
+Aug  7 22:55:09 kwaadpepper-N24-25JU kernel: [100606.920335] audit: type=1400 audit(1596833709.417:159): apparmor="STATUS" operation="profile_replace" info="same as current profile, skipping" profile="unconfined" name="snap-update-ns.auto-cpufreq" pid=1658060 comm="apparmor_parser"
+Aug  7 22:55:09 kwaadpepper-N24-25JU systemd[1]: Reloading.
+Aug  7 22:55:10 kwaadpepper-N24-25JU systemd[1]: /lib/systemd/system/dbus.socket:5: ListenStream= references a path below legacy directory /var/run/, updating /var/run/dbus/system_bus_socket → /run/dbus/system_bus_socket; please update the unit file accordingly.
+Aug  7 22:55:10 kwaadpepper-N24-25JU systemd[1]: /lib/systemd/system/docker.socket:6: ListenStream= references a path below legacy directory /var/run/, updating /var/run/docker.sock → /run/docker.sock; please update the unit file accordingly.
+Aug  7 22:55:10 kwaadpepper-N24-25JU systemd[1]: Starting Process error reports when automatic reporting is enabled...
+Aug  7 22:55:10 kwaadpepper-N24-25JU systemd[1]: Starting Refresh fwupd metadata and update motd...
+Aug  7 22:55:10 kwaadpepper-N24-25JU nscd: 2870 fichier de surveillance `/etc/passwd` (1)
+Aug  7 22:55:10 kwaadpepper-N24-25JU nscd: 2870 répertoire de surveillance `/etc` (2)
+Aug  7 22:55:10 kwaadpepper-N24-25JU nscd: 2870 fichier de surveillance `/etc/group` (3)
+Aug  7 22:55:10 kwaadpepper-N24-25JU nscd: 2870 répertoire de surveillance `/etc` (2)
+Aug  7 22:55:10 kwaadpepper-N24-25JU dbus-daemon[2844]: [system] Activating via systemd: service name='org.freedesktop.fwupd' unit='fwupd.service' requested by ':1.596' (uid=62803 pid=1658284 comm="/usr/bin/fwupdmgr refresh --no-metadata-check ")
+Aug  7 22:55:10 kwaadpepper-N24-25JU systemd[1]: Starting Firmware update daemon...
+Aug  7 22:55:10 kwaadpepper-N24-25JU systemd[4954]: run-snapd-ns-auto\x2dcpufreq.mnt.mount: Succeeded.
+Aug  7 22:55:10 kwaadpepper-N24-25JU systemd[1]: run-snapd-ns-auto\x2dcpufreq.mnt.mount: Succeeded.
+Aug  7 22:55:10 kwaadpepper-N24-25JU systemd[1]: snap-auto\x2dcpufreq-14.mount: Succeeded.
+Aug  7 22:55:10 kwaadpepper-N24-25JU systemd[4954]: snap-auto\x2dcpufreq-14.mount: Succeeded.
+Aug  7 22:55:11 kwaadpepper-N24-25JU systemd[1]: Reloading.
+Aug  7 22:55:11 kwaadpepper-N24-25JU whoopsie-upload-all[1658276]: /var/crash/_usr_bin_git.1000.crash already marked for upload, skipping
+Aug  7 22:55:11 kwaadpepper-N24-25JU whoopsie-upload-all[1658276]: /var/crash/_usr_bin_gnome-control-center.1000.crash already marked for upload, skipping
+Aug  7 22:55:11 kwaadpepper-N24-25JU whoopsie-upload-all[1658276]: All reports processed
+Aug  7 22:55:11 kwaadpepper-N24-25JU systemd[1]: /lib/systemd/system/dbus.socket:5: ListenStream= references a path below legacy directory /var/run/, updating /var/run/dbus/system_bus_socket → /run/dbus/system_bus_socket; please update the unit file accordingly.
+Aug  7 22:55:11 kwaadpepper-N24-25JU systemd[1]: /lib/systemd/system/docker.socket:6: ListenStream= references a path below legacy directory /var/run/, updating /var/run/docker.sock → /run/docker.sock; please update the unit file accordingly.
+Aug  7 22:55:11 kwaadpepper-N24-25JU fwupd[1658308]: 20:55:11:0866 FuEngine             device 5dbeb140337f610d54913c0f43d15fdaa0eafb51 [ST2000LX001-1RG174] does not define a vendor-id!
+Aug  7 22:55:11 kwaadpepper-N24-25JU fwupd[1658308]: 20:55:11:0874 FuEngine             device 64ec4cd1e1c9565e79b00f4e7221b1c689b33e96 [WDC WDS120G1G0B-00RC30] does not define a vendor-id!
+Aug  7 22:55:11 kwaadpepper-N24-25JU systemd[1]: apport-autoreport.service: Succeeded.
+Aug  7 22:55:11 kwaadpepper-N24-25JU systemd[1]: Finished Process error reports when automatic reporting is enabled.
+Aug  7 22:55:12 kwaadpepper-N24-25JU dbus-daemon[2844]: [system] Successfully activated service 'org.freedesktop.fwupd'
+Aug  7 22:55:12 kwaadpepper-N24-25JU systemd[1]: Started Firmware update daemon.
+Aug  7 22:55:12 kwaadpepper-N24-25JU fwupdmgr[1658284]: Fetching metadata https://cdn.fwupd.org/downloads/firmware.xml.gz
+Aug  7 22:55:12 kwaadpepper-N24-25JU fwupdmgr[1658284]: Fetching signature https://cdn.fwupd.org/downloads/firmware.xml.gz.asc
+Aug  7 22:55:13 kwaadpepper-N24-25JU fwupdmgr[1658284]: Successfully downloaded new metadata: 1 local device supported
+Aug  7 22:55:13 kwaadpepper-N24-25JU systemd[1]: fwupd-refresh.service: Succeeded.
+Aug  7 22:55:13 kwaadpepper-N24-25JU systemd[1]: Finished Refresh fwupd metadata and update motd.
+Aug  7 22:55:13 kwaadpepper-N24-25JU nscd: 2870 fichier de surveillance `/etc/passwd` (1)
+Aug  7 22:55:13 kwaadpepper-N24-25JU nscd: 2870 répertoire de surveillance `/etc` (2)
+Aug  7 22:55:13 kwaadpepper-N24-25JU nscd: 2870 fichier de surveillance `/etc/group` (3)
+Aug  7 22:55:13 kwaadpepper-N24-25JU nscd: 2870 répertoire de surveillance `/etc` (2)
+Aug  7 22:55:54 kwaadpepper-N24-25JU dbus-daemon[1659365]: [session uid=0 pid=1659363] Activating service name='org.kde.kwalletd5' requested by ':1.0' (uid=0 pid=1659335 comm="/usr/bin/python3 /usr/bin/pip3 install psutil clic")
+Aug  7 22:55:54 kwaadpepper-N24-25JU org.kde.kwalletd5[1659367]: QStandardPaths: XDG_RUNTIME_DIR not set, defaulting to '/tmp/runtime-root'
+Aug  7 22:55:54 kwaadpepper-N24-25JU dbus-daemon[1659365]: [session uid=0 pid=1659363] Successfully activated service 'org.kde.kwalletd5'
+Aug  7 22:55:54 kwaadpepper-N24-25JU dbus-daemon[1659365]: [session uid=0 pid=1659363] Activating service name='org.freedesktop.secrets' requested by ':1.0' (uid=0 pid=1659335 comm="/usr/bin/python3 /usr/bin/pip3 install psutil clic")
+Aug  7 22:55:54 kwaadpepper-N24-25JU org.freedesktop.secrets[1659371]: GNOME_KEYRING_CONTROL=/root/.cache/keyring-532MO0
+Aug  7 22:55:54 kwaadpepper-N24-25JU dbus-daemon[1659365]: [session uid=0 pid=1659363] Successfully activated service 'org.freedesktop.secrets'
+Aug  7 22:56:46 kwaadpepper-N24-25JU systemd[1]: Reloading.
+Aug  7 22:56:46 kwaadpepper-N24-25JU systemd[1]: /lib/systemd/system/dbus.socket:5: ListenStream= references a path below legacy directory /var/run/, updating /var/run/dbus/system_bus_socket → /run/dbus/system_bus_socket; please update the unit file accordingly.
+Aug  7 22:56:46 kwaadpepper-N24-25JU systemd[1]: /lib/systemd/system/docker.socket:6: ListenStream= references a path below legacy directory /var/run/, updating /var/run/docker.sock → /run/docker.sock; please update the unit file accordingly.
+Aug  7 22:56:46 kwaadpepper-N24-25JU systemd[1]: Starting Process error reports when automatic reporting is enabled...
+Aug  7 22:56:46 kwaadpepper-N24-25JU systemd[1]: Started auto-cpufreq - Automatic CPU speed & power optimizer for Linux.
+Aug  7 22:56:46 kwaadpepper-N24-25JU systemd[1]: Reloading.
+Aug  7 22:56:47 kwaadpepper-N24-25JU whoopsie-upload-all[1660940]: /var/crash/_usr_bin_git.1000.crash already marked for upload, skipping
+Aug  7 22:56:47 kwaadpepper-N24-25JU whoopsie-upload-all[1660940]: /var/crash/_usr_bin_gnome-control-center.1000.crash already marked for upload, skipping
+Aug  7 22:56:47 kwaadpepper-N24-25JU whoopsie-upload-all[1660940]: All reports processed
+Aug  7 22:56:47 kwaadpepper-N24-25JU systemd[1]: /lib/systemd/system/dbus.socket:5: ListenStream= references a path below legacy directory /var/run/, updating /var/run/dbus/system_bus_socket → /run/dbus/system_bus_socket; please update the unit file accordingly.
+Aug  7 22:56:47 kwaadpepper-N24-25JU systemd[1]: /lib/systemd/system/docker.socket:6: ListenStream= references a path below legacy directory /var/run/, updating /var/run/docker.sock → /run/docker.sock; please update the unit file accordingly.
+Aug  7 22:56:47 kwaadpepper-N24-25JU systemd[1]: apport-autoreport.service: Succeeded.
+Aug  7 22:56:47 kwaadpepper-N24-25JU systemd[1]: Finished Process error reports when automatic reporting is enabled.
+Aug  7 22:56:48 kwaadpepper-N24-25JU systemd[1]: auto-cpufreq.service: Main process exited, code=exited, status=1/FAILURE
+Aug  7 22:56:48 kwaadpepper-N24-25JU systemd[1]: auto-cpufreq.service: Failed with result 'exit-code'.
+Aug  7 22:57:02 kwaadpepper-N24-25JU rtkit-daemon[3476]: Supervising 4 threads of 2 processes of 1 users.
+Aug  7 22:57:02 kwaadpepper-N24-25JU rtkit-daemon[3476]: Supervising 4 threads of 2 processes of 1 users.
+Aug  7 22:57:12 kwaadpepper-N24-25JU cpufreqd: get_class_device_attribute: couldn't open /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT0/energy_full (No such file or directory)
+Aug  7 22:57:12 kwaadpepper-N24-25JU cpufreqd: get_class_device_attribute: couldn't open /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT0/energy_now (No such file or directory)
+Aug  7 22:57:12 kwaadpepper-N24-25JU cpufreqd: get_class_device_attribute: couldn't open /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT0/power_now (No such file or directory)
+Aug  7 22:57:12 kwaadpepper-N24-25JU cpufreqd: get_class_device_attribute: couldn't open /sys/devices/pci0000:00/0000:00:14.0/usb1/1-3/1-3:1.2/0003:046D:C52B.0013/0003:046D:4072.0015/power_supply/hidpp_battery_3/energy_full (No such file or directory)
+Aug  7 22:57:12 kwaadpepper-N24-25JU cpufreqd: get_class_device_attribute: couldn't open /sys/devices/pci0000:00/0000:00:14.0/usb1/1-3/1-3:1.2/0003:046D:C52B.0013/0003:046D:4072.0015/power_supply/hidpp_battery_3/charge_full (No such file or directory)
+Aug  7 22:57:12 kwaadpepper-N24-25JU cpufreqd: acpi_battery_init        : Couldn't open hidpp_battery_3 attributes
+Aug  7 22:57:21 kwaadpepper-N24-25JU cpufreqd: get_class_device_attribute: couldn't open /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT0/energy_full (No such file or directory)
+Aug  7 22:57:21 kwaadpepper-N24-25JU cpufreqd: get_class_device_attribute: couldn't open /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT0/energy_now (No such file or directory)
+Aug  7 22:57:21 kwaadpepper-N24-25JU cpufreqd: get_class_device_attribute: couldn't open /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT0/power_now (No such file or directory)
+Aug  7 22:57:21 kwaadpepper-N24-25JU cpufreqd: get_class_device_attribute: couldn't open /sys/devices/pci0000:00/0000:00:14.0/usb1/1-3/1-3:1.2/0003:046D:C52B.0013/0003:046D:4072.0015/power_supply/hidpp_battery_3/energy_full (No such file or directory)
+Aug  7 22:57:21 kwaadpepper-N24-25JU cpufreqd: get_class_device_attribute: couldn't open /sys/devices/pci0000:00/0000:00:14.0/usb1/1-3/1-3:1.2/0003:046D:C52B.0013/0003:046D:4072.0015/power_supply/hidpp_battery_3/charge_full (No such file or directory)
+Aug  7 22:57:21 kwaadpepper-N24-25JU cpufreqd: acpi_battery_init        : Couldn't open hidpp_battery_3 attributes
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Kwaadpepper:</strong></p>
+                    <p>Same as #88 closing then</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

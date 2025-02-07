@@ -1,0 +1,48 @@
+
+        <html>
+        <head>
+            <title>Issue #273: Fix auto-cpufreq-installer steps order</title>
+        </head>
+        <body>
+            <h1>Fix auto-cpufreq-installer steps order</h1>
+            <p><strong>Issue #273</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>In the cases the systemd service file needs its path updated, do so _after_ copying the files to the place where they are expected to be.
+
+Fixes https://github.com/AdnanHodzic/auto-cpufreq/issues/270
+
+Tested on EndeavourOS (Arch based)
+```
+Linux distro: EndeavourOS rolling rolling
+Linux kernel: 5.14.12-arch1-1
+Processor: AMD Ryzen 7 5800H with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: acpi-cpufreq
+```</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Hi @4JX, I apologize for such delayed reply on this PR. Could you please resolve code/branch conflicts before I can review this properly?
+
+Thank you!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>4JX:</strong></p>
+                    <p>Apologies for the extra indentation fixing commits, I don't know why it doesn't save with tabs.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Good stuff, thank you for your contribution! </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

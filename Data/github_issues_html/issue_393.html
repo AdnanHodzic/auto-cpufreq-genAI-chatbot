@@ -1,0 +1,102 @@
+
+        <html>
+        <head>
+            <title>Issue #393: CPU not scaling up</title>
+        </head>
+        <body>
+            <h1>CPU not scaling up</h1>
+            <p><strong>Issue #393</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Ive just installed this and ran it in live mode, it sets the system to run at most 1400Mhz, even under full load, ive used the power_save.py script to attempt to get it to run in anymore than power save. It does allow boosting but the cpu will never boost, nor does it change governor from powersave to balanced or performace
+
+### System information:
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 21.10 (Impish Indri)
+Linux kernel: 5.13.0-40-generic
+Processor: AMD Ryzen 5 5500U with Radeon Graphics
+Cores: 12
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4056 MHz
+CPU min frequency: 1400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  3.9%     41 °C     1400 MHz
+CPU1:	  1.0%     41 °C     1400 MHz
+CPU2:	  2.0%     41 °C     1400 MHz
+CPU3:	  3.0%     41 °C     1400 MHz
+CPU4:	  5.1%     41 °C     1400 MHz
+CPU5:	  3.0%     41 °C     1400 MHz
+CPU6:	  8.1%     41 °C     1400 MHz
+CPU7:	  1.0%     41 °C     1400 MHz
+CPU8:	 18.4%     41 °C     1397 MHz
+CPU9:	  1.0%     41 °C     1400 MHz
+CPU10:	  5.1%     41 °C     1397 MHz
+CPU11:	  1.0%     41 °C     1400 MHz
+
+auto-cpufreq version: (Snap) 1.9.3
+
+Python: 3.8.10
+psutil package: 5.9.0
+platform package: 1.0.8
+click package: 8.0.4
+distro package: 1.7.0
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.18 %
+
+Total CPU usage: 3.5 %
+Total system load: 1.11
+Average temp. of all cores: 40.625 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+
+#### Without providing requested information your issue might be ignored!
+
+---
+
+If installation failed with [auto-cpufreq-installer ](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer)have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Nova1545:</strong></p>
+                    <p>Through further testing I have found that even when using the config file, it will not change governor, always stuck in powersave
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Can you confirm if this is related to: #398</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>RaptaG:</strong></p>
+                    <p>~~Hello, I can report something similar. Yesterday night I got `auto-cpufreq` to work, and it did improve performance. I installed it via the AUR package and enabled it with the `sudo systemctl enable auto-cpufreq`, then rebooted. Everything worked fine and the performance optimization was _notable_. Today, when I opened my laptop I noticed the same thing. It was lagging because the CPU was not scaling up and was locked to 500Mhz (CPU: Intel Celeron N2840). I had to manually disable the service manually (with `sudo systemctl disable auto-cpufreq`). Please fix that, `auto-cpufreq` brings my old laptop back to life, but with this problem it makes it function even worse :(~~
+I'm transferring this to #398 because it is related to that..</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>If there are any changes that could be made please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+In meantime closing the issue due to inactivity.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

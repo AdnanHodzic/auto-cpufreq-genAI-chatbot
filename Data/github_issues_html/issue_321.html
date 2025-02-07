@@ -1,0 +1,186 @@
+
+        <html>
+        <head>
+            <title>Issue #321: Auto-cpu-freq goes to wrong Power supply</title>
+        </head>
+        <body>
+            <h1>Auto-cpu-freq goes to wrong Power supply</h1>
+            <p><strong>Issue #321</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+```text
+Auto-cpufreq, looks for battery, but real power supply is BAT0
+```
+---
+
+### System information:
+```text
+tree /sys/class/power_supply/
+/sys/class/power_supply/
+├── ACAD -> ../../devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0003:00/power_supply/ACAD
+├── BAT0 -> ../../devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0A:00 /power_supply/BAT0
+**Power Supply ^^^^**
+
+├── hidpp_battery_0 -> ../../devices/pci0000:00/0000:00:08.1/0000:05:00.4/usb3/3-1/3-1.2/3-1.2:1.2/0003:046D:C52B.0006/0003:046D:4004.000B/power_supply/hidpp_battery_0
+└── hidpp_battery_1 -> ../../devices/pci0000:00/0000:00:08.1/0000:05:00.4/usb3/3-1/3-1.1/3-1.1:1.1/0003:046D:C52F.0003/0003:046D:4055.0007/power_supply/hidpp_battery_1
+
+Battery is: discharging
+
+Setting to use: "powersave" governor
+
+Total CPU usage: 5.1 %
+Total system load: 0.78
+Average temp. of all cores: 45.75 °C
+
+High CPU load
+setting turbo boost: off
+
+[evan@arch ~]$ cat /sys/class/power_supply/BAT0/status
+Full
+
+
+
+
+```
+---
+
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>fbievan:</strong></p>
+                    <p>auto-cpu-freq debug
+```
+[evan@arch ~]$ sudo auto-cpufreq --debug
+
+-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux
+Linux kernel: 5.15.8-228-tkg-bmq
+Processor: AMD Ryzen 5 4600H with Radeon Graphics
+Cores: 12
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3000 MHz
+CPU min frequency: 1400 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0:     4.1%     52 °C     1397 MHz
+CPU1:     0.0%     52 °C     1400 MHz
+CPU2:     4.0%     52 °C     1400 MHz
+CPU3:     1.0%     52 °C     1400 MHz
+CPU4:     4.0%     52 °C     1400 MHz
+CPU5:     0.0%     52 °C     1400 MHz
+CPU6:     4.9%     52 °C     1397 MHz
+CPU7:     0.0%     52 °C     1400 MHz
+CPU8:     0.0%     52 °C     1400 MHz
+CPU9:     0.0%     52 °C     1400 MHz
+CPU10:    0.0%     52 °C     1400 MHz
+CPU11:    0.0%     52 °C     1400 MHz
+
+auto-cpufreq version:
+fatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+Traceback (most recent call last):
+  File "/usr/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.0', 'auto-cpufreq')
+  File "/usr/lib/python3.10/site-packages/pkg_resources/__init__.py", line 651, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/usr/lib/python3.10/site-packages/pkg_resources/__init__.py", line 1455, in run_script
+    exec(script_code, namespace, namespace)
+  File "/usr/lib/python3.10/site-packages/auto_cpufreq-1.0-py3.10.egg/EGG-INFO/scripts/auto-cpufreq", line 198, in <module>
+  File "/usr/lib/python3.10/site-packages/click/core.py", line 1128, in __call__
+    return self.main(*args, **kwargs)
+  File "/usr/lib/python3.10/site-packages/click/core.py", line 1053, in main
+    rv = self.invoke(ctx)
+  File "/usr/lib/python3.10/site-packages/click/core.py", line 1395, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/usr/lib/python3.10/site-packages/click/core.py", line 754, in invoke
+    return __callback(*args, **kwargs)
+  File "/usr/lib/python3.10/site-packages/auto_cpufreq-1.0-py3.10.egg/EGG-INFO/scripts/auto-cpufreq", line 134, in main
+  File "/usr/lib/python3.10/site-packages/auto_cpufreq-1.0-py3.10.egg/auto_cpufreq/core.py", line 97, in app_version
+  File "/usr/lib/python3.10/subprocess.py", line 420, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+  File "/usr/lib/python3.10/subprocess.py", line 524, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['git', 'describe', '--always']' returned non-zero exit status 128.
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Thank you very much for your report! Will look into this.
+
+Can you give me output of:
+`cat /sys/class/power_supply/hidpp_battery_0/type`
+`cat /sys/class/power_supply/hidpp_battery_1/type`
+
+Probably both "Battery".</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>fbievan:</strong></p>
+                    <p>```
+[evan@arch ~]$  cat /sys/class/power_supply/hidpp_battery_0/type
+Battery
+[evan@arch ~]$ cat /sys/class/power_supply/hidpp_battery_1/type
+Battery
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>fbievan:</strong></p>
+                    <p>```
+[evan@arch ~]$ cat /sys/class/power_supply/BAT0/type
+Battery
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Working on it. One moment.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Alright, could you test this fix:
+Be sure the current auto-cpufreq is removed.
+```
+git clone https://github.com/bobslept/auto-cpufreq.git
+cd auto-cpufreq
+git checkout fix-hid-power-supply
+sudo ./auto-cpufreq-installer --install
+sudo auto-cpufreq --live
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>fbievan:</strong></p>
+                    <p>Works.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Thank you very much for testing, and reporting this error.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>#322 merged with `master`, will be part of upcoming release due in few days.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Changes live as part of [v1.9.0 release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

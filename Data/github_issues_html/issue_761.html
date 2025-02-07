@@ -1,0 +1,106 @@
+
+        <html>
+        <head>
+            <title>Issue #761: [ NixOS ]  python3.11-auto-cpufreq-2.3.0 failed with exit code 1 after ⏱ 23s in pythonRuntimeDepsCheckHook</title>
+        </head>
+        <body>
+            <h1>[ NixOS ]  python3.11-auto-cpufreq-2.3.0 failed with exit code 1 after ⏱ 23s in pythonRuntimeDepsCheckHook</h1>
+            <p><strong>Issue #761</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+### Error output:
+```text
+Relevant part:
+
+Successfully built auto_cpufreq-2.3.0-py3-none-any.whl
+Finished creating a wheel...
+Finished executing pypaBuildPhase
+@nix { "action": "setPhase", "phase": "pythonRuntimeDepsCheckHook" }
+Running phase: pythonRuntimeDepsCheckHook
+Executing pythonRuntimeDepsCheck
+Checking runtime dependencies for auto_cpufreq-2.3.0-py3-none-any.whl
+  - psutil<7.0.0,>=6.0.0 not satisfied by version 5.9.8
+  - requests<3.0.0,>=2.32.3 not satisfied by version 2.31.0
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+-------------------------------------------------------------------------------
+
+Linux distro: NixOS 24.05 Uakari
+Linux kernel: 6.9.11-xanmod1
+Processor: 11th Gen Intel(R) Core(TM) i7-11370H @ 3.30GHz
+Cores: 8
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3301 MHz
+CPU min frequency: 400 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0      2.0%        46 °C      3301 MHz
+CPU1      0.0%        45 °C      3301 MHz
+CPU2      2.0%        45 °C      3066 MHz
+CPU3      4.0%        44 °C      2530 MHz
+CPU4      3.0%        46 °C      3301 MHz
+CPU5      1.0%        45 °C      1640 MHz
+CPU6      2.0%        45 °C      3301 MHz
+CPU7      0.0%        44 °C      3301 MHz
+
+auto-cpufreq version: 2.3.0
+
+Python: 3.11.9
+psutil package: 5.9.8
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.22 %
+
+Total CPU usage: 2.3 %
+Total system load: 0.96
+Average temp. of all cores: 45.00 °C 
+
+Currently using: performance governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```
+
+It seems the package needs the dependencies version update.
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>psutil 6.0.0 is available on nixpkgs unstable, so update your flake. If you're not running unstable, don't set auto-cpufreq flake to follow your nixpkgs input</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

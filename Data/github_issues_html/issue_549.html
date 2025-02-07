@@ -1,0 +1,168 @@
+
+        <html>
+        <head>
+            <title>Issue #549: installer script does not fail properly</title>
+        </head>
+        <body>
+            <h1>installer script does not fail properly</h1>
+            <p><strong>Issue #549</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Even though this script clearly know that there are a lot of errors, it claims to be installed correctly at the end. This shouldnt be the case.
+
+### Error output:
+```text
+─────────────────────────────────────────────────── auto-cpufreq installer ───────────────────────────────────────────────────
+
+Welcome to auto-cpufreq tool installer.
+  			
+Options:
+
+[I]nstall
+[U]pdate
+[R]emove
+[Q]uit
+
+Select a key: [i/u/r/q]: i
+
+
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+Didn't detect Debian or RedHat based distro.
+
+To complete installation, you need to:
+Install: python3, pip3, python3-setuptools, gobject-introspection, cairo (or cairo-devel), gcc, and gtk3
+
+Install necessary Python packages:
+pip3 install psutil click distro power requests PyGObject
+Run following sequence of lines:
+
+-----
+
+python3 setup.py install --record files.txt
+mkdir -p /usr/local/share/auto-cpufreq/
+cp -r scripts/ /usr/local/share/auto-cpufreq/
+
+-----
+
+After which tool is installed, for full list of options run:
+
+  	auto-cpufreq
+
+
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+  Consider creating a feature request to add support for your distro:
+  https://github.com/AdnanHodzic/auto-cpufreq/issues/new
+
+  Make sure to include following information:
+
+  Distribution: 
+  Release: 
+  Codename: 
+
+
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+Installing necessary Python packages
+
+./auto-cpufreq-installer: line 54: python3: Command not found.
+./auto-cpufreq-installer: line 56: /opt/auto-cpufreq/venv/bin/activate: No such file or directory
+./auto-cpufreq-installer: line 57: python3: Command not found.
+./auto-cpufreq-installer: line 58: python3: Command not found.
+
+
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+installing auto-cpufreq tool
+
+./auto-cpufreq-installer: line 63: python3: Command not found.
+cp: unable to create regular file '/usr/share/pixmaps/auto-cpufreq.png': No such file or directory
+cp: Unable to create regular file '/usr/share/polkit-1/actions': No such file or directory
+cp: Unable to create regular file '/usr/local/bin/auto-cpufreq': No such file or directory
+cp: Unable to create regular file '/usr/local/bin/auto-cpufreq-gtk': No such file or directory
+chmod: Unable to access '/usr/local/bin/auto-cpufreq': No such file or directory
+chmod: Unable to access '/usr/local/bin/auto-cpufreq-gtk': No such file or directory
+./auto-cpufreq-installer: Line 76: desktop-file-install: Command not found.
+./auto-cpufreq-installer: line 77: update-desktop-database: command not found.
+
+
+
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+auto-cpufreq tool successfully installed.
+
+For list of options, run:
+auto-cpufreq --help"
+
+
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+```
+---
+
+### System information:
+
+  Distribution: NixOS
+  Release: 23.05
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@shadeyg56 weren't you working on NixOS package?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>robertosw:</strong></p>
+                    <p>Btw, it might be best to change `#!/bin/bash` to `#!/usr/bin/env bash` in the installer to allow systems that have bash at a different place to still run the installer</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Yes, I created a Nix flake and it's on the nix branch of my fork
+
+I was working on adding relevant info to the README before I made a PR
+
+@robertosw do not use the installer script on Nix! The paths used in the installer are meant for non-Nix systems which explains all the errors. Until the flake is pushed to master, you're welcome to use it from my repo at https://github.com/shadeyg56/auto-cpufreq/tree/nix or there is an outdated version of auto-cpufreq available in nixpkgs (which I plan on writing a PR to update at some point)
+
+However, I do agree it's weird that the script says it installs successfully despite the fact that it did not.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Btw, it might be best to change `#!/bin/bash` to `#!/usr/bin/env bash` in the installer to allow systems that have bash at a different place to still run the installer
+
+@robertosw even if it's for 1 line changes like this one, I encourage folks to [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+@shadeyg56 
+> do not use the installer script on Nix! The paths used in the installer are meant for non-Nix systems which explains all the errors. 
+
+Just something to keep in mind, once we have these changes on `master`, we should probably also update auto-cpufreq-installer if Nix is detected to output a message to use the Nix package.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>> Just something to keep in mind, once we have these changes on master, we should probably also update auto-cpufreq-installer if Nix is detected to output a message to use the Nix package.
+
+I will include this as a part of my upcoming PR</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

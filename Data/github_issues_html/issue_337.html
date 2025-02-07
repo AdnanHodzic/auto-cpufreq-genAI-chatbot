@@ -1,0 +1,76 @@
+
+        <html>
+        <head>
+            <title>Issue #337: Cannot start auto-cpufreq via openrc.</title>
+        </head>
+        <body>
+            <h1>Cannot start auto-cpufreq via openrc.</h1>
+            <p><strong>Issue #337</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Bug INFO: 
+
+doas rc-service auto-cpufreq start -v
+ * Executing: /usr/libexec/rc/sh/openrc-run.sh /usr/libexec/rc/sh/openrc-run.sh /etc/init.d/auto-cpufreq start
+ * Starting auto-cpufreq ...
+ * supervise-daemon: --pidfile must be specified
+ * failed to start auto-cpufreq                                           [ !! ]
+ * ERROR: auto-cpufreq failed to start
+ 
+
+System INFO:
+
+Hyperbola Gnu/Linux-Libre 0.4
+It uses a fork of openrc 0.28 which is called hyperrc 0.28-4
+https://git.hyperbola.info:50100/packages/core.git/tree/hyperrc
+
+I should also mention, whether I changed the prefix on everything to /usr
+
+or left it alone, same error
+
+Although, Hyperbola usually uses FHS
+
+https://wiki.hyperbola.info/doku.php?id=en:main:fhs
+
+They forked the old version of openrc, due to the newer ones being more bloated.
+
+The odd thing though, is that once I install it, though rc-service cannot start it, I noticed that   the below command
+
+auto-cpufreq --live 
+
+It appears still, hope this helps you in fixing this.
+
+
+Edit: by appears still, I mean the --live command for auto-cpufreq seems to work correctly.
+
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>The openrc file we made, is setup for using the python virtual environment. Which is used only when installed via the `auto-cpufreq-installer`. And we point it to the auto-cpufreq wrapper.
+
+So if you installed it via another way, for example via PKGBUILD. You need to edit the openrc file yourself. Just like they did with the systemd service file on the AUR package. They made it point to `/usr/bin/auto-cpufreq --daemon`.
+
+You can find the path of auto-cpufreq with `which auto-cpufreq`
+
+Hope this fixes your problem. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>FrostKnight:</strong></p>
+                    <p>Almost forgot, to mention, it seems to work now, the devs for Hyperbola made a few changes due to it using FHS instead of FSH.
+
+https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard
+
+Anywho, I hope you don't mind, but this seems to be solved albeit indirectly. 
+
+;)</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

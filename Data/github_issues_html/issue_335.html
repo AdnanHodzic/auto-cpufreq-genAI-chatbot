@@ -1,0 +1,144 @@
+
+        <html>
+        <head>
+            <title>Issue #335: Pop OS doesn't have Grub to disable intel_pstate</title>
+        </head>
+        <body>
+            <h1>Pop OS doesn't have Grub to disable intel_pstate</h1>
+            <p><strong>Issue #335</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I read the *Troubleshooting* section and my Pop OS does not have **Grub** to disable.
+
+Previous, i used Manjaro and everything worked fine, but i needed switch to Pop OS.
+
+How i disable since its not working this solution?
+
+---
+### Error output: 
+``` 
+cat: /etc/default/grub: No such file or directory
+```
+---
+### System information:
+```text
+-------------------------------------------------------------------------------
+
+Linux distro: Pop!_OS 21.10 impish
+Linux kernel: 5.15.8-76051508-generic
+Processor: Intel(R) Core(TM) i5-8300H CPU @ 2.30GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2300 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  1.0%     42 °C     2300 MHz
+CPU1:	  2.1%     46 °C     2300 MHz
+CPU2:	  4.9%     40 °C      900 MHz
+CPU3:	  0.0%     42 °C     2300 MHz
+CPU4:	  5.1%     42 °C     2300 MHz
+CPU5:	  5.0%     46 °C      900 MHz
+CPU6:	  5.0%     40 °C     2300 MHz
+CPU7:	  3.0%     42 °C     2300 MHz
+
+auto-cpufreq version:
+fatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+CalledProcessError(128, ['git', 'describe', '--always'])
+
+Python: 3.9.7
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 8.0.3
+distro package 1.6.0
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.14 %
+
+Total CPU usage: 7.2 %
+Total system load: 0.72
+Average temp. of all cores: 42.5 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> ```
+> cat: /etc/default/grub: No such file or directory
+> ```
+
+This seems like a specific Pop OS problem which isn't really related to auto-cpufreq or its functionality. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ImHereByChance:</strong></p>
+                    <p>@DanielAbrante, if you still interested (or if someone have the same issue): Pop_os uses systemd-boot instead of GRUB, so you have to configure it to disable intel_pstate. Path to boot config file in my case looks like `/boot/efi/loader/entries/Pop_OS-current.conf` - may vary depending on your partitions scheme.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>dswapnil104:</strong></p>
+                    <p>> @DanielAbrante, if you still interested (or if someone have the same issue): Pop_os uses systemd-boot instead of GRUB, so you have to configure it to disable intel_pstate. Path to boot config file in my case looks like `/boot/efi/loader/entries/Pop_OS-current.conf` - may vary depending on your partitions scheme.
+
+I am stuck at the same stone block, so what is the usage / command to switch from intel_pstate to acpi_cpufreq driver via systemd / kernelstub ?
+Any help is appreciated !
+LinuxNewbie here!
+
+Update:1
+I figured out that command for the same would be : 
+  - ` sudo kernelstub -a "intel_pstate=disable" `
+
+
+But I do not find acpi_cpufreq / acpi_freq : 
+**So is it okay to run the above command that disables intel_pstate ?**
+
+```
+
+> cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_driver
+
+       intel_pstate
+
+> ll /lib/modules/5.17.5-76051705-generic/kernel/drivers/cpufreq
+
+       amd_freq_sensitivity.ko 
+       amd_pstate.ko 
+       p4-clockmod.ko 
+       speedstep-lib.ko 
+```
+
+
+
+
+### [Reference](https://www.reddit.com/r/pop_os/comments/oa5m1t/error_after_updating_grub/)
+
+- Pop!_OS uses systemd-boot as the bootloader, so if you want to make those changes you have to do it not in grub config
+
+  - `sudo kernelstub -a XYZ add boot parameter`
+  - `sudo kernelstub -d XYZ delete boot parameter`
+  - `sudo kernelstub -p print out all boot paramters`
+     > **No grub is needed.**
+     Depending on what you changed an sudo update-initramfs -u -k all might be needed.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,28 @@
+
+        <html>
+        <head>
+            <title>Discussion #219: Deamon on openrc</title>
+        </head>
+        <body>
+            <h1>Deamon on openrc</h1>
+            <p><strong>Discussion #219</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Is it possible to start a service on openrc? I tried sudo rc-service auto-cpufreq start and it says that it doesn't exist.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>explosion-mental:</strong></p>
+                    <p>@los95 I'm pretty sure it can. I have no experience with openrc so I need help on how to identify if the system is using openrc. Output of:
+- `readlink -f /sbin/init`
+- `ps 1` and `ps h -o comm 1`
+
+After that all we do is copy the service file to the corresponding directory. On runit service files are scripts, maybe on openrc as well?</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

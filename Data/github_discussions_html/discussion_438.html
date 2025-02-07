@@ -1,0 +1,31 @@
+
+        <html>
+        <head>
+            <title>Discussion #438: Does the `scaling_max_freq` affect the turbo boost max?</title>
+        </head>
+        <body>
+            <h1>Does the `scaling_max_freq` affect the turbo boost max?</h1>
+            <p><strong>Discussion #438</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>1. Does the `scaling_max_freq` affect the turbo boost max?
+2. How can I discover the upper-end of the range for my 4750U?
+
+Perhaps there should be a section in the readme for discovering processor information. Googling has yielded little useful information.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>spikespaz:</strong></p>
+                    <p>```
+cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies
+```
+
+Are these values the only ones supported, or if something else is set, will it use that frequency?</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,283 @@
+
+        <html>
+        <head>
+            <title>Issue #271: Not respecting settings in /etc/auto-cpufreq.conf</title>
+        </head>
+        <body>
+            <h1>Not respecting settings in /etc/auto-cpufreq.conf</h1>
+            <p><strong>Issue #271</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+```text
+None from system log.
+When set to governor powersave, CPU never goes beyond 1400 GHz. even when boost is enabled.
+¨powersave¨ is the setting auto-cpufreq enforces when on battery
+
+I created a config file. In the config file "/etc/auto-cpufreq.conf " I have set it to use ondemand when on battery. 
+The daemon does not use/respect that setting however and will always set powersave mode. 
+When on battery my laptop is limited to 1400 Ghz whatever I do. Even though boost is enabled 
+it will not boost beyond that.
+
+Also I notice the daemon does not use the lenovo specific settings It should activate 
+battery saving mode when on battery.:
+
+Current mode : 0x0
+Key
+0x0 = Intelligent Cooling
+0x2 = Battery Saving
+0x1 = Extreme Performance
+Battery protection setting
+Battery protection: DISABLED
+Boost enabled? (0 i disabled)
+0
+
+
+```
+---
+
+### System information:
+```text
+Linux distro: Manjaro Linux 21.1.6 Pahvo
+Linux kernel: 5.14.10-1-MANJARO
+Processor: AMD Ryzen 7 4700U with Radeon Graphics
+Cores: 8
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>tnfru:</strong></p>
+                    <p>Same for me, my settings don't get respected at all.
+
+Running auto-cpufreq --stats even tells me my settings, but it enables turbo boost even when it is set to never and doesn't hold any limit on max cpu usage for powersave. Even after disabling tlp this still happens.
+
+(This only happens if plugged in to power)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Can both of you include @Woodhousemelena @tnfru output of `auto-cpufreq --debug`.
+
+> Even after disabling tlp this still happens.
+
+Running tools similar to auto-cpufreq could potentially be a culprit for this problem.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>tamimmahmudkhan:</strong></p>
+                    <p>In my case I had set my governor to performance and turbo to always when in charger and powersave and never in battery but for some reason, even though stats reported performance the cpu was not boosting properly at all. I game in a vm and I noticed the game getting stuck along with audio. I also noticed general performance be sluggish. Turning the setting back to auto for charger fixed it. 
+
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux rolling n/a
+Linux kernel: 5.14.16-arch1-1
+Processor: Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz
+Cores: 12
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2600 MHz
+CPU min frequency: 800 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0:     3.0%     57 °C     2600 MHz
+CPU1:     3.9%     57 °C     2600 MHz
+CPU2:     3.0%     56 °C      800 MHz
+CPU3:     1.0%     56 °C     2600 MHz
+CPU4:     7.9%     56 °C     2600 MHz
+CPU5:     5.0%     56 °C     2600 MHz
+CPU6:     2.0%     57 °C     2600 MHz
+CPU7:     2.0%     57 °C     2600 MHz
+CPU8:     3.0%     56 °C     2600 MHz
+CPU9:     5.0%     56 °C     2600 MHz
+CPU10:    1.0%     56 °C     2600 MHz
+CPU11:    4.0%     56 °C     2600 MHz
+
+auto-cpufreq version:
+Version         : 1.6.9-1
+
+Python: 3.9.7
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 8.0.3
+/bin/sh: line 1: pip3: command not found
+distro package
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.1 %
+
+Total CPU usage: 5.2 %
+Total system load: 1.5
+Average temp. of all cores: 56.333333333333336 °C 
+
+Currently using: performance governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> In my case I had set my governor to performance and turbo to always when in charger and powersave and never in battery but for some reason, even though stats reported performance the cpu was not boosting properly at all. I game in a vm and I noticed the game getting stuck along with audio. I also noticed general performance be sluggish. Turning the setting back to auto for charger fixed it.
+
+@tamimmahmudkhan in your case I would definitely let auto-cpufreq make the decisions. 
+
+When I first created this tool I had in mind for it to automatically make all the decisions. Along the way, there were some people who thought that they could make better/overrule decisions that were made by auto-cpufreq, as originally reported in #26
+
+That's how  [auto-cpufreq config file ](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq) came to be. Just because it's there, doesn't mean you have to use it, it's only there to potentially make your auto-cpufreq a better one.  </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Woodhousemelena:</strong></p>
+                    <p>Output of debug:
+
+-------------------------------------------------------------------------------
+
+Linux distro: Manjaro Linux 21.1.6 Pahvo
+Linux kernel: 5.14.10-1-MANJARO
+Processor: AMD Ryzen 7 4700U with Radeon Graphics
+Cores: 8
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2000 MHz
+CPU min frequency: 1400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	 17.7%     40 °C     1397 MHz
+CPU1:	  8.8%     40 °C     1400 MHz
+CPU2:	  5.1%     40 °C     1397 MHz
+CPU3:	  5.1%     40 °C     1400 MHz
+CPU4:	  7.9%     40 °C     1400 MHz
+CPU5:	  7.1%     40 °C     1400 MHz
+CPU6:	 10.0%     40 °C     1400 MHz
+CPU7:	  9.1%     40 °C     1400 MHz
+
+auto-cpufreq version:
+Version         : 1.6.9.r0.gffc0bf0-1
+
+Python: 3.9.7
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 8.0.3
+distro package 1.6.0
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.12 %
+
+Total CPU usage: 11.5 %
+Total system load: 0.83
+Average temp. of all cores: 39.875 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Woodhousemelena:</strong></p>
+                    <p>An update to version 171 from 169 seems to have fixed this!
+Any chance you might incorporate the lenovo powerprofiles? </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> An update to version 171 from 169 seems to have fixed this!
+
+Great to hear! In that case I'm closing this issue.
+
+> Any chance you might incorporate the lenovo powerprofiles?
+
+Please submit a new issue as a "[request]" and I'll look into it when I get a chance.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bigorbi:</strong></p>
+                    <p>> An update to version 171 from 169 seems to have fixed this! Any chance you might incorporate the lenovo powerprofiles?
+
+Hello, 
+I have Lenovo Yoga Slim 7 with same AMD processorr (4700U). Can you tell me how I can check if auto-cpufreq is using lenovo specific settings such as Intelligent Cooling - Battery Saving or Extreme Performance? I`m using Zorin OS 16 which uses Ubuntu 22.4 if that makes any difference. I`m not so experienced in Linux sorry for newbie question :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bigorbi:</strong></p>
+                    <p>This is my auto-cpufreq debug ;
+
+seckinguvenc@SGYoga-Slim-7-14ARE05:~$ sudo auto-cpufreq --debug
+[sudo] password for seckinguvenc:          
+
+-------------------------------------------------------------------------------
+
+Linux distro: Zorin OS 16.2
+Linux kernel: 5.15.0-60-generic
+Processor: AMD Ryzen 7 4700U with Radeon Graphics
+Cores: 8
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2000 MHz
+CPU min frequency: 1400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  2.0%     45 °C     2000 MHz
+CPU1:	  2.0%     45 °C     2000 MHz
+CPU2:	  1.0%     45 °C     2000 MHz
+CPU3:	  1.0%     45 °C     2000 MHz
+CPU4:	  1.0%     45 °C     2000 MHz
+CPU5:	  0.0%     45 °C     1610 MHz
+CPU6:	  1.0%     45 °C     2000 MHz
+CPU7:	  3.0%     45 °C     2000 MHz
+
+auto-cpufreq version: (Snap) 1.9.7
+
+Python: 3.10.6
+psutil package: 5.9.4
+platform package: 1.0.8
+click package: 8.1.3
+distro package: 1.8.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.15 %
+
+Total CPU usage: 0.3 %
+Total system load: 0.48
+Average temp. of all cores: 45.00 °C 
+
+Currently using: performance governor
+Currently turbo boost is: off
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

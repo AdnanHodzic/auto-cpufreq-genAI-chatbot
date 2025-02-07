@@ -1,0 +1,121 @@
+
+        <html>
+        <head>
+            <title>Issue #793: auto-cpufreq on Alt Linux </title>
+        </head>
+        <body>
+            <h1>auto-cpufreq on Alt Linux </h1>
+            <p><strong>Issue #793</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I tried to install on Alt Linux and this is what I got:
+[root@Ivan-PC auto-cpufreq-2.4.0]# ./auto-cpufreq-installer 
+
+────────────────────────────────────────────── auto-cpufreq installer ──────────────────────────────────────────────
+
+Welcome to auto-cpufreq tool installer.
+
+Select a key [I]nstall/[R]emove or press ctrl+c to quit: i
+
+
+──────────────────────────────────────── Detected RedHat based distribution ────────────────────────────────────────
+
+
+─────────────────────────────────────────── Setting up Python environment ───────────────────────────────────────────
+
+./auto-cpufreq-installer: строка 86: yum: команда не найдена
+./auto-cpufreq-installer: строка 88: yum: команда не найдена
+
+─────────────────────────────────────── Installing necessary Python packages ───────────────────────────────────────
+
+Requirement already satisfied: pip in /opt/auto-cpufreq/venv/lib64/python3/site-packages (24.2)
+Collecting pip
+  Using cached pip-24.3.1-py3-none-any.whl.metadata (3.7 kB)
+Collecting wheel
+  Using cached wheel-0.45.0-py3-none-any.whl.metadata (2.3 kB)
+Using cached pip-24.3.1-py3-none-any.whl (1.8 MB)
+Using cached wheel-0.45.0-py3-none-any.whl (72 kB)
+Installing collected packages: wheel, pip
+  Attempting uninstall: pip
+    Found existing installation: pip 24.2
+    Uninstalling pip-24.2:
+      Successfully uninstalled pip-24.2
+Successfully installed pip-24.3.1 wheel-0.45.0
+
+─────────────────────────────────────────── Installing auto-cpufreq tool ───────────────────────────────────────────
+
+Processing /home/ivan/Загрузки/auto-cpufreq-2.4.0
+  Installing build dependencies ... done
+  Getting requirements to build wheel ... done
+  Preparing metadata (pyproject.toml) ... error
+  error: subprocess-exited-with-error
+  
+  × Preparing metadata (pyproject.toml) did not run successfully.
+  │ exit code: 1
+  ╰─> [35 lines of output]
+      Traceback (most recent call last):
+        File "/opt/auto-cpufreq/venv/lib64/python3/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 353, in <module>
+          main()
+        File "/opt/auto-cpufreq/venv/lib64/python3/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 335, in main
+          json_out['return_val'] = hook(**hook_input['kwargs'])
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        File "/opt/auto-cpufreq/venv/lib64/python3/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 149, in prepare_metadata_for_build_wheel
+          return hook(metadata_directory, config_settings)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        File "/tmp/.private/root/pip-build-env-_cibuurl/overlay/lib/python3/site-packages/poetry/core/masonry/api.py", line 42, in prepare_metadata_for_build_wheel
+          poetry = Factory().create_poetry(Path(".").resolve(), with_groups=False)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        File "/tmp/.private/root/pip-build-env-_cibuurl/overlay/lib/python3/site-packages/poetry_dynamic_versioning/patch.py", line 26, in alt_poetry_create
+          name = _get_and_apply_version(
+                 ^^^^^^^^^^^^^^^^^^^^^^^
+        File "/tmp/.private/root/pip-build-env-_cibuurl/overlay/lib/python3/site-packages/poetry_dynamic_versioning/__init__.py", line 681, in _get_and_apply_version
+          version, instance = _get_version(config, name)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+        File "/tmp/.private/root/pip-build-env-_cibuurl/overlay/lib/python3/site-packages/poetry_dynamic_versioning/__init__.py", line 501, in _get_version
+          version = _get_version_from_dunamai(vcs, pattern, config)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        File "/tmp/.private/root/pip-build-env-_cibuurl/overlay/lib/python3/site-packages/poetry_dynamic_versioning/__init__.py", line 462, in _get_version_from_dunamai
+          return Version.from_vcs(
+                 ^^^^^^^^^^^^^^^^^
+        File "/tmp/.private/root/pip-build-env-_cibuurl/overlay/lib/python3/site-packages/dunamai/__init__.py", line 2082, in from_vcs
+          return cls._do_vcs_callback(
+                 ^^^^^^^^^^^^^^^^^^^^^
+        File "/tmp/.private/root/pip-build-env-_cibuurl/overlay/lib/python3/site-packages/dunamai/__init__.py", line 2137, in _do_vcs_callback
+          return callback(**kwargs)
+                 ^^^^^^^^^^^^^^^^^^
+        File "/tmp/.private/root/pip-build-env-_cibuurl/overlay/lib/python3/site-packages/dunamai/__init__.py", line 1096, in from_git
+          _detect_vcs(vcs, path)
+        File "/tmp/.private/root/pip-build-env-_cibuurl/overlay/lib/python3/site-packages/dunamai/__init__.py", line 371, in _detect_vcs
+          raise RuntimeError("This does not appear to be a {} project".format(expected_vcs.value.title()))
+      RuntimeError: This does not appear to be a Git project
+      [end of output]
+  
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+error: metadata-generation-failed
+
+× Encountered error while generating package metadata.
+╰─> See above for output.
+
+note: This is an issue with the package mentioned above, not pip.
+hint: See above for details.
+
+───────────────────────────────────── auto-cpufreq tool successfully installed ─────────────────────────────────────
+
+For list of options, run:
+auto-cpufreq --help
+
+
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>MisTerio497:</strong></p>
+                    <p>Download with git clone and check pakage libcairo-gobject-devel</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

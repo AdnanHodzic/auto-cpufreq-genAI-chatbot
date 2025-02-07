@@ -1,0 +1,364 @@
+
+        <html>
+        <head>
+            <title>Issue #434: auto-cpufreq keeps failing on Arch Linux</title>
+        </head>
+        <body>
+            <h1>auto-cpufreq keeps failing on Arch Linux</h1>
+            <p><strong>Issue #434</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out informtion requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+
+### Error output:
+
+```
+sudo systemctl status auto-cpufreq
+× auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux
+     Loaded: loaded (/etc/systemd/system/auto-cpufreq.service; enabled; preset: disabled)
+     Active: failed (Result: exit-code) since Sat 2022-09-10 09:34:25 IST; 32min ago
+   Duration: 1.300s
+   Main PID: 2177 (code=exited, status=1/FAILURE)
+        CPU: 302ms
+
+Sep 10 09:34:25 hmm systemd[1]: auto-cpufreq.service: Scheduled restart job, restart counter is at 6.
+Sep 10 09:34:25 hmm systemd[1]: Stopped auto-cpufreq - Automatic CPU speed & power optimizer for Linux.
+Sep 10 09:34:25 hmm systemd[1]: auto-cpufreq.service: Start request repeated too quickly.
+Sep 10 09:34:25 hmm systemd[1]: auto-cpufreq.service: Failed with result 'exit-code'.
+Sep 10 09:34:25 hmm systemd[1]: Failed to start auto-cpufreq - Automatic CPU speed & power optimizer for Linux.
+```
+
+### System information:
+```
+lscpu
+Architecture:            x86_64
+  CPU op-mode(s):        32-bit, 64-bit
+  Address sizes:         48 bits physical, 48 bits virtual
+  Byte Order:            Little Endian
+CPU(s):                  12
+  On-line CPU(s) list:   0-11
+Vendor ID:               AuthenticAMD
+  Model name:            AMD Ryzen 5 4600H with Radeon Graphics
+    CPU family:          23
+    Model:               96
+    Thread(s) per core:  2
+    Core(s) per socket:  6
+    Socket(s):           1
+    Stepping:            1
+    Frequency boost:     enabled
+    CPU(s) scaling MHz:  55%
+    CPU max MHz:         3000.0000
+    CPU min MHz:         1400.0000
+    BogoMIPS:            5991.43
+    Flags:               fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr 
+                         sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl nonst
+                         op_tsc cpuid extd_apicid aperfmperf rapl pni pclmulqdq monitor ssse3 fma cx16 sse4_1 sse4
+                         _2 movbe popcnt aes xsave avx f16c rdrand lahf_lm cmp_legacy svm extapic cr8_legacy abm s
+                         se4a misalignsse 3dnowprefetch osvw ibs skinit wdt tce topoext perfctr_core perfctr_nb bp
+                         ext perfctr_llc mwaitx cpb cat_l3 cdp_l3 hw_pstate ssbd mba ibrs ibpb stibp vmmcall fsgsb
+                         ase bmi1 avx2 smep bmi2 cqm rdt_a rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec 
+                         xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local clzero irperf xsaveerptr
+                          rdpru wbnoinvd cppc arat npt lbrv svm_lock nrip_save tsc_scale vmcb_clean flushbyasid de
+                         codeassists pausefilter pfthreshold avic v_vmsave_vmload vgif v_spec_ctrl umip rdpid over
+                         flow_recov succor smca
+Virtualization features: 
+  Virtualization:        AMD-V
+Caches (sum of all):     
+  L1d:                   192 KiB (6 instances)
+  L1i:                   192 KiB (6 instances)
+  L2:                    3 MiB (6 instances)
+  L3:                    8 MiB (2 instances)
+NUMA:                    
+  NUMA node(s):          1
+  NUMA node0 CPU(s):     0-11
+```
+
+
+Add/paste output of:
+
+```
+auto-cpufreq --debug
+```
+```
+sudo auto-cpufreq --debug
+
+-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux rolling n/a
+Linux kernel: 5.19.7-arch1-1
+Processor: AMD Ryzen 5 4600H with Radeon Graphics
+Cores: 12
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3000 MHz
+CPU min frequency: 1400 MHz
+
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.9.5+7573df7b', 'auto-cpufreq')
+  File "/opt/auto-cpufreq/venv/lib/python3.10/site-packages/pkg_resources/__init__.py", line 672, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/opt/auto-cpufreq/venv/lib/python3.10/site-packages/pkg_resources/__init__.py", line 1479, in run_script
+    exec(script_code, namespace, namespace)
+  File "/opt/auto-cpufreq/venv/lib/python3.10/site-packages/auto_cpufreq-1.9.5+7573df7b-py3.10.egg/EGG-INFO/scripts/auto-cpufreq", line 226, in <module>
+  File "/opt/auto-cpufreq/venv/lib/python3.10/site-packages/click/core.py", line 1130, in __call__
+    return self.main(*args, **kwargs)
+  File "/opt/auto-cpufreq/venv/lib/python3.10/site-packages/click/core.py", line 1055, in main
+    rv = self.invoke(ctx)
+  File "/opt/auto-cpufreq/venv/lib/python3.10/site-packages/click/core.py", line 1404, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/opt/auto-cpufreq/venv/lib/python3.10/site-packages/click/core.py", line 760, in invoke
+    return __callback(*args, **kwargs)
+  File "/opt/auto-cpufreq/venv/lib/python3.10/site-packages/auto_cpufreq-1.9.5+7573df7b-py3.10.egg/EGG-INFO/scripts/auto-cpufreq", line 148, in main
+  File "/opt/auto-cpufreq/venv/lib/python3.10/site-packages/auto_cpufreq-1.9.5+7573df7b-py3.10.egg/auto_cpufreq/core.py", line 1104, in sysinfo
+ValueError: invalid literal for int() with base 10: ' egrep is obsolescent; using grep -E'
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+---
+It should show the frequency of all the cores when doing the auto-cpufreq --stats but it didnt
+So i checked journald which showed that auto-cpufreq was failing
+The installation method was the git clone one
+I didnt use the aur package</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>hingen:</strong></p>
+                    <p>I'm using the maintained AUR package and am also experiencing the same issue.
+
+Seems like an issue with the recent update to `grep` causing a `egrep is obsolescent; using grep -E` line to be printed before the actual desired output whenever `egrep` is called.
+
+Can be fixed by changing any `egrep` calls in `auto_cpufreq/core.py` to `grep -E`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@hingen feel free to make the changes and you'll get credit as part of the next (upcoming) release: https://github.com/AdnanHodzic/auto-cpufreq#code-contribution</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>hingen:</strong></p>
+                    <p>@AdnanHodzic alright, have just done so :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>milkycookies100:</strong></p>
+                    <p>after git cloning the latest commit 620433d7 and reinstalling, everything seems to work
+thank you very much !!!
+```
+sudo auto-cpufreq --stats
+
+Note: You can quit stats mode by pressing "ctrl+c"
+
+                "auto-cpufreq" is about to refresh ...
+                Executed on: September 10 (Saturday) - 14:23:06
+
+-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux rolling n/a
+Linux kernel: 5.19.7-arch1-1
+Processor: AMD Ryzen 5 4600H with Radeon Graphics
+Cores: 12
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3000 MHz
+CPU min frequency: 1400 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0:     4.9%     46 °C     1396 MHz
+CPU1:     2.0%     46 °C     1397 MHz
+CPU2:     6.0%     46 °C     1754 MHz
+CPU3:     2.0%     46 °C     3000 MHz
+CPU4:     2.0%     46 °C     1397 MHz
+CPU5:     1.0%     46 °C     1397 MHz
+CPU6:     1.0%     46 °C     3000 MHz
+CPU7:     1.0%     46 °C     1397 MHz
+CPU8:     2.0%     46 °C     1397 MHz
+CPU9:     1.0%     46 °C     2265 MHz
+CPU10:    1.0%     46 °C     3000 MHz
+CPU11:    1.0%     46 °C     3000 MHz
+
+CPU fan speed: 0 RPM
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+
+Total CPU usage: 1.6 %
+Total system load: 0.62
+Average temp. of all cores: 46.50 °C 
+
+Load optimal
+setting turbo boost: off
+
+-------------------------------------------------------------------------------
+
+                "auto-cpufreq" is about to refresh ...^C
+Aborted!
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Zedo9:</strong></p>
+                    <p>I had the same problem previously and switched to the `git` version from the AUR. The `egrep` error is no longer there and `sudo auto-cpufreq --live` works as intended but the systemd service is still not working correctly.
+
+Here are the logs that I'm getting when I try to start/restart the service:
+```
+Sep 11 15:03:24 archpad systemd[8390]: auto-cpufreq.service: Failed to locate executable /opt/auto-cpufreq/venv/bin/python: No such file or directory
+Sep 11 15:03:24 archpad systemd[8390]: auto-cpufreq.service: Failed at step EXEC spawning /opt/auto-cpufreq/venv/bin/python: No such file or directory
+Sep 11 15:03:24 archpad systemd[1]: auto-cpufreq.service: Main process exited, code=exited, status=203/EXEC
+Sep 11 15:03:24 archpad systemd[1]: auto-cpufreq.service: Failed with result 'exit-code'.
+Sep 11 15:03:24 archpad audit[1]: SERVICE_STOP pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=auto-cpufreq comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=failed'
+```
+
+Here is my configuration:
+```
+lscpu
+
+Architecture:            x86_64
+  CPU op-mode(s):        32-bit, 64-bit
+  Address sizes:         48 bits physical, 48 bits virtual
+  Byte Order:            Little Endian
+CPU(s):                  16
+  On-line CPU(s) list:   0-15
+Vendor ID:               AuthenticAMD
+  Model name:            AMD Ryzen 7 4800H with Radeon Graphics
+    CPU family:          23
+    Model:               96
+    Thread(s) per core:  2
+    Core(s) per socket:  8
+    Socket(s):           1
+    Stepping:            1
+    Frequency boost:     disabled
+    CPU(s) scaling MHz:  87%
+    CPU max MHz:         2900.0000
+    CPU min MHz:         1400.0000
+    BogoMIPS:            5791.27
+    Flags:               fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx 
+                         mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl nonstop_tsc cpuid extd_apicid aperfmperf rapl pni p
+                         clmulqdq monitor ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand lahf_lm cmp_legacy svm exta
+                         pic cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw ibs skinit wdt tce topoext perfctr_core perfctr_nb bpext
+                          perfctr_llc mwaitx cpb cat_l3 cdp_l3 hw_pstate ssbd mba ibrs ibpb stibp vmmcall fsgsbase bmi1 avx2 smep bmi2 cq
+                         m rdt_a rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_tota
+                         l cqm_mbm_local clzero irperf xsaveerptr rdpru wbnoinvd cppc arat npt lbrv svm_lock nrip_save tsc_scale vmcb_cle
+                         an flushbyasid decodeassists pausefilter pfthreshold avic v_vmsave_vmload vgif v_spec_ctrl umip rdpid overflow_r
+                         ecov succor smca
+Virtualization features: 
+  Virtualization:        AMD-V
+Caches (sum of all):     
+  L1d:                   256 KiB (8 instances)
+  L1i:                   256 KiB (8 instances)
+  L2:                    4 MiB (8 instances)
+  L3:                    8 MiB (2 instances)
+NUMA:                    
+  NUMA node(s):          1
+  NUMA node0 CPU(s):     0-15
+Vulnerabilities:         
+  Itlb multihit:         Not affected
+  L1tf:                  Not affected
+  Mds:                   Not affected
+  Meltdown:              Not affected
+  Mmio stale data:       Not affected
+  Retbleed:              Mitigation; untrained return thunk; SMT enabled with STIBP protection
+  Spec store bypass:     Mitigation; Speculative Store Bypass disabled via prctl
+  Spectre v1:            Mitigation; usercopy/swapgs barriers and __user pointer sanitization
+  Spectre v2:            Mitigation; Retpolines, IBPB conditional, STIBP always-on, RSB filling, PBRSB-eIBRS Not affected
+  Srbds:                 Not affected
+  Tsx async abort:       Not affected
+```
+Here is the output of `sudo auto-cpufreq --debug`:
+
+```
+Linux distro: Arch Linux  
+Linux kernel: 5.19.7-arch1-1
+Processor: AMD Ryzen 7 4800H with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2900 MHz
+CPU min frequency: 1400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	 0.0%     44 °C     2900 MHz
+CPU1:	 0.0%     44 °C     2708 MHz
+CPU2:	 1.0%     44 °C     2900 MHz
+CPU3:	 0.0%     44 °C     2900 MHz
+CPU4:	 0.0%     44 °C     2733 MHz
+CPU5:	 0.0%     44 °C     2900 MHz
+CPU6:	 1.0%     44 °C     2900 MHz
+CPU7:	 1.0%     44 °C     2900 MHz
+CPU8:	 0.0%     44 °C     2900 MHz
+CPU9:	 0.0%     44 °C     2439 MHz
+CPU10:	 0.0%     44 °C     2900 MHz
+CPU11:	 0.0%     44 °C     2900 MHz
+CPU12:	 0.0%     44 °C     2900 MHz
+CPU13:	 0.0%     44 °C     2900 MHz
+CPU14:	 0.0%     44 °C     2900 MHz
+CPU15:	 0.0%     44 °C     2900 MHz
+
+auto-cpufreq version: Version         : 334.r00a6ab2.-1
+
+Python: 3.10.7
+psutil package: 5.9.1
+platform package: 1.0.8
+click package: 8.1.3
+distro package: 1.7.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.08 %
+
+Total CPU usage: 0.7 %
+Total system load: 0.58
+Average temp. of all cores: 44.00 °C 
+
+Currently using: performance governor
+Currently turbo boost is: off
+```
+
+Could it be a problem with my python installation or is anyone having the same issue?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>hingen:</strong></p>
+                    <p>Hi @Zedo9 I believe this is a different issue, please create a separate thread for it</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Zedo9:</strong></p>
+                    <p>> Hi @Zedo9 I believe this is a different issue, please create a separate thread for it
+
+Thanks for the response @hingen.
+
+Actually the problem is because the AUR `aur/auto-cpufreq-git 1.5.5.r203.3985d3e-1` package is orphaned and  didn't receive updates for a long time, so many fixes are missing (I didn't notice that it's not up to date). I tried manually installing the tool from source (I cloned the repo and did a manual install) and everything looks to be working smoothly.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

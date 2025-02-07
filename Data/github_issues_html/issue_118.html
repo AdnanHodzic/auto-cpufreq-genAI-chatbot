@@ -1,0 +1,164 @@
+
+        <html>
+        <head>
+            <title>Issue #118: Turbo boost enabled under low load</title>
+        </head>
+        <body>
+            <h1>Turbo boost enabled under low load</h1>
+            <p><strong>Issue #118</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Looks like auto-cpufreq is a bit overzealous when deciding the system is under high load. You can see my debug below, 1% CPU usage and 0.62 system load. As a result, turbo is on probably when it shoudln't and the laptop is running a few degrees hotter than it could.
+
+Under the same sort of load, without running auto-cpufreq the system temp is around 45/47 degrees C.
+
+### System information:
+```text
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 20.04.1 LTS (Focal Fossa)
+Linux kernel: 5.4.0-47-generic
+
+Snap package: yes
+
+Python: 3.8.2
+psutil package: 5.7.2
+platform package: 1.0.8
+click package: 7.1.2
+distro package 1.5.0
+
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.05 %
+
+Processor: Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 3800 MHz
+CPU min frequency: 800 MHz
+
+CPU frequency for each core:
+
+CPU0: 3616 MHz
+CPU1: 3577 MHz
+CPU2: 3574 MHz
+CPU3: 3678 MHz
+CPU4: 3573 MHz
+CPU5: 3580 MHz
+CPU6: 3422 MHz
+CPU7: 3656 MHz
+
+CPU usage per each core:
+
+CPU0: 2.0 %
+CPU1: 1.0 %
+CPU2: 3.0 %
+CPU3: 1.0 %
+CPU4: 1.0 %
+CPU5: 1.0 %
+CPU6: 3.0 %
+CPU7: 0.0 %
+
+Temperature for each physical core:
+
+CPU0 temp: 50°C
+CPU1 temp: 49°C
+CPU2 temp: 49°C
+CPU3 temp: 47°C
+
+Total CPU usage: 1.0 %
+Total system load: 0.62 
+
+Currently using: performance governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Thanks for confirming this. As [I mentioned](https://github.com/AdnanHodzic/auto-cpufreq/issues/109#issuecomment-691314410) in #109  currently `auto-cpufreq` is very "turbo mode" trigger friendly when charging. 
+
+I've marked this bug as duplicate, and if possible let's continue this discussion in #109.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@luispabon I made some [changes in turbo-lover](https://github.com/AdnanHodzic/auto-cpufreq/tree/turbo-lover) branch, you can get them by installing `auto-cpufreq` from snap beta channel:
+
+```
+sudo snap install auto-cpufreq --beta
+```
+
+Now it's using more conservative settings and turbo isn't triggered as easily as before. Let me know how it works for you.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>luispabon:</strong></p>
+                    <p>Copy that, I will do so as soon as I'm back to charging tomorrow :+1:</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>luispabon:</strong></p>
+                    <p>@AdnanHodzic definitely much better than before.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>luispabon:</strong></p>
+                    <p>Do you want to keep this open until the change is released to non-beta? Or should I just close it?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> @AdnanHodzic definitely much better than before.
+
+Good to hear, I could make turbo trigger even more conservative, but this seems like the right balance. 
+
+> Do you want to keep this open until the change is released to non-beta? Or should I just close it?
+
+Don't worry about it, once I've released 1.3.2 final and promoted build to snap stable channel, I'll close it myself. I want to test it more myself and for @marc0der  to confirm the same in #109
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>dnisyd:</strong></p>
+                    <p>How about making it configurable which lets us use the default turbo boost load balance trigger or use a self defined threshold?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@dnisyd while I was working on this I was thinking about the same thing. This would be ideal candidate for #26, but I'm not sure when I'll have time to start working on it. 
+
+Also, until #26 is implemented, we need to have good "defaults" for triggering turbo. What was there before was too "trigger happy" in terms of turning on turbo.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>After thoroughly testing changes for few days, I've merged them with `master` branch and made [1.3.2 release](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.3.2). These changes have also been promoted to snap `stable` channel. 
+
+If you've been using beta channel you can switch to stable by running:
+
+```
+sudo snap switch --channel=stable auto-cpufreq
+```
+
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

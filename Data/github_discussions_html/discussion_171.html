@@ -1,0 +1,131 @@
+
+        <html>
+        <head>
+            <title>Discussion #171: Display AUR package version as part of `--debug`</title>
+        </head>
+        <body>
+            <h1>Display AUR package version as part of `--debug`</h1>
+            <p><strong>Discussion #171</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hey @crian @yochananmarqos @marc0der @librewish
+
+Number 1 question that gets asked in every reported issue/bug is which `auto-cpufreq` are you running? I've decided to add this option as part of `--debug` flag. However, since I don't use Arch/Manjaro/Garuda, do you have any suggestions what's the best way to [output version of auto-cpufreq AUR if installed](https://github.com/AdnanHodzic/auto-cpufreq/blob/auto-cpufreq-ver/auto_cpufreq/core.py#L71)? 
+
+I pulled you in because I know you're using these, suggestions welcome! </p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>yochananmarqos:</strong></p>
+                    <p>Something like this? Probably needs some regex magic or something.
+```
+❯ pacman -Qi auto-cpufreq* | grep Version
+Version         : 1.5.4.r4.gd062ca9-1
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Right, that's a good step forward. As this will output package version _if AUR package has been installed_. But currently it'll end up in this condition, if distros is detected as Arch based even package is not installed it will return back an error instead of package version.
+
+It will also end up in this condition, if Arch based distro is detected even if user installed it using [auto-cpufreq-installer (source code)](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer).
+
+Hence, I'm asking is there a good way to test "if AUR package (auto-cpufreq) has been installed" first.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ghost:</strong></p>
+                    <p>Pacman only shows what it installed
+It will not show if auto-cpufreq is installed via
+Installer
+So there is no need to worry</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Right, to confirm. With logic that I have here, what will happen if Arch based user who installed auto-cpufreq using auto-cpufreq-installer (not pacman) runs `--debug`, [will you/he get output from git commit](https://github.com/AdnanHodzic/auto-cpufreq/blob/auto-cpufreq-ver/auto_cpufreq/core.py#L74)?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Ended up installed Arch in VM to properly debug this problem, is part of [1.6.0 release](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.6.0).
+
+Thank you @yochananmarqos and @librewish for your input</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>marc0der:</strong></p>
+                    <p>I just installed this (snap refresh) and noticed the following error in the `--debug` dump:
+
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Manjaro Linux UNKNOWN version
+Linux kernel: 5.9.16-1-MANJARO
+Processor: Intel(R) Core(TM) i7-1065G7 CPU @ 1.30GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3900 MHz
+CPU min frequency: 400 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0:     7.9%     52 °C     3474 MHz
+CPU1:     6.9%     56 °C     3493 MHz
+CPU2:     7.1%     55 °C     3490 MHz
+CPU3:     4.0%     53 °C     3516 MHz
+CPU4:     4.1%     52 °C     3516 MHz
+CPU5:     8.0%     56 °C     3501 MHz
+CPU6:     6.0%     55 °C     3512 MHz
+CPU7:     7.9%     53 °C     3469 MHz
+
+/bin/sh: 1: pacman: not found
+auto-cpufreq version:
+Snap: 1.6.0
+
+Python: 3.8.5
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 7.1.2
+distro package 1.5.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.05 %
+
+Total CPU usage: 2.5 %
+Total system load: 1.19
+Average temp. of all cores: 54.0 °C
+
+Currently using: performance governor
+Currently turbo boost is: on
+-------------------------------------------------------------------------------
+```
+
+I'm seeing two issues here:
+* attempting to query `pacman` for AUR package version when installed with `snap`
+* the `pacman` binary does not seem accessible in this scope (probably due to running in snap)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>marc0der:</strong></p>
+                    <p>I've just submitted #173 to resolve this issue.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Thanks, changes are live as part of [1.6.1](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.6.1)</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

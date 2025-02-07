@@ -1,0 +1,42 @@
+
+        <html>
+        <head>
+            <title>Issue #396: Higher freq than maximum on almost every core</title>
+        </head>
+        <body>
+            <h1>Higher freq than maximum on almost every core</h1>
+            <p><strong>Issue #396</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>![image](https://user-images.githubusercontent.com/50179148/169655757-70f60f73-11e1-4563-a6fa-100607c6dce7.png)
+
+Manjaro, T480(Intel i5-8350U)
+And the --live says that i have tlp running, but i stopped and disabled via systemctl
+
+While doint stress test all the cores on max 3ghz.
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I fail to understand what's the problem then? That auto-cpufreq is allowing you hit frequencies higher then your distribution does? 
+
+Also template when submitting new issue was not filled out which clearly said:
+
+#### Without providing requested information your issue might be ignored!
+
+Hence I'm closing this issue.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>hujberhunor:</strong></p>
+                    <p>Sorry for takig your time.
+i solved the issue, intel-psstage driver caused, now it is disabled.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

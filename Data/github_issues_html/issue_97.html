@@ -1,0 +1,161 @@
+
+        <html>
+        <head>
+            <title>Issue #97: cpufreqd: get_class_device_attribute couldn't open /sys/devices/... in syslog</title>
+        </head>
+        <body>
+            <h1>cpufreqd: get_class_device_attribute couldn't open /sys/devices/... in syslog</h1>
+            <p><strong>Issue #97</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+```text
+Aug 14 09:17:03 kwaadpepper-N24-25JU cpufreqd: get_class_device_attribute: couldn't open /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT0/energy_│  
+Au│full (No such file or directory)                                                                                                                                  │  
+Au│Aug 14 09:17:03 kwaadpepper-N24-25JU cpufreqd: get_class_device_attribute: couldn't open /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT0/energy_│  
+Au│now (No such file or directory)                                                                                                                                   │  
+Au│Aug 14 09:17:03 kwaadpepper-N24-25JU cpufreqd: get_class_device_attribute: couldn't open /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT0/power_n│  
+Au│ow (No such file or directory)                                                                                                                                    │  
+Au│Aug 14 09:17:03 kwaadpepper-N24-25JU cpufreqd: get_class_device_attribute: couldn't open /sys/devices/pci0000:00/0000:00:14.0/usb1/1-3/1-3:1.2/0003:046D:C52B.0024│  
+Au│/0003:046D:4072.0025/power_supply/hidpp_battery_8/energy_full (No such file or directory)                                                                         │  
+Au│Aug 14 09:17:03 kwaadpepper-N24-25JU cpufreqd: get_class_device_attribute: couldn't open /sys/devices/pci0000:00/0000:00:14.0/usb1/1-3/1-3:1.2/0003:046D:C52B.0024│  
+Au│/0003:046D:4072.0025/power_supply/hidpp_battery_8/charge_full (No such file or directory)                                                                         │  
+Au│Aug 14 09:17:03 kwaadpepper-N24-25JU cpufreqd: acpi_battery_init        : Couldn't open hidpp_battery_8 attributes                                                │  
+Au│Aug 14 09:17:05 kwaadpepper-N24-25JU cpufreqd: get_class_device_attribute: couldn't open /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT0/energy_│  
+Au│full (No such file or directory)                                                                                                                                  │  
+Au│Aug 14 09:17:05 kwaadpepper-N24-25JU cpufreqd: get_class_device_attribute: couldn't open /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT0/energy_│  
+Au│now (No such file or directory)                                                                                                                                   │  
+Au│Aug 14 09:17:05 kwaadpepper-N24-25JU cpufreqd: get_class_device_attribute: couldn't open /sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT0/power_n│  
+Au│ow (No such file or directory)                                                                                                                                    │  
+Au│Aug 14 09:17:05 kwaadpepper-N24-25JU cpufreqd: get_class_device_attribute: couldn't open /sys/devices/pci0000:00/0000:00:14.0/usb1/1-3/1-3:1.2/0003:046D:C52B.0024│  
+Au│/0003:046D:4072.0025/power_supply/hidpp_battery_8/energy_full (No such file or directory)                                                                         │  
+Au│Aug 14 09:17:05 kwaadpepper-N24-25JU cpufreqd: get_class_device_attribute: couldn't open /sys/devices/pci0000:00/0000:00:14.0/usb1/1-3/1-3:1.2/0003:046D:C52B.0024│  
+Au│/0003:046D:4072.0025/power_supply/hidpp_battery_8/charge_full (No such file or directory)                                                                         │  
+Au│Aug 14 09:17:05 kwaadpepper-N24-25JU cpufreqd: acpi_battery_init        : Couldn't open hidpp_battery_8 attributes 
+```
+---
+
+### System information:
+```text
+
+-------------------------------------------------------------------------------
+
+System: Notebook product: N24_25JU serial: N/A
+           Mobo: Notebook model: N24_25JU serial: N/A UEFI: American Megatrends v: 5.11 date: 03/31/2016
+Battery    BAT0: charge: 40.2 Wh 100.0% condition: 40.2/43.1 Wh (93%)
+           hidpp__8: charge: N/A condition: NA/NA Wh
+CPU:       Governors: performance powersave Dual core Intel Core i3-6100U (-MT-MCP-) cache: 3072 KB
+           clock speeds: max: 2300 MHz 1: 2295 MHz 2: 2285 MHz 3: 2296 MHz 4: 2297 MHz
+Graphics:  Card: Intel Skylake GT2 [HD Graphics 520]
+           Display Server: N/A drivers: modesetting (unloaded: fbdev,vesa) tty size: 168x41
+Audio:     Card Intel Sunrise Point-LP HD Audio driver: snd_hda_intel
+           Sound: Advanced Linux Sound Architecture v: k5.6.14-050614-generic
+Network:   Card-1: Realtek RTL8111/8168/8411 PCIE Gigabit Ethernet Controller driver: r8169
+           IF: enp1s0f1 state: down mac: <filter>
+           Card-2: Intel Wireless 8260 driver: iwlwifi
+           IF: wlp2s0 state: up mac: <filter>
+Drives:    HDD Total Size: 2120.4GB (41.8% used)
+           ID-1: /dev/sdb model: WDC_WDS120G1G0B size: 120.0GB
+           ID-2: /dev/sda model: ST2000LX001 size: 2000.4GB
+Partition: ID-1: /var/log size: 18G used: 1.1G (7%) fs: zfs dev: N/A
+           ID-2: swap-1 size: 4.29GB used: 0.00GB (0%) fs: swap dev: /dev/zd0
+           ID-3: swap-2 size: 2.15GB used: 0.00GB (0%) fs: swap dev: /dev/sdb2
+           ID-4: swap-3 size: 1.56GB used: 0.47GB (30%) fs: swap dev: /dev/zram0
+           ID-5: swap-4 size: 1.56GB used: 0.46GB (30%) fs: swap dev: /dev/zram1
+           ID-6: swap-5 size: 1.56GB used: 0.47GB (30%) fs: swap dev: /dev/zram2
+           ID-7: swap-6 size: 1.56GB used: 0.47GB (30%) fs: swap dev: /dev/zram3
+RAID:      No RAID devices: /proc/mdstat, md_mod kernel module present
+Sensors:   
+{'battery': sbattery(percent=100.0, secsleft=<BatteryTime.POWER_TIME_UNLIMITED: -2>, power_plugged=True),
+ 'fans': {},
+ 'temperatures:': {'acpitz': [shwtemp(label='', current=52.0, high=120.0, critical=120.0)],
+                   'coretemp': [shwtemp(label='Package id 0', current=55.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 0', current=50.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 1', current=55.0, high=100.0, critical=100.0),
+                                shwtemp(label='Package id 0', current=55.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 0', current=50.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 1', current=55.0, high=100.0, critical=100.0)],
+                   'iwlwifi_1': [shwtemp(label='', current=44.0, high=None, critical=None)]}} System Temperatures: cpu: 52.0C mobo: N/A
+           Fan Speeds (in rpm): cpu: N/A
+Info:      Processes: 480 Uptime: 9 days Memory: 9097.8/11899.3MB Init: systemd runlevel: 5
+           Client: Unknown python3.6 client inxi: 2.3.56
+
+-------------------------------------------------------------------------------
+
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>Is this error or just warnings?
+Does application work?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Kwaadpepper:</strong></p>
+                    <p>I'm a not sure whether it is in error channel or warning channel but it spams syslog. And yes application works. But it produce this.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>> I'm a not sure whether it is in error channel or warning channel but it spams syslog. And yes application works. But it produce this.
+
+Thank you, you just didn't write a description, so I didn't have any idea what's going wrong.  
+So the problem is that syslog is being polluted, right?   
+If so, there is linked issue #82 #</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>@AdnanHodzic I think that we should consider of solving this issue as a primary one bc a lot of users complain about that.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Kwaadpepper:</strong></p>
+                    <p>It is polluted but with this error or warning so I taught it was not the same issue maybe. This happens because it tries to open file without testing it presence I guess.
+
+I'm aware of #82</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>So, we use 3rd party libraries that are trying to open that files </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>Also, log says about `cpufreqd`  
+I Don't remember that we have `cpufreqd` in our code base, @AdnanHodzic are u aware of that?
+@Kwaadpepper are you sure that `cpufreqd` is actually `auto-cpufreq` ?
+It seems that `cpufreqd` is [yet another cpufreq package on your system](https://linux.die.net/man/8/cpufreqd), so the issue is not related to this project</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Kwaadpepper:</strong></p>
+                    <p>If I turn of auto-cpufreq I don't have these anymore. This is why I assumed this lib was responsible</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>Oh, I see. Do you have `cpufreqd` installed?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Kwaadpepper:</strong></p>
+                    <p>Oh you are right, i did have this installed, just forgot this. So purged these useless libs I assumed it was part of auto-cpufreq my bad. I'll close this. But please take a look at #82 It makes syslog unreadable.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@Kwaadpepper we'll take a look at #82 as soon as the time allows. Please be aware all this work is done in our free time without any compensations :slightly_smiling_face: </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

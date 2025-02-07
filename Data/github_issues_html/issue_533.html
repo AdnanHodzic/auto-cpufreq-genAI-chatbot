@@ -1,0 +1,62 @@
+
+        <html>
+        <head>
+            <title>Issue #533: cpufreqctl: don't try writing to non-existent files</title>
+        </head>
+        <body>
+            <h1>cpufreqctl: don't try writing to non-existent files</h1>
+            <p><strong>Issue #533</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>When you give "nosmt" to your kernel, you still get directories under /sys that correspond to inactive hyperthreads, but there's nothing writable inside those directories, which causes auto-cpufreq to generate lots of logspam.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Nice catch, not sure how this was missed until now. Thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>cmm:</strong></p>
+                    <p>> you will be credited for your work
+
+I would rather not be, if it's all the same to you, having taken a closer look at the sources.
+
+> not sure how this was missed until now
+
+Oh man.   Many, many possible reasons.  Where to even begin.
+
+(I apologize if this comment sounds hostile.  I do not mean it to!  At this point I choose to believe that this whole project is an art performance, meant to show what's wrong with Linux user-space ecosystem in general and also how not to write software.  Right?)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> > you will be credited for your work
+> 
+> I would rather not be
+
+Noted, you will not be credited. 
+
+> if it's all the same to you, having taken a closer look at the sources.
+
+Not sure what you mean by this.
+
+> (I apologize if this comment sounds hostile. I do not mean it to! At this point I choose to believe that this whole project is an art performance, meant to show what's wrong with Linux user-space ecosystem in general and also how not to write software. Right?)
+
+> I apologize if this comment sounds hostile. I do not mean it to! 
+
+Thanks for the heads up, because what follows definitely made it one of the most hostile and ill mannered comments :) 
+
+> At this point I choose to believe that this whole project is an art performance, meant to show what's wrong with Linux user-space ecosystem in general and also how not to write software. Right?)
+
+Needless to say, hours and hours of various contributors work, 4k stars on Github, 61 contributors, various mentions in reputable sites and news paper definitely don't agree with this statement. 
+
+If you think something is wrong, feel free to improve & fix it. Otherwise you're also free to stay away from this project.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

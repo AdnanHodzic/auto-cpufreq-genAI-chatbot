@@ -1,0 +1,71 @@
+
+        <html>
+        <head>
+            <title>Pull Request #786: Implement support for Fedora 41</title>
+        </head>
+        <body>
+            <h1>Implement support for Fedora 41</h1>
+            <p><strong>Pull Request #786</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>This PR closes #779. It adds the support to Fedora 41.
+
+Fedora 41 uses [TuneD](https://docs.fedoraproject.org/en-US/fedora/latest/release-notes/sysadmin/#tuned-def-pwr-mgmt-daemon) as a default power profile management daemon and it is conflicting with auto-cpufreq service.
+
+Thanks to this PR, TuneD is automatically disabled when installing auto-cpufreq.
+
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Perfect! 
+
+Thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+@shadeyg56 btw since I remember you were the one maintaining the Nix package, [Nix flake / build-nix (pull_request) checks failed](https://github.com/AdnanHodzic/auto-cpufreq/actions/runs/11643961840/job/32425491528?pr=786). It all LGTM so I overruled it and merged it anyways. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@geragio btw I noticed one thing that could be improved, when remove auto-cpufreq daemon, you'll be greeted with following message in case you don't have or use TuneD at all:
+
+```
+* Enabling GNOME power profiles
+
+Removed "/etc/systemd/system/power-profiles-daemon.service".
+Created symlink /etc/systemd/system/graphical.target.wants/power-profiles-daemon.service → /usr/lib/systemd/system/power-profiles-daemon.service.
+* Enabling TuneD
+
+Unit tuned.service does not exist, proceeding anyway.
+Failed to enable unit: Unit file tuned.service does not exist.
+```
+
+So if you have time in future, it would be good to make an improvement where this message will not be outputted if tuned is not present on the system as it could be confusing for some folks.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>geragio:</strong></p>
+                    <p>@AdnanHodzic that's a valid point, thanks a lot for your suggestion.
+I'll take a look and see how to improve this :+1: </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>geragio:</strong></p>
+                    <p>@AdnanHodzic the PR #788 improves the detection mechanism of TuneD on the host.
+We probably need something similar for GNOME power profiles, I'm not sure all distros have it by default.
+
+Let me know what do you think, your feedback is more than welcome!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@geragio love it! Thanks</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

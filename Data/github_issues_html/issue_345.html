@@ -1,0 +1,43 @@
+
+        <html>
+        <head>
+            <title>Issue #345: power-profiles-daemon</title>
+        </head>
+        <body>
+            <h1>power-profiles-daemon</h1>
+            <p><strong>Issue #345</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hi, Does GNOME team copied what auto-cpufreq to their power-profiles-daemon or what ??
+Because, I've noticed same power consumption under same circumstances using powerstat command.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Perhaps, I'm not sure and can't say anything until I've seen their code.
+
+In open source it's not uncommon to see instead of contributing to existing code and improving that tool/project, to just fork it and start over on your own without any references to original project.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>molitona:</strong></p>
+                    <p>> Perhaps, I'm not sure and can't say anything until I've seen their code.
+> 
+> In open source it's not uncommon to see instead of contributing to existing code and improving that tool/project, to just fork it and start over on your own without any references to original project.
+
+Ok, do you recommand using powertop tunnable or TLP with auto-cpufreq to manage power consumption for the rest of HW. Does it give any results ? @AdnanHodzic </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Please read 4th paragraph of [auto-cpufreq README](https://github.com/AdnanHodzic/auto-cpufreq/), auto-cpufreq will even detect if TLP is running and make a suggestion to remove it. Not sure if using powertop of tunnable will bring any value if used alongside auto-cpufreq but I don't think they'll conflict with anything unlike TLP.
+
+I'm also closing this as it's not an actual issue and should be part of [discussion.](https://github.com/AdnanHodzic/auto-cpufreq/discussions) </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

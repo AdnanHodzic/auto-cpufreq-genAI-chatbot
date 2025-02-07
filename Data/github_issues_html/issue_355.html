@@ -1,0 +1,121 @@
+
+        <html>
+        <head>
+            <title>Issue #355: Failed to start auto-cpufreq</title>
+        </head>
+        <body>
+            <h1>Failed to start auto-cpufreq</h1>
+            <p><strong>Issue #355</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux
+     Loaded: loaded (/etc/systemd/system/auto-cpufreq.service; enabled; vendor preset: disabled)
+     Active: failed (Result: exit-code) since Thu 2022-01-20 19:37:43 IST; 8min ago
+    Process: 183268 ExecStart=/opt/auto-cpufreq/venv/bin/python /opt/auto-cpufreq/venv/bin/auto-cpufreq --daemon (code=exited, status=1/FAILURE)
+   Main PID: 183268 (code=exited, status=1/FAILURE)
+        CPU: 197ms
+
+Jan 20 19:37:43 Legion systemd[1]: auto-cpufreq.service: Scheduled restart job, restart counter is at 6.
+Jan 20 19:37:43 Legion systemd[1]: Stopped auto-cpufreq - Automatic CPU speed & power optimizer for Linux.
+Jan 20 19:37:43 Legion systemd[1]: auto-cpufreq.service: Start request repeated too quickly.
+Jan 20 19:37:43 Legion systemd[1]: auto-cpufreq.service: Failed with result 'exit-code'.
+Jan 20 19:37:43 Legion systemd[1]: Failed to start auto-cpufreq - Automatic CPU speed & power optimizer for Linux.
+
+
+
+
+### System information:
+
+Linux distro: Manjaro Linux 21.2.1 Qonos
+Linux kernel: 5.16.0-1-MANJARO
+Processor: AMD Ryzen 7 5800H with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3200 MHz
+CPU min frequency: 1200 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0:     3.9%     41 °C     3200 MHz
+CPU1:     5.9%     41 °C     3200 MHz
+CPU2:     0.0%     41 °C     3200 MHz
+CPU3:     1.0%     41 °C     3200 MHz
+CPU4:     6.9%     41 °C     3200 MHz
+CPU5:     0.0%     41 °C     3200 MHz
+CPU6:     1.0%     41 °C     3200 MHz
+CPU7:     4.0%     41 °C     3200 MHz
+CPU8:     0.0%     41 °C     3200 MHz
+CPU9:     0.0%     41 °C     3200 MHz
+CPU10:    8.5%     41 °C     3200 MHz
+CPU11:    0.0%     41 °C     3200 MHz
+CPU12:    0.0%     41 °C     2777 MHz
+CPU13:    0.0%     41 °C     3200 MHz
+CPU14:    3.9%     41 °C     3200 MHz
+CPU15:    0.0%     41 °C     3200 MHz
+
+auto-cpufreq version: 1.9.1 (git: 8fb5469a)
+
+Python: 3.10.1
+psutil package: 5.9.0
+platform package: 1.0.8
+click package: 8.0.3
+distro package: 1.6.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.16 %
+
+Total CPU usage: 1.9 %
+Total system load: 0.88
+Average temp. of all cores: 40.625 °C 
+
+Currently using: performance governor
+Currently turbo boost is: on
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>How did you install auto-cpufreq? I would recommend to use the stable AUR version, which should work on manjaro.
+https://aur.archlinux.org/packages/auto-cpufreq</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>D0T7:</strong></p>
+                    <p>> How did you install auto-cpufreq? I would recommend to use the stable AUR version, which should work on manjaro. https://aur.archlinux.org/packages/auto-cpufreq
+
+I tired AUR version (both git and not git version) and they had the same issue, so I tried building from source and the issue still persists.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>The git version from AUR will not work. It isn't being updated. Using stable AUR package just works for me.
+Be sure to remove the installed source version:
+```
+sudo ./auto-cpufreq-installer --remove
+sudo pamac build auto-cpufreq
+sudo systemctl enable --now auto-cpufreq
+```
+
+I cannot look into this because i'm not on manjaro system and using VM's to troubleshoot this is not working.
+If you could restart the service, see when it stops and then find in the `journalctl --since "5 minutes ago"` if you see anything why it stopped? For me on a VM ofcourse it doesn't have access to certain things, so it would crash at those points.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing the issue due to inactivity, if the problem persist please feel free to re-open the issue.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

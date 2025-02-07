@@ -1,0 +1,80 @@
+
+        <html>
+        <head>
+            <title>Pull Request #250: Add config file for preferred governor and turbo boost behaviour.</title>
+        </head>
+        <body>
+            <h1>Add config file for preferred governor and turbo boost behaviour.</h1>
+            <p><strong>Pull Request #250</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>This branch adds support for a configuration file to allow users to set preferred governors and turbo boost behavior for when connected a power source and when running on battery.
+
+In the case of my devices powersave is not necessarily the best cpu governor when on battery.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Hi @zoitrok this looks great and is a long/high requested feature! #26 
+
+I have few suggestions and remarks before we get this merged. 
+
+**README**
+
+As part of this PR I would also like to have README updated, in particular to have a new "Configuration/Settings file" section which elaborates on how a config file can be used. As currently if you don't know how to read Python you won't be able to figure out how to use it :)
+
+**Explicitly state that conf file is used**
+
+Although in auto-cpufreq output it's stated when conf file is used, I would be even more explicit.
+
+When auto-cpufreq is first started "Note: You can quit live mode by pressing "ctrl+c"" message is printed. It would be good idea if right below that line something like: "Using settings defined in /etc/auto-cpufreq.conf file" is stated, just for additional clarity.
+
+**Changes to .conf file**
+
+Then as part of auto-cpufreq.conf file:
+
+```
+# preferred governor
+governor = performance
+```
+
+Maybe it would be a good idea as part of `# preferred governor` to also have a comment how to get a list of available governors, i.e: `cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors`
+
+Or what would be an ideal is to extend `auto-cpufreq --debug` so it can also show list of available governors, and then user could refer and see what they could select. 
+
+It also might not be a bad idea to point to new contributors who are interested on how they could extend auto-cpufreq.conf file with their field of interest, but this is optional as they should be able to look at code and figure how it works.
+
+**Snap doesn't see /etc/auto-cpufreq.conf**
+
+Finally, if auto-cpufreq is installed using a snap package (which is running in a containerized env) it won't know about `/etc/auto-cpufreq.conf` on local file system. So I think being able to specify any location where the file is located using new `--config` argument would be a better idea and then even "snap/containerized" version of auto-cpufreq would be able to use it?
+
+Either way, thank you again and looking forward to your update and/or comments!
+
+Adnan</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>zoitrok:</strong></p>
+                    <p>Hi @AdnanHodzic and thanks for the constructive and detailed review!
+
+I think I've addressed most concerns.
+
+- The README file now has a section about configuration
+- Live mode explicitly says that settings from a configuration file is used, and where it is located
+- The sample configuration file has comments about where to find available governors. The debug option to list available ones sounds like a good feature, but I think it could be out of the scope for this PR. I don't mind adding it later.
+- I've also added a --config parameter to explicitly give a path to a config file located elsewhere. Defaulting to /etc/auto-cpufreq.conf if none is provided.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Hey @zoitrok, first of all I apologize for delayed response. Changes you made are superb and have definitely addressed all of my remarks/concerns.
+
+I'll make a 1.7.0 release today and make sure to credit you in [releases page](https://github.com/AdnanHodzic/auto-cpufreq/releases). Looking forward to any new PR's you may come up with in future! </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

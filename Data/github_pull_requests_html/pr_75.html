@@ -1,0 +1,73 @@
+
+        <html>
+        <head>
+            <title>Pull Request #75: added hot fix for snap for pop os</title>
+        </head>
+        <body>
+            <h1>added hot fix for snap for pop os</h1>
+            <p><strong>Pull Request #75</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p></p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Let's continue discussion from #59 here.
+
+All you need to do to build a snap with current structure is: 
+
+```
+snapcraft
+```
+
+After build is successful, all you need to do is install the snap, i.e:
+
+```
+sudo snap install auto-cpufreq_1.2_amd64.snap --dangerous
+```
+and then enable necessary interfaces, i.e:
+
+```
+sudo snap connect auto-cpufreq:cpu-control
+sudo snap connect auto-cpufreq:hardware-observe
+sudo snap connect auto-cpufreq:system-observe
+```
+
+A lot of people on on forum.snapcraft.com are Canonical employees and are more then willing to help as you [can see from an example](https://forum.snapcraft.io/t/snap-not-buildable-anymore/19274).
+
+For everything else [I suggest you refer to their official documentation](https://snapcraft.io/docs/creating-a-snap) or a ask me a question here :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>Just wonder,  are there any specific reasons to add gcc and python devel ?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Just wonder, are there any specific reasons to add gcc and python devel ?
+
+They were missing as build dependencies. I could've also used deb packages, i.e `python3-psutils` but it's much older version then when downloaded using `pip3` which is what's used in this case.
+
+What you did in this PR is good, but worst case it won't display distro info. Regardless, I pushed it to `edge` channel so feel free to test it by running:
+
+```
+sudo snap install auto-cpufreq --edge
+```
+
+If this makes it work for you, let me know so I can merge it with master.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>Yes, it works.
+But after merging, merge please this #76 </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

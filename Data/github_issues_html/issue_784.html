@@ -1,0 +1,104 @@
+
+        <html>
+        <head>
+            <title>Issue #784: Governor Override changes Platform Profile in Powersave but not Performance mode (Microsoft Surface)</title>
+        </head>
+        <body>
+            <h1>Governor Override changes Platform Profile in Powersave but not Performance mode (Microsoft Surface)</h1>
+            <p><strong>Issue #784</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Governor Override is able to set the Platform Profile to "low-power" when "Powersave" mode is selected, but "Performance" mode will not change the power profile. 
+
+I assume this is because it is the Governor itself that changes the profile rather than auto-cpufreq? Expected behaviour to me would be to select the Platform Profile "Performance" along with the "Performance" governor. That way I could easily go into the auto-cpufreq GUI and go into a full Performance mode that is actually effective on my system, or select low power for the quietest operation.
+
+On the Microsoft Surface I am using, the only way to control the fan is to change the Platform Profile, and auto-cpufreq overrides manual Platform Profile selection through the Surface Control tool. This means if I want to boost the fan for high intensity workloads I need to go into the auto-cpufreq configuration and change the Platform Profile there.
+
+My feature request solution would be: instead of only being able to override the Governor, have the option define different full auto-cpufreq profiles in the configuration file within the Charger and Battery sections, e.g. "Performance", "Balanced", "Quiet", "Power-Save", or just lettered or numbered profiles – lettered/numbered would allow the user more freedom to assign equivalents between Charger and Battery profiles (e.g. what "Profile (b)" means on Charger VS Battery), although having the option to label them in the config would be useful. The user would define each aspect (e.g. Governor, Platform Profile, min/max freq as normal) of those profiles (e.g. Governor, Platform Profile, min/max freq as normal) depending on their hardware. Then these profiles could be selected as an Override in the command line tool or GUI.
+
+
+### System information:
+
+```
+-------------------------------------------------------------------------------
+
+Linux distro: NixOS 24.11 Vicuna
+Linux kernel: 6.10.5
+Processor: Intel(R) Core(TM) i7-1065G7 CPU @ 1.30GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3900 MHz
+CPU min frequency: 400 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0      5.1%        56 °C      1305 MHz
+CPU1      8.9%        57 °C      3500 MHz
+CPU2      6.1%        57 °C      2144 MHz
+CPU3      5.1%        53 °C      1916 MHz
+CPU4      7.1%        56 °C      1410 MHz
+CPU5      5.0%        57 °C      3502 MHz
+CPU6     14.0%        57 °C      3157 MHz
+CPU7      5.1%        53 °C      3500 MHz
+
+auto-cpufreq version: 2.4.0
+Git commit: v2.4.0
+
+Python: 3.12.6
+psutil package: 6.0.0
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: /nix/store/717iy55ncqs0wmhdkwc5fg2vci5wbmq8-bash-5.2p32/bin/sh: line 1: dmidecode: command not found
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.14 %
+
+Total CPU usage: 11.5 %
+Total system load: 6.18
+Average temp. of all cores: 55.75 °C 
+
+Currently using: performance governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+```
+Operating System: NixOS 24.11
+KDE Plasma Version: 6.2.1
+KDE Frameworks Version: 6.7.0
+Qt Version: 6.8.0
+Kernel Version: 6.10.5 (64-bit)
+Graphics Platform: Wayland
+Processors: 8 × Intel® Core™ i7-1065G7 CPU @ 1.30GHz
+Memory: 15.2 GiB of RAM
+Graphics Processor: Mesa Intel® Iris® Plus Graphics
+Manufacturer: Microsoft Corporation
+Product Name: Surface Pro 7</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Cal-Nine:</strong></p>
+                    <p>Just want to add as part of that feature request, being able to somehow switch to certain presets when certain apps are open would be amazingly useful. That would be getting less "auto", but auto-cpufreq works a lot better than other similar tools and I'd prefer it to grow than to require something else to be able to do that.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I agree it would be great to have this functionality, however due to my limited time and [considering this project is looking for maintainers & developers](https://github.com/AdnanHodzic/auto-cpufreq/discussions/312). 
+
+Please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+If you want to start playing with it, you can look at how i.e [`cpuload` is set or `performance_load_thresholds` and when they are called.](https://github.com/AdnanHodzic/auto-cpufreq/blob/7b03630a5e094fc2ef58492d6be35bf64c387815/auto_cpufreq/core.py#L43)</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

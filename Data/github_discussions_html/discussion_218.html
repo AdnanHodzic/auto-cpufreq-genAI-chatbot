@@ -1,0 +1,31 @@
+
+        <html>
+        <head>
+            <title>Discussion #218: How does auto-cpufreq detect cpu information?</title>
+        </head>
+        <body>
+            <h1>How does auto-cpufreq detect cpu information?</h1>
+            <p><strong>Discussion #218</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I ask because I just recently got base arch running on my system and auto-cpufreq never dropped the governor below performance and my CPU constantly stayed at 2.6GHz which is its base frequency (i7 9750H 6c/12t). I only managed to get it to detect the full range by installing cpupower and manually setting the upper limits to 4.5 GHz and lower limit to 800MHz. Now I see it intelligently switch between the two ranges depending on load and actually boosting the cpu to 4GHz. However the fact that it still uses performance governor when plugged in at all times still keeps my laptop warm to the touch while I am browsing the or just doing simple things. </p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Not sure how well you understand Python but here are the conditions how it set for [performance](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto_cpufreq/core.py#L602), and for [powersave](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto_cpufreq/core.py#L416).
+
+Of course besides this it can also be set based on [temperature (one example).](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto_cpufreq/core.py#L451). So for some reason auto-cpufreq doesn't detect this for you and it keeps running in performance, are you running any other similar tool at the same time?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>tamimmahmudkhan:</strong></p>
+                    <p>No. I only use auto-cpufreq. </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

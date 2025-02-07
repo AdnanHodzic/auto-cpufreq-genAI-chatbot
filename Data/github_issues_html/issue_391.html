@@ -1,0 +1,130 @@
+
+        <html>
+        <head>
+            <title>Issue #391: Full Documentation request?</title>
+        </head>
+        <body>
+            <h1>Full Documentation request?</h1>
+            <p><strong>Issue #391</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>In my case, its an ivybridge device, with intel me disabled, a hard forked arch based distro using openrc, etc...
+
+But yeah, it would be nice, if you could have all the various example options in one spot, even if they are commented out by default.
+
+I would like to have the option change settings at will, to the way I want it...
+
+Max battery life, with one exception, want to have wifi come back on, when I enabled it, as long as I haven't kill switched it, but when I disable killswitch, it turns on again, etc...
+
+This is only but one example though.
+
+Also, I don't know each specific, function for each available option, etc... 
+
+Can you help me, at some point? 
+
+Thanks in advance, for this lovely project.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>anonyco:</strong></p>
+                    <p>Here you go: https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto-cpufreq.conf-example
+
+This should close the issue.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Thank you @anonyco. I also believe it's all there, I always encourage folks to [make contributions](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and improve things, if one of you think this can be improved. 
+
+Closing the issue, if problem persists feel free to re-open it.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>FrostKnight:</strong></p>
+                    <p>> Thank you @anonyco. I also believe it's all there, I always encourage folks to [make contributions](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and improve things, if one of you think this can be improved.
+> 
+> Closing the issue, if problem persists feel free to re-open it.
+
+Actually, are you saying, this is all the documentation you have regarding power settings?
+
+I wanted to know, how to do a few things, such as wifi controls, ethernet controls, etc...
+
+I have a kill switch for wifi/bluetooth, but I kind of wanted, to be able to turn wifi back on, otherwise, it keeps disabling itself...
+
+;)
+
+Aka, if killswitch is on when boot or for a long enough time, it automatically disables itself till I use rfkill unblock wlan and FN + F5 doesn't always work in unblocking it.
+
+Strange stuff it is but yeah...
+
+Btw, no I don't have tlp on my system anymore or laptop-mode-tools, thus, I don't know why that happens...
+
+Its weird.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>anonyco:</strong></p>
+                    <p>> I wanted to know, how to do a few things, such as wifi controls, ethernet controls, etc...
+
+One of the unix philosophies for software is "do one thing and do one thing well." auto-cupfreq does only cpu frequency tuning and it does this one thing well. You would need to make extensive modifications to the scripts in order to add advanced features like these.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>FrostKnight:</strong></p>
+                    <p>> > I wanted to know, how to do a few things, such as wifi controls, ethernet controls, etc...
+> 
+> One of the unix philosophies for software is "do one thing and do one thing well." auto-cupfreq does only cpu frequency tuning and it does this one thing well. You would need to make extensive modifications to the scripts in order to add advanced features like these.
+
+Ah, okay, hmm... 
+
+I didn't know that was how you designed this.
+
+Alrighty, cool, thanks for the info, I didn't know if you were holding off on me...
+
+;) 
+
+Anywho, done and done.
+
+Btw, does this mean you plan to support BSD as well?
+
+I hope so, because ARM64, has no good distro, imo.
+
+I hope to use arm64 more in the future, etc...
+
+OpenBSD is currently the only OS i would trust that currently supports it.
+
+Long story short, you are wise to do this, sorry for bothering you with my lack of knowledge...</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I do have plans to implement arm64 support, but I never had enough time to do so far, hence as I mentioned previously if you or anyone else want to give it a go, please [give it a try and contribute](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>FrostKnight:</strong></p>
+                    <p>> I do have plans to implement arm64 support, but I never had enough time to do so far, hence as I mentioned previously if you or anyone else want to give it a go, please [give it a try and contribute](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) :)
+
+I would be willing to test, except for two issues:
+
+I don't have an arm64 device, (yet!)
+I tend to prefer to test betas if at all.
+Aka, alphas usually make me nervous...
+Unless I have a virtual machine, etc...
+:)
+Curious btw, have you heard of something called MNT Reform?
+Whenever their pocket version comes out, you better believe, I will want this to support ARM64! Although some probably want that even now for the current version. 
+
+Long story short,  those represent my interest in ARM64, although other options exist, those are most definitely, the most secure/freest out there.
+
+Anywho, till then, I very much appreciate this project. Not that I don't wish I understood how to keep wifi from disabling, but I think that isn't your fault. Probably something I need to figure out that is more central to my own OS/hardware.
+
+Have a good one!</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

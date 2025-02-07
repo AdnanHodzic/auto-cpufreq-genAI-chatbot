@@ -1,0 +1,175 @@
+
+        <html>
+        <head>
+            <title>Issue #326: Implement python virtual environment</title>
+        </head>
+        <body>
+            <h1>Implement python virtual environment</h1>
+            <p><strong>Issue #326</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Most of this work is done by @aroundthfur in PR #263 
+
+Based on his PR I've added a few changes.
+
+Seems to work on Fedora 35 with systemd
+Seems to work on Gentoo with openrc
+Seems to work on Void with runit
+
+Please see if it works for you! :tada: 
+
+**Not tested with Snap**</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Not tested with Snap
+
+Just tested it, works great.
+
+Superb work by both of you @aroundthfur, @bobslept. Thank you both for this great contribution! :partying_face: </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Nice!! :partying_face: </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>aroundthfur:</strong></p>
+                    <p>@bobslept  nice!
+Thank you for bringing this to the end!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>> @bobslept nice! Thank you for bringing this to the end!
+
+You did all the hard work! Happy to help :partying_face: </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Are we sure this is working on Snap builds? **Or maybe I'm doing something totally wrong.** Yes you did :smiling_face_with_tear: 
+I've build 1.9.0 and cannot run --monitor for example
+```
+beep@pop-os:~/auto-cpufreq$ sudo auto-cpufreq --monitor
+
+Note: You can quit monitor mode by pressing "ctrl+c"
+
+----------------------------------- Warning -----------------------------------
+
+Unable to detect state of GNOME Power Profiles daemon service!
+This daemon might interfere with auto-cpufreq and should be disabled.
+
+Steps to perform this action using auto-cpufreq: power_helper script:
+git clone https://github.com/AdnanHodzic/auto-cpufreq.git
+cd auto-cpufreq/auto_cpufreq
+python3 power_helper.py --gnome_power_disable
+
+----------------------------------- Warning -----------------------------------
+
+Unable to detect if you are using a TLP service!
+This daemon might interfere with auto-cpufreq which can lead to unexpected results.
+We strongly encourage you not to use TLP unless you really know what you are doing.
+Traceback (most recent call last):
+  File "/snap/auto-cpufreq/x1/lib/python3.8/site-packages/psutil/_pslinux.py", line 1576, in wrapper
+    return fun(self, *args, **kwargs)
+  File "/snap/auto-cpufreq/x1/lib/python3.8/site-packages/psutil/_pslinux.py", line 1696, in cmdline
+    with open_text("%s/%s/cmdline" % (self._procfs_path, self.pid)) as f:
+  File "/snap/auto-cpufreq/x1/lib/python3.8/site-packages/psutil/_common.py", line 725, in open_text
+    return open(fname, "rt", **kwargs)
+PermissionError: [Errno 13] Permission denied: '/proc/493/cmdline'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/snap/auto-cpufreq/x1/bin/auto-cpufreq", line 198, in <module>
+    main()
+  File "/snap/auto-cpufreq/x1/lib/python3.8/site-packages/click/core.py", line 1128, in __call__
+    return self.main(*args, **kwargs)
+  File "/snap/auto-cpufreq/x1/lib/python3.8/site-packages/click/core.py", line 1053, in main
+    rv = self.invoke(ctx)
+  File "/snap/auto-cpufreq/x1/lib/python3.8/site-packages/click/core.py", line 1395, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/snap/auto-cpufreq/x1/lib/python3.8/site-packages/click/core.py", line 754, in invoke
+    return __callback(*args, **kwargs)
+  File "/snap/auto-cpufreq/x1/bin/auto-cpufreq", line 85, in main
+    running_daemon()
+  File "/snap/auto-cpufreq/x1/lib/python3.8/site-packages/auto_cpufreq/core.py", line 1080, in running_daemon
+    if is_running("auto-cpufreq", "--daemon"):
+  File "/snap/auto-cpufreq/x1/lib/python3.8/site-packages/auto_cpufreq/core.py", line 1065, in is_running
+    for s in filter(lambda x: program in x, p.cmdline()):
+  File "/snap/auto-cpufreq/x1/lib/python3.8/site-packages/psutil/__init__.py", line 677, in cmdline
+    return self._proc.cmdline()
+  File "/snap/auto-cpufreq/x1/lib/python3.8/site-packages/psutil/_pslinux.py", line 1578, in wrapper
+    raise AccessDenied(self.pid, self._name)
+psutil.AccessDenied: psutil.AccessDenied (pid=493)
+```
+Going back to dd5d8717696221f7d9a197d495c14f40450c7496 and build snap 1.8.2 will give me a 'working' --monitor
+
+Maybe it's just me because i'm fiddling around on a virtual machine to check this. I hope i'm just doing something wrong. But I think there is more. Or is it another PopOS only thingy....
+
+Edit:
+Whoopsie via the software manager I gave permission to `Read process and system information` and now it works.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@bobslept if you want to verify if it works on Snap, in auto-cpufreq root dir run: `snapcraft`
+
+With following changes on `master` you'll end up with `auto-cpufreq_1.9.0_amd64.snap`. Install it by running:
+
+```
+sudo snap install auto-cpufreq_1.8.0_amd64.snap --devmode
+```
+
+But running in this mode, might not give you real overview of how things are working. To remove the snap run:
+
+```
+sudo snap remove auto-cpufreq
+```
+
+Install with `dangerous` flag:
+
+```
+sudo snap install auto-cpufreq_1.9.0_amd64.snap --dangerous
+```
+
+After which you want to connect the plugs:
+
+```
+sudo snap connect auto-cpufreq:cpu-control
+sudo snap connect auto-cpufreq:system-observe
+sudo snap connect auto-cpufreq:hardware-observe
+sudo snap connect auto-cpufreq:etc-auto-cpufreq-conf
+```
+
+To get inside/run shell inside of a Snap auto-cpufreq container:
+
+```
+snap run --shell auto-cpufreq
+```
+
+Let me know if you have any other questions and I'll be happy to help you.
+
+P.S: as I [pointed out](https://github.com/AdnanHodzic/auto-cpufreq/issues/323#issuecomment-999647910) in #329, 1.9.0 is not released yet, latest version in both stable/beta channels is 1.8.2</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Yeah it worked out in the end. I forgot to connect the plugs. 
+But thanks for the info :+1: </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Changes live as part of [v1.9.0 release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

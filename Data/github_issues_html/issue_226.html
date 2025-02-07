@@ -1,0 +1,204 @@
+
+        <html>
+        <head>
+            <title>Issue #226: Problem | ARCH | Thinkpad with Intel Graphics appears to only stay in powersave governor mode when running on battery </title>
+        </head>
+        <body>
+            <h1>Problem | ARCH | Thinkpad with Intel Graphics appears to only stay in powersave governor mode when running on battery </h1>
+            <p><strong>Issue #226</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>When using only using battery power on my Thinkpad T450 (Ivy Bridge CPU) in EndeavorOS (Arch Linux) I noticed no matter what load I am applying to the laptop (e.g. playing a 4K video) I notice the laptop will stay in  "Setting to use: "powersave" governor" and stay at a speed of "798 MHz" where turbo does turn on. 
+
+When the laptop is plugged into power I will see it switch to "Currently using: performance governor" ramp up to speed of "2195 MHz".
+
+The problem is the laptop in battery mode with the slower CPU speed will make it unusable under load (where video will just play audio and video just pauses). 
+
+I am at a loss at why the speed is stuck "798 MHz". The articles I sourced below appear to say that the new 'powersave' mode used by the Intel_pstate driver is dynamic for persons using Kernel 5.7 or higher. As I used TLP, I have included this file for review. Thank you.
+
+
+[tlp.conf.txt](https://github.com/AdnanHodzic/auto-cpufreq/files/6936690/tlp.conf.txt)
+
+
+### Hardware:
+```
+System:
+  Host: mani Kernel: 5.10.55-1-lts x86_64 bits: 64 Desktop: GNOME 40.3
+  Distro: EndeavourOS
+Machine:
+  Type: Laptop System: LENOVO ThinkPad T450
+
+Battery:
+  ID-1: BAT0 charge: 17.2 Wh (87.8%) condition: 19.6/23.2 Wh (84.4%)
+  ID-2: BAT1 charge: 14.7 Wh (72.1%) condition: 20.4/23.5 Wh (87.0%)
+CPU:
+  Info: Dual Core Intel Core i5-5300U [MT MCP] speed: 2195 MHz
+  min/max: 500/2200 MHz
+Graphics:
+  Device-1: Intel HD Graphics 5500 driver: i915 v: kernel
+  Device-2: Chicony Integrated Camera type: USB driver: uvcvideo
+  Display: wayland server: X.org 1.20.13 driver: loaded: i915
+Info:
+  Processes: 183 Uptime: 8m Memory: 15.51 GiB used: 1.56 GiB (10.0%) Shell: Zsh
+  inxi: 3.3.05
+``` 
+
+### System information:
+``` 
+-------------------------------------------------------------------------------
+
+Linux distro: EndeavourOS rolling rolling
+Linux kernel: 5.10.55-1-lts
+Processor: Intel(R) Core(TM) i5-5300U CPU @ 2.30GHz
+Cores: 4
+Architecture: x86_64
+Driver: intel_cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2200 MHz
+CPU min frequency: 500 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0:     3.9%     44 °C     2195 MHz
+CPU1:     0.0%     44 °C     2195 MHz
+CPU2:     2.0%     43 °C     2195 MHz
+CPU3:     2.0%     43 °C     2195 MHz
+
+auto-cpufreq version:
+fatal: not a git repository (or any of the parent directories): .git
+CalledProcessError(128, ['git', 'describe', '--always'])
+
+Python: 3.9.6
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 8.0.1
+/bin/sh: line 1: pip3: command not found
+distro package
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.1 %
+
+Total CPU usage: 1.0 %
+Total system load: 0.39
+Average temp. of all cores: 43.5 °C
+
+Currently using: performance governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```
+
+---
+
+### Sources:
+
+https://linrunner.de/tlp/settings/processor.html 
+https://wiki.archlinux.org/title/CPU_frequency_scaling#Scaling_governors 
+https://silvae86.github.io/2020/06/13/switching-to-acpi-power/
+https://wiki.archlinux.org/title/GRUB
+https://forum.garudalinux.org/t/guide-configuring-garuda-linux-for-laptop/7685
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Added [Troubleshooting section to README on how to change CPU management driver](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting).
+
+Could you please give this a try as I believe it will resolve your problem. If it doesn't please feel free to re-open this issue.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rsramkis:</strong></p>
+                    <p>Hi Adnan,
+
+Thanks for your feedback. I did try using ACPI-CPUFreq which was referenced in your Read.me and the two below sources: 
+
+https://wiki.archlinux.org/title/CPU_frequency_scaling#cpupower
+https://silvae86.github.io/2020/06/13/switching-to-acpi-power/
+
+Add the “intel_pstate=disable” to the “GRUB_CMDLINE_LINUX_DEFAULT” configuration line.
+
+```
+FROM:
+GRUB_CMDLINE_LINUX_DEFAULT=“resume=UUID=715c2972-1a51-4d73-89a0-86ea7bb5aa7f resume_offset=3127296… apparmor=1 lsm=lockdown,yama,apparmor”
+
+TO:
+GRUB_CMDLINE_LINUX_DEFAULT=“resume=UUID=715c2972-1a51-4d73-89a0-86ea7bb5aa7f resume_offset=3127296… apparmor=1 lsm=lockdown,yama,apparmor intel_pstate=disable”
+```
+
+Unfortunately after I switched to ACPI-CPUFreq from intel_cpufreq I noticed Auto-CPUFreq would only change the govenor to 'powersave' on battery and 'performance' on AC. So no inbetween states. Testing with CPUPower I was able to switch to the various governor states manually.
+
+My workaround now with Kernel 5.7+ kernels is I am now using TLP alone where I use 'Ondemand' for battery and 'Performance' for AC Power.
+
+I created some details notes of my testing (just in case you have some recommendations) in the EndeavourOS forms:
+
+
+https://forum.endeavouros.com/t/auto-cpufreq-thinkpad-with-intel-graphics-appears-to-only-stay-in-powersave-governor-mode-when-running-on-battery/16384
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rsramkis:</strong></p>
+                    <p>I'd like to re-open this issue (I don't have the permissions to change the status).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Sorry, I just re-read what this issue is about.
+
+Problem you're facing is that auto-cpufreq was made not to go to `powersave` governor while plugged in to power source, hence it'll only stay in this mode when on battery.
+
+This use case fits most users needs. However, once long planned feature to have a settings file #26 is implemented, you will be able to override this (default) behavior. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rsramkis:</strong></p>
+                    <p>Hi Adnan,
+
+No issue. I tend to write allot of detail in my tickets. Pretty much my **usecase** was:
+
+_Play the following 4k Video while running **on battery** (without it dropping frames). It would require that the CPU not be restricted to the Batterysave governor only, but ramp up Ondemand (or appropriate setting)._
+
+https://www.youtube.com/watch?v=gNtJ4HdMavo
+
+My original setup with Auto-CPUFreq was **Manjaro Gnome on Kernel LTS 5.4** where I believe Auto-CPUFreq was able to change my governor settings while in battery mode (I could be wrong as I am not always on battery when I am testing).
+
+The new setup  on the same laptop with Auto-CPUFreq is **EndeavourOS Gnome on Kernel LTS 5.10** where TLP service is disabled and Auto-CPUFreq was able to change my governor settings to:
+
+Battery = Powersave
+AC - Performance
+
+Since on battery I am stuck at Powersave which restricts the CPU frequencies (turbo turns on) the video will pause or lose audio sync. 
+
+**Note:**
+* My setup has hardware acceleration configured (Vaapi) in Firefox and Chromium.
+* I have considered switching to Kernel LTS 5.4, but this is kind of a pain as I would have to get it via the AUR and compile it everytime the kernel receives a patch.
+
+This was an article I was reading as I was trying to learn your implementation better. Thought it might interest you as Phoronix always has some interesting points of view with testing to back it up.
+
+https://www.phoronix.com/scan.php?page=article&item=intel_pstate_linux315&num=1
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>With [v1.7.0 release](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.7.0) it's now possible to manually define some of the settings instead of leaving everything to be picked up automatically. Could you try tweaking some of the [available options](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq) and report back on how that worked for you? Thanks</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rsramkis:</strong></p>
+                    <p>Thanks for the feedback Adnan. I'm going to close this issue for now and will revisit with v1.7.0 release after I finish my KDE test project.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,229 @@
+
+        <html>
+        <head>
+            <title>Issue #714: Nvidia GPU not using all it's power when using auto-cpufreq</title>
+        </head>
+        <body>
+            <h1>Nvidia GPU not using all it's power when using auto-cpufreq</h1>
+            <p><strong>Issue #714</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? **Yes**
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)? **Not applicable**
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)? **Yes**
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)? **Yes and it's actually worse with acpi than pstate**
+
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+mimillie@tataru-os:~/auto-cpufreq$ sudo auto-cpufreq --debug
+
+Using settings defined in /etc/auto-cpufreq.conf file
+could not get value from conservation mode
+
+-------------------------------- Battery Info ---------------------------------
+
+battery count = 1
+ERROR: failed to read BAT0 thresholds: [Errno 2] No such file or directory: '/sys/class/power_supply/BAT0/charge_start_threshold'
+
+-------------------------------------------------------------------------------
+
+Linux distro: Fedora Linux 40 Silverblue
+Linux kernel: 6.8.10-300.fc40.x86_64
+Processor: 13th Gen Intel(R) Core(TM) i9-13905H
+Cores: 20
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2600 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      0.0%        51 °C      1221 MHz
+CPU1      0.0%        51 °C       400 MHz
+CPU2      1.0%        50 °C       400 MHz
+CPU3      0.0%        50 °C       400 MHz
+CPU4      7.1%        47 °C       971 MHz
+CPU5      0.0%        47 °C       400 MHz
+CPU6     11.0%        48 °C      1635 MHz
+CPU7      0.0%        48 °C       400 MHz
+CPU8      3.9%        47 °C       399 MHz
+CPU9      0.0%        47 °C       400 MHz
+CPU10      5.0%        47 °C      1531 MHz
+CPU11      2.0%        47 °C       400 MHz
+CPU12      2.0%        51 °C       400 MHz
+CPU13      3.0%        51 °C       795 MHz
+CPU14      0.0%        51 °C       919 MHz
+CPU15      3.9%        51 °C       400 MHz
+CPU16      1.0%        49 °C       400 MHz
+CPU17      1.0%        49 °C      1154 MHz
+CPU18      4.0%        49 °C       900 MHz
+CPU19      0.0%        49 °C      1637 MHz
+
+auto-cpufreq version: 2.3.0 (git: 3f6d7a3)
+
+Python: 3.12.3
+psutil package: 5.9.8
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.05 %
+
+Total CPU usage: 2.4 %
+Total system load: 0.76
+Average temp. of all cores: 49.00 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```
+
+Hello, So since I'm trying to use auto-cpufreq on all my laptops, I had the same issue which is super annoying on newer laptops. Nvidia Power stay at the lowest possible like if I'm on energy saving and on battery with power-profile-daemon. that results in half the available wattage to not being used by my GPU which is a deal breaker.
+
+Here are the differences on my laptop : 
+
+**Without auto-cpufreq (plugged in)**
+
+![Capture d’écran du 2024-05-29 17-40-06](https://github.com/AdnanHodzic/auto-cpufreq/assets/52078885/19789811-233c-4ae0-9341-03f188ea1c13)
+
+**With auto-cpufreq (plugged in)**
+
+![Capture d’écran du 2024-05-29 17-41-47](https://github.com/AdnanHodzic/auto-cpufreq/assets/52078885/1fee6c20-b205-4298-a38f-bc84af1dcbc4)
+
+
+I've tried to : 
+ - set power profile daemon to performance before using auto-cpufreq
+ - setting governor to performance with --force performance
+ - using feral gamemode (just in case don't ask why I've tried this...)
+
+Additional info : 
+The screenshots you see have been taken while running Unigine Superposition on the Nvidia GPU.
+
+If anyone could help that would be nice.
+Thanks and have a nice day :) 
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Hm, not sure what's happening as auto-cpufreq shouldn't have any effect on GPU. 
+
+Curious to hear what happens if [you setup config file](https://github.com/AdnanHodzic/auto-cpufreq/?tab=readme-ov-file#3-auto-cpufreq-config-file), and set `energy_performance_preference` to other value then performance, would this change anything?
+
+Will also ask on [our Discord community](https://discord.gg/Sjauxtj6kH) if anyone else has Nvidia and has faced this problem.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Angel-Karasu:</strong></p>
+                    <p>This may be due to the PowerMizer configuration in the Nvidia settings.
+
+You can get the value using `nvidia-settings -q GPUPowerMizerMode`, 0 is adaptative, 1 is performance mode and 2 is auto
+
+Try to set it in Performance mode using `sudo nvidia-settings -a "[gpu:0]/GpuPowerMizerMode=1"`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>MiMillieuh:</strong></p>
+                    <p>Unfortunatly I still encounter the issue... 
+
+by the way I can't querry the powerMizer on my GPU : 
+
+```
+mimillie@tataru-os:~$ sudo nvidia-settings -a "[gpu:0]/GpuPowerMizerMode=1"
+
+mimillie@tataru-os:~$ nvidia-settings -q GPUPowerMizerMode
+
+ERROR: Error resolving target specification '' (No targets match target
+       specification), specified in query 'GPUPowerMizerMode'.
+
+mimillie@tataru-os:~$ nvidia-settings -q "[gpu:0]/GpuPowerMizerMode"
+
+
+ERROR: Error resolving target specification 'gpu:0' (No targets match target
+       specification), specified in query '[gpu:0]/GpuPowerMizerMode'.
+
+```
+
+
+What's even stranger is that the GPU is sitting at 55W limit while doing nothing but when I ask for the GPU to be used it limits itself to around 40W
+
+
+Without auto-cpufreq I set via gnome the profile to performance and it can use up to 80W if the load is enough</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Angel-Karasu:</strong></p>
+                    <p>Try to get the value using the GUI of nvidia settings</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>MiMillieuh:</strong></p>
+                    <p>> Try to get the value using the GUI of nvidia settings
+
+Where can I find it ? 
+By the way I use Wayland so I don't have the full Nvidia settings.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Angel-Karasu:</strong></p>
+                    <p>Normally in nvidia-settings, there should be a PowerMizer section under the GPU.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>MiMillieuh:</strong></p>
+                    <p>I know there is on Xorg but not on Wayland : 
+
+![image](https://github.com/AdnanHodzic/auto-cpufreq/assets/52078885/d2be8140-7008-4c76-9ea7-ec14426f426f)
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Angel-Karasu:</strong></p>
+                    <p>I don't know, maybe wait for the 555 driver, which improves compatibility with Wayland.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>MiMillieuh:</strong></p>
+                    <p>> Hm, not sure what's happening as auto-cpufreq shouldn't have any effect on GPU.
+> 
+> Curious to hear what happens if [you setup config file](https://github.com/AdnanHodzic/auto-cpufreq/?tab=readme-ov-file#3-auto-cpufreq-config-file), and set `energy_performance_preference` to other value then performance, would this change anything?
+> 
+> Will also ask on [our Discord community](https://discord.gg/Sjauxtj6kH) if anyone else has Nvidia and has faced this problem.
+
+I've tried multiple settings in the config but I still get the same results.
+
+I managed to have my GPU using 80W with autocpu-freq with this command : `sudo echo "performance" | sudo tee /sys/firmware/acpi/platform_profile`
+
+However that's unoptimal as I need root acces to change the profile of my GPU and once done it nevers goes back to its low power state... when using balanced it just keep the old profile and low-power is what I get with balanced in power-profile-daemon currently. And it may change something else I don't know I haven't tested it for too long since it's really not a great solution in my case.
+
+
+There's probably something that trigger the GPU driver to change it's power limit but I can't find what.
+
+All I know is that power-profile-daemon trigger it correctly.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

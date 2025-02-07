@@ -1,0 +1,60 @@
+
+        <html>
+        <head>
+            <title>Issue #468: revisiting platform/power profiles</title>
+        </head>
+        <body>
+            <h1>revisiting platform/power profiles</h1>
+            <p><strong>Issue #468</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hi there,
+auto-cpufreq has been great for me to strangle my 5800HC CPU and stop it cranking up and wasting battery
+
+I've got a suggestion/improvement I'd like you to consider, it's stated that cpu-autofreq uses and works best with the "balanced" power profile presumably referencing the setting in  /sys/firmware/acpi/platform_profile
+
+Based on some benchmarks done by phoronix etc, battery life would be better with the low-power profile as in most cases this tells the laptops BIOS to conserve power, leveraging not software or drivers but actual firmware features to save power.
+
+If this profile switcher was incorporated into cpu-autofreq's config so that for example, on battery low-power profile is set and on AC this is changed back to balanced, I think we'd see some further gains in power saving.
+
+Is this something you could look into?
+
+example source:
+https://www.phoronix.com/review/ryzen7-6850u-acpi/6</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>While this sounds like an interesting option to have. Since I'm very limited with available time to do this myself, if you or anyone else wants to give it a try in implementing this functionality, please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>SunkenHero:</strong></p>
+                    <p>I dont want to get offensive, but it looks like you are limited so hard, that you even copy pasta this message.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I dont want to get offensive, but it looks like you are limited so hard, that you even copy pasta this message.
+
+None taken, it has really gotten to that point.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>explosion-mental:</strong></p>
+                    <p>system76 and gnome power management tools use power profiles, and yes it is best to use that than manually tweaking stuff in /sys. However this feat is limited to some hw, usually newest machines.
+
+[related](https://github.com/JakeRoggenbuck/auto-clock-speed/discussions/493#discussioncomment-4481693)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>drishal:</strong></p>
+                    <p>I would also love to allow configuring platform_profiles as well, since my laptop allows tweaking it, would love to push it to `performance` when charging and `low_power` when not plugged in </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,274 @@
+
+        <html>
+        <head>
+            <title>Pull Request #486: Gtk Application for auto-cpufreq</title>
+        </head>
+        <body>
+            <h1>Gtk Application for auto-cpufreq</h1>
+            <p><strong>Pull Request #486</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Alright, this PR is for the Gtk GUI I have been working on. 
+I have tested it on Hyprland (Wayland) and Cinnamon (X11) to make sure that it works on both desktop servers
+I will quickly go over the features 
+
+![image](https://user-images.githubusercontent.com/31134255/218565733-ea007829-4d69-4da2-b8aa-77f5775924f1.png)
+The theme, font, etc, will follow the user-defined config in `/etc/gtk-3.0/settings.ini', so the user can easily customize it based on their own preference
+
+Features
+- View CPU stats and frequency stats
+- Override the current governor as you would with the `--force` flag 
+- Install the daemon if it is not installed
+- Remove the daemon (from menu)
+- Small about dialog
+
+That's about it. The GUI can be run via the desktop entry (auto-cpufreq) or with the new command `auto-cpufreq-gtk`. 
+
+Please note UI/UX design is very much not my thing. If anybody has any recommendations regarding the style of the app, feel free to comment or make changes. The window for the app is not resizeable due to the fact that the majority of it is composed of text which cannot be easily resized on the fly. 
+
+I'm also open to more ideas for features!</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>siddharthkumarjha:</strong></p>
+                    <p>I am just curious, but would it be possible to have two separate branches where one is for command line users and the other is for GTK GUI users. So we can avoid the bloat?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>I considered that but many well-known applications have both CLI and GUI. Also the difference in separating them would be negligible. I don't think it's worth complicating things and having to manage 2 release versions. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Great stuff, here's my initial feedback: 
+
+**Password prompt:** 
+
+After `sudo ./auto-cpufreq-installer --install` and I click on auto-cpufreq icon (desktop entry), GNOME will ask me for root password. At this stage I would leave this out, because root password is not needed for anything. 
+
+Then on next screen "auto-cpufreq daemon is not running. Please click the install button" that's when I would pop the "root password" dialog.  
+
+![gnome auth](http://foolcontrol.org/wp-content/uploads/2023/02/gnome-auth-required.png).
+
+But even that's not too much of a problem, my problem is that each time I close auto-cpufreq GUI, and it goes back to run in background and I run the auto-cpufreq icon, that same password prompt will pop up. There are ways to [disable this prompt](https://forum.manjaro.org/t/disable-gnome-keyring-password-prompt/41065), but I doubt that people will go thru this trouble to do this ... hence is there a way to avoid asking/prompting for password since it's not really needed, as `auto-cpufreq --stats` was originally designed to not even need root password, so I think same thing should be with GUI stats.
+
+Same thing is after I click on auto-cpufreq, again same dialog will pop up, and I think some people might be bothered by this. I'm one of them.
+
+**Dash icon** is not really visible. I use GNOME (dark mode by default) on Wayland, and auto hide my dash, so when it shows up (it's bit transparent) on a green background you can barely see it. We might need to increase it when it's in the dash ...
+
+![dash icon](http://foolcontrol.org/wp-content/uploads/2023/02/auto-cpufreq-dash-icon.png)
+
+Can we try using the other whiter version of icon for dash? Although I see it's pulled up from the icon (desktop entry itself), so the answer is probably no. When I search for it, or when I click on "burger bar" it looks great. We need to figure out how to make it more visible ...
+
+**On hover Dash icon == App.py**
+
+Let's fix this to auto-cpufreq.
+
+**Have same output as `--stats`:** currently, Linux distro & kernel are on the bottom of GUI window, for consistency sake let's have exact layout/stats as they are on cli version.
+
+**Pull contents bit higher** can contents be brought up higher to the window title, or is burger bar blocking it from going higher?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>So the root password is required because both the governor override and daemon install/removal require it, however, it can be done differently. Instead of having it now where it prompts for a password upon opening the app, it could prompt for a password every time you try to perform a root action like you were saying
+
+I considered this but didn't know if it would be annoying for the user to enter their password every time they want to override or remove the override, but perhaps it would be better that way. Let me know your thoughts
+
+
+Regarding the dash icon, I was having issues with GTK wanting to show the icon unless I scaled it down. I'll see if I can fix this. I currently use a window manager only, so I don't have a dash, but I'll try to test in a DE.
+
+> On hover Dash icon == App.py
+Let's fix this to auto-cpufreq.
+
+ah, since I don't have a dash, I didn't even know this way a thing. I'll look into changing this as well
+
+> Have same output as --stats: currently, Linux distro & kernel are on the bottom of GUI window, for consistency sake let's have exact layout/stats as they are on cli version.
+
+Sounds good
+
+> Pull contents bit higher can contents be brought up higher to the window title, or is burger bar blocking it from going higher?
+
+I can shift the text up to be in-line with the menu button. Wasn't sure how it would look, but I'll give it a try and see if it looks ok
+
+Thanks for taking a look</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@shadeyg56 let me know privately if I can help with any of how it looks like in a DE.
+
+I also just ran to build a snap package out of it to see if we would need to request any additional permissions for GTK/GUI part. But running `snapcraft` completely fails, on first look it seems like we're missing some python dependencies. 
+
+[Real interesting stuff starts towards the end ...](https://paste.debian.net/plainh/3f3a0315)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>> But running snapcraft completely fails, on first look it seems like we're missing some python dependencies.
+
+I don't use snap so I can't confirm this, but there was a Python requirement added to `requirements.txt` and also some system packages added to `auto-cpufreq-installer`
+
+That could be the issue. I'm not familiar with how we would add those to Snapcraft</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@shadeyg56 could you please make following two packages `libgirepository1.0-dev` & `libcairo2-dev` to `build-packages` section as part of the `snap/snapcraft.yaml` file, i.e:
+
+```
+parts:
+  auto-cpufreq:
+    plugin: python
+    python-packages:
+       - setuptools
+       - wheel
+    build-packages:
+       - gcc
+       - python3-dev
+       - libgirepository1.0-dev
+       - libcairo2-dev
+```
+
+This will help successfully build the snap package and make it installable, however the icon won't show up for some reason, hence I'm asking about this myself on [Snapcraft forums](https://forum.snapcraft.io/t/app-icon-desktop-entry-not-showing-up/33960) so let's see what they say.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Ok so I pushed all of the changes. Here's how it looks now
+
+![image](https://user-images.githubusercontent.com/31134255/220256938-bec19268-1ab3-4f0e-a14f-8a884b0912b6.png)
+
+Also, I installed GNOME and was not able to reproduce the fuzzy icon. Not sure what the issue is 
+
+> I considered this but didn't know if it would be annoying for the user to enter their password every time they want to override or remove the override, but perhaps it would be better that way. Let me know your thoughts
+
+You never said what you wanted me to do regarding the password prompt so I haven't changed it yet.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Ok so I pushed all of the changes. Here's how it looks now
+
+Changes look great, but I wasn't able to verify them. Because now after `sudo ./auto-cpufreq-installer --install`, I click on `auto-cpufreq` icon, it'll allow me to "install daemon" via GUI. But after that, after I click on the icon, I'll be asked for the password and nothing happens after that. CLI still works as expected, and `auto-cpufreq --stats` will work fine.
+
+This is what output of auto-cpufreq-gtk (what icon entry call will exec) looks like when I run it in terminal:
+
+```
+auto-cpufreq-gtk
+localuser:root being added to access control list
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/app.py", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==2.0b0', 'app.py')
+  File "/opt/auto-cpufreq/venv/lib/python3.10/site-packages/pkg_resources/__init__.py", line 656, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/opt/auto-cpufreq/venv/lib/python3.10/site-packages/pkg_resources/__init__.py", line 1460, in run_script
+    exec(script_code, namespace, namespace)
+  File "/opt/auto-cpufreq/venv/lib/python3.10/site-packages/auto_cpufreq-2.0b0-py3.10.egg/EGG-INFO/scripts/app.py", line 85, in <module>
+  File "/opt/auto-cpufreq/venv/lib/python3.10/site-packages/auto_cpufreq-2.0b0-py3.10.egg/EGG-INFO/scripts/app.py", line 27, in __init__
+  File "/opt/auto-cpufreq/venv/lib/python3.10/site-packages/auto_cpufreq-2.0b0-py3.10.egg/EGG-INFO/scripts/app.py", line 66, in build
+  File "/opt/auto-cpufreq/venv/lib/python3.10/site-packages/auto_cpufreq-2.0b0-py3.10.egg/EGG-INFO/scripts/app.py", line 56, in main
+AttributeError: 'MyWindow' object has no attribute 'vbox_top'
+localuser:root being removed from access control list
+access control enabled, only authorized clients can connect
+SI:localuser:ahodzic
+```
+
+Apparently has something to do with running [GUI app as a root ...](https://wiki.archlinux.org/title/Talk:Running_GUI_applications_as_root). You don't have this problem? 
+
+Also from code POV, let's rename `MyWindow` to `toolWindow` or something bit more descriptive :) 
+
+> Also, I installed GNOME and was not able to reproduce the fuzzy icon. Not sure what the issue is
+
+Maybe it's an issue since Ubuntu has it's own "dash to dock" which is built on of GNOME Shell one. I'll try to replicate as part of "vanilla" GNOME dash, once I have it working again.
+
+> You never said what you wanted me to do regarding the password prompt so I haven't changed it yet.
+
+Let's have GNOME Shell only ask for password (display prompt), when the password is needed.
+
+**Example 1:** when auto-cpufreq icon is just clicked, there's no need to ask for password. If I click on "install daemon" button then it should ask me for password.
+
+**Example 2:** when auto-cpufreq icon is clicked after daemon is installed, there's no need for password prompt, so let's eliminate need to ask for it. As even `auto-cpufreq --stats` was designed and can be run without sudo and will output the stats.
+
+In a nutshell, let's only ask for the password when password is needed, now it needs a password as I click on the icon. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>> Changes look great, but I wasn't able to verify them. Because now after sudo ./auto-cpufreq-installer --install, I click on auto-cpufreq icon, it'll allow me to "install daemon" via GUI. But after that, after I click on the icon, I'll be asked for the password and nothing happens after that. CLI still works as expected, and auto-cpufreq --stats will work fine.
+
+Fixed in commit 3a4fd1d
+
+> In a nutshell, let's only ask for the password when password is needed, now it needs a password as I click on the icon.
+
+As of commit 3a8eaaf,  it will only ask for password upon daemon install, remove, or governor override.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> > Changes look great, but I wasn't able to verify them. Because now after sudo ./auto-cpufreq-installer --install, I click on auto-cpufreq icon, it'll allow me to "install daemon" via GUI. But after that, after I click on the icon, I'll be asked for the password and nothing happens after that. CLI still works as expected, and auto-cpufreq --stats will work fine.
+> 
+> Fixed in commit [3a4fd1d](https://github.com/AdnanHodzic/auto-cpufreq/commit/3a4fd1dc3f1fbd2c7e691020d8dbea08c761d9ca)
+> 
+> > In a nutshell, let's only ask for the password when password is needed, now it needs a password as I click on the icon.
+> 
+> As of commit [3a8eaaf](https://github.com/AdnanHodzic/auto-cpufreq/commit/3a8eaaf03e620aa00b1e1a0e3c43d8ea6031a1d2), it will only ask for password upon daemon install, remove, or governor override.
+
+Looking great!
+
+Also, icon is not showing up in dash anymore, and it's still being printed as "app.py".
+![auto-cpufreq icon](http://foolcontrol.org/wp-content/uploads/2023/02/Screenshot-from-2023-02-27-11-32-53.png)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Summary of what needs to be done for this PR to be merged with `master`:
+
+1. Fix how the icon is [displayed in dock](https://github.com/AdnanHodzic/auto-cpufreq/pull/486#issuecomment-1446084771)
+2. Info text is more aligned towards "CPU frequency scaling", we need both of these sections centered so they consuming same amount of space each ![auto-cpufreq text alignment](http://foolcontrol.org/wp-content/uploads/2023/05/auto-cpufreq-gtk-text-alignment.png )
+3. I'm still getting asked for root password too many times. For example, I'll be asked for root password when opening auto-cpufreq GUI/GTK app, and then I'll be asked for root password again when switching between i.e "default" to "performance" governor override as part of GUI and I find this counterproductive. At least switching between governors should be done without needing and being asked for root password.
+4. Make snap package updates, namely application entry and desktop icon is not created if snap package is build using existing changes, [official docs reference](https://snapcraft.io/docs/desktop-menu-support), and/or [google search results](https://www.google.com/search?q=create+icon+snap+packages&oq=create+icon+snap+packages&aqs=chrome..69i57j33i160l2j33i22i29i30j33i671l2.2449j0j1&sourceid=chrome&ie=UTF-8). As stated before I could help with this.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>We're back in business after a long hiatus. Several commits have been pushed to fix the issues addressed above. @AdnanHodzic  please test the snap package and let me know how it goes. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Summary of what needs to be done for this PR to be merged with `master`:
+> 
+> 1. Fix how the icon is [displayed in dock](https://github.com/AdnanHodzic/auto-cpufreq/pull/486#issuecomment-1446084771)
+> 2. Info text is more aligned towards "CPU frequency scaling", we need both of these sections centered so they consuming same amount of space each ![auto-cpufreq text alignment](https://camo.githubusercontent.com/9a812a1036704984608b7fddae0d79ced8810925027378434296ca8b90c5ea4a/687474703a2f2f666f6f6c636f6e74726f6c2e6f72672f77702d636f6e74656e742f75706c6f6164732f323032332f30352f6175746f2d637075667265712d67746b2d746578742d616c69676e6d656e742e706e67)
+> 3. I'm still getting asked for root password too many times. For example, I'll be asked for root password when opening auto-cpufreq GUI/GTK app, and then I'll be asked for root password again when switching between i.e "default" to "performance" governor override as part of GUI and I find this counterproductive. At least switching between governors should be done without needing and being asked for root password.
+> 4. Make snap package updates, namely application entry and desktop icon is not created if snap package is build using existing changes, [official docs reference](https://snapcraft.io/docs/desktop-menu-support), and/or [google search results](https://www.google.com/search?q=create+icon+snap+packages&oq=create+icon+snap+packages&aqs=chrome..69i57j33i160l2j33i22i29i30j33i671l2.2449j0j1&sourceid=chrome&ie=UTF-8). As stated before I could help with this.
+
+1. Fixed
+2. I think we can ignore this one as it's not that important, and it looks good as it is.
+3. I'm now getting prompted only for root password when governor is changed from i.e "default" to "performance" which is good.
+4. As we discussed in PM, Snap icon (desktop entry) is missing but I'll look into this myself. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@shadeyg56 regarding point 4, I made changes that add the Snap icon, could you please enable `Allow edits from maintainers` checkbox [so I can also push my changes to this branch](https://stackoverflow.com/questions/20928727/adding-commits-to-another-persons-pull-request-on-github)?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>@AdnanHodzic it should already be enabled</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Agreed to merge the changes and make subsequent changes as part of new PR.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

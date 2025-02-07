@@ -1,0 +1,90 @@
+
+        <html>
+        <head>
+            <title>Issue #328: Logitech wireless mouse forces battery behavior </title>
+        </head>
+        <body>
+            <h1>Logitech wireless mouse forces battery behavior </h1>
+            <p><strong>Issue #328</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Plugging in a Logitech Unifying Receiver and wireless mouse results in auto-cpufreq believing that the system is "discharging", even if it is plugged into AC. 
+
+When the receiver is plugged in, /sys/class/power_supply contains three entries: AC, BAT0, and hidpp_battery_1. The first two correspond to the laptop's AC supply and built in battery; the last one corresponds to the battery in the wireless mouse and is normally always in a discharging state. Unfortunately, the charging() function in core.py is picking up this status and using it to assume that the entire system is on battery power, adjusting the CPU governor accordingly.
+
+The proper behavior should be to check the AC status before all others and/or skip any power_supply entries which are not actual power supplies for the host.
+
+### Error output:
+
+
+### System information:
+-------------------------------------------------------------------------------
+
+Linux distro: EndeavourOS rolling rolling
+Linux kernel: 5.15.10-lqx2-1-lqx
+Processor: Intel(R) Core(TM)2 Extreme CPU Q9300  @ 2.53GHz
+Cores: 4
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2535 MHz
+CPU min frequency: 1600 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  4.0%     57 °C     2394 MHz
+CPU1:	  2.0%     57 °C     2535 MHz
+CPU2:	  3.0%     57 °C     2535 MHz
+CPU3:	  7.0%     55 °C     2535 MHz
+
+auto-cpufreq version:
+Git commit: bdc546b
+
+Python: 3.10.1
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 8.0.3
+distro package 1.6.0
+
+Computer type: Portable
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.21 %
+
+Total CPU usage: 1.5 %
+Total system load: 0.6
+Average temp. of all cores: 56.5 °C
+
+Currently using: performance governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+
+
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Thank you very much for your bug report. 
+
+This bug is brought to our attention in #321 and proposed fix #322 is already merged in master branch.
+I hope it works for you too, feel free to test it out.
+
+This fix should be part of a new release in a few days.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>This issue has now been resolved as part of [v1.9.0 release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

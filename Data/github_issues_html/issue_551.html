@@ -1,0 +1,28 @@
+
+        <html>
+        <head>
+            <title>Issue #551: replaced #!/bin/bash  with  #!/usr/bin/env bash</title>
+        </head>
+        <body>
+            <h1>replaced #!/bin/bash  with  #!/usr/bin/env bash</h1>
+            <p><strong>Issue #551</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Some Distros do not have /bin/bash by default, but have bash installed at some other location and in PATH.
+To allow all of these distros to use these shell scripts, change the shebangs to search for bash in PATH.
+
+More to why this is better [here](https://unix.stackexchange.com/questions/29608/why-is-it-better-to-use-usr-bin-env-name-instead-of-path-to-name-as-my)</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>
+LGTM, thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

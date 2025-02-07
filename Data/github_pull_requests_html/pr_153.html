@@ -1,0 +1,55 @@
+
+        <html>
+        <head>
+            <title>Pull Request #153: Improved Python file structure (rename source > auto_cpufreq)</title>
+        </head>
+        <body>
+            <h1>Improved Python file structure (rename source > auto_cpufreq)</h1>
+            <p><strong>Pull Request #153</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>This corrects the generic `/usr/lib/python3.9/site-packages/source/` > `/usr/lib/python3.9/site-packages/auto_cpufreq/`
+
+Now we have matching proper folders:
+```
+/usr/lib/python3.9/site-packages/auto_cpufreq/
+/usr/lib/python3.9/site-packages/auto_cpufreq-1.0-py3.9.egg-info/
+``</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Makes sense, thanks for your contribution.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>yochananmarqos:</strong></p>
+                    <p>The `source` folder is still leftover on the remote side of both our repos, but not my local fork. I guess I must've done `mv` and `git add` instead of `git mv`. Oops.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Do you want me to revert your last changes, or do you want to create a new PR with fix?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>yochananmarqos:</strong></p>
+                    <p>I guess I'll just do a quick new one since this is already done.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>yochananmarqos:</strong></p>
+                    <p>Done: #154 </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>yochananmarqos:</strong></p>
+                    <p>@crian One more change to the PKGBUILD needs to be done to reflect to folder name change. In the prepare() function, the last bit in the `sed` line needs to be changed from `source/core.py` to `auto_cpufreq/core.py`.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

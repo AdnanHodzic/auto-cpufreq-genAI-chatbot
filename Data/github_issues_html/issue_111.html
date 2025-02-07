@@ -1,0 +1,76 @@
+
+        <html>
+        <head>
+            <title>Issue #111: auto-cpufreq --debug git error</title>
+        </head>
+        <body>
+            <h1>auto-cpufreq --debug git error</h1>
+            <p><strong>Issue #111</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+```text
+fatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+Traceback (most recent call last):
+  File "/usr/bin/auto-cpufreq", line 141, in <module>
+    main()
+  File "/usr/lib/python3.8/site-packages/click/core.py", line 829, in __call__
+    return self.main(*args, **kwargs)
+  File "/usr/lib/python3.8/site-packages/click/core.py", line 782, in main
+    rv = self.invoke(ctx)
+  File "/usr/lib/python3.8/site-packages/click/core.py", line 1066, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/usr/lib/python3.8/site-packages/click/core.py", line 610, in invoke
+    return callback(*args, **kwargs)
+  File "/usr/bin/auto-cpufreq", line 95, in main
+    app_version()
+  File "/usr/lib/python3.8/site-packages/source/core.py", line 48, in app_version
+    print("Build git commit:", check_output(["git", "describe", "--always"]).strip().decode())
+  File "/usr/lib/python3.8/subprocess.py", line 411, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+  File "/usr/lib/python3.8/subprocess.py", line 512, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['git', 'describe', '--always']' returned non-zero exit status 128.
+```
+---
+
+### System information:
+```text
+Linux distro: Arch Linux
+Linux kernel: 5.8.7-arch1-1
+```
+---
+
+Getting this error with AUR package beacuse there is no git version of auto-cpufreq available.
+Is there another way to check the app version?
+
+```text
+def app_version():
+    print("Build git commit:", check_output(["git", "describe", "--always"]).strip().decode())
+```</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I only intended for this to show only on installs with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq#auto-cpufreq-installer). I've (temporarily) disabled this functionality in last commit, I want to re-think how to feed app version as I'm also facing same issue with snap package. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@crian in last commit I re-enabled `app_version` function, can you confirm that now you're not getting any errors with AUR, as it should only work if installed with `auto-cpufreq-installer`.
+
+In meantime, I'll leave this issue open until I figure out how to feed git commit/version for AUR/SNAP.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I'm closing this issue, as adding version for AUR/SNAP package will be a new feature.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

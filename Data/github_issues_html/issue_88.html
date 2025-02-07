@@ -1,0 +1,178 @@
+
+        <html>
+        <head>
+            <title>Issue #88: PermissionError: [Errno 1] Operation not permitted</title>
+        </head>
+        <body>
+            <h1>PermissionError: [Errno 1] Operation not permitted</h1>
+            <p><strong>Issue #88</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hello,
+I know another user sent a similar issue, but he seems to have solved it by installing from github...while I didnt. I used the auto-cpufreq-installer to install it. 
+Let me know if you need some other info about all this.
+Regards.
+
+### Error output:
+```
+$ sudo auto-cpufreq --live
+
+----------------------------- System information ------------------------------
+
+Linux distro: Ubuntu 20.04 focal
+Linux kernel: 5.4.0-42-generic
+Driver: intel_pstate
+Architecture: x86_64
+Processor: Intel(R) Pentium(R) CPU 2020M @ 2.40GHz
+Cores: 2
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 2400MHz
+CPU min frequency: 1200MHz
+
+CPU frequency for each core:
+
+CPU0: 2277 MHz
+CPU1: 2288 MHz
+
+Temperature for each physical core:
+
+CPU0 temp: 51°C
+CPU1 temp: 50°C
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+Setting to use: "performance" governor
+
+Total CPU usage: 1.0 %
+Total system load: 0.62 
+
+High load, setting turbo boost: on
+PermissionError: [Errno 1] Operation not permitted
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.0', 'auto-cpufreq')
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 667, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/usr/lib/python3/dist-packages/pkg_resources/__init__.py", line 1470, in run_script
+    exec(script_code, namespace, namespace)
+  File "/usr/local/lib/python3.8/dist-packages/auto_cpufreq-1.0-py3.8.egg/EGG-INFO/scripts/auto-cpufreq", line 115, in <module>
+  File "/usr/lib/python3/dist-packages/click/core.py", line 764, in __call__
+    return self.main(*args, **kwargs)
+  File "/usr/lib/python3/dist-packages/click/core.py", line 717, in main
+    rv = self.invoke(ctx)
+  File "/usr/lib/python3/dist-packages/click/core.py", line 956, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/usr/lib/python3/dist-packages/click/core.py", line 555, in invoke
+    return callback(*args, **kwargs)
+  File "/usr/local/lib/python3.8/dist-packages/auto_cpufreq-1.0-py3.8.egg/EGG-INFO/scripts/auto-cpufreq", line 76, in main
+  File "/usr/local/lib/python3.8/dist-packages/auto_cpufreq-1.0-py3.8.egg/source/core.py", line 402, in set_autofreq
+  File "/usr/local/lib/python3.8/dist-packages/auto_cpufreq-1.0-py3.8.egg/source/core.py", line 362, in set_performance
+  File "/usr/local/lib/python3.8/dist-packages/auto_cpufreq-1.0-py3.8.egg/source/core.py", line 52, in turbo
+  File "/usr/lib/python3.8/pathlib.py", line 1247, in write_text
+    return f.write(data)
+PermissionError: [Errno 1] Operation not permitted
+
+```
+---
+
+### System information:
+```
+$ sudo auto-cpufreq --debug
+
+-------------------------------------------------------------------------------
+
+System: LENOVO product: 20251 v: Lenovo G700 serial: <filter> 
+           Mobo: LENOVO model: Ginkgo 7A serial: <filter> UEFI: LENOVO v: 7ACN28WW date: 09/02/2013 
+Battery:   ID-1: BAT0 charge: 27.8 Wh condition: 28.1/40.4 Wh (70%) 
+CPU:       Governors: performance powersave Topology: Dual Core model: Intel Pentium 2020M bits: 64 type: MCP L2 cache: 2048 KiB 
+           Speed: 1490 MHz min/max: 1200/2400 MHz Core speeds (MHz): 1: 1899 2: 2095 
+Graphics:  Device-1: Intel 3rd Gen Core processor Graphics driver: i915 v: kernel 
+           Display: server: X.Org 1.20.8 driver: modesetting unloaded: fbdev,vesa resolution: 1600x900~60Hz 
+           OpenGL: renderer: Mesa DRI Intel HD Graphics 2500 (IVB GT1) v: 4.2 Mesa 20.0.8 
+Audio:     Device-1: Intel 7 Series/C216 Family High Definition Audio driver: snd_hda_intel 
+           Sound Server: ALSA v: k5.4.0-42-generic 
+Network:   Device-1: Broadcom and subsidiaries BCM43142 802.11b/g/n driver: wl 
+           IF: wlp2s0 state: up mac: <filter> 
+           Device-2: Qualcomm Atheros AR8162 Fast Ethernet driver: alx 
+           IF: enp3s0 state: down mac: <filter> 
+Drives:    Local Storage: total: 298.09 GiB used: 208.55 GiB (70.0%) 
+           ID-1: /dev/sda vendor: HGST (Hitachi) model: HTS545032A7E380 size: 298.09 GiB 
+Partition: ID-1: / size: 19.10 GiB used: 13.93 GiB (73.0%) fs: ext4 dev: /dev/sda2 
+           ID-2: /home size: 269.75 GiB used: 194.38 GiB (72.1%) fs: ext4 dev: /dev/sda4 
+           ID-3: swap-1 size: 3.88 GiB used: 229.8 MiB (5.8%) fs: swap dev: /dev/sda3 
+Sensors:   
+{'battery': sbattery(percent=99.03948772678763, secsleft=<BatteryTime.POWER_TIME_UNLIMITED: -2>, power_plugged=True),
+ 'fans': {},
+ 'temperatures:': {'acpitz': [shwtemp(label='', current=47.0, high=88.0, critical=88.0),
+                              shwtemp(label='', current=47.0, high=None, critical=None)],
+                   'coretemp': [shwtemp(label='Package id 0', current=53.0, high=72.0, critical=90.0),
+                                shwtemp(label='Core 0', current=53.0, high=72.0, critical=90.0),
+                                shwtemp(label='Core 1', current=50.0, high=72.0, critical=90.0)]}} System Temperatures: cpu: 53.0 C mobo: 53.0 C 
+           Fan Speeds (RPM): N/A 
+Info:      Processes: 210 Uptime: 2d 5h 21m Memory: 3.72 GiB used: 1.92 GiB (51.4%) Shell: bash inxi: 3.0.38 
+
+-------------------------------------------------------------------------------
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>thanks for the report!
+can u do this and say what u get:
+`sudo sh -c "echo > 0 /sys/devices/system/cpu/intel_pstate/no_turbo"`
+`sudo sh -c "echo > 1 /sys/devices/system/cpu/intel_pstate/no_turbo"`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>It seems that your cpu doesn't support `turbo boost`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>Found similar issue on [SO](https://askubuntu.com/questions/876903/cannot-change-intel-turbo-boost-sys-devices-system-cpu-intel-pstate-no-turbo)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Karrelax:</strong></p>
+                    <p>```
+sudo sh -c "echo > 1 /sys/devices/system/cpu/intel_pstate/no_turbo"
+cat /sys/devices/system/cpu/intel_pstate/no_turbo
+1
+sudo sh -c "echo > 0 /sys/devices/system/cpu/intel_pstate/no_turbo"
+cat /sys/devices/system/cpu/intel_pstate/no_turbo
+1
+```
+So yeah, I guess the turbo boost option is not an option for me.
+So the fact that auto-cpufreq assumes turbo boost is possible is what brings up the problem. Thanks for the quick support :)
+
+EDIT: I just tested your change to the core.py and in my case, it solves the issue. For me, the issue can be closed, I wait for your decission.
+ Thanks!
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>Oh, nice! Thanks for the testing!
+it will be closed automatically after the merge will be done</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Kwaadpepper:</strong></p>
+                    <p>I can confirm I don't have the issue with the last release anymore.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

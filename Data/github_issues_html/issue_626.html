@@ -1,0 +1,208 @@
+
+        <html>
+        <head>
+            <title>Issue #626: Installation errors out saying permission denied</title>
+        </head>
+        <body>
+            <h1>Installation errors out saying permission denied</h1>
+            <p><strong>Issue #626</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+- Reformatted my PC and reinstalled Ubuntu 23.10 multiple times now and reinstalled auto-cpufreq
+
+### Error output:
+```text
+$ sudo auto-cpufreq --install
+
+--------------------- Deploying auto-cpufreq as a daemon ----------------------
+
+* Turn off bluetooth on boot
+
+* Deploy auto-cpufreq install script
+
+* Deploy auto-cpufreq remove script
+
+----------------------------------- Warning -----------------------------------
+
+Detected running GNOME Power Profiles daemon service!
+This daemon might interfere with auto-cpufreq and has been disabled.
+
+This daemon is not automatically disabled in "monitor" mode and
+will be enabled after auto-cpufreq is removed.
+
+auto-cpufreq snap package installed, GNOME Power Profiles Daemon should be disabled.
+
+Using profile:  balanced
+
+* Disabling GNOME power profiles
+Removed "/etc/systemd/system/graphical.target.wants/power-profiles-daemon.service".
+Created symlink /etc/systemd/system/power-profiles-daemon.service → /dev/null.
+/bin/sh: 1: /usr/local/bin/auto-cpufreq-install: Permission denied
+
+----------------- auto-cpufreq daemon installed and running -----------------
+
+To view live stats, run:
+auto-cpufreq --stats
+
+To disable and remove auto-cpufreq daemon, run:
+sudo auto-cpufreq --remove
+
+-------------------------------------------------------------------------------
+
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+Using settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 23.10 Mantic Minotaur
+Linux kernel: 6.5.0-14-generic
+Processor: AMD Ryzen 7 PRO 6850U with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: /bin/sh: 1: cpufreqctl.auto-cpufreq: Permission denied
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4768 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      2.0%        43 °C      1432 MHz
+CPU1      0.0%        43 °C       400 MHz
+CPU2      0.0%        43 °C       400 MHz
+CPU3      0.0%        43 °C       400 MHz
+CPU4      0.0%        43 °C       400 MHz
+CPU5      0.0%        43 °C       400 MHz
+CPU6      1.0%        43 °C       400 MHz
+CPU7      0.0%        43 °C      2106 MHz
+CPU8      0.0%        43 °C      1396 MHz
+CPU9      0.0%        43 °C       400 MHz
+CPU10      2.0%        43 °C       400 MHz
+CPU11      0.0%        43 °C       400 MHz
+CPU12      0.0%        43 °C      3250 MHz
+CPU13      0.0%        43 °C       400 MHz
+CPU14      1.0%        43 °C      2021 MHz
+CPU15      0.0%        43 °C       400 MHz
+
+CPU fan speed: 2073 RPM
+
+auto-cpufreq version: 2.1.0 (git: fe29620)
+
+Python: 3.11.6
+psutil package: 5.9.7
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.09 %
+
+Total CPU usage: 0.3 %
+Total system load: 0.56
+Average temp. of all cores: 43.00 °C 
+
+Currently using: /bin/sh: governor
+Warning: CPU turbo is not available
+Currently turbo boost is: off
+
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+---
+
+I am not sure what's going on but everytime I run the installation script it always say permission denied. How do I get through this? This causing such a massive system instability as my CPU is running only at 400mhz. What am I missing?
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>msmafra:</strong></p>
+                    <p>I comes to mind is their migration to Snaps. Obviously it's a guess, but they are setting snaps as main packaging for Ubuntu.
+I'm downloading (Huge ISO 4.8GB for a live media one) it to test. Not just for test auto-cpufreq, but other things too.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>hingen:</strong></p>
+                    <p>Could you perhaps describe your method of installation? Did you install via snap or via cloning the Git repo or perhaps via some other means? If possible, maybe provide the commands which you ran?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>galacticappster04:</strong></p>
+                    <p>Hello @hingen apologies I haven't provided this earlier. So here are my step from fresh Ubuntu Install:
+- Install Ubuntu normally, using legacy installer (Their installer from official is not working for me)
+- Clone this project
+- Run ./auto-cpufreq-installer
+- After installation, it installed correctly and without problem.
+- When I run sudo auto-cpufreq --stats, it says I am not running in daemon so I install via sudo auto-cpufreq --install
+- After installing it says permission denied. I am not too technical on this but it appears I can't revert back by uninstalling auto-cpufreq and also it appears it broke power profile (e.g. I can't select power profile anymore from top-left corner since the option is gone). My entire system lags after that failed installation and upon checking on my cpu cores most of my cores are stuck at 400mhz. Also, uninstalling yields similar error, the python installer just stops complaining of permission denied. Since I am not too familiar to tinker with Laptop battery management I just reinstall Ubuntu 23.10 and repeat the step again. At the time I blame the way I installed Ubuntu or my setup script after I reinstall Ubuntu (I have an automated script that reinstall my machine and put it back to where it was once), my install script basically include step to install auto-cpufreq just as described in the Github page (e.g clone, install, run --stats). Its weird because it was working before, I reinstalled Ubuntu because I jump to Kernel from 6.5-6.7 but it made my system a bit unstable (I was hoping if the kernel fix the screen resolution bug and sdma time out error with AMD GPUs). 
+
+Unfortunately, I have been trying this for 5 times already yesterday and out of frustration just factory reset my laptop, reinstall Ubuntu at the cost of losing some of my weeks progress in the things I am doing then retried my step (5th time) and its still the same.
+
+Obviously, I am not willing replicate this on my machine anymore. If it helps my machine is Lenovo P14s gen 3 AMD and here is my neofetch:
+
+```
+        `:+ssssssssssssssssss+:`           ------------------- 
+      -+ssssssssssssssssssyyssss+-         OS: Ubuntu 23.10 x86_64 
+    .ossssssssssssssssssdMMMNysssso.       Host: 21J5CTO1WW ThinkPad P14s Gen 3 
+   /ssssssssssshdmmNNmmyNMMMMhssssss/      Kernel: 6.5.0-14-generic 
+  +ssssssssshmydMMMMMMMNddddyssssssss+     Uptime: 7 hours, 2 mins 
+ /sssssssshNMMMyhhyyyyhmNMMMNhssssssss/    Packages: 3023 (dpkg), 17 (flatpak), 
+.ssssssssdMMMNhsssssssssshNMMMdssssssss.   Shell: bash 5.2.15 
++sssshhhyNMMNyssssssssssssyNMMMysssssss+   Resolution: 1920x1200 
+ossyNMMMNyMMhsssssssssssssshmmmhssssssso   DE: GNOME 45.2 
+ossyNMMMNyMMhsssssssssssssshmmmhssssssso   WM: Mutter 
++sssshhhyNMMNyssssssssssssyNMMMysssssss+   WM Theme: Adwaita 
+.ssssssssdMMMNhsssssssssshNMMMdssssssss.   Theme: Yaru [GTK2/3] 
+ /sssssssshNMMMyhhyyyyhdNMMMNhssssssss/    Icons: Yaru [GTK2/3] 
+  +sssssssssdmydMMMMMMMMddddyssssssss+     Terminal: gnome-terminal 
+   /ssssssssssshdmNNNNmyNMMMMhssssss/      CPU: AMD Ryzen 7 PRO 6850U with Rade 
+    .ossssssssssssssssssdMMMNysssso.       GPU: AMD ATI Radeon 680M 
+      -+sssssssssssssssssyyyssss+-         Memory: 6208MiB / 31345MiB 
+
+```
+Currently, I am not using auto-cpufreq and just didn't bother and decided to stick with power-profiles that this OS comes with for now. 
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>msmafra:</strong></p>
+                    <p>After installing Ubuntu (only worked with legacy installer) I had a different problem running sudo auto-cpufreq --live. When it tries to set the governor, it can´t and errors for each core saying that the "Device is busy". 
+I tried to pinpoint the error and added xtrace to the cpufreqctl, but it breaks the python script. Doing the modifications using a separated script or manually in the terminal issues no errors in some actions. I forgot to copy the output, ant it is not in the logs. I'll have to boot to Ubuntu another time to copy it.
+I'm resuming modifying the bash scripts, I started way back, but forgot/lost track of time</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing the issue due to inactivity.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Tuxman2:</strong></p>
+                    <p>Hello,
+
+I've the same problem with Fedora 41 Workstation. I made the auto-cpufreq-installer file executable (chmod +x auto-cpufreq-installer). After that, I launched the sudo ./auto-cpufreq-installer command
+Despit it, I've got the 'permission denied' message.
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

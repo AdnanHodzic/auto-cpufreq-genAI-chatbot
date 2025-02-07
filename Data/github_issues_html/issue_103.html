@@ -1,0 +1,91 @@
+
+        <html>
+        <head>
+            <title>Issue #103: [AUR] Missing /var/log/auto-cpufreq.log makes service fail to start</title>
+        </head>
+        <body>
+            <h1>[AUR] Missing /var/log/auto-cpufreq.log makes service fail to start</h1>
+            <p><strong>Issue #103</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+
+I installed the AUR package, and ran:
+```
+sudo systemctl enable auto-cpufreq
+sudo systemctl start auto-cpufreq
+```
+The service fails to start with this error:
+```
+user@mycomputer ~> sudo systemctl status auto-cpufreq
+● auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux
+     Loaded: loaded (/usr/lib/systemd/system/auto-cpufreq.service; enabled; vendor preset: disabled)
+     Active: inactive (dead)
+  Condition: start condition failed at Mon 2020-08-31 19:32:47 MDT; 1s ago
+             └─ ConditionPathExists=/var/log/auto-cpufreq.log was not met
+
+Aug 31 19:13:22 mycomputer systemd[1]: Condition check resulted in auto-cpufreq - Automatic CPU speed & power optimizer for Linux being skipped.
+
+```
+If I reboot, the service also fails to start with the same error.
+
+I think the AUR package should be making `/var/log/auto-cpufreq.log`, but it doesn't, so the service fails to start because the log file is missing. If I manually create `/var/log/auto-cpufreq.log`, the service starts up fine.
+
+---
+
+### Neofetch:
+
+```
+                   -`                    user@mycomputer
+                  .o+`                   ------------------- 
+                 `ooo/                   OS: Arch Linux x86_64 
+                `+oooo:                  Host: GT72VR 7RE REV:1.0 
+               `+oooooo:                 Kernel: 5.8.5-8-tkg-pds 
+               -+oooooo+:                Uptime: 27 mins 
+             `/:-:++oooo+:               Packages: 1470 (pacman), 80 (flatpak) 
+            `/++++/+++++++:              Shell: fish 3.1.2 
+           `/++++++++++++++:             Resolution: 1920x1080 
+          `/+++ooooooooooooo/`           DE: GNOME 
+         ./ooosssso++osssssso+`          WM: Mutter 
+        .oossssso-````/ossssss+`         WM Theme: Adwaita 
+       -osssssso.      :ssssssso.        Theme: Adwaita-dark [GTK2/3] 
+      :osssssss/        osssso+++.       Icons: Adwaita [GTK2/3] 
+     /ossssssss/        +ssssooo/-       Terminal: gnome-terminal 
+   `/ossssso+/:-        -:/+osssso+-     CPU: Intel i7-7700HQ (8) @ 3.800GHz 
+  `+sso+:-`                 `.-/+oso:    GPU: NVIDIA GeForce GTX 1070 Mobile 
+ `++:.                           `-/+/   Memory: 2092MiB / 15968MiB 
+ .`                                 `/
+
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@crian can you please confirm this has nothing to do with AUR package?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>crian:</strong></p>
+                    <p>The log file is created during the install process.
+
+https://aur.archlinux.org/cgit/aur.git/tree/auto-cpufreq.install?h=auto-cpufreq-git</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>It will attempt to create this same file as part of `daemon_deploy` function unless it's already there: https://github.com/AdnanHodzic/auto-cpufreq/blob/master/source/core.py#L217</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing due to inactivity. </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

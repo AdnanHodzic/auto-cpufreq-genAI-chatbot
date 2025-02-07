@@ -1,0 +1,55 @@
+
+        <html>
+        <head>
+            <title>Issue #195: Auto cpy freq still pushing my cpu at 98 Celsius</title>
+        </head>
+        <body>
+            <h1>Auto cpy freq still pushing my cpu at 98 Celsius</h1>
+            <p><strong>Issue #195</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hey there, I am rocking a 2.3ghz amd A8-7410 i had my laptop on charging and the cpu's temp is 96 DEGREE CELSIUS but auto cpu freq is still putting it on performance mode when it should be trying to cool down my pc, Is there something i have to enable to make this happen?</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I suggest you take it down a notch. As this (`Auto-cpufreq wanna burn my pc or what?`) is not a way to go about reporting bugs in professional environment and expect someone to assist you with your problem.
+
+In meantime, could you include output of: `sudo auto-cpufreq --debug` and is there any difference in temperature if you plug the laptop out of power?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>crackedpotato007:</strong></p>
+                    <p>Happy now?
+Output https://srcb.in/n4OMaLSDTC</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Reason why it's working so hard is that `Total CPU usage: 67%` which is pretty high. But if computer is in semi-idle and not doing that much temperature can go below 40°. If you actively monitor the state with `sudo auto-cpufreq --stats`, and CPU is running this high, can you check what's process that's doing this?
+
+Also what happens if you plug the laptop out of power, does this lower the temperature? I'm curious to find out as this should force it to use `powersave` governor instead of `performance`.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>crackedpotato007:</strong></p>
+                    <p>> Reason why it's working so hard is that `Total CPU usage: 67%` which is pretty high. But if computer is in semi-idle and not doing that much temperature can go below 40°. If you actively monitor the state with `sudo auto-cpufreq --stats`, and CPU is running this high, can you check what's process that's doing this?
+> 
+> Also what happens if you plug the laptop out of power, does this lower the temperature? I'm curious to find out as this should force it to use `powersave` governor instead of `performance`.
+
+I actually cant plug out my pc because my batter health is like 12% so if i unplug it dies within a min</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Added [Troubleshooting section to README on how to change CPU management driver](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting).
+
+Could you please give this a try as I believe it will resolve your problem. If it doesn't please feel free to re-open this issue.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

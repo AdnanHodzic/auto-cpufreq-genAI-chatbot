@@ -1,0 +1,266 @@
+
+        <html>
+        <head>
+            <title>Issue #85: Battery appears as Charging while not</title>
+        </head>
+        <body>
+            <h1>Battery appears as Charging while not</h1>
+            <p><strong>Issue #85</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+
+--> Battery is: charging
+Battery appears as "charging" while not ! My computer was not charging at all.
+
+---
+
+### System information:
+-------------------------------------------------------------------------------
+
+System: HP product: HP EliteBook 830 G5 v: N/A serial: <filter> 
+           Mobo: HP model: 83B3 v: KBC Version 04.65.00 serial: <filter> UEFI: HP 
+           v: Q78 Ver. 01.10.01 date: 03/02/2020 
+Battery:   ID-1: BAT0 charge: 20.7 Wh condition: 47.3/47.3 Wh (100%) 
+CPU:       Governors: performance powersave Topology: Dual Core model: Intel Core i5-7300U bits: 64 type: MT MCP 
+           L2 cache: 3072 KiB 
+           Speed: 1611 MHz min/max: 400/2600 MHz Core speeds (MHz): 1: 1751 2: 1895 3: 1857 
+           4: 1802 
+Graphics:  Device-1: Intel HD Graphics 620 driver: i915 v: kernel 
+           Device-2: Lite-On HP HD Camera type: USB driver: uvcvideo 
+           Display: server: X.Org 1.20.8 driver: intel unloaded: modesetting,vesa 
+           resolution: 1920x1080~60Hz 
+           OpenGL: renderer: Mesa Intel HD Graphics 620 (KBL GT2) v: 4.6 Mesa 20.1.4 
+Audio:     Device-1: Intel Sunrise Point-LP HD Audio driver: snd_hda_intel 
+           Sound Server: ALSA v: k5.7.12-arch1-1 
+Network:   Device-1: Intel Ethernet I219-LM driver: e1000e 
+           IF: enp0s31f6 state: down mac: <filter> 
+           Device-2: Intel Wireless 8265 / 8275 driver: iwlwifi 
+           IF: wlp1s0 state: up mac: <filter> 
+Drives:    Local Storage: total: 238.47 GiB used: 110.49 GiB (46.3%) 
+           ID-1: /dev/sda vendor: Micron model: MTFDDAV256TBN-1AR15ABHA size: 238.47 GiB 
+Partition: ID-1: / size: 229.28 GiB used: 110.38 GiB (48.1%) fs: ext4 dev: /dev/dm-2 
+           ID-2: /boot size: 511.0 MiB used: 109.7 MiB (21.5%) fs: vfat dev: /dev/sda1 
+Swap:      ID-1: swap-1 type: partition size: 4.00 GiB used: 0 KiB (0.0%) dev: /dev/dm-1 
+Sensors:   
+{'battery': None,
+ 'fans': {},
+ 'temperatures:': {'acpitz': [shwtemp(label='', current=30.0, high=None, critical=None),
+                              shwtemp(label='', current=39.0, high=128.0, critical=128.0),
+                              shwtemp(label='', current=0.0, high=128.0, critical=128.0),
+                              shwtemp(label='', current=33.0, high=128.0, critical=128.0),
+                              shwtemp(label='', current=33.0, high=128.0, critical=128.0),
+                              shwtemp(label='', current=31.0, high=128.0, critical=128.0),
+                              shwtemp(label='', current=33.0, high=128.0, critical=128.0),
+                              shwtemp(label='', current=0.0, high=128.0, critical=128.0)],
+                   'coretemp': [shwtemp(label='Package id 0', current=42.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 0', current=42.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 1', current=39.0, high=100.0, critical=100.0),
+                                shwtemp(label='Package id 0', current=42.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 0', current=42.0, high=100.0, critical=100.0),
+                                shwtemp(label='Core 1', current=39.0, high=100.0, critical=100.0)],
+                   'iwlwifi_1': [shwtemp(label='', current=44.0, high=None, critical=None)],
+                   'pch_skylake': [shwtemp(label='', current=36.5, high=None, critical=None)]}} System Temperatures: cpu: 44.0 C mobo: 39.0 C 
+           Fan Speeds (RPM): N/A 
+Info:      Processes: 240 Uptime: 4h 19m Memory: 15.49 GiB used: 2.17 GiB (14.0%) Shell: Sudo 
+           inxi: 3.1.04 
+
+-------------------------------------------------------------------------------
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>Oh, thank you!
+ I see, `psutil` cannot detect it. Will check it out!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>One more question, how did u install it?
+Which operation system?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Ratatinator97:</strong></p>
+                    <p>By the AUR package ;)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>it's upstream issue
+https://github.com/giampaolo/psutil/issues/1658</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>What does `sudo ls -la /sys/class/power_supply/` show?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Ratatinator97:</strong></p>
+                    <p>it does : 
+`drwxr-xr-x  2 root root 0  8 août  10:44 .
+drwxr-xr-x 69 root root 0  8 août  10:44 ..
+lrwxrwxrwx  1 root root 0  8 août  10:44 AC -> ../../devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0003:00/power_supply/AC
+lrwxrwxrwx  1 root root 0  8 août  10:44 BAT0 -> ../../devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0A:00/power_supply/BAT0`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>Thanks, could you then post output here of this cmd `cat /sys/class/power_supply/BAT0/status` when it charging and when it's not?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ntropy83:</strong></p>
+                    <p>I have a similiar issue, but it is saying discharging for me.
+
+https://i.imgur.com/2xifPOM.png
+
+BAT0 is read as well as unknown by conky, when it is on charge stop. I set a charge stop to 90% in the BIOS and when I plug in the laptop having the battery fully charged, conky will say unknown. This might be the issue.
+
+cat /sys/class/power_supply/BAT0/status gives the unknown as well.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Ratatinator97:</strong></p>
+                    <p>Hey, sry for the late response: 
+The output of the command `cat /sys/class/power_supply/BAT0/status` (The laptop is NOT plugged in)
+`Discharging`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lucacesare:</strong></p>
+                    <p>Hi guys (@Ratatinator97, @Red-Eyed) , I've been facing this problem myself today. I solved the issue just re-writing "def charging()" in core.py:
+
+`def charging():
+    """
+    get charge state: is battery charging or discharging
+    """
+    f = Path("/sys/class/power_supply/BAT1/status")
+    
+    if f.read_text()!="Discharging\n":
+        state = True
+    else:
+        state = False
+
+    return state`
+
+this way the returned value is okay. Python's power modules gave me problem, probably cause I'm on a patched kernel.
+Note that I haven't touched the psutils used by the debugger to show system stats, so it will keep showing " 'battery': None ".
+Hope this can help </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@gnunikorn could you please create a [PR from a fork](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request-from-a-fork)? This would help me in review and also to give you credit for your contribution, thanks.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Red-Eyed:</strong></p>
+                    <p>@AdnanHodzic and @gnunikorn this is an [upstream issue](https://github.com/giampaolo/psutil/issues/1238) of `psutil` all machines has `/sys/class/power_supply/BAT0`
+but it seems to be fixed.
+which version of `psutil` do u use?
+`python -c "import psutil; print(psutil.__version)"`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lucacesare:</strong></p>
+                    <p>@AdnanHodzic I didn't create a fork cause the issue was related to my system and to the fact that I had the elementaryOS pre-installed repo's version of python3-psutil. I dind't want to replace them with the updated pip3 version so I just changed the code, but your code is perfect for the most. @Red-Eyed y the issue was upstream and fixed, and was related to the fact that in rare cases the system was showing `/sys/class/power_supply/BAT0` as `.../BAT*something!=0*`. Seems they solved it with a for cycle :D</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@gnunikorn great, I'll close this issue then.
+
+In meantime what happened is changes to `auto-cpufreq-installer` were made so it doesn't rely on apt for necessary python libraries, but uses pip instead. Which guarantees you get its latest version.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@Ratatinator97 @ntropy83 @gnunikorn and anybody else who's experienced this issue.
+
+Changes were made as part of #124, could please verify if these changes still work for you?
+
+If you're using snap changes can be tested by switching to beta channel, i.e:
+
+```
+sudo snap install auto-cpufreq --beta
+```
+
+Otherwise you can test them by running:
+
+```
+git checkout -b Haptein-master master
+git pull https://github.com/Haptein/auto-cpufreq.git master
+sudo ./auto-cpufreq-installer --install
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Changes are now made as part of [1.3.4 release.](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.3.4) 
+
+If you were using snap beta channel, you can switch back to stable as changes have been propagated there as well.
+
+```
+sudo snap switch --channel=stable auto-cpufreq
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Ratatinator97:</strong></p>
+                    <p>@AdnanHodzic it is working fine for me now : 
+`-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux rolling n/a
+Linux kernel: 5.8.10-arch1-1
+
+fatal: not a git repository (or any of the parent directories): .git
+Snap package: no
+
+Python: 3.8.5
+psutil package: 5.7.2
+platform package: 1.0.8
+click package: 7.1.2
+distro package 1.5.0
+
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.09 %
+
+Procesor: Intel(R) Core(TM) i5-7300U CPU @ 2.60GHz
+Cores: 4
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU states ------------------------------
+
+CPU max frequency: 3500 MHz
+CPU min frequency: 400 MHz
+
+	 Usage  Temperature  Frequency
+CPU0:	 38.9%     49 °C     1015 MHz
+CPU1:	 33.0%     49 °C     1005 MHz
+CPU2:	 39.4%     49 °C     1004 MHz
+CPU3:	 35.0%     49 °C     1001 MHz
+
+Total CPU usage: 54.0 %
+Total system load: 3.19 
+
+Currently using: powersave governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------`</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

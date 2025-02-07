@@ -1,0 +1,58 @@
+
+        <html>
+        <head>
+            <title>Issue #369: Wrong copying path</title>
+        </head>
+        <body>
+            <h1>Wrong copying path</h1>
+            <p><strong>Issue #369</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>The scripts are installed at `/usr/share/auto-cpufreq/scripts` not `/usr/local/share/auto-cpufreq/scripts`
+
+Otherwise, this error will occur,
+```
+------------------ Running auto-cpufreq daemon install script ------------------
+
+* Deploying auto-cpufreq openrc unit file
+cp: cannot stat '/usr/local/share/auto-cpufreq/scripts/auto-cpufreq-openrc': No such file or directory
+chmod: cannot access '/etc/init.d/auto-cpufreq': No such file or directory
+Starting auto-cpufreq daemon (openrc) service
+ * rc-service: service `auto-cpufreq' does not exist
+
+* Enabling auto-cpufreq daemon (openrc) service at boot
+ * rc-update: service `auto-cpufreq' does not exist
+ ```</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>mizzunet:</strong></p>
+                    <p>I see that there are this same error for the openrc and runit service</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Hi @mizzunet, thank you for looking into this as original contributors stopped making changes for `openrc` and `runit`. In meantime a lot changed when virtual python env for auto-cpufreq was introduced as part of [1.9.0 release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+I left single comment if we can resolve that then we can merge with merge of this and #370</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>mizzunet:</strong></p>
+                    <p>No, I was wrong. The PKGBUILD completely wrong :o
+
+AUR installs `scripts` folder to `/usr/share/auto-cpufreq/`
+
+Whereas `auto-cpufreq-installer` installs the same folder at `/usr/local/share/auto-cpufreq/` 
+Not sure about snap though
+
+In that case, it's PKGBUILD to be editted. I don't know, how do I edit from repo.
+ So, I'm closing this.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

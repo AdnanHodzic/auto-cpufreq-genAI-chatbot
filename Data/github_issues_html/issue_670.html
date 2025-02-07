@@ -1,0 +1,164 @@
+
+        <html>
+        <head>
+            <title>Issue #670: Intel i7-1260p on Asus Laptop won't go past 2.5GHz</title>
+        </head>
+        <body>
+            <h1>Intel i7-1260p on Asus Laptop won't go past 2.5GHz</h1>
+            <p><strong>Issue #670</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Update
+I did some more testing and I found that the problem isn't that the processor isn't able to go past 2.5GHz, it actually can. I started doing some music production tests and I saw values up to 4GHz on some cores. Now the problem is that the performance of this laptop when it comes to demanding tasks isn't anywhere close to what it can do with Windows. My conclusion is that since this laptop isn't designed to run Linux that's what I get. Hopefully someday it'll be fixed.
+
+### The problem
+
+Hello! I'm having an issue with an Asus Zenbook 14 Laptop, model UX3402ZA. It has an Intel Core i7-1260p which is advertised to be able to reach a maximum frequency of 4.70 GHz.
+
+The laptop running Windows is able to change between three performance/fan modes: silent, balanced and performance. The last one being required for the processor to reach it's maximum speed. In Linux you can also change between those three modes by modifying the EC registers, there's a [page in the Arch Wiki](https://wiki.archlinux.org/title/ASUS_Zenbook_UM3402YAR#Fan_control) which explains it in detail.
+
+So I'm able to set this laptop in performance mode by writing the `0x02` value in the `0x61` EC registry, but the maximum speed reached in average by all the cores is 2.25 GHz, and the maximum speed for a single core is 2.50 GHz. I have tried both `intel_pstate` and `acpi-cpufreq` but the results are still the same.
+
+### I have tried
+
+- ✅ [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- ✅ Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+---
+
+### System information:
+
+CPU stress test with acpi-cpufreq:
+
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux  
+Linux kernel: 6.8.2-arch2-1
+Processor: 12th Gen Intel(R) Core(TM) i7-1260P
+Cores: 16
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2401 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0    100.0%        66 °C      2500 MHz
+CPU1    100.0%        66 °C      2500 MHz
+CPU2    100.0%        66 °C      2500 MHz
+CPU3    100.0%        66 °C      2500 MHz
+CPU4    100.0%        68 °C      2500 MHz
+CPU5    100.0%        68 °C      2500 MHz
+CPU6    100.0%        68 °C      2500 MHz
+CPU7    100.0%        68 °C      2500 MHz
+CPU8    100.0%        64 °C      2000 MHz
+CPU9    100.0%        64 °C      2000 MHz
+CPU10    100.0%        64 °C      2000 MHz
+CPU11    100.0%        64 °C      2000 MHz
+CPU12    100.0%        65 °C      2000 MHz
+CPU13    100.0%        65 °C      2000 MHz
+CPU14    100.0%        65 °C      2000 MHz
+CPU15    100.0%        65 °C      2000 MHz
+
+auto-cpufreq version: 2.2.0 (git: 215026a)
+
+Python: 3.11.8
+psutil package: 5.9.8
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.19 %
+
+Total CPU usage: 100.0 %
+Total system load: 9.39
+Average temp. of all cores: 65.75 °C 
+
+Currently using: performance governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+
+```
+CPU stress test with intel_pstate:
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux  
+Linux kernel: 6.8.2-arch2-1
+Processor: 12th Gen Intel(R) Core(TM) i7-1260P
+Cores: 16
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4700 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0    100.0%        63 °C      2489 MHz
+CPU1    100.0%        63 °C      2489 MHz
+CPU2    100.0%        64 °C      2489 MHz
+CPU3    100.0%        64 °C      2489 MHz
+CPU4    100.0%        65 °C      2490 MHz
+CPU5    100.0%        65 °C      2489 MHz
+CPU6    100.0%        63 °C      2489 MHz
+CPU7    100.0%        63 °C      2489 MHz
+CPU8    100.0%        59 °C      1989 MHz
+CPU9    100.0%        59 °C      1988 MHz
+CPU10    100.0%        59 °C      1989 MHz
+CPU11    100.0%        59 °C      1989 MHz
+CPU12    100.0%        61 °C      1989 MHz
+CPU13    100.0%        61 °C      1983 MHz
+CPU14    100.0%        61 °C      1989 MHz
+CPU15    100.0%        61 °C      1989 MHz
+
+auto-cpufreq version: 2.2.0 (git: 215026a)
+
+Python: 3.11.8
+psutil package: 5.9.8
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.19 %
+
+Total CPU usage: 100.0 %
+Total system load: 6.24
+Average temp. of all cores: 61.88 °C 
+
+Currently using: performance governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+```
+**I have also tried having thermald both active and inactive with both intel_pstate and acpi-cpufreq. I still get the same result.**
+
+Something interesting I found is that when I release the CPU from the stress test, a few of the cores suddenly burst to almost the limit of 4.7GHz for a few seconds and then come back down. The stress test I'm using is the one in [s-tui](https://github.com/amanusk/s-tui).
+
+The computer overall works great with Linux and I like it way more than Windows, but part of my workflow involves running cpu-intensive programs so in this state it doesn't give me the performance I need, because the system starts to stutter and struggle.
+
+Any guidance is truly appreciated!
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+            </div>
+        </body>
+        </html>
+        

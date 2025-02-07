@@ -1,0 +1,159 @@
+
+        <html>
+        <head>
+            <title>Issue #529: cpu frequency limit is ignored</title>
+        </head>
+        <body>
+            <h1>cpu frequency limit is ignored</h1>
+            <p><strong>Issue #529</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- yes
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)
+- yes
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+- yes
+
+
+### System information:
+OS: Arch Linux x86_64
+Host: 2344BZU ThinkPad T430
+Kernel: 6.3.8-arch1-1
+Shell: bash 5.1.16
+Resolution: 1920x1080
+WM: i3
+Terminal: st
+CPU: Intel i7-3632QM (8) @ 2.201GHz
+GPU: Intel 3rd Gen Core processor Graphics Controller
+
+Add/paste output of:
+```
+auto-cpufreq --debug
+```
+
+Using settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux rolling n/a
+Linux kernel: 6.3.8-arch1-1
+Processor: Intel(R) Core(TM) i7-3632QM CPU @ 2.20GHz
+Cores: 8
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+Using settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux rolling n/a
+Linux kernel: 6.3.8-arch1-1
+
+Processor: Intel(R) Core(TM) i7-3632QM CPU @ 2.20GHz
+Cores: 8
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1500 MHz
+CPU min frequency: 1200 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0     18.2%        64 °C      2195 MHz
+CPU1     22.8%        64 °C      2195 MHz
+CPU2     21.2%        64 °C      2195 MHz
+CPU3     22.0%        64 °C      2195 MHz
+CPU4     21.2%        61 °C      2195 MHz
+CPU5     21.6%        61 °C      2195 MHz
+CPU6     23.7%        62 °C      2195 MHz
+CPU7     24.5%        62 °C      2195 MHz
+
+CPU fan speed: 2585 RPM
+
+auto-cpufreq version: 1.9.8 (git: 3dcf2fd8)
+
+Python: 3.11.3
+psutil package: 5.9.5
+platform package: 1.0.8
+click package: 8.1.3
+distro package: 1.8.0
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.17 %
+
+Total CPU usage: 21.4 %
+Total system load: 2.16
+Average temp. of all cores: 62.75 °C
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+I have set my cpu to not go above 1.5ghz but it ignores this limit and goes to 2.2ghz regardless.
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Andybasicasd:</strong></p>
+                    <p>may be it helps...
+1. i found in 'CPU Specifications' this value: 'Configurable TDP-down Base Frequency =1.70GHz' for my i3-1115G4.
+2. I changed only two values in config: "scaling_max_freq = 1700000", "#governor = powersave"
+3. I disabled intel_pstate in Grub. (it automatically replaced "powersave" with "schedutil" governor).
+4. i restarted system.
+It`s working fine)))</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Andybasicasd:</strong></p>
+                    <p>you can just change only "scaling_max_freq = 1700000", "governor = powersave" without disabling Grub. It works fine too)))
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ahkdigital:</strong></p>
+                    <p>I'm seeing similar behavior after setting up a configuration file and restarting the computer. I've set mine to 900 MHz max and it recognizes that limit exists but I see the cores surpass it. Is yours continuing to respect the limits? 
+
+I took the steps to switch over to acpi-cpufreq driver via the suggested method here. My powersave governer is still 'powersave', though.
+
+![image](https://github.com/AdnanHodzic/auto-cpufreq/assets/95383159/d3be00cf-5a92-418d-9ee7-f92045982359)
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Andybasicasd:</strong></p>
+                    <p>> I'm seeing similar behavior after setting up a configuration file and restarting the computer. I've set mine to 900 MHz max and it recognizes that limit exists but I see the cores surpass it. Is yours continuing to respect the limits?
+> 
+> I took the steps to switch over to acpi-cpufreq driver via the suggested method here. My powersave governer is still 'powersave', though.
+> 
+> ![image](https://user-images.githubusercontent.com/95383159/269149426-d3be00cf-5a92-418d-9ee7-f92045982359.png)
+
+I have deleted all config, and I still using app... I don`t have any issues with battery lifetime)))</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>With latest release, changes to config file are automatically picked up: https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v2.3.0
+
+Please make sure to pull the latest changes. Closing the issue, if you still have the same problem please re-open it.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

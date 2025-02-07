@@ -1,0 +1,758 @@
+
+        <html>
+        <head>
+            <title>Issue #359: Not respecting the config file</title>
+        </head>
+        <body>
+            <h1>Not respecting the config file</h1>
+            <p><strong>Issue #359</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Here is my debug output
+
+`Using settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux
+Linux kernel: 5.16.1-arch1-g14-2
+Processor: AMD Ryzen 7 5800U with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: amd-pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1901 MHz
+CPU min frequency: 1600 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  0.0%     37 °C     1600 MHz
+CPU1:	  0.0%     37 °C     1600 MHz
+CPU2:	  0.0%     37 °C     1600 MHz
+CPU3:	  0.0%     37 °C     1600 MHz
+CPU4:	  0.0%     37 °C     1600 MHz
+CPU5:	  0.0%     37 °C     1600 MHz
+CPU6:	  1.0%     37 °C     1600 MHz
+CPU7:	  0.0%     37 °C     1600 MHz
+CPU8:	  0.0%     37 °C     1600 MHz
+CPU9:	  1.0%     37 °C     1563 MHz
+CPU10:	  0.0%     37 °C     1600 MHz
+CPU11:	  1.0%     37 °C     1600 MHz
+CPU12:	  0.0%     37 °C     1600 MHz
+CPU13:	  0.0%     37 °C     1600 MHz
+CPU14:	  0.0%     37 °C     1600 MHz
+CPU15:	  0.0%     37 °C     1600 MHz
+
+auto-cpufreq version: Version         : 1.9.1-3
+
+Python: 3.10.2
+psutil package: 5.9.0
+platform package: 1.0.8
+click package: 8.0.3
+distro package: 1.6.0
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.15 %
+
+Total CPU usage: 0.9 %
+Total system load: 0.94
+Average temp. of all cores: 37.125 °C
+
+Currently using: powersave governor
+Currently turbo boost is: off
+`
+
+this is my config file 
+
+`
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   1   │ # settings for when connected to a power source
+   2   │ [charger]
+   3   │ # see available governors by running: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+   4   │ # preferred governor.
+   5   │ governor = performance
+   6   │
+   7   │ # minimum cpu frequency (in kHz)
+   8   │ # example: for 800 MHz = 800000 kHz --> scaling_min_freq = 800000
+   9   │ # see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+  10   │ # to use this feature, uncomment the following line and set the value accordingly
+  11   │ # scaling_min_freq = 800000
+  12   │
+  13   │ # maximum cpu frequency (in kHz)
+  14   │ # example: for 1GHz = 1000 MHz = 1000000 kHz -> scaling_max_freq = 1000000
+  15   │ # see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+  16   │ # to use this feature, uncomment the following line and set the value accordingly
+  17   │ # scaling_max_freq = 1000000
+  18   │
+  19   │ # turbo boost setting. possible values: always, auto, never
+  20   │ turbo = auto
+  21   │
+  22   │ # settings for when using battery power
+  23   │ [battery]
+  24   │ # see available governors by running: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+  25   │ # preferred governor
+  26   │ governor = powersave
+  27   │
+  28   │ # minimum cpu frequency (in kHz)
+  29   │ # example: for 800 MHz = 800000 kHz --> scaling_min_freq = 800000
+  30   │ # see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+  31   │ # to use this feature, uncomment the following line and set the value accordingly
+  32   │ scaling_min_freq = 1600000
+  33   │
+  34   │ # maximum cpu frequency (in kHz)
+  35   │ # see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+  36   │ # example: for 1GHz = 1000 MHz = 1000000 kHz -> scaling_max_freq = 1000000
+  37   │ # to use this feature, uncomment the following line and set the value accordingly
+  38   │ scaling_max_freq = 3000000
+  39   │
+  40   │ # turbo boost setting. possible values: always, auto, never
+  41   │ turbo = auto
+
+`
+
+i want to set the max freq as 3ghz but its stuck at 1900</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>varaki:</strong></p>
+                    <p>Try setting turbo boost to 'always', if turbo boost is off, your system limits the max frequently.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Hikandy:</strong></p>
+                    <p>> Try setting turbo boost to 'always', if turbo boost is off, your system limits the max frequently.
+
+can enabling that setting eat battery life? </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Hikandy:</strong></p>
+                    <p>> Try setting turbo boost to 'always', if turbo boost is off, your system limits the max frequently.
+Didn't work, still the same output as before 1600 and 1900. Another weird thing that i noticed was that when i gave the stress command to stress 9 cpu threads to 100%, the frequency was always 1600, it never went to 1900.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Another weird thing that i noticed was that when i gave the stress command to stress 9 cpu threads to 100%, the frequency was always 1600, it never went to 1900.
+
+I see this confirmed here, I also saw another mentioned of this in another bug report, as this is a regression which I [originally mentioned this](https://github.com/AdnanHodzic/auto-cpufreq/pull/349#issuecomment-1007712682) to @bobslept as part of his #349 PR. In a nutshell, what was happening before and what was [displayed as part of auto-cpufreq demo on Youtube](https://youtu.be/QkYRpVEEIlg?t=243) is not happening for me anymore. Hence, if my CPU usage in % starts to increase and is above >= 70 or even in 100% range, instead of cores kicking in to their max, they'll never get there anymore.
+
+This is what my CPU stats look like while I'm stressing all of my cores: `stress --cpu 8 --io 4 --vm 4 --timeout 60`
+
+```
+CPU max frequency: 4600 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	100.0%     70 °C     1900 MHz
+CPU1:	100.0%     69 °C     1900 MHz
+CPU2:	100.0%     70 °C     1900 MHz
+CPU3:	100.0%     72 °C     1900 MHz
+CPU4:	100.0%     70 °C     1900 MHz
+CPU5:	100.0%     69 °C     1900 MHz
+CPU6:	100.0%     70 °C     1900 MHz
+CPU7:	100.0%     72 °C     1900 MHz
+```
+
+I haven't had a time to look into this, but I'm sure one of the conditions as part of [set_performance function](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto_cpufreq/core.py#L742) is messing something up.
+
+In meantime, if anyone has time to look into this and make a [code contribution](https://github.com/AdnanHodzic/auto-cpufreq#code-contribution) that would be great! </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>While building a kernel. 
+My max turbo on all cores is 3.2ghz, exactly like the specs from my cpu.
+
+```
+CPU max frequency: 1800 MHz
+CPU min frequency: 1400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	100.0%     83 °C     3198 MHz
+CPU1:	100.0%     83 °C     3198 MHz
+CPU2:	100.0%     83 °C     3198 MHz
+CPU3:	100.0%     83 °C     3198 MHz
+CPU4:	100.0%     83 °C     3198 MHz
+CPU5:	100.0%     83 °C     3197 MHz
+CPU6:	 99.0%     83 °C     3197 MHz
+CPU7:	100.0%     83 °C     3197 MHz
+CPU8:	100.0%     83 °C     3198 MHz
+CPU9:	100.0%     83 °C     3197 MHz
+CPU10:	100.0%     83 °C     3197 MHz
+CPU11:	100.0%     83 °C     3197 MHz
+CPU12:	100.0%     83 °C     3197 MHz
+CPU13:	100.0%     83 °C     3197 MHz
+CPU14:	100.0%     83 °C     3197 MHz
+CPU15:	100.0%     83 °C     3197 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+
+Total CPU usage: 99.9 %
+Total system load: 18.35
+Average temp. of all cores: 82.875 °C
+
+High CPU load
+setting turbo boost: on
+```
+
+On battery with powersave governor it locks on 1400mhz. If change governor to `shedutil` on battery I hit max speeds.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@bobslept yea I remember that it worked for you when I initially mentioned this issue. Can you confirm you're also not using the auto-cpufreq config file?
+
+While I'm running on Intel ...
+
+```
+Linux distro: Ubuntu 21.10 (Impish Indri)
+Linux kernel: 5.13.0-28-generic
+Processor: Intel(R) Core(TM) i7-8565U CPU @ 1.80GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+```
+
+... it doesn't seem to be an Intel only thing as @Hikandy is running on Ryzen 7 and has this problem. Really hard to pinpoint what exactly is causing this behavior ...</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>I'm not using the config file normally. 
+
+He says speed is not going higher then 1600mhz. Which is exactly the same behavior I have using the `powersave` governor on battery, instead it's 1400mhz on my Ryzen. 
+
+So to get max speed when I need it on battery, I switch to `schedutil` governor. But I think `performance` governor would also work. `powersave` just locks the speed on cpu min frequency. Even when turbo is enabled. At least on my system.
+
+Why I chose `schedutil` over `performance` I think was that it would clock down to min frequency instead of max frequency when on `performance`.  But most of the time I'm not heavy lifting when on battery, so I prefer `powersave`.
+
+Btw @AdnanHodzic to pinpoint this, did you try set the stuff manually instead of letting `auto-cpufreq` do it? See if you get different results. Then you can really be sure it's something `auto-cpufreq` does wrong or there is something else going on.
+
+Did you look into platform profiles that controls your power level? Added since 5.12. I mean if I set my profile to low-power it has a max of 20 watts to use if I'm correct. Then I never reach my 3.2ghz no matter how hard I try. That's why we made sure it was on balanced before stopping the `power-profiles-daemon`. I reach max speeds on that mode. But the performance mode is adding 10 watts extra vs balanced in my case. It wouldn't suprise me if it has something todo with that. 
+
+`cat /sys/firmware/acpi/platform_profile_choices` to see what profiles are available for your system.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@bobslept 
+
+> I'm not using the config file normally.
+
+Neither am I, as I like auto-cpufreq to automatically figure what it needs to do. Regardless, I just configured auto-cpufreq config file to:
+
+```
+[charger]
+governor = performance
+turbo = always
+[battery]
+governor = powersave
+turbo = auto
+```
+
+output during regular workload is better then it is when CPU is put under pressure ...
+
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 21.10 impish
+Linux kernel: 5.13.0-28-generic
+Processor: Intel(R) Core(TM) i7-8565U CPU @ 1.80GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4600 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  1.0%     59 °C     3897 MHz
+CPU1:	  1.0%     56 °C     4517 MHz
+CPU2:	  1.0%     58 °C     2000 MHz
+CPU3:	  2.0%     58 °C     2000 MHz
+CPU4:	  0.0%     59 °C     2000 MHz
+CPU5:	  4.9%     56 °C     2000 MHz
+CPU6:	  1.0%     58 °C     2000 MHz
+CPU7:	  1.0%     58 °C     2000 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+
+Total CPU usage: 3.1 %
+Total system load: 10.29
+Average temp. of all cores: 57.75 °C
+Configuration file enforces turbo boost
+setting turbo boost: on
+
+-------------------------------------------------------------------------------
+
+			"auto-cpufreq" refresh in: 2
+```
+
+then I ran: `stress --cpu 8 --io 4 --vm 4 --timeout 60` and frequency was limited to 1400 Mhz
+
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 21.10 impish
+Linux kernel: 5.13.0-28-generic
+Processor: Intel(R) Core(TM) i7-8565U CPU @ 1.80GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4600 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	100.0%     61 °C     1400 MHz
+CPU1:	100.0%     60 °C     1400 MHz
+CPU2:	100.0%     59 °C     1400 MHz
+CPU3:	100.0%     62 °C     1400 MHz
+CPU4:	100.0%     61 °C     1400 MHz
+CPU5:	100.0%     60 °C     1400 MHz
+CPU6:	100.0%     59 °C     1400 MHz
+CPU7:	100.0%     62 °C     1400 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+
+Total CPU usage: 100.0 %
+Total system load: 8.79
+Average temp. of all cores: 60.5 °C
+Configuration file enforces turbo boost
+setting turbo boost: on
+
+-------------------------------------------------------------------------------
+
+			"auto-cpufreq" refresh in: 4
+```
+
+Then, I set for performance governor to be used on battery as well:
+
+```
+[charger]
+governor = performance
+turbo = always
+[battery]
+governor = performance
+turbo = always
+```
+
+Ran stress test and during first iteration frequencies were unlocked and went really high (as they should in this scenario)
+
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 21.10 impish
+Linux kernel: 5.13.0-28-generic
+Processor: Intel(R) Core(TM) i7-8565U CPU @ 1.80GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4600 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	100.0%     93 °C     3458 MHz
+CPU1:	100.0%     90 °C     3459 MHz
+CPU2:	100.0%     91 °C     3459 MHz
+CPU3:	100.0%     97 °C     3459 MHz
+CPU4:	100.0%     93 °C     3459 MHz
+CPU5:	100.0%     90 °C     3459 MHz
+CPU6:	100.0%     91 °C     3459 MHz
+CPU7:	100.0%     97 °C     3459 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+
+Total CPU usage: 100.0 %
+Total system load: 3.68
+Average temp. of all cores: 92.75 °C
+Configuration file enforces turbo boost
+setting turbo boost: on
+```
+
+and next iteration they went lower
+
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 21.10 impish
+Linux kernel: 5.13.0-28-generic
+Processor: Intel(R) Core(TM) i7-8565U CPU @ 1.80GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4600 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	100.0%     70 °C     2000 MHz
+CPU1:	100.0%     70 °C     2000 MHz
+CPU2:	100.0%     70 °C     2000 MHz
+CPU3:	100.0%     74 °C     2000 MHz
+CPU4:	100.0%     70 °C     2000 MHz
+CPU5:	100.0%     70 °C     2000 MHz
+CPU6:	100.0%     70 °C     2000 MHz
+CPU7:	100.0%     74 °C     2000 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+
+Total CPU usage: 100.0 %
+Total system load: 4.75
+Average temp. of all cores: 71.0 °C
+Configuration file enforces turbo boost
+setting turbo boost: on
+
+-------------------------------------------------------------------------------
+```
+
+and they ended up settling on 1400Mhz, but were ranging between 1400 to 1700Mhz
+
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 21.10 impish
+Linux kernel: 5.13.0-28-generic
+Processor: Intel(R) Core(TM) i7-8565U CPU @ 1.80GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4600 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	100.0%     66 °C     1400 MHz
+CPU1:	100.0%     65 °C     1400 MHz
+CPU2:	100.0%     65 °C     1400 MHz
+CPU3:	100.0%     68 °C     1400 MHz
+CPU4:	100.0%     66 °C     1400 MHz
+CPU5:	100.0%     65 °C     1400 MHz
+CPU6:	100.0%     65 °C     1400 MHz
+CPU7:	100.0%     68 °C     1400 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+
+Total CPU usage: 100.0 %
+Total system load: 7.32
+Average temp. of all cores: 66.0 °C
+Configuration file enforces turbo boost
+setting turbo boost: on
+
+-------------------------------------------------------------------------------
+```
+
+I also performed stress test while laptop was discharging ... and same behavior in terms of frequencies while it was charging. 
+
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 21.10 impish
+Linux kernel: 5.13.0-28-generic
+Processor: Intel(R) Core(TM) i7-8565U CPU @ 1.80GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4600 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	100.0%     64 °C     1700 MHz
+CPU1:	100.0%     63 °C     1700 MHz
+CPU2:	100.0%     63 °C     1700 MHz
+CPU3:	100.0%     65 °C     1700 MHz
+CPU4:	100.0%     64 °C     1700 MHz
+CPU5:	100.0%     63 °C     1700 MHz
+CPU6:	100.0%     63 °C     1700 MHz
+CPU7:	100.0%     65 °C     1700 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: discharging
+
+Setting to use: "performance" governor
+
+Total CPU usage: 100.0 %
+Total system load: 12.78
+Average temp. of all cores: 63.75 °C
+Configuration file enforces turbo boost
+setting turbo boost: on
+
+-------------------------------------------------------------------------------
+
+			"auto-cpufreq" refresh in: 5
+```
+
+Finally, I changed both `call(["powerprofilesctl", "set", "balanced"])` to `call(["powerprofilesctl", "set", "performance"])` as part of `gnome_power_stop_live` & `gnome_power_svc_disable` functions. Ran same stress test and frequencies were as they should (still not at absolute maximum, but way better then it is now) be under so much workload:
+
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 21.10 impish
+Linux kernel: 5.13.0-28-generic
+Processor: Intel(R) Core(TM) i7-8565U CPU @ 1.80GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4600 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	100.0%     92 °C     3206 MHz
+CPU1:	100.0%     88 °C     3206 MHz
+CPU2:	100.0%     90 °C     3206 MHz
+CPU3:	100.0%     97 °C     3206 MHz
+CPU4:	100.0%     92 °C     3206 MHz
+CPU5:	100.0%     88 °C     3206 MHz
+CPU6:	100.0%     90 °C     3206 MHz
+CPU7:	100.0%     97 °C     3206 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+
+Total CPU usage: 99.9 %
+Total system load: 6.45
+Average temp. of all cores: 91.75 °C
+Configuration file enforces turbo boost
+setting turbo boost: on
+
+-------------------------------------------------------------------------------
+
+			"auto-cpufreq" refresh in: 4
+```
+
+I then even removed the auto-cpufreq config file, ran same stress test and results were again as they should be:
+
+```
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 21.10 impish
+Linux kernel: 5.13.0-28-generic
+Processor: Intel(R) Core(TM) i7-8565U CPU @ 1.80GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4600 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	100.0%     92 °C     3149 MHz
+CPU1:	100.0%     88 °C     3149 MHz
+CPU2:	100.0%     91 °C     3149 MHz
+CPU3:	100.0%     97 °C     3149 MHz
+CPU4:	100.0%     92 °C     3150 MHz
+CPU5:	100.0%     88 °C     3150 MHz
+CPU6:	100.0%     91 °C     3150 MHz
+CPU7:	100.0%     97 °C     3150 MHz
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+
+Total CPU usage: 99.9 %
+Total system load: 4.65
+Average temp. of all cores: 92.0 °C
+
+High CPU load
+setting turbo boost: on
+
+-------------------------------------------------------------------------------
+
+			"auto-cpufreq" refresh in: 3
+```
+
+There we have it, using team work we managed to pinpoint the problem and that's what caps the frequencies on some hardware. Here's my suggestion how we could resolve this so it works as it should for everybody. 
+
+1: Leave power-profiles-daemon to be set to "balanced" before its disabled. 
+2: If user sets "performance" to be used as a governor as part of auto-cpufreq config file. New functionality should be added to auto-cpufreq, where it'll read this from config file, and if `performance` is set to call a new parameter as part of `power_helper.py` script (example: `--gnome_power_disable_performance`) which will:
+2.1: run `--gnome_power_enable` to enable `power-profiles-daemon`
+2.2: run `--gnome_power_disable_performance` which will disable `power-profiles-daemon` with `performance` governor.
+
+Other option is to instruct people to change code and re-install auto-cpufreq (as I did) which is incredibly ugly and not really a solution. Would love to hear your thoughts.
+
+3. I'm baffled why in current setup with `balanced` my frequencies started of good/high (as they should) and then they were lowered in each iteration ...
+
+Btw`cat /sys/firmware/acpi/platform_profile_choices` returns `low-power balanced performance`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Hikandy:</strong></p>
+                    <p>@AdnanHodzic I don't use power-profiles-daemon though so I don't think i can resolve it via your suggestions </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>@AdnanHodzic 
+Why would you reinstall the application, or modify it? Just let the user specify the platform profile. We stop `power-profiles-daemon` on balanced mode, their 'default' setting.
+
+If that profile does not fit the user they could set the system profile themselfs? If they have support for it.
+
+To get supported profiles from your system:
+`cat /sys/firmware/acpi/platform_profile_choices`
+
+Set it to performance profile for example:
+`echo performance > /sys/firmware/acpi/platform_profile`
+
+I would not set it automatic to performance. Let the user be responsible for it. But that's my opinion.
+
+@Hikandy You are correct this stuff is all unrelated to your issue.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@Hikandy correct, I genuinely apologize for hijacking this issue. 
+
+@bobslept please take a look at comment I made in #361
+
+P.S: I might be wrong but is #358 related to this issue?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>tnfru:</strong></p>
+                    <p>My settings are sadly not respected either. Turbo is set to never but it turns on all the time when a charger is plugged in.
+In the debug output it says that turbo is on, while it is turned off in the config and running `auto-cpufreq --stats` also says its turned off:
+
+```
+Setting to use: "performance" governor
+
+Total CPU usage: 1.4 %
+Total system load: 1.36
+Average temp. of all cores: 63.25 °C 
+
+Configuration file disables turbo boost
+setting turbo boost: off
+```
+Debug output:
+
+```
+Using settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------------------------------------------------------
+
+Linux distro: Pop!_OS 22.04 jammy
+Linux kernel: 5.16.19-051619-generic
+Processor: 11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4700 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0:	  0.0%     66 °C     2800 MHz
+CPU1:	  1.0%     66 °C     2800 MHz
+CPU2:	  0.0%     64 °C     2800 MHz
+CPU3:	  0.0%     64 °C     2800 MHz
+CPU4:	  0.0%     64 °C     1492 MHz
+CPU5:	  0.0%     64 °C     2800 MHz
+CPU6:	  1.0%     66 °C     2800 MHz
+CPU7:	  0.0%     66 °C     2800 MHz
+
+auto-cpufreq version: 1.9.4
+
+Python: 3.10.4
+psutil package: 5.9.1
+platform package: 1.0.8
+click package: 8.1.3
+distro package: 1.7.0
+
+Computer type: Laptop
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.09 %
+
+Total CPU usage: 1.0 %
+Total system load: 0.95
+Average temp. of all cores: 65.00 °C 
+
+Currently using: performance governor
+Currently turbo boost is: on
+
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Can you confirm if this is related to: https://github.com/AdnanHodzic/auto-cpufreq/issues/398</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>tnfru:</strong></p>
+                    <p>@AdnanHodzic Pretty sure this is a different issue. I'm also on intel, not amd.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>If there are any changes that could be made please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+In meantime closing the issue due to inactivity.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

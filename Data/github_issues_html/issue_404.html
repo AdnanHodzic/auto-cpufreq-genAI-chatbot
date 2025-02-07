@@ -1,0 +1,72 @@
+
+        <html>
+        <head>
+            <title>Issue #404: Turbo boost constantly toggles ON/OFF for <10% CPU load</title>
+        </head>
+        <body>
+            <h1>Turbo boost constantly toggles ON/OFF for <10% CPU load</h1>
+            <p><strong>Issue #404</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>`Linux distro: EndeavourOS rolling rolling`
+`Linux kernel: 5.18.5-arch1-1`
+`Processor: AMD Ryzen 7 4800H with Radeon Graphics`
+`Cores: 16`
+`Architecture: x86_64`
+`Driver: acpi-cpufreq`
+
+Running `auto-cpufreq --stats` outputs the following:(Relevent part)
+
+`Battery is: charging`
+
+`Setting to use: "performance" governor`
+
+`Total CPU usage: 11.7 %`
+`Total system load: 2.34`
+`Average temp. of all cores: 57.88 °C `
+
+`High CPU load`
+`setting turbo boost: on`
+
+For the next refresh, the output:
+
+`Battery is: charging`
+
+`Setting to use: "performance" governor`
+
+`Total CPU usage: 11.8 %`
+`Total system load: 2.34`
+`Average temp. of all cores: 75.62 °C `
+
+`High CPU load`
+
+`Optimal total CPU usage: 11.8 %, high average core temp: 75.625 °C`
+
+`setting turbo boost: off`
+
+This is a pattern I have noticed where it constantly toggles Turbo boost off/On without much change in CPU usage. My concern is is this intentional/A bug and should I disable the auto-turbo boost i.e will the constant toggling potentially cause damage to my CPU?
+
+
+
+
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Seems to be related to: #398</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>zoitrok:</strong></p>
+                    <p>Looks like there's a [hardcoded threshold](https://github.com/AdnanHodzic/auto-cpufreq/blob/cde4cbeb45f12c168b2e58ecf20cf593f77c40a2/auto_cpufreq/core.py#L632) of 70⁰C to disable turbo boost.
+
+You're hitting that threshold, so seems to be working as designed. I guess most computers would have some safety to clock down, albeit at a bit higher threshold. Maybe this threshold would be a good candidate to add to the configuration file?</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

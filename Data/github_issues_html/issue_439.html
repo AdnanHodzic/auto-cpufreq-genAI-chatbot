@@ -1,0 +1,156 @@
+
+        <html>
+        <head>
+            <title>Issue #439: Encountering ModuleNotFoundError for `pkg_resources`</title>
+        </head>
+        <body>
+            <h1>Encountering ModuleNotFoundError for `pkg_resources`</h1>
+            <p><strong>Issue #439</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hi Adnan,
+I have an issue running auto-cpufreq with kernel at `5.18.10-76051810-generic` (Pop os). This is something new - the tool was working fine before the upgrade. Sadly I can't tell which exact linux version I used to use before.
+I've tried reinstalling the package with snap but it didn't help. Running auto-cpufreq always results in the following error:
+
+```
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.9.3+ae1f53c7', 'auto-cpufreq')
+ModuleNotFoundError: No module named 'pkg_resources'
+```
+
+Tried running it with `--stats`, `--version` and `--help` - same result regardless of the argument.
+
+I'm running the latest (1.9.6) version - `snap list` resulted in the following output
+```
+Name          Version   Rev    Tracking       Publisher   Notes
+auto-cpufreq  1.9.6     122    latest/stable  fooctrl     -
+```
+
+I might come up with a PR fixing this but first, could somebody confirm the same error? This might also be issue with my local setup...
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Hey Mateusz,
+
+> I have an issue running auto-cpufreq with kernel at 5.18.10-76051810-generic (Pop os). This is something new - the tool was working fine before the upgrade. Sadly I can't tell which exact linux version I used to use before.
+
+Kernel version has nothing to do with this. 
+
+> I've tried reinstalling the package with snap but it didn't help. Running auto-cpufreq always results in the following error:
+>
+>Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.9.3+ae1f53c7', 'auto-cpufreq')
+ModuleNotFoundError: No module named 'pkg_resources'
+
+This looks like you're running old version of `auto-cpufreq==1.9.3+ae1f53c7`. 
+
+> I'm running the latest (1.9.6) version - snap list resulted in the following output
+
+I can't figure out if you installed using [installer or snap package,](https://github.com/AdnanHodzic/auto-cpufreq#installing-auto-cpufreq) (or you have both at the same time?) since you didn't fill out the template when reporting this issue. But with snap package you shouldn't run into these type of errors since it packages all the dependencies into a container.
+
+> I might come up with a PR fixing this but first, could somebody confirm the same error? This might also be issue with my local setup...
+
+That would be great and please do so, but I think this might related to your own setup, and next time please fill out the template issue as without it I usually close the issues, reference:
+
+### Fill out informtion requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+### Error output:
+```text
+Add/paste error output in case of failed installation or other failing component
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+auto-cpufreq --debug
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>matkob:</strong></p>
+                    <p>I read the template and followed it when creating the issue. I didn't know I should post the questions/hints together with the results.
+
+> This looks like you're running old version of auto-cpufreq==1.9.3+ae1f53c7
+
+> can't figure out if you installed using [installer or snap package,](https://github.com/AdnanHodzic/auto-cpufreq#installing-auto-cpufreq)
+
+What I did after encountering the problem initially was I uninstalled the package and install it again using `snap`. As I showed, the installed version was `1.9.6` - according to `snap list` output.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I read the template and followed it when creating the issue. I didn't know I should post the questions/hints together with the results.
+
+Let me know if following message can be improved in any way:
+
+> ### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+> What I did after encountering the problem initially was I uninstalled the package and install it again using `snap`. As I showed, the installed version was `1.9.6` - according to `snap list` output.
+
+What's the error you get if you only have it installed as snap package (1.9.6)? Before that, make sure to run `sudo snap refresh auto-cpufreq` first.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>matkob:</strong></p>
+                    <p>I ran couple of commands to clean the state and make it as reproducible as possible:
+
+1. Ran `sudo snap refresh auto-cpufreq` which resulted in `snap "auto-cpufreq" has no updates available`
+2. Ran `sudo snap remove auto-cpufreq` and `sudo snap install auto-cpufreq` which resulted in `auto-cpufreq 1.9.6 from Adnan Hodzic (fooctrl) installed`
+3. Ran `auto-cpufreq --debug` and the error was the same:
+
+```
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.9.3+ae1f53c7', 'auto-cpufreq')
+ModuleNotFoundError: No module named 'pkg_resources'
+```
+What's interesting is that installing the tool via script seems to be working just fine. Using snap is problematic though</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> What's interesting is that installing the tool via script seems to be working just fine. Using snap is problematic though
+
+Indeed, this is very strange. My hunch is that PopOS is doing something different and that certain package might be missing from [python-packages dep. section for Snap](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/snap/snapcraft.yaml#L21) which might be needed for PopOS. Which if added would fix this issue, I know in past there weresimiliar issues on Fedora and Snap packages, but it was all fixed.
+
+Either way, that's why auto-cpufreq-installer is there, in case Snap install fails and vice versa.
+
+However, what's even stranger in all of this is:
+
+```
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.9.3+ae1f53c7', 'auto-cpufreq')
+ModuleNotFoundError: No module named 'pkg_resources'
+```
+
+In particular `auto-cpufreq==1.9.3+ae1f53c7` as that's an obviously old version with git tag which gets added when using [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq#auto-cpufreq-installer). Same will be reported as part of `sudo auto-cpufreq --debug`, i.e: `auto-cpufreq version: 1.9.6 (git: e813301a)`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>matkob:</strong></p>
+                    <p>I propose to close this issue as installing the tool via installer worked and I won't have enough time to debug what happened exactly.
+
+Thanks for your input anyway, hope it was just local setup related.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

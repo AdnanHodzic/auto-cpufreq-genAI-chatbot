@@ -1,0 +1,38 @@
+
+        <html>
+        <head>
+            <title>Issue #105: Improved turbo trigger on 1 core 100% load and on load average >1m wh…</title>
+        </head>
+        <body>
+            <h1>Improved turbo trigger on 1 core 100% load and on load average >1m wh…</h1>
+            <p><strong>Issue #105</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I've included last @Red-Eyed code suggestion, and also included an optimization for detect correct load when there are more than 8 CPUS (now based on percentage).
+
+I've checked the results with geekbench with charging state and battery. Turbo gets enabled and disabled fast (some times when the system get very high load takes a bit to get disabled).
+
+Based on geekbench results, I'm getting very good results: https://browser.geekbench.com/v5/cpu/search?page=1&q=3700u&utf8=%E2%9C%93
+
+![batterymode](https://user-images.githubusercontent.com/70445358/92047112-8faa7380-ed84-11ea-8712-96a106fe29ba.png)
+![performance](https://user-images.githubusercontent.com/70445358/92047117-91743700-ed84-11ea-87ea-049d415b6398.png)
+
+Please take a look, maybe some parameters could be improved a bit, but for me works really well.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rrodriguez81:</strong></p>
+                    <p>Is the load average in last minute.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@rrodriguez81 good stuff, thanks for your contribution!</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

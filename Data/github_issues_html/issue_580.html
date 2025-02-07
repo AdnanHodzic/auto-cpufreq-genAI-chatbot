@@ -1,0 +1,72 @@
+
+        <html>
+        <head>
+            <title>Issue #580: feat(cli): added supported for shell completions</title>
+        </head>
+        <body>
+            <h1>feat(cli): added supported for shell completions</h1>
+            <p><strong>Issue #580</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>## Introduction
+ Added opt-in shell completions support for bash, zsh and fish shells
+
+### Generating completions
+
+1. ```bash
+    auto-cpufreq --completions=zsh # shell name
+    ```
+2. Copy the displayed command and run it once! Voila! you have the completions working
+3. Restart the shell or `source <rc-file>`
+
+### Screenshots 
+![Screenshot](https://github.com/AdnanHodzic/auto-cpufreq/assets/35325046/44e19f62-bea3-4202-8836-f5cb06cd3b63)
+
+
+## Resources
+- [Click lib docs](https://click.palletsprojects.com/en/8.1.x/shell-completion/)</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@rootCircle lgtm! 
+
+Couple of remarks:
+
+1: let's add explanation of `--completions` flag to https://github.com/AdnanHodzic/auto-cpufreq/#how-to-run-auto-cpufreq
+
+2: Why not suggest "Restart the shell or source <rc-file>" part here:
+
+```
+sudo auto-cpufreq --completions=zsh
+Run the below command in your current shell!
+
+echo 'eval "$(_AUTO_CPUFREQ_COMPLETE=zsh_source auto-cpufreq)"' >> ~/.zshrc
+source ~/.zshrc
+```
+
+Think it would be a better flow.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rootCircle:</strong></p>
+                    <p>> Why not suggest "Restart the shell or source " part here:
+
+Yes, this will be more elegant from user POV, I am making the required changes :-)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> > Why not suggest "Restart the shell or source " part here:
+> 
+> Yes, this will be more elegant from user POV, I am making the required changes :-)
+
+Perfect :) </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

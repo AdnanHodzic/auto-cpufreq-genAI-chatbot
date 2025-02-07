@@ -1,0 +1,60 @@
+
+        <html>
+        <head>
+            <title>Issue #213: [Request] User defined Max/Peak Frequencies for different scenarios</title>
+        </head>
+        <body>
+            <h1>[Request] User defined Max/Peak Frequencies for different scenarios</h1>
+            <p><strong>Issue #213</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>My request is;
+To add a max frequency (You can choose any frequency the driver reports) when for example unplugged / plugged
+- It would be nice if you can add an application that would override this
+The purpose of this is to better manage thermals specially when launching programs that spike the cpu freq. or watching videos which would make the frequency jump up to 3ghz+ unnecessarily.
+Here are my system specs (maybe it has to do with the cpu but if there be a way to make it better; I think is by doing the max. frequencies request) :
+
+i5-7300u 
+16gb ddr4 ram
+Opensuse Tumbleweed
+
+here is my frequency-info by cpupower;
+aniki@Amethyst:~> sudo cpupower  frequency-info
+analyzing CPU 0:
+  driver: intel_pstate
+  CPUs which run at the same hardware frequency: 0
+  CPUs which need to have their frequency coordinated by software: 0
+  maximum transition latency:  Cannot determine or is not supported.
+  **hardware limits: 400 MHz - 3.50 GHz**
+  available cpufreq governors: performance powersave
+  current policy: frequency should be within 400 MHz and 2.60 GHz.
+                  The governor "powersave" may decide which speed to use
+                  within this range.
+  current CPU frequency: Unable to call hardware
+  current CPU frequency: 1.42 GHz (asserted by call to kernel)
+  boost state support:
+    Supported: yes
+    Active: yes
+
+- I think that if i set a max frequency of 900mhz - 1.5ghz for example, itll fare better for my temps and itll keep the spikes at bay.
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Should be done as part of: #26</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>With [v1.7.0 release](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.7.0) it's now possible to manually define some of the settings instead of leaving everything to be picked up automatically. Could you try tweaking some of the [available options](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq) and report back on how that worked for you? Thanks
+
+In meantime I'll close the issue, please re-open it if the problem persists.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

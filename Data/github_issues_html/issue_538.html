@@ -1,0 +1,58 @@
+
+        <html>
+        <head>
+            <title>Issue #538: added optional path in --update</title>
+        </head>
+        <body>
+            <h1>added optional path in --update</h1>
+            <p><strong>Issue #538</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>in continuation of PR #535 
+as per your suggestions, an optional add to path has been added.
+i.e. `auto-cpufreq --update=path/to/dir`
+
+i was expecting to use:
+ `auto-cpufreq --update path/to/dir`
+but  there are some unknown issues 
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>1. Let's set to use `/opt/auto-cpufreq/source` as the default path as part of `--update` as part of this PR, and then having ability to set "custom path" can be made as part of one of following iterations. 
+
+Besides this I'll leave couple of comments for the code itself, as I found some bugs.
+
+2. What's the proper mechanism for testing `--update` changes? As changing i.e `VERSION = "1.9.8"` line in setup.py had no impact, and even changing auto-cpufreq-installer file to trick it into that there are updates:
+
+```
+    # Fetch the latest release information from GitHub API
+    #latest_release=$(curl -s "https://api.github.com/repos/$repository/releases/latest")
+    # Extract the latest release version without using jq
+    #latest_version=$(echo "$latest_release" | grep -o '"tag_name": "[^"]*' | cut -d'"' -f4)
+    latest_version=v1.9.9 # same case with v2.0
+    # Get the current version of auto-cpufreq
+      #installed_version=$(pip list | awk '/auto-cpufreq/ {print $2}')
+    installed_version=$(grep -oP "(?<=__requires__ = 'auto-cpufreq==)\d+(\.\d+)+" /opt/auto-cpufreq/venv/bin/auto-cpufreq)
+```
+
+kept returning: 
+
+```
+sudo auto-cpufreq --update 
+auto-cpufreq is up to date
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>LGTM, thank you for your contribution! </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

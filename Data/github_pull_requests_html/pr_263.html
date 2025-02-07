@@ -1,0 +1,69 @@
+
+        <html>
+        <head>
+            <title>Pull Request #263: WIP: Implement python virtual environment </title>
+        </head>
+        <body>
+            <h1>WIP: Implement python virtual environment </h1>
+            <p><strong>Pull Request #263</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>  * added venv instead of using system env pip
+  * adjusted the unit file to startup the app from the venv
+  * created a wrapper script to call the app from the venv
+  * extended cleanup for venv and additional scripts
+  * refactored the is_running() function to find the process now that it
+    is called from a venv
+
+
+I tested this on Fedora 35. It worked fine (TM).
+Please test on other platforms before merging. I am especially not sure how this change reflects on SNAP and other packaging systems.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>aroundthfur:</strong></p>
+                    <p>Please do not merge yet!
+
+I am experiencing random SIGKILL on the process. Not sure why yet, it needs to be debugged more.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Could it be that power-profiles-daemon had something to do with it at the time of testing this?
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Could it be that power-profiles-daemon had something to do with it at the time of testing this?
+
+@bobslept yep, that exactly was the reason as it was confirmed to me by @aroundthfur in private. Btw, whenever you have time /you're able feel free to push final updates to this PR.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>What would be the correct way of doing this. Merge his branch from the fork locally, work on it and push it as new PR and mention this PR in the new one? 
+
+I can do it like that if you want. Not sure if it is the right way.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> What would be the correct way of doing this. Merge his branch from the fork locally, work on it and push it as new PR and mention this PR in the new one?
+> 
+> I can do it like that if you want. Not sure if it is the right way.
+
+Please do this. As I also got @aroundthfur consent to do this (make new PR on top of his changes) in the end I'll just credit you both.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Changes live as part of [v1.9.0 release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,49 @@
+
+        <html>
+        <head>
+            <title>Pull Request #252: Add temperature readings in thinkpad</title>
+        </head>
+        <body>
+            <h1>Add temperature readings in thinkpad</h1>
+            <p><strong>Pull Request #252</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Great utility! Found temperature readings became NaN in thinkpad (P14s Gen 2, Ryzen 7 Pro 5850u), so I have added a new case to read the CPU temperatures in thinkpads.
+
+Sample psutil.sensors_temperatures() below:
+```
+>>> psutil.sensors_temperatures()
+{
+    "nvme": [
+        shwtemp(label="Composite", current=37.85, high=81.85, critical=84.85),
+        shwtemp(label="Sensor 1", current=37.85, high=65261.85, critical=65261.85),
+        shwtemp(label="Sensor 2", current=40.85, high=65261.85, critical=65261.85),
+    ],
+    "amdgpu": [shwtemp(label="edge", current=41.0, high=None, critical=None)],
+    "thinkpad": [
+        shwtemp(label="CPU", current=42.0, high=None, critical=None),
+        shwtemp(label="GPU", current=0.0, high=None, critical=None),
+        shwtemp(label="", current=0.0, high=None, critical=None),
+        shwtemp(label="", current=0.0, high=None, critical=None),
+        shwtemp(label="", current=0.0, high=None, critical=None),
+        shwtemp(label="", current=0.0, high=None, critical=None),
+        shwtemp(label="", current=0.0, high=None, critical=None),
+    ],
+}
+
+```</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Good catch @alexmak23!
+
+Thank you for your contribution, I'll make a 1.7.0 release today and make sure to credit you in [releases page](https://github.com/AdnanHodzic/auto-cpufreq/releases). Looking forward to any new PR's you may come up with in future! </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

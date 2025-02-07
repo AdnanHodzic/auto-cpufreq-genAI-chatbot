@@ -1,0 +1,443 @@
+
+        <html>
+        <head>
+            <title>Issue #306: Battery status showing wrong!</title>
+        </head>
+        <body>
+            <h1>Battery status showing wrong!</h1>
+            <p><strong>Issue #306</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+```text
+Paste here error output
+```Battery is not charging but status shows charging.
+
+---
+
+### System information:
+```text
+Paste here output of the auto-cpufreq --debug
+
+```Linux distro: Ubuntu 21.10 (Impish Indri)
+Linux kernel: 5.13.0-22-generic
+Processor: 11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2800 MHz
+CPU min frequency: 400 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0:     8.0%     52 °C     2800 MHz
+CPU1:    10.0%     52 °C     2467 MHz
+CPU2:     9.9%     52 °C     2800 MHz
+CPU3:     8.0%     52 °C     2800 MHz
+CPU4:     3.2%     52 °C     2800 MHz
+CPU5:     7.1%     52 °C     2800 MHz
+CPU6:     7.1%     52 °C     2800 MHz
+CPU7:     7.9%     52 °C     2800 MHz
+
+auto-cpufreq version:
+Snap: 1.8.0
+
+Python: 3.8.10
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 8.0.3
+Traceback (most recent call last):
+  File "/snap/auto-cpufreq/89/bin/pip3", line 5, in <module>
+    from pip._internal.cli.main import main
+  File "/snap/auto-cpufreq/89/lib/python3.8/site-packages/pip/_internal/cli/main.py", line 10, in <module>
+    from pip._internal.cli.autocompletion import autocomplete
+  File "/snap/auto-cpufreq/89/lib/python3.8/site-packages/pip/_internal/cli/autocompletion.py", line 9, in <module>
+    from pip._internal.cli.main_parser import create_main_parser
+  File "/snap/auto-cpufreq/89/lib/python3.8/site-packages/pip/_internal/cli/main_parser.py", line 7, in <module>
+    from pip._internal.cli import cmdoptions
+  File "/snap/auto-cpufreq/89/lib/python3.8/site-packages/pip/_internal/cli/cmdoptions.py", line 24, in <module>
+    from pip._internal.exceptions import CommandError
+  File "/snap/auto-cpufreq/89/lib/python3.8/site-packages/pip/_internal/exceptions.py", line 10, in <module>
+    from pip._vendor.six import iteritems
+ModuleNotFoundError: No module named 'pip._vendor.six'
+distro package
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.1 %
+
+Total CPU usage: 8.0 %
+Total system load: 1.98
+Average temp. of all cores: 52.0 °C 
+
+Currently using: performance governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Thank you very much for report. For finding the problem of this issue I would need some more info from you.
+Could you maybe give me the output of this command on your machine?
+
+`ls /sys/class/power_supply/*`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Gokul2003g:</strong></p>
+                    <p>~$ ls /sys/class/power_supply/*
+/sys/class/power_supply/ADP1:
+device  hwmon0  online  power  subsystem  type  uevent  wakeup23
+
+/sys/class/power_supply/CMB0:
+alarm           energy_full         model_name     status
+     voltage_min_design
+capacity        energy_full_design  power          subsystem   voltage_now
+capacity_level  energy_now          power_now      technology
+cycle_count     hwmon2              present        type
+device          manufacturer        serial_number  uevent
+
+This is the output. Thanks for your reply!
+
+On Mon, Dec 13, 2021 at 3:32 AM bobslept ***@***.***> wrote:
+
+> Thank you very much for report. For finding the problem of this issue I
+> would need some more info from you.
+> Could you maybe give me the output of this command on your machine?
+>
+> ls /sys/class/power_supply/*
+>
+> —
+> You are receiving this because you authored the thread.
+> Reply to this email directly, view it on GitHub
+> <https://github.com/AdnanHodzic/auto-cpufreq/issues/306#issuecomment-991978453>,
+> or unsubscribe
+> <https://github.com/notifications/unsubscribe-auth/AR5OEE6IHBVWC6BPQQXCG3TUQULWNANCNFSM5JYIMTDQ>
+> .
+> Triage notifications on the go with GitHub Mobile for iOS
+> <https://apps.apple.com/app/apple-store/id1477376905?ct=notification-email&mt=8&pt=524675>
+> or Android
+> <https://play.google.com/store/apps/details?id=com.github.android&referrer=utm_campaign%3Dnotification-email%26utm_medium%3Demail%26utm_source%3Dgithub>.
+>
+>
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Alright very nice. Now I would like the information of these two commands. One time when connected to the power chord and one time when you are on battery only. But please run the commands a few times first. So we are sure we have the right state.
+
+`cat /sys/class/power_supply/ADP1/online`
+`cat /sys/class/power_supply/CMB0/status`
+
+Oh and I would like this one as well. When you run this, doesn't matter:
+`cat /sys/class/power_supply/ADP1/type`
+`cat /sys/class/power_supply/CMB0/type`
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Gokul2003g:</strong></p>
+                    <p>The power chord is plugged in:
+
+***@***.***:~$ cat /sys/class/power_supply/CMB0/status
+Charging
+***@***.***:~$ cat /sys/class/power_supply/CMB0/status
+Charging
+
+***@***.***:~$ cat /sys/class/power_supply/ADP1/online
+1
+***@***.***:~$ cat /sys/class/power_supply/ADP1/online
+1
+
+The Power chord unplugged:
+
+
+***@***.***:~$ cat /sys/class/power_supply/CMB0/status
+Discharging
+***@***.***:~$ cat /sys/class/power_supply/CMB0/status
+Discharging
+***@***.***:~$ cat /sys/class/power_supply/CMB0/status
+Discharging
+
+***@***.***:~$ cat /sys/class/power_supply/ADP1/online
+0
+***@***.***:~$ cat /sys/class/power_supply/ADP1/online
+0
+
+
+On Mon, Dec 13, 2021 at 3:08 PM bobslept ***@***.***> wrote:
+
+> Alright very nice. Now I would like the information of these two commands.
+> One time when connected to the power chord and one time when you are on
+> battery only. But please run the commands a few times first. So we are sure
+> we have the right state.
+>
+> cat /sys/class/power_supply/ADP1/online
+> cat /sys/class/power_supply/CMB0/status
+>
+> —
+> You are receiving this because you authored the thread.
+> Reply to this email directly, view it on GitHub
+> <https://github.com/AdnanHodzic/auto-cpufreq/issues/306#issuecomment-992277444>,
+> or unsubscribe
+> <https://github.com/notifications/unsubscribe-auth/AR5OEE35F7GG4TEWQOP5XQ3UQW5IRANCNFSM5JYIMTDQ>
+> .
+> Triage notifications on the go with GitHub Mobile for iOS
+> <https://apps.apple.com/app/apple-store/id1477376905?ct=notification-email&mt=8&pt=524675>
+> or Android
+> <https://play.google.com/store/apps/details?id=com.github.android&referrer=utm_campaign%3Dnotification-email%26utm_medium%3Demail%26utm_source%3Dgithub>.
+>
+>
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Thank you! Could run these as well?
+`cat /sys/class/power_supply/ADP1/type`
+`cat /sys/class/power_supply/CMB0/type`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Gokul2003g:</strong></p>
+                    <p>***@***.***:~$ cat /sys/class/power_supply/ADP1/type
+Mains
+***@***.***:~$ cat /sys/class/power_supply/CMB0/type
+
+Battery
+***@***.***:~$
+
+On Mon, Dec 13, 2021 at 7:11 PM bobslept ***@***.***> wrote:
+
+> Thank you! Could run these as well?
+> cat /sys/class/power_supply/ADP1/type
+> cat /sys/class/power_supply/CMB0/type
+>
+> —
+> You are receiving this because you authored the thread.
+> Reply to this email directly, view it on GitHub
+> <https://github.com/AdnanHodzic/auto-cpufreq/issues/306#issuecomment-992487522>,
+> or unsubscribe
+> <https://github.com/notifications/unsubscribe-auth/AR5OEE7VJRTNOHI3HX2NJQDUQXZ2NANCNFSM5JYIMTDQ>
+> .
+> Triage notifications on the go with GitHub Mobile for iOS
+> <https://apps.apple.com/app/apple-store/id1477376905?ct=notification-email&mt=8&pt=524675>
+> or Android
+> <https://play.google.com/store/apps/details?id=com.github.android&referrer=utm_campaign%3Dnotification-email%26utm_medium%3Demail%26utm_source%3Dgithub>.
+>
+>
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Thank you very much. I will try to fix this issue. I see you were using the snap install. Are you comfortable with git? So that you can maybe test a fix from source code. We only make snap releases for new versions, so otherwise you won't be able to test if my fix works.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Gokul2003g:</strong></p>
+                    <p>No, I am not good with Git. But, if you provide me with steps I can try.
+
+On Mon, Dec 13, 2021 at 7:29 PM bobslept ***@***.***> wrote:
+
+> Thank you very much. I will try to fix this issue. I see you were using
+> the snap install. Are you comfortable with git? So that you can maybe test
+> a fix from source code. We only make snap releases for new versions, so
+> otherwise you won't be able to test if my fix works.
+>
+> —
+> You are receiving this because you authored the thread.
+> Reply to this email directly, view it on GitHub
+> <https://github.com/AdnanHodzic/auto-cpufreq/issues/306#issuecomment-992506561>,
+> or unsubscribe
+> <https://github.com/notifications/unsubscribe-auth/AR5OEE3LFAAAYLM5N3ZWVKLUQX355ANCNFSM5JYIMTDQ>
+> .
+> Triage notifications on the go with GitHub Mobile for iOS
+> <https://apps.apple.com/app/apple-store/id1477376905?ct=notification-email&mt=8&pt=524675>
+> or Android
+> <https://play.google.com/store/apps/details?id=com.github.android&referrer=utm_campaign%3Dnotification-email%26utm_medium%3Demail%26utm_source%3Dgithub>.
+>
+>
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Allright. First of all. uninstall the snap package from your system.
+
+Then follow these steps. You will use my repo from github because it's not available here yet.
+
+```
+git clone https://github.com/bobslept/auto-cpufreq.git
+cd auto-cpufreq
+git checkout fix-charging-state
+sudo ./auto-cpufreq-installer --install
+```
+Now auto-cpufreq is installed. You can now use it in live mode to test the fix like this:
+`sudo auto-cpufreq --live`
+
+to remove all this from your system use the remove function from the installer:
+`sudo ./auto-cpufreq-installer --remove`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Gokul2003g:</strong></p>
+                    <p>Awesome, thanks!
+It is working now!!
+Thanks for your help.
+A personal question, Can you guide me to also contribute to open source and
+get involved in development and share your personal experience? And share
+some learning materials.
+I am currently learning JAVA from codeacademy.com and learning web
+development from freecodecamp.com.
+For learning linux command I am using The Linux Command Line Book
+
+On Mon, Dec 13, 2021 at 8:40 PM bobslept ***@***.***> wrote:
+
+> Allright. First of all. uninstall the snap package from your system.
+> Then follow these steps. You will use my repo from git because it's not
+> available here yet.
+>
+> git clone https://github.com/bobslept/auto-cpufreq.git
+> cd auto-cpufreq
+> git checkout fix-charging-state
+> sudo ./auto-cpufreq-installer --install
+>
+> Now auto-cpufreq is installed. You cand now use it in live mode to test
+> the fix like this:
+> sudo auto-cpufreq --live
+>
+> to remove all this from your system use the remove function from the
+> installer:
+> sudo ./auto-cpufreq-installer --remove
+>
+> —
+> You are receiving this because you authored the thread.
+> Reply to this email directly, view it on GitHub
+> <https://github.com/AdnanHodzic/auto-cpufreq/issues/306#issuecomment-992575415>,
+> or unsubscribe
+> <https://github.com/notifications/unsubscribe-auth/AR5OEEZBO7F755FR34WKXNTUQYEHLANCNFSM5JYIMTDQ>
+> .
+> Triage notifications on the go with GitHub Mobile for iOS
+> <https://apps.apple.com/app/apple-store/id1477376905?ct=notification-email&mt=8&pt=524675>
+> or Android
+> <https://play.google.com/store/apps/details?id=com.github.android&referrer=utm_campaign%3Dnotification-email%26utm_medium%3Demail%26utm_source%3Dgithub>.
+>
+>
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Thank you very much for testing and providing all the information. Very happy to hear that it worked for you! :+1: 
+
+Well about the contributing to open source. If you use some project from github. Look into issues that are open, but also issues that are closed. Read and learn how they fixed certain issues. Then try fixing some issue yourself locally and if you think you have fixed something, try to participate on that issue. Ofcourse it's easier to contribute to a project that uses programming languages that you know. Another tip, don't start to difficult. Sometimes you can already help if you spot a typo and fix that. Or write some documentation if you feel that is missing. I wish you the best of luck on your journey!
+
+https://github.com/firstcontributions/first-contributions
+https://docs.github.com/en/get-started/quickstart/contributing-to-projects
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Gokul2003g:</strong></p>
+                    <p>Thank you!
+
+
+On Mon, Dec 13, 2021 at 10:57 PM bobslept ***@***.***> wrote:
+
+> Thank you very much for testing and providing all the information. Very
+> happy to hear that it worked for you! 👍
+>
+> Well about the contributing to open source. If you use some project from
+> github. Look into issues that are open, but also issues that are closed.
+> Read and learn how they fixed certain issues. Then try fixing some issue
+> yourself locally and if you think you have fixed something, try to
+> participate on that issue. Ofcourse it's easier to contribute to a project
+> that uses programming languages that you know. Another tip, don't start to
+> difficult. Sometimes you can already help if you spot a typo and fix that.
+> Or write some documentation if you feel that is missing. I wish you the
+> best of luck on your journey!
+>
+> https://github.com/firstcontributions/first-contributions
+> https://docs.github.com/en/get-started/quickstart/contributing-to-projects
+>
+> —
+> You are receiving this because you authored the thread.
+> Reply to this email directly, view it on GitHub
+> <https://github.com/AdnanHodzic/auto-cpufreq/issues/306#issuecomment-992704306>,
+> or unsubscribe
+> <https://github.com/notifications/unsubscribe-auth/AR5OEE4B2KAQCG7LZW67L7LUQYUINANCNFSM5JYIMTDQ>
+> .
+> Triage notifications on the go with GitHub Mobile for iOS
+> <https://apps.apple.com/app/apple-store/id1477376905?ct=notification-email&mt=8&pt=524675>
+> or Android
+> <https://play.google.com/store/apps/details?id=com.github.android&referrer=utm_campaign%3Dnotification-email%26utm_medium%3Demail%26utm_source%3Dgithub>.
+>
+>
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Thanks to @bobslept the proposed changes have now been merged with `master` branch. Changes will be part of the upcoming 1.8.2 release.  
+
+Until the release is made, changes can be installed by either having latest `master` changes and installing them using [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto-cpufreq-installer) or using `beta` channel of Snap package (`sudo snap install auto-cpufreq --beta`). With that said I'm closing this issue, please re-open it if the issue persists.
+
+@Gokul2003g if you look at issues for auto-cpufreq, there's a lot of easy to fix ones. If you fix some of them [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and that's an easy way to start contributing to open source :slightly_smiling_face: </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Gokul2003g:</strong></p>
+                    <p>Thanks for the tip!
+
+On Thu, Dec 16, 2021 at 12:44 PM Adnan Hodzic ***@***.***>
+wrote:
+
+> Thanks to @bobslept <https://github.com/bobslept> the proposed changes
+> have now been merged with master branch. Changes will be part of the
+> upcoming 1.8.2 release.
+>
+> Until the release is made, changes can be installed by either having
+> latest master changes and installing them using auto-cpufreq-installer
+> <https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto-cpufreq-installer>
+> or using beta channel of Snap package (sudo snap install auto-cpufreq
+> --beta). With that said I'm closing this issue, please re-open it if the
+> issue persists.
+>
+> @Gokul2003g <https://github.com/Gokul2003g> if you look at issues for
+> auto-cpufreq, there's a lot of easy to fix ones. If you fix some of them contribute
+> to the project
+> <https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution> and
+> that's an easy way to start contributing to open source 🙂
+>
+> —
+> You are receiving this because you were mentioned.
+> Reply to this email directly, view it on GitHub
+> <https://github.com/AdnanHodzic/auto-cpufreq/issues/306#issuecomment-995502997>,
+> or unsubscribe
+> <https://github.com/notifications/unsubscribe-auth/AR5OEE6L6GTCQUZ7Q7KCL5TURGGVJANCNFSM5JYIMTDQ>
+> .
+> Triage notifications on the go with GitHub Mobile for iOS
+> <https://apps.apple.com/app/apple-store/id1477376905?ct=notification-email&mt=8&pt=524675>
+> or Android
+> <https://play.google.com/store/apps/details?id=com.github.android&referrer=utm_campaign%3Dnotification-email%26utm_medium%3Demail%26utm_source%3Dgithub>.
+>
+>
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,48 @@
+
+        <html>
+        <head>
+            <title>Issue #121: sudo auto-cpufreq</title>
+        </head>
+        <body>
+            <h1>sudo auto-cpufreq</h1>
+            <p><strong>Issue #121</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+
+Installing necessary Python packages
+
+ModuleNotFoundError: No module named 'setuptools'
+
+installing auto-cpufreq tool
+-----------------------------------------------------
+Traceback (most recent call last):
+  File "setup.py", line 3, in <module>
+    from setuptools import setup
+/usr/bin/python3: No module named pip
+------------------------------------------------------
+sudo: auto-cpufreq: command not found
+
+### System information:
+
+sudo: auto-cpufreq: command not found
+Further context:
+Using LMDE 4 "Debbie". Two missing module errors as pasted above. Despite those errors, installer script says the package installed successfully. However, when I try to run "sudo auto-cpufreq" I get a command not found error, also pasted above. </p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I just made changes which should fix your problem, pull the latest changes and run `auto-cpufreq-installer --installer` again.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing due to inactivity.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

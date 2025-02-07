@@ -1,0 +1,96 @@
+
+        <html>
+        <head>
+            <title>Issue #296: auto-cpufreq stops after reboot when installed using git clone</title>
+        </head>
+        <body>
+            <h1>auto-cpufreq stops after reboot when installed using git clone</h1>
+            <p><strong>Issue #296</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>i am using ubuntu 21.10
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>farhan10ansari:</strong></p>
+                    <p>i need to use "sudo auto-cpufreq --install" command after every reboot
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>farhan10ansari:</strong></p>
+                    <p>if i  install it using snap 
+it only stays in powersaver mode even when charger plugged in
+yeah i do not need to install it again </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Maybe this issue is related to issue #277.
+You can try the gnome-power branch and see if that fix your problem.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>farhan10ansari:</strong></p>
+                    <p>
+
+
+
+> Maybe this issue is related to issue #277. You can try the gnome-power branch and see if that fix your problem.
+
+thanks i ran these commands
+https://github.com/AdnanHodzic/auto-cpufreq/issues/277#issuecomment-968246100
+it solved the problem
+
+i wanna ask one more think
+can these command cause any problem
+i am asking because these commands disable power-profiles-daemon 
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>> > Maybe this issue is related to issue #277. You can try the gnome-power branch and see if that fix your problem.
+> 
+> thanks i ran these commands [#277 (comment)](https://github.com/AdnanHodzic/auto-cpufreq/issues/277#issuecomment-968246100) it solved the problem
+> 
+> i wanna ask one more think can these command cause any problem i am asking because these commands disable power-profiles-daemon
+
+I see you manualy ran the commands. The gnome-power branch would do this for you automaticly. Glad to hear that it solved your problem. 
+
+It should not bring any problems. power-profiles-daemon is doing power management, which is in conflict with the power management that auto-cpufreq will do. So auto-cpufreq will take over, but in a slightly different way. I'm running for about a week now with the power-profiles-daemon disabled and havent seen any errors or problems so far. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Hi everyone, could you please test final changes before I merge them with `master` and make them part of 1.8.0 release.
+
+Latest changes are available on `gnome-power-v2` branch, which you test by running:
+
+```
+git fetch
+git checkout gnome-power-v2
+sudo ./auto-cpufreq-installer --install
+```
+
+For those using Snap package changes are available as part of beta channel which can be installed by running:
+
+```
+sudo snap install auto-cpufreq --beta
+```
+
+Thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Functionality which addresses this problem has now been released as part of [1.8.0 release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,292 @@
+
+        <html>
+        <head>
+            <title>Issue #602: "Warning: CPU turbo is not available" - Of concern? </title>
+        </head>
+        <body>
+            <h1>"Warning: CPU turbo is not available" - Of concern? </h1>
+            <p><strong>Issue #602</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Issue:
+"Warning: CPU turbo is not available" is displayed in the GUI app. Also displays this in the "auto-cpufreq --stats" command. I am running am AMD CPU, so is turbo-boosting my CPU not an option for myself? 
+
+- **More info**: 
+- I tried using a config file with variable "turbo" set to "auto" for both power battery and charger governors (remembering to restart the daemon as well after telling the utility where the config is stored). Nothing change by doing so: 
+`sudo auto-cpufreq --config /etc/auto-cpufreq.conf`
+`sudo systemctl stop auto-cpufreq.service`
+`sudo systemctl start auto-cpufreq.service`
+-  Debug output and copy of the config file is all below. 
+
+### Error output:
+
+![image](https://github.com/AdnanHodzic/auto-cpufreq/assets/64159618/b4dbc31f-fb26-4abe-a450-a19f3cdae16e)
+
+
+### System information:
+
+<pre><font color="#26A269">gxnni@necrozama</font>:<font color="#26A269">/home/gxnni</font>$ sudo auto-cpufreq --debug
+
+-------------------------------------------------------------------------------
+
+Linux distro: Fedora Linux 39 Workstation Edition
+Linux kernel: 6.5.6-300.fc39.x86_64
+Processor: AMD Ryzen 5 7640U w/ Radeon 760M Graphics
+Cores: 12
+Architecture: x86_64
+Driver: amd-pstate-epp
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 5579 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      3.0%        36 °C      1376 MHz
+CPU1     13.0%        36 °C      1735 MHz
+CPU2      4.0%        36 °C      2392 MHz
+CPU3      4.0%        36 °C       400 MHz
+CPU4      1.0%        36 °C      1996 MHz
+CPU5      3.0%        36 °C       400 MHz
+CPU6      3.0%        36 °C       400 MHz
+CPU7      1.0%        36 °C       400 MHz
+CPU8      3.0%        36 °C       400 MHz
+CPU9      9.0%        36 °C      1996 MHz
+CPU10      4.0%        36 °C      1367 MHz
+CPU11      0.0%        36 °C       400 MHz
+
+auto-cpufreq version: 2.0.0 (git: 15c17fc)
+
+Python: 3.12.0
+psutil package: 5.9.6
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.8.0
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.09 %
+
+Total CPU usage: 3.3 %
+Total system load: 0.76
+Average temp. of all cores: 35.80 °C 
+
+Currently using: powersave governor
+Warning: CPU turbo is not available
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+</pre>
+
+### Config File:
+
+<pre>
+gxnni@necrozama:/home/gxnni$ sudo cat /etc/auto-cpufreq.conf
+# settings for when connected to a power source
+[charger]
+# see available governors by running: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+# preferred governor
+governor = performance
+
+# minimum cpu frequency (in kHz)
+# example: for 800 MHz = 800000 kHz --> scaling_min_freq = 800000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly
+# scaling_min_freq = 800000
+
+# maximum cpu frequency (in kHz)
+# example: for 1GHz = 1000 MHz = 1000000 kHz -> scaling_max_freq = 1000000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly
+# scaling_max_freq = 1000000
+
+# turbo boost setting. possible values: always, auto, never
+turbo = auto
+
+# settings for when using battery power
+[battery]
+# see available governors by running: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+# preferred governor
+governor = powersave
+
+# minimum cpu frequency (in kHz)
+# example: for 800 MHz = 800000 kHz --> scaling_min_freq = 800000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly
+# scaling_min_freq = 800000
+
+# maximum cpu frequency (in kHz)
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# example: for 1GHz = 1000 MHz = 1000000 kHz -> scaling_max_freq = 1000000
+# to use this feature, uncomment the following line and set the value accordingly
+# scaling_max_freq = 1000000
+
+# turbo boost setting (always, auto, or never)
+turbo = auto
+</pre> 
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I don't have an AMD chipset (but @shadeyg56 might know more), but if you're getting this message about turbo boost, that means that your CPU doesn't have/support it. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>avatar1024:</strong></p>
+                    <p>> I don't have an AMD chipset (but @shadeyg56 might know more), but if you're getting this message about turbo boost, that means that your CPU doesn't have/support it.
+
+I am not sure this is correct. Both ryzen 7640u and 7840u have turbo mode. In fact in this thread https://github.com/AdnanHodzic/auto-cpufreq/issues/604 you can see that the user has a ryzen 7840u and turbo mode is detected by auto-cpufreq. 
+
+I have the same issue with a ryzen 6600u where turbo is not detected.
+
+What I can see is different is the "Driver" and the kernel. Both here and in my case the Driver is: amd-pstate-epp and kernel is 6.5, whereas in that other thread the Driver is acpi-cpufreq and Kernel is 6.1.
+
+Hope this helps. 
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@avatar1024 interesting, if changing the driver enables ability to have turbo on this chipset, could you please update the [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq/#troubleshooting) with this info?
+
+I credit [every contributor to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) in [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases) even if it's for a simple Readme update :) </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>avatar1024:</strong></p>
+                    <p>Hello, right so I've now done some testing on my machine. By switching the driver to acpi-cpufreq, the turbo mode is available and is working. I did a stress test of the CPU and turbo mode turned on. I made the commit to the README.md.
+
+auto-cpufreq is a great piece of software btw, greatly improved my system :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Hello, right so I've now done some testing on my machine. By switching the driver to acpi-cpufreq, the turbo mode is available and is working.
+
+Great to hear!
+
+> I made the commit to the README.md.
+
+I didn't see any new PR's ... as a PR could close this issue. Although now I'm thinking, even code changes could be made where in case `Warning: CPU turbo is not available` message is outputted and if AMD chipset is detected a suggestion to switch to `acpi-cpufreq` could also be made (referring to README).
+
+> auto-cpufreq is a great piece of software btw, greatly improved my system :)
+
+Spread the love and [consider donating to the project](https://github.com/AdnanHodzic/auto-cpufreq/#donate) :) </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>avatar1024:</strong></p>
+                    <p>> I didn't see any new PR's ... as a PR could close this issue
+
+I may not have done it correctly. I went to the README.md, did an edit there and committed the changes (with a comment relating the changes to this bug report). Did you not receive that?
+
+> Spread the love and [consider donating to the project](https://github.com/AdnanHodzic/auto-cpufreq/#donate) :)
+
+Absolutely!
+
+All the best
+
+Gauthier</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Ozonised:</strong></p>
+                    <p>I changed my driver to acpi-cpufreq. Now, when the charger is unplugged, it enters powersave mode as intended and the CPU(Ryzen 5 5600H) frequency is locked at 1.2GHz. 
+![Screenshot_20231207_183353](https://github.com/AdnanHodzic/auto-cpufreq/assets/74808685/15f7bc02-14d9-4516-9452-d735c3cd3e0e)
+Even during high loads with turboboost enabled, it won't clock higher than 1.2GHz. Due to this frequency lock, certain programs like mission center don't open, they get stuck with the loading animation until the charger is plugged back in. Is there a way to fix this frequency lock?
+
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bigorbi:</strong></p>
+                    <p>I am using Zorin OS 17(Ubuntu 22.04) with 6.6.5 Kernel and I have the exact same issue with my Ryzen 7 4700U (Zen2) CPU. I did not realize that AMD P-state drivers became default beginning from 6.3 kernel but when I updated the kernel it was still acpi_cpufreq driver. Then after some research I found out that you need to activate CPPC in BIOS (change from Auto to Enabled) and then restarting laptop I checked driver automatically changed to amd_pstate_epp
+
+Nice thing about this driver is that for my CPU (4700U) it allows it to go down to 400MHz and boost up to 4.2GHz , with previous driver there was only 3 frequencies available (1400 - 1700 - 2000). Initially it worked without any issues , I did a few stress tests and CPU really jumped to 4.2 GHz for some time and then going down around 3.2-3.3 GHz range. 
+
+But since yesterday I don't know what happened CPU doesn't pass 1.6 GHz limit and I got the same error "CPU Turbo is not available" in auto-cpufreq interface. When I closed CPPC in BIOS and reverting back to acpi_cpufreq driver Max frequency is limited to 2000MHz for this CPU but in stress test it can go up to 3GHz and can maintain that frequency consistently. 
+
+It seems like these AMD P-state drivers are not properly optimized yet.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ripplingsnake:</strong></p>
+                    <p>I have same issue on my rog ally 7840u chip pstates are a mess , high cpu usage if using powersave governor and performance setting it keeps freq at 4300 (turbo), I don’t think the latest kernel in fedora supports access to the turbo yet in pstates, I reverted cpu auto freq to acpi and all works as it should, however it would be great to have this work with pstates as it gives far more granular control rather than 1200 2200 and 3300 of acpi (4800) on boost , maybe the dev can look further into this In Future </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Ozonised:</strong></p>
+                    <p>>Even during high loads with turboboost enabled, it won't clock higher than 1.2GHz. 
+
+I was able to remedy this by changing  ```governor = powersave``` under ```[battery]``` in the config file to ```governor = conservative```.
+This made the CPU run at 1.2GHz for the most part, however during high load it would reach 4.2Ghz. Since, I wanted to maximise my run time when on battery, I set ```turbo = auto``` to  ```turbo = never``` under the ```[battery]``` in the config file. This, however, did not prevent the CPU from reaching 4.2GHz, so what I did next was to change the CPU scaling frequency. 
+In the config file, under ```[battery]```, I changed ```#scaling_min_freq = 800000``` to ```scaling_min_freq = 1200000``` and ```# scaling_max_freq = 1000000``` to ```scaling_max_freq = 3400000```. This made the CPU run at 1.2GHz under normal conditions and at 3.3GHz during high load. Even though the max CPU frequency was set to 3.4GHz, the processor would not run at that frequency, setting a value lower than 3.3GHz locked the processor to 1.2GHz. 
+So the obvious, choice would be to set the ```scaling_max_freq``` to 3.3GHz but in my testing with ```scaling_max_freq = 3300000``` was rather unstable. Despite setting the max frequency to 3.3GHz, the processor would at times reach 4.2GHz on all cores. So, I changed the max frequency to 3.4GHz, and it has been working well for me since then. 
+Now, I can easily squeeze out 5 hours (display brightness set to 25%) of battery life on my IdeaPad gaming 3 without sacrificing much on performance. 
+The available governors for your platform can be found out by running: ``` cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors```. These are the governors available on my machine: 
+![image](https://github.com/AdnanHodzic/auto-cpufreq/assets/74808685/2d810fd6-634d-4009-870d-e39fc4d704da)
+I have only tested ```powersave```, ```performance``` and ```conservative```.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>fridrichgood:</strong></p>
+                    <p>If used amd_pstate=guided i don't see this warning about turbo. Guided works not same like active and you can't use EPP. In both cases, cpupower tells me that the turbo is working. Not work only switching with auto-cpufreq and amd_pstate=active.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>fridrichgood:</strong></p>
+                    <p>Also i noticed error in logs if used amd_pstate=active
+
+auto-cpufreq : /usr/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>fridrichgood:</strong></p>
+                    <p>If switch guided to active
+
+echo active > /sys/devices/system/cpu/amd_pstate/status
+
+/sys/devices/system/cpu/cpufreq/boost disappear. I think EPP manages the boost itself. 
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>> I think EPP manages the boost itself.
+
+Yes this is the case it seems</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>fridrichgood:</strong></p>
+                    <p>> Also i noticed error in logs if used amd_pstate=active
+> 
+> auto-cpufreq : /usr/bin/cpufreqctl.auto-cpufreq: line 105: echo: write error: Device or resource busy
+
+This bug annoys me ) Something with function set_energy_performance_preference i think.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>braun-steven:</strong></p>
+                    <p>> @avatar1024 interesting, if changing the driver enables ability to have turbo on this chipset, could you please update the [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq/#troubleshooting) with this info?
+
+Check out the in-detail description here: https://www.reddit.com/r/linux/comments/15p4bfs/amd_pstate_and_amd_pstate_epp_scaling_driver/
+
+I think you loose a lot of benefits when switching to the old driver. Right now the README even suggests to go back to the old driver just because `auto-cpufreq --stats` shows "CPU turbo not available" without mentioning the possible backdraws of a worse driver. And in fact, turbo is available. I can run `sysbench --threads=8 cpu run` and see that all cores reach their maximum (turbo) frequency, i.e. go beyond base clock.
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

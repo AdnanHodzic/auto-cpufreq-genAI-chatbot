@@ -1,0 +1,198 @@
+
+        <html>
+        <head>
+            <title>Issue #797: Autocpu-freq doesn't work for me on Fedora 41 Workstation.</title>
+        </head>
+        <body>
+            <h1>Autocpu-freq doesn't work for me on Fedora 41 Workstation.</h1>
+            <p><strong>Issue #797</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hello,
+
+I  installed the last source code from github on Fedora 41 Workstation.
+
+Installation is ok (from auto-cpufreq-installer) : successfully installed auto-cpufreq-2.4.0+18a3a93
+
+$ sudo auto-cpufreq --install
+
+> 
+--------------------- Deploying auto-cpufreq as a daemon ----------------------
+
+* Turn off bluetooth on boot (can be turned on any time later on!)
+
+* Deploy auto-cpufreq install script
+
+* Deploy auto-cpufreq remove script
+There was a problem, couldn't determine GNOME Power Profiles Daemon
+
+* Disabling TuneD daemon
+Removed '/etc/systemd/system/multi-user.target.wants/tuned.service'.
+Created symlink '/etc/systemd/system/tuned.service' → '/dev/null'.
+/bin/sh: ligne 1: /usr/local/bin/auto-cpufreq-install: permission denied 
+
+----------------- auto-cpufreq daemon installed and running -----------------
+
+To view live stats, run:
+auto-cpufreq --stats
+
+auto-cpufreq makes all decisions automatically, if you would like to
+configure certain setting to your own liking, please refer to:
+https://github.com/AdnanHodzic/auto-cpufreq#configuring-auto-cpufreq
+
+To disable and remove auto-cpufreq daemon, run:
+sudo auto-cpufreq --remove
+
+-------------------------------------------------------------------------------
+>
+
+$ auto-cpufreq --stats
+
+------------------------ auto-cpufreq not running ------------------------------
+
+ERROR: auto-cpufreq is not running in daemon mode.
+
+Make sure to run "sudo auto-cpufreq --install" first
+
+-------------------------------------------------------------------------------
+
+
+$ sudo systemctl status auto-cpufreq
+
+
+Unit auto-cpufreq.service could not be found.
+
+-------------------------------------------------------------------------------
+
+
+$ sudo auto-cpufreq --debug
+
+
+Linux distro: Fedora Linux 41 Workstation Edition
+Cores: 4
+Architecture: x86_64
+Driver: /bin/sh: ligne 1: /usr/local/bin/cpufreqctl.auto-cpufreq: permission denied 
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2700 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      6.1%        43 °C      2587 MHz
+CPU1      2.0%        43 °C      2586 MHz
+CPU2      3.0%        43 °C      2587 MHz
+CPU3     30.0%        43 °C      2587 MHz
+
+auto-cpufreq version: 2.4.0
+
+Python: 3.13.0
+psutil package: 6.1.0
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.87 %
+
+Total CPU usage: 8.0 %
+Total system load: 1.03
+Average temp. of all cores: 43.00 °C 
+
+Currently using: /bin/sh: governor
+Currently turbo boost is: on
+
+--------------------------------------------------------------
+
+Thanks.
+
+Regards.
+
+**Note**: I launched the : sudo chmod +x /usr/local/bin/auto-cpufreq-install  command but the permission denied message is still there.  :-(
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Considering I merged changes in #762 
+
+What output do you get if you run `stat /usr/local/bin/cpufreqctl.auto-cpufreq`?
+
+If it's all good and you have exec access it should return 755, i.e:
+
+```
+stat /usr/local/bin/cpufreqctl.auto-cpufreq
+  File: /usr/local/bin/cpufreqctl.auto-cpufreq
+  Size: 11871     	Blocks: 10         IO Block: 12288  regular file
+Device: 0,29	Inode: 26          Links: 1
+Access: (0755/-rwxr-xr-x)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2024-12-01 08:24:07.052833325 +0100
+Modify: 2024-11-24 07:47:55.919756011 +0100
+Change: 2024-11-24 07:47:55.919756011 +0100
+ Birth: 2024-11-24 07:47:55.914755795 +0100
+```
+
+I think changes are not applied yet, can you do the following. Uninstall auto-cpufreq which will also remove the auto-cpufreq daemon, then [re-install auto-cpufreq (using installer) ](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#auto-cpufreq-installer)and [re-install auto-cpufreq daemon](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#install---auto-cpufreq-daemon). I.e:
+
+```
+git pull
+sudo ./auto-cpufreq-installer --remove
+```
+
+Make sure auto-cpufreq daemon is gone, i.e:
+`sudo auto-cpufreq --stats` doesn't return anything and `ps -ef | grep auto-cpufreq` doesn't return any running processes. 
+
+Then re-install auto-cpufreq and its daemon
+
+```
+sudo ./auto-cpufreq-installer --install
+sudo auto-cpufreq --install 
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Tuxman2:</strong></p>
+                    <p>@AdnanHodzic: Thanks.
+
+I downloaded your last source code and now it works. :+1:
+
+There is only one last thing. The powersave governor is not setting to use.
+
+Here are the results I've got in the gtk interface:
+
+----- CPU frequency scaling -------------------------
+
+Setting to use "powersave" governor
+Warning : governor overwritten using '--force' flag.
+Not setting EPP (not supported by system)
+Setting to use "balance_power" EPB
+
+So, I'm not in the powersave setting but in the balance setting, that's right ?
+But in the gtk interface, Current governor is powersave and governor Override is set to Powersave.
+
+Is there a way to solve this issue ?
+
+Thanks a lot.
+
+Regards.
+
+Note: $ sudo auto-cpufreq --debug
+Driver: intel_cpufreq
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Not setting EPP and powersave governor are 2 different things. From little info you provided I see powersave is set, but EEP is not which is fine as your hardware might not have support for it. Refer to [project readme for more info](https://github.com/AdnanHodzic/auto-cpufreq).
+
+In meantime closing the issue, since original problem has been solved.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

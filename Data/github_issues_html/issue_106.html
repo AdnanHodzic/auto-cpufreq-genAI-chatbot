@@ -1,0 +1,62 @@
+
+        <html>
+        <head>
+            <title>Issue #106: Removal of accidentally pushed file</title>
+        </head>
+        <body>
+            <h1>Removal of accidentally pushed file</h1>
+            <p><strong>Issue #106</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hello,
+
+As part of https://github.com/AdnanHodzic/auto-cpufreq/commit/02bfd551c2f60924e68f3e8bc5efe340ca7ea533 commit I accidentally pushed a `auto-cpufreq_1.2.1_amd64.snap` file. Which adds additional (unneeded) ~19 MB to projects git history, which is evident when project is cloned for the first time.
+
+In meantime I removed it from auto-cpufreq repo and made changes so some thing can't happen again. But, the tricky part is that this commit was pushed to a few other repositories, including:
+
+@rrodriguez81 https://github.com/rrodriguez81/auto-cpufreq
+@sebastian-xyz https://github.com/sebastian-xyz/auto-cpufreq
+@crispud https://github.com/crispud/auto-cpufreq
+@easyriders https://github.com/easyriders/auto-cpufreq as well as `v1.2.2` tag.
+
+You can verify this by running:
+
+```
+git log --all --full-history -- "**auto-cpufreq_1.2.1_amd64.snap*"
+```
+
+Output should be something like this, and you'll be able to see this binary as part of the commit: 
+
+```
+commit 33f3b195c0222c2f85e4b74b9a5f93c32e8f504e
+Author: Adnan Hodzic <adnan@hodzic.org>
+Date:   Fri Aug 14 11:28:29 2020 +0200
+
+    removed unused power lib
+```
+
+Hence, could you please remove this file by running the following inside your forked auto-cpufreq repo.
+
+```
+git filter-branch --force --index-filter \
+  "git rm --cached --ignore-unmatch auto-cpufreq_1.2.1_amd64.snap" \
+  --prune-empty --tag-name-filter cat -- --all
+
+git push origin --force --all
+
+git push origin --force --tags
+```
+
+You can also refer to [official documentation](https://docs.github.com/en/github/authenticating-to-github/removing-sensitive-data-from-a-repository).
+
+Thanks and please inform me if you have any additional questions and/or comments,
+
+Adnan</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+            </div>
+        </body>
+        </html>
+        

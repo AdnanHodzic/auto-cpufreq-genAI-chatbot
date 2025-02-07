@@ -1,0 +1,131 @@
+
+        <html>
+        <head>
+            <title>Issue #233: Fails to find scaling_available_governors</title>
+        </head>
+        <body>
+            <h1>Fails to find scaling_available_governors</h1>
+            <p><strong>Issue #233</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Extends #185
+
+This is a desktop PC without battery. (Basically I am debugging a heat issue - throtteling the CPU would help.)
+
+### Error output:
+```text
+FileNotFoundError: [Errno 2] No such file or directory: '/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors'
+```
+
+However a similar file exists:
+/sys/devices/system/cpu/cpuidle/available_governors
+
+Is that an option?
+
+Also can  you catch the exception and output some more user friendly information instead?
+
+---
+
+### System information:
+```text
+
+-------------------------------------------------------------------------------
+
+Linux distro: Manjaro Linux 21.1.0 Pahvo
+Linux kernel: 5.10.56-1-MANJARO
+Processor: Intel(R) Core(TM)2 Duo CPU     E8500  @ 3.16GHz
+Cores: 2
+Architecture: x86_64
+Driver: /bin/sh: Zeile 1: cpufreqctl.auto-cpufreq: Kommando nicht gefunden.
+
+------------------------------ Current CPU stats
+------------------------------
+
+CPU max frequency: 0 MHz
+CPU min frequency: 0 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0:     0.0%     99 °C     2709 MHz
+CPU1:     1.0%     99 °C     2596 MHz
+
+auto-cpufreq version:
+Version                  : 1.6.4.r3.gc0f2022-1
+
+Python: 3.9.6
+psutil package: 5.8.0
+platform package: 1.0.8
+click package: 8.0.1
+/bin/sh: Zeile 1: pip3: Kommando nicht gefunden.
+distro package
+
+Computer type: Desktop
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.41 %
+
+Total CPU usage: 1.5 %
+Total system load: 0.0
+Average temp. of all cores: 99.0 °C
+
+Currently using: /bin/sh: governor
+Warning: CPU turbo is not available
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>With [v1.7.0 release](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.7.0) it's now possible to manually define some of the settings instead of leaving everything to be picked up automatically. Could you try tweaking some of the [available options](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq) and report back on how that worked for you? Thanks</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>antis81:</strong></p>
+                    <p>Thanks for the update, I will try and report back.
+(FYI: Those "heat issues" ar gone now on that particular machine, which is 15+ years now -> cleaning, apply fresh heat-flow paste etc. helped to reduce power consumption)
+
+Do you think about moving auto-cpufreq into kernel (dkms?) instead of user space? (I know the question is off-topic here - and implies writing bloody C/Rust? code. From user's viewpoint though this would add so much value…)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Thanks for the update, I will try and report back. 
+
+:+1: 
+
+> (FYI: Those "heat issues" ar gone now on that particular machine, which is 15+ years now -> cleaning, apply fresh heat-flow paste etc. helped to reduce power consumption)
+
+Good to hear. 
+
+> Do you think about moving auto-cpufreq into kernel (dkms?) instead of user space? (I know the question is off-topic here - and implies writing bloody C/Rust? code. From user's viewpoint though this would add so much value…)
+
+I thought about it, but would first like to add few more features and then we can discuss the next steps for auto-cpufreq :)
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closing due to inactivity. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>antis81:</strong></p>
+                    <p>@AdnanHodzic Checked yesterday. I couldn't find any scaling governour so I guess the CPU/Mainboard is simply "too old" and doesn't have this feature. Don't have time to check that really.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>domainoverflow:</strong></p>
+                    <p>I am having the same problem ( scaling_available_governors not found ) on a brand new dell xps 8940 i7-11k ubuntu 20.04.1 ....  and on an dell optiplex i7-4770 ubuntu .... </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

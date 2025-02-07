@@ -1,0 +1,380 @@
+
+        <html>
+        <head>
+            <title>Issue #794: Requesting for battery threshold management for Asus vivobook S14 S433EA</title>
+        </head>
+        <body>
+            <h1>Requesting for battery threshold management for Asus vivobook S14 S433EA</h1>
+            <p><strong>Issue #794</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+### Error output:
+```text
+Add/paste error output in case of failed installation or other failing component
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+auto-cpufreq --debug
+```
+
+I Have an Asus vivobook S14 S433EA and recenty switched to popos and the main issue i had is with battery threshold management(Every other functionality is working totally fine ) as the auto-cpufreq is still not available for this device , i am sharing information about the device driver modules you have asked for but as i am new to linux , i really don't know how to check if the proper acpi modules is installed or not on my linux distro(popos).
+
+here are the info i got from lsmod command:-
+
+Module                  Size  Used by
+ccm                    20480  3
+rfcomm                102400  4
+cmac                   12288  2
+algif_hash             12288  1
+algif_skcipher         16384  1
+af_alg                 32768  6 algif_hash,algif_skcipher
+snd_seq_dummy          12288  0
+snd_hrtimer            12288  1
+zstd                   12288  8
+bnep                   32768  2
+zram                   36864  2
+snd_hda_codec_hdmi     98304  1
+snd_sof_pci_intel_tgl    12288  0
+snd_sof_intel_hda_common   221184  1 snd_sof_pci_intel_tgl
+soundwire_intel        73728  1 snd_sof_intel_hda_common
+snd_sof_intel_hda_mlink    45056  2 soundwire_intel,snd_sof_intel_hda_common
+soundwire_cadence      40960  1 soundwire_intel
+snd_sof_intel_hda      24576  1 snd_sof_intel_hda_common
+snd_sof_pci            24576  2 snd_sof_intel_hda_common,snd_sof_pci_intel_tgl
+snd_sof_xtensa_dsp     12288  1 snd_sof_intel_hda_common
+snd_sof               385024  3 snd_sof_pci,snd_sof_intel_hda_common,snd_sof_intel_hda
+snd_sof_utils          16384  1 snd_sof
+snd_hda_codec_realtek   200704  1
+snd_soc_hdac_hda       24576  1 snd_sof_intel_hda_common
+snd_soc_acpi_intel_match   102400  2 snd_sof_intel_hda_common,snd_sof_pci_intel_tgl
+soundwire_generic_allocation    12288  1 soundwire_intel
+snd_hda_codec_generic   122880  1 snd_hda_codec_realtek
+snd_soc_acpi           16384  2 snd_soc_acpi_intel_match,snd_sof_intel_hda_common
+soundwire_bus         110592  3 soundwire_intel,soundwire_generic_allocation,soundwire_cadence
+snd_hda_scodec_component    20480  1 snd_hda_codec_realtek
+snd_soc_avs           196608  0
+snd_soc_hda_codec      24576  1 snd_soc_avs
+snd_hda_ext_core       32768  6 snd_soc_avs,snd_soc_hda_codec,snd_sof_intel_hda_common,snd_soc_hdac_hda,snd_sof_intel_hda_mlink,snd_sof_intel_hda
+snd_soc_core          442368  6 snd_soc_avs,snd_soc_hda_codec,soundwire_intel,snd_sof,snd_sof_intel_hda_common,snd_soc_hdac_hda
+snd_compress           28672  2 snd_soc_avs,snd_soc_core
+ac97_bus               12288  1 snd_soc_core
+snd_pcm_dmaengine      16384  1 snd_soc_core
+snd_hda_intel          61440  1
+intel_uncore_frequency    16384  0
+intel_uncore_frequency_common    16384  1 intel_uncore_frequency
+intel_tcc_cooling      12288  0
+snd_intel_dspcfg       36864  4 snd_soc_avs,snd_hda_intel,snd_sof,snd_sof_intel_hda_common
+snd_intel_sdw_acpi     16384  2 snd_sof_intel_hda_common,snd_intel_dspcfg
+snd_hda_codec         204800  8 snd_hda_codec_generic,snd_soc_avs,snd_hda_codec_hdmi,snd_soc_hda_codec,snd_hda_intel,snd_hda_codec_realtek,snd_soc_hdac_hda,snd_sof_intel_hda
+x86_pkg_temp_thermal    20480  0
+intel_powerclamp       24576  0
+snd_hda_core          139264  11 snd_hda_codec_generic,snd_soc_avs,snd_hda_codec_hdmi,snd_soc_hda_codec,snd_hda_intel,snd_hda_ext_core,snd_hda_codec,snd_hda_codec_realtek,snd_sof_intel_hda_common,snd_soc_hdac_hda,snd_sof_intel_hda
+coretemp               24576  0
+snd_hwdep              20480  1 snd_hda_codec
+binfmt_misc            24576  1
+kvm_intel             483328  0
+snd_pcm               196608  12 snd_soc_avs,snd_hda_codec_hdmi,snd_hda_intel,snd_hda_codec,soundwire_intel,snd_sof,snd_sof_intel_hda_common,snd_compress,snd_soc_core,snd_sof_utils,snd_hda_core,snd_pcm_dmaengine
+iwlmvm                876544  0
+uvcvideo              135168  0
+videobuf2_vmalloc      20480  1 uvcvideo
+mei_pxp                16384  0
+mei_hdcp               28672  0
+uvc                    12288  1 uvcvideo
+intel_rapl_msr         20480  0
+input_leds             12288  0
+nls_iso8859_1          12288  1
+kvm                  1417216  1 kvm_intel
+snd_seq_midi           24576  0
+snd_seq_midi_event     16384  1 snd_seq_midi
+videobuf2_memops       16384  1 videobuf2_vmalloc
+videobuf2_v4l2         36864  1 uvcvideo
+mac80211             1740800  1 iwlmvm
+snd_rawmidi            57344  1 snd_seq_midi
+btusb                  77824  0
+rtsx_usb_ms            24576  0
+btrtl                  32768  1 btusb
+videodev              356352  2 videobuf2_v4l2,uvcvideo
+snd_seq               114688  9 snd_seq_midi,snd_seq_midi_event,snd_seq_dummy
+btintel                61440  1 btusb
+processor_thermal_device_pci_legacy    12288  0
+processor_thermal_device    20480  1 processor_thermal_device_pci_legacy
+btbcm                  24576  1 btusb
+videobuf2_common       81920  4 videobuf2_vmalloc,videobuf2_v4l2,uvcvideo,videobuf2_memops
+asus_nb_wmi            32768  0
+btmtk                  12288  1 btusb
+snd_seq_device         16384  3 snd_seq,snd_seq_midi,snd_rawmidi
+processor_thermal_wt_hint    16384  1 processor_thermal_device
+asus_wmi               86016  1 asus_nb_wmi
+processor_thermal_rfim    32768  1 processor_thermal_device
+rapl                   20480  0
+libarc4                12288  1 mac80211
+bfq                   122880  8
+memstick               28672  1 rtsx_usb_ms
+cmdlinepart            12288  0
+processor_thermal_rapl    16384  1 processor_thermal_device
+bluetooth            1028096  36 btrtl,btmtk,btintel,btbcm,bnep,btusb,rfcomm
+mc                     81920  4 videodev,videobuf2_v4l2,uvcvideo,videobuf2_common
+snd_timer              49152  3 snd_seq,snd_hrtimer,snd_pcm
+platform_profile       12288  1 asus_wmi
+iwlwifi               626688  1 iwlmvm
+spi_nor               163840  0
+serio_raw              20480  0
+iTCO_wdt               16384  0
+joydev                 32768  0
+sparse_keymap          12288  1 asus_wmi
+mei_me                 53248  2
+intel_rapl_common      40960  2 intel_rapl_msr,processor_thermal_rapl
+mtd                    98304  3 spi_nor,cmdlinepart
+snd                   143360  18 snd_hda_codec_generic,snd_seq,snd_seq_device,snd_hda_codec_hdmi,snd_hwdep,snd_hda_intel,snd_hda_codec,snd_hda_codec_realtek,snd_sof,snd_timer,snd_compress,snd_soc_core,snd_pcm,snd_rawmidi
+hid_multitouch         36864  0
+intel_cstate           24576  0
+intel_pmc_bxt          16384  1 iTCO_wdt
+wmi_bmof               12288  0
+cfg80211             1335296  3 iwlmvm,iwlwifi,mac80211
+iTCO_vendor_support    12288  1 iTCO_wdt
+8250_dw                20480  0
+soundcore              16384  1 snd
+processor_thermal_wt_req    12288  1 processor_thermal_device
+processor_thermal_power_floor    12288  1 processor_thermal_device
+mei                   172032  5 mei_hdcp,mei_pxp,mei_me
+ecdh_generic           16384  1 bluetooth
+ecc                    45056  1 ecdh_generic
+processor_thermal_mbox    12288  4 processor_thermal_power_floor,processor_thermal_wt_req,processor_thermal_rfim,processor_thermal_wt_hint
+intel_soc_dts_iosf     16384  1 processor_thermal_device_pci_legacy
+igen6_edac             24576  0
+int3403_thermal        16384  0
+int340x_thermal_zone    16384  2 int3403_thermal,processor_thermal_device
+intel_pmc_core        118784  0
+intel_vsec             20480  1 intel_pmc_core
+pmt_telemetry          16384  1 intel_pmc_core
+int3400_thermal        24576  0
+pmt_class              12288  1 pmt_telemetry
+mac_hid                12288  0
+acpi_tad               20480  0
+acpi_thermal_rel       20480  1 int3400_thermal
+acpi_pad              184320  0
+sch_fq_codel           24576  1
+kyber_iosched          45056  2
+msr                    12288  0
+parport_pc             53248  0
+ppdev                  24576  0
+lp                     28672  0
+parport                73728  3 parport_pc,lp,ppdev
+efi_pstore             12288  0
+ip_tables              32768  0
+x_tables               65536  1 ip_tables
+autofs4                57344  2
+raid10                 77824  0
+raid456               196608  0
+async_raid6_recov      20480  1 raid456
+async_memcpy           16384  2 raid456,async_raid6_recov
+async_pq               20480  2 raid456,async_raid6_recov
+async_xor              16384  3 async_pq,raid456,async_raid6_recov
+async_tx               16384  5 async_pq,async_memcpy,async_xor,raid456,async_raid6_recov
+xor                    20480  1 async_xor
+raid6_pq              126976  3 async_pq,raid456,async_raid6_recov
+libcrc32c              12288  1 raid456
+raid1                  61440  0
+raid0                  24576  0
+system76_io            20480  0
+system76_acpi          20480  0
+rtsx_usb_sdmmc         36864  0
+rtsx_usb               32768  2 rtsx_usb_sdmmc,rtsx_usb_ms
+xe                   2777088  0
+drm_gpuvm              45056  1 xe
+drm_exec               12288  2 drm_gpuvm,xe
+gpu_sched              61440  1 xe
+drm_suballoc_helper    16384  1 xe
+drm_ttm_helper         12288  1 xe
+usbhid                 77824  0
+i915                 4333568  22
+crct10dif_pclmul       12288  1
+spi_pxa2xx_platform    36864  0
+crc32_pclmul           12288  0
+hid_generic            12288  0
+dw_dmac                12288  0
+drm_buddy              20480  2 xe,i915
+polyval_clmulni        12288  0
+dw_dmac_core           36864  1 dw_dmac
+i2c_algo_bit           16384  2 xe,i915
+polyval_generic        12288  1 polyval_clmulni
+ghash_clmulni_intel    16384  0
+ttm                   110592  3 drm_ttm_helper,xe,i915
+nvme                   61440  2
+sha256_ssse3           32768  0
+sha1_ssse3             32768  0
+drm_display_helper    266240  2 xe,i915
+nvme_core             212992  3 nvme
+i2c_i801               36864  0
+spi_intel_pci          12288  0
+i2c_smbus              16384  1 i2c_i801
+thunderbolt           528384  0
+ucsi_acpi              12288  0
+nvme_auth              28672  1 nvme_core
+spi_intel              32768  1 spi_intel_pci
+intel_lpss_pci         24576  2
+cec                    94208  3 drm_display_helper,xe,i915
+typec_ucsi             61440  1 ucsi_acpi
+intel_lpss             12288  1 intel_lpss_pci
+xhci_pci               24576  0
+idma64                 20480  0
+xhci_pci_renesas       20480  1 xhci_pci
+rc_core                73728  1 cec
+typec                 110592  1 typec_ucsi
+i2c_hid_acpi           12288  0
+i2c_hid                40960  1 i2c_hid_acpi
+hid                   180224  4 i2c_hid,usbhid,hid_multitouch,hid_generic
+video                  73728  4 asus_wmi,asus_nb_wmi,xe,i915
+wmi                    28672  3 video,asus_wmi,wmi_bmof
+pinctrl_tigerlake      32768  0
+aesni_intel           356352  5
+crypto_simd            16384  1 aesni_intel
+cryptd                 24576  3 crypto_simd,ghash_clmulni_intel
+
+Also i am attaching photo of driver name i got from windows 11.
+![WhatsApp Image 2024-11-18 at 6 21 12 PM](https://github.com/user-attachments/assets/9142caa6-ad24-4acd-9358-5c5881c8962b)
+ 
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Relates to #741, #765
+
+Since [project is looking for contributors](https://github.com/AdnanHodzic/auto-cpufreq#looking-for-developers-and-co-maintainers) if you or anyone else wants to give it a try in implementing this functionality, please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>mantisdc:</strong></p>
+                    <p>Well , i would surely like to contribute (skill issue) . I don't have any prior programming experience.
+If you can  tell me what thing I have to learn from language to tech and
+core subjects so I have a working knowledge of how to try implementing this
+functionality, I would really try doing this.
+
+On Sun, 24 Nov, 2024, 3:30 pm Adnan Hodzic, ***@***.***>
+wrote:
+
+> Relates to #741 <https://github.com/AdnanHodzic/auto-cpufreq/issues/741>,
+> #765 <https://github.com/AdnanHodzic/auto-cpufreq/issues/765>
+>
+> Since project is looking for contributors
+> <https://github.com/AdnanHodzic/auto-cpufreq#looking-for-developers-and-co-maintainers>
+> if you or anyone else wants to give it a try in implementing this
+> functionality, please give it a try and contribute to the project
+> <https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution> and you
+> will be credited for your work as part of future release
+> <https://github.com/AdnanHodzic/auto-cpufreq/releases>.
+>
+> —
+> Reply to this email directly, view it on GitHub
+> <https://github.com/AdnanHodzic/auto-cpufreq/issues/794#issuecomment-2495914668>,
+> or unsubscribe
+> <https://github.com/notifications/unsubscribe-auth/AWIYZ2IUKXOVXRP2YPRCIJL2CGPTRAVCNFSM6AAAAABR7T76NOVHI2DSMVQWIX3LMV43OSLTON2WKQ3PNVWWK3TUHMZDIOJVHEYTINRWHA>
+> .
+> You are receiving this because you authored the thread.Message ID:
+> ***@***.***>
+>
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lukasnxyz:</strong></p>
+                    <p>Hey I can help you out with this, I'm going to work through all of the issues and such in about a week or two once I have a solid block of a few days open to make some progress. I will let you know about this feature request!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>mantisdc:</strong></p>
+                    <p>Thanks for the help, will really love to see your work running on my pc.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>you device looks like it does support the asus kernel module ( asus_wmi ) meaning your device can be used with with auto_cpufreq after we change some stuff 
+
+taking a look from a similar project it looks like the asus_wmi modules get loaded too late on boot 
+
+https://github.com/linrunner/TLP/issues/602 
+
+from here it suggests you add the module to the initramfs so that it loads the module on boot instead of later when it find your device</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>@mantisdc clone my repo and check it out. https://github.com/PurpleWazard/auto-cpufreq
+
+let me know of any issues. its basically a copy and paste of the thinkpad system since the paths look the be the same. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@mantisdc any updates? As based on your reply we can conclude if this works or not.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>mantisdc:</strong></p>
+                    <p>@AdnanHodzic , well the battery charging threshold issue didn't get resolved with all the help and method shared here ,so I just installed linux on another desktop device(for now)and kept windows on my laptop device. 
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>@mantisdc just to clarify did my repo with the changes not work? Or did you just not test it?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>mantisdc:</strong></p>
+                    <p>I did try using your repo but it didn't work either(popOS), so I changed my linux distro(arch Linux) then I tried again using your repo and same results and while using arch my laptop was not shutting down properly.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>@mantisdc well I'm willing to fix this issue. But I need your cooperation as I can not test it due to not having your laptop. Also I'd recommend joining our discord where you can reach me better.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>mantisdc:</strong></p>
+                    <p>@PurpleWazard Share me the discord link , i will join there. i would install any linux distro recommended by you as a dual boot on my laptop for testing .</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>https://discord.gg/Sjauxtj6kH @mantisdc here you go</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>@mantisdc were you able to join the discord?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>mantisdc:</strong></p>
+                    <p>just joined , Username - ALIG_DEVRAJ.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>mantisdc:</strong></p>
+                    <p>for now, i am closing this issue here and will be communicating using discord.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

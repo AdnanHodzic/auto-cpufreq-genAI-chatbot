@@ -1,0 +1,298 @@
+
+        <html>
+        <head>
+            <title>Issue #300: 'sudo auto-cpufreq --install' error, v1.8.0, Void Linux.</title>
+        </head>
+        <body>
+            <h1>'sudo auto-cpufreq --install' error, v1.8.0, Void Linux.</h1>
+            <p><strong>Issue #300</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>When trying to run `sudo auto-cpufreq --install` after installing v1.8.0, I get the following error output:
+
+### Error output:
+```
+Unable to determine init system
+If this causes any problems, please submit an issue:
+https://github.com/AdnanHodzic/auto-cpufreq/issues
+
+--------------------- Deploying auto-cpufreq as a daemon ----------------------
+
+* Turn off bluetooth on boot
+
+* Deploy auto-cpufreq install script
+
+* Deploy auto-cpufreq remove script
+Traceback (most recent call last):
+  File "/bin/auto-cpufreq", line 4, in <module>
+    __import__('pkg_resources').run_script('auto-cpufreq==1.0', 'auto-cpufreq')
+  File "/usr/lib/python3.10/site-packages/pkg_resources/__init__.py", line 651, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/usr/lib/python3.10/site-packages/pkg_resources/__init__.py", line 1455, in run_script
+    exec(script_code, namespace, namespace)
+  File "/usr/lib/python3.10/site-packages/auto_cpufreq-1.0-py3.10.egg/EGG-INFO/scripts/auto-cpufreq", line 189, in <module>
+  File "/usr/lib/python3.10/site-packages/click/core.py", line 1128, in __call__
+    return self.main(*args, **kwargs)
+  File "/usr/lib/python3.10/site-packages/click/core.py", line 1053, in main
+    rv = self.invoke(ctx)
+  File "/usr/lib/python3.10/site-packages/click/core.py", line 1395, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/usr/lib/python3.10/site-packages/click/core.py", line 754, in invoke
+    return __callback(*args, **kwargs)
+  File "/usr/lib/python3.10/site-packages/auto_cpufreq-1.0-py3.10.egg/EGG-INFO/scripts/auto-cpufreq", line 166, in main
+  File "/usr/lib/python3.10/site-packages/auto_cpufreq-1.0-py3.10.egg/auto_cpufreq/core.py", line 315, in deploy_daemon
+  File "/usr/lib/python3.10/site-packages/auto_cpufreq-1.0-py3.10.egg/auto_cpufreq/power_helper.py", line 45, in gnome_power_detect_install
+NameError: name 'gnome_power_stats' is not defined. Did you mean: 'gnome_power_detect'?
+```
+---
+
+### System information:
+```Linux distro: void rolling void
+Linux kernel: 5.15.6_1
+Processor: Intel(R) Core(TM) i5-9300H CPU @ 2.40GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+```
+---
+
+I have tried to install v1.7.2, with success. It seems to run as intended, and 'sudo auto-cpufreq --install' seems to successfully deploy the daemon.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I thought this could happen as I mentioned to (@explosion-mental, @jpnt who implemented support for Void Linux IIRC) as part of [my comment](https://github.com/AdnanHodzic/auto-cpufreq/issues/277#issuecomment-986219983) in #277. 
+
+There needs to be a better detection where if init system is not `systemd` it should completely skip calling [` gnome_power_detect_install` and `gnome_power_svc_disable`](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto_cpufreq/core.py#L314) functions as part of `deploy_daemon` function.
+
+Since I do't use Void Linux and it'll be hard for me to debug it, I would encourage you to [create a code contribution](https://github.com/AdnanHodzic/auto-cpufreq#code-contribution) for this and I'll gladly review it.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bobslept:</strong></p>
+                    <p>Could something like this be enough to skip the steps?
+I saw something like this being used to check if  `bluetoothctl` was present on the system.
+
+``` 
+    # check if systemctl is present on the system
+    # skip steps otherwise
+    if which("systemctl") is not None:
+        # output warning if gnome power profile is running
+        gnome_power_detect_install()
+        gnome_power_svc_disable()
+```
+After some searching I found this page:
+https://www.freedesktop.org/software/systemd/man/sd_booted.html
+
+> sd_booted() checks whether the system was booted up using the systemd init system.
+
+> Internally, this function checks whether the directory /run/systemd/system/ exists. A simple check like this can also be implemented trivially in shell or any other language.
+
+Which is probably a better way to verify if systemd is used.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Could something like this be enough to skip the steps? I saw something like this being used to check if `bluetoothctl` was present on the system.
+> 
+> ```
+>     # check if systemctl is present on the system
+>     # skip steps otherwise
+>     if which("systemctl") is not None:
+>         # output warning if gnome power profile is running
+>         gnome_power_detect_install()
+>         gnome_power_svc_disable()
+> ```
+> 
+> After some searching I found this page: https://www.freedesktop.org/software/systemd/man/sd_booted.html
+> 
+> > sd_booted() checks whether the system was booted up using the systemd init system.
+> 
+> > Internally, this function checks whether the directory /run/systemd/system/ exists. A simple check like this can also be implemented trivially in shell or any other language.
+> 
+> Which is probably a better way to verify if systemd is used.
+
+@bobslept this will work, but I placed this check in `power_helper.py`, as these functions will be called in different stages of auto-cpufreq. See what I did as part of the branch, but thank you for your suggestion! Next time you an idea like this please create a PR out of it immediately (altough I'll give you your credit in next release if these changes end up in `master`). :)
+
+@Salyrus and @benezen could you please pull the changes from `non-systemd-gnome-power` branch and perform install again?
+
+You can do this by running:
+
+```
+sudo ./auto-cpufreq-installer --remove
+git fetch
+git checkout non-systemd-gnome-power
+sudo ./auto-cpufreq-installer --install
+sudo auto-cpufreq --install
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>benezen:</strong></p>
+                    <p>i will try tyvm :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>benezen:</strong></p>
+                    <p>edited [https://aur.archlinux.org/packages/auto-cpufreq-git/](https://aur.archlinux.org/packages/auto-cpufreq-git/)
+PKGBUILD
+```
+pkgname=auto-cpufreq
+pkgver=1.8.0
+pkgrel=1
+pkgdesc='Automatic CPU speed & power optimizer'
+arch=('any')
+url="https://github.com/AdnanHodzic/auto-cpufreq"
+license=('LGPL-3.0')
+depends=('python-distro' 'python-psutil' 'python-click' 'dmidecode')
+optdepends=('cpufreqctl: CPU Power Manager'
+            'gnome-shell-extension-cpufreq: CPU Power Manager for GNOME Shell')
+makedepends=('git' 'python-setuptools')
+install="${pkgname}.install"
+source=("git+${url}.git")
+sha256sums=('SKIP')
+
+prepare() {
+    cd "$srcdir/${pkgname}"
+    git fetch
+    git checkout non-systemd-gnome-power
+    sed -i 's|usr/local|usr|g' "scripts/${pkgname}.service" auto_cpufreq/core.py
+}
+
+build() {
+    cd "$srcdir/${pkgname}"
+    python setup.py build
+}
+
+package() {
+    cd "$srcdir/$pkgname"
+    python setup.py install --root="$pkgdir" --optimize=1 --skip-build
+    install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+    install -Dm644 README.md "$pkgdir/usr/share/doc/$pkgname/README"
+    install -Dm755 scripts/cpufreqctl.sh -t "$pkgdir/usr/share/$pkgname/scripts"
+    install -Dm644 "scripts/$pkgname.service" -t "$pkgdir/usr/lib/systemd/system"
+}
+```
+auto-cpufreq.install
+```
+post_install() {
+    # This is needed on SELinux enabled systems (see also ConditionPathExists in .service)
+    touch /var/log/auto-cpufreq.log
+
+    echo ''
+    echo 'Enable auto-cpufreq daemon service at boot:'
+    echo 'systemctl enable --now auto-cpufreq'
+    echo ''
+    echo 'To view live log, run:'
+    echo 'auto-cpufreq --log'
+    echo ''
+}
+
+post_upgrade() {
+    echo ''
+    echo 'Reload systemd manager configuration:'
+    echo 'systemctl daemon-reload'
+    echo ''
+    echo 'Restart auto-cpufreq daemon service:'
+    echo 'systemctl restart auto-cpufreq'
+    echo ''
+}
+
+post_remove() {
+    # Remove auto-cpufreq log file
+    rm /var/log/auto-cpufreq.log
+
+    # Remove auto-cpufreq's cpufreqctl binary
+    rm /usr/bin/cpufreqctl
+
+    # Restore original cpufreqctl binary if backup was made
+    if [ -f "/usr/bin/cpufreqctl.auto-cpufreq.bak" ]; then
+        mv /usr/bin/cpufreqctl.auto-cpufreq.bak /usr/bin/cpufreqctl
+    fi
+}
+```
+and it working very well tyvm :)
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> edited https://aur.archlinux.org/packages/auto-cpufreq-git/ PKGBUILD `pkgname=auto-cpufreq pkgver=1.8.0 pkgrel=1 pkgdesc='Automatic CPU speed & power optimizer' arch=('any') url="https://github.com/AdnanHodzic/auto-cpufreq" license=('LGPL-3.0') depends=('python-distro' 'python-psutil' 'python-click' 'dmidecode') optdepends=('cpufreqctl: CPU Power Manager' 'gnome-shell-extension-cpufreq: CPU Power Manager for GNOME Shell') makedepends=('git' 'python-setuptools') install="${pkgname}.install" source=("git+${url}.git") sha256sums=('SKIP')
+> 
+> prepare() { cd "$srcdir/${pkgname}" git fetch git checkout non-systemd-gnome-power sed -i 's|usr/local|usr|g' "scripts/${pkgname}.service" auto_cpufreq/core.py }
+> 
+> build() { cd "$srcdir/${pkgname}" python setup.py build }
+> 
+> package() { cd "$srcdir/$pkgname" python setup.py install --root="$pkgdir" --optimize=1 --skip-build install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE" install -Dm644 README.md "$pkgdir/usr/share/doc/$pkgname/README" install -Dm755 scripts/cpufreqctl.sh -t "$pkgdir/usr/share/$pkgname/scripts" install -Dm644 "scripts/$pkgname.service" -t "$pkgdir/usr/lib/systemd/system" }`auto-cpufreq.install`post_install() { # This is needed on SELinux enabled systems (see also ConditionPathExists in .service) touch /var/log/auto-cpufreq.log
+> 
+> ```
+> echo ''
+> echo 'Enable auto-cpufreq daemon service at boot:'
+> echo 'systemctl enable --now auto-cpufreq'
+> echo ''
+> echo 'To view live log, run:'
+> echo 'auto-cpufreq --log'
+> echo ''
+> ```
+> 
+> }
+> 
+> post_upgrade() { echo '' echo 'Reload systemd manager configuration:' echo 'systemctl daemon-reload' echo '' echo 'Restart auto-cpufreq daemon service:' echo 'systemctl restart auto-cpufreq' echo '' }
+> 
+> post_remove() { # Remove auto-cpufreq log file rm /var/log/auto-cpufreq.log
+> 
+> ```
+> # Remove auto-cpufreq's cpufreqctl binary
+> rm /usr/bin/cpufreqctl
+> 
+> # Restore original cpufreqctl binary if backup was made
+> if [ -f "/usr/bin/cpufreqctl.auto-cpufreq.bak" ]; then
+>     mv /usr/bin/cpufreqctl.auto-cpufreq.bak /usr/bin/cpufreqctl
+> fi
+> ```
+> 
+> }`
+> 
+> and it working very well tyvm :)
+
+@benezen without changes to `PKGBUILD` can you confirm changes from `non-systemd-gnome-power` worked for you as I'd like to merge them with `master`.
+
+On topic of AUR package, it looks bit outdated. If changes proposed here look good I would release them as part of 1.8.1 "hotfix release" and then could one you please update the AUR package? @crian @yochananmarqos @marc0der Thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>benezen:</strong></p>
+                    <p>yeah its outdated bit but there is another guy updating aur [here](https://aur.archlinux.org/packages/auto-cpufreq/)
+if you release 1.8.1 i think he will update :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>yochananmarqos:</strong></p>
+                    <p>@AdnanHodzic FYI, I'm not an AUR package maintainer and I've dropped it from the Manjaro repos. I neither have time to create a PR nor patch it. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> @AdnanHodzic FYI, I'm not an AUR package maintainer and I've dropped it from the Manjaro repos. I neither have time to create a PR nor patch it.
+
+@yochananmarqos good to know, thank you for you update.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@benezen @Salyrus changes proposed in this branch have been merged with `master`. I'll aim to make a new release within few days, until then just use `auto-cpufreq-installer` to get latest changes installed from `master`.
+
+Outdated AUR package should be handled and tracked as part of separate issue, so please create new one for that purpose. Thanks</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>pim-n:</strong></p>
+                    <p>Cheers! Everything works as expected.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        
