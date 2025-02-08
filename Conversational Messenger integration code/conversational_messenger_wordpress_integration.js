@@ -1,3 +1,10 @@
+/*
+From Zero to AI Hero: How to Build a GenAI Chatbot with Gemini & Vertex AI Agent Builder
+
+Blog post: https://foolcontrol.org/?p=5051
+Youtube playlist: https://www.youtube.com/watch?list=PL83G0TLSeXRFiTPyctEn_vdL2_Z7xd-e_&v=LgAUPJm4Dio
+*/
+
 <script>
   // Debugging: Log the current page URL to check for accuracy
   console.log("Current URL:", window.location.href);
