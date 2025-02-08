@@ -93,3 +93,7 @@ After which you can run each script with:
 * reddit_**post_comments**_export.py - `pipenv run python reddit_post_comments_export.py $URL`
 
 The exported HTML files, containing all necessary data, will be stored in the Data/ directory, organized by source.
+
+---
+
+**Google Cloud credits are provided for this project #VertexAISprint**
