@@ -5,7 +5,7 @@ I built [auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/) genAI chatb
 - Blog post: [How I replaced myself with a GenAI chatbot using Gemini](https://foolcontrol.org/?p=4903)  
 - Youtube video: [How I replaced myself with a GenAI chatbot using Gemini](https://www.youtube.com/watch?v=a-UcwAAXOoc)
 
-The idea is that you follow along in what's described in [From Zero to AI Hero: How to Build a GenAI Chatbot with Gemini & Vertex AI Agent Builder](https://foolcontrol.org/?p=5051) blog post and/or [Youtube video playlist](https://www.youtube.com/watch?list=PL83G0TLSeXRFiTPyctEn_vdL2_Z7xd-e_&v=LgAUPJm4Dio). Which expands on what I said before as part of my initial blog post/Youtube video, build the same chatbot I did, and then customize it with your own data to fit your unique GenAI chatbot use case.
+The idea is that you follow along in what's described in [From Zero to AI Hero: How to Build a GenAI Chatbot with Gemini & Vertex AI Agent Builder](https://foolcontrol.org/?p=5051) blog post and/or [(17 video) Youtube video playlist](https://www.youtube.com/watch?list=PL83G0TLSeXRFiTPyctEn_vdL2_Z7xd-e_&v=LgAUPJm4Dio). Which expands on what I said before as part of my initial blog post/Youtube video, build the same chatbot I did, and then customize it with your own data to fit your unique GenAI chatbot use case.
 
 This repository contains Python scripts to fetch its data from GitHub, YouTube, and Reddit APIs, which is then fed into the chatbot’s data store and used as part of a Retrieval-Augmented Generation (RAG) workflow.
 
@@ -13,7 +13,7 @@ auto-cpufreq genAI chatbot is built on Google Cloud, and leverages Vertex AI Age
 
 _From Zero to AI Hero: How to Build a GenAI Chatbot with Gemini & Vertex AI Agent Builder Youtube playlist:_
 
-[![From Zero to AI Hero: How to Build a GenAI Chatbot with Gemini & Vertex AI Agent Builder YouTube playlist](https://img.youtube.com/vi/LgAUPJm4Dio/0.jpg)](https://www.youtube.com/watch?v=LgAUPJm4Dio&list=PL83G0TLSeXRFiTPyctEn_vdL2_Z7xd-e_)
+[![From Zero to AI Hero: How to Build a GenAI Chatbot with Gemini & Vertex AI Agent Builder (17 video) YouTube playlist](https://img.youtube.com/vi/LgAUPJm4Dio/0.jpg)](https://www.youtube.com/watch?v=LgAUPJm4Dio&list=PL83G0TLSeXRFiTPyctEn_vdL2_Z7xd-e_)
 
 
 ### Create API keys needed to fetch data from Github, Youtube & Reddit
