@@ -1,14 +1,9 @@
-/*
- * Outside of WordPress context, nest inside an appropriate <body> tag in an HTML file.
- * ToDo: add blog post title & URL 
- */
-
 <script>
   // Debugging: Log the current page URL to check for accuracy
   console.log("Current URL:", window.location.href);
 
-  // Check if the current URL matches either page 4903 or 5051 (partial match for robustness)
-  if (window.location.href.includes("?p=4903") || window.location.href.includes("?p=5051")) {
+  // Check if the current URL matches only page 4903
+  if (window.location.href.includes("?p=4903")) {
     console.log("Widget will be added to this page");
 
     // Set a delay of 1 second to show the chatbot
@@ -62,46 +57,40 @@
               --df-messenger-message-bot-background: #C8E6C9;
               bottom: 16px;
               right: 16px;
-              opacity: 0; /* Start with 0 opacity for effect */
-              transform: scale(0.5); /* Start smaller */
-              animation: genieEffect 1s forwards; /* Apply the genie effect animation */
+              opacity: 0;
+              transform: scale(0.5);
+              animation: genieEffect 1s forwards;
             }
             df-messenger-chat-bubble {
               width: 100%;
               height: auto;
             }
-
-            /* Keyframe animation for the genie effect */
             @keyframes genieEffect {
               0% {
                 opacity: 0;
-                transform: scale(0.5) translateY(20px); /* Start small and lower */
+                transform: scale(0.5) translateY(20px);
               }
               100% {
                 opacity: 1;
-                transform: scale(1) translateY(0); /* End at normal size and position */
+                transform: scale(1) translateY(0);
               }
             }
           </style>`;
         document.body.insertAdjacentHTML("beforeend", widgetHTML);
 
-        // Function to set the width and height of the chat bubble based on the screen size
+        // Function to set the width and height of the chat bubble based on screen size
         function updateChatBubbleSize() {
           const chatBubble = document.querySelector('df-messenger-chat-bubble');
-
-          if (window.innerWidth >= 768) {  // Desktop size (768px and above)
+          if (window.innerWidth >= 768) {
             chatBubble.setAttribute('chat-width', '600');
             chatBubble.setAttribute('chat-height', '700');
-          } else {  // Mobile size
+          } else {
             chatBubble.setAttribute('chat-width', '100%');
             chatBubble.setAttribute('chat-height', 'auto');
           }
         }
 
-        // Initial update when the page loads
         updateChatBubbleSize();
-
-        // Update the chat bubble size on window resize
         window.addEventListener('resize', updateChatBubbleSize);
       };
 
@@ -110,9 +99,7 @@
       };
 
       head.appendChild(script);
-
-    }, 1000); // 1000ms = 1 second
-
+    }, 1000);
   } else {
     console.log("Widget will not be added to this page");
   }
