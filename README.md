@@ -13,7 +13,7 @@ auto-cpufreq genAI chatbot is built on Google Cloud, and leverages Vertex AI Age
 
 _From Zero to AI Hero: How to Build a GenAI Chatbot with Gemini & Vertex AI Agent Builder Youtube playlist:_
 
-[![From Zero to AI Hero: How to Build a GenAI Chatbot with Gemini & Vertex AI Agent Builder (17 video) YouTube playlist](https://img.youtube.com/vi/LgAUPJm4Dio/0.jpg)](https://www.youtube.com/watch?v=LgAUPJm4Dio&list=PL83G0TLSeXRFiTPyctEn_vdL2_Z7xd-e_)
+[![From Zero to AI Hero: How to Build a GenAI Chatbot with Gemini & Vertex AI Agent Builder (17 video) YouTube playlist](https://img.youtube.com/vi/LgAUPJm4Dio/0.jpg)](https://www.youtube.com/watch?v=LgAUPJm4Dio&list=PL83G0TLSeXRFiTPyctEn_vdL2_Z7xd-e_&index=1)
 
 
 ### Create API keys needed to fetch data from Github, Youtube & Reddit
@@ -68,7 +68,7 @@ Followed by: `source ~/.zshrc`
 
 _How to fetch data from defined GenAI Chatbot Data Sources:_
 
-[![How to fetch data from defined GenAI Chatbot Data Sources"](https://img.youtube.com/vi/N3i-8hYHfTo/0.jpg)](https://www.youtube.com/watch?v=N3i-8hYHfTo)
+[![How to fetch data from defined GenAI Chatbot Data Sources"](https://img.youtube.com/vi/N3i-8hYHfTo/0.jpg)](https://www.youtube.com/watch?v=N3i-8hYHfTo&list=PL83G0TLSeXRFiTPyctEn_vdL2_Z7xd-e_&index=7)
 
 
 Since all requirements to run any of the .py files are stored in a single [Pipfile](#Pipfile) file, after you have [pipenv](https://pipenv.pypa.io/en/latest/installation.html)  installed on your system, you'll need to run `pipenv install` the first time to install needed dependencies.
