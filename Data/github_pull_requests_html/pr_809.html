@@ -1,0 +1,30 @@
+
+        <html>
+        <head>
+            <title>Pull Request #809: nix: fail evaluation if power-profiles-daemon is enabled</title>
+        </head>
+        <body>
+            <h1>nix: fail evaluation if power-profiles-daemon is enabled</h1>
+            <p><strong>Pull Request #809</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>So I noticed auto-cpufreq systemd service was being killed immediately after boot on Nix. 
+This was actually brought up previously in #740, but it seemed to fix itself for everyone.
+Anyways, it started happening to me recently and was happening on every single boot so I knew something was wrong.
+
+Basically I discovered that if a module enabled (or the user has it explicitly enabled)  `services.power-profiles-daemon`, systemd sees it as a conflict and just decides to kill auto-cpufreq in favor of power-profiles. In my situation, Cinnamon DE was enabling it by default.
+
+This PR makes a change that causes an assertion error to be thrown if the user has `auto-cpufreq` enabled alongside `power-profiles`. This forces the user to disable `power-profiles`, in order for their config to build. I considered just making this a warning, since technically you can still run `auto-cpufreq` manually, but I feel like it is better to force users to enable one or the other in this case</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>LGTM, wouldn't be bad to have this same [`assertions` block](https://github.com/AdnanHodzic/auto-cpufreq/pull/809/files) outside of Nix scope.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

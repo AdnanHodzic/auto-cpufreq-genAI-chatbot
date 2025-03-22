@@ -1,0 +1,126 @@
+
+        <html>
+        <head>
+            <title>Pull Request #819: Rework Core Component</title>
+        </head>
+        <body>
+            <h1>Rework Core Component</h1>
+            <p><strong>Pull Request #819</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### PR Summary: Refactored Core System Logic and Applied to Daemon  
+
+#### Overview  
+This PR reworks the core system logic by introducing an event-driven approach, replacing the previous method where each function had to manually check for system changes. The new implementation improves efficiency, maintainability, and logging.  
+
+#### Key Changes  
+- **Created System Event Observer**  
+  - Monitors system events such as power source changes.  
+  - Notifies registered listeners when an event occurs, eliminating the need for manual checks in each function.  
+
+- **Created System Controller**  
+  - Centralized logic for managing core system actions, such as toggling turbo mode and setting the system governor.  
+
+- **Created System Event Handler**  
+  - Listens for events from the observer.  
+  - Applies necessary system changes using the system controller.  
+
+- **Added Logging**  
+  - Introduced structured logging to track system changes and errors.  
+  - Provides better visibility into system actions for debugging and monitoring.  
+  - log file at '/var/log/auto-cpufreq/app.log'
+
+#### Impact  
+- Transitions the system to an event-driven model, reducing redundant checks.  
+- Improves modularity by separating event detection, handling, and execution.  
+- Enhances observability through logging.  
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I was about to start testing these changes by installing the daemon, but then as soon as I run `--stats` I get following error:
+
+```
+auto-cpufreq --stats       
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 5, in <module>
+    from auto_cpufreq.bin.auto_cpufreq import main
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/auto_cpufreq/bin/auto_cpufreq.py", line 17, in <module>
+    from auto_cpufreq.modules.observer import observer
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/auto_cpufreq/modules/observer.py", line 5, in <module>
+    from auto_cpufreq.modules.system_info import BatteryInfo, SystemInfo
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/auto_cpufreq/modules/system_info.py", line 19, in <module>
+    from auto_cpufreq.tools import get_gov_override_path
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/auto_cpufreq/tools.py", line 36, in <module>
+    file_handler = RotatingFileHandler(
+                   ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/logging/handlers.py", line 155, in __init__
+    BaseRotatingHandler.__init__(self, filename, mode, encoding=encoding,
+  File "/usr/lib/python3.12/logging/handlers.py", line 58, in __init__
+    logging.FileHandler.__init__(self, filename, mode=mode,
+  File "/usr/lib/python3.12/logging/__init__.py", line 1231, in __init__
+    StreamHandler.__init__(self, self._open())
+                                 ^^^^^^^^^^^^
+  File "/usr/lib/python3.12/logging/__init__.py", line 1263, in _open
+    return open_func(self.baseFilename, self.mode,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: '/var/log/auto-cpufreq/app.log'
+```
+
+GUI app also no longer works
+
+```
+auto-cpufreq-gtk 
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 5, in <module>
+    from auto_cpufreq.bin.auto_cpufreq import main
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/auto_cpufreq/bin/auto_cpufreq.py", line 17, in <module>
+    from auto_cpufreq.modules.observer import observer
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/auto_cpufreq/modules/observer.py", line 5, in <module>
+    from auto_cpufreq.modules.system_info import BatteryInfo, SystemInfo
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/auto_cpufreq/modules/system_info.py", line 19, in <module>
+    from auto_cpufreq.tools import get_gov_override_path
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/auto_cpufreq/tools.py", line 36, in <module>
+    file_handler = RotatingFileHandler(
+                   ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/logging/handlers.py", line 155, in __init__
+    BaseRotatingHandler.__init__(self, filename, mode, encoding=encoding,
+  File "/usr/lib/python3.12/logging/handlers.py", line 58, in __init__
+    logging.FileHandler.__init__(self, filename, mode=mode,
+  File "/usr/lib/python3.12/logging/__init__.py", line 1231, in __init__
+    StreamHandler.__init__(self, self._open())
+                                 ^^^^^^^^^^^^
+  File "/usr/lib/python3.12/logging/__init__.py", line 1263, in _open
+    return open_func(self.baseFilename, self.mode,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: '/var/log/auto-cpufreq/app.log'
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq-gtk", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/auto_cpufreq/bin/auto_cpufreq_gtk.py", line 13, in main
+    win.handle_update()
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/auto_cpufreq/gui/app.py", line 76, in handle_update
+    if not check_for_update(): return
+           ^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/auto_cpufreq/core.py", line 150, in check_for_update
+    output = check_output(['auto-cpufreq', '--version']).decode('utf-8')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/subprocess.py", line 466, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['auto-cpufreq', '--version']' returned non-zero exit status 1.
+```
+
+Hence, in this state this PR is currently in, I cannot test these changes.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        
