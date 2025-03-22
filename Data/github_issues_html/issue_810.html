@@ -1,0 +1,162 @@
+
+        <html>
+        <head>
+            <title>Issue #810: Enhance System Monitoring with a TUI</title>
+        </head>
+        <body>
+            <h1>Enhance System Monitoring with a TUI</h1>
+            <p><strong>Issue #810</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>## Summary  
+This PR introduces a **Terminal User Interface (TUI)** using `urwid` to improve the visualization of system information, monitoring, and live statistics.
+
+## Changes  
+- **Added a system info module** to retrieve all necessary system details.  
+- **Implemented a system monitor module** to manage the TUI using `urwid`.  
+- **Fixed an issue with `set_autofreq()`** where `avg_all_core_temp` was undefined when running in a separate thread.  
+
+## Showcase  
+https://github.com/user-attachments/assets/1c8388e9-759d-476e-9009-f5966d2fc2e3</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>While I'll miss the "old cli look" due to nostalgic reasons :) 
+
+This looks great, gives a better overview and is just a great improvement overall with updates to the "metrics".
+
+However, when I try to use `sudo auto-cpufreq --stats` command after auto-cpufreq is installed using a snap package I get following error:
+
+```
+sudo auto-cpufreq --stats            
+
+Using settings defined in /etc/auto-cpufreq.conf file
+
+----------------------------------- Warning -----------------------------------
+
+Due to Snap package confinement limitations please consider installing auto-cpufreq using
+auto-cpufreq-installer: https://github.com/AdnanHodzic/auto-cpufreq#auto-cpufreq-installer
+
+Unable to detect state of GNOME Power Profiles daemon service!
+This daemon might interfere with auto-cpufreq and should be disabled!
+
+Steps to perform this action using auto-cpufreq: power_helper script:
+git clone https://github.com/AdnanHodzic/auto-cpufreq.git
+cd auto-cpufreq/auto_cpufreq
+python3 power_helper.py --gnome_power_disable
+
+Reference: https://github.com/AdnanHodzic/auto-cpufreq#configuring-auto-cpufreq
+
+----------------------------------- Warning -----------------------------------
+
+Unable to detect if you are using a TLP service!
+This daemon might interfere with auto-cpufreq which can lead to unexpected results.
+We strongly encourage you not to use TLP unless you really know what you are doing.
+press Enter to continue or Ctrl + c to exit...
+Traceback (most recent call last):
+  File "/snap/auto-cpufreq/155/bin/auto-cpufreq", line 8, in <module>
+    sys.exit(main())
+  File "/snap/auto-cpufreq/155/lib/python3.10/site-packages/click/core.py", line 1161, in __call__
+    return self.main(*args, **kwargs)
+  File "/snap/auto-cpufreq/155/lib/python3.10/site-packages/click/core.py", line 1082, in main
+    rv = self.invoke(ctx)
+  File "/snap/auto-cpufreq/155/lib/python3.10/site-packages/click/core.py", line 1443, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/snap/auto-cpufreq/155/lib/python3.10/site-packages/click/core.py", line 788, in invoke
+    return __callback(*args, **kwargs)
+  File "/snap/auto-cpufreq/155/lib/python3.10/site-packages/auto_cpufreq/bin/auto_cpufreq.py", line 233, in main
+    monitor.run()
+  File "/snap/auto-cpufreq/155/lib/python3.10/site-packages/auto_cpufreq/modules/system_monitor.py", line 292, in run
+    self.loop.run()
+  File "/snap/auto-cpufreq/155/lib/python3.10/site-packages/urwid/event_loop/main_loop.py", line 337, in run
+    self._run()
+  File "/snap/auto-cpufreq/155/lib/python3.10/site-packages/urwid/event_loop/main_loop.py", line 439, in _run
+    self.event_loop.run()
+  File "/snap/auto-cpufreq/155/lib/python3.10/site-packages/urwid/event_loop/select_loop.py", line 182, in run
+    self._loop()
+  File "/snap/auto-cpufreq/155/lib/python3.10/site-packages/urwid/event_loop/select_loop.py", line 224, in _loop
+    alarm_callback()
+  File "/snap/auto-cpufreq/155/lib/python3.10/site-packages/urwid/event_loop/main_loop.py", line 218, in cb
+    callback(self, user_data)
+  File "/snap/auto-cpufreq/155/lib/python3.10/site-packages/auto_cpufreq/modules/system_monitor.py", line 98, in update
+    report: SystemReport = system_info.generate_system_report()
+  File "/snap/auto-cpufreq/155/lib/python3.10/site-packages/auto_cpufreq/modules/system_info.py", line 278, in generate_system_report
+    battery_info=self.battery_info(),
+  File "/snap/auto-cpufreq/155/lib/python3.10/site-packages/auto_cpufreq/modules/system_info.py", line 190, in battery_info
+    output = getoutput(
+TypeError: getoutput() got an unexpected keyword argument 'encoding'
+```
+
+It would be great to fix this before changes are merged.
+
+Another thing I noticed during testing is that auto-cpufreq GUI is inconsistent with CLI output and is missing i.e "System Statistics" header. Would be ideal if they both had same layout.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>LAITH343:</strong></p>
+                    <p>> However, when I try to use `sudo auto-cpufreq --stats` command after auto-cpufreq is installed using a snap package I get following error:
+
+the error is now fixed but i didn't build a snap package to verify it. try it and tell me if there's any errors 
+
+> Another thing I noticed during testing is that auto-cpufreq GUI is inconsistent with CLI output and is missing i.e "System Statistics" header. Would be ideal if they both had same layout.
+
+i don't know how the GUI built so maybe the GUI author can help with this, but for the TUI i can change the design if you want </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> > However, when I try to use `sudo auto-cpufreq --stats` command after auto-cpufreq is installed using a snap package I get following error:
+> 
+> the error is now fixed but i didn't build a snap package to verify it. try it and tell me if there's any errors
+
+Thanks! I just pulled the latest changes, built the snap package and it all seems to work as expected!
+
+> > Another thing I noticed during testing is that auto-cpufreq GUI is inconsistent with CLI output and is missing i.e "System Statistics" header. Would be ideal if they both had same layout.
+> 
+> i don't know how the GUI built so maybe the GUI author can help with this
+
+@shadeyg56 as the original implementer of GUI, any comments or suggestions regarding this?
+
+> but for the TUI i can change the design if you want
+
+Out of curiosity, what are the design or color options?
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>LAITH343:</strong></p>
+                    <p>> Thanks! I just pulled the latest changes, built the snap package and it all seems to work as expected!
+
+Nice :)
+
+
+
+> Out of curiosity, what are the design or color options?
+
+most of the colors are supported check [urwid Display Attributes docs](https://urwid.org/manual/displayattributes.html#display-attributes) and you can apply the color in  `auto_cpufreq/modules/system_monitor.py` line 65 to see how to looks 
+
+for the layout options check [urwid widget layout docs](https://urwid.org/manual/widgets.html#widget-layout)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I once again reviewed the code and have been testing it for days now. At this point all I can say is LGTM :) 
+
+[Nix build is failing because it's missing `urwid`,](https://github.com/AdnanHodzic/auto-cpufreq/actions/runs/13471250096/job/38028152895?pr=810#step:5:646) @shadeyg56 and I've [also put this on Discord ](https://discord.com/channels/1158239366251020361/1158239367337349164/1345270410740240477)so I hope someone using Nix will fix this.
+
+I'm merging the changes, and if anyone else notices or has problem between differences in CLI and GUI interface which I mentioned above:
+ > Another thing I noticed during testing is that auto-cpufreq GUI is inconsistent with CLI output and is missing i.e "System Statistics" header. Would be ideal if they both had same layout.
+ 
+ Please feel free to create a PR to "sync" the layout between these two. For reference GTK/GUI was implemented as part of following PR's: https://github.com/AdnanHodzic/auto-cpufreq/pull/486 https://github.com/AdnanHodzic/auto-cpufreq/pull/554
+ 
+@LAITH343 thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

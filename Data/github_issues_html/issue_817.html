@@ -1,0 +1,33 @@
+
+        <html>
+        <head>
+            <title>Issue #817: psutil 7.0.0</title>
+        </head>
+        <body>
+            <h1>psutil 7.0.0</h1>
+            <p><strong>Issue #817</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>psutil version 7.0.0 was released [upstream](https://pypi.org/project/psutil/#history). I saw this project requests any 6.x version. The [release notes](https://github.com/giampaolo/psutil/blob/master/HISTORY.rst#700) only list incompatibilities with python2.7 (this project already [uses newer py](https://github.com/AdnanHodzic/auto-cpufreq/blob/f2c4a2d763551e64c82469c52767762d01a4d994/pyproject.toml#L24)), and removal of `memory_info_ex` which this project does not use at all. This means 7.0.0 should "just work". Any chance to unpin this in the `pyproject.toml`?
+
+Currently, attempting to build against 7.0.0 obviously fails (which i noticed in the [nixpkgs ci](https://hydra.nixos.org/build/292453144/log)). Figured i'd open an issue, partially to track for myself. I understand this is primarily a packaging thing and failing on the nix side, but by the looks of it supporting the new release of psutil shouldn't be too hard.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Similar thing was discussed in #813 in regards to `girepository-2.0`. 
+
+Regarding unpinning `psutil`, I'm completely fine with this, I encourage you to give it a try yourself with changes you would like to see and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>LordGrimmauld:</strong></p>
+                    <p>Alright, i opened https://github.com/AdnanHodzic/auto-cpufreq/pull/821</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

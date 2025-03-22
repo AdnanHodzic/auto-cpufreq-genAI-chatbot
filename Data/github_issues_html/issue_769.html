@@ -456,6 +456,233 @@ Also please be descriptive about the issue you're reporting, i.e: what you tried
                     <p>It seems like something when wrong when it was trying to pull the poetry-core & poetry-dynamic-versioning package, can you try again or getting it from different repo?</p>
                 </div>
             
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>traptoo:</strong></p>
+                    <p>Same OS, similar error here:
+
+
+
+```
+────────────────────────────────────────────── Installing auto-cpufreq tool ──────────────────────────────────────────────
+
+Processing /home/phillip/auto-cpufreq
+  Installing build dependencies ... error
+  ERROR: Command errored out with exit status 1:
+   command: /opt/auto-cpufreq/venv/bin/python /opt/auto-cpufreq/venv/lib64/python3.6/site-packages/pip install --ignore-installed --no-user --prefix /tmp/pip-build-env-91v62dew/overlay --no-warn-script-location --no-binary :none: --only-binary :none: -i https://pypi.org/simple -- 'poetry-core>=1.0.0' 'poetry-dynamic-versioning>=1.0.0,<2.0.0'
+       cwd: None
+  Complete output (4 lines):
+  Collecting poetry-core>=1.0.0
+    Using cached poetry_core-1.0.8-py2.py3-none-any.whl (425 kB)
+  ERROR: Could not find a version that satisfies the requirement poetry-dynamic-versioning<2.0.0,>=1.0.0 (from versions: 0.1.0, 0.2.0, 0.3.0, 0.3.1, 0.3.2, 0.4.0, 0.5.0, 0.6.0, 0.7.0, 0.8.0, 0.8.1, 0.8.2, 0.8.3, 0.9.0, 0.10.0, 0.11.0, 0.12.0, 0.12.1, 0.12.2, 0.12.3, 0.12.4, 0.12.5, 0.12.6, 0.12.7, 0.13.0, 0.13.1, 0.14.0, 0.14.1, 0.15.0, 0.16.0, 0.17.0, 0.17.1, 1.0.0b1, 1.0.0b2, 1.0.0b3)
+  ERROR: No matching distribution found for poetry-dynamic-versioning<2.0.0,>=1.0.0
+  ----------------------------------------
+WARNING: Discarding file:///home/phillip/auto-cpufreq. Command errored out with exit status 1: /opt/auto-cpufreq/venv/bin/python /opt/auto-cpufreq/venv/lib64/python3.6/site-packages/pip install --ignore-installed --no-user --prefix /tmp/pip-build-env-91v62dew/overlay --no-warn-script-location --no-binary :none: --only-binary :none: -i https://pypi.org/simple -- 'poetry-core>=1.0.0' 'poetry-dynamic-versioning>=1.0.0,<2.0.0' Check the logs for full command output.
+ERROR: Command errored out with exit status 1: /opt/auto-cpufreq/venv/bin/python /opt/auto-cpufreq/venv/lib64/python3.6/site-packages/pip install --ignore-installed --no-user --prefix /tmp/pip-build-env-91v62dew/overlay --no-warn-script-location --no-binary :none: --only-binary :none: -i https://pypi.org/simple -- 'poetry-core>=1.0.0' 'poetry-dynamic-versioning>=1.0.0,<2.0.0' Check the logs for full command output.
+
+──────────────────────────────────────── auto-cpufreq tool successfully installed ────────────────────────────────────────
+
+For list of options, run:
+auto-cpufreq --help
+
+```
+Tried to install poetry-dynamic-versioning manually
+
+```
+phillip@localhost:~/auto-cpufreq> poetry self add "poetry-dynamic-versioning[plugin]"
+Using version ^1.7.1 for poetry-dynamic-versioning
+
+Updating dependencies
+Resolving dependencies... Downloading https://files.pythonhosted.org/packages/e5/ca/1172b6638d52f2d6caa2dd262ec4c811ba59eee96d54a7701930726bce18/installer-0.7Resolving dependencies... Downloading https://files.pythonhosted.org/packages/99/bc/058b8ff87871fce6615ad032d62c773272f243266b110f7b86d146cf78d8/poetry_core-1Resolving dependencies... Downloading https://files.pythonhosted.org/packages/13/a3/a812df4e2dd5696d1f351d58b8fe16a405b234ad2886a0dab9183fb78109/pycparser-2.2Resolving dependencies... (7.5s)
+
+Package operations: 4 installs, 28 updates, 0 removals
+
+  • Updating pycparser (2.21 -> 2.22): Failed
+
+  CalledProcessError
+
+  Command '['/usr/bin/python3.11', '-m', 'pip', 'uninstall', 'pycparser', '-y']' returned non-zero exit status 2.
+
+  at /usr/lib64/python3.11/subprocess.py:571 in run
+       567│             # We don't call process.wait() as .__exit__ does that for us.
+       568│             raise
+       569│         retcode = process.poll()
+       570│         if check and retcode:
+    →  571│             raise CalledProcessError(retcode, process.args,
+       572│                                      output=stdout, stderr=stderr)
+       573│     return CompletedProcess(process.args, retcode, stdout, stderr)
+       574│ 
+       575│ 
+
+The following error occurred when trying to handle this error:
+
+
+  EnvCommandError
+
+  Command ['/usr/bin/python3.11', '-m', 'pip', 'uninstall', 'pycparser', '-y'] errored with the following return code 2
+  
+  Output:
+  Found existing installation: pycparser 2.21
+  Uninstalling pycparser-2.21:
+  ERROR: Exception:
+  Traceback (most recent call last):
+    File "/usr/lib64/python3.11/shutil.py", line 853, in move
+      os.rename(src, real_dst)
+  OSError: [Errno 18] Ungültiger Link über Gerätegrenzen hinweg: '/usr/lib/python3.11/site-packages/pycparser' -> '/tmp/pip-uninstall-hasty5oc'
+  
+  During handling of the above exception, another exception occurred:
+  
+  Traceback (most recent call last):
+    File "/usr/local/lib/python3.11/site-packages/pip/_internal/cli/base_command.py", line 106, in _run_wrapper
+      status = _inner_run()
+               ^^^^^^^^^^^^
+    File "/usr/local/lib/python3.11/site-packages/pip/_internal/cli/base_command.py", line 97, in _inner_run
+      return self.run(options, args)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+    File "/usr/local/lib/python3.11/site-packages/pip/_internal/commands/uninstall.py", line 106, in run
+      uninstall_pathset = req.uninstall(
+                          ^^^^^^^^^^^^^^
+    File "/usr/local/lib/python3.11/site-packages/pip/_internal/req/req_install.py", line 723, in uninstall
+      uninstalled_pathset.remove(auto_confirm, verbose)
+    File "/usr/local/lib/python3.11/site-packages/pip/_internal/req/req_uninstall.py", line 370, in remove
+      moved.stash(path)
+    File "/usr/local/lib/python3.11/site-packages/pip/_internal/req/req_uninstall.py", line 261, in stash
+      renames(path, new_path)
+    File "/usr/local/lib/python3.11/site-packages/pip/_internal/utils/misc.py", line 350, in renames
+      shutil.move(old, new)
+    File "/usr/lib64/python3.11/shutil.py", line 871, in move
+      rmtree(src)
+    File "/usr/lib64/python3.11/shutil.py", line 752, in rmtree
+      _rmtree_safe_fd(fd, path, onerror)
+    File "/usr/lib64/python3.11/shutil.py", line 703, in _rmtree_safe_fd
+      onerror(os.unlink, fullname, sys.exc_info())
+    File "/usr/lib64/python3.11/shutil.py", line 701, in _rmtree_safe_fd
+      os.unlink(entry.name, dir_fd=topfd)
+  PermissionError: [Errno 13] Keine Berechtigung: '__init__.py'
+  
+
+  at /usr/lib/python3.11/site-packages/poetry/utils/env/base_env.py:354 in _run
+      350│                 output = subprocess.check_output(
+      351│                     cmd, stderr=stderr, env=env, text=True, **kwargs
+      352│                 )
+      353│         except CalledProcessError as e:
+    → 354│             raise EnvCommandError(e)
+      355│ 
+      356│         return output
+      357│ 
+      358│     def execute(self, bin: str, *args: str, **kwargs: Any) -> int:
+
+Cannot install pycparser.
+```
+
+Is this helpful?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Think this is related to #808 
+
+@CaffineAddic if you're looking for way to contribute more, helping with this one would be great 🙂 </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>CaffineAddic:</strong></p>
+                    <p>> Think this is related to [#808](https://github.com/AdnanHodzic/auto-cpufreq/pull/808)
+> 
+> [@CaffineAddic](https://github.com/CaffineAddic) if you're looking for way to contribute more, helping with this one would be great 🙂
+
+Copy that chief, I will create a leap VM and try diagnosing it</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>CaffineAddic:</strong></p>
+                    <p>@AdnanHodzic which file has the python env install script, i.e. the line which is doing the pip install command 
+
+with list of packages. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Not sure if you caught it, but you can also use [auto-cpufreq genAI chatbot](https://foolcontrol.org/?p=4903) for this purpose 😉 
+
+- [pyproject.toml ](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/pyproject.toml)defines the project dependencies but does not lock them to specific versions.
+- [poetry.lock](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/poetry.lock) contains the exact versions of all dependencies that Poetry has resolved.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>CaffineAddic:</strong></p>
+                    <p>@AdnanHodzic Thanks captain, [auto-cpufreq genAI chatbot](https://foolcontrol.org/?p=4903) I used this but it gave subpar responses which were not actually relevant. 😭 
+
+I will look into it Captain, if you are working something open source in A.I., I would love to help there as well</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>CaffineAddic:</strong></p>
+                    <p>@AdnanHodzic  
+
+Captain, I think I found a place of issue 
+
+Here is available versions of 
+
+poetry-dynamic-versioning (1.7.1)
+
+Available versions: 1.7.1, 1.7.0, 1.6.0, 1.5.2, 1.5.1, 1.5.0, 1.4.1, 1.4.0, 1.3.0, 1.2.0, 1.1.1, 1.1.0, 1.0.1, 1.0.0, 0.25.0, 0.24.0, 0.23.0, 0.22.0, 0.21.5, 0.21.4, 0.21.3, 0.21.2, 0.21.1, 0.21.0, 0.20.0, 0.19.0, 0.18.0, 0.17.1, 0.17.0, 0.16.0, 0.15.0, 0.14.1, 0.14.0, 0.13.1, 0.13.0, 0.12.7, 0.12.6, 0.12.5, 0.12.4, 0.12.3, 0.12.2, 0.12.1, 0.12.0, 0.11.0, 0.10.0, 0.9.0, 0.8.3, 0.8.2, 0.8.1, 0.8.0, 0.7.0, 0.6.0, 0.5.0, 0.4.0, 0.3.2, 0.3.1, 0.3.0, 0.2.0, 0.1.0
+  
+In OpenSUSE Tumbleweed (rolling release)
+
+But in Opensuse Leap the packages are much older and in my experience down right ancient 
+
+ERROR: Could not find a version that satisfies the requirement poetry-dynamic-versioning<2.0.0,>=1.0.0 (from versions: 0.1.0, 0.2.0, 0.3.0, 0.3.1, 0.3.2, 0.4.0, 0.5.0, 0.6.0, 0.7.0, 0.8.0, 0.8.1, 0.8.2, 0.8.3, 0.9.0, 0.10.0, 0.11.0, 0.12.0, 0.12.1, 0.12.2, 0.12.3, 0.12.4, 0.12.5, 0.12.6, 0.12.7, 0.13.0, 0.13.1, 0.14.0, 0.14.1, 0.15.0, 0.16.0, 0.17.0, 0.17.1, 1.0.0b1, 1.0.0b2, 1.0.0b3)
+  ERROR: No matching distribution found for poetry-dynamic-versioning<2.0.0,>=1.0.0
+ 
+
+To solve >= 1.0.0, leap doesn't have those latest packages are it's using Pip 20.0.2
+
+I think there are two ways to solve it
+
+ poetry-dynamic-versioning<2.0.0,>=1.0.0-beta can be added to the pyproject.toml to allow beta versions for all 
+or add an exception for leap.
+
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> poetry-dynamic-versioning<2.0.0,>=1.0.0-beta can be added to the pyproject.toml to allow beta versions for all
+or add an exception for leap.
+
+If you could please create a pull request for this, let's see if it solves it for @emirhurem and I can also test if it breaks anything else along the way.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>CaffineAddic:</strong></p>
+                    <p>Copy that captain, on it.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>CaffineAddic:</strong></p>
+                    <p>Dynamic versioning plugin for Poetry
+
+This is a Python 3.7+ plugin for [Poetry 1.2.0+](https://github.com/sdispater/poetry) and [Poetry Core 1.0.0+](https://github.com/python-poetry/poetry-core)
+
+
+and the default install that OpenSuse Leap does is, 
+
+It goes for poetry 1.1.15, if allowed pip install poetry.
+
+I don't know how the env is created in auto-cpufreq because of this versioning nothing works - even letting the Beta versions to be available.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>CaffineAddic:</strong></p>
+                    <p>@AdnanHodzic Captain, I haven't created a pull request as doing those changes still don't allow the auto-cpufreq to work</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@CaffineAddic thanks for the update, no worries, take your time! </p>
+                </div>
+            
             </div>
         </body>
         </html>

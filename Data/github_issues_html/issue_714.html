@@ -223,6 +223,25 @@ There's probably something that trigger the GPU driver to change it's power limi
 All I know is that power-profile-daemon trigger it correctly.</p>
                 </div>
             
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>newcharhuso:</strong></p>
+                    <p>> > Hm, not sure what's happening as auto-cpufreq shouldn't have any effect on GPU.
+> > Curious to hear what happens if [you setup config file](https://github.com/AdnanHodzic/auto-cpufreq/?tab=readme-ov-file#3-auto-cpufreq-config-file), and set `energy_performance_preference` to other value then performance, would this change anything?
+> > Will also ask on [our Discord community](https://discord.gg/Sjauxtj6kH) if anyone else has Nvidia and has faced this problem.
+> 
+> I've tried multiple settings in the config but I still get the same results.
+> 
+> I managed to have my GPU using 80W with autocpu-freq with this command : `sudo echo "performance" | sudo tee /sys/firmware/acpi/platform_profile`
+> 
+> However that's unoptimal as I need root acces to change the profile of my GPU and once done it nevers goes back to its low power state... when using balanced it just keep the old profile and low-power is what I get with balanced in power-profile-daemon currently. And it may change something else I don't know I haven't tested it for too long since it's really not a great solution in my case.
+> 
+> There's probably something that trigger the GPU driver to change it's power limit but I can't find what.
+> 
+> All I know is that power-profile-daemon trigger it correctly.
+
+Hello, I am having the same issue on my Lenovo Yoga Pro 7 with RTX3050, is there any solution to this other than this manual intervention?</p>
+                </div>
+            
             </div>
         </body>
         </html>

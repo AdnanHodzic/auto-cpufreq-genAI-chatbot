@@ -1,0 +1,172 @@
+
+        <html>
+        <head>
+            <title>Issue #816: config file not being applied</title>
+        </head>
+        <body>
+            <h1>config file not being applied</h1>
+            <p><strong>Issue #816</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+#### Before submitting an issue, it is strongly recommended to use the **[auto-cpufreq-genAI-chatbot](https://foolcontrol.org/?p=4903)** to get an immediate answer to your question.
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+
+yes
+
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+
+installation successful
+
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+
+yes, and that is the issue
+
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+couldn't  find anything relevant
+
+### Error output:
+```text
+Add/paste error output in case of failed installation or other failing component
+
+installation is successful, output is blank. the command in question is 
+
+sudo auto-cpufreq --config auto-cpufreq.conf
+
+the file in question is ~/Downloads/auto-cpufreq/auto-cpufreq.conf 
+
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+auto-cpufreq --debug
+
+sudo auto-cpufreq --debug
+
+-------------------------------------------------------------------------------
+
+Linux distro: Nobara Linux 41 GNOME Edition
+Linux kernel: 6.13.7-200.nobara.fc41.x86_64
+Processor: Intel(R) Core(TM) Ultra 7 155H
+Cores: 22
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1400 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      1.0%        46 °C      1362 MHz
+CPU1      7.0%        44 °C      1661 MHz
+CPU2      0.0%        44 °C       400 MHz
+CPU3      5.1%        44 °C      1582 MHz
+CPU4      0.0%        44 °C       400 MHz
+CPU5      1.0%        46 °C      1589 MHz
+CPU6      3.0%        45 °C       400 MHz
+CPU7      0.0%        45 °C       400 MHz
+CPU8      1.0%        45 °C       400 MHz
+CPU9      0.0%        45 °C       400 MHz
+CPU10      3.0%        44 °C       400 MHz
+CPU11      0.0%        44 °C       400 MHz
+CPU12      2.0%        46 °C       400 MHz
+CPU13      0.0%        47 °C      1000 MHz
+CPU14      0.0%        46 °C       400 MHz
+CPU15      0.0%        46 °C       400 MHz
+CPU16      1.0%        44 °C       400 MHz
+CPU17      1.0%        43 °C       999 MHz
+CPU18      1.0%        44 °C       400 MHz
+CPU19      2.0%        44 °C       400 MHz
+CPU20      0.0%        49 °C       400 MHz
+CPU21      0.0%        49 °C       400 MHz
+
+CPU fan speed: 0 RPM
+
+auto-cpufreq version: 2.5.0
+
+Python: 3.13.2
+psutil package: 6.1.1
+platform package: 1.0.8
+click package: 8.1.8
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.17 %
+
+Total CPU usage: 3.9 %
+Total system load: 0.79
+Average temp. of all cores: 46.00 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+![Image](https://github.com/user-attachments/assets/94216c8e-ad68-406c-9fb2-6d5395f96f5f)
+
+
+I have the following lines on my auto-cpufreq.conf 
+
+[battery]
+energy_performance_preference = power
+energy_perf_bias = power
+energy_perf_bias = power
+
+However, as shown in the screen shots, the settings remain as balance_power. How can I make them change all to power so I can have maximum battery savings? 
+
+Hope that is more clear now. 
+
+
+
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>For reference, more config info is in #815</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>LAITH343:</strong></p>
+                    <p>your config file isn't been applied. in order to apply your settings, you need to put your config file in `~/.config/auto-cpufreq/` directory 
+it will look like this 
+`~/.config/auto-cpufreq/auto-cpufreq.conf`
+after restart 
+you will see the config file path in System Information section in Stats mode 
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>What was said above, you're using wrong location for your config file. Ideally place it in `/etc/auto-cpufreq.conf` as instructed in [config file as part of README](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#3-auto-cpufreq-config-file). 
+
+Closing the issue, please feel free to open if the issue persists. </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,93 @@
+
+        <html>
+        <head>
+            <title>Issue #813: Dependency 'girepository-2.0' is required but not found.</title>
+        </head>
+        <body>
+            <h1>Dependency 'girepository-2.0' is required but not found.</h1>
+            <p><strong>Issue #813</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hi! Have Carbon X1 gen 6 laptop running Ubuntu 24.10 and get this error while trying to install according to the doc:
+
+```
+Collecting PyGObject<4.0.0,>=3.46.0 (from auto-cpufreq==2.5.0+6be1547)
+  Downloading pygobject-3.52.1.tar.gz (1.2 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.2/1.2 MB 7.8 MB/s eta 0:00:00
+  Installing build dependencies ... done
+  Getting requirements to build wheel ... done
+  Installing backend dependencies ... done
+  Preparing metadata (pyproject.toml) ... error
+  error: subprocess-exited-with-error
+  
+  × Preparing metadata (pyproject.toml) did not run successfully.
+  │ exit code: 1
+  ╰─> [23 lines of output]
+      + meson setup /tmp/pip-install-d1gea8ab/pygobject_6192d5ef207c4a78b56f0eb36df0f755 /tmp/pip-install-d1gea8ab/pygobject_6192d5ef207c4a78b56f0eb36df0f755/.mesonpy-77k4i7a0 -Dbuildtype=release -Db_ndebug=if-release -Db_vscrt=md -Dtests=false -Dwheel=true --wrap-mode=nofallback --native-file=/tmp/pip-install-d1gea8ab/pygobject_6192d5ef207c4a78b56f0eb36df0f755/.mesonpy-77k4i7a0/meson-python-native-file.ini
+      The Meson build system
+      Version: 1.7.0
+      Source dir: /tmp/pip-install-d1gea8ab/pygobject_6192d5ef207c4a78b56f0eb36df0f755
+      Build dir: /tmp/pip-install-d1gea8ab/pygobject_6192d5ef207c4a78b56f0eb36df0f755/.mesonpy-77k4i7a0
+      Build type: native build
+      Project name: pygobject
+      Project version: 3.52.1
+      C compiler for the host machine: cc (gcc 14.2.0 "cc (Ubuntu 14.2.0-4ubuntu2) 14.2.0")
+      C linker for the host machine: cc ld.bfd 2.43.1
+      Host machine cpu family: x86_64
+      Host machine cpu: x86_64
+      Program python3 found: YES (/opt/auto-cpufreq/venv/bin/python)
+      Found pkg-config: YES (/usr/bin/pkg-config) 1.8.1
+      Run-time dependency python found: YES 3.12
+      Found CMake: /usr/bin/cmake (3.30.3)
+      Run-time dependency girepository-2.0 found: NO (tried pkgconfig and cmake)
+      Not looking for a fallback subproject for the dependency girepository-2.0 because:
+      Use of fallback dependencies is disabled.
+      
+      ../meson.build:31:9: ERROR: Dependency 'girepository-2.0' is required but not found.
+      
+      A full log can be found at /tmp/pip-install-d1gea8ab/pygobject_6192d5ef207c4a78b56f0eb36df0f755/.mesonpy-77k4i7a0/meson-logs/meson-log.txt
+      [end of output]
+  
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+error: metadata-generation-failed
+
+× Encountered error while generating package metadata.
+╰─> See above for output.
+
+note: This is an issue with the package mentioned above, not pip.
+hint: See above for details.
+```
+
+I checked and I do have gir1.2-girepository-2.0-dev package installed already.
+Looks like after I manually installed libgirepository-2.0-dev package I got auto-cpufreq-installer ran smooth without error.
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Fixed with f2c4a2d
+
+Thanks for bringing this to our attention. The newest release of PyGObject switches from libgirepository 1.0 to 2.0, which is unfortunately not available in older versions of Ubuntu. In the interest of a quick, temporary fix, I have pinned PyGObject to a version that uses libgirepository 1.0
+
+@AdnanHodzic this means we have to consider dropping support for older versions of Ubuntu/Debian since libgirepository 2.0 will not be available unless those users install the package from source which is definitely not ideal. Of course, we could keep PyGObject pinned to the working version but it also isn't really a good idea to keep a dependency pinned for the foreseeable future. There isn't really a way to supply different versions of PyGObject based on the user's distro, it is only possible to set different versions for "Linux" as a whole versus "macos" or "win32"</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@shadeyg56 thanks for taking care of this and heads up.
+
+> this means we have to consider dropping support for older versions of Ubuntu/Debian since libgirepository 2.0 will not be available unless those users install the package from source which is definitely not ideal.
+
+I'm all for dropping it, only problem is that libgirepository 2 is only available as of recently in [Debian >= testing (trixie)](https://packages.debian.org/search?keywords=libgirepository&searchon=names&suite=all&section=all) & [Ubuntu >= 24.04](https://packages.ubuntu.com/search?keywords=libgirepository&searchon=names&suite=all&section=all) repos so it's not widely available yet. 
+
+> Of course, we could keep PyGObject pinned to the working version but it also isn't really a good idea to keep a dependency pinned for the foreseeable future. 
+
+Let's keep an eye on it, and I'll add this to the releases to make it easier for us to track.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

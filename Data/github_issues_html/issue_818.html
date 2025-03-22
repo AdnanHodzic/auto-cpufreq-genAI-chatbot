@@ -1,0 +1,48 @@
+
+        <html>
+        <head>
+            <title>Issue #818: Warning: Changing CPU turbo is not supported. Skipping.</title>
+        </head>
+        <body>
+            <h1>Warning: Changing CPU turbo is not supported. Skipping.</h1>
+            <p><strong>Issue #818</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I disabled Turbo Boost in the BIOS settings, but I am still getting the following warning when running the application:
+
+![Image](https://github.com/user-attachments/assets/43a85f62-0c42-4f6d-a0a6-a8054ae30150)
+
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>LAITH343:</strong></p>
+                    <p>this is normal behavior because it doesn't know your turbo boost is disabled</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>brook1167:</strong></p>
+                    <p>If it's the cause, how can I know that auth-cpu-freq is working?
+
+
+
+
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Fact you're seeing those stats above means that it's working. 
+
+Only thing that isn't working is setting your CPU to use turbo because you're hardware doesn't support it. Other then that governors are changed and it looks good to me.
+
+For more info I advise you to check out [auto-cpufreq - tool demo (Automatic CPU speed & power optimizer for Linux)](https://youtu.be/QkYRpVEEIlg) or [auto-cpufreq v2.0 release & demo of all available features and options](https://youtu.be/SPGpkZ0AZVU) Youtube videos. </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

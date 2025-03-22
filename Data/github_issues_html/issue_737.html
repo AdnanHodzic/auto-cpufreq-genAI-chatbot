@@ -395,6 +395,18 @@ cat /sys/devices/system/cpu/cpu*/cpufreq/cpuinfo_min_freq
                     <p>That would be great, @shadeyg56 is the one who originally introduced GUI, so if you have some questions he might be able to help. We're also all hanging around in [auto-cpufreq Discord community.](https://discord.gg/Sjauxtj6kH)</p>
                 </div>
             
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>YoussefRbahi:</strong></p>
+                    <p>I've been experiencing the same issue, and I believe it's because the script takes some time to enable Turbo Boost, even when it's already set to `always`. As a result, `/sys/devices/system/cpu/cpu*/cpufreq/cpuinfo_max_freq` is read before Turbo Boost is fully activated, showing the non-boosted value.
+
+I resolved this by setting `turbo = auto` and controlling Turbo Boost manually using `scaling_max_freq` in the configuration file. In practice, setting `scaling_max_freq = 1600000` or lower is practically the same as disabling Turbo Boost in your case, both in terms of temperatures and power consumption (even when `--stats` reports `Setting turbo boost: on` ). On the other hand, setting `scaling_max_freq` to anything higher should function nearly identically to `turbo = always`, unless you're hitting extremely high temperatures and getting something like BD PROCHOT.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@YoussefRbahi if you think these changes are worth sharing with rest and having them as part of `master` branch, please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
             </div>
         </body>
         </html>

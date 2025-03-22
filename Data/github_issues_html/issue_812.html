@@ -1,0 +1,71 @@
+
+        <html>
+        <head>
+            <title>Issue #812: How to configure permissions to not require pswd for Governor/power mode change?</title>
+        </head>
+        <body>
+            <h1>How to configure permissions to not require pswd for Governor/power mode change?</h1>
+            <p><strong>Issue #812</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hi!
+
+Is it possible to set file permissions in Linux (or do anything else) to **avoid** auto-cpufreq **requiring password** for each **Governor/power mode change**?
+Its currently asking for (root permissions? I guess) every time I switch Governor/power mode (at least on Cinnamon).
+If this is possible, which files one need to change ownership or permissions?
+
+I did a search of issues and couldn't find anything relevant, please let me know if there's.
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+Yes.
+
+Thank you for this great project!</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>The files `auto-cpufreq` edits are in sysfs which is provided by the kernel and they come from the `cpufreq` driver. It is up to the driver to set the owner of the attributes it exposes. You might be able to make a group and combine that with some udev rules or something, but I wouldn't recommend messing with it too much since it could lead to unexpected behavior.
+
+`auto-cpufreq` asking for root password every time is intended behavior</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@Heavygrass you can simply configure [sudo NOPASSWD in sudoers file](https://www.tecmint.com/run-sudo-command-without-password-linux/) not to be asked for password every time you want to run something as root.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Heavygrass:</strong></p>
+                    <p>@AdnanHodzic Thank you for your response!
+Is removing root password the only way?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Who said anything about removing root password? 🤔
+
+Article I shared above instructs you how to not be prompted for password every time you want to run something as root.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Heavygrass:</strong></p>
+                    <p>@shadeyg56 @AdnanHodzic 
+Is it possible to point me to say a discussion (or anything else) that could help me to understand the reason(s) for requiring sudo for governor change design decision was made?
+Thank you.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>You're asking questions that don't have anything to do with auto-cpufreq and are related to how Linux itself and some of its operations were designed.
+
+If you want to change e.g CPU governor state in Linux, you need sudo/root permissions to perform this action (you can see this in code btw). Hence if you want auto-cpufreq to automatically make these decisions for you, you need to provide it with root access, simple as that.
+
+I can't find exact discussions now (which are somewhere in issues), but that's why auto-cpufreq won't ask you for root for actions where it's not needed. For example, you can run `auto-cpufreq --stats` (without sudo) as it's not making any actions and is just printing information.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

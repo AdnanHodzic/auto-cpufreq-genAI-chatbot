@@ -1,0 +1,150 @@
+
+        <html>
+        <head>
+            <title>Issue #814: Python 3.13.2 not install using installer</title>
+        </head>
+        <body>
+            <h1>Python 3.13.2 not install using installer</h1>
+            <p><strong>Issue #814</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>@AdnanHodzic,
+### Error output:
+```text
+───────────────────────────────────────────────────────────────────────────────────────── Installing auto-cpufreq tool ─────────────────────────────────────────────────────────────────────────────────────────
+
+Processing /home/debian/Downloads/auto-cpufreq-2.5.0
+  Installing build dependencies ... done
+  Getting requirements to build wheel ... done
+  Preparing metadata (pyproject.toml) ... error
+  error: subprocess-exited-with-error
+  
+  × Preparing metadata (pyproject.toml) did not run successfully.
+  │ exit code: 1
+  ╰─> [48 lines of output]
+      Traceback (most recent call last):
+        File "/opt/auto-cpufreq/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 389, in <module>
+          main()
+          ~~~~^^
+        File "/opt/auto-cpufreq/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 373, in main
+          json_out["return_val"] = hook(**hook_input["kwargs"])
+                                   ~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+        File "/opt/auto-cpufreq/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 175, in prepare_metadata_for_build_wheel
+          return hook(metadata_directory, config_settings)
+        File "/tmp/pip-build-env-4xajpjqg/overlay/lib/python3.13/site-packages/poetry/core/masonry/api.py", line 42, in prepare_metadata_for_build_wheel
+          poetry = Factory().create_poetry(Path().resolve(), with_groups=False)
+        File "/tmp/pip-build-env-4xajpjqg/overlay/lib/python3.13/site-packages/poetry_dynamic_versioning/patch.py", line 26, in alt_poetry_create
+          name = _get_and_apply_version(
+              pyproject_path=_get_pyproject_path_from_poetry(instance.pyproject),
+          )
+        File "/tmp/pip-build-env-4xajpjqg/overlay/lib/python3.13/site-packages/poetry_dynamic_versioning/__init__.py", line 688, in _get_and_apply_version
+          version, instance = _get_version(config, name)
+                              ~~~~~~~~~~~~^^^^^^^^^^^^^^
+        File "/tmp/pip-build-env-4xajpjqg/overlay/lib/python3.13/site-packages/poetry_dynamic_versioning/__init__.py", line 502, in _get_version
+          version = _get_version_from_dunamai(vcs, pattern, config)
+        File "/tmp/pip-build-env-4xajpjqg/overlay/lib/python3.13/site-packages/poetry_dynamic_versioning/__init__.py", line 463, in _get_version_from_dunamai
+          return Version.from_vcs(
+                 ~~~~~~~~~~~~~~~~^
+              vcs=vcs,
+              ^^^^^^^^
+          ...<7 lines>...
+              ignore_untracked=config["ignore-untracked"],
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          )
+          ^
+        File "/tmp/pip-build-env-4xajpjqg/overlay/lib/python3.13/site-packages/dunamai/__init__.py", line 2090, in from_vcs
+          return cls._do_vcs_callback(
+                 ~~~~~~~~~~~~~~~~~~~~^
+              vcs,
+              ^^^^
+          ...<9 lines>...
+              commit_length,
+              ^^^^^^^^^^^^^^
+          )
+          ^
+        File "/tmp/pip-build-env-4xajpjqg/overlay/lib/python3.13/site-packages/dunamai/__init__.py", line 2145, in _do_vcs_callback
+          return callback(**kwargs)
+        File "/tmp/pip-build-env-4xajpjqg/overlay/lib/python3.13/site-packages/dunamai/__init__.py", line 1104, in from_git
+          _detect_vcs(vcs, path)
+          ~~~~~~~~~~~^^^^^^^^^^^
+        File "/tmp/pip-build-env-4xajpjqg/overlay/lib/python3.13/site-packages/dunamai/__init__.py", line 371, in _detect_vcs
+          raise RuntimeError("This does not appear to be a {} project".format(expected_vcs.value.title()))
+      RuntimeError: This does not appear to be a Git project
+      [end of output]
+  
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+error: metadata-generation-failed
+
+× Encountered error while generating package metadata.
+╰─> See above for output.
+
+note: This is an issue with the package mentioned above, not pip.
+hint: See above for details.
+```
+---
+
+### System information:
+Not install using `sudo ./auto-cpufreq-installer `
+
+```
+$ lsb_release -a
+No LSB modules are available.
+Distributor ID: Debian
+Description:    Debian GNU/Linux trixie/sid
+Release:        n/a
+Codename:       trixie
+```
+
+```
+$ python -V
+Python 3.13.2
+
+```</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Not install using sudo ./auto-cpufreq-installer 
+
+Then what are you using to install auto-cpufreq? 
+
+If you want me or any of the other maintainers to help you, do not  ignore issue template! Which you did, hence making this issue invalid, closing. Feel free to re-open this issue once you properly filled out requested fields.
+
+Reference:
+
+### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+#### Before submitting an issue, it is strongly recommended to use the **[auto-cpufreq-genAI-chatbot](https://foolcontrol.org/?p=4903)** to get an immediate answer to your question.
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+### Error output:
+```text
+Add/paste error output in case of failed installation or other failing component
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+auto-cpufreq --debug
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behavior.
+
+In meantime, please refer to [project Readme and recommended installation](https://github.com/AdnanHodzic/auto-cpufreq/?tab=readme-ov-file#installing-auto-cpufreq) methods.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

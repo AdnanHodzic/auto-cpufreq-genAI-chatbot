@@ -1,0 +1,53 @@
+
+        <html>
+        <head>
+            <title>Issue #821: deps: allow psutil 7.x</title>
+        </head>
+        <body>
+            <h1>deps: allow psutil 7.x</h1>
+            <p><strong>Issue #821</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>This allows building with both psutil 6.x and 7.x. Closes #817.
+
+Upstream [1] released psutil 7.0.0 recently, which caused a build failure on nixpkgs ci [2].
+Checking release notes [3], `memory_info_ex` was removed (unused in auto-cpufreq),
+and minimum python version requirements were increased to what this project uses already anyways.
+
+[1] https://pypi.org/project/psutil/#history
+[2] https://hydra.nixos.org/build/292453144/log
+[3] https://github.com/giampaolo/psutil/blob/master/HISTORY.rst#700
+
+Tested with:
+```patch
+diff --git a/flake.nix b/flake.nix
+index ab3449b..89a11db 100644
+--- a/flake.nix
++++ b/flake.nix
+@@ -1,6 +1,6 @@
+ {
+   inputs = {
+-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
++    nixpkgs.url = "github:NixOS/nixpkgs/staging-next";
+   };
+
+   outputs = {nixpkgs, ...} @ inputs: let
+```
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>LGTM! Thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases). 
+
+Closes #817 
+
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        
