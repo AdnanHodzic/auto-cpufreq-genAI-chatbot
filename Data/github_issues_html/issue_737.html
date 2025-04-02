@@ -407,6 +407,13 @@ I resolved this by setting `turbo = auto` and controlling Turbo Boost manually u
                     <p>@YoussefRbahi if you think these changes are worth sharing with rest and having them as part of `master` branch, please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
                 </div>
             
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>LDrawe:</strong></p>
+                    <p>Hi, sorry for the long hiatus. The last time I used Linux, I enabled Turbo Boost by writing directly to the CPU registers with MSR. For some reason however, this method stopped working some time ago, so I had to switch to Windows. I initially closed this issue because I thought I was doing something wrong. But since @YoussefRbahi reported the same problem, it might be worth revisiting.
+
+I can modify the code to retrieve the value from `scaling_max_freq` to handle these cases and submit a PR for testing if you're okay with it, @AdnanHodzic.</p>
+                </div>
+            
             </div>
         </body>
         </html>

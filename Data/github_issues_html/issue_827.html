@@ -1,0 +1,92 @@
+
+        <html>
+        <head>
+            <title>Issue #827: [BUG] on install, are created tons of logs</title>
+        </head>
+        <body>
+            <h1>[BUG] on install, are created tons of logs</h1>
+            <p><strong>Issue #827</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>After starting it i'm experiencing a full disk with logs (44GB), all of them equals to the next sample
+### Error output:
+```journal
+mar 31 22:12:39 mypc kernel: pcieport 0000:00:1c.5: AER: Correctable error message received from 0000:03:00.0
+mar 31 22:12:39 mypc kernel: ath9k 0000:03:00.0: PCIe Bus Error: severity=Correctable, type=Physical Layer, (Receiver ID)
+mar 31 22:12:39 mypc kernel: ath9k 0000:03:00.0:   device [168c:0036] error status/mask=00000001/00002000
+mar 31 22:12:39 mypc kernel: ath9k 0000:03:00.0:    [ 0] RxErr                  (First)
+
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+sudo auto-cpufreq --debug
+
+-------------------------------------------------------------------------------
+
+Linux distro: Zorin OS 17 jammy
+Linux kernel: 6.8.0-52-generic
+Processor: Intel(R) Core(TM) i3-6006U CPU @ 2.00GHz
+Cores: 4
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2000 MHz
+CPU min frequency: 400 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0    100.0%        61 °C      2000 MHz
+CPU1    100.0%        60 °C      2000 MHz
+CPU2      2.0%        61 °C      2000 MHz
+CPU3      3.0%        60 °C      2000 MHz
+
+CPU fan speed: 2700 RPM
+
+auto-cpufreq version: 2.5.0
+
+Python: 3.10.12
+psutil package: 7.0.0
+platform package: 1.0.8
+click package: 8.1.8
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.59 %
+
+Total CPU usage: 53.4 %
+Total system load: 2.06
+Average temp. of all cores: 60.00 °C 
+
+Currently using: performance governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+
+  ```
+I have removed the files and then they appear again, disabling the tool and rebooting solved the problem, which is not good, i want to use the auto-cpufreq 
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>What's the path of the log file? What are its contents?</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

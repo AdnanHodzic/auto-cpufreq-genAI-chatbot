@@ -1,0 +1,78 @@
+
+        <html>
+        <head>
+            <title>Issue #822: Added pyasyncore to pyproject, fixing issue #601</title>
+        </head>
+        <body>
+            <h1>Added pyasyncore to pyproject, fixing issue #601</h1>
+            <p><strong>Issue #822</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>
+Changed python version requirement to >=3.9 to fix error: 
+
+> pygobject requires Python <4.0,>=3.9, so it will not be satisfied for Python >=3.8,<3.9
+
+Changed PyGObject to an optional dependency. 
+
+Changes to be committed:
+	modified:   poetry.lock
+	modified:   pyproject.toml
+-----------
+
+After making this change, I was able to install the program with poetry, and install onto Silverblue 41 successfully. 
+I tried to check if this fixes #574, but ran into an issue with Gnome Boxes not being able to access a governor. I will continue to mess with that and report back here if I get any success. </p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>LGTM! Thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases). 
+
+Closes #601 
+
+Besides #601, does this mean #677 could also be closed? Since you said you'll look into #574 as it's also related. 
+
+@shadeyg56 fyi,this merge broke the nix build.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>devinmcanelly:</strong></p>
+                    <p>#574 
+------
+I was able to get auto-cpufreq to build and install on a Kubuntu VM, but not able to get cpu governor pass-through to work inside it; so I was only able to build and install but not actually install/enable the daemon. I suspect its in a similar state to silverblue
+
+#677 / Silverblue
+-----
+PyGobject is failing because PyCairo is failing, because silverblue doesn't ship with clang/gcc, causing 601. Making PyGobject optional & adding pyasyncore as a dependency let me install the daemon, but auto-cpufreq-gtk crashes because it can't import PyGobject.
+
+In a Toolbox where the installer can `dnf install gcc`, everything works as expected, except the container doesn't have permission to use systemctl. Outside the toolbox, the installer can't `dnf install gcc`. It's definitely a silverblue issue and the fix will probably end up being specific installation instructions.
+
+
+How much does any of this relate to #677? I looked into his .spec/repo and it looked like gcc was included so I don't think much.
+Considering the user is trying to build an RPM to install on a fork of Universal Blue, which is itself a fork of silverblue, its hard to say, and I'm not sure how to check. 
+
+
+
+> @shadeyg56 fyi,this merge broke the nix build.
+
+That would've been an easy thing to have done myself :sweat_smile:
+
+I will continue trying to get -gtk working on silverblue, and submit a PR to update the readme if I can get it figured out.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Ok sounds good, in that case let's just leave those other issues open for now.
+
+> I will continue trying to get -gtk working on silverblue, and submit a PR to update the readme if I can get it figured out
+
+Great, looking forward to your future PR's!</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        
