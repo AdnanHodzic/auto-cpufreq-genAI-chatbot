@@ -15,6 +15,9 @@ _From Zero to AI Hero: How to Build a GenAI Chatbot with Gemini & Vertex AI Agen
 
 [![From Zero to AI Hero: How to Build a GenAI Chatbot with Gemini & Vertex AI Agent Builder (17 video) YouTube playlist](https://img.youtube.com/vi/LgAUPJm4Dio/0.jpg)](https://www.youtube.com/watch?v=LgAUPJm4Dio&list=PL83G0TLSeXRFiTPyctEn_vdL2_Z7xd-e_&index=1)
 
+### auto-cpufreq genAI chatbot Playbook example
+
+Example reference of [auto-cpufreq genAI chatbot Playbook with goal and instructions code.](https://github.com/AdnanHodzic/auto-cpufreq-genAI-chatbot/blob/main/auto-cpufreq%20genAI%20chatbot%20Playbook.md)
 
 ### Create API keys needed to fetch data from Github, Youtube & Reddit
 
