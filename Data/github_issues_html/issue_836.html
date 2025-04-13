@@ -1,0 +1,37 @@
+
+        <html>
+        <head>
+            <title>Issue #836: Implement dedicated functionality to turn Bluetooth on/off at boot</title>
+        </head>
+        <body>
+            <h1>Implement dedicated functionality to turn Bluetooth on/off at boot</h1>
+            <p><strong>Issue #836</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>To preserve battery life when [auto-cpufreq daemon (`--install`)](https://github.com/AdnanHodzic/auto-cpufreq/tree/bluetooth#install---auto-cpufreq-daemon) is installed, Bluetooth will be disabled by default at boot. Bluetooth can be enabled at any time later on.
+
+Regardless, over the time, a feature requests and bugs were reported over this which this PR is aiming to close:
+
+* [Feature] Bluetooth disabled after reboot #673
+* [Feature request ] How can I stop disabling of bluetooth on boot? #451
+* deploy_daemon() disables Bluetooth regardless of using laptop on AC #92
+
+This PR brings 2 new flags which are also described on [auto-cpufreq README page.](https://github.com/AdnanHodzic/auto-cpufreq)
+
+*  [`--bluetooth_boot_off`  Turn off Bluetooth on boot](https://github.com/AdnanHodzic/auto-cpufreq/tree/bluetooth#bluetooth_boot_off)
+* [ `--bluetooth_boot_on`   Turn on Bluetooth on boot](https://github.com/AdnanHodzic/auto-cpufreq/tree/bluetooth#bluetooth_boot_on)
+
+Now, for those who don't even have auto-cpufreq daemon installed and/or are only using it for [monitoring](https://github.com/AdnanHodzic/auto-cpufreq/tree/bluetooth#monitor) or [live](https://github.com/AdnanHodzic/auto-cpufreq/tree/bluetooth#live). Or if you're simply trying to find a quick way to prevents GNOME from automatically enabling Bluetooth on every reboot or after suspend/wake up even if you manually disable it. 
+
+You can turn off bluetooth at boot by running: `sudo auto-cpufreq --bluetooth_boot_off`
+
+Or, if you installed auto-cpufreq daemon but would like to keep bluetooth enabled at boot can also do so by running `auto-cpufreq --bluetooth_boot_on`
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+            </div>
+        </body>
+        </html>
+        

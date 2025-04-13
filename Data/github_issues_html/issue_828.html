@@ -1,0 +1,102 @@
+
+        <html>
+        <head>
+            <title>Issue #828: Battery Charging Thresholds Not Applied by auto-cpufreq</title>
+        </head>
+        <body>
+            <h1>Battery Charging Thresholds Not Applied by auto-cpufreq</h1>
+            <p><strong>Issue #828</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p># Battery Charging Thresholds Not Applied by auto-cpufreq
+
+## Have you tried?
+- ✅ Searched through existing/closed issues.
+- ✅ Verified installation via `auto-cpufreq --install` and `auto-cpufreq --remove`.
+- ✅ Checked GNOME Power Profiles Daemon status.
+- ✅ Reviewed `auto-cpufreq --debug` output.
+
+## Error output:
+No explicit error message, but **battery charging thresholds** do not seem to be enforced. 
+
+![Image](https://github.com/user-attachments/assets/a66cf079-f002-4f6d-a913-c69eb109c3cd)
+
+## System Information:
+```
+Linux distro: Ubuntu 22.04 Jammy Jellyfish  
+Kernel: 6.8.0-57-generic  
+CPU: 11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz  
+Architecture: x86_64  
+Driver: acpi-cpufreq
+auto-cpufreq version: 2.5.0  
+```
+
+## Issue Description:
+Despite setting charging thresholds in `/etc/auto-cpufreq.conf`:
+```
+enable_thresholds = true
+start_threshold = 60
+stop_threshold = 80
+```
+Auto-cpufreq does not enforce these limits. The battery is charging beyond the stop threshold with **no rules detected** in `auto-cpufreq --stats`. 
+
+## Steps Taken:
+- Installed and removed auto-cpufreq to reset settings.
+- Verified GNOME Power Profiles Daemon interference.
+- Ensured `/etc/auto-cpufreq.conf` is properly configured.
+- Observed battery stats showing **no charging thresholds applied**.
+
+## Expected Behavior:
+Battery charging should **stop at 80%** and **resume at 60%**, but this is not happening.
+
+Would appreciate any guidance on troubleshooting or confirming whether this is a known bug.
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@PurpleWazard 👆</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>Hey @rakshitx1 what is your laptop? Vendor and model. Depending on your vendor it may or may not support battery charge thresholds</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>rakshitx1:</strong></p>
+                    <p>@PurpleWazard 
+
+My laptop is the MSI GF63 11UC (i7-11800H).
+
+I checked `/sys/class/power_supply/BAT1/`, and I see the following charge control files:  
+
+```bash
+charge_control_end_threshold
+charge_control_start_threshold
+```
+
+Let me know if you need any other details!  </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>@rakshitx1 alright thanks what is the output of `lsmod`
+
+i need to see what kernel modules you're using.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>@rakshitx1 ^
+
+lets get this fixed soon.
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

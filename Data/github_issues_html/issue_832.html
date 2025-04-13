@@ -1,0 +1,49 @@
+
+        <html>
+        <head>
+            <title>Issue #832: Measure keeps CPU "hot".</title>
+        </head>
+        <body>
+            <h1>Measure keeps CPU "hot".</h1>
+            <p><strong>Issue #832</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>This is my observation.
+I wrote fans controller for my laptop, so I had that issue and know what to do. 
+So when `auto-cpufreq` runs minimum temperature is 44C when laptop is not touched. If I stop the service, it drops down to 35C.
+Which means measuring temperature raises temperature. To overcome this we need to use dynamic slices, i.e. below 45C do the measure once a minute.
+My solution in my program as example:
+https://github.com/alexzk1/MsiFanControl/blob/main/MsiFanControlGUI/reads_period_detector.h
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Would be great if we had more accurate CPU readings and making decisions based on the same, and to somehow integrate with what you built. 
+
+Please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>alexzk1:</strong></p>
+                    <p>I recall, on my laptop sensors are read over IRQ-9. If I mask it - all and any readers fail. This fact can be used to detect "issue". Not sure if it is common for all systems.
+But than, doing IRQ too often heats CPU. IRQs are handled in the kernel space, I guess much of the wrapping code happens.
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>alexzk1:</strong></p>
+                    <p>As for "joining", I just made logic of the turbo-boost control, based on [derivatives](https://github.com/alexzk1/MsiFanControl/blob/cea5384db73419a911bb3f7cf4bccb21e14bd8ec/MsiFanControlGUI/booster_onoff_decider.h#L21).
+Works awesome, 2 minutes stress CPU test didn't triggered the fan's boost.
+
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

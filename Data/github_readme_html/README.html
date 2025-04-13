@@ -70,6 +70,8 @@
 <li><a href="#update---auto-cpufreq-update">Update - auto-cpufreq update</a></li>
 <li><a href="#remove---auto-cpufreq-daemon">Remove - auto-cpufreq daemon</a></li>
 <li><a href="#stats">stats</a></li>
+<li><a href="#bluetooth_boot_off">bluetooth<em>boot</em>off</a></li>
+<li><a href="#bluetooth_boot_on">bluetooth<em>boot</em>on</a></li>
 </ul></li>
 <li><a href="#battery-charging-thresholds">Battery charging thresholds</a>
 <ul>
@@ -349,17 +351,23 @@ the repository:</p>
 
 <p><code>git clone https://github.com/AdnanHodzic/auto-cpufreq</code></p>
 
-<p>Navigate to the directory where <code>power_helper.py</code> resides:</p>
+<p>Make sure to have <code>psutil</code> &amp; <code>pyinotify</code> Python library installed before next step:</p>
 
-<p><code>cd auto-cpufreq/auto_cpufreq</code></p>
+<p>If you're using Debian based distro install them by running:</p>
 
-<p>Make sure to have <code>psutil</code> Python library installed before next step:</p>
+<p><code>sudo apt install python3-psutil python3-pyinotify</code> </p>
 
-<p><code>sudo python3 -m pip install psutil</code></p>
+<p>or manually using pip, e.g: </p>
+
+<p><code>sudo pip3 install psutil pyinotify --break-system-packages</code></p>
 
 <p>Then disable the GNOME Power Profiles daemon:</p>
 
-<p><code>sudo python3 power_helper.py --gnome_power_disable</code></p>
+<p><code>sudo python3 -m auto_cpufreq.power_helper --gnome_power_disable</code></p>
+
+<p>for full list of options run --help, e.g:</p>
+
+<p><code>sudo python3 -m auto_cpufreq.power_helper --help</code></p>
 
 <h3>2: <code>--force</code> governor override</h3>
 
@@ -569,6 +577,16 @@ the repository:</p>
 <ul>
 <li>View live stats of CPU optimizations made by daemon</li>
 </ul></li>
+<li><p><a href="#bluetooth_boot_off">bluetooth<em>boot</em>off</a></p>
+
+<ul>
+<li>Turn off Bluetooth on boot (only)! Can be turned on any time later on.</li>
+</ul></li>
+<li><p><a href="#bluetooth_boot_on">bluetooth<em>boot</em>on</a></p>
+
+<ul>
+<li>Turn on Bluetooth on boot.</li>
+</ul></li>
 <li><p><a href="#overriding-governor">force=TEXT</a></p>
 
 <ul>
@@ -694,6 +712,16 @@ Please note that any set override will persist even after reboot.</p>
 <p>If the daemon has been installed, live stats of CPU/system load monitoring and optimization can be seen by running:</p>
 
 <p><code>auto-cpufreq --stats</code></p>
+
+<h3>bluetooth<em>boot</em>off</h3>
+
+<p>Turn off Bluetooth on boot (only)! Bluetooth can still be turned on manually when needed. This option is executed during the installation of the auto-cpufreq daemon, but it can also be run independently without installing the daemon.</p>
+
+<p>It prevents GNOME from automatically enabling Bluetooth on every reboot or after suspend/wake up even if you manually disable it, GNOME will turn it back on unless this option is used.</p>
+
+<h3>bluetooth<em>boot</em>on</h3>
+
+<p>Useful if you prefer Bluetooth to be enabled at boot time, especially after installing the auto-cpufreq daemon, which will disable it by default.</p>
 
 <h2>Battery charging thresholds</h2>
 

@@ -1,0 +1,102 @@
+
+        <html>
+        <head>
+            <title>Issue #829: NixOS Unstable could not build package.</title>
+        </head>
+        <body>
+            <h1>NixOS Unstable could not build package.</h1>
+            <p><strong>Issue #829</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+#### Before submitting an issue, it is strongly recommended to use the **[auto-cpufreq-genAI-chatbot](https://foolcontrol.org/?p=4903)** to get an immediate answer to your question.
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+### Error output:
+```text
+error:
+       … while checking flake output 'nixosConfigurations'
+
+       … while checking the NixOS configuration 'nixosConfigurations.Yon'
+         at /nix/store/84m9nfg7kamv5va1fkk2iszbn5q2mavh-source/lib/mkFlake.nix:132:7:
+          131|     {
+          132|       ${host.output}.${reverseDomainName} = host.builder ({
+             |       ^
+          133|         inherit (host) system;
+
+       … while calling the 'head' builtin
+         at /nix/store/fwhfa9pbx8vdi8nd5pcys665baz6xdxf-source/lib/attrsets.nix:1534:13:
+         1533|           if length values == 1 || pred here (elemAt values 1) (head values) then
+         1534|             head values
+             |             ^
+         1535|           else
+
+       … while evaluating the option `system.build.toplevel':
+
+       … while evaluating definitions from `/nix/store/fwhfa9pbx8vdi8nd5pcys665baz6xdxf-source/nixos/modules/system/activation/top-level.nix':
+
+       … while evaluating the option `system.systemBuilderArgs':
+
+       … while evaluating definitions from `/nix/store/fwhfa9pbx8vdi8nd5pcys665baz6xdxf-source/nixos/modules/system/activation/activatable-system.nix':
+
+       … while evaluating the option `system.activationScripts.etc.text':
+
+       … while evaluating definitions from `/nix/store/fwhfa9pbx8vdi8nd5pcys665baz6xdxf-source/nixos/modules/system/etc/etc-activation.nix':
+
+       … while evaluating definitions from `/nix/store/fwhfa9pbx8vdi8nd5pcys665baz6xdxf-source/nixos/modules/system/etc/etc.nix':
+
+       … while evaluating the option `environment.etc.dbus-1.source':
+
+       … while evaluating the option `environment.systemPackages':
+
+       … while evaluating definitions from `/nix/store/24mjn4qqgp66pl65ia5252bmdgas4a4d-52s45jvjbp35yrzwk6dl1zs3b157j921-source/modules/nixos/powerManagement/default.nix':
+
+       (stack trace truncated; use '--show-trace' to show the full, detailed trace)
+
+       error: do not use python3Packages when building Python packages, specify each used package as a separate argument
+
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+Linux distro: NixOS 25.05 Warbler                                                                                                                                                                        
+Linux kernel: 6.14.0                                                                                                                                                                                     
+Processor: AMD Ryzen 7 7840HS w/ Radeon 780M Graphics                                                                                                                                                    
+Cores: 16                                                                                                                                                                                                
+Architecture: x86_64                                                                                                                                                                                     
+Driver: amd-pstate
+```
+
+I updated my flake `nix flake update` and then checked it with `nix flake check` and got this error.
+If I disable auto-cpufreq I dont get this message, so its related with it.
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>scientiac:</strong></p>
+                    <p>+1 and same CPU same arch, same kernel version same driver</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Changed merged with `master` as part of #830</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,966 @@
+
+        <html>
+        <head>
+            <title>Issue #833: Pop OS install fails</title>
+        </head>
+        <body>
+            <h1>Pop OS install fails</h1>
+            <p><strong>Issue #833</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+#### Before submitting an issue, it is strongly recommended to use the **[auto-cpufreq-genAI-chatbot](https://foolcontrol.org/?p=4903)** to get an immediate answer to your question.
+
+The chatbot provided a link that gave me an error 403 forbidden.
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? - Yes, there are similar issues
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)? - No, i do not use snaps
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)? - No, install fails
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)? - No, install fails
+
+### Error output:
+```
+> sudo auto-cpufreq/auto-cpufreq-installer 
+
+───────────────────────────────────────────────────────────────────────── auto-cpufreq installer ─────────────────────────────────────────────────────────────────────────
+
+Welcome to auto-cpufreq tool installer.
+
+Select a key [I]nstall/[R]emove or press ctrl+c to quit: i
+
+libgirepository-2.0-dev needs to be installed for version bookworm/sid
+---- 
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+E: Unable to locate package libgirepository-2.0-dev
+E: Couldn't find any package by glob 'libgirepository-2.0-dev'
+
+────────────────────────────────────────────────────────────────── Installing necessary Python packages ──────────────────────────────────────────────────────────────────
+
+Requirement already satisfied: pip in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (25.0.1)
+Requirement already satisfied: wheel in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (0.45.1)
+Collecting PyGObject
+  Using cached pygobject-3.52.3.tar.gz (1.2 MB)
+  Installing build dependencies ... done
+  Getting requirements to build wheel ... done
+  Installing backend dependencies ... done
+  Preparing metadata (pyproject.toml) ... error
+  error: subprocess-exited-with-error
+  
+  × Preparing metadata (pyproject.toml) did not run successfully.
+  │ exit code: 1
+  ╰─> [24 lines of output]
+      + meson setup /tmp/pip-install-wct09o9d/pygobject_07b7bbccae574a72a3193b6a33623d35 /tmp/pip-install-wct09o9d/pygobject_07b7bbccae574a72a3193b6a33623d35/.mesonpy-_mdmf556 -Dbuildtype=release -Db_ndebug=if-release -Db_vscrt=md -Dtests=false -Dwheel=true --wrap-mode=nofallback --native-file=/tmp/pip-install-wct09o9d/pygobject_07b7bbccae574a72a3193b6a33623d35/.mesonpy-_mdmf556/meson-python-native-file.ini
+      The Meson build system
+      Version: 1.7.2
+      Source dir: /tmp/pip-install-wct09o9d/pygobject_07b7bbccae574a72a3193b6a33623d35
+      Build dir: /tmp/pip-install-wct09o9d/pygobject_07b7bbccae574a72a3193b6a33623d35/.mesonpy-_mdmf556
+      Build type: native build
+      Project name: pygobject
+      Project version: 3.52.3
+      C compiler for the host machine: cc (gcc 11.4.0 "cc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0")
+      C linker for the host machine: cc ld.bfd 2.38
+      Host machine cpu family: x86_64
+      Host machine cpu: x86_64
+      Program python3 found: YES (/opt/auto-cpufreq/venv/bin/python3)
+      Found pkg-config: YES (/usr/bin/pkg-config) 0.29.2
+      Run-time dependency python found: YES 3.10
+      Did not find CMake 'cmake'
+      Found CMake: NO
+      Run-time dependency girepository-2.0 found: NO (tried pkgconfig and cmake)
+      Not looking for a fallback subproject for the dependency girepository-2.0 because:
+      Use of fallback dependencies is disabled.
+      
+      ../meson.build:31:9: ERROR: Dependency 'girepository-2.0' is required but not found.
+      
+      A full log can be found at /tmp/pip-install-wct09o9d/pygobject_07b7bbccae574a72a3193b6a33623d35/.mesonpy-_mdmf556/meson-logs/meson-log.txt
+      [end of output]
+  
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+error: metadata-generation-failed
+
+× Encountered error while generating package metadata.
+╰─> See above for output.
+
+note: This is an issue with the package mentioned above, not pip.
+hint: See above for details.
+
+────────────────────────────────────────────────────────────────────── Installing auto-cpufreq tool ──────────────────────────────────────────────────────────────────────
+
+Processing /home/aaron/Documents/apps-from-git/auto-cpufreq
+  Installing build dependencies ... done
+  Getting requirements to build wheel ... done
+  Preparing metadata (pyproject.toml) ... done
+Collecting pyinotify@ git+https://github.com/shadeyg56/pyinotify-3.12 (from auto-cpufreq==2.5.0+3898246)
+  Cloning https://github.com/shadeyg56/pyinotify-3.12 to /tmp/pip-install-a3z9mgtg/pyinotify_5e4a88fec253449eab910fa04f280c7d
+  Running command git clone --filter=blob:none --quiet https://github.com/shadeyg56/pyinotify-3.12 /tmp/pip-install-a3z9mgtg/pyinotify_5e4a88fec253449eab910fa04f280c7d
+  Resolved https://github.com/shadeyg56/pyinotify-3.12 to commit 271b7aba3269116b6c3870355393f47c79bce146
+  Preparing metadata (setup.py) ... done
+Requirement already satisfied: click<9.0.0,>=8.1.0 in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (from auto-cpufreq==2.5.0+3898246) (8.1.8)
+Requirement already satisfied: distro<2.0.0,>=1.8.0 in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (from auto-cpufreq==2.5.0+3898246) (1.9.0)
+Requirement already satisfied: psutil<8.0.0,>=6.0.0 in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (from auto-cpufreq==2.5.0+3898246) (7.0.0)
+Requirement already satisfied: pyasyncore<2.0.0,>=1.0.4 in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (from auto-cpufreq==2.5.0+3898246) (1.0.4)
+Requirement already satisfied: requests<3.0.0,>=2.32.3 in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (from auto-cpufreq==2.5.0+3898246) (2.32.3)
+Requirement already satisfied: urwid<3.0.0,>=2.6.16 in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (from auto-cpufreq==2.5.0+3898246) (2.6.16)
+Requirement already satisfied: charset-normalizer<4,>=2 in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (from requests<3.0.0,>=2.32.3->auto-cpufreq==2.5.0+3898246) (3.4.1)
+Requirement already satisfied: idna<4,>=2.5 in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (from requests<3.0.0,>=2.32.3->auto-cpufreq==2.5.0+3898246) (3.10)
+Requirement already satisfied: urllib3<3,>=1.21.1 in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (from requests<3.0.0,>=2.32.3->auto-cpufreq==2.5.0+3898246) (2.3.0)
+Requirement already satisfied: certifi>=2017.4.17 in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (from requests<3.0.0,>=2.32.3->auto-cpufreq==2.5.0+3898246) (2025.1.31)
+Requirement already satisfied: typing-extensions in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (from urwid<3.0.0,>=2.6.16->auto-cpufreq==2.5.0+3898246) (4.13.1)
+Requirement already satisfied: wcwidth in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (from urwid<3.0.0,>=2.6.16->auto-cpufreq==2.5.0+3898246) (0.2.13)
+Building wheels for collected packages: auto-cpufreq
+  Building wheel for auto-cpufreq (pyproject.toml) ... done
+  Created wheel for auto-cpufreq: filename=auto_cpufreq-2.5.0+3898246-py3-none-any.whl size=49136 sha256=822087538d31e41c9524a6ac4328163c95ec7e6588767ba5489add62afc5562a
+  Stored in directory: /root/.cache/pip/wheels/cb/bd/e7/71ee5d8af7e65a334bca2734bb1c3f5cec38c7cc1eb5a46256
+Successfully built auto-cpufreq
+Installing collected packages: auto-cpufreq
+  Attempting uninstall: auto-cpufreq
+    Found existing installation: auto-cpufreq 2.5.0+3898246
+    Uninstalling auto-cpufreq-2.5.0+3898246:
+      Successfully uninstalled auto-cpufreq-2.5.0+3898246
+Successfully installed auto-cpufreq-2.5.0+3898246
+
+──────────────────────────────────────────────────────────────── auto-cpufreq tool successfully installed ────────────────────────────────────────────────────────────────
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+
+Linux distro: Pop!_OS 22.04 jammy
+Linux kernel: 6.12.10-76061203-generic
+Processor: 11th Gen Intel(R) Core(TM) i7-11390H @ 3.40GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 5000 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      1.0%        36 °C       658 MHz
+CPU1      1.0%        37 °C       523 MHz
+CPU2      1.0%        39 °C      1062 MHz
+CPU3      2.0%        37 °C      1100 MHz
+CPU4      1.0%        36 °C      1010 MHz
+CPU5      2.0%        37 °C       400 MHz
+CPU6      0.0%        39 °C      1200 MHz
+CPU7      1.0%        37 °C       775 MHz
+
+CPU fan speed: 0 RPM
+
+auto-cpufreq version: 2.5.0
+
+Python: 3.10.12
+psutil package: 7.0.0
+platform package: 1.0.8
+click package: 8.1.8
+distro package: 1.9.0
+
+Computer type: Convertible
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.22 %
+
+Total CPU usage: 1.0 %
+Total system load: 0.70
+Average temp. of all cores: 37.00 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: on
+
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+Expected behavior is a successful install. The installer script states it completed successfully, however, I'm unable to open auto-cpu-freq.
+
+I've tried installing just the missing package but that is also failing..
+I've tried locating instructions on enabling fallback dependencies
+
+It's worth noting that I had this working on the same laptop, on Pop OS, a few months ago. I reinstalled Pop a few days ago and am now unable to install auto-cpu-freq, not sure what has changed.
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Related to improvements made as part of #826. 
+
+@kirmola in this case it's trying to install `libgirepository-2.0-dev` when it shouldn't as it won't find it for 22.04 repos.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@kirmola we have another issue (#834) as outcome of #826, can you please create a PR to address these? Thanks</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@noncarbonatedclack & @noamtu123 since @kirmola isn't responding, I pushed a fix as part of [8870b62 commit](https://github.com/AdnanHodzic/auto-cpufreq/commit/8870b62b172b11fea9de63971158a76c271d939a) with revamped logic to solve this issue.
+
+Can you please pull the latest git changes and run `sudo ./auto-cpufreq-installer --install` again.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>noamtu123:</strong></p>
+                    <p>thank for your quick response i don't think it's working i have tried even completely removing auto-cpufreq then reinstalling and it didn't help
+
+_this what i did andpc info: dell inspiron 14 5459 (intel i5-6200u, amd radeon r5 335 2gb ddr3 vram, 8gb ddr3l ram walram 256gb sata ssd from aliexpress)
+Linux distro: Zorin OS 17.3 lite
+
+that was my install process in terminal: what is said:_
+
+```
+noamtu123@noamtu123-Inspiron-5459:~$ git clone https://github.com/AdnanHodzic/auto-cpufreq.git
+cd auto-cpufreq && sudo ./auto-cpufreq-installer
+Cloning into 'auto-cpufreq'...
+remote: Enumerating objects: 2837, done.
+remote: Counting objects: 100% (906/906), done.
+remote: Compressing objects: 100% (246/246), done.
+remote: Total 2837 (delta 786), reused 661 (delta 660), pack-reused 1931 (from 2)
+Receiving objects: 100% (2837/2837), 961.02 KiB | 2.55 MiB/s, done.
+Resolving deltas: 100% (1585/1585), done.
+[sudo] password for noamtu123:      
+
+─────────────────────────────────────────────────────────────────────── auto-cpufreq installer ───────────────────────────────────────────────────────────────────────
+
+Welcome to auto-cpufreq tool installer.
+
+Select a key [I]nstall/[R]emove or press ctrl+c to quit: i
+
+
+───────────────────────────────────────────────────────────────── Detected Debian based distribution ─────────────────────────────────────────────────────────────────
+
+
+──────────────────────────────────────────────────────────────────── Setting up Python environment ────────────────────────────────────────────────────────────────────
+
+Hit:1 http://il.archive.ubuntu.com/ubuntu jammy InRelease
+Hit:2 http://il.archive.ubuntu.com/ubuntu jammy-updates InRelease                                                                              
+Hit:3 http://security.ubuntu.com/ubuntu jammy-security InRelease                                                                               
+Hit:4 http://il.archive.ubuntu.com/ubuntu jammy-backports InRelease                                                                                         
+Hit:5 https://packages.mozilla.org/apt mozilla InRelease                                                                                                    
+Hit:6 https://ppa.launchpadcontent.net/zorinos/apps/ubuntu jammy InRelease                        
+Hit:7 https://ppa.launchpadcontent.net/zorinos/drivers/ubuntu jammy InRelease
+Hit:8 https://ppa.launchpadcontent.net/zorinos/patches/ubuntu jammy InRelease
+Hit:9 https://ppa.launchpadcontent.net/zorinos/stable/ubuntu jammy InRelease
+Hit:10 https://packages.zorinos.com/stable jammy InRelease
+Hit:11 https://packages.zorinos.com/patches jammy InRelease
+Hit:12 https://packages.zorinos.com/apps jammy InRelease
+Hit:13 https://packages.zorinos.com/drivers jammy InRelease
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+2 packages can be upgraded. Run 'apt list --upgradable' to see them.
+Installing libgirepository1.0-dev...
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+libgirepository1.0-dev is already the newest version (1.72.0-1).
+0 upgraded, 0 newly installed, 0 to remove and 2 not upgraded.
+needs to be installed for version bookworm/sid
+---- 
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+gcc is already the newest version (4:11.2.0-1ubuntu1).
+libcairo2-dev is already the newest version (1.16.0-5ubuntu2).
+dmidecode is already the newest version (3.3-3ubuntu0.2).
+libgtk-3-dev is already the newest version (3.24.33-1ubuntu2.2).
+python3-dev is already the newest version (3.10.6-1~22.04.1).
+python3-setuptools is already the newest version (59.6.0-1.2ubuntu0.22.04.2).
+python3-pip is already the newest version (22.0.2+dfsg-1ubuntu0.5).
+python3-venv is already the newest version (3.10.6-1~22.04.1).
+0 upgraded, 0 newly installed, 0 to remove and 2 not upgraded.
+
+──────────────────────────────────────────────────────────────── Installing necessary Python packages ────────────────────────────────────────────────────────────────
+
+Requirement already satisfied: pip in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (22.0.2)
+Collecting pip
+  Using cached pip-25.0.1-py3-none-any.whl (1.8 MB)
+Collecting wheel
+  Using cached wheel-0.45.1-py3-none-any.whl (72 kB)
+Installing collected packages: wheel, pip
+  Attempting uninstall: pip
+    Found existing installation: pip 22.0.2
+    Uninstalling pip-22.0.2:
+      Successfully uninstalled pip-22.0.2
+Successfully installed pip-25.0.1 wheel-0.45.1
+Collecting PyGObject
+  Using cached pygobject-3.52.3.tar.gz (1.2 MB)
+  Installing build dependencies ... done
+  Getting requirements to build wheel ... done
+  Installing backend dependencies ... done
+  Preparing metadata (pyproject.toml) ... error
+  error: subprocess-exited-with-error
+  
+  × Preparing metadata (pyproject.toml) did not run successfully.
+  │ exit code: 1
+  ╰─> [24 lines of output]
+      + meson setup /tmp/pip-install-7pgtpfm4/pygobject_08e355bb26434a8795781756e6bf8f55 /tmp/pip-install-7pgtpfm4/pygobject_08e355bb26434a8795781756e6bf8f55/.mesonpy-j9n9q3rg -Dbuildtype=release -Db_ndebug=if-release -Db_vscrt=md -Dtests=false -Dwheel=true --wrap-mode=nofallback --native-file=/tmp/pip-install-7pgtpfm4/pygobject_08e355bb26434a8795781756e6bf8f55/.mesonpy-j9n9q3rg/meson-python-native-file.ini
+      The Meson build system
+      Version: 1.7.2
+      Source dir: /tmp/pip-install-7pgtpfm4/pygobject_08e355bb26434a8795781756e6bf8f55
+      Build dir: /tmp/pip-install-7pgtpfm4/pygobject_08e355bb26434a8795781756e6bf8f55/.mesonpy-j9n9q3rg
+      Build type: native build
+      Project name: pygobject
+      Project version: 3.52.3
+      C compiler for the host machine: cc (gcc 11.4.0 "cc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0")
+      C linker for the host machine: cc ld.bfd 2.38
+      Host machine cpu family: x86_64
+      Host machine cpu: x86_64
+      Program python3 found: YES (/opt/auto-cpufreq/venv/bin/python3)
+      Found pkg-config: YES (/usr/bin/pkg-config) 0.29.2
+      Run-time dependency python found: YES 3.10
+      Did not find CMake 'cmake'
+      Found CMake: NO
+      Run-time dependency girepository-2.0 found: NO (tried pkgconfig and cmake)
+      Not looking for a fallback subproject for the dependency girepository-2.0 because:
+      Use of fallback dependencies is disabled.
+      
+      ../meson.build:31:9: ERROR: Dependency 'girepository-2.0' is required but not found.
+      
+      A full log can be found at /tmp/pip-install-7pgtpfm4/pygobject_08e355bb26434a8795781756e6bf8f55/.mesonpy-j9n9q3rg/meson-logs/meson-log.txt
+      [end of output]
+  
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+error: metadata-generation-failed
+
+× Encountered error while generating package metadata.
+╰─> See above for output.
+
+note: This is an issue with the package mentioned above, not pip.
+hint: See above for details.
+
+──────────────────────────────────────────────────────────────────── Installing auto-cpufreq tool ────────────────────────────────────────────────────────────────────
+
+Processing /home/noamtu123/auto-cpufreq
+  Installing build dependencies ... done
+  Getting requirements to build wheel ... done
+  Preparing metadata (pyproject.toml) ... done
+Collecting pyinotify@ git+https://github.com/shadeyg56/pyinotify-3.12 (from auto-cpufreq==2.5.0+8870b62)
+  Cloning https://github.com/shadeyg56/pyinotify-3.12 to /tmp/pip-install-wotap7dy/pyinotify_000b1b55f183476691de822b63b49c24
+  Running command git clone --filter=blob:none --quiet https://github.com/shadeyg56/pyinotify-3.12 /tmp/pip-install-wotap7dy/pyinotify_000b1b55f183476691de822b63b49c24
+  Resolved https://github.com/shadeyg56/pyinotify-3.12 to commit 271b7aba3269116b6c3870355393f47c79bce146
+  Preparing metadata (setup.py) ... done
+Collecting click<9.0.0,>=8.1.0 (from auto-cpufreq==2.5.0+8870b62)
+  Using cached click-8.1.8-py3-none-any.whl.metadata (2.3 kB)
+Collecting distro<2.0.0,>=1.8.0 (from auto-cpufreq==2.5.0+8870b62)
+  Using cached distro-1.9.0-py3-none-any.whl.metadata (6.8 kB)
+Collecting psutil<8.0.0,>=6.0.0 (from auto-cpufreq==2.5.0+8870b62)
+  Using cached psutil-7.0.0-cp36-abi3-manylinux_2_12_x86_64.manylinux2010_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (22 kB)
+Collecting pyasyncore<2.0.0,>=1.0.4 (from auto-cpufreq==2.5.0+8870b62)
+  Using cached pyasyncore-1.0.4-py3-none-any.whl.metadata (3.7 kB)
+Collecting requests<3.0.0,>=2.32.3 (from auto-cpufreq==2.5.0+8870b62)
+  Using cached requests-2.32.3-py3-none-any.whl.metadata (4.6 kB)
+Collecting urwid<3.0.0,>=2.6.16 (from auto-cpufreq==2.5.0+8870b62)
+  Using cached urwid-2.6.16-py3-none-any.whl.metadata (11 kB)
+Collecting charset-normalizer<4,>=2 (from requests<3.0.0,>=2.32.3->auto-cpufreq==2.5.0+8870b62)
+  Using cached charset_normalizer-3.4.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (35 kB)
+Collecting idna<4,>=2.5 (from requests<3.0.0,>=2.32.3->auto-cpufreq==2.5.0+8870b62)
+  Using cached idna-3.10-py3-none-any.whl.metadata (10 kB)
+Collecting urllib3<3,>=1.21.1 (from requests<3.0.0,>=2.32.3->auto-cpufreq==2.5.0+8870b62)
+  Using cached urllib3-2.3.0-py3-none-any.whl.metadata (6.5 kB)
+Collecting certifi>=2017.4.17 (from requests<3.0.0,>=2.32.3->auto-cpufreq==2.5.0+8870b62)
+  Using cached certifi-2025.1.31-py3-none-any.whl.metadata (2.5 kB)
+Collecting typing-extensions (from urwid<3.0.0,>=2.6.16->auto-cpufreq==2.5.0+8870b62)
+  Using cached typing_extensions-4.13.1-py3-none-any.whl.metadata (3.0 kB)
+Collecting wcwidth (from urwid<3.0.0,>=2.6.16->auto-cpufreq==2.5.0+8870b62)
+  Using cached wcwidth-0.2.13-py2.py3-none-any.whl.metadata (14 kB)
+Using cached click-8.1.8-py3-none-any.whl (98 kB)
+Using cached distro-1.9.0-py3-none-any.whl (20 kB)
+Using cached psutil-7.0.0-cp36-abi3-manylinux_2_12_x86_64.manylinux2010_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl (277 kB)
+Using cached pyasyncore-1.0.4-py3-none-any.whl (10 kB)
+Using cached requests-2.32.3-py3-none-any.whl (64 kB)
+Using cached urwid-2.6.16-py3-none-any.whl (297 kB)
+Using cached certifi-2025.1.31-py3-none-any.whl (166 kB)
+Using cached charset_normalizer-3.4.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (146 kB)
+Using cached idna-3.10-py3-none-any.whl (70 kB)
+Using cached urllib3-2.3.0-py3-none-any.whl (128 kB)
+Using cached typing_extensions-4.13.1-py3-none-any.whl (45 kB)
+Using cached wcwidth-0.2.13-py2.py3-none-any.whl (34 kB)
+Building wheels for collected packages: auto-cpufreq, pyinotify
+  Building wheel for auto-cpufreq (pyproject.toml) ... done
+  Created wheel for auto-cpufreq: filename=auto_cpufreq-2.5.0+8870b62-py3-none-any.whl size=49137 sha256=14d4bf145c39d2e5e852651b5dbb0e5ce413cd4438e5e4a539ced0e2fb7c8d4a
+  Stored in directory: /root/.cache/pip/wheels/ff/24/63/08867e8efba8de960065fe542e6a21683ab1eb0331354eb9ee
+  Building wheel for pyinotify (setup.py) ... done
+  Created wheel for pyinotify: filename=pyinotify-0.9.6-py3-none-any.whl size=25128 sha256=448ead8b4e1b4841544020c5c486b7df0ccb6720131be28143ec0d02911a620a
+  Stored in directory: /tmp/pip-ephem-wheel-cache-04w4lchw/wheels/05/96/04/46756d3df7a942bbde7e1f94ee3f5a6942e98460487d4bafd4
+Successfully built auto-cpufreq pyinotify
+Installing collected packages: wcwidth, pyinotify, pyasyncore, urllib3, typing-extensions, psutil, idna, distro, click, charset-normalizer, certifi, urwid, requests, auto-cpufreq
+Successfully installed auto-cpufreq-2.5.0+8870b62 certifi-2025.1.31 charset-normalizer-3.4.1 click-8.1.8 distro-1.9.0 idna-3.10 psutil-7.0.0 pyasyncore-1.0.4 pyinotify-0.9.6 requests-2.32.3 typing-extensions-4.13.1 urllib3-2.3.0 urwid-2.6.16 wcwidth-0.2.13
+
+────────────────────────────────────────────────────────────── auto-cpufreq tool successfully installed ──────────────────────────────────────────────────────────────
+
+For list of options, run:
+auto-cpufreq --help
+
+noamtu123@noamtu123-Inspiron-5459:~/auto-cpufreq$ sudo auto-cpufreq --install
+
+--------------------- Deploying auto-cpufreq as a daemon ----------------------
+
+* Turn off bluetooth on boot (can be turned on any time later on!)
+
+* Deploy auto-cpufreq install script
+
+* Deploy auto-cpufreq remove script
+auto-cpufreq snap package not installed
+GNOME Power Profiles Daemon should be enabled. run:
+
+sudo python3 power_helper.py --gnome_power_enable
+
+───────────────────────────────────────── Running auto-cpufreq daemon install script ─────────────────────────────────────────
+
+Deploying auto-cpufreq systemd unit file
+
+* Reloading systemd manager configuration
+
+* Starting auto-cpufreq daemon (systemd) service
+
+* Enabling auto-cpufreq daemon (systemd) at boot
+Created symlink /etc/systemd/system/multi-user.target.wants/auto-cpufreq.service → /etc/systemd/system/auto-cpufreq.service.
+
+----------------- auto-cpufreq daemon installed and running -----------------
+
+To view live stats, run:
+auto-cpufreq --stats
+
+auto-cpufreq makes all decisions automatically, if you would like to
+configure certain setting to your own liking, please refer to:
+https://github.com/AdnanHodzic/auto-cpufreq#configuring-auto-cpufreq
+
+To disable and remove auto-cpufreq daemon, run:
+sudo auto-cpufreq --remove
+
+-------------------------------------------------------------------------------
+
+noamtu123@noamtu123-Inspiron-5459:~/auto-cpufreq$ sudo auto-cpufreq --debug
+
+-------------------------------------------------------------------------------
+
+Linux distro: Zorin OS 17 jammy
+Linux kernel: 6.8.0-57-generic
+Processor: Intel(R) Core(TM) i5-6200U CPU @ 2.30GHz
+Cores: 4
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2800 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      0.0%        49 °C      2764 MHz
+CPU1      0.0%        46 °C      2777 MHz
+CPU2      1.0%        49 °C      2714 MHz
+CPU3      0.0%        46 °C      2734 MHz
+
+CPU fan speed: 0 RPM
+
+auto-cpufreq version: 2.5.0
+
+Python: 3.10.12
+psutil package: 7.0.0
+platform package: 1.0.8
+click package: 8.1.8
+distro package: 1.9.0
+
+Computer type: Notebook
+Docking Station
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.44 %
+
+Total CPU usage: 1.0 %
+Total system load: 0.78
+Average temp. of all cores: 47.00 °C 
+
+Currently using: performance governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+```
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@noncarbonatedclack & @noamtu123 I just made [another update](https://github.com/AdnanHodzic/auto-cpufreq/pull/826#issuecomment-2794549837), please get the latest changes `git pull`, followed by `sudo ./auto-cpufreq-installer --remove && sudo ./auto-cpufreq-installer --install`
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>noamtu123:</strong></p>
+                    <p>> [@noncarbonatedclack](https://github.com/noncarbonatedclack) & [@noamtu123](https://github.com/noamtu123) I just made [another update](https://github.com/AdnanHodzic/auto-cpufreq/pull/826#issuecomment-2794549837), please get the latest changes `git pull`, followed by `sudo ./auto-cpufreq-installer --remove && sudo ./auto-cpufreq-installer --install`
+
+Still not working</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>When I run:
+
+```
+sudo ./auto-cpufreq-installer --install
+
+
+────────────────── Detected Debian based distribution ────────────────
+
+
+──────────────────────── Setting up Python environment ──────────────────────
+
+Hit:1 http://nl.archive.ubuntu.com/ubuntu noble InRelease
+Hit:2 http://nl.archive.ubuntu.com/ubuntu noble-updates InRelease                                                 
+Hit:3 http://nl.archive.ubuntu.com/ubuntu noble-backports InRelease                                               
+Hit:4 http://security.ubuntu.com/ubuntu noble-security InRelease                                                  
+Hit:5 https://download.docker.com/linux/ubuntu noble InRelease                                                    
+Hit:6 https://dl.google.com/linux/chrome/deb stable InRelease                                                     
+Get:7 https://esm.ubuntu.com/apps/ubuntu noble-apps-security InRelease [7,595 B]
+Hit:8 https://repo.protonvpn.com/debian stable InRelease   
+Get:9 https://esm.ubuntu.com/apps/ubuntu noble-apps-updates InRelease [7,480 B]
+Get:10 https://esm.ubuntu.com/infra/ubuntu noble-infra-security InRelease [7,474 B]
+Get:11 https://esm.ubuntu.com/infra/ubuntu noble-infra-updates InRelease [7,473 B]
+Fetched 30.0 kB in 2s (19.4 kB/s)     
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+18 packages can be upgraded. Run 'apt list --upgradable' to see them.
+PyGObject version updated to ^3.50.0 in pyproject.toml
+libgirepository-2.0-dev needs to be installed for version trixie/sid
+---- 
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+python3-dev is already the newest version (3.12.3-0ubuntu2).
+python3-pip is already the newest version (24.0+dfsg-1ubuntu1.1).
+python3-venv is already the newest version (3.12.3-0ubuntu2).
+python3-setuptools is already the newest version (68.1.2-2ubuntu1.1).
+dmidecode is already the newest version (3.5-3ubuntu0.1).
+libgirepository-2.0-dev is already the newest version (2.80.0-6ubuntu3.2).
+libcairo2-dev is already the newest version (1.18.0-3build1).
+libgtk-3-dev is already the newest version (3.24.41-4ubuntu1.2).
+gcc is already the newest version (4:13.2.0-7ubuntu1).
+0 upgraded, 0 newly installed, 0 to remove and 18 not upgraded.
+─────────────────────── Installing necessary Python packages ─────────────────
+
+Requirement already satisfied: pip in /opt/auto-cpufreq/venv/lib/python3.12/site-packages (25.0.1)
+```
+
+Right at the beginning I get:
+
+```
+PyGObject version updated to ^3.50.0 in pyproject.toml
+libgirepository-2.0-dev needs to be installed for version trixie/sid
+```
+
+What do you get for these 2 lines?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>noamtu123:</strong></p>
+                    <p>```
+PyGObject version updated to 3.50.0 in pyproject.toml
+libgirepository1.0-dev needs to be installed for version bookworm/sid
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>noamtu123:</strong></p>
+                    <p>```
+noamtu123@noamtu123-Inspiron-5459:~$ cd auto-cpufreq
+noamtu123@noamtu123-Inspiron-5459:~/auto-cpufreq$ git pull
+Already up to date.
+noamtu123@noamtu123-Inspiron-5459:~/auto-cpufreq$ sudo ./auto-cpufreq-installer --remove && sudo ./auto-cpufreq-installer --install
+[sudo] password for noamtu123:      
+
+auto-cpufreq daemon is not installed.
+
+
+auto-cpufreq tool and all its supporting files successfully removed
+
+
+
+───────────────────── Detected Debian based distribution ─────────────────────
+
+
+──────────────────────── Setting up Python environment ────────────────────────
+
+Hit:1 http://il.archive.ubuntu.com/ubuntu jammy InRelease
+Hit:2 http://il.archive.ubuntu.com/ubuntu jammy-updates InRelease              
+Hit:3 http://security.ubuntu.com/ubuntu jammy-security InRelease               
+Hit:4 http://il.archive.ubuntu.com/ubuntu jammy-backports InRelease            
+Hit:5 https://ppa.launchpadcontent.net/zorinos/apps/ubuntu jammy InRelease     
+Hit:6 https://ppa.launchpadcontent.net/zorinos/drivers/ubuntu jammy InRelease  
+Hit:7 https://packages.mozilla.org/apt mozilla InRelease                       
+Hit:8 https://ppa.launchpadcontent.net/zorinos/patches/ubuntu jammy InRelease
+Hit:9 https://ppa.launchpadcontent.net/zorinos/stable/ubuntu jammy InRelease
+Hit:10 https://packages.zorinos.com/stable jammy InRelease
+Hit:11 https://packages.zorinos.com/patches jammy InRelease
+Hit:12 https://packages.zorinos.com/apps jammy InRelease
+Hit:13 https://packages.zorinos.com/drivers jammy InRelease
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+All packages are up to date.
+PyGObject version updated to 3.50.0 in pyproject.toml
+libgirepository1.0-dev needs to be installed for version bookworm/sid
+---- 
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+gcc is already the newest version (4:11.2.0-1ubuntu1).
+libcairo2-dev is already the newest version (1.16.0-5ubuntu2).
+libgirepository1.0-dev is already the newest version (1.72.0-1).
+dmidecode is already the newest version (3.3-3ubuntu0.2).
+libgtk-3-dev is already the newest version (3.24.33-1ubuntu2.2).
+python3-dev is already the newest version (3.10.6-1~22.04.1).
+python3-setuptools is already the newest version (59.6.0-1.2ubuntu0.22.04.2).
+python3-pip is already the newest version (22.0.2+dfsg-1ubuntu0.5).
+python3-venv is already the newest version (3.10.6-1~22.04.1).
+0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+
+──────────────────── Installing necessary Python packages ────────────────────
+
+Requirement already satisfied: pip in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (25.0.1)
+Requirement already satisfied: wheel in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (0.45.1)
+Collecting PyGObject
+  Using cached pygobject-3.52.3.tar.gz (1.2 MB)
+  Installing build dependencies ... done
+  Getting requirements to build wheel ... done
+  Installing backend dependencies ... done
+  Preparing metadata (pyproject.toml) ... error
+  error: subprocess-exited-with-error
+  
+  × Preparing metadata (pyproject.toml) did not run successfully.
+  │ exit code: 1
+  ╰─> [24 lines of output]
+      + meson setup /tmp/pip-install-umtodst1/pygobject_4ba5e2386c074c009d9f7f3b52a25e66 /tmp/pip-install-umtodst1/pygobject_4ba5e2386c074c009d9f7f3b52a25e66/.mesonpy-eskffyz0 -Dbuildtype=release -Db_ndebug=if-release -Db_vscrt=md -Dtests=false -Dwheel=true --wrap-mode=nofallback --native-file=/tmp/pip-install-umtodst1/pygobject_4ba5e2386c074c009d9f7f3b52a25e66/.mesonpy-eskffyz0/meson-python-native-file.ini
+      The Meson build system
+      Version: 1.7.2
+      Source dir: /tmp/pip-install-umtodst1/pygobject_4ba5e2386c074c009d9f7f3b52a25e66
+      Build dir: /tmp/pip-install-umtodst1/pygobject_4ba5e2386c074c009d9f7f3b52a25e66/.mesonpy-eskffyz0
+      Build type: native build
+      Project name: pygobject
+      Project version: 3.52.3
+      C compiler for the host machine: cc (gcc 11.4.0 "cc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0")
+      C linker for the host machine: cc ld.bfd 2.38
+      Host machine cpu family: x86_64
+      Host machine cpu: x86_64
+      Program python3 found: YES (/opt/auto-cpufreq/venv/bin/python3)
+      Found pkg-config: YES (/usr/bin/pkg-config) 0.29.2
+      Run-time dependency python found: YES 3.10
+      Did not find CMake 'cmake'
+      Found CMake: NO
+      Run-time dependency girepository-2.0 found: NO (tried pkgconfig and cmake)
+      Not looking for a fallback subproject for the dependency girepository-2.0 because:
+      Use of fallback dependencies is disabled.
+      
+      ../meson.build:31:9: ERROR: Dependency 'girepository-2.0' is required but not found.
+      
+      A full log can be found at /tmp/pip-install-umtodst1/pygobject_4ba5e2386c074c009d9f7f3b52a25e66/.mesonpy-eskffyz0/meson-logs/meson-log.txt
+      [end of output]
+  
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+error: metadata-generation-failed
+
+× Encountered error while generating package metadata.
+╰─> See above for output.
+
+note: This is an issue with the package mentioned above, not pip.
+hint: See above for details.
+
+──────────────────────── Installing auto-cpufreq tool ────────────────────────
+
+Processing /home/noamtu123/auto-cpufreq
+  Installing build dependencies ... done
+  Getting requirements to build wheel ... done
+  Preparing metadata (pyproject.toml) ... done
+Collecting pyinotify@ git+https://github.com/shadeyg56/pyinotify-3.12 (from auto-cpufreq==2.5.0+6789cb6)
+  Cloning https://github.com/shadeyg56/pyinotify-3.12 to /tmp/pip-install-zkmqo73w/pyinotify_7365c15518934fc1b850bdc621b12f16
+  Running command git clone --filter=blob:none --quiet https://github.com/shadeyg56/pyinotify-3.12 /tmp/pip-install-zkmqo73w/pyinotify_7365c15518934fc1b850bdc621b12f16
+  Resolved https://github.com/shadeyg56/pyinotify-3.12 to commit 271b7aba3269116b6c3870355393f47c79bce146
+  Preparing metadata (setup.py) ... done
+Requirement already satisfied: click<9.0.0,>=8.1.0 in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (from auto-cpufreq==2.5.0+6789cb6) (8.1.8)
+Requirement already satisfied: distro<2.0.0,>=1.8.0 in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (from auto-cpufreq==2.5.0+6789cb6) (1.9.0)
+Requirement already satisfied: psutil<8.0.0,>=6.0.0 in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (from auto-cpufreq==2.5.0+6789cb6) (7.0.0)
+Requirement already satisfied: pyasyncore<2.0.0,>=1.0.4 in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (from auto-cpufreq==2.5.0+6789cb6) (1.0.4)
+Requirement already satisfied: requests<3.0.0,>=2.32.3 in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (from auto-cpufreq==2.5.0+6789cb6) (2.32.3)
+Requirement already satisfied: urwid<3.0.0,>=2.6.16 in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (from auto-cpufreq==2.5.0+6789cb6) (2.6.16)
+Requirement already satisfied: charset-normalizer<4,>=2 in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (from requests<3.0.0,>=2.32.3->auto-cpufreq==2.5.0+6789cb6) (3.4.1)
+Requirement already satisfied: idna<4,>=2.5 in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (from requests<3.0.0,>=2.32.3->auto-cpufreq==2.5.0+6789cb6) (3.10)
+Requirement already satisfied: urllib3<3,>=1.21.1 in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (from requests<3.0.0,>=2.32.3->auto-cpufreq==2.5.0+6789cb6) (2.4.0)
+Requirement already satisfied: certifi>=2017.4.17 in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (from requests<3.0.0,>=2.32.3->auto-cpufreq==2.5.0+6789cb6) (2025.1.31)
+Requirement already satisfied: typing-extensions in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (from urwid<3.0.0,>=2.6.16->auto-cpufreq==2.5.0+6789cb6) (4.13.2)
+Requirement already satisfied: wcwidth in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (from urwid<3.0.0,>=2.6.16->auto-cpufreq==2.5.0+6789cb6) (0.2.13)
+Building wheels for collected packages: auto-cpufreq
+  Building wheel for auto-cpufreq (pyproject.toml) ... done
+  Created wheel for auto-cpufreq: filename=auto_cpufreq-2.5.0+6789cb6-py3-none-any.whl size=49137 sha256=eb7556d67c5c5bec537c8794d526ffb3530c1f0e131a2852a6a2746e46db76b8
+  Stored in directory: /root/.cache/pip/wheels/ff/24/63/08867e8efba8de960065fe542e6a21683ab1eb0331354eb9ee
+Successfully built auto-cpufreq
+Installing collected packages: auto-cpufreq
+  Attempting uninstall: auto-cpufreq
+    Found existing installation: auto-cpufreq 2.5.0+6789cb6
+    Uninstalling auto-cpufreq-2.5.0+6789cb6:
+      Successfully uninstalled auto-cpufreq-2.5.0+6789cb6
+Successfully installed auto-cpufreq-2.5.0+6789cb6
+
+────────────────── auto-cpufreq tool successfully installed ──────────────────
+
+For list of options, run:
+auto-cpufreq --help
+
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>This is good:
+```
+PyGObject version updated to 3.50.0 in pyproject.toml
+libgirepository1.0-dev needs to be installed for version bookworm/sid
+```
+
+But then this is the problem:
+
+```
+../meson.build:31:9: ERROR: Dependency 'girepository-2.0' is required but not found.
+```
+
+and I'm not sure where this is coming from. Only thing I can think of is that this is a leftover from first install so please try to remove everything under following locations to clean-up:
+
+```
+rm -rf  auto-cpufreq/ build .mesonpy-* /tmp/pip-install-* /tmp/pip-req-build-*
+```
+
+Clone auto-cpufreq and install it again.
+
+Alternatively, if you're still facing this problem and are not going to use GUI (because it doesn't work with Snap). I would just recommend you install with [Snap package ](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#snap-store)which is not going to have any of these dependencies issues. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>noamtu123:</strong></p>
+                    <p>> This is good:
+> 
+> ```
+> PyGObject version updated to 3.50.0 in pyproject.toml
+> libgirepository1.0-dev needs to be installed for version bookworm/sid
+> ```
+> 
+> But then this is the problem:
+> 
+> ```
+> ../meson.build:31:9: ERROR: Dependency 'girepository-2.0' is required but not found.
+> ```
+> 
+> and I'm not sure where this is coming from. Only thing I can think of is that this is a leftover from first install so please try to remove everything under following locations to clean-up:
+> 
+> ```
+> rm -rf  auto-cpufreq/ build .mesonpy-* /tmp/pip-install-* /tmp/pip-req-build-*
+> ```
+> 
+> Clone auto-cpufreq and install it again.
+> 
+> Alternatively, if you're still facing this problem and are not going to use GUI (because it doesn't work with Snap). I would just recommend you install with [Snap package ](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#snap-store)which is not going to have any of these dependencies issues.
+
+well, i tried and it didn't help you can see there(what shown here is after i removed auto-cpufreq): 
+```
+noamtu123@noamtu123-Inspiron-5459:~$ rm -rf  auto-cpufreq/ build .mesonpy-* /tmp/pip-install-* /tmp/pip-req-build-*
+noamtu123@noamtu123-Inspiron-5459:~$ git clone https://github.com/AdnanHodzic/auto-cpufreq.git
+cd auto-cpufreq && sudo ./auto-cpufreq-installer
+Cloning into 'auto-cpufreq'...
+remote: Enumerating objects: 2841, done.
+remote: Counting objects: 100% (910/910), done.
+remote: Compressing objects: 100% (249/249), done.
+remote: Total 2841 (delta 788), reused 664 (delta 661), pack-reused 1931 (from 2)
+Receiving objects: 100% (2841/2841), 964.75 KiB | 1.83 MiB/s, done.
+Resolving deltas: 100% (1587/1587), done.
+[sudo] password for noamtu123:      
+
+─────────────────────────── auto-cpufreq installer ───────────────────────────
+
+Welcome to auto-cpufreq tool installer.
+
+Select a key [I]nstall/[R]emove or press ctrl+c to quit: i
+
+
+───────────────────── Detected Debian based distribution ─────────────────────
+
+
+──────────────────────── Setting up Python environment ────────────────────────
+
+Hit:1 http://il.archive.ubuntu.com/ubuntu jammy InRelease                      
+Hit:2 http://il.archive.ubuntu.com/ubuntu jammy-updates InRelease              
+Hit:3 http://security.ubuntu.com/ubuntu jammy-security InRelease               
+Hit:4 http://il.archive.ubuntu.com/ubuntu jammy-backports InRelease            
+Hit:5 https://ppa.launchpadcontent.net/zorinos/apps/ubuntu jammy InRelease     
+Hit:6 https://ppa.launchpadcontent.net/zorinos/drivers/ubuntu jammy InRelease  
+Hit:7 https://ppa.launchpadcontent.net/zorinos/patches/ubuntu jammy InRelease  
+Hit:8 https://packages.mozilla.org/apt mozilla InRelease                       
+Hit:9 https://ppa.launchpadcontent.net/zorinos/stable/ubuntu jammy InRelease
+Hit:10 https://packages.zorinos.com/stable jammy InRelease                  
+Hit:11 https://packages.zorinos.com/patches jammy InRelease
+Hit:12 https://packages.zorinos.com/apps jammy InRelease
+Hit:13 https://packages.zorinos.com/drivers jammy InRelease
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+All packages are up to date.
+PyGObject version updated to 3.50.0 in pyproject.toml
+libgirepository1.0-dev needs to be installed for version bookworm/sid
+---- 
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+gcc is already the newest version (4:11.2.0-1ubuntu1).
+libcairo2-dev is already the newest version (1.16.0-5ubuntu2).
+libgirepository1.0-dev is already the newest version (1.72.0-1).
+dmidecode is already the newest version (3.3-3ubuntu0.2).
+libgtk-3-dev is already the newest version (3.24.33-1ubuntu2.2).
+python3-dev is already the newest version (3.10.6-1~22.04.1).
+python3-setuptools is already the newest version (59.6.0-1.2ubuntu0.22.04.2).
+python3-pip is already the newest version (22.0.2+dfsg-1ubuntu0.5).
+python3-venv is already the newest version (3.10.6-1~22.04.1).
+0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+
+──────────────────── Installing necessary Python packages ────────────────────
+
+Requirement already satisfied: pip in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (25.0.1)
+Requirement already satisfied: wheel in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (0.45.1)
+Collecting PyGObject
+  Using cached pygobject-3.52.3.tar.gz (1.2 MB)
+  Installing build dependencies ... done
+  Getting requirements to build wheel ... done
+  Installing backend dependencies ... done
+  Preparing metadata (pyproject.toml) ... error
+  error: subprocess-exited-with-error
+  
+  × Preparing metadata (pyproject.toml) did not run successfully.
+  │ exit code: 1
+  ╰─> [24 lines of output]
+      + meson setup /tmp/pip-install-qn1yql_j/pygobject_41707075b41549fbadf4c769f09cc960 /tmp/pip-install-qn1yql_j/pygobject_41707075b41549fbadf4c769f09cc960/.mesonpy-b5h63bsd -Dbuildtype=release -Db_ndebug=if-release -Db_vscrt=md -Dtests=false -Dwheel=true --wrap-mode=nofallback --native-file=/tmp/pip-install-qn1yql_j/pygobject_41707075b41549fbadf4c769f09cc960/.mesonpy-b5h63bsd/meson-python-native-file.ini
+      The Meson build system
+      Version: 1.7.2
+      Source dir: /tmp/pip-install-qn1yql_j/pygobject_41707075b41549fbadf4c769f09cc960
+      Build dir: /tmp/pip-install-qn1yql_j/pygobject_41707075b41549fbadf4c769f09cc960/.mesonpy-b5h63bsd
+      Build type: native build
+      Project name: pygobject
+      Project version: 3.52.3
+      C compiler for the host machine: cc (gcc 11.4.0 "cc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0")
+      C linker for the host machine: cc ld.bfd 2.38
+      Host machine cpu family: x86_64
+      Host machine cpu: x86_64
+      Program python3 found: YES (/opt/auto-cpufreq/venv/bin/python3)
+      Found pkg-config: YES (/usr/bin/pkg-config) 0.29.2
+      Run-time dependency python found: YES 3.10
+      Did not find CMake 'cmake'
+      Found CMake: NO
+      Run-time dependency girepository-2.0 found: NO (tried pkgconfig and cmake)
+      Not looking for a fallback subproject for the dependency girepository-2.0 because:
+      Use of fallback dependencies is disabled.
+      
+      ../meson.build:31:9: ERROR: Dependency 'girepository-2.0' is required but not found.
+      
+      A full log can be found at /tmp/pip-install-qn1yql_j/pygobject_41707075b41549fbadf4c769f09cc960/.mesonpy-b5h63bsd/meson-logs/meson-log.txt
+      [end of output]
+  
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+error: metadata-generation-failed
+
+× Encountered error while generating package metadata.
+╰─> See above for output.
+
+note: This is an issue with the package mentioned above, not pip.
+hint: See above for details.
+
+──────────────────────── Installing auto-cpufreq tool ────────────────────────
+
+Processing /home/noamtu123/auto-cpufreq
+  Installing build dependencies ... done
+  Getting requirements to build wheel ... done
+  Preparing metadata (pyproject.toml) ... done
+Collecting pyinotify@ git+https://github.com/shadeyg56/pyinotify-3.12 (from auto-cpufreq==2.5.0+6789cb6)
+  Cloning https://github.com/shadeyg56/pyinotify-3.12 to /tmp/pip-install-hpbdttd3/pyinotify_8fbde3aefe5c492d905f109b3c540e45
+  Running command git clone --filter=blob:none --quiet https://github.com/shadeyg56/pyinotify-3.12 /tmp/pip-install-hpbdttd3/pyinotify_8fbde3aefe5c492d905f109b3c540e45
+  Resolved https://github.com/shadeyg56/pyinotify-3.12 to commit 271b7aba3269116b6c3870355393f47c79bce146
+  Preparing metadata (setup.py) ... done
+Requirement already satisfied: click<9.0.0,>=8.1.0 in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (from auto-cpufreq==2.5.0+6789cb6) (8.1.8)
+Requirement already satisfied: distro<2.0.0,>=1.8.0 in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (from auto-cpufreq==2.5.0+6789cb6) (1.9.0)
+Requirement already satisfied: psutil<8.0.0,>=6.0.0 in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (from auto-cpufreq==2.5.0+6789cb6) (7.0.0)
+Requirement already satisfied: pyasyncore<2.0.0,>=1.0.4 in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (from auto-cpufreq==2.5.0+6789cb6) (1.0.4)
+Requirement already satisfied: requests<3.0.0,>=2.32.3 in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (from auto-cpufreq==2.5.0+6789cb6) (2.32.3)
+Requirement already satisfied: urwid<3.0.0,>=2.6.16 in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (from auto-cpufreq==2.5.0+6789cb6) (2.6.16)
+Requirement already satisfied: charset-normalizer<4,>=2 in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (from requests<3.0.0,>=2.32.3->auto-cpufreq==2.5.0+6789cb6) (3.4.1)
+Requirement already satisfied: idna<4,>=2.5 in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (from requests<3.0.0,>=2.32.3->auto-cpufreq==2.5.0+6789cb6) (3.10)
+Requirement already satisfied: urllib3<3,>=1.21.1 in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (from requests<3.0.0,>=2.32.3->auto-cpufreq==2.5.0+6789cb6) (2.4.0)
+Requirement already satisfied: certifi>=2017.4.17 in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (from requests<3.0.0,>=2.32.3->auto-cpufreq==2.5.0+6789cb6) (2025.1.31)
+Requirement already satisfied: typing-extensions in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (from urwid<3.0.0,>=2.6.16->auto-cpufreq==2.5.0+6789cb6) (4.13.2)
+Requirement already satisfied: wcwidth in /opt/auto-cpufreq/venv/lib/python3.10/site-packages (from urwid<3.0.0,>=2.6.16->auto-cpufreq==2.5.0+6789cb6) (0.2.13)
+Building wheels for collected packages: auto-cpufreq
+  Building wheel for auto-cpufreq (pyproject.toml) ... done
+  Created wheel for auto-cpufreq: filename=auto_cpufreq-2.5.0+6789cb6-py3-none-any.whl size=49137 sha256=eb7556d67c5c5bec537c8794d526ffb3530c1f0e131a2852a6a2746e46db76b8
+  Stored in directory: /root/.cache/pip/wheels/ff/24/63/08867e8efba8de960065fe542e6a21683ab1eb0331354eb9ee
+Successfully built auto-cpufreq
+Installing collected packages: auto-cpufreq
+  Attempting uninstall: auto-cpufreq
+    Found existing installation: auto-cpufreq 2.5.0+6789cb6
+    Uninstalling auto-cpufreq-2.5.0+6789cb6:
+      Successfully uninstalled auto-cpufreq-2.5.0+6789cb6
+Successfully installed auto-cpufreq-2.5.0+6789cb6
+
+────────────────── auto-cpufreq tool successfully installed ──────────────────
+
+For list of options, run:
+auto-cpufreq --help
+
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>noamtu123:</strong></p>
+                    <p>> This is good:
+> 
+> ```
+> PyGObject version updated to 3.50.0 in pyproject.toml
+> libgirepository1.0-dev needs to be installed for version bookworm/sid
+> ```
+> 
+> But then this is the problem:
+> 
+> ```
+> ../meson.build:31:9: ERROR: Dependency 'girepository-2.0' is required but not found.
+> ```
+> 
+> and I'm not sure where this is coming from. Only thing I can think of is that this is a leftover from first install so please try to remove everything under following locations to clean-up:
+> 
+> ```
+> rm -rf  auto-cpufreq/ build .mesonpy-* /tmp/pip-install-* /tmp/pip-req-build-*
+> ```
+> 
+> Clone auto-cpufreq and install it again.
+> 
+> Alternatively, if you're still facing this problem and are not going to use GUI (because it doesn't work with Snap). I would just recommend you install with [Snap package ](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#snap-store)which is not going to have any of these dependencies issues.
+
+Btw shouldn't i just use auto-cpufreq as it is and not use the snap package? i understood that the installer method will integrate better with my system than snap because of how snap works(or snap is better because it won't have dependencies issues?)</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

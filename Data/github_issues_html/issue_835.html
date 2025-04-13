@@ -1,0 +1,31 @@
+
+        <html>
+        <head>
+            <title>Issue #835: change cpu settings according to battery percentage</title>
+        </head>
+        <body>
+            <h1>change cpu settings according to battery percentage</h1>
+            <p><strong>Issue #835</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Is there a way to make the battery percentage a parameter to change frequencies or turn turbo boost on/off or change governor? (also in combination if on ac or on battery)
+For example:
+I wanted an option to do a command like this:
+if AC_power = connected and Battery_percentage >70 use performance governor and force turbo boost
+elif AC_power = connected and Battery_percentage < 70 use performance governor and auto turbo boost
+elif AC_power = disconnected and battery_percentage >70 use power save governor and turbo boost auto
+else: use power save and turbo boost disabled
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Please refer to[ auto-cpufreq config file.](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#3-auto-cpufreq-config-file)</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        
