@@ -84,7 +84,7 @@ After which you can run each script with:
 * github_export_**issues**.py - `pipenv run python github_export_issues.py`
 * github_export_**discussions**.py - `pipenv run python github_export_discussions.py`
 * github_export_**pull_requests**.py - `pipenv run python github_export_pull_requests.py`
-* github_export_**releases**.py - `pipenv run python github_export_releases.py $URL`
+* github_export_**releases**.py - `pipenv run python github_export_releases.py`
 
 #### Youtube
 
