@@ -7,6 +7,7 @@ import os
 import argparse
 from googleapiclient.discovery import build
 import os
+from urllib.parse import urlparse, parse_qs
 
 # usage, i.e:
 # pipenv run python youtube_comments_downloader.py https://www.youtube.com/watch?v=SPGpkZ0AZVU
@@ -14,11 +15,22 @@ import os
 # YouTube API Key (read environment variable)
 youtube_api_key = os.getenv('youtube_api_key')
 
+def extract_video_id(url):
+    """Extracts video ID from various YouTube URL formats."""
+    parsed_url = urlparse(url)
+    if parsed_url.hostname == 'youtu.be':
+        return parsed_url.path[1:]
+    if parsed_url.hostname in ('www.youtube.com', 'youtube.com'):
+        if parsed_url.path == '/watch':
+            p = parse_qs(parsed_url.query)
+            return p['v'][0]
+    return url
+
 # Function to fetch comments from a YouTube video using YouTube API
 def fetch_comments(video_url):
     youtube = build('youtube', 'v3', developerKey=youtube_api_key)
 
-    video_id = video_url.split('v=')[1]  # Extract video ID from the URL
+    video_id = extract_video_id(video_url)
     comments = []
     
     # Requesting the first page of comments
@@ -86,7 +98,7 @@ def save_comments_as_html(comments, video_title, filename):
 # Fetch video title using YouTube API
 def fetch_video_title(video_url):
     youtube = build('youtube', 'v3', developerKey=youtube_api_key)
-    video_id = video_url.split('v=')[1]
+    video_id = extract_video_id(video_url)
     
     request = youtube.videos().list(
         part="snippet",
