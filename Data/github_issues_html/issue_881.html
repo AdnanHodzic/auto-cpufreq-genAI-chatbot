@@ -1,0 +1,38 @@
+
+        <html>
+        <head>
+            <title>Issue #881: relax deps for nix pkgs</title>
+        </head>
+        <body>
+            <h1>relax deps for nix pkgs</h1>
+            <p><strong>Issue #881</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>fixes #880</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@shadeyg56 could you please get a confirmation from your side as nix user?
+
+Thanks</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>This probably works, but is not necessary. A better fix is to just update urwid with poetry. 
+
+This would involve moving to urwid 3.0 from 2.x. I checked the [changelog](https://urwid.org/changelog.html#breaking-changes) and none of the breaking changes apply to us, so it should be perfectly safe to migrate as is</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Fixed with 9f86acc</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

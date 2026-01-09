@@ -1,0 +1,40 @@
+
+        <html>
+        <head>
+            <title>Issue #859: Allow for overriding the CPU turbo setting via CLI and GUI.</title>
+        </head>
+        <body>
+            <h1>Allow for overriding the CPU turbo setting via CLI and GUI.</h1>
+            <p><strong>Issue #859</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>As per feature request #604, this pull request implements the ability for the user to override the turbo setting, being able to set it to auto, never, or always. This exists both as a CLI flag and in the GUI (which is only visible if the turbo setting is supported by the CPU.) So far, the CLI flag and GUI setting "work on my machine", as it follows the same principle the performance override uses. Any thoughts, comments, or suggestions are greatly appreciated. :)</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>This is great! Code LGTM and it works as expected. 
+
+Before I merge this, could you just add a brief/one liner explanation of turbo flag e.g: under `force` [under flags description of README](https://github.com/AdnanHodzic/auto-cpufreq#how-to-run-auto-cpufreq)?
+
+Thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>JuanR4140:</strong></p>
+                    <p>Awesome! Happy to hear that it works.
+
+I added info about the turbo flag where it made sense, but if you want me to remove/modify anything, that's totally fine with me!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>This looks great. Thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases) as this will be a great new feature. </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

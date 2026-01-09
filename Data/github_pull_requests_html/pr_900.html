@@ -1,0 +1,377 @@
+
+        <html>
+        <head>
+            <title>Pull Request #900: fix: start/stop thresholds not being set because of initial values</title>
+        </head>
+        <body>
+            <h1>fix: start/stop thresholds not being set because of initial values</h1>
+            <p><strong>Pull Request #900</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Background
+
+I had this issue on my thinkpad where sometimes the start/stop thresholds of the battery charge were not being applied and failed with this;
+
+```
+write error: Invalid argument
+```
+
+This can happen when e.g. our start value is higher than the current stop value. In those cases we should lower the stop value to below our start.
+
+### What this change does
+
+- Rewrites the battery scripts more cleanly to share more code.
+- Adjusts the write to first set 0 and 100 for start/stop respectively.
+- Sleeps 100ms before then applying actual settings.
+
+### Impact
+
+If writes somehow fail user might end up with incorrect settings, but this was the case before anyway.
+The 100ms sleep is to ensure settings are applied by the driver, but this might not be needed?
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Sounds good, please let me know once it's complete. 
+
+Thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>CasperVM:</strong></p>
+                    <p>> Sounds good, please let me know once it's complete.
+> 
+> Thanks!
+
+Done :+1: 
+
+Have a look when you can :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@PurpleWazard since you originally implemented this feature, please let me know if you have any comments.
+
+In meantime, @CasperVM please give me some time to further review and test this.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>@AdnanHodzic @CasperVM. this PR adds a batterydevice class which i like makes the code a bit cleaner. however, thinkpad_acpi and ideapad_acpi were removed for unknown reason and they dont seem to be implemented with the changes. 
+
+
+>  I had this issue on my thinkpad where sometimes the start/stop thresholds of the battery charge were not being applied and failed with this;
+
+> write error: Invalid argument
+This can happen when e.g. our start value is higher than the current stop value. In those cases we should lower the stop value to below our start.
+
+which is backwards the start shouldn't be higher then the stop. the reason for the error is becuase the kernel module wont work with those values.  
+
+the start value is what % at or under for the battery to start charging. the stop value is that value should charging at. ie. start: 70,  stop: 80. the battery will maintain % between 70 and 80. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>CasperVM:</strong></p>
+                    <p>> the start value is what % at or under for the battery to start charging. the stop value is that value should charging at. ie. start: 70, stop: 80. the battery will maintain % between 70 and 80.
+
+Let me elaborate a little bit here, because I was probably a bit too unclear with my changes:
+
+First of the class is an abstraction, both the `thinkpad_acpi` and `ideapad_acpi` had the exact same behavior, thus, we just use the parent class that implements the 'default'. I could add these back for clarity, but that just feels like unnecessary boilerplate to me.
+
+
+For the battery percent, yes, the start shouldn't be higher than the stop. That was never in my config, but if you change the config it might become an issue:
+
+- E.g. you initially set start/stop to 50-60 using the config.
+- You then decide, hey, I want it to be 70-80 instead.
+- The script tries to first set the start value to 70, which the kernel doesn't allow, because your old CURRENT stop value is 60.
+- So this is not a config issue, but an error in how we handle config changes.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>CasperVM:</strong></p>
+                    <p>@AdnanHodzic @PurpleWazard </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Code changes (logic) generally make sense to me and from my testing everything worked as it should on ThinkPad X1 Carbon. I ran Copilot review also since there are a lot of changes and refactoring so please take a look at those, as it made some good remarks.
+
+1. Things that could be improved and also addressed is that changes will not automatically picked up from config file:
+
+```
+# battery charging threshold
+# reference: https://github.com/AdnanHodzic/auto-cpufreq/#battery-charging-thresholds
+enable_thresholds = true
+#start_threshold = 20
+stop_threshold = 90  
+```
+
+instead I had to restart the auto-cpufreq daemon in order for them to be picked up (or simply `auto-cpufreq --remove && auto-cpufreq --install`)
+
+2. As I suggested in a comment in code review, I think [Battery charging thresholds ](https://github.com/AdnanHodzic/auto-cpufreq/?tab=readme-ov-file#battery-charging-thresholds)of docs could be updated. 
+
+3. Changes in my case worked as intended, e.g: I purposely charged laptop to 91% and after I set the `stop_threshold = 90` it didn't continue to charge. Same case is with charging stopping to charge at 90% if it was below that level. 
+
+With that said I think, after mentioned things above are addressed I think we're good to merge this, unless you have any other major concerns @PurpleWazard 
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>In meantime, I ran into a major issue, after I disabled `stop_threshold` and `enable_thresholds = true` and removed auto-cpufreq in meantime, and reverted everything with changes that are on `master` branch.
+
+```
+# battery charging threshold
+# reference: https://github.com/AdnanHodzic/auto-cpufreq/#battery-charging-thresholds
+#enable_thresholds = true
+#start_threshold = 20
+#stop_threshold = 90 
+```
+
+I realized that my laptop was still not charging above 90% because permanent changes were made to my ` /sys/class/power_supply/BAT0/charge_control_end_threshold` file which still returns 90 ...
+
+After I manually edited it back to 100, it charges past 90%.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>CasperVM:</strong></p>
+                    <p>@AdnanHodzic Fixed some of the issues that the auto-review caught. Should this also perhaps be tested before merge?
+
+Added some clarification in the Readme as well
+
+As for the thresholds not resetting, we could add that to the `--remove` option when uninstalling auto-cpufreq. But perhaps in another PR?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>CasperVM:</strong></p>
+                    <p>One small oversight still, but unsure what would be the proper way to go around it here:
+
+If we only have e.g. the stop threshold, the start will be at 0. Meaning we wont start charging until the battery is dead.
+
+We should probably keep some sane defaults instead? Or just ignore the config if only one of the values is set?
+
+Edit: made it so we actually validate now, and both start/stop are needed. I don't think it makes sense to apply anything if either one is not set.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Fixed some of the issues that the auto-review caught. Should this also perhaps be tested before merge?
+> Added some clarification in the Readme as well
+
+Thanks, I can also test this if changes are finalized, just please note it might not happen until end of the week.
+
+> As for the thresholds not resetting, we could add that to the --remove option when uninstalling auto-cpufreq. But perhaps in another PR?
+
+Option 1: Ideally, changes would be updated immediately as soon as they are written to config file. Some kind of hook could be created to trigger it, but would need to think more about this. As this will be the problem with enabling and disabling the changes.
+
+Option 2: Alternatively, we could update config part (and README) and below `# battery charging threshold` state that after each change to fields:
+
+```
+#enable_thresholds = true
+#start_threshold = 20
+#stop_threshold = 90
+```
+
+auto-cpufreq daemon should be restart or simply removed and enabled again (`auto-cpufreq --remove && auto-cpufreq --install).  It's not pretty, but it's the simplest thing I can think of now.
+
+> As for the thresholds not resetting, we could add that to the --remove option when uninstalling auto-cpufreq. But perhaps in another PR?
+
+If we're going for Option 2, then it can be part of this PR.
+
+> One small oversight still, but unsure what would be the proper way to go around it here:
+> 
+> If we only have e.g. the stop threshold, the start will be at 0. Meaning we wont start charging until the battery is dead.
+> 
+> We should probably keep some sane defaults instead? Or just ignore the config if only one of the values is set?
+> 
+> Edit: made it so we actually validate now, and both start/stop are needed. I don't think it makes sense to apply anything if either one is not set.
+
+Not sure if I understand this part, as during my testing I used following config:
+
+```
+# battery charging threshold
+# reference: https://github.com/AdnanHodzic/auto-cpufreq/#battery-charging-thresholds
+enable_thresholds = true
+#start_threshold = 20
+stop_threshold = 90
+```
+
+and charging worked fine?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>CasperVM:</strong></p>
+                    <p>I think that option 2 for now would be the best and a proper hook should be implemented later. So we just add more documentation.
+
+It's odd that your charging worked fine, as in the previous commit the default for start = 0, and stop = 100.
+
+As per the kernel docs:
+https://docs.kernel.org/admin-guide/laptops/thinkpad-acpi.html#battery-charge-control
+
+
+_charge_control_start_threshold accepts an integer between 0 and 99 (inclusive); this value represents a battery percentage level, below which charging will begin._
+
+and
+
+_charge_control_end_threshold accepts an integer between 1 and 100 (inclusive); this value represents a battery percentage level, above which charging will stop._
+
+I'll make one last commit to properly enforce this + add documentation/comments. Again, I don't think it make sense to have only 1 of the values set up. It might just end up in someone having issues and not understanding why. Additionally, it's difficult to determine 'sane' defaults.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>>I think that option 2 for now would be the best and a proper hook should be implemented later. So we just add more documentation.
+
+Agreed.
+
+> It's odd that your charging worked fine, as in the previous commit the default for start = 0, and stop = 100.
+> 
+> As per the kernel docs: https://docs.kernel.org/admin-guide/laptops/thinkpad-acpi.html#battery-charge-control
+> 
+> _charge_control_start_threshold accepts an integer between 0 and 99 (inclusive); this value represents a battery percentage level, below which charging will begin._
+> 
+> and
+> 
+> _charge_control_end_threshold accepts an integer between 1 and 100 (inclusive); this value represents a battery percentage level, above which charging will stop._
+
+I think it worked because by not setting `#start_threshold = 20` it left it at 0 by default and didn't change anything?
+
+
+
+> I'll make one last commit to properly enforce this + add documentation/comments. Again, I don't think it make sense to have only 1 of the values set up. It might just end up in someone having issues and not understanding why. Additionally, it's difficult to determine 'sane' defaults.
+
+Sounds good, better to relate them to avoid unnecessary new issues and questions.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@CasperVM Once you're done making all the changes and testing from your side, please let me know so I know when I can do the final review and test. Thanks
+
+P.S: reference from #898 how users [setup battery charging thresholds](https://github.com/AdnanHodzic/auto-cpufreq/issues/898#issuecomment-3553618111).
+
+> ```
+> sudo modprobe thinkpad_acpi force_load=true
+> echo 85 > /sys/class/power_supply/BAT0/charge_control_end_threshold
+> ```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>CasperVM:</strong></p>
+                    <p>@AdnanHodzic I'm happy with the current changes, you can do the final review and test when you have the time</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Thanks, 
+
+I added some more comments in documentation, and let's please get rid of auto-cpufreq.conf example contents under "Example config file contents" because user should refer to [auto-cpufreq.conf file instead](https://github.com/AdnanHodzic/auto-cpufreq/blob/58670c364799987c62de9430364947bc9f6c5463/auto-cpufreq.conf-example). 
+
+and let's make "Example config file contents" a link to [auto-cpufreq.conf-example file](https://github.com/AdnanHodzic/auto-cpufreq/blob/58670c364799987c62de9430364947bc9f6c5463/auto-cpufreq.conf-example)
+
+Also during my testing, setting following values in /etc/auto-cpufreq.conf file:
+
+```
+# enable thresholds true or false
+enable_thresholds = true
+
+# whether to check if thresholds are valid (true or false). (THIS SHOULD BE LEFT AS-IS IN MOST CASES)
+check_thresholds = true
+
+# start threshold (0 is off ) can be 0-99
+start_threshold = 80
+                                                                                                                                                       
+# stop threshold (100 is off) can be 1-100
+stop_threshold = 90
+```
+
+Even after as instructed in readme, `systemctl restart auto-cpufreq.service` and when that didn't change anything `auto-cpufreq --remove && auto-cpufreq --install` made no difference and values weren't picked up from auto-cpufreq.conf file and these values remained the same as set by system:
+
+```
+cat /sys/class/power_supply/BAT0/charge_stop_threshold
+100
+cat /sys/class/power_supply/BAT0/charge_start_threshold
+0 
+```
+
+So not sure what happened but this feature is not working as it should anymore on my side.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>1. I started testing these changes again and I came across another weird issue. 
+
+Which is, if in `/etc/auto-cpufreq.conf` I leave these values commented, e.g:
+
+```
+# battery charging threshold
+# reference: https://github.com/AdnanHodzic/auto-cpufreq/#battery-charging-thresholds
+
+
+# enable thresholds true or false
+#enable_thresholds = true                                                                                                                                                                                             
+
+# whether to check if thresholds are valid (true or false). (THIS SHOULD BE LEFT AS-IS IN MOST CASES)
+#check_thresholds = true
+
+# start threshold (0 is off ) can be 0-99
+#start_threshold = 0 
+
+# stop threshold (100 is off) can be 1-100
+#stop_threshold = 80
+```
+
+install auto-cpufreq using auto-cpufreq-installer from changes with this PR, I'll install auto-cpufreq daemon and --stats will work fine.
+
+But, if I remove auto-cpufreq using auto-cpufreq-installer, install it again using the same, enable threshold values in: ` `/etc/auto-cpufreq.conf`
+
+```
+# battery charging threshold
+# reference: https://github.com/AdnanHodzic/auto-cpufreq/#battery-charging-thresholds
+
+
+# enable thresholds true or false
+enable_thresholds = true                                                                                                                                                                                             
+
+# whether to check if thresholds are valid (true or false). (THIS SHOULD BE LEFT AS-IS IN MOST CASES)
+check_thresholds = true
+
+# start threshold (0 is off ) can be 0-99
+start_threshold = 0 
+
+# stop threshold (100 is off) can be 1-100
+stop_threshold = 80
+```
+
+and install auto-cpufreq daemon, running stats will return the following:
+
+```
+sudo auto-cpufreq --stats              
+
+------------------------ auto-cpufreq not running ------------------------------
+
+ERROR: auto-cpufreq is not running in daemon mode.
+
+Make sure to run "sudo auto-cpufreq --install" first
+
+-------------------------------------------------------------------------------
+```
+
+2. Besides that new issue, as I said in my [latest comment](https://github.com/AdnanHodzic/auto-cpufreq/pull/900#issuecomment-3580386572), these values no longer work for me unlike with initial commit. So I can't even test anything anymore.
+
+3. Furthermore, I also noticed that my laptop is no longer charging when connected to my external monitor via usb-c (which was always the case before). Not sure if this is related to testing these changes, but with all this said as much as I appreciate the effort, I cannot merge this PR and its changes in this state. 
+
+Update: reboot fixed the issue and my laptop is charging again when connected to external monitor with changes on `master` branch.
+
+Especially since I wan't to make a big new release in next couple of weeks. 
+
+If anyone would like to further test these changes or new ones are made, and is in working state again I'm also willing to test it again. But right now I'm facing these 3 major issues.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

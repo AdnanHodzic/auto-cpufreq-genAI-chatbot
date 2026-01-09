@@ -1,0 +1,58 @@
+
+        <html>
+        <head>
+            <title>Pull Request #866: fix: use scaling_max_freq for accurate max CPU clock detection</title>
+        </head>
+        <body>
+            <h1>fix: use scaling_max_freq for accurate max CPU clock detection</h1>
+            <p><strong>Pull Request #866</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Background
+
+In some systems, the two CPU frequency values — from `cpuinfo_max_freq` and `scaling_max_freq` — return different results. This discrepancy causes the application to pick a lower maximum frequency, which leads to incorrect behavior, such as disabling Turbo Boost and causing the GUI to malfunction.
+
+### What this change does
+
+This update makes the application use the value from `scaling_max_freq` to determine the CPU's maximum frequency. By doing so, it fixes the detection issue on affected systems.
+
+### Impact
+
+For users whose systems do not have this discrepancy, this change should have no impact and will continue working as before.
+
+With this fix, the GUI is able to function normally again, reflecting the correct CPU maximum frequency.
+
+### Screenshot
+Tested on my system, working fine!
+
+![GUI working correctly now](https://github.com/user-attachments/assets/bf978e47-880a-4d26-b8da-25fcc32f0d6e)
+
+---
+
+Closes issue #737.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>LGTM! 
+
+On my side `cat /sys/devices/system/cpu/cpu1/cpufreq/cpuinfo_max_freq` and `cat /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq` are returning the same value, but I guess this can differ for some.
+
+ Thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases). 
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Please pull the latest changes, a fix has been made in #899 which closes this issue. 
+
+If the issue persist, please feel free to re-open the issue.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

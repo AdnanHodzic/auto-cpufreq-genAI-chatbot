@@ -119,6 +119,82 @@ Hope you find it entertaining.
 Please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
                 </div>
             
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>VorpalBlade:</strong></p>
+                    <p>I ran into the same observation while profiling something unrelated using bpftrace. Every few seconds I see a lot of exec calls from auto-cpufreq:
+
+```console
+❯ bpftrace -e 'tracepoint:syscalls:sys_enter_execve,tracepoint:syscalls:sys_enter_execveat { printf("%lld ns: %s %s\n", nsecs(boot), comm, str(args.filename)); }'
+Attaching 2 probes...
+544145151799058 ns: auto-cpufreq /bin/sh
+544145154312314 ns: sh /usr/bin/date
+544145156262938 ns: auto-cpufreq /bin/sh
+544145158393664 ns: sh /usr/bin/grep
+544145160394295 ns: auto-cpufreq /bin/sh
+544145162365755 ns: sh /usr/bin/nproc
+544145163845771 ns: auto-cpufreq /bin/sh
+544145165835133 ns: sh /usr/bin/cpufreqctl.auto-cpufreq
+544145166848873 ns: cpufreqctl.auto /usr/local/sbin/bash
+544145166862295 ns: cpufreqctl.auto /usr/local/bin/bash
+544145166868606 ns: cpufreqctl.auto /usr/bin/bash
+544145169676763 ns: bash /usr/bin/cat
+544145169906914 ns: bash /usr/bin/grep
+544145170160208 ns: bash /usr/bin/wc
+544145174080018 ns: bash /usr/bin/cat
+544146178036553 ns: auto-cpufreq /bin/sh
+544146180395573 ns: sh /usr/bin/grep
+544146303661048 ns: auto-cpufreq /bin/sh
+544146305875673 ns: sh /usr/bin/cpufreqctl.auto-cpufreq
+544146306989737 ns: cpufreqctl.auto /usr/local/sbin/bash
+544146307003849 ns: cpufreqctl.auto /usr/local/bin/bash
+544146307010602 ns: cpufreqctl.auto /usr/bin/bash
+544146310329528 ns: bash /usr/bin/cat
+544146310567918 ns: bash /usr/bin/grep
+544146310742182 ns: bash /usr/bin/wc
+544146315022885 ns: bash /usr/bin/expr
+544146317394422 ns: bash /usr/bin/expr
+544146319629639 ns: bash /usr/bin/expr
+544146321931191 ns: bash /usr/bin/expr
+544146324138232 ns: bash /usr/bin/expr
+544146326546200 ns: bash /usr/bin/expr
+544146328688428 ns: bash /usr/bin/expr
+544146330888371 ns: bash /usr/bin/expr
+544146333490445 ns: auto-cpufreq /bin/sh
+544146335560334 ns: sh /usr/bin/cat
+544146337063872 ns: auto-cpufreq /bin/sh
+544146339122655 ns: sh /usr/bin/cpufreqctl.auto-cpufreq
+544146340262892 ns: cpufreqctl.auto /usr/local/sbin/bash
+544146340278145 ns: cpufreqctl.auto /usr/local/bin/bash
+544146340284942 ns: cpufreqctl.auto /usr/bin/bash
+544146343238731 ns: bash /usr/bin/cat
+544146343449442 ns: bash /usr/bin/grep
+544146343667710 ns: bash /usr/bin/wc
+544146347752882 ns: bash /usr/bin/expr
+544146350123750 ns: bash /usr/bin/expr
+544146352437204 ns: bash /usr/bin/expr
+544146354575541 ns: bash /usr/bin/expr
+544146356938124 ns: bash /usr/bin/expr
+544146359113706 ns: bash /usr/bin/expr
+544146361303152 ns: bash /usr/bin/expr
+544146363531868 ns: bash /usr/bin/expr
+544146365824058 ns: auto-cpufreq /bin/sh
+544146367870105 ns: sh /usr/bin/cpufreqctl.auto-cpufreq
+544146368868411 ns: cpufreqctl.auto /usr/local/sbin/bash
+544146368882290 ns: cpufreqctl.auto /usr/local/bin/bash
+544146368888730 ns: cpufreqctl.auto /usr/bin/bash
+544146371778426 ns: bash /usr/bin/cat
+544146371956070 ns: bash /usr/bin/grep
+544146372134368 ns: bash /usr/bin/wc
+544146377067547 ns: bash /usr/bin/cat
+544146378936212 ns: bash /usr/bin/cat
+544146380771937 ns: bash /usr/bin/cat
+```
+
+etc. I also saw that these bash processes were causing a lot of page faults (which is what I was originally looking at). This surprised me since I use zsh as my shell, and a simple `ps aux | grep bash` showed no long-running bash processes. So I got curious as to where these bash executions came from.
+
+The script seems to be executed every 5 seconds and take less than a second to execute (but still, as the original poster observed, doing this in shell script is battery inefficient). I would suggest doing it in-process in the python program.</p>
+                </div>
+            
             </div>
         </body>
         </html>

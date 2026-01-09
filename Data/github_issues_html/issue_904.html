@@ -1,0 +1,89 @@
+
+        <html>
+        <head>
+            <title>Issue #904: IRQ/9-acpi CPU usage</title>
+        </head>
+        <body>
+            <h1>IRQ/9-acpi CPU usage</h1>
+            <p><strong>Issue #904</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I found that when my laptop is idle, about 3-4% of the CPU usage is the process `irq/9-acpi` which appears only when auto-cpufreq is active. I confirmed that suspending and restarting the systemd daemon.
+ 
+A quick investigation with an LLM suggested to try configuring auto-cpufreq to use a shorter polling time, but as far I can tell, I couldn't find any ways to do it.
+
+I would like to first confirm that it is indeed a known auto-cpufreq issue, and if so, how to address it.
+
+Below the output of the debug info on my system from auto-cpufreq..
+
+
+```
+### System information:
+
+-------------------------------- Battery Info ---------------------------------
+
+battery count = 1
+BAT0 start threshold = b'75\n'
+BAT0 stop threshold = b'80\n'
+
+-------------------------------------------------------------------------------
+
+Linux distro: Debian GNU/Linux 13 trixie
+Linux kernel: 6.16.3+deb13-amd64
+Processor: Intel(R) Core(TM) Ultra 7 258V
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2200 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      1.0%        36 °C      1372 MHz
+CPU1      1.0%        37 °C      1069 MHz
+CPU2      1.0%        36 °C      1444 MHz
+CPU3      0.0%        35 °C      1372 MHz
+CPU4      1.0%        36 °C      1651 MHz
+CPU5      1.0%        36 °C       400 MHz
+CPU6      1.0%        36 °C      1660 MHz
+CPU7      0.0%        36 °C       400 MHz
+
+CPU fan speed: 0 RPM
+
+CPU fan speed: 0 RPM
+
+auto-cpufreq version: 2.6.0
+
+Python: 3.13.5
+psutil package: 7.0.0
+platform package: 1.0.8
+click package: 8.3.1
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.14 %
+
+Total CPU usage: 1.5 %
+Total system load: 1.52
+Average temp. of all cores: 36.00 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,153 @@
+
+        <html>
+        <head>
+            <title>Issue #901: [Improvement] Inaccurate core temps shown in monitor mode for AMD Ryzen chipsets</title>
+        </head>
+        <body>
+            <h1>[Improvement] Inaccurate core temps shown in monitor mode for AMD Ryzen chipsets</h1>
+            <p><strong>Issue #901</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Related:
+
+#851
+
+### Problem description:
+
+Currently when running in monitor mode:
+```shell
+ sudo auto-cpufreq --monitor
+```
+
+We use the following function to determine cpu temps:
+
+https://github.com/AdnanHodzic/auto-cpufreq/blob/25bd7d9a98649b84b519dd2ec46b2d282dc404dc/auto_cpufreq/modules/system_info.py#L102
+
+This does a few things:
+- grabs sensors from a list in a global  `CPU_TEMP_SENSOR_PRIORITY = ("coretemp", "acpitz", "k10temp", "zenpower")`
+- if there's not enough temps in all those lists combined, we just use the average over all for missing values.
+
+This results in the CPU temps not being accurate, as e.g. acpitz takes priority over k10temp. acpitz shows various thermal zones, not necessarily at the CPU itself. k10temp on AMD systems exporses Tdie/Tctl, which are the hottest die temperature/control temperature (what's used for fan curves, based on Tdie) respectively. (This was different on zen1, as these were just delta's I believe, but I digress)..
+AMD does not expose temp per core, so ideally we should just show the k10temp for these (either the Tdie or Tctl - some offset).
+However doing this per model and figuring out the various offsets could be difficult.
+
+There's also inconsistencies, as `--debug` uses an entirely different function that just uses the first found temp for all cores:
+https://github.com/AdnanHodzic/auto-cpufreq/blob/25bd7d9a98649b84b519dd2ec46b2d282dc404dc/auto_cpufreq/core.py#L853
+
+Concretely, this ends up in the monitor mode showing acpitz temps for my first 4 cores:
+```
+acpitz-acpi-0
+Adapter: ACPI interface
+temp1:        +42.8°C  
+temp2:        +42.8°C  
+temp3:        +44.8°C  
+temp4:        +46.8°C     <= This is actually the same as the k10temp Tctl, the other values seem to be something else?
+```
+And the cores after show the average of these values.
+
+This probably also applies to the GUI.
+
+### Proposed changes:
+
+First and foremost, the debug and monitor mode seem to not be sharing their code, and use different functions, this should probably be unified into one working version.
+
+As per the actual fix:
+
+- Based on available sensors we determine the proper values (e.g. we know we're AMD and have Tdie available, show that).
+- Possibly calculate the actual temp if it's not exposed (via Tctl)
+- If that's too difficult, at least just use a singular value.
+- On intel systems, use coretemp, as these show temp per actual core.
+
+### System information:
+
+Add/paste output of:
+
+```
+auto-cpufreq --debug
+```
+
+```
+Using settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------------------------------------------------------
+
+Linux distro: Fedora Linux 43 Workstation Edition
+Linux kernel: 6.17.7-300.fc43.x86_64
+Processor: AMD Ryzen 9 7940HS w/ Radeon 780M Graphics
+Cores: 16
+Architecture: x86_64
+Driver: amd-pstate-epp
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4001 MHz
+CPU min frequency: 403 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      0.0%        40 °C       403 MHz
+CPU1      0.0%        40 °C       403 MHz
+CPU2      0.0%        40 °C       403 MHz
+CPU3      0.0%        40 °C       403 MHz
+CPU4      0.0%        40 °C       403 MHz
+CPU5      0.0%        40 °C       403 MHz
+CPU6      4.0%        40 °C       544 MHz
+CPU7      0.0%        40 °C       403 MHz
+CPU8      0.0%        40 °C       403 MHz
+CPU9      0.0%        40 °C       403 MHz
+CPU10      0.0%        40 °C       544 MHz
+CPU11      5.0%        40 °C       971 MHz
+CPU12      0.0%        40 °C       403 MHz
+CPU13      0.0%        40 °C       544 MHz
+CPU14      4.0%        40 °C       403 MHz
+CPU15      0.0%        40 °C       403 MHz
+
+CPU fan speed: 0 RPM
+
+auto-cpufreq version: 2.6.0
+
+Python: 3.14.0
+psutil package: 7.0.0
+platform package: 1.0.9
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.07 %
+
+Total CPU usage: 1.2 %
+Total system load: 0.39
+Average temp. of all cores: 37.00 °C 
+
+Currently using: performance governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>CasperVM:</strong></p>
+                    <p>Not the most important issue/change needed, but thought it'd be good to discuss
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I like the proposed changes, especially the:
+> First and foremost, the debug and monitor mode seem to not be sharing their code, and use different functions, this should probably be unified into one working version.
+
+As indeed a lot of features branched out with their own codebase in a way. 
+
+I would say feel free to create a PR, if you want anyone's further opinion in meantime feel free to ask this same question on [auto-cpufreq discord channel/server.](https://discord.gg/Sjauxtj6kH)</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

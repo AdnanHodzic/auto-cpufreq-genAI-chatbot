@@ -1,0 +1,88 @@
+
+        <html>
+        <head>
+            <title>Issue #847: Fix (system_info) : improve battery path detection </title>
+        </head>
+        <body>
+            <h1>Fix (system_info) : improve battery path detection </h1>
+            <p><strong>Issue #847</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>## Fix (system_info) : improve battery path detection
+
+- Refactor `battery_info()` to correctly call static methods with `SystemInfo` prefix to prevent NameError.
+- Enhance `get_battery_path()` logic for more reliable battery directory detection.
+
+
+### Tested on GNU/Linux (Ubuntu 
+```
+lsb_release -a
+
+No LSB modules are available.
+Distributor ID:	Ubuntu
+Description:	Ubuntu 24.04.2 LTS
+Release:	24.04
+Codename:	noble
+```
+
+
+### Bug fixed
+```
+sudo auto-cpufreq --stats
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/click/core.py", line 1442, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/click/core.py", line 1363, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/click/core.py", line 1226, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/click/core.py", line 794, in invoke
+    return callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/auto_cpufreq/bin/auto_cpufreq.py", line 236, in main
+    monitor.run()
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/auto_cpufreq/modules/system_monitor.py", line 297, in run
+    self.loop.run()
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/urwid/event_loop/main_loop.py", line 337, in run
+    self._run()
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/urwid/event_loop/main_loop.py", line 439, in _run
+    self.event_loop.run()
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/urwid/event_loop/select_loop.py", line 182, in run
+    self._loop()
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/urwid/event_loop/select_loop.py", line 224, in _loop
+    alarm_callback()
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/urwid/event_loop/main_loop.py", line 218, in cb
+    callback(self, user_data)
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/auto_cpufreq/modules/system_monitor.py", line 98, in update
+    report: SystemReport = system_info.generate_system_report()
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/auto_cpufreq/modules/system_info.py", line 333, in generate_system_report
+    battery_info=self.battery_info(),
+                 ^^^^^^^^^^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/auto_cpufreq/modules/system_info.py", line 263, in battery_info
+    energy_rate: str | None = read_file(
+                              ^^^^^^^^^^
+  File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/auto_cpufreq/modules/system_info.py", line 221, in read_file
+    return f.read().strip()
+           ^^^^^^^^
+OSError: [Errno 19] No such device
+```</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>LGTM! Thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases). </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

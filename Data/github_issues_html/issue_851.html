@@ -1,0 +1,273 @@
+
+        <html>
+        <head>
+            <title>Issue #851: I get wrong temperaure detection in v2.6.0</title>
+        </head>
+        <body>
+            <h1>I get wrong temperaure detection in v2.6.0</h1>
+            <p><strong>Issue #851</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>
+### Have you tried?
+
+- yes I have
+
+### Error output:
+```text
+none
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+$ sudo auto-cpufreq --debug
+
+-------------------------------- Battery Info ---------------------------------
+
+battery count = 1
+BAT0 start threshold = b'70\n'
+BAT0 stop threshold = b'85\n'
+
+-------------------------------------------------------------------------------
+
+Linux distro: Manjaro Linux 25.0.3 Zetar
+Linux kernel: 6.12.32-1-MANJARO
+Processor: AMD Ryzen 7 PRO 6850U with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: amd-pstate-epp
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2701 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      1.0%        36 °C      2643 MHz
+CPU1      0.0%        36 °C       400 MHz
+CPU2      0.0%        36 °C       400 MHz
+CPU3      0.0%        36 °C       400 MHz
+CPU4      0.0%        36 °C      2618 MHz
+CPU5      0.0%        36 °C      2637 MHz
+CPU6      1.0%        36 °C      2626 MHz
+CPU7      0.0%        36 °C       400 MHz
+CPU8      1.0%        36 °C       400 MHz
+CPU9      0.0%        36 °C       400 MHz
+CPU10      0.0%        36 °C      2648 MHz
+CPU11      0.0%        36 °C       400 MHz
+CPU12      0.0%        36 °C      2646 MHz
+CPU13      0.0%        36 °C      2633 MHz
+CPU14      0.0%        36 °C      2634 MHz
+CPU15      0.0%        36 °C       400 MHz
+
+CPU fan speed: 0 RPM
+
+auto-cpufreq version: Version                  : 2.6.0-2
+
+Python: 3.13.3
+psutil package: 7.0.0
+platform package: 1.0.8
+click package: 8.1.8
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.17 %
+
+Total CPU usage: 0.6 %
+Total system load: 0.88
+Average temp. of all cores: 28.00 °C         <== ?
+
+Currently using: performance governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```
+Only CPU0 is correctly detected, wich results in a wrong (too low) average temperature, see below.
+Tried this with the v2.6.0 from AUR and with v2.6.0 installer.
+
+$ auto-cpufreq --stats
+![Image](https://github.com/user-attachments/assets/11f45110-c3f4-4b70-a8b6-c7a697b52316)
+
+In v2.5.0 temps are fine, see:
+```
+$ sudo auto-cpufreq --debug
+
+-------------------------------- Battery Info ---------------------------------
+
+battery count = 1
+BAT0 start threshold = b'70\n'
+BAT0 stop threshold = b'85\n'
+
+-------------------------------------------------------------------------------
+
+Linux distro: Manjaro Linux 25.0.3 Zetar
+Linux kernel: 6.12.32-1-MANJARO
+Processor: AMD Ryzen 7 PRO 6850U with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: amd-pstate-epp
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2701 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      1.0%        35 °C       400 MHz
+CPU1      0.0%        35 °C       400 MHz
+CPU2      1.0%        35 °C       400 MHz
+CPU3      0.0%        35 °C       400 MHz
+CPU4      0.0%        35 °C       400 MHz
+CPU5      0.0%        35 °C       400 MHz
+CPU6      0.0%        35 °C      2617 MHz
+CPU7      1.0%        35 °C      2656 MHz
+CPU8      0.0%        35 °C       400 MHz
+CPU9      0.0%        35 °C       400 MHz
+CPU10      1.0%        35 °C      2639 MHz
+CPU11      0.0%        35 °C       400 MHz
+CPU12      1.0%        35 °C       400 MHz
+CPU13      0.0%        35 °C       400 MHz
+CPU14      0.0%        35 °C      2636 MHz
+CPU15      2.0%        35 °C      2670 MHz
+
+CPU fan speed: 0 RPM
+
+auto-cpufreq version: Version                  : 2.5.0-1
+
+Python: 3.13.3
+psutil package: 7.0.0
+platform package: 1.0.8
+click package: 8.1.8
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.13 %
+
+Total CPU usage: 0.7 %
+Total system load: 0.08
+Average temp. of all cores: 35.00 °C 
+
+Currently using: performance governor
+Currently turbo boost is: off
+
+---------------------------------------------------------------------------
+```
+
+```
+$ auto-cpufreq --stats
+
+-------------------------------- Battery Info ---------------------------------
+
+battery count = 1
+BAT0 start threshold = b'70\n'
+BAT0 stop threshold = b'85\n'
+Linux kernel: 6.12.32-1-MANJARO
+Processor: AMD Ryzen 7 PRO 6850U with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: amd-pstate-epp
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2701 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      0.0%        36 °C       400 MHz
+CPU1      0.0%        36 °C       400 MHz
+CPU2      0.0%        36 °C       400 MHz
+CPU3      0.0%        36 °C       400 MHz
+CPU4      0.0%        36 °C       400 MHz
+CPU5      0.0%        36 °C      2669 MHz
+CPU6      1.0%        36 °C       400 MHz
+CPU7      0.0%        36 °C       400 MHz
+CPU8      0.0%        36 °C       400 MHz
+CPU9      0.0%        36 °C       400 MHz
+CPU10      0.0%        36 °C      2667 MHz
+CPU11      2.0%        36 °C       400 MHz
+CPU12      0.0%        36 °C       400 MHz
+CPU13      0.0%        36 °C       400 MHz
+CPU14      0.0%        36 °C       400 MHz
+CPU15      0.0%        36 °C      2657 MHz
+
+CPU fan speed: 0 RPM
+
+---------------------------- CPU frequency scaling ----------------------------
+
+Battery is: charging
+
+Setting to use: "performance" governor
+Setting to use: "performance" EPP
+Not setting EPB (not supported by system)
+
+Total CPU usage: 1.2 %
+Total system load: 0.59
+Average temp. of all cores: 36.00 °C 
+
+Load optimal (load average: 0.59, 0.44, 0.29)
+Optimal total CPU usage: 1.2%, high average core temp: 36.0°C
+Setting turbo boost: off
+
+```
+
+This may only be cosmetic, but I am not shure, have not stressed the notebook yet.
+
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>banjo51st:</strong></p>
+                    <p>As a workaround I changed CPU_TEMP_SENSOR_PRIORITY in
+
+` /usr/lib/python3.13/site-packages/auto_cpufreq/globals.py`
+from
+`CPU_TEMP_SENSOR_PRIORITY = ("coretemp", "acpitz", "k10temp", "zenpower")`
+to
+`CPU_TEMP_SENSOR_PRIORITY = ("coretemp", "k10temp", "zenpower", "acpitz")`
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> As a workaround I changed CPU_TEMP_SENSOR_PRIORITY in
+> 
+> ` /usr/lib/python3.13/site-packages/auto_cpufreq/globals.py` from `CPU_TEMP_SENSOR_PRIORITY = ("coretemp", "acpitz", "k10temp", "zenpower")` to `CPU_TEMP_SENSOR_PRIORITY = ("coretemp", "k10temp", "zenpower", "acpitz")`
+
+If this fixes the issue, please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>soloopooo:</strong></p>
+                    <p>> As a workaround I changed CPU_TEMP_SENSOR_PRIORITY in
+> 
+> ` /usr/lib/python3.13/site-packages/auto_cpufreq/globals.py` from `CPU_TEMP_SENSOR_PRIORITY = ("coretemp", "acpitz", "k10temp", "zenpower")` to `CPU_TEMP_SENSOR_PRIORITY = ("coretemp", "k10temp", "zenpower", "acpitz")`
+
+That fixed my issue too. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Since there's already a fix which has been confirmed, please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution)  (create a PR) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

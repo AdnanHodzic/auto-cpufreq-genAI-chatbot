@@ -1,0 +1,99 @@
+
+        <html>
+        <head>
+            <title>Issue #852: Stuck in userspace governor, and no epp or epb support. Is this normal?</title>
+        </head>
+        <body>
+            <h1>Stuck in userspace governor, and no epp or epb support. Is this normal?</h1>
+            <p><strong>Issue #852</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? Yes
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)? -
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)? Yes
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)? Yes
+
+### Error output:
+```-
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+-------------------------------- Battery Info ---------------------------------
+
+battery count = 2
+BAT1 start threshold = b'0\n'
+BAT1 stop threshold = b'100\n'
+BAT0 start threshold = b'0\n'
+BAT0 stop threshold = b'100\n'
+
+-------------------------------------------------------------------------------
+
+Linux distro: Linux Mint 22.1 Xia
+Linux kernel: 6.14.10-1-liquorix-amd64
+Processor: Intel(R) Core(TM) i5-8250U CPU @ 1.60GHz
+Cores: 8
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1801 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      2.0%        47 °C      1600 MHz
+CPU1      4.0%        49 °C      1600 MHz
+CPU2      3.0%        49 °C      1600 MHz
+CPU3      1.0%        49 °C      1600 MHz
+CPU4      0.0%        47 °C      1801 MHz
+CPU5      0.0%        49 °C      1801 MHz
+CPU6      1.0%        49 °C      1801 MHz
+CPU7      0.0%        49 °C      1801 MHz
+
+CPU fan speed: 0 RPM
+
+auto-cpufreq version: 2.6.0
+
+Python: 3.12.3
+psutil package: 7.0.0
+platform package: 1.0.8
+click package: 8.2.1
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.07 %
+
+Total CPU usage: 1.5 %
+Total system load: 1.27
+Average temp. of all cores: 48.00 °C 
+
+Currently using: userspace governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+
+```
+
+`auto-cpufreq` is constantly using the `userspace` governor, and not setting epp or epb. Is this normal? I am just curious. `auto-cpufreq --stats` also shows less stuff than before and seems.. frozen, like its not doing anything.
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+            </div>
+        </body>
+        </html>
+        

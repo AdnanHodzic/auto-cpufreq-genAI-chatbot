@@ -1,0 +1,134 @@
+
+        <html>
+        <head>
+            <title>Issue #906: Switching turbo mode via CLI is not working on NixOS</title>
+        </head>
+        <body>
+            <h1>Switching turbo mode via CLI is not working on NixOS</h1>
+            <p><strong>Issue #906</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+#### Before submitting an issue, it is strongly recommended to use the **[auto-cpufreq-genAI-chatbot](https://foolcontrol.org/?p=4903)** to get an immediate answer to your question.
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? Yes
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)? No
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)? Yes
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)? Yes
+
+### Error output:
+```text
+sudo auto-cpufreq --turbo never
+
+Traceback (most recent call last):
+  File "/nix/store/8aq76sx7mx63xkmps57xpbybn7xjm1g4-python3.13-auto-cpufreq-2.6.0/bin/..auto-cpufreq-wrapped-wrapped", line 9, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/nix/store/43nwmaicjbskvld9yyl1ksdjza1infdp-python3.13-click-8.2.1/lib/python3.13/site-packages/click/core.py", line 1442, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/nix/store/43nwmaicjbskvld9yyl1ksdjza1infdp-python3.13-click-8.2.1/lib/python3.13/site-packages/click/core.py", line 1363, in main
+    rv = self.invoke(ctx)
+  File "/nix/store/43nwmaicjbskvld9yyl1ksdjza1infdp-python3.13-click-8.2.1/lib/python3.13/site-packages/click/core.py", line 1226, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/nix/store/43nwmaicjbskvld9yyl1ksdjza1infdp-python3.13-click-8.2.1/lib/python3.13/site-packages/click/core.py", line 794, in invoke
+    return callback(*args, **kwargs)
+  File "/nix/store/8aq76sx7mx63xkmps57xpbybn7xjm1g4-python3.13-auto-cpufreq-2.6.0/lib/python3.13/site-packages/auto_cpufreq/bin/auto_cpufreq.py", line 66, in main
+    set_turbo_override(turbo)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "/nix/store/8aq76sx7mx63xkmps57xpbybn7xjm1g4-python3.13-auto-cpufreq-2.6.0/lib/python3.13/site-packages/auto_cpufreq/core.py", line 88, in set_turbo_override
+    with open(turbo_override_state, "wb") as store:
+         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/opt/auto-cpufreq/turbo-override.pickle'
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+auto-cpufreq --debug
+
+
+-------------------------------- Battery Info ---------------------------------
+
+battery count = 1
+BAT1 start threshold: file not found
+BAT1 stop threshold = b'100\n'
+
+-------------------------------------------------------------------------------
+
+Linux distro: NixOS 25.11 Xantusia
+Linux kernel: 6.12.58
+Processor: AMD Ryzen 7 4800H with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: amd-pstate-epp
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4300 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      0.0%        62 °C      4277 MHz
+CPU1      0.0%        62 °C       400 MHz
+CPU2      1.0%        62 °C      3177 MHz
+CPU3     46.0%        62 °C       400 MHz
+CPU4      0.0%        62 °C       400 MHz
+CPU5      0.0%        62 °C       400 MHz
+CPU6      1.0%        62 °C      2895 MHz
+CPU7      0.0%        62 °C       400 MHz
+CPU8      0.0%        62 °C      3100 MHz
+CPU9      0.0%        62 °C       400 MHz
+CPU10      3.0%        62 °C      2895 MHz
+CPU11      0.0%        62 °C       400 MHz
+CPU12      2.0%        62 °C      2895 MHz
+CPU13      2.0%        62 °C      3617 MHz
+CPU14      2.0%        62 °C      2861 MHz
+CPU15      0.0%        62 °C       400 MHz
+
+CPU fan speed: 3100 RPM
+
+auto-cpufreq version: 2.6.0
+
+Python: 3.13.9
+psutil package: 7.1.2
+platform package: 1.0.8
+click package: 8.2.1
+distro package: 1.9.0
+
+Computer type: /nix/store/rlq03x4cwf8zn73hxaxnx0zn5q9kifls-bash-5.3p3/bin/sh: line 1: dmidecode: command not found
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.15 %
+
+Total CPU usage: 3.0 %
+Total system load: 0.65
+Average temp. of all cores: 61.00 °C 
+
+Currently using: performance governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+```
+
+I tried switching from nixpkgs' auto-cpufreq service (2.6.0) to this flake because I want to dynamically disable and enable my turbo boost. When I try to disable turbo using CLI, I got that error instead.
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+            </div>
+        </body>
+        </html>
+        

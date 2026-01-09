@@ -1,0 +1,131 @@
+
+        <html>
+        <head>
+            <title>Issue #905: Release cutting</title>
+        </head>
+        <body>
+            <h1>Release cutting</h1>
+            <p><strong>Issue #905</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+#### Before submitting an issue, it is strongly recommended to use the **[auto-cpufreq-genAI-chatbot](https://foolcontrol.org/?p=4903)** to get an immediate answer to your question.
+
+### Have you tried?
+
+- [x] [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+### Error output:
+```text
+N/A
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+sudo auto-cpufreq --debug
+
+Using settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux rolling n/a
+Linux kernel: 6.17.8-arch1-1
+Processor: Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz
+Cores: 12
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4500 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      0.0%        50 °C       800 MHz
+CPU1      0.0%        48 °C      4372 MHz
+CPU2      0.0%        48 °C       800 MHz
+CPU3      2.0%        49 °C      4359 MHz
+CPU4      0.0%        48 °C       800 MHz
+CPU5      8.0%        50 °C      4359 MHz
+CPU6      0.0%        50 °C      4395 MHz
+CPU7      1.0%        48 °C      4400 MHz
+CPU8      2.0%        48 °C      4200 MHz
+CPU9      1.0%        49 °C      4393 MHz
+CPU10      4.0%        48 °C       800 MHz
+CPU11      2.0%        50 °C      4393 MHz
+
+auto-cpufreq version: Version         : 2.6.0-2
+
+Python: 3.13.7
+psutil package: 7.1.3
+platform package: 1.0.8
+click package: 8.2.1
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.08 %
+
+Total CPU usage: 1.1 %
+Total system load: 0.65
+Average temp. of all cores: 48.00 °C
+
+Currently using: performance governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+---
+Should users of this software expect releases to be cut? Particularly for AUR – there's not been a new release in over 6 months. Should AUR be updated to use the latest commit on the default branch instead?</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>No that shouldn't be the case, please contact[ AUR auto-cpufreq package maintainers.](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#aur-package-arch-based-distributions)
+
+@MusicalArtist12), @liljaylj, @parmjotsinghrobot 
+
+Also there should be a new big auto-cpufreq v2.7 released soon. 
+
+Otherwise if you want latest changes I would advise you to get latest changes using repo and install it using [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#auto-cpufreq-installer) which also supports Arch.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>effleurager:</strong></p>
+                    <p>Just to clarify, were you saying "No" to expecting releases to be regularly cut or "No" to switching the AUR package to building directly from the default branch? Your message isn't quite clear to me 😅</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I think using "release being cut" is what's confusing for me :) 
+
+IIRC, AUR package releases are only made when new major auto-cpufreq release happen. [Last major release was 2.6.0](https://github.com/AdnanHodzic/auto-cpufreq/releases) which matches your 6 months timeframe. 
+
+So, if you don't want to wait for major release to be made to get the latest changes, I suggest to use [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#auto-cpufreq-installer) instead.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>parmjotsinghrobot:</strong></p>
+                    <p>Not to just +1, but yes the AUR package currently follows the major releases. If current commit behaviour is desired, one could look into [`auto-cpufreq-git`](https://aur.archlinux.org/packages/auto-cpufreq-git)?</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

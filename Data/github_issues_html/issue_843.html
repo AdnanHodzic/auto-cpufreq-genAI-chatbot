@@ -1,0 +1,25 @@
+
+        <html>
+        <head>
+            <title>Issue #843: Replace magic-nix-cache-action</title>
+        </head>
+        <body>
+            <h1>Replace magic-nix-cache-action</h1>
+            <p><strong>Issue #843</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>The `DeterminateSystems/magic-nix-cache-action` action has been [deprecated](https://determinate.systems/posts/magic-nix-cache-free-tier-eol/) and no longer works. This PR replaces it with the `nix-community/cache-nix-action` action, which is actively maintained. It also replaces the `cachix/install-nix-action` action with the `nixbuild/nix-quick-install-action` action, which is required for the cache action to work. The cache has been configured to restore based on the runner's OS and architecture, so it should work on any runner.
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>LGTM! Thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases). </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

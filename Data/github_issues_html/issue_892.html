@@ -1,0 +1,33 @@
+
+        <html>
+        <head>
+            <title>Issue #892: Fix PyGObject installation on Pop!_OS</title>
+        </head>
+        <body>
+            <h1>Fix PyGObject installation on Pop!_OS</h1>
+            <p><strong>Issue #892</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Issue
+Installation fails on Pop!_OS 22.04 and similar Ubuntu systems because PyGObject tries to compile against girepository-2.0, which isn't available #833 . These systems only have libgirepository1.0-dev and already include a working python3-gi package.
+
+Changes
+- Create venv with --system-site-packages flag to access system Python packages
+- Install python3-gi system package in apt dependencies
+
+Tested on Pop!_OS 22.04 LTS. </p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Great job @Karthiktiwari, LGTM and also tested on my side and works as intended! Thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases). 
+
+Closes #833</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,45 @@
+
+        <html>
+        <head>
+            <title>Issue #855: Fix `auto-cpufreq --monitor` reporting the "CPU frequency scaling" section wrong.</title>
+        </head>
+        <body>
+            <h1>Fix `auto-cpufreq --monitor` reporting the "CPU frequency scaling" section wrong.</h1>
+            <p><strong>Issue #855</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>It used to always read the config file's "battery" section and report that, even if connected to a charger. I used a hacky solution (simply check the state of the battery, i.e., charging or not charging) and read the correct part of the config file based on that.
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Hi, 
+
+Could you please be more elaborate in what exactly does this PR fix? As I couldn't replicate what changes with `--monitor` with or without config file with what's currently on `master` branch.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PhoenixCausesOof:</strong></p>
+                    <p>Charger is plugged (wrong):
+![Screenshot From 2025-06-23 13-38-31](https://github.com/user-attachments/assets/bfc4ade4-9f9c-43d6-a4a3-7ed16f0433d8)
+
+Charger is unplugged (correct):
+![Screenshot From 2025-06-23 13-39-52](https://github.com/user-attachments/assets/bda932ad-26cc-481d-8b34-90cc731758b8)
+
+The state of EPP and EPB aren't accurate (nor matches with the GUI's data) when the device is connected to AC / being charged. This fixes that. (I apologize for explaining confusingly).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Thank you for clarification, LGTM. 
+
+Thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases). </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,46 @@
+
+        <html>
+        <head>
+            <title>Pull Request #899: fix: cpuinfo and scaling min/max freqs not being used properly</title>
+        </head>
+        <body>
+            <h1>fix: cpuinfo and scaling min/max freqs not being used properly</h1>
+            <p><strong>Pull Request #899</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>related to:
+- #866 
+- #737
+
+Bit of a copy paste because this is sort of a fix/revert of a previous issue but here we go:
+
+### Background
+
+In some systems, the two CPU frequency values from `cpuinfo_max_freq` and `scaling_max_freq` return different results. This discrepancy causes the application to pick a lower maximum frequency, which leads to incorrect behavior, such as not going back to the proper max frequency in certain cases.
+
+### What this change does
+
+This update makes the application use the value from `scaling_max_freq` OR `cpuinfo_max_freq` (whichever is bigger), to determine the CPU's maximum frequency. By doing so, it fixes the detection issue on affected systems. It seems that Intel and AMD cpu's work in the opposite way regarding these variables?
+
+For sanity's sake, I also applied this in reverse to the min frequency.
+
+### Impact
+
+For users whose systems do not have this discrepancy, this change should have no impact and will continue working as before. 
+
+For users with this discrepancy, this fixes frequency scaling again.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>LGTM! Think you used some very nice logic here and on my side I'm getting much better ranges then before. Only weird thing is that all my core were initially pinned to 400Mhz until I restarted, which I don't quite have the explanation for.
+
+Regardless, great job, thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases). </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

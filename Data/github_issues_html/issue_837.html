@@ -1,0 +1,269 @@
+
+        <html>
+        <head>
+            <title>Issue #837: Config file applied incorrectly</title>
+        </head>
+        <body>
+            <h1>Config file applied incorrectly</h1>
+            <p><strong>Issue #837</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+#### Before submitting an issue, it is strongly recommended to use the **[auto-cpufreq-genAI-chatbot](https://foolcontrol.org/?p=4903)** to get an immediate answer to your question.
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+### Error output:
+```text
+Add/paste error output in case of failed installation or other failing component
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+Using settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 24.04 Noble Numbat
+Linux kernel: 6.11.0-24-generic
+Processor: 13th Gen Intel(R) Core(TM) i9-13900HX
+Cores: 32
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 5400 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      0.0%        55 °C       800 MHz
+CPU1      0.0%        55 °C       800 MHz
+CPU2      0.0%        56 °C      3226 MHz
+CPU3      0.0%        56 °C      1122 MHz
+CPU4      3.0%        54 °C      4517 MHz
+CPU5      0.0%        54 °C       800 MHz
+CPU6      0.0%        53 °C       800 MHz
+CPU7      0.0%        53 °C       800 MHz
+CPU8      1.0%        54 °C       800 MHz
+CPU9      0.0%        54 °C       842 MHz
+CPU10      0.0%        50 °C       800 MHz
+CPU11      0.0%        50 °C       800 MHz
+CPU12      0.0%        49 °C       800 MHz
+CPU13      0.0%        49 °C       800 MHz
+CPU14      0.0%        54 °C       800 MHz
+CPU15      0.0%        54 °C       800 MHz
+CPU16      0.0%        58 °C       800 MHz
+CPU17      0.0%        58 °C      3241 MHz
+CPU18      0.0%        58 °C       800 MHz
+CPU19      0.0%        58 °C       800 MHz
+CPU20      0.0%        52 °C       800 MHz
+CPU21      0.0%        52 °C       800 MHz
+CPU22      0.0%        52 °C       800 MHz
+CPU23      0.0%        52 °C       800 MHz
+CPU24      0.0%        57 °C      3476 MHz
+CPU25      0.0%        57 °C       800 MHz
+CPU26      0.0%        57 °C       800 MHz
+CPU27      0.0%        57 °C       800 MHz
+CPU28      0.0%        53 °C       800 MHz
+CPU29      1.0%        53 °C      2438 MHz
+CPU30      0.0%        53 °C       800 MHz
+CPU31      0.0%        53 °C      3900 MHz
+
+CPU fan speed: 1681 RPM
+
+CPU fan speed: 1681 RPM
+
+auto-cpufreq version: 2.5.0
+
+Python: 3.12.3
+psutil package: 7.0.0
+platform package: 1.0.8
+click package: 8.1.8
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.13 %
+
+Total CPU usage: 0.3 %
+Total system load: 0.76
+Average temp. of all cores: 54.00 °C 
+
+Currently using: performance governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+---
+
+Device info: laptop with ubuntu installed.
+
+I am trying to setup a config file to have between 1.2GHz and 5.4GHz with **performance** governor when plugged in, and between 800Mhz and 3.4GHz when on battery mode with governor **powersave**.
+Here is my config file which is based on the example one:
+```
+# settings for when connected to a power source
+[charger]
+# see available governors by running: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+# preferred governor.
+governor = performance
+
+# EPP: see available preferences by running: cat /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_available_preferences
+energy_performance_preference = performance
+
+# EPB (Energy Performance Bias) for the intel_pstate driver
+# see conversion info: https://www.kernel.org/doc/html/latest/admin-guide/pm/intel_epb.html
+# available EPB options include a numeric value between 0-15
+# (where 0 = maximum performance and 15 = maximum power saving),
+# or one of the following strings:
+# performance (0), balance_performance (4), default (6), balance_power (8), or power (15)
+# if the parameter is missing in the config and the hardware supports this setting, the default value will be used
+# the default value is `balance_performance` (for charger)
+# energy_perf_bias = balance_performance
+
+# Platform Profiles
+# https://www.kernel.org/doc/html/latest/userspace-api/sysfs-platform_profile.html
+# See available options by running:
+# cat /sys/firmware/acpi/platform_profile_choices
+# platform_profile = performance
+
+# minimum cpu frequency (in kHz)
+# example: for 800 MHz = 800000 kHz --> scaling_min_freq = 800000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly
+# scaling_min_freq = 800000
+scaling_min_freq = 1200000
+
+# maximum cpu frequency (in kHz)
+# example: for 1GHz = 1000 MHz = 1000000 kHz -> scaling_max_freq = 1000000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly
+# scaling_max_freq = 1000000
+scaling_max_freq = 5400000
+
+# turbo boost setting. possible values: always, auto, never
+turbo = auto
+
+
+# this is for ignoring controllers and other connected devices battery from affecting 
+# laptop preformence
+# [power_supply_ignore_list]
+
+# name1 = this
+# name2 = is
+# name3 = an
+# name4 = example
+
+
+# settings for when using battery power
+[battery]
+# see available governors by running: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+# preferred governor
+governor = powersave
+
+# EPP: see available preferences by running: cat /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_available_preferences
+energy_performance_preference = power
+
+# EPB (Energy Performance Bias) for the intel_pstate driver
+# see conversion info: https://www.kernel.org/doc/html/latest/admin-guide/pm/intel_epb.html
+# available EPB options include a numeric value between 0-15
+# (where 0 = maximum performance and 15 = maximum power saving),
+# or one of the following strings:
+# performance (0), balance_performance (4), default (6), balance_power (8), or power (15)
+# if the parameter is missing in the config and the hardware supports this setting, the default value will be used
+# the default value is `balance_power` (for battery)
+# energy_perf_bias = balance_power
+
+# Platform Profiles
+# https://www.kernel.org/doc/html/latest/userspace-api/sysfs-platform_profile.html
+# See available options by running:
+# cat /sys/firmware/acpi/platform_profile_choices
+# platform_profile = low-power
+
+# minimum cpu frequency (in kHz)
+# example: for 800 MHz = 800000 kHz --> scaling_min_freq = 800000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly
+# scaling_min_freq = 800000
+scaling_min_freq = 800000
+
+# maximum cpu frequency (in kHz)
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# example: for 1GHz = 1000 MHz = 1000000 kHz -> scaling_max_freq = 1000000
+# to use this feature, uncomment the following line and set the value accordingly
+# scaling_max_freq = 1000000
+scaling_max_freq = 3400000
+
+
+# turbo boost setting. possible values: always, auto, never
+turbo = auto
+
+# experimental 
+
+# Add battery charging threshold (currently only available to Lenovo)
+# checkout README.md for more info
+
+# enable thresholds true or false
+#enable_thresholds = true
+#
+# start threshold (0 is off ) can be 0-99
+#start_threshold = 0
+#
+# stop threshold (100 is off) can be 1-100
+#stop_threshold = 100
+```
+Strangely,  plugging in or out won't change the governor, and the max/min is between 5.5 GHz and 800MHz.
+I have tried rebooting and re-installing, but nothing seems to work.
+Could someone help?</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PixsaOJ:</strong></p>
+                    <p>Yeah, i have trouble setting scaling_max_freq, it never respects it.
+
+From TUI it says that config is being used but settings are not respected. From GUI it does not even say that config is being used.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>>From GUI it does not even say that config is being used.
+
+I've mentioned why this is the case as part of #885 
+
+> auto-cpufreq GUI is not really maintained for some time now and has been out of sync with quite some CLI changes that were made in meantime.
+>
+> As always, if you want to improve some of it please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release.](https://github.com/AdnanHodzic/auto-cpufreq/releases)
+
+Regarding:
+>Yeah, i have trouble setting scaling_max_freq, it never respects it.
+
+I personally don't have problem with this ... there are similar problems reported: #615 and #837 without resolution. There's even one config related issue ready to be turned into PR but it never happened: #851
+
+@shadeyg56 was the original implementer of config file functionality, maybe he can pitch in but I'm sure he's busy as well.  
+
+Ideally if anyone else wants to give it a try in implementing this functionality, please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases). </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

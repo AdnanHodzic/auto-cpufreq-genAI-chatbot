@@ -1,0 +1,30 @@
+
+        <html>
+        <head>
+            <title>Pull Request #902: Fix variable name for virtual environment removal</title>
+        </head>
+        <body>
+            <h1>Fix variable name for virtual environment removal</h1>
+            <p><strong>Pull Request #902</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Fix: wrong variable name venv_path → VENV_PATH in script
+
+Because the environment variable was misspelled (venv_path instead of VENV_PATH), the script never detected the directory and therefore failed to remove the folder. This commit fixes the variable name so the directory is correctly deleted.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Good catch! This was [also addressed as part](https://github.com/AdnanHodzic/auto-cpufreq/pull/889#discussion_r2454594920) of #889 but unfortunately these changes haven't been merged yet. 
+
+Thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases). 
+
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

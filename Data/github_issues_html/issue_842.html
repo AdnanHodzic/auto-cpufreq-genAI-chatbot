@@ -1,0 +1,229 @@
+
+        <html>
+        <head>
+            <title>Issue #842: [Bug] /usr/bin/cpufreqctl.auto-cpufreq: line 99: echo: write error: Device or resource busy</title>
+        </head>
+        <body>
+            <h1>[Bug] /usr/bin/cpufreqctl.auto-cpufreq: line 99: echo: write error: Device or resource busy</h1>
+            <p><strong>Issue #842</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>> I'm on Arch Linux on a Lenovo IdeaPad Slim 5 with an Intel Core Ultra 5 125H CPU, and I still get this error when in charging mode.
+> 
+> Exact error:
+> ```
+> /usr/bin/cpufreqctl.auto-cpufreq: line 99: echo: write error: Device or resource busy
+> ``` 
+
+ _Originally posted by @itzayush69 in [#751](https://github.com/AdnanHodzic/auto-cpufreq/issues/751#issuecomment-2849155666)_
+
+![Image](https://github.com/user-attachments/assets/d599dac4-d457-40b3-85ca-7f5e0f791bfb)
+
+**Note:** This error only occurs when the laptop is connected to AC power (plugged in).
+
+Below is the config (```/etc/auto-cpufreq.conf```):
+_I haven't changed anything, just added `ideapad_laptop_conservation_mode = true`_
+```
+# settings for when connected to a power source
+[charger]
+# see available governors by running: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+# preferred governor
+governor = performance
+
+# EPP: see available preferences by running: cat /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_available_preferences
+energy_performance_preference = performance
+
+# EPB (Energy Performance Bias) for the intel_pstate driver
+# see conversion info: https://www.kernel.org/doc/html/latest/admin-guide/pm/intel_epb.html
+# available EPB options include a numeric value between 0-15
+# (where 0 = maximum performance and 15 = maximum power saving),
+# or one of the following strings:
+# performance (0), balance_performance (4), default (6), balance_power (8), or power (15)
+# if the parameter is missing in the config and the hardware supports this setting, the default value will be used
+# the default value is `balance_performance` (for charger)
+# energy_perf_bias = balance_performance
+energy_perf_bias = performance
+
+# Platform Profiles
+# https://www.kernel.org/doc/html/latest/userspace-api/sysfs-platform_profile.html
+# See available options by running:
+# cat /sys/firmware/acpi/platform_profile_choices
+# platform_profile = performance
+
+# minimum cpu frequency (in kHz)
+# example: for 800 MHz = 800000 kHz --> scaling_min_freq = 800000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly
+# scaling_min_freq = 800000
+
+# maximum cpu frequency (in kHz)
+# example: for 1GHz = 1000 MHz = 1000000 kHz -> scaling_max_freq = 1000000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly
+# scaling_max_freq = 1000000
+
+# turbo boost setting. possible values: always, auto, never
+turbo = auto
+
+# settings for when using battery power
+[battery]
+# see available governors by running: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+# preferred governor
+governor = powersave
+
+# EPP: see available preferences by running: cat /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_available_preferences
+energy_performance_preference = power
+
+# EPB (Energy Performance Bias) for the intel_pstate driver
+# see conversion info: https://www.kernel.org/doc/html/latest/admin-guide/pm/intel_epb.html
+# available EPB options include a numeric value between 0-15
+# (where 0 = maximum performance and 15 = maximum power saving),
+# or one of the following strings:
+# performance (0), balance_performance (4), default (6), balance_power (8), or power (15)
+# if the parameter is missing in the config and the hardware supports this setting, the default value will be used
+# the default value is `balance_power` (for battery)
+# energy_perf_bias = balance_power
+
+# Platform Profiles
+# https://www.kernel.org/doc/html/latest/userspace-api/sysfs-platform_profile.html
+# See available options by running:
+# cat /sys/firmware/acpi/platform_profile_choices
+# platform_profile = low-power
+
+# minimum cpu frequency (in kHz)
+# example: for 800 MHz = 800000 kHz --> scaling_min_freq = 800000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly
+# scaling_min_freq = 800000
+
+# maximum cpu frequency (in kHz)
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# example: for 1GHz = 1000 MHz = 1000000 kHz -> scaling_max_freq = 1000000
+# to use this feature, uncomment the following line and set the value accordingly
+# scaling_max_freq = 1000000
+
+# turbo boost setting (always, auto, or never)
+turbo = auto
+
+# battery charging threshold
+# reference: https://github.com/AdnanHodzic/auto-cpufreq/#battery-charging-thresholds
+#enable_thresholds = true
+#start_threshold = 20
+#stop_threshold = 80
+
+ideapad_laptop_conservation_mode = true
+```</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>@itzayush69  you still have this issue when ideapad_laptop_conservation_mode = false ?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>itzayush18:</strong></p>
+                    <p>> [@itzayush69](https://github.com/itzayush69) you still have this issue when ideapad_laptop_conservation_mode = false ?
+
+Yeah, the issue persists even with ideapad_laptop_conservation_mode set to false, or even when completely removing that line.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>MixedOne:</strong></p>
+                    <p>Hello, I can confirm  I  have the same problem using NixOS (doesn't mater if it's stable or unstable pkgs branch), it's present since a few months.
+I'm keen to help to resolve the issue, please let me know if sharing any specific details would help.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Hello, I can confirm I have the same problem using NixOS (doesn't mater if it's stable or unstable pkgs branch), it's present since a few months. I'm keen to help to resolve the issue, please let me know if sharing any specific details would help.
+
+@shadeyg56 might be able to help since he maintains the Nix package ...</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>w-A-L-L-e:</strong></p>
+                    <p>Confirmed. Also have exact same issue with asus zenbook (intel core ultra 9) on ubuntu 22.04 LTS:
+
+```
+2025-06-17T23:47:08.878061+02:00 wschrep-zenbook python[9817]: /usr/local/bin/cpufreqctl.auto-cpufreq: line 99: echo: write error: Device or resource busy
+```
+When unplugging power it stops. Luckily thereby the battery is not drained. Still I'd like it not to spam my syslog with errors whenever I charge. Is there some config setting we can alter to make this stop?
+
+I tried running this:
+```
+cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors 
+performance powersave
+```
+
+This is my current config in /etc/auto-cpufreq.conf:
+```
+# settings for when connected to a power source
+[charger]
+# see available governors by running: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+# preferred governor.
+governor = performance
+
+# turbo boost setting. possible values: always, auto, never
+turbo = auto
+
+# settings for when using battery power
+[battery]
+# see available governors by running: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+# preferred governor
+governor = powersave
+
+# turbo boost setting. possible values: always, auto, never
+turbo = never
+```
+So for now I'll just set the charger config to also be powersave. That will likely fix that spamming of errors in syslog. However I'd like to have performance working when charging...
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>w-A-L-L-e:</strong></p>
+                    <p>Ok this might help others. Just not use performance (but do allow turbo on charger) and the errors don't happen anymore:
+```
+# settings for when connected to a power source
+[charger]
+# see available governors by running: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+# preferred governor.
+# governor = performance # -> activating this spams syslog with errors
+governor = powersave
+
+# turbo boost setting. possible values: always, auto, never
+turbo = auto
+
+# settings for when using battery power
+[battery]
+# see available governors by running: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+# preferred governor
+governor = powersave
+
+# turbo boost setting. possible values: always, auto, never
+turbo = never
+```
+Not ideal but better than my syslog being spammed and my laptop was already fast enough in powersave mode anyway (better battery life is most important to me nowadays...).
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>I cannot reproduce this and have not been able to for quite some time now. That being said, I pushed a change to the `log-spam-fix` branch that should in theory fix this for those who are experiencing it. It basically just takes any errors and throws them out.
+
+Can somebody who has this problem pull the change and see if it fixes it for them? Thanks
+
+https://github.com/AdnanHodzic/auto-cpufreq/tree/log-spam-fix</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>nephariouz:</strong></p>
+                    <p>That fixed it for me. Thanks</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

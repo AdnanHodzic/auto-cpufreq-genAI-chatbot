@@ -1,0 +1,67 @@
+
+        <html>
+        <head>
+            <title>Issue #869: [Bug] KeyError prevents frequency settings from being applied</title>
+        </head>
+        <body>
+            <h1>[Bug] KeyError prevents frequency settings from being applied</h1>
+            <p><strong>Issue #869</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+It works, but it doesn't apply my frequency settings.
+My configuration file can be seen [here](https://wiki.archlinux.org/title/User:0xMrRobot/Alienware_m16_R1#CPU_frequency_scaling).
+
+---
+
+### Error output:
+```
+$ sudo systemctl status auto-cpufreq.service
+auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux
+     Loaded: loaded (/usr/lib/systemd/system/auto-cpufreq.service; enabled; preset: disabled)
+     Active: active (running) since Wed 2025-08-06 11:09:11 -03; 4min 48s ago
+ Invocation: eaf652cc03ea4946adf74d09629e644e
+   Main PID: 1167 (auto-cpufreq)
+      Tasks: 2 (limit: 37844)
+     Memory: 74.3M (peak: 82.7M)
+        CPU: 791ms
+     CGroup: /system.slice/auto-cpufreq.service
+             └─1167 /usr/bin/python /usr/bin/auto-cpufreq --daemon
+
+ago 06 11:09:13 alienware auto-cpufreq[1167]:   File "/usr/lib/python3.13/site-packages/auto_cpufreq/core.py", line 770, in set_autofreq
+ago 06 11:09:13 alienware auto-cpufreq[1167]:     set_performance()
+ago 06 11:09:13 alienware auto-cpufreq[1167]:     ~~~~~~~~~~~~~~~^^
+ago 06 11:09:13 alienware auto-cpufreq[1167]:   File "/usr/lib/python3.13/site-packages/auto_cpufreq/core.py", line 669, in set_performance
+ago 06 11:09:13 alienware auto-cpufreq[1167]:     set_frequencies()
+ago 06 11:09:13 alienware auto-cpufreq[1167]:     ~~~~~~~~~~~~~~~^^
+ago 06 11:09:13 alienware auto-cpufreq[1167]:   File "/usr/lib/python3.13/site-packages/auto_cpufreq/core.py", line 494, in set_frequencies
+ago 06 11:09:13 alienware auto-cpufreq[1167]:     print(f"Invalid value for '{freq_type}': {frequency[freq_type]['value']}")
+ago 06 11:09:13 alienware auto-cpufreq[1167]:                                               ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+ago 06 11:09:13 alienware auto-cpufreq[1167]: KeyError: 'value'
+```
+---
+
+### System information: Arch Linux, using the AUR package
+
+Add/paste output of:
+
+```
+$ sudo auto-cpufreq --debug
+```
+Output can be read [here](https://0x0.st/8hVF.txt).
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+The expected behaviour is the CPU frequency not going over the limits that are defined. Currently they aren't enforced.
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,114 @@
+
+        <html>
+        <head>
+            <title>Issue #861: Uninstall instructions</title>
+        </head>
+        <body>
+            <h1>Uninstall instructions</h1>
+            <p><strong>Issue #861</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I installed auto-cpufreq to test by cloning the repo and running this:
+
+```
+git clone https://github.com/AdnanHodzic/auto-cpufreq.git
+cd auto-cpufreq && sudo ./auto-cpufreq-installer
+```
+
+Now I want to uninstall it, but I couldn't find instructions on how to do that. I managed to remove the daemon, but I want to revert all changes the installer made to my system. I couldn't find instructions or a script that does that. How can I do that?
+
+### System information:
+
+Add/paste output of:
+
+```
+ sudo auto-cpufreq --debug     
+
+-------------------------------- Battery Info ---------------------------------
+
+battery count = 1
+BAT0 start threshold = b'75\n'
+BAT0 stop threshold = b'80\n'
+
+-------------------------------------------------------------------------------
+
+Linux distro: Fedora Linux 42 Workstation Edition
+Linux kernel: 6.14.6-300.fc42.x86_64
+Processor: Intel(R) Core(TM) Ultra 7 165H
+Cores: 22
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1400 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      0.0%        38 °C       400 MHz
+CPU1      2.0%        38 °C      1500 MHz
+CPU2      0.0%        38 °C      1996 MHz
+CPU3      1.0%        37 °C      2000 MHz
+CPU4      1.0%        37 °C       400 MHz
+CPU5      0.0%        38 °C      2000 MHz
+CPU6      2.0%        38 °C      1901 MHz
+CPU7      1.0%        38 °C      1997 MHz
+CPU8      0.0%        37 °C      2005 MHz
+CPU9      0.0%        37 °C       400 MHz
+CPU10      2.9%        36 °C       400 MHz
+CPU11      0.0%        36 °C       400 MHz
+CPU12      0.0%        38 °C       400 MHz
+CPU13      0.0%        38 °C       955 MHz
+CPU14      0.0%        37 °C      1000 MHz
+CPU15      0.0%        37 °C       400 MHz
+CPU16      0.0%        37 °C       400 MHz
+CPU17      0.0%        36 °C       400 MHz
+CPU18      0.0%        36 °C       984 MHz
+CPU19      0.0%        37 °C       400 MHz
+CPU20      0.0%        43 °C       400 MHz
+CPU21      0.0%        43 °C       400 MHz
+
+CPU fan speed: 2111 RPM
+
+auto-cpufreq version: 2.6.0
+
+Python: 3.13.5
+psutil package: 7.0.0
+platform package: 1.0.8
+click package: 8.2.1
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.14 %
+
+Total CPU usage: 1.1 %
+Total system load: 0.45
+Average temp. of all cores: 38.00 °C 
+
+Currently using: performance governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>This question was asked multiple times, and if you use [auto-cpufreq genAI chatbot you can get an answer to it](https://foolcontrol.org/?p=4903). 
+
+If you want to explicitly add these instructions to the project README, please [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+If you want me or any of the other maintainers to help you, do not  ignore issue template when opening a new issue! Which you did, hence making this issue invalid, closing. Feel free to re-open this issue once you properly filled out requested fields.
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

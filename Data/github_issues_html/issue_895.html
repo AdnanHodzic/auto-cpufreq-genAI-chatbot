@@ -1,0 +1,42 @@
+
+        <html>
+        <head>
+            <title>Issue #895: feat: allow users to specify battery device in config</title>
+        </head>
+        <body>
+            <h1>feat: allow users to specify battery device in config</h1>
+            <p><strong>Issue #895</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Prior, there was no way for users encountering incorrect battery detection via `get_battery_path()` had no option to manually set the desired battery. On my Minisforum V3 tablet I have 3 devices listed in `/sys/class/power_supply/`. The battery detection was selecting the device that resulted in the battery status never changing, and the percentage to always show as 0%. These changes allow the user to specify, via the config, a device from `/sys/class/power_supply` they wish to have auto-cpufreq use. This is done by:
+
+1. Adding `battery_device = {some batt}` as a valid setting in the config file
+2. Adding an if statement to `get_battery_path()` to check for the config value above and return the user set device's path if it is a valid device</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@PurpleWazard anything to add from your side before I merge these changes?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>Looks good to me 👍</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Looks good to me 👍
+
+Thanks confirming, because it also LGTM from my side.
+
+Thank you for your contribution, @cayubweeums, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases). 
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

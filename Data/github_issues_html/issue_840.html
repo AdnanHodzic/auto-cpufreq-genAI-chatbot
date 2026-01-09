@@ -1,0 +1,177 @@
+
+        <html>
+        <head>
+            <title>Issue #840: system_info.py cannot find the current power_now value for a power supply</title>
+        </head>
+        <body>
+            <h1>system_info.py cannot find the current power_now value for a power supply</h1>
+            <p><strong>Issue #840</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Error output:
+```text
+auto-cpufreq --stats
+
+Using settings defined in /etc/auto-cpufreq.conf file
+
+----------------------------------- Warning -----------------------------------
+
+Detected you are running a TLP service!
+This daemon might interfere with auto-cpufreq which can lead to unexpected results.
+We strongly encourage you to remove TLP unless you really know what you are doing.
+press Enter to continue or Ctrl + c to exit...
+Traceback (most recent call last):
+  File "/usr/bin/auto-cpufreq", line 8, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/usr/lib/python3.13/site-packages/click/core.py", line 1161, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/site-packages/click/core.py", line 1082, in main
+    rv = self.invoke(ctx)
+  File "/usr/lib/python3.13/site-packages/click/core.py", line 1443, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/site-packages/click/core.py", line 788, in invoke
+    return __callback(*args, **kwargs)
+  File "/usr/lib/python3.13/site-packages/auto_cpufreq/bin/auto_cpufreq.py", line 236, in main
+    monitor.run()
+    ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/site-packages/auto_cpufreq/modules/system_monitor.py", line 297, in run
+    self.loop.run()
+    ~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/site-packages/urwid/event_loop/main_loop.py", line 337, in run
+    self._run()
+    ~~~~~~~~~^^
+  File "/usr/lib/python3.13/site-packages/urwid/event_loop/main_loop.py", line 439, in _run
+    self.event_loop.run()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/site-packages/urwid/event_loop/select_loop.py", line 182, in run
+    self._loop()
+    ~~~~~~~~~~^^
+  File "/usr/lib/python3.13/site-packages/urwid/event_loop/select_loop.py", line 224, in _loop
+    alarm_callback()
+    ~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/site-packages/urwid/event_loop/main_loop.py", line 218, in cb
+    callback(self, user_data)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/site-packages/auto_cpufreq/modules/system_monitor.py", line 98, in update
+    report: SystemReport = system_info.generate_system_report()
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/site-packages/auto_cpufreq/modules/system_info.py", line 333, in generate_system_report
+    battery_info=self.battery_info(),
+                 ~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/site-packages/auto_cpufreq/modules/system_info.py", line 263, in battery_info
+    energy_rate: str | None = read_file(
+                              ~~~~~~~~~^
+        f"{POWER_SUPPLY_DIR}{supply}/power_now"
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/usr/lib/python3.13/site-packages/auto_cpufreq/modules/system_info.py", line 221, in read_file
+    return f.read().strip()
+           ~~~~~~^^
+OSError: [Errno 19] No such device
+```
+---
+
+### System information:
+
+```
+Using settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux rolling n/a
+Linux kernel: 6.14.2-arch1-1
+Processor: 12th Gen Intel(R) Core(TM) i7-1255U
+Cores: 12
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1700 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      2.0%        35 °C      1316 MHz
+CPU1      0.0%        35 °C       400 MHz
+CPU2      1.0%        37 °C       518 MHz
+CPU3      0.0%        37 °C       400 MHz
+CPU4      2.0%        36 °C      1450 MHz
+CPU5      1.0%        36 °C       400 MHz
+CPU6      1.0%        36 °C      1701 MHz
+CPU7      3.0%        36 °C      1700 MHz
+CPU8      2.0%        33 °C       400 MHz
+CPU9      0.0%        33 °C      1520 MHz
+CPU10      0.0%        33 °C       400 MHz
+CPU11      0.0%        33 °C       400 MHz
+
+CPU fan speed: 0 RPM
+
+auto-cpufreq version: Version         : 2.6.0-1
+
+Python: 3.13.2
+psutil package: 7.0.0
+platform package: 1.0.8
+click package: 8.1.8
+distro package: 1.9.0
+
+Computer type: Convertible
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.3 %
+
+Total CPU usage: 1.2 %
+Total system load: 2.11
+Average temp. of all cores: 35.00 °C 
+
+Currently using: performance governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+```
+### What's the issue?
+
+When testing the new release of `auto-cpufreq` to release to the AUR, I have noted that when running `auto-cpufreq --stats`, it does not work as intended, since it crashes, which is very clearly not intended.
+
+Within the file `auto_cpufreq/modules/system_info.py`, it tries to find the statistic located at `{POWER_SUPPLY_DIR}{supply}/power_now`, which expands to `/sys/class/power_supply/[DEVICE]/power_now`, which doesn't exist for neither my mouse nor my charger. However, the code seems to handle the charger, but not the mouse. When I unplug both devices, it still errors out, which is quite counter-intuitive, even after restarting `auto-cpufreq`. My belief is that the code does not correctly handle the mains device, and thinks it is a battery, even when it is not. Note that the mains device remains there, even when unplugged.
+
+I believe this stems from the refactoring from the commit https://github.com/AdnanHodzic/auto-cpufreq/commit/081dbda79c3ea9adf9dc2436d3bdbbae993c80ab, since this command worked fine before this commit from my testing.
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>so let me get this straight. this worked fine for you before #810 ? 
+
+and for our information what devices do you have in `/sys/class/power_supply/` while plugged in and your mouse.
+
+-thx
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Tamir-K:</strong></p>
+                    <p>I'm stumped. No matter what I do, I can't replicate this issue. Whenever I unplug and plug back my mouse, it just gets a new entry with an incremented ID.
+
+I suspect the issue might be related to the mouse device entry persisting even after the device is unplugged. You could check if another entry is created when the device is plugged back in—it's possible the rogue entry isn't actively being used at all.
+
+The OSError appears to map to the Linux ENODEV error code, as described in the [Python errno documentation](https://docs.python.org/3/library/errno.html). This seems like expected behavior when a device entry remains in sysfs despite the physical device being unavailable.
+
+Since sysfs is RAM-based, restarting your computer should clear the issue. That said, I'm not an expert, so take this with a grain of salt.
+
+Regarding error handling, I believe adding OSError to the except block for read_file should be safe. However, treating a missing device the same way as a missing stat on an available device might not be ideal.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

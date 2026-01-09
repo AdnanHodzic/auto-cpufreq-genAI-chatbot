@@ -1,0 +1,139 @@
+
+        <html>
+        <head>
+            <title>Issue #893: GUI doesn't launch under EndeavourOS</title>
+        </head>
+        <body>
+            <h1>GUI doesn't launch under EndeavourOS</h1>
+            <p><strong>Issue #893</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+#### Before submitting an issue, it is strongly recommended to use the **[auto-cpufreq-genAI-chatbot](https://foolcontrol.org/?p=4903)** to get an immediate answer to your question.
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted?  yes
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)? I used the AUR
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)? It's not related
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)? It's not related, the program and the cli works fine
+
+### Error output:
+```text
+Add/paste error output in case of failed installation or other failing component
+```
+That's the interesting part, there's no output, auto-cpufreq-gtk just doesn't launch with exit code 1
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+auto-cpufreq --debug
+```
+-------------------------------------------------------------------------------
+
+Linux distro: EndeavourOS rolling rolling
+Linux kernel: 6.17.5-arch1-1
+Processor: 13th Gen Intel(R) Core(TM) i7-13620H
+Cores: 16
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2400 MHz
+CPU min frequency: 400 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0      1.0%        35 °C       680 MHz
+CPU1      0.0%        35 °C       400 MHz
+CPU2      3.0%        37 °C       491 MHz
+CPU3      0.0%        37 °C       400 MHz
+CPU4      3.0%        35 °C       475 MHz
+CPU5      0.0%        35 °C       400 MHz
+CPU6      2.0%        35 °C       664 MHz
+CPU7      0.0%        35 °C       400 MHz
+CPU8      0.0%        35 °C       704 MHz
+CPU9      0.0%        35 °C       400 MHz
+CPU10      0.0%        37 °C       400 MHz
+CPU11      0.0%        37 °C       400 MHz
+CPU12      2.0%        40 °C       400 MHz
+CPU13      1.0%        40 °C      1700 MHz
+CPU14      2.0%        40 °C       400 MHz
+CPU15      0.0%        40 °C       400 MHz
+
+auto-cpufreq version:
+
+Python: 3.13.7
+psutil package: 7.1.1
+platform package: 1.0.8
+click package: 8.2.1
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.28 %
+
+Total CPU usage: 2.6 %
+Total system load: 0.66
+Average temp. of all cores: 38.00 °C
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+The program and the cli interface works fine, thank you for your work, but the GUI doesn't launch, I've gotten it to launch through the terminal using  "env -i XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR DBUS_SESSION_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS auto-cpufreq-gtk" (suggested by chatgpt) but I don't know why it doesn't without it. Maybe because I'm using wayland?
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>sacredeanne:</strong></p>
+                    <p>I've worked around it by modifying the .desktop file to use 'env -i XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR auto-cpufreq-gtk', but still wanted to report it nonetheless.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I've worked around it by modifying the .desktop file to use 'env -i XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR auto-cpufreq-gtk', but still wanted to report it nonetheless.
+
+Good to hear, please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+It would be great to have these changes as part of `master` branch.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>sacredeanne:</strong></p>
+                    <p>I don't know what the issue is or how to fix the issue itself because I don't get error output just the exit code 1, but I can make a pull request to add it to the troubleshooting section of the readme.md</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>That also sounds like a good idea to me.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>sacredeanne:</strong></p>
+                    <p>Created pull request, closing this issue.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Issue fixed as part of #896, and [workaround can be found in auto-cpufreq readme](https://github.com/AdnanHodzic/auto-cpufreq/#:~:text=Q%3A%20If%20auto%2Dcpufreq%2Dgtk%20doesn%27t%20launch%20with%20exit%20code%201%20(Workaround)). </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

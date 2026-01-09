@@ -65,6 +65,143 @@ If you want to change e.g CPU governor state in Linux, you need sudo/root permis
 I can't find exact discussions now (which are somewhere in issues), but that's why auto-cpufreq won't ask you for root for actions where it's not needed. For example, you can run `auto-cpufreq --stats` (without sudo) as it's not making any actions and is just printing information.</p>
                 </div>
             
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ekasprzak:</strong></p>
+                    <p>Hi @AdnanHodzic, do you know a way to disable asking for password ONLY when using auto-cpufreq GUI?
+I added /usr/local/bin/auto-cpufreq to sudoers and can change governor using CLI without a password, but GUI still asks for it.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>What happens if you add `/usr/local/bin/auto-cpufreq-gtk` to sudoers, as that's where GUI binary is coming from.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> What happens if you add `/usr/local/bin/auto-cpufreq-gtk` to sudoers, as that's where GUI binary is coming from.
+
+@ekasprzak @Heavygrass Besides this ^ can you please pull the latest changes, I think part of your problem might've been resolved with #903 merge, if that's the case would like to add it as such to release notes.
+
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>developpeur-php:</strong></p>
+                    <p>> > What happens if you add `/usr/local/bin/auto-cpufreq-gtk` to sudoers, as that's where GUI binary is coming from.
+> 
+> [@ekasprzak](https://github.com/ekasprzak) [@Heavygrass](https://github.com/Heavygrass) Besides this ^ can you please pull the latest changes, I think part of your problem might've been resolved with [#903](https://github.com/AdnanHodzic/auto-cpufreq/pull/903) merge, if that's the case would like to add it as such to release notes.
+
+I don't think my changes have an impact on this issue; my code just fixed an aesthetic problem.
+
+If I understand correctly, the author of this issue wants to be able to switch modes without having to enter their password each time, like is the case with GNOME, for example.
+
+When I have the time, I will take a look.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> What happens if you add `/usr/local/bin/auto-cpufreq-gtk` to sudoers, as that's where GUI binary is coming from.
+
+@developpeur-php I think my suggestion should address it. But waiting for confirmation from @ekasprzak & @Heavygrass  </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ekasprzak:</strong></p>
+                    <p>As @developpeur-php stated, pulling latest change doesn't affect this issue/feat request.
+
+> What happens if you add `/usr/local/bin/auto-cpufreq-gtk` to sudoers, as that's where GUI binary is coming from.
+
+Yes, that kind of helps (I didn't think about it before, I thought the GUI runs classic cli command in the background), so adding -gtk into sudoers makes that when gui is run via CMD & sudo then yes, it works, so I can change the governor without typing a password.
+
+But, this makes that -gtk needs to be run cia cmd with sudo, I think this request exists to make it easier, so that running GUI via menu (not CMD --> sudo -gtk) would just work.
+For now, I just changed my menu entry for -gtk to run using sudo and it works great, so thank you @AdnanHodzic for the suggestion!
+
+Just it would be nice if there was a way that works out of the box (right now I guess I will need to modify my menu entry every time there is a change with the GUI?
+
+But yeah, via some small customization it's possible to achieve changing the governor without typing pass every time, so it's already nice, thanks again!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>developpeur-php:</strong></p>
+                    <p>So i read the code to get a sense of how the program works.
+
+Below is a simplified explanation of what i understood and the solution i propose.
+
+You have the main program, _auto-cpufreq_: serves both as a _daemon_ and as a _cli_. The _daemon_ code and the _cli_ code are in the same binary. It's like opening the same program twice to do two different things.
+
+Then there is _auto-cpufreq-gtk_, the graphical interface, which runs _auto-cpufreq_ commands according to the user’s choices.
+
+When you change modes via the _gui_ or the _cli_, _auto-cpufreq_ updates the following root-owned files: _/opt/auto-cpufreq/override.pickle_ (for the mode) and _/opt/auto-cpufreq/turbo-override.pickle_ (for turbo mode). That is why sudo is required for every change.
+
+### Conclusion
+
+In my opinion, there is a software architecture problem.
+We need sudo for every operation because the user has access to a single _auto-cpufreq_ program designed both as a _daemon_ and as a _cli_.
+
+### Proposed solution
+
+sudo should only be required during installation or updates.
+
+I therefore propose splitting the components into three programs:
+- auto-cpufreq-cli
+- auto-cpufreq-gtk
+- auto-cpufreq-daemon
+
+Operational flow would be:
+1. The user has a configuration file, _~/.config/auto-cpufreq_ for example, writable by the user and readable by the _daemon_.
+2. The user selects modes via _auto-cpufreq-cli_ or _auto-cpufreq-gtk_, which modifies _~/.config/auto-cpufreq_.
+3. _auto-cpufreq-daemon_ is notified of the change and applies it to the system.
+
+This will make the code cleaner and easier to maintain, but it will require a substantial refactor.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Heavygrass:</strong></p>
+                    <p>How/what modifies `/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor`?
+And `/sys/devices/system/cpu/cpu*/cpufreq/energy_performance_preference`?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Heavygrass:</strong></p>
+                    <p>> [@ekasprzak](https://github.com/ekasprzak) [@Heavygrass](https://github.com/Heavygrass) Besides this ^ can you please pull the latest changes
+
+I've never built auto-cpufreq yet sorry (simply use automatic update). If there's a build for Ubuntu Cinnamon 24.04 I'm happy to test it.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>developpeur-php:</strong></p>
+                    <p>> How/what modifies `/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor`? And `/sys/devices/system/cpu/cpu*/cpufreq/energy_performance_preference`?
+
+A file named _cpufreqctl.sh_ in the project is installed as _cpufreqctl.auto-cpufreq_ in _/usr/local/bin_.
+_auto-cpufreq_ uses _cpufreqctl.auto-cpufreq_ to modify _/sys/devices/system/cpu/cpuX/cpufreq/scaling_governor_ and _/sys/devices/system/cpu/cpuX/cpufreq/energy_performance_preference_, make no sense to me 🤔.
+But why are you asking?
+
+> > [@ekasprzak](https://github.com/ekasprzak) [@Heavygrass](https://github.com/Heavygrass) Besides this ^ can you please pull the latest changes
+> 
+> I've never built auto-cpufreq yet sorry (simply use automatic update). If there's a build for Ubuntu Cinnamon 24.04 I'm happy to test it.
+
+Just download the source ZIP from GitHub, go to the project folder, run `sudo ./auto-cpufreq-installer`, and type i to install or r to remove it's that simple 🙂.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> > How/what modifies `/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor`? And `/sys/devices/system/cpu/cpu*/cpufreq/energy_performance_preference`?
+> 
+> A file named _cpufreqctl.sh_ in the project is installed as _cpufreqctl.auto-cpufreq_ in _/usr/local/bin_. _auto-cpufreq_ uses _cpufreqctl.auto-cpufreq_ to modify _/sys/devices/system/cpu/cpuX/cpufreq/scaling_governor_ and _/sys/devices/system/cpu/cpuX/cpufreq/energy_performance_preference_, make no sense to me 🤔. But why are you asking?
+
+@developpeur-php I think @Heavygrass  is asking this because you'll need sudo permissions to edit these files. 
+
+Otherwise, if you have better way to do this and as you [proposed it](https://github.com/AdnanHodzic/auto-cpufreq/issues/812#issuecomment-3554852275), please go ahead and contribute to the project 🙂 You already made some great contributions, so please keep them coming.
+
+Btw, [auto-cpufreq genAI chatbot](https://foolcontrol.org/?p=4903) can you be your friend if you have questions like "what is cpufreqctl.sh used for?" give it a try 😉
+
+<img width="677" height="790" alt="Image" src="https://github.com/user-attachments/assets/f772c213-1ccb-409a-87d4-1c625597c101" />
+
+</p>
+                </div>
+            
             </div>
         </body>
         </html>

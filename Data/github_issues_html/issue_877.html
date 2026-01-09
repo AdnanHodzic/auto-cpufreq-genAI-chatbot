@@ -1,0 +1,64 @@
+
+        <html>
+        <head>
+            <title>Issue #877: [Bug] GUI completely ignores DE "text scaling factor". GUI text is very small on HD screen (Cinnamon)</title>
+        </head>
+        <body>
+            <h1>[Bug] GUI completely ignores DE "text scaling factor". GUI text is very small on HD screen (Cinnamon)</h1>
+            <p><strong>Issue #877</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>#### Before submitting an issue, it is strongly recommended to use the **[auto-cpufreq-genAI-chatbot](https://foolcontrol.org/?p=4903)** to get an immediate answer to your question.
+
+### Have you tried? Yes
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? Yes
+-
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)? N/A
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)? This is a GUI issue
+- 
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)? Suggestions have nothing to do with GUI
+
+### Error output:
+N/A
+
+### System information:
+
+Add/paste output of:
+This bug is solely about GUI font size, and has nothing to do with the daemon.
+Linux distro: Ubuntu 24.04 Noble Numbat                                                                         
+Linux kernel: 6.8.0-79-generic
+
+auto-cpufreq version: 2.6.0
+
+Python: 3.12.3
+psutil package: 6.0.0
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+Cinnamon 6.0.4
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+In Cinnamon menu choose "Font Selection" -> under "Font settings" set "text scaling factor" to 1.5 (or more).
+Observe the font size in GUI remains the same (small), while the font size in all the other windows significantly increases.
+I believe auto-cpufreq is the only GUI that did not respect "text scaling factor" in Cinnamon (at least on my setup).
+Especially on HD laptop screen (or higher resolution on smaller screen sizes) it makes it very small font in auto-cpufreq GUI, which is very hard to read.
+
+Expected: GUI should adjust font size wrt to the "text scaling factor" in Cinnamon.
+Thank you.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>What if you [change font-size ](https://github.com/AdnanHodzic/auto-cpufreq/blob/d7941e848cf1c68ca505b5640499e15b267bb25f/scripts/style.css#L3)to something bigger, then re-install auto-cpufreq with auto-cpufreq-installer and auto-cpufreq --install?
+
+Ideally font could be increased by `ctrl + +` but unfortunately this is currently not possible.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

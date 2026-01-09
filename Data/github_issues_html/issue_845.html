@@ -1,0 +1,207 @@
+
+        <html>
+        <head>
+            <title>Issue #845: Stay in battery mode even when charging</title>
+        </head>
+        <body>
+            <h1>Stay in battery mode even when charging</h1>
+            <p><strong>Issue #845</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hi,
+
+First of all thank you for your auto-cpufreq tool.
+I have a problem getting it to work.
+When my computer is charging, the battery configuration is always applied.
+I placed the configuration file in /etc but nothing changes.
+My laptop is a CLEVO NS50MU.
+
+Thank you for your help.
+
+
+### Error output:
+```text
+No error output
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+auto-cpufreq --debug
+
+Using settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------------------------------------------------------
+
+Linux distro: Fedora Linux 42 Workstation Edition
+Linux kernel: 6.14.6-300.fc42.x86_64
+Processor: 11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2800 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      4.0%        40 °C       768 MHz
+CPU1      4.9%        42 °C       542 MHz
+CPU2      4.0%        38 °C      1300 MHz
+CPU3      0.0%        39 °C       400 MHz
+CPU4      3.9%        40 °C       400 MHz
+CPU5      0.0%        42 °C       400 MHz
+CPU6      1.0%        38 °C      1300 MHz
+CPU7      5.9%        39 °C      1300 MHz
+
+auto-cpufreq version: 2.6.0
+
+Python: 3.13.3
+psutil package: 7.0.0
+platform package: 1.0.8
+click package: 8.2.0
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.07 %
+
+Total CPU usage: 1.4 %
+Total system load: 0.34
+Average temp. of all cores: 39.00 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@jack5766 what happens if you don't use the configuration file and simply delete it? As by default auto-cpufreq makes automated decisions for you. For reference see [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/?tab=readme-ov-file#configuring-auto-cpufreq).
+
+@PurpleWazard any comments from your side if it's related to battery threshold.
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>jack5766:</strong></p>
+                    <p>Hi,
+If I don't use the configuration file, the problem remains the same.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>zenzer0s:</strong></p>
+                    <p>try to disable intel pstate and check they might be conflicated
+
+give a try to install from git version 
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>neut:</strong></p>
+                    <p>This might be due to battery charging settings. By design it currently only checks charge charge or discharge state, not actually ac power state. Therefore if you are on AC but not charging, the performance mode won't change. It will suggest you to change but does not actually do it.
+
+The fast workaround is It can be overridden in **./auto_cpufreq/core.py**. Simply change this
+
+```
+def charging():
+    """
+    get charge state: is battery charging or discharging
+    """
+    # sort it so AC is 'always' first
+    power_supplies = sorted(os.listdir(Path(POWER_SUPPLY_DIR)))
+    POWER_SUPPLY_IGNORELIST = get_power_supply_ignore_list()
+
+    # check if we found power supplies. on a desktop these are not found and we assume we are on a powercable.
+    if len(power_supplies) == 0: return True # nothing found, so nothing to check
+
+    # we found some power supplies, lets check their state
+    for supply in power_supplies:
+        # Check if supply is in ignore list, if found in ignore list, skip it.
+        if any(item in supply for item in POWER_SUPPLY_IGNORELIST): continue
+
+        power_supply_type_path = Path(POWER_SUPPLY_DIR + supply + "/type")
+        if not power_supply_type_path.exists(): continue
+        with open(power_supply_type_path) as f: supply_type = f.read()[:-1]
+
+        if supply_type == "Mains":
+            # we found an AC
+            power_supply_online_path = Path(POWER_SUPPLY_DIR + supply + "/online")
+            if not power_supply_online_path.exists(): continue
+            with open(power_supply_online_path) as f:
+                if int(f.read()[:-1]) == 1: return True # we are definitely charging
+        elif supply_type == "Battery":
+            # we found a battery, check if its being discharged
+            power_supply_status_path = Path(POWER_SUPPLY_DIR + supply + "/status")
+            if not power_supply_status_path.exists(): continue
+            with open(power_supply_status_path) as f:
+                # we found a discharging battery
+                if str(f.read()[:-1]) == "Discharging": return False
+
+    return True # we cannot determine discharging state, assume we are on powercable
+```
+
+into this:
+
+```
+def charging():
+    """
+    get charge state: is battery charging or discharging
+    """
+    # sort it so AC is 'always' first
+    power_supplies = sorted(os.listdir(Path(POWER_SUPPLY_DIR)))
+    POWER_SUPPLY_IGNORELIST = get_power_supply_ignore_list()
+
+    # check if we found power supplies. on a desktop these are not found and we assume we are on a powercable.
+    if len(power_supplies) == 0: return True # nothing found, so nothing to check
+
+    # we found some power supplies, lets check their state
+    for supply in power_supplies:
+        # Check if supply is in ignore list, if found in ignore list, skip it.
+        if any(item in supply for item in POWER_SUPPLY_IGNORELIST): continue
+
+        power_supply_type_path = Path(POWER_SUPPLY_DIR + supply + "/type")
+        if not power_supply_type_path.exists(): continue
+        with open(power_supply_type_path) as f: supply_type = f.read()[:-1]
+
+        if supply_type == "Mains":
+            # we found an AC.
+            return True # Workaround to force different mode
+            #power_supply_online_path = Path(POWER_SUPPLY_DIR + supply + "/online")
+            #if not power_supply_online_path.exists(): continue
+            #with open(power_supply_online_path) as f:
+            #    if int(f.read()[:-1]) == 1: return True # we are definitely charging
+        elif supply_type == "Battery":
+            # we found a battery, check if its being discharged
+            power_supply_status_path = Path(POWER_SUPPLY_DIR + supply + "/status")
+            if not power_supply_status_path.exists(): continue
+            with open(power_supply_status_path) as f:
+                # we found a discharging battery
+                if str(f.read()[:-1]) == "Discharging": return False
+
+    return True # we cannot determine discharging state, assume we are on powercable"
+```
+
+This is a dirty fix. Imho the right fix is to rename some of the functions because the expected behavior is based on AC state, not charging state.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

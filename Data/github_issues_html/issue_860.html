@@ -1,0 +1,120 @@
+
+        <html>
+        <head>
+            <title>Issue #860: auto-cpufreq-gtk loads/uses 100% 1 full core in Cinnamon alone</title>
+        </head>
+        <body>
+            <h1>auto-cpufreq-gtk loads/uses 100% 1 full core in Cinnamon alone</h1>
+            <p><strong>Issue #860</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+Yes
+
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+N/A
+
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+Yes
+- 
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+Yes
+
+### Error output:
+```text
+N/A
+```
+---
+
+### System information:
+
+```
+-------------------------------- Battery Info ---------------------------------                                  
+                                                                                                                 
+battery count = 1                                                                                                
+BAT0 start threshold = b'0\n'                                                                                    
+BAT0 stop threshold = b'85\n'                                                                                    
+                                                                                                                 
+-------------------------------------------------------------------------------
+                            
+Linux distro: Ubuntu 24.04 Noble Numbat                                                                          
+Linux kernel: 6.8.0-58-generic
+Processor: Intel(R) Core(TM) i5-3320M CPU @ 2.60GHz
+Cores: 4
+Architecture: x86_64
+Driver: intel_cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3300 MHz
+CPU min frequency: 1200 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0      5.0%        90 °C      3093 MHz
+CPU1     97.0%        90 °C      3093 MHz
+CPU2      3.0%        87 °C      3093 MHz
+CPU3      3.0%        87 °C      3093 MHz
+
+CPU fan speed: 4518 RPM
+
+auto-cpufreq version: 2.6.0
+
+Python: 3.12.3
+psutil package: 6.0.0
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.26 %
+
+Total CPU usage: 26.7 %
+Total system load: 1.84
+Average temp. of all cores: 89.00 °C 
+
+Currently using: performance governor
+Currently turbo boost is: on
+```
+
+
+---
+
+auto-cpufreq-gtk loads **100%** 1 full core in Cinnamon 6.0.4 alone.
+The load doesn't go away.
+
+ps shows its run as:
+`/opt/auto-cpufreq/venv/bin/python /opt/auto-cpufreq/venv/bin/auto-cpufreq-gtk`
+
+![Image](https://github.com/user-attachments/assets/1592f175-8565-4bbf-b42e-ae6166a7b529)
+
+auto-cpufreq-gtk process state `Rl`.
+
+Restarting Cinnamon didn't fix the issue.
+
+Thank you.
+
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Heavygrass:</strong></p>
+                    <p>This especially happens all the time on resume from **hibernate** (no matter how long I wait after the resume).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>MangoIV:</strong></p>
+                    <p>Happens here as well. </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

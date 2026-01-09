@@ -1,0 +1,108 @@
+
+        <html>
+        <head>
+            <title>Issue #870: [FR] Option for automatically suspend/hibernate if CPU Temperature becomes too high (to avoid hard poweroff/data loss)</title>
+        </head>
+        <body>
+            <h1>[FR] Option for automatically suspend/hibernate if CPU Temperature becomes too high (to avoid hard poweroff/data loss)</h1>
+            <p><strong>Issue #870</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hi,
+Generally if CPU temperature becomes too high in order to avoid CPU damage BIOS forces **hard poweroff**, which can easily **cause a data loss**.
+
+It would be much safer if auto-cpufreq monitored CPU temperature and would either **automatically suspend/hibernate** PC or offer a user to do so (or rather give a user N seconds opportunity to cancel  suspend/hibernate).
+Suspend/hibernate would allow CPU to cool down.
+
+An intermediate step could be also automatically switching to `powersave` mode when temperature gets close to the threshold temperature. E.g. a number of phones do this automatically when hot.
+Suspend/hibernate might still be unavoidable though.
+Clearly suspend/hibernate are way better than **hard poweroff** when its imminent.
+
+A user need to be able to set a temperature threshold of cause.
+Simply raising temperature threshold isn't a solution as HW can overheat and got damaged.
+Thanks.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>While I think this is an interesting idea, I'm not sure it fits as part of auto-cpufreq for a couple of reasons. 
+
+CPUs should not be getting so hot that they are forcing the machine to be shutdown on a regular basis. I personally have never had a machine of mine shutdown due to high CPU temps. If a user is experiencing this problem, they need to be fixing their CPU cooling immediately, not relying on software to prevent their computer from hard shutting down.
+
+> An intermediate step could be also automatically switching to powersave mode when temperature gets close to the threshold temperature
+
+I do like this idea better, however CPUs are already designed to throttle at certain temps so I believe this is also out of the scope of what auto-cpufreq aims to do.
+
+@AdnanHodzic do you have any thoughts on this?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Heavygrass:</strong></p>
+                    <p>> CPUs should not be getting so hot that they are forcing the machine to be shutdown on a regular basis. 
+
+Nobody is talking about "shutdown on a regular basis". Even 1-2 cases of overheat  and forced shutdown can cause loosing data (especially likely if there's some encryption used).
+
+> I personally have never had a machine of mine shutdown due to high CPU temps.
+
+Have you lived in a hot area and worked outside under the sun?
+A black laptop case can get really hot simply from the sun, outside temp etc.
+And try playing youtube 1080p+ on an old laptop w/o HW acceleration at the same time. Even clean and working cooling system can give up. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Heavygrass:</strong></p>
+                    <p>> however CPUs are already designed to throttle at certain temps
+
+I doubt CPU can throttle to as low frequency/voltage as `powersave` mode (at least in general). Possibly auto-cpufreq could go to even lower frequency/voltage than `powersave` mode if still high temperature.
+Also user has little to no control over CPU throttling algorithm.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I also had one of my old laptops turn off, Intel/AMD/etc literally have a point once certain temperature is reached (IIRC it was above 120°C) it'll be instructed to shut down.
+
+>An intermediate step could be also automatically switching to powersave mode when temperature gets close to the threshold temperature 
+
+I also like this idea, or maybe simply turn off turbo, or clock the CPU's in case temp goes above >= defined threshold. As in case CPU is still needed at that point you still want it to be able to finish whatever you're busy with instead of slowing then when you need it the most.
+
+This could even "open  thedoor" to be able to set to never allow CPU to go above certain temperature, no matter the condition, e.g 90°C.
+
+I would merge this feature if it was implemented in a smart way. Either way, if anyone wants to give it a try in implementing this functionality, please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>@Heavygrass id recommend you look into https://github.com/erpalma/throttled/tree/master
+
+its what i use with auto-cpufreq. it supports undervolting and throttle limits.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Heavygrass:</strong></p>
+                    <p>@PurpleWazard Do you use  erpalma for undervolting specifically?
+On Intel or AMD CPU?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>@Heavygrass it's called throttled and I use it on intel it possiblly works AMD. I don't have AMD so I cant tell you.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Heavygrass:</strong></p>
+                    <p>Another example on recent laptop:
+I have recent Lenovo ryzen laptop with junky cooling system that can't seem to cool continuously more than 25Wt.
+But APU can draw up to 54Wt.
+It easily gets to 100C even under moderate load.
+Whole cooling system was recently replaced.
+Clearly bad engineering decision, but Lenovo does NOT CARE.
+When it throttles it can throttle immediately to 400Mhz (10 times) for a significant period of time.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

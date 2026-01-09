@@ -1,0 +1,39 @@
+
+        <html>
+        <head>
+            <title>Issue #890: [FR] add upgrade option to auto-cpufreq-installer</title>
+        </head>
+        <body>
+            <h1>[FR] add upgrade option to auto-cpufreq-installer</h1>
+            <p><strong>Issue #890</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>It would be nice if [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#auto-cpufreq-installer) also supported updating/upgrading the service, so same logic can be used for installing & upgrading the service.
+
+Or is the `--install` option already idempotent and could be used for upgrading?</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>This functionality is already there with [--update flag ](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#update---auto-cpufreq-update).
+
+It could be improved tho, as it was added long time ago as part of #535 (Closes: #341) and hasn't been touched since then. 
+
+During development and testing things along pulling latest changes, to be on safe side I'll usually just do:
+
+```
+./auto-cpufreq-installer --remove
+git pull
+./auto-cpufreq-installer --install
+sudo auto-cpufreq --install
+```
+
+If you feel like improving it please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

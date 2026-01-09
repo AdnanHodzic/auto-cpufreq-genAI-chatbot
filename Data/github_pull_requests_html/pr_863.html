@@ -1,0 +1,76 @@
+
+        <html>
+        <head>
+            <title>Pull Request #863: Adding gnome extension to README</title>
+        </head>
+        <body>
+            <h1>Adding gnome extension to README</h1>
+            <p><strong>Pull Request #863</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Adding reference to the Gnome Extension in the README with a link to the Gnome extension store as discussed in https://github.com/AdnanHodzic/auto-cpufreq/issues/729 </p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Great to see this PR! After thoroughly reviewing it, these are my observations and some items that need to be addressed before it can be merged. 
+
+I'm aiming for a new release soon, and I'd love to reference this change as part of it, plus planning on making a new YouTube video talking about all the updates. It's been a while since my last one for the [2.0 release](https://youtu.be/SPGpkZ0AZVU?si=JnhWgqu-CxDcMdcj) and many new features have been implemented.
+
+**Observations and potential new ToDo's:**
+
+**1: Auto-cpufreq Switcher name on GNOME extensions:**
+
+It's a minor thing, but I would call it "auto-cpufreq Profile (governor) Switcher". Or you can leave out governor part.
+
+As part of description on GNOME extensions I would even reference that it does governor switch as explained on: [Configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#configuring-auto-cpufreq) README page.
+
+**2: Enabling extension without having auto-cpufreq daemon installed**
+
+If extension is enabled without auto-cpufreq daemon being installed. Where system is still using GNOME Power Profiles daemon. Extension will show up in GNOME system menu (quick settings) but if toggled it won't do anything. For example I tried switching from balanced to performance.
+
+Extension pop-up will eventually show up (3-5 minutes) saying e.g: "Failed to switch to performance governor".
+
+This could lead to a lot of confusion and I guess same thing will happen if user is using `--live` mode?
+
+It would be ideal if `auto-cpufreq --daemon` is not installed, pop-up would showup and user would be instructed that they need to enable daemon first, e.g: "Please do this by running: `auto-cpufreq --install` or for more info refer to: https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#install---auto-cpufreq-daemon"
+
+ **3: "CPU Governor" name in GNOME system menu**
+ 
+ To avoid confusing this with [same setting for "GNOME Power Profiles daemon"](https://x.com/fooctrl/status/1467469508373884933), I would suggest to call it "auto-cpufreq CPU Governor" or something like that. 
+ 
+ **4: If you have auto-cpufreq.conf file, extension will not ignore it and will conflict with it**
+
+If user has [auto-cpufreq.conf file configured](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#4-auto-cpufreq-config-file), it would be ideal if extension would show in pop-up "auto-cpufreq config file detected, please remove otherwise it's conflicting with this auto-cpufreq Profile switcher extension" 
+
+I had a config file configured, and extension still tried to switch governors, but of course these 2 were conflicting with each other.
+
+**5: It takes too long for extension to change governor profiles**
+
+Currently switching governor profiles is taking too long. 
+
+For example, I used `auto-cpufreq --monitor` to track changes and I would switch from Balanced to Performance, I see right command will be triggered and after I enter my root password do this action ... initially nothing happens. 
+
+If I were a new user, I wouldn't have been as patient, would think the extension just doesn't work, and I would delete it.
+
+Eventually a pop-up will say that it successfully changed the governor, and governor will be changed but this will take at least 3-5 minutes in my case and I think this is the biggest problem.
+
+I also tried rebooting, but same behavior persisted. 
+
+Hope this feedback assists in refining this extension :) 
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@EBendinelli do you have any updates regarding some of the things I mentioned here? As I'm planning to create a new auto-cpufreq release soon, and would love to also have this PR/GNOME extension mentioned. 
+
+Thanks!</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

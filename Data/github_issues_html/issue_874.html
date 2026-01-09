@@ -1,0 +1,45 @@
+
+        <html>
+        <head>
+            <title>Issue #874: Turbo Boost is not working properly on AMD Cpu</title>
+        </head>
+        <body>
+            <h1>Turbo Boost is not working properly on AMD Cpu</h1>
+            <p><strong>Issue #874</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+yes to all
+
+### Error output:
+Also using 'acpi-cpufreq' doesn't helps at all in terms of performance boost on AC ,instead it just kills the meaning of auto-cpufreq on battery , so using 'acpi-cpufreq' is not an option.
+
+### System information:
+
+<img width="945" height="506" alt="Image" src="https://github.com/user-attachments/assets/f735e41b-4aa8-415a-a99a-767c92b82172" />
+
+
+<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/dcdb2967-31d5-4177-8d91-c9bcda243bb8" />
+
+---
+Alright so here is the thing, my laptop on Windows can go up to 4.5 GHz on all cores at 86 degrees, (my cooling is a bit modified) and normally as far as I know my CPU should be able to go up to 3.8GHZ, but in my case things are a bit different and as you can see I am compiling a kernel and in auto-cpufreq I cannot go over 3.2 GHz and it slows things much and you can see that temperatures are also not high at all, so it's not an issue about thermals. I'm trying to set frequencies manually but all I can do is setting minimum frequency to 'max' value and also fastfetch shows that it can go up to 4.8 GHz but wheter I am benchmarking using geekbench with single core or multi-core it doesn't exceeds 3.2Ghz</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Yuzuru10:</strong></p>
+                    <p>stupidly enough disabling and enabling amdpstate did the trick</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

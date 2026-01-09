@@ -1,0 +1,73 @@
+
+        <html>
+        <head>
+            <title>Issue #908: Error on NixOS `line 211: awk: command not found`</title>
+        </head>
+        <body>
+            <h1>Error on NixOS `line 211: awk: command not found`</h1>
+            <p><strong>Issue #908</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### System Details Report
+- **Hardware Model:**                              Framework Laptop 13 _AMD Ryzen AI 300 Series_
+- **Memory:**                                      32.0 GiB
+- **Processor:**                                   AMD Ryzen™ AI 9 HX 370 w/ Radeon™ 890M × 24
+- **Graphics:**                                    AMD Radeon™ 890M Graphics
+- **Disk Capacity:**                               2.0 TB
+- **Firmware Version:**                            03.05
+- **OS Name:**                                     NixOS 26.05 (Yarara)
+- **OS Build:**                                    
+- **OS Type:**                                     64-bit
+- **GNOME Version:**                               49
+- **Windowing System:**                            Wayland
+- **Kernel Version:**                              Linux 6.18.2
+
+
+### Error output:
+```text
+freq-wrapped: line 211: awk: command not found\n'
+```
+
+---
+
+When using the flake on NixOS, and running `sudo systemctl status auto-cpufreq` I got the startup error that `awk` is not found. The above is a (clipped) output of the error because that command for some reason has a terrible buffered viewer with no linewrap.
+
+The fix is to change [this line](https://github.com/AdnanHodzic/auto-cpufreq/blob/2e5c725be0a7da2c749a345e09f3df3b9ef8c209/nix/module.nix#L43) from
+
+```nix
+        path = with pkgs; [ bash coreutils ];
+```
+
+to
+
+```nix
+        path = with pkgs; [ bash coreutils gawk ];
+```
+
+---
+
+I applied the fix [on my local machine](https://github.com/AndreiCravtov/nixos-config/blob/43e14cd7befb76fd69bd79963f5af17e6463a022/modules/nixos/laptop.nix#L67) and the problem is fixed.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Nice catch, could you please give it a try and [contribute these changes to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+Thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AndreiCravtov:</strong></p>
+                    <p>> Nice catch, could you please give it a try and [contribute these changes to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+> 
+> Thanks!
+
+Done, [here](https://github.com/AdnanHodzic/auto-cpufreq/pull/910).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

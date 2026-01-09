@@ -1,0 +1,98 @@
+
+        <html>
+        <head>
+            <title>Discussion #831: [SP9] Thermal/Power setup to prevent throttling</title>
+        </head>
+        <body>
+            <h1>[SP9] Thermal/Power setup to prevent throttling</h1>
+            <p><strong>Discussion #831</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hello all!
+
+For weeks, I have been struggling to optimize my Surface Pro 9 with Linux. I have been having constant issues running CPU-intensive games and programs, as it would run the SP9 too hot and throttle the MHz to 400. I believe now I have finally solved it and have a configuration that, for me, no longer throttles the CPU and keeps temps at a normal level.
+
+I am running Arch Linux with KDE Plasma, and I have the following necessary packages:
+- powerdevil
+- power-profiles-daemon
+- thermald
+- stress
+- surface-control (AUR)
+
+My "benchmark" is the game _Oxygen Not Included_. Not extremely intensive, but one that I have specifically experiencing throttling issues in. I also use the "stress" command in combination, to further test the power configs I have.
+
+The packages "powerdevil" and "power-profiles-daemon" provide the Power Profile slider on the taskbar, which I wanted to actually work as intended. I was having issues with the Power Save mode as it would lower the CPU speeds (and therefore temps), but it also for whatever reason lowers the fan speed too. I still can't figure out why - and having too high of a thermald temperature makes the Power Save mode useless. Anyway, my config strikes a good balance of performance and temperature to keep the CPU from throttling, in both Power Save and Performance modes.
+
+Firstly, for Thermald. You want to remove the "--adaptive" flag from the systemd service. I'm not an expert, and I've been reading mixed messages on whether or not this flag ignores the custom config. But for me, yes it seemed to ignore it. "--adaptive" prevents the "rapl_controller" cooling device from actually working when used in the Thermald config.
+The file is `/usr/lib/systemd/system/thermald.service`. Remove "--adaptive" from Line 9 (ExecStart=).
+
+In `/etc/thermald/`, there are two files. Here are my configs:
+
+
+**thermal-conf.xml**:
+```
+<?xml version="1.0"?>
+<ThermalConfiguration>
+<Platform>
+    <Name>Surface Pro 9</Name>
+    <ProductName>*</ProductName>
+    <Preference>QUIET</Preference>
+    <ThermalZones>
+        <ThermalZone>
+            <Type>cpu</Type>
+            <TripPoints>
+                <TripPoint>
+                    <SensorType>x86_pkg_temp</SensorType>
+                    <Temperature>65000</Temperature>
+                    <type>passive</type>
+                    <ControlType>SEQUENTIAL</ControlType>
+                    <CoolingDevice>
+                        <index>1</index>
+                        <type>rapl_controller</type>
+                        <influence>100</influence>
+                        <SamplingPeriod>10</SamplingPeriod>
+                    </CoolingDevice>
+                </TripPoint>
+            </TripPoints>
+        </ThermalZone>
+    </ThermalZones>
+</Platform>
+</ThermalConfiguration>
+```
+
+
+**thermal-cpu-cdev-order.xml**:
+```
+<CoolingDeviceOrder>
+	<CoolingDevice>rapl_controller</CoolingDevice>
+	<CoolingDevice>intel_pstate</CoolingDevice>
+	<CoolingDevice>intel_powerclamp</CoolingDevice>
+	<CoolingDevice>cpufreq</CoolingDevice>
+	<CoolingDevice>Processor</CoolingDevice>
+</CoolingDeviceOrder>
+```
+
+
+I keep the temperature at 65000, which strikes a very good balance. I have tested 50k, 55k, 60k, 65k, and 70k.
+70k gets the best performance, BUT after a few minutes it will throttle the CPU to 400MHz. I don't think the SP9 fans are able to keep up with it, and rapl_controller may not be effective enough.
+65k is a tiny bit less performant, but it has not throttled for me at all. I've been running the game _Oxygen Not Included_, as well as the command `stress -c 12` for at least an hour straight now, and there has been no throttling.
+
+Without stress, ONI runs at ~50 fps. Temps confidently remain below 65. With stress, ~20-25 fps. Temps go a little over, but stay below 70. Obviously wouldn't be using stress when actually playing, though. This is also without ANY programs like gamemode or gamescope running - so you can likely net even better performance when using those.
+
+The Power Save mode also works, and has not throttled on me yet. Game performance is terrible, but that is to be expected.
+
+Obviously this is a slightly specific and anecdotal solution, but I wanted to share it in hopes it helps anyone else experiencing similar issues with a Surface Pro 9. </p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>beneeno:</strong></p>
+                    <p>Wow, my apologies. I have no idea how I ended up here, but this was meant to be posted to the linux-surface discussions.
+My bad !!</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

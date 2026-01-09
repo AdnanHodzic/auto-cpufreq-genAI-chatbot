@@ -1,0 +1,42 @@
+
+        <html>
+        <head>
+            <title>Pull Request #887: Fixed python packages names in installing script for OpenSuse Tumbleweed</title>
+        </head>
+        <body>
+            <h1>Fixed python packages names in installing script for OpenSuse Tumbleweed</h1>
+            <p><strong>Pull Request #887</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I changed the python packages names in the zypper command on opensuse tumbleweed in installer. Of course it is rather cosmetic change, because even python3 package is not proper, zypper automatically choose python313. Please let me know if preffered version is 3.11 (for me it works with 3.13). Sorry for not creating separate branch, but I am unexperienced a little bit yet. I ran this script once again and all packages names was proper.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Note to myself: Closes #886
+
+Regarding the changes you made, I don't use OpenSuse, but how this works in other distros is that you have a "meta" package that always points and installs latest python version.
+
+So. e.g `zypper install -y python3` should always install the latest version and by saying `zypper install -y python313` you're explicitly pinning it to Python 3.13. This way in future it'll break for someone when future OpenSuse release doesn't have Python 3.13 but only e.g: Python 3.15
+
+I think the issue was created in #808 where it's explicitly pinning `python311-setuptools` to 3.11. What would happen if you changed all the proposed lines to something like:
+
+```
+zypper install -y python3 python3-pip python3-setuptools python3-devel gcc dmidecode gobject-introspection-devel python3-cairo-devel gtk3 gtk3-devel
+```
+
+Does that fix your problem?
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Mozartwa123:</strong></p>
+                    <p>I think I made a bad think. I did not realize, it was intended (because - it works, it installs the latest stable version of python, but I thought at first it was error) and probably wasted your time. I will close this pull request.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

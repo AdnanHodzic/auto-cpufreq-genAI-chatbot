@@ -1,0 +1,47 @@
+
+        <html>
+        <head>
+            <title>Issue #839: [Feature Request] Bluetooth Control, via configuration.</title>
+        </head>
+        <body>
+            <h1>[Feature Request] Bluetooth Control, via configuration.</h1>
+            <p><strong>Issue #839</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>[bluetooth_boot_off](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#bluetooth_boot_off)
+```
+    Turn off Bluetooth on boot (only)! Can be turned on any time later on.
+```
+[bluetooth_boot_on](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#bluetooth_boot_on)
+```
+    Turn on Bluetooth on boot.
+```
+
+
+Instead of having these as command line arguments, It would be nice if it could be enabled and disabled via the config file.
+```
+   bluetooth_boot=on/off
+```
+
+I am on NixOS using flakes, and I don't really know how I would do that in a declarative way.
+@shadeyg56 
+
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@scientiac since I'm limited with available time to do this myself and [project is looking for contributors](https://github.com/AdnanHodzic/auto-cpufreq#looking-for-developers-and-co-maintainers) if you or anyone else wants to give it a try in implementing this functionality, please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>Can't this just be done with an init system? e.g. systemd and a Bluetooth focused application?</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

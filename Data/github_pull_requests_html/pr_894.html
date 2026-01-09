@@ -1,0 +1,48 @@
+
+        <html>
+        <head>
+            <title>Pull Request #894: fix: display actual EPP and EPB values in stats output</title>
+        </head>
+        <body>
+            <h1>fix: display actual EPP and EPB values in stats output</h1>
+            <p><strong>Pull Request #894</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Previously, the stats output was showing values from the config file instead of actual system values. This fixes the issue by:
+
+1. Reading EPP directly from /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_preference
+2. Reading EPB from /sys/devices/system/cpu/cpu0/power/energy_perf_bias and converting numeric values to string representations
+
+This ensures that the displayed values reflect the actual current system settings rather than the configured values.
+I am new in PR culture, so any suggestion are welcome.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>RafaeruAybu:</strong></p>
+                    <p>I am still not sure, if this can be applied to all systems with different cpus and OS. I noticed that GTK version works good. It works by reading auto_cpufreq_stats_file.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Thank you for PR, welcome to open source and let's work on getting these changes merged :) 
+
+I left a couple of comments and I also [asked on auto-cpufreq discord community](https://discord.com/channels/1158239366251020361/1158239367337349164/1433012250482053152) for others to test these changes to make sure they work every architecture. 
+
+Rest of things were raised by Copilot, nothing major but would be good if they were addressed.
+
+Also, to resolve any ambiguity: 
+>Previously, the stats output was showing values from the config file instead of actual system values. This fixes the issue by ...
+
+Could you please tell me how do your stats output differ before and with this PR? As besides seeing `EPP setting: performance` and `Setting to use: "balance_performance" EPB` it looks the same to me as before.
+
+
+
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

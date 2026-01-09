@@ -25,6 +25,154 @@ If you or anyone else wants to give it a try in implementing this functionality,
                     <p>I will have a look at this.</p>
                 </div>
             
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>EBendinelli:</strong></p>
+                    <p>Hey there, I decided to give that a go and created a gnome shell extension as it seemed the easiest way for me to get what I wanted. I know it doesn't exactly respond to what's requested here but it might do the trick for some people: https://github.com/EBendinelli/auto-cpufreq-switcher
+
+DISCLAIMER: This is my first gnome-extension so expect issues!
+
+Two notes:
+- Password is requested on change, just like with the GUI
+- The way I"m getting the current governor is a quick hacky (running `timeout 1s auto-cpufreq --stats` and parsing the output), it would be nice to have a  a `--status`` that simply returns the current governor.
+
+Hope that's useful to someone.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@EBendinelli this is amazing!
+
+On first look extension is definitively rough around the edges and some things could be improved, but in a nutshell, it works! For 4 years [I had the same idea so it's great to see someone actually did it.](https://github.com/AdnanHodzic/auto-cpufreq/discussions/312)
+
+> In its current form auto-cpufreq is very stable and besides implementing [existing feature requests](https://github.com/AdnanHodzic/auto-cpufreq/issues?q=is%3Aissue+feature+is%3Aopen), next big feature I would need help with is to have it implemented as a [GNOME extension](https://extensions.gnome.org/).
+
+Would you be interested in [creating a PR to work towards merging this with `master` branch?](https://github.com/AdnanHodzic/auto-cpufreq#code-contribution). This would be a great feature and something that would be a highlight of auto-cpufreq 3.0 release.
+
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>EBendinelli:</strong></p>
+                    <p>> definitively rough around the edges
+I didn't expect anything less after many years without coding haha! But glad to hear it works :)
+
+Happy to have a look into making a proper PR but you'll have to tell me how you envision the integration with the main codebase. 
+
+Do you see this integrated as an option to install/enable the extension? Something in the config? Or simply have the extension's code in this repo, publish on https://extensions.gnome.org/ and keep separate from the main app from a workflow perspective?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Happy to have a look into making a proper PR but you'll have to tell me how you envision the integration with the main codebase.
+
+Great!
+
+> Do you see this integrated as an option to install/enable the extension? 
+> Something in the config? Or simply have the extension's code in this repo, publish on https://extensions.gnome.org/ and keep separate from the main app from a workflow perspective?
+
+If need be we could have it as an additional flag which could install the extension. 
+
+But not sure if it would add any value, I think it would be better to simply have the extension published on https://extensions.gnome.org, as that would also simplify README changes. 
+
+Regarding the rest, we could simply add rest of the extension code in auto-cpufreq repo and put it into e.g "gnome-extension" dir. If there are a lot of changes from your side, I wouldn't mind give you collaborator access, so you could push changes without me having to approve every PR.
+
+In beginning, until extension is in state we want it in, all changes could be made on a separate branch before we merge it with `master`.
+
+Let me know, and if you want to discuss this more in detail I also pop up [auto-cpufreq Discord server](https://discord.gg/Sjauxtj6kH) from time to time. Otherwise Github also works fine :) 
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>EBendinelli:</strong></p>
+                    <p>So I've been daily driving this and so far so good. The only issue is I recently updated to 2.6.0 (was using 2.5.0) and the hack I was using to identify the governor on start doesn't work anymore (I was looking for the "Warning" keyword to distinguish between default/balanced and manually set governor).
+
+As far as I can tell right now there is no way to distinguish what governor is selected with the `--stats` command anymore. It returns the governor set, whether it was set by the user or the balanced/default mode.
+
+So I guess we may need a very simple `--status` command to get the status which this extension could use. With that I could also add some code to check the status at regular interval so that if the mode is switched from the GUI the extension updates its status (this currently doesn't work).
+
+If you want to give me so suggestions of where to look at, I could try and implement this. Also open to suggestions if you have a better idea !
+
+Also a note that in the GUI, discarding the password prompt when trying to switch to a different governor will result in the governor radio button being enabled (e.g: click powersave > click cancel on password prompt > powersave radio button is enabled).  </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>> So I guess we may need a very simple --status command to get the status which this extension could use. 
+
+There's a hidden flag `--get_state` that returns the current override the user has. Should be able to use that
+
+> Also a note that in the GUI, discarding the password prompt when trying to switch to a different governor will result in the governor radio button being enabled
+
+iirc this is just a visual bug that I never got around to fixing</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>JuanR4140:</strong></p>
+                    <p>@AdnanHodzic @EBendinelli Seeing as a solution is being worked on for GNOME, I decided to give it a try and do something of a tray icon for KDE Plasma. It's not perfect and has some small kinks that need to be worked out (possibly width/height sizing and mouse clicks outside the widget) but overall details some information from the log at a set 2.5s interval and can also override settings, similar to the GUI. Attached is an image of the widget (I couldn't find an icon file for auo-cpufreq so it's a placeholder) working. I haven't published the code either as it requires the folder/metadata to be named a specific way that I'm not sure would be best/approved by the team. Let me know your thoughts/suggestions, if it's any good, what should be changed, if everything should be changed, etc. Should this be looked into further, I'd like to be able to contribute to the process of getting things integrated right. Cheers!
+
+![Image](https://github.com/user-attachments/assets/696013bd-bf7f-4d69-a7af-ddc28c39d0f8)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>EBendinelli:</strong></p>
+                    <p>Using this bump to ask some questions. I've been daily driving the gnome extension for a while now and after fixing a few things it's now working as expected so I've started looking into merging with this repo.
+
+1. Do you want me to package and publish the extension on https://extensions.gnome.org/ or should it be done by the owner of this repo? It's a bit of a chicken and egg problem, if I write the doc saying to download the extension from the site it needs to be there but I don't really want to publish it with a link to my own repo. Although that's probably the easiest thing to do and we can replace the link later
+2. Another option for download would be to include a .zip file in this repo, either by including it in the gnome-extension folder or in the release file. Opinions are welcome
+
+For those willing to test I've packaged and put the extension here: https://github.com/EBendinelli/auto-cpufreq-switcher/releases/tag/v1.0-rc.1</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>JuanR4140:</strong></p>
+                    <p>For CLI installs through the auto-cpufreq-installer, would there be any issues with leaving that choice up to the user? Maybe you can detect what DE the user is in with the `$XDG_CURRENT_DESKTOP` variable and ask them if they'd like to install the extension. If they confirm, you can `cp` the extension from the folder to the right location and enable it. I think that would work for manual installation. For package managers though, that would have to be different. Just an idea..</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@JuanR4140 this looks great and it would be awesome if we could release both GNOME & KDE one as part of the same release. 
+
+> Attached is an image of the widget (I couldn't find an icon file for auo-cpufreq so it's a placeholder) working.
+
+I've attached auto-cpufreq icons, first one is the dark mode one (which I prefer as it works good for both), and the other one is "regular".
+
+<img width="512" height="512" alt="Image" src="https://github.com/user-attachments/assets/c5733a95-4990-4436-9095-2ed80a943432" />
+<img width="512" height="512" alt="Image" src="https://github.com/user-attachments/assets/05f48c15-7aa9-4502-9712-ac45ea144173" />
+
+@EBendinelli 
+
+>1. Do you want me to package and publish the extension on https://extensions.gnome.org/ or should it be done by the owner of this repo? It's a bit of a chicken and egg problem, if I write the doc saying to download the extension from the site it needs to be there but I don't really want to publish it with a link to my own repo. Although that's probably the easiest thing to do and we can replace the link later
+
+Think it would be the best to:
+
+> package and publish the extension on https://extensions.gnome.org
+
+As this way you can act independently and make necessary changes. If I can I can authorize that it's part of auto-cpufreq repo or however we could do this?
+
+> 2. Another option for download would be to include a .zip file in this repo, either by including it in the gnome-extension folder or in the release file. Opinions are welcome
+
+It wouldn't be bad to also have .zip as part of the [auto-cpufreq releases](https://github.com/AdnanHodzic/auto-cpufreq/releases). But again, auto-cpufreq releases aren't necessarily tied to its GNOME/KDE counter part, so we can as well skip it. Think having it on https://extensions.gnome.org would be the best.
+
+Btw, how would this work for KDE @JuanR4140 ?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Syncing in parts of [communication that happened on Discord](https://discord.com/channels/1158239366251020361/1158239367337349164/1390926233394483285).
+
+In summary, once it's all completed, I think it would the best to update README (somewhere towards the top) with something like:
+
+```
+### 🌐 Community Projects 
+
+If you're using auto‑cpufreq in desktop environments, you may find these community integrations helpful and useful:
+
+- GNOME Extension: [auto-cpufreq-gnome-extension](https://github.com/example/auto-cpufreq-gnome-extension)
+- KDE Widget: [auto-cpufreq-kde-widget](https://github.com/example/auto-cpufreq-kde-widget)
+```</p>
+                </div>
+            
             </div>
         </body>
         </html>

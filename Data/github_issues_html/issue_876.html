@@ -1,0 +1,99 @@
+
+        <html>
+        <head>
+            <title>Issue #876: [Feature] D-Bus Interface like PPD</title>
+        </head>
+        <body>
+            <h1>[Feature] D-Bus Interface like PPD</h1>
+            <p><strong>Issue #876</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>First of all, thank you for developing `auto-cpufreq` — it’s an excellent tool for dynamic CPU frequency scaling.  
+
+Currently, several desktop environments (DEs) provide a **power mode/slider integration** in their system tray or settings panels. These sliders usually work with `power-profiles-daemon` or `tuned-ppd`, allowing users to switch between modes such as *Performance*, *Balanced*, and *Power Saver*.  
+
+It would be great if `auto-cpufreq` could integrate with these power sliders across DEs.
+
+## Benefits
+- Unified user experience across desktop environments.  
+- Quick and intuitive switching between `auto-cpufreq` profiles without relying on CLI.  
+- Encourages wider adoption since many users prefer GUI-driven controls.  
+
+## Examples of DE Integration Points
+- **KDE Plasma** – System Tray Power Management Slider (via `powerdevil`).  
+- **GNOME** – Settings → Power Mode toggle (exposed via `power-profiles-daemon`).  
+- **XFCE** – Power Manager panel plugin.  
+- **Cinnamon / MATE / Budgie** – Power applets that already use PPD as backend.  
+
+## Possible Implementation Approaches
+- Allow `auto-cpufreq` to **expose its profiles via D-Bus**, making them visible to DEs in the same way as `power-profiles-daemon`.  
+- Provide an **optional compatibility layer** that lets DEs treat `auto-cpufreq` as if it were `power-profiles-daemon` or `tuned-ppd`.  
+- Offer a **configurable mapping** of `auto-cpufreq` modes to standard power profiles.  
+
+## References
+- KDE Plasma PowerDevil: [https://invent.kde.org/plasma/powerdevil](https://invent.kde.org/plasma/powerdevil)  
+- GNOME Power Profiles: [https://gitlab.freedesktop.org/upower/power-profiles-daemon](https://gitlab.freedesktop.org/upower/power-profiles-daemon)  
+
+---
+
+### **Feature Request Summary**
+Add integration between `auto-cpufreq` and desktop environment power sliders (KDE, GNOME, XFCE, etc.) by exposing profiles through a standard interface (e.g., D-Bus, PPD compatibility), similar to how `power-profiles-daemon` and `tuned-ppd` work. I just really like the look and feel of KDE's powerdevil
+
+<img width="440" height="150" alt="Image" src="https://github.com/user-attachments/assets/29349719-cd0e-4bc8-912b-855575a40b97" /></p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Thank you, much appreciated.
+
+Regarding your suggestion, I love it ☺️ [Especially since 2021](https://github.com/AdnanHodzic/auto-cpufreq/discussions/312#:~:text=In%20its%20current%20form%20auto%2Dcpufreq%20is%20very%20stable%20and%20besides%20implementing%20existing%20feature%20requests%2C%20next%20big%20feature%20I%20would%20need%20help%20with%20is%20to%20have%20it%20implemented%20as%20a%20GNOME%20extension.) I'm hoping someone with more experience in this, could contribute such functionality. 
+
+In meantime GNOME extension was crated and there's a PR for it #863, however at this point it's not quite where I would want it to be in before I merge it and endorse it from auto-cpufreq POV. 
+
+Regarding KDE, there was [some discussion about this on auto-cpufreq Discord community,](https://discord.com/channels/1158239366251020361/1158239367337349164/1390926233394483285), and @JuanR4140 was working on it as part of #729, but I'm not sure what's the latest status. 
+
+It would be ideal if 2 of you could perhaps join forces to make it happen? 
+
+As always, I encourage you to give it a try in implementing this functionality, please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Panda-Code-Master:</strong></p>
+                    <p>That sounds awesome! I’m not particularly experienced with building the implementation myself, but I’d love to help out with testing. I’m happy to contribute in any way I can to make sure everything works smoothly. Let me know if there’s anything specific you need tested! 😊</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>In that case I think it's the best if you reach out to @JuanR4140 :) </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>JuanR4140:</strong></p>
+                    <p>@Panda-Code-Master Hi! I'm currently working on a KDE widget for auto-cpufreq. It features a summary view of your cores/usage/temp/frequencies, fan speed, what settings you're on, and allows you to change them. 
+
+This might vary hardware to hardware, though (and there might be edge cases), which is why I want to test this before putting it on a repo. If you're willing to test this out on your machine, I'd really appreciate it! 
+
+Doing something related to PPD is something I want to look more into as it was the first idea I had before just creating a widget....</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Panda-Code-Master:</strong></p>
+                    <p>@JuanR4140 Sorry for the late reply
+ 
+> This might vary hardware to hardware, though (and there might be edge cases), which is why I want to test this before putting it on a repo. If you're willing to test this out on your machine, I'd really appreciate it!
+ 
+I would love to test it out, please let me know what needs to be done
+
+> Doing something related to PPD is something I want to look more into as it was the first idea I had before just creating a widget....
+
+Ya I thought of creating a widget but after pondering on it a little more I think it would be better to implement something like tuned-ppd as it would allow all DEs  that support power-profiles-daemon to take advantage of it</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

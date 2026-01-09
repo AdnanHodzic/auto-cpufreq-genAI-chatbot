@@ -1,0 +1,131 @@
+
+        <html>
+        <head>
+            <title>Issue #864: Problems accessing `/sys/devices/system/cpu/cpu*/power/energy_perf_bias` in snap package</title>
+        </head>
+        <body>
+            <h1>Problems accessing `/sys/devices/system/cpu/cpu*/power/energy_perf_bias` in snap package</h1>
+            <p><strong>Issue #864</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+Yes
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+N/A (installed from sbap package)
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+Yes
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+Yes
+
+### Error output:
+```log
+[12705.381644] audit: type=1400 audit(1752507453.970:24465): apparmor="DENIED" operation="open" class="file" profile="snap.auto-cpufreq.service" name="/sys/devices/system/cpu/cpu6/power/energy_perf_bias" pid=249250 comm="bash" requested_mask="wc" denied_mask="wc" fsuid=0 ouid=0
+[12705.383637] audit: type=1400 audit(1752507453.972:24466): apparmor="DENIED" operation="open" class="file" profile="snap.auto-cpufreq.service" name="/sys/devices/system/cpu/cpu7/power/energy_perf_bias" pid=249250 comm="bash" requested_mask="wc" denied_mask="wc" fsuid=0 ouid=0
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+-------------------------------------------------------------------------------
+
+Linux distro: KDE neon User Edition
+Linux kernel: 6.11.0-29-generic
+Processor: Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2800 MHz
+CPU min frequency: 800 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0      5.1%        63 °C      2799 MHz
+CPU1      6.1%        66 °C      2800 MHz
+CPU2      4.1%        60 °C      2800 MHz
+CPU3     10.7%        61 °C      2800 MHz
+CPU4      5.2%        63 °C      2800 MHz
+CPU5      6.1%        66 °C      2800 MHz
+CPU6      7.1%        60 °C      2800 MHz
+CPU7      6.9%        61 °C      2800 MHz
+
+CPU fan speed: 0 RPM
+
+auto-cpufreq version: (Snap) 2.6.0
+
+Python: 3.10.12
+psutil package: 7.0.0
+platform package: 1.0.8
+click package: 8.1.8
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.21 %
+
+Total CPU usage: 6.0 %
+Total system load: 1.14
+Average temp. of all cores: 63.00 °C
+
+Currently using: performance governor
+Currently turbo boost is: off
+
+```
+
+I receive a lot of outputs like the error in ouput section, I think the apparmor profile is wrong in the snap package, I try to modify it but I didn't make it.
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>If you want me or any of the other maintainers to help you, do not  ignore issue template when opening a new issue! If you didn't ignore it you would also see suggestion to [use auto-cpufreq-installer instead of Snap.](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#auto-cpufreq-installer).
+
+Ignoring it renders this issue invalid, closing. Feel free to re-open this issue once you properly filled out requested fields.
+
+
+Reference:
+
+### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+#### Before submitting an issue, it is strongly recommended to use the **[auto-cpufreq-genAI-chatbot](https://foolcontrol.org/?p=4903)** to get an immediate answer to your question.
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+### Error output:
+```text
+Add/paste error output in case of failed installation or other failing component
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+auto-cpufreq --debug
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behavior.
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

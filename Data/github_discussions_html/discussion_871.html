@@ -1,0 +1,68 @@
+
+        <html>
+        <head>
+            <title>Discussion #871: Adaptive profiling proposal</title>
+        </head>
+        <body>
+            <h1>Adaptive profiling proposal</h1>
+            <p><strong>Discussion #871</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>The main idea is to move beyond reactive automation. 
+The current `auto-cpufreq` system operates on a simple, deterministic model: it checks for a power source and monitors **global** system load, then adjusts the CPU profile accordingly.
+
+However, this reactive approach has a core limitation which is **it lacks context**. It can see *that* the system is busy, but it doesn't know *why*. Although it works well for what it's trying to do this leads to two problems:
+1.  For demanding applications like games or IDEs, the system only reacts *after* the load has already increased. This causes a perceptible delay before peak performance is available.
+2.  The system may waste energy by boosting performance for a background task that isn't time-sensitive, simply because it pushed the global CPU load over a static threshold.
+
+So I think there are some good benefits to transforming `auto-cpufreq` into a more intelligent system that understands application context.
+
+I was thinking about some ways to solve this and the best idea i've got is introducing a new layer of intelligence.
+
+To make it i thought of 4 stages:
+
+### 1
+
+The current system is "context-blind," only seeing global metrics (which is good most of the time but limits a lot what auto-cpufreq can see and act accordingly). Making a new observation engine will make us able to track the **foreground application**. It will collect per-application metrics (CPU usage, duration of high load) and store this history in a local database.
+
+### 2
+
+The current system relies on static, one-size-fits-all thresholds. An analysis module will process the collected data to learn which applications consistently demand high performance (like for example it will see that chromium is hungry with ram, that a game loves CPU etc...). By assigning a "performance score" based on historical usage, it will automatically identify which applications are important to the user's workflow and add them to a "learned high performance list."
+
+### 3
+
+The current system's reactive nature causes a lag before performance is delivered. This is where the new system is shining because when a user switches to an application on the "learned list," `auto-cpufreq` will **proactively** switch to a high-performance profile. It will not wait for the load to build. For all other applications, the system defaults to its standard, load-based behavior.
+
+### 4
+
+Of course a purely automated "black box" system is a mistake because it can make mistakes. The current manual configuration, while powerful, is static. This proposal combines the best of both worlds because the system learns and automates, but the user retains full transparency and control. A new GUI/CLI interface could allow the user to inspect the "Learned List," correct any mistakes (false positives), and manually add applications (with that it's possible to have community made profiles for example).
+
+---
+
+It seems to be a big thing to do but i'm ready to work on it. Not sure if I should make a PR or make my own fork as it changes a lot of thing. We can also do it gradually by introducing things slowly but surely. Anyway I'm open to discussion so don't hesitate to ask things or try to improve some idea.
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>carabistouflette:</strong></p>
+                    <p>Also I think this idea must be completely optional if implemented. By default the new system shouldn't be activated as the risk of false positives exists (and at the end some users already using auto-cpufreq may not want all of this).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>carabistouflette:</strong></p>
+                    <p>After some work there is a big problem which can't be really avoided in any way without doing black magic. We can't know what application is a foreground one agnosticly on Wayland. The whole idea relies on detecting what foreground apps are running but because of that there is no way to know it. My take on this subject is we don't really need to know if an app is a foreground one or not, we need to know if it's an important one. To know that we can detect what apps runs a while with high cpu loads (for example it could be a game, a browser...). To that we can add a behavioral classification engine (which sounds difficult but isn't really). For example this engine could detect if the app asks explicitly for real time priority (SCHED_FIFO or SCHED_RR) and this information could be used by the engine. Anyway I continue with my research I'm pretty close to find a solution which should be good enough.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>It could be done ... I see it working with [auto-cpufreq config file](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#4-auto-cpufreq-config-file). So you could add couple of processes, e.g "vscode, obs-studio" and potentially in combination with `nice` command, overrule "default/global" auto-cpufreq settings.
+
+Either way, please continue the research, if you come up with anything interesting give it a try in implementing this functionality, please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

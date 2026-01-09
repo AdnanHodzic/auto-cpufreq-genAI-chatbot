@@ -1,0 +1,43 @@
+
+        <html>
+        <head>
+            <title>Discussion #865: Experience with Framework 7040 models</title>
+        </head>
+        <body>
+            <h1>Experience with Framework 7040 models</h1>
+            <p><strong>Discussion #865</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hej, thanks for the amazing work! I was looking into auto-cpufreq since the early days, but the setup was a bit tedious compared to tlp/ppd. But since I am rocking NixOS now, things are different and I can try things out without a second thought!
+
+I am big [Framework](https://frame.work) fan and I was rocking the OG 11th gen version and upgraded the motherboard to the 7840, worked so far like a charm! Buuut, I wanted to try out auto-cpufreq but the result isn't really great... The battery drain is really high... I was wondering if it is a similar issue on the 7040 series as with [TLP](https://knowledgebase.frame.work/en_us/optimizing-ubuntu-battery-life-Sye_48Lg3):
+```markdown
+## PPD (power-profiles-daemon) (****AMD****)
+
+For Framework Laptop 13/16 AMD Ryzen™ 7040 Series configurations, 
+you will absolutely want to use power-profiles-daemon for the absolute best experience. 
+*Do NOT use TLP*.
+Without getting too detailed, there are things happening behind the scenes that require 
+PPD for the best experience for our Linux customers.
+```
+
+I explicitly disabled tlp and ppd in the services section, so they don't colide with auto-cpufreq.
+
+I am curious to hear about the experience of other users!</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Hey, sorry for such delayed reply. 
+
+Not sure what exactly seems to be the problem, as I don't have AMD hardware. My best suggestion would be to look through code and see could be going wrong.
+
+Also try restarting auto-cpufreq systemd service to make sure all changes are picked up after you disable ppd and tlp. Would also suggest playing with [auto-cpufreq config file ](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#4-auto-cpufreq-config-file)to see if you can make it work the way you want to.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

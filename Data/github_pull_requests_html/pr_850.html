@@ -1,0 +1,111 @@
+
+        <html>
+        <head>
+            <title>Pull Request #850: Bump requests from 2.32.3 to 2.32.4</title>
+        </head>
+        <body>
+            <h1>Bump requests from 2.32.3 to 2.32.4</h1>
+            <p><strong>Pull Request #850</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Bumps [requests](https://github.com/psf/requests) from 2.32.3 to 2.32.4.
+<details>
+<summary>Release notes</summary>
+<p><em>Sourced from <a href="https://github.com/psf/requests/releases">requests's releases</a>.</em></p>
+<blockquote>
+<h2>v2.32.4</h2>
+<h2>2.32.4 (2025-06-10)</h2>
+<p><strong>Security</strong></p>
+<ul>
+<li>CVE-2024-47081 Fixed an issue where a maliciously crafted URL and trusted
+environment will retrieve credentials for the wrong hostname/machine from a
+netrc file. (<a href="https://redirect.github.com/psf/requests/issues/6965">#6965</a>)</li>
+</ul>
+<p><strong>Improvements</strong></p>
+<ul>
+<li>Numerous documentation improvements</li>
+</ul>
+<p><strong>Deprecations</strong></p>
+<ul>
+<li>Added support for pypy 3.11 for Linux and macOS. (<a href="https://redirect.github.com/psf/requests/issues/6926">#6926</a>)</li>
+<li>Dropped support for pypy 3.9 following its end of support. (<a href="https://redirect.github.com/psf/requests/issues/6926">#6926</a>)</li>
+</ul>
+</blockquote>
+</details>
+<details>
+<summary>Changelog</summary>
+<p><em>Sourced from <a href="https://github.com/psf/requests/blob/main/HISTORY.md">requests's changelog</a>.</em></p>
+<blockquote>
+<h2>2.32.4 (2025-06-10)</h2>
+<p><strong>Security</strong></p>
+<ul>
+<li>CVE-2024-47081 Fixed an issue where a maliciously crafted URL and trusted
+environment will retrieve credentials for the wrong hostname/machine from a
+netrc file.</li>
+</ul>
+<p><strong>Improvements</strong></p>
+<ul>
+<li>Numerous documentation improvements</li>
+</ul>
+<p><strong>Deprecations</strong></p>
+<ul>
+<li>Added support for pypy 3.11 for Linux and macOS.</li>
+<li>Dropped support for pypy 3.9 following its end of support.</li>
+</ul>
+</blockquote>
+</details>
+<details>
+<summary>Commits</summary>
+<ul>
+<li><a href="https://github.com/psf/requests/commit/021dc729f0b71a3030cefdbec7fb57a0e80a6cfd"><code>021dc72</code></a> Polish up release tooling for last manual release</li>
+<li><a href="https://github.com/psf/requests/commit/821770e822a20a21b207b3907ea83878bda1d396"><code>821770e</code></a> Bump version and add release notes for v2.32.4</li>
+<li><a href="https://github.com/psf/requests/commit/59f8aa2adf1d3d06bcbf7ce6b13743a1639a5401"><code>59f8aa2</code></a> Add netrc file search information to authentication documentation (<a href="https://redirect.github.com/psf/requests/issues/6876">#6876</a>)</li>
+<li><a href="https://github.com/psf/requests/commit/5b4b64c3467fd7a3c03f91ee641aaa348b6bed3b"><code>5b4b64c</code></a> Add more tests to prevent regression of CVE 2024 47081</li>
+<li><a href="https://github.com/psf/requests/commit/7bc45877a86192af77645e156eb3744f95b47dae"><code>7bc4587</code></a> Add new test to check netrc auth leak (<a href="https://redirect.github.com/psf/requests/issues/6962">#6962</a>)</li>
+<li><a href="https://github.com/psf/requests/commit/96ba401c1296ab1dda74a2365ef36d88f7d144ef"><code>96ba401</code></a> Only use hostname to do netrc lookup instead of netloc</li>
+<li><a href="https://github.com/psf/requests/commit/7341690e842a23cf18ded0abd9229765fa88c4e2"><code>7341690</code></a> Merge pull request <a href="https://redirect.github.com/psf/requests/issues/6951">#6951</a> from tswast/patch-1</li>
+<li><a href="https://github.com/psf/requests/commit/6716d7c9f29df636643fa2489f98890216525cb0"><code>6716d7c</code></a> remove links</li>
+<li><a href="https://github.com/psf/requests/commit/a7e1c745dc23c18e836febd672416ed0c5d8d8ae"><code>a7e1c74</code></a> Update docs/conf.py</li>
+<li><a href="https://github.com/psf/requests/commit/c799b8167a13416833ad3b4f3298261a477e826f"><code>c799b81</code></a> docs: fix dead links to kenreitz.org</li>
+<li>Additional commits viewable in <a href="https://github.com/psf/requests/compare/v2.32.3...v2.32.4">compare view</a></li>
+</ul>
+</details>
+<br />
+
+
+[![Dependabot compatibility score](https://dependabot-badges.githubapp.com/badges/compatibility_score?dependency-name=requests&package-manager=pip&previous-version=2.32.3&new-version=2.32.4)](https://docs.github.com/en/github/managing-security-vulnerabilities/about-dependabot-security-updates#about-compatibility-scores)
+
+Dependabot will resolve any conflicts with this PR as long as you don't alter it yourself. You can also trigger a rebase manually by commenting `@dependabot rebase`.
+
+[//]: # (dependabot-automerge-start)
+[//]: # (dependabot-automerge-end)
+
+---
+
+<details>
+<summary>Dependabot commands and options</summary>
+<br />
+
+You can trigger Dependabot actions by commenting on this PR:
+- `@dependabot rebase` will rebase this PR
+- `@dependabot recreate` will recreate this PR, overwriting any edits that have been made to it
+- `@dependabot merge` will merge this PR after your CI passes on it
+- `@dependabot squash and merge` will squash and merge this PR after your CI passes on it
+- `@dependabot cancel merge` will cancel a previously requested merge and block automerging
+- `@dependabot reopen` will reopen this PR if it is closed
+- `@dependabot close` will close this PR and stop Dependabot recreating it. You can achieve the same result by closing it manually
+- `@dependabot show <dependency name> ignore conditions` will show all of the ignore conditions of the specified dependency
+- `@dependabot ignore this major version` will close this PR and stop Dependabot creating any more for this major version (unless you reopen the PR or upgrade to it yourself)
+- `@dependabot ignore this minor version` will close this PR and stop Dependabot creating any more for this minor version (unless you reopen the PR or upgrade to it yourself)
+- `@dependabot ignore this dependency` will close this PR and stop Dependabot creating any more for this dependency (unless you reopen the PR or upgrade to it yourself)
+You can disable automated security fix PRs for this repo from the [Security Alerts page](https://github.com/AdnanHodzic/auto-cpufreq/network/alerts).
+
+</details></p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+            </div>
+        </body>
+        </html>
+        

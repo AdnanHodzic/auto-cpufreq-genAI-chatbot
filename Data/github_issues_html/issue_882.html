@@ -1,0 +1,44 @@
+
+        <html>
+        <head>
+            <title>Issue #882: fix for asus_expertBook_charging_threshold</title>
+        </head>
+        <body>
+            <h1>fix for asus_expertBook_charging_threshold</h1>
+            <p><strong>Issue #882</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>My Asus Expertbook laptop use charge_control_end_threshold path instead of charge_stop_threshold
+i added charge_control_end_threshold path as a fallback path
+and i also add that path to system_info file.
+current implementation works with my laptop
+Please let me know if any changes are needed.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@PurpleWazard since you implemented baterry threshold feature, could you please give it a ✅️ from your side before I merge it?
+
+Thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>@AdnanHodzic @sgimres i left notes in the review.  i think that change made to `system_info.py` should be made its own PR to be reviewed.  its out of scope of just battery thresholds.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>sgimres:</strong></p>
+                    <p>My bad, my editor uses ruff to auto format python files.
+And as per your advice, I split this PR into two separate PRs.
+#883 
+#884 
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,62 @@
+
+        <html>
+        <head>
+            <title>Issue #886: Incorect python packages names on tumbleweed (installer needs update)</title>
+        </head>
+        <body>
+            <h1>Incorect python packages names on tumbleweed (installer needs update)</h1>
+            <p><strong>Issue #886</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>In the installation script there is a line for opensuse tumbleweed
+zypper install -y python3 python3-pip python311-setuptools python3-devel gcc dmidecode gobject-introspection-devel python3-cairo-devel gtk3 gtk3-devel
+
+But most python packages on opensuse tumbleweed requires precise python version, for example python313, instead of python3. So i searched for all packages like in line above and no all appeared (by the way instead of "pakiet" it should be package, i use polish version of tumbleweed, this is why this strange word appeared):
+
+mozartwa123@localhost:~> zypper search -x python3 python3-pip python311-setuptools python3-devel gcc dmidecode gobject-introspection-devel python3-cairo-devel gtk3 gtk3-devel
+
+S  | Name                        | Summary                                                          | Type
+---+-----------------------------+------------------------------------------------------------------+-------
+i  | dmidecode                   | DMI table decoder                                                | pakiet
+i+ | gcc                         | The system GNU C Compiler                                        | pakiet
+i+ | gobject-introspection-devel | GObject Introspection Development Files                          | pakiet
+i+ | gtk3-devel                  | Development files for the GTK+ toolkit library v3                | pakiet
+i+ | python311-setuptools        | Download, build, install, upgrade, and uninstall Python packages | pakiet
+
+Maybe packages name should be named like belove (unfortunately i did not find a correct substitution for gtk3)?
+
+mozartwa123@localhost:~> zypper search -x python313 python313-pip python311-setuptools python313-devel gcc dmidecode gobject-introspection-devel python311-cairo-devel gtk3 gtk3-devel
+
+S  | Name                        | Summary                                                           | Type
+---+-----------------------------+-------------------------------------------------------------------+-------
+i  | dmidecode                   | DMI table decoder                                                 | pakiet
+i+ | gcc                         | The system GNU C Compiler                                         | pakiet
+i+ | gobject-introspection-devel | GObject Introspection Development Files                           | pakiet
+i+ | gtk3-devel                  | Development files for the GTK+ toolkit library v3                 | pakiet
+i+ | python311-setuptools        | Download, build, install, upgrade, and uninstall Python packages  | pakiet
+i  | python313                   | Python 3 Interpreter                                              | pakiet
+i  | python313-devel             | Include Files and Libraries Mandatory for Building Python Modules | pakiet
+i  | python313-pip               | A Python package management system 
+
+Of course, zypper install python3 could cause installation python313, but what if some functionality needs python311 package?
+
+Maybe I should make a fork and pull request instead of issue, but I am afraid I would brake something.
+Sorry, if it is duplicate.
+Best regards, great job by the way!</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>For reference, similar PR was made in past as part of #808 which closed #805.
+
+> Maybe I should make a fork and pull request instead of issue, but I am afraid I would brake something.
+
+Please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

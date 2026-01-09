@@ -88,6 +88,22 @@ It shows that EPP is not supported by the system but i think my cpu (ryzen 9 590
                     <p>It's because you're using `acpi-cpufreq` as your scaling driver which doesn't make use of EPP. To learn more about the differences between `acpi-cpufreq`, `amd-pstate`, and `amd-pstate-epp`, visit the kernel docs [here](https://docs.kernel.org/admin-guide/pm/amd-pstate.html#amd-pstate-vs-acpi-cpufreq)</p>
                 </div>
             
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ftarlao:</strong></p>
+                    <p>I have quite similar issues and I confirm that using amd-pstate saved my day, BUT after understanding that **I need to set the ACTIVE** mode.
+Passive and Guided modes prevented in my case auto-cpufreq to work at all.
+So I suggest in case of problems to impose from grub: amd-pstate=active
+
+My cpu is: AMD Ryzen 5 5600H</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Some of this referenced on[ README in Troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq/?tab=readme-ov-file#troubleshooting). 
+
+If there's anything that can be improved, please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
             </div>
         </body>
         </html>

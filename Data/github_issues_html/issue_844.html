@@ -1,0 +1,277 @@
+
+        <html>
+        <head>
+            <title>Issue #844: Installation failure from auto-cpufreq-installer</title>
+        </head>
+        <body>
+            <h1>Installation failure from auto-cpufreq-installer</h1>
+            <p><strong>Issue #844</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Note: I visited the [auto-cpufreq-genAI-chatbot](https://foolcontrol.org/?p=4903), but I'm getting:
+```
+Looks like there’s a problem with this site
+
+https://foolcontrol.org/?p=4903 might have a temporary problem or it could have moved.
+
+Error code: 500 Internal Server Error
+
+    The site could be temporarily unavailable or too busy. Try again in a few moments.
+```
+
+### Have you tried?
+
+- [x] [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- [x] If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+
+I was trying this installation method because the Snap package was spewing syslog errors about AppArmor denying permissions, and I saw a thread that said this other install was preferred.
+
+### Error output:
+```text
+sudo ./auto-cpufreq-installer 
+
+─────────────────────────────────────────────────────────────────────────────────────────────── auto-cpufreq installer ───────────────────────────────────────────────────────────────────────────────────────────────
+
+Welcome to auto-cpufreq tool installer.
+
+Select a key [I]nstall/[R]emove or press ctrl+c to quit: i
+
+
+───────────────────────────────────────────────────────────────────────────────────────── Detected Debian based distribution ─────────────────────────────────────────────────────────────────────────────────────────
+
+
+──────────────────────────────────────────────────────────────────────────────────────────── Setting up Python environment ────────────────────────────────────────────────────────────────────────────────────────────
+
+Hit:1 https://packages.microsoft.com/repos/code stable InRelease
+Hit:2 https://updates.signal.org/desktop/apt xenial InRelease                     
+Hit:3 http://us.archive.ubuntu.com/ubuntu noble InRelease                         
+Hit:4 http://us.archive.ubuntu.com/ubuntu noble-updates InRelease            
+Hit:5 http://us.archive.ubuntu.com/ubuntu noble-backports InRelease          
+Hit:6 http://security.ubuntu.com/ubuntu noble-security InRelease             
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+1 package can be upgraded. Run 'apt list --upgradable' to see it.
+PyGObject version updated to ^3.50.0 in pyproject.toml
+libgirepository-2.0-dev needs to be installed for version trixie/sid
+---- 
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+python3-dev is already the newest version (3.12.3-0ubuntu2).
+python3-pip is already the newest version (24.0+dfsg-1ubuntu1.1).
+python3-venv is already the newest version (3.12.3-0ubuntu2).
+python3-setuptools is already the newest version (68.1.2-2ubuntu1.1).
+dmidecode is already the newest version (3.5-3ubuntu0.1).
+libgirepository-2.0-dev is already the newest version (2.80.0-6ubuntu3.2).
+libcairo2-dev is already the newest version (1.18.0-3build1).
+libgtk-3-dev is already the newest version (3.24.41-4ubuntu1.3).
+gcc is already the newest version (4:13.2.0-7ubuntu1).
+0 upgraded, 0 newly installed, 0 to remove and 1 not upgraded.
+
+──────────────────────────────────────────────────────────────────────────────────────── Installing necessary Python packages ────────────────────────────────────────────────────────────────────────────────────────
+
+Requirement already satisfied: pip in /opt/auto-cpufreq/venv/lib/python3.12/site-packages (25.1.1)
+Requirement already satisfied: wheel in /opt/auto-cpufreq/venv/lib/python3.12/site-packages (0.45.1)
+Requirement already satisfied: PyGObject in /opt/auto-cpufreq/venv/lib/python3.12/site-packages (3.52.3)
+Requirement already satisfied: pycairo>=1.16 in /opt/auto-cpufreq/venv/lib/python3.12/site-packages (from PyGObject) (1.28.0)
+
+──────────────────────────────────────────────────────────────────────────────────────────── Installing auto-cpufreq tool ────────────────────────────────────────────────────────────────────────────────────────────
+
+Processing /home/carver/code/auto-cpufreq
+  Installing build dependencies ... done
+  Getting requirements to build wheel ... done
+  Preparing metadata (pyproject.toml) ... done
+Collecting click<9.0.0,>=8.1.0 (from auto-cpufreq==2.6.0+ad6e313)
+  Using cached click-8.2.0-py3-none-any.whl.metadata (2.5 kB)
+Collecting distro<2.0.0,>=1.8.0 (from auto-cpufreq==2.6.0+ad6e313)
+  Using cached distro-1.9.0-py3-none-any.whl.metadata (6.8 kB)
+Collecting psutil<8.0.0,>=6.0.0 (from auto-cpufreq==2.6.0+ad6e313)
+  Using cached psutil-7.0.0-cp36-abi3-manylinux_2_12_x86_64.manylinux2010_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (22 kB)
+Collecting pyasyncore<2.0.0,>=1.0.4 (from auto-cpufreq==2.6.0+ad6e313)
+  Using cached pyasyncore-1.0.4-py3-none-any.whl.metadata (3.7 kB)
+Collecting pyinotify@ git+https://github.com/shadeyg56/pyinotify-3.12 (from auto-cpufreq==2.6.0+ad6e313)
+  Cloning https://github.com/shadeyg56/pyinotify-3.12 to /tmp/pip-install-etxkfgj0/pyinotify_aa8ab16c8159425680c0460aff34b10a
+  Running command git clone --filter=blob:none --quiet https://github.com/shadeyg56/pyinotify-3.12 /tmp/pip-install-etxkfgj0/pyinotify_aa8ab16c8159425680c0460aff34b10a
+  Resolved https://github.com/shadeyg56/pyinotify-3.12 to commit 271b7aba3269116b6c3870355393f47c79bce146
+  Installing build dependencies ... done
+  Getting requirements to build wheel ... done
+  Preparing metadata (pyproject.toml) ... done
+Collecting requests<3.0.0,>=2.32.3 (from auto-cpufreq==2.6.0+ad6e313)
+  Using cached requests-2.32.3-py3-none-any.whl.metadata (4.6 kB)
+Collecting urwid<3.0.0,>=2.6.16 (from auto-cpufreq==2.6.0+ad6e313)
+  Using cached urwid-2.6.16-py3-none-any.whl.metadata (11 kB)
+Collecting charset-normalizer<4,>=2 (from requests<3.0.0,>=2.32.3->auto-cpufreq==2.6.0+ad6e313)
+  Using cached charset_normalizer-3.4.2-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (35 kB)
+Collecting idna<4,>=2.5 (from requests<3.0.0,>=2.32.3->auto-cpufreq==2.6.0+ad6e313)
+  Using cached idna-3.10-py3-none-any.whl.metadata (10 kB)
+Collecting urllib3<3,>=1.21.1 (from requests<3.0.0,>=2.32.3->auto-cpufreq==2.6.0+ad6e313)
+  Using cached urllib3-2.4.0-py3-none-any.whl.metadata (6.5 kB)
+Collecting certifi>=2017.4.17 (from requests<3.0.0,>=2.32.3->auto-cpufreq==2.6.0+ad6e313)
+  Using cached certifi-2025.4.26-py3-none-any.whl.metadata (2.5 kB)
+Collecting typing-extensions (from urwid<3.0.0,>=2.6.16->auto-cpufreq==2.6.0+ad6e313)
+  Using cached typing_extensions-4.13.2-py3-none-any.whl.metadata (3.0 kB)
+Collecting wcwidth (from urwid<3.0.0,>=2.6.16->auto-cpufreq==2.6.0+ad6e313)
+  Using cached wcwidth-0.2.13-py2.py3-none-any.whl.metadata (14 kB)
+Using cached click-8.2.0-py3-none-any.whl (102 kB)
+Using cached distro-1.9.0-py3-none-any.whl (20 kB)
+Using cached psutil-7.0.0-cp36-abi3-manylinux_2_12_x86_64.manylinux2010_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl (277 kB)
+Using cached pyasyncore-1.0.4-py3-none-any.whl (10 kB)
+Using cached requests-2.32.3-py3-none-any.whl (64 kB)
+Using cached charset_normalizer-3.4.2-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (148 kB)
+Using cached idna-3.10-py3-none-any.whl (70 kB)
+Using cached urllib3-2.4.0-py3-none-any.whl (128 kB)
+Using cached urwid-2.6.16-py3-none-any.whl (297 kB)
+Using cached certifi-2025.4.26-py3-none-any.whl (159 kB)
+Using cached typing_extensions-4.13.2-py3-none-any.whl (45 kB)
+Using cached wcwidth-0.2.13-py2.py3-none-any.whl (34 kB)
+Building wheels for collected packages: auto-cpufreq, pyinotify
+  Building wheel for auto-cpufreq (pyproject.toml) ... error
+  error: subprocess-exited-with-error
+  
+  × Building wheel for auto-cpufreq (pyproject.toml) did not run successfully.
+  │ exit code: 1
+  ╰─> [27 lines of output]
+      Traceback (most recent call last):
+        File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 389, in <module>
+          main()
+        File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 373, in main
+          json_out["return_val"] = hook(**hook_input["kwargs"])
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 280, in build_wheel
+          return _build_backend().build_wheel(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        File "/tmp/pip-build-env-4gl9v8cp/overlay/lib/python3.12/site-packages/poetry/core/masonry/api.py", line 58, in build_wheel
+          return WheelBuilder.make_in(
+                 ^^^^^^^^^^^^^^^^^^^^^
+        File "/tmp/pip-build-env-4gl9v8cp/overlay/lib/python3.12/site-packages/poetry/core/masonry/builders/wheel.py", line 95, in make_in
+          wb.build(target_dir=directory)
+        File "/tmp/pip-build-env-4gl9v8cp/overlay/lib/python3.12/site-packages/poetry/core/masonry/builders/wheel.py", line 135, in build
+          self._copy_module(zip_file)
+        File "/tmp/pip-build-env-4gl9v8cp/overlay/lib/python3.12/site-packages/poetry/core/masonry/builders/wheel.py", line 307, in _copy_module
+          to_add = self.find_files_to_add()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^
+        File "/tmp/pip-build-env-4gl9v8cp/overlay/lib/python3.12/site-packages/poetry/core/masonry/builders/builder.py", line 191, in find_files_to_add
+          include_file.relative_to_project_root()
+        File "/tmp/pip-build-env-4gl9v8cp/overlay/lib/python3.12/site-packages/poetry/core/masonry/builders/builder.py", line 375, in relative_to_project_root
+          return self.path.relative_to(self.project_root)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        File "/usr/lib/python3.12/pathlib.py", line 682, in relative_to
+          raise ValueError(f"{str(self)!r} is not in the subpath of {str(other)!r}")
+      ValueError: '/usr/bin/python3.12' is not in the subpath of '/home/carver/code/auto-cpufreq'
+      [end of output]
+  
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+  ERROR: Failed building wheel for auto-cpufreq
+  Building wheel for pyinotify (pyproject.toml) ... done
+  Created wheel for pyinotify: filename=pyinotify-0.9.6-py3-none-any.whl size=25194 sha256=285158c2868effd80736a6069c97a1eef29fcd5836ae1aee29e7f8a13ecef313
+  Stored in directory: /tmp/pip-ephem-wheel-cache-b06nbkua/wheels/07/e5/ce/fea2cd22ebf52f17815ad9c2fc9b8ee89830ab78edd0bde6c7
+Successfully built pyinotify
+Failed to build auto-cpufreq
+ERROR: Failed to build installable wheels for some pyproject.toml based projects (auto-cpufreq)
+
+────────────────────────────────────────────────────────────────────────────────────── auto-cpufreq tool successfully installed ──────────────────────────────────────────────────────────────────────────────────────
+
+For list of options, run:
+auto-cpufreq --help
+
+carver@carver-framework-2023:~/code/auto-cpufreq$ which python3.12
+/usr/bin/python3.12
+carver@carver-framework-2023:~/code/auto-cpufreq$ python3.12
+Python 3.12.3 (main, Feb  4 2025, 14:48:35) [GCC 13.3.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> 
+carver@carver-framework-2023:~/code/auto-cpufreq$ auto-cpufreq --help
+/opt/auto-cpufreq/venv/bin/python: can't open file '/opt/auto-cpufreq/venv/bin/auto-cpufreq': [Errno 2] No such file or directory
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+auto-cpufreq --debug
+/opt/auto-cpufreq/venv/bin/python: can't open file '/opt/auto-cpufreq/venv/bin/auto-cpufreq': [Errno 2] No such file or directory
+```
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Note: I visited the [auto-cpufreq-genAI-chatbot](https://foolcontrol.org/?p=4903), but I'm getting:
+>
+> Looks like there’s a problem with this site
+> 
+> https://foolcontrol.org/?p=4903 might have a temporary problem or it could have moved.
+> 
+> Error code: 500 Internal Server Error
+> 
+>    The site could be temporarily unavailable or too busy. Try again in a few moments.
+
+Do you still get this issue? As site was (and still is) up and the are no problems with opening ["How I replaced myself with a genAI chatbot using Gemini"](https://foolcontrol.org/?p=4903).
+
+I suggest to re-install auto-cpufreq, e.g: 
+
+`sudo ./auto-cpufreq-installer --remove`
+
+Clean up build files, since I see it's trying to use a lot of cached libraries:
+
+```
+rm -rf /tmp/pip-build-env-*
+rm -rf /tmp/pip-install-*
+```
+
+Maybe even a good idea to remove old auto-cpufreq repo code and [try to install it again](https://github.com/AdnanHodzic/auto-cpufreq/?tab=readme-ov-file#auto-cpufreq-installer).
+
+Regarding snap package:
+> I was trying this installation method because the Snap package was spewing syslog errors about AppArmor denying permissions, and I saw a thread that said this other install was preferred.
+
+If you follow the [snap installation](https://github.com/AdnanHodzic/auto-cpufreq/?tab=readme-ov-file#snap-store), it should all work fine, only problem is that GUI won't work due to Snap restrictions. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>carver:</strong></p>
+                    <p>> Do you still get this issue? As site was (and still is) up and the are no problems with opening ["How I replaced myself with a genAI chatbot using Gemini"](https://foolcontrol.org/?p=4903).
+
+Ah, bummer. It loads for me now. It was an intermittent problem, apparently.
+
+> If you follow the [snap installation](https://github.com/AdnanHodzic/auto-cpufreq/?tab=readme-ov-file#snap-store), it should all work fine, only problem is that GUI won't work due to Snap restrictions.
+
+Unfortunately, it doesn't seem to be working. I tried removing and reinstalling with snap. I continue to get permission errors in my syslog like:
+```
+2025-05-19T11:39:36.096547-07:00 carver-framework-2023 kernel: audit: type=1400 audit(1747679976.095:2459119): apparmor="DENIED" operation="open" class="file" profile="snap.auto-cpufreq.service" name="/sys/devices/system/cpu/cpu9/power/energy_perf_bias" pid=1420915 comm="bash" requested_mask="wc" denied_mask="wc" fsuid=0 ouid=0
+2025-05-19T11:39:36.097704-07:00 carver-framework-2023 auto-cpufreq.service[1420915]: /snap/auto-cpufreq/160/usr/bin/cpufreqctl.auto-cpufreq: line 288: /sys/devices/system/cpu/cpu10/power/energy_perf_bias: Permission denied
+2025-05-19T11:39:36.099975-07:00 carver-framework-2023 auto-cpufreq.service[1420915]: /snap/auto-cpufreq/160/usr/bin/cpufreqctl.auto-cpufreq: line 288: /sys/devices/system/cpu/cpu11/power/energy_perf_bias: Permission denied
+2025-05-19T11:39:36.101753-07:00 carver-framework-2023 auto-cpufreq.service[1420915]: /snap/auto-cpufreq/160/usr/bin/cpufreqctl.auto-cpufreq: line 288: /sys/devices/system/cpu/cpu12/power/energy_perf_bias: Permission denied
+... (lots more)
+```
+
+> Maybe even a good idea to remove old auto-cpufreq repo code and [try to install it again](https://github.com/AdnanHodzic/auto-cpufreq/?tab=readme-ov-file#auto-cpufreq-installer).
+
+Ok, I tried this (plus nuking pip cache files, etc, that you suggested). I wish I understood why, but that does seem to do the trick. I am up and running now. Thanks!
+
+I'm happy to answer questions or try things if you're curious about why my snap install is giving permissions errors. Otherwise, I'm all set if you want to close. 👍🏻 </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Ok, I tried this (plus nuking pip cache files, etc, that you suggested). I wish I understood why, but that does seem to do the trick. I am up and running now. Thanks!
+
+It was using (old) cached version of libraries. 
+
+> I'm happy to answer questions or try things if you're curious about why my snap install is giving permissions errors. Otherwise, I'm all set if you want to close. 👍🏻
+
+No need, as auto-cpufreq-intsaller is preferred installation method.  
+
+Regardless, good to hear and I'm closing the issue, please consider donating or contributing to the project: https://github.com/AdnanHodzic/auto-cpufreq/#donate
+
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

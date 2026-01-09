@@ -1,0 +1,53 @@
+
+        <html>
+        <head>
+            <title>Discussion #885: Why display temperature per THREAD, why not per CORE?</title>
+        </head>
+        <body>
+            <h1>Why display temperature per THREAD, why not per CORE?</h1>
+            <p><strong>Discussion #885</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hi,
+On AMD CPU (at least) auto-cpufreq GUI shows separate temperature for each (hyper)THREAD, i.e. **DOUBLE** the number of cores.
+I doubt the temperatures between 2 hyperthreads of the **same core** may be different, so why not display one same temperature per core?
+Or even add an **option** to show  average temperature only? (not the main topic here).
+There's already quite a lot of info in the GUI, and number of cores is quickly growing recently.
+Also requesting temperature twice per each core clearly doesn't improve the auto-cpufreq performance.
+Thank you.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>auto-cpufreq GUI is not really maintained for some time now and has been out of sync with quite some CLI changes that were made in meantime.
+
+As always, if you want to improve some of it please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release.](https://github.com/AdnanHodzic/auto-cpufreq/releases)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Heavygrass:</strong></p>
+                    <p>After thinking about it and looking at other people's issues it doesn't seem to be about the GUI.
+It incorrectly determines # of cores on Ryzen (**doubles** it usually).
+I believe it displays **(hyper)threads** instead of cores.
+If the  # of cores on Ryzen were determined correctly, GUI would likely be fixed automatically.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>PurpleWazard:</strong></p>
+                    <p>Hyper threads are treated as cores in software</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Heavygrass:</strong></p>
+                    <p>@PurpleWazard Which software are you talking about?
+I believe most software (except some low-level) simply creates processes/threads and it doesn't matter for it which core it runs on.
+
+Anyway whats the benefit for a user to try to follow the **double** number of cores?</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

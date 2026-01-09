@@ -1,0 +1,63 @@
+
+        <html>
+        <head>
+            <title>Pull Request #903: Improve pkexec error handling for GUI</title>
+        </head>
+        <body>
+            <h1>Improve pkexec error handling for GUI</h1>
+            <p><strong>Pull Request #903</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I had issues with the GUI, so I fixed the code to handle it better for most users.
+
+pkexec errors were being handled by verifying the string returned by the pkexec command.
+
+I noticed the expected string — "Error executing command as another user: Not authorized\n\nThis incident has been reported.\n" — did not match what I had on Arch Linux.
+
+So I checked the pkexec manual to verify the return codes and corrected the code accordingly.
+
+> RETURN VALUE
+       Upon successful completion, the return value is the return value of
+       PROGRAM. If the calling process is not authorized or an authorization
+       could not be obtained through authentication or an error occurred,
+       pkexec exits with a return value of 127. If the authorization could not
+       be obtained because the user dismissed the authentication dialog, pkexec
+       exits with a return value of 126.
+
+before
+![before](https://github.com/user-attachments/assets/e8f4a05c-dc04-4eba-93f4-d76bc16bee8e)
+
+after
+![after](https://github.com/user-attachments/assets/ab208afb-9813-409b-bd20-2f54a1a2c952)
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Nice one @developpeur-php! LGTM, Thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases). 
+
+Btw, @ekasprzak and @Heavygrass do these changes also fix your problem in #812? </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Heavygrass:</strong></p>
+                    <p>> Btw, @ekasprzak and @Heavygrass do these changes also fix your problem in #812?
+
+Is there a built for Ubuntu 24.04(.3)?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> > Btw, @ekasprzak and @Heavygrass do these changes also fix your problem in #812?
+> 
+> Is there a built for Ubuntu 24.04(.3)?
+
+I was hoping that by now everyone knows that [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#auto-cpufreq-installer) supports all major linux distributions, regardless of their release. </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

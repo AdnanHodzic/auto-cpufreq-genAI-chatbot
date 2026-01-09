@@ -1,0 +1,153 @@
+
+        <html>
+        <head>
+            <title>Issue #880: [BUG] Build error on NixOS-unstable</title>
+        </head>
+        <body>
+            <h1>[BUG] Build error on NixOS-unstable</h1>
+            <p><strong>Issue #880</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>On NixOS-unstable its currently impossible to build auto-cpufreq:
+
+```bash
+building the system configuration...
+copying '«github:nixos/nixpkgs/c23193b943c6c689d70ee98ce3128239ed9e32d1?narHash=sha256-hLEO2TPj55KcUFUU1vgtHE9UEIOjRcH/4QbmfHNF820%3D»/nix/store/lvwgkdy9nrki8qcrdsqnpfr
+error: Cannot build '/nix/store/r623p0qy2m1pizm60s0pasiiqz9kfv0v-python3.13-auto-cpufreq-2.6.0.drv'.
+       Reason: builder failed with exit code 1.
+       Output paths:
+         /nix/store/3az55frady2346ldngihwzpvg9imfw8l-python3.13-auto-cpufreq-2.6.0
+         /nix/store/j8rywyaxlixwf2m8h8vv1msal5x01zrc-python3.13-auto-cpufreq-2.6.0-dist
+       Last 25 log lines:
+       > source root is 0akxxsy9w19vx1s9l65alx1wsb3dpvdx-source
+       > setting SOURCE_DATE_EPOCH to timestamp 315619200 of file "0akxxsy9w19vx1s9l65alx1wsb3dpvdx-source/snap/snapcraft.yaml"
+       > Running phase: patchPhase
+       > applying patch /nix/store/xk2fybf94g4laqlf5w5gm9kjpv6h8ac1-prevent-install-and-copy.patch
+       > patching file auto_cpufreq/core.py
+       > Hunk #1 succeeded at 303 (offset 26 lines).
+       > Hunk #2 succeeded at 326 (offset 26 lines).
+       > Hunk #3 succeeded at 359 (offset 26 lines).
+       > Running phase: updateAutotoolsGnuConfigScriptsPhase
+       > Running phase: configurePhase
+       > no configure script, doing nothing
+       > Running phase: buildPhase
+       > Executing pypaBuildPhase
+       > Setting POETRY_DYNAMIC_VERSIONING_BYPASS to 2.6.0
+       > Creating a wheel...
+       > pypa build flags: --no-isolation --outdir dist/ --wheel
+       > * Getting build dependencies for wheel...
+       > * Building wheel...
+       > Successfully built auto_cpufreq-2.6.0-py3-none-any.whl
+       > Finished creating a wheel...
+       > Finished executing pypaBuildPhase
+       > Running phase: pythonRuntimeDepsCheckHook
+       > Executing pythonRuntimeDepsCheck
+       > Checking runtime dependencies for auto_cpufreq-2.6.0-py3-none-any.whl
+       >   - urwid<3.0.0,>=2.6.16 not satisfied by version 3.0.2
+       For full logs, run:
+         nix log /nix/store/r623p0qy2m1pizm60s0pasiiqz9kfv0v-python3.13-auto-cpufreq-2.6.0.drv
+error: Cannot build '/nix/store/ywph5k4xikcgjkf4py54fqmhp4v0wnql-system-generators.drv'.
+       Reason: 1 dependency failed.
+       Output paths:
+         /nix/store/dg6426xaqalqwy81l827ykyi2fsmchj2-system-generators
+error: Cannot build '/nix/store/qnghaj9li7p68x3mc6q5xsbpz65bfs0p-system-path.drv'.
+       Reason: 1 dependency failed.
+       Output paths:
+         /nix/store/1jdc7y6p28wwddi84wmir5dnbhwv94hw-system-path
+error: Cannot build '/nix/store/lwggz9sz7xkjw7p515gikmxf4aarakip-nixos-system-Yon-25.11.20250913.c23193b.drv'.
+       Reason: 1 dependency failed.
+       Output paths:
+         /nix/store/mgml4pm6xfyjyxzy7bhk3sg8zpqs0r9c-nixos-system-Yon-25.11.20250913.c23193b
+Command 'nix --extra-experimental-features 'nix-command flakes' build --print-out-paths '/etc/nixos#nixosConfigurations."Yon".config.system.build.toplevel' --no-link' returned non-zero exit status 1.
+```
+
+The reason is an update of the `urwid` pyhton module! 
+update PR: https://github.com/NixOS/nixpkgs/pull/405063
+possible solution PR: https://github.com/NixOS/nixpkgs/pull/436381</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>If you have a way how this issue could be fixed, please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>JuliusFreudenberger:</strong></p>
+                    <p>This breaks auto-cpufreq if used on a NixOS 25.05 system. urwid is still using 2.6.16 there and will most probably not be updated to v3 because of the breaking changes.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@JuliusFreudenberger  and/or @shadeyg56 do you have any other suggestions how to fix this issue then? As otherwise the only thing I can do is revert [9f86acc](https://github.com/AdnanHodzic/auto-cpufreq/commit/9f86acc38dca4299b70ea55ae6c52902da5c903c)[5 days ago](https://github.com/AdnanHodzic/auto-cpufreq/issues/880#event-19735907807)?
+
+I made similar changes for [Debian based distros few months ago](https://github.com/AdnanHodzic/auto-cpufreq/pull/826#issuecomment-2794549837), so maybe [same type of logic](https://github.com/AdnanHodzic/auto-cpufreq/commit/6789cb6ce48a741dbd881dc3fc5fcd12250dc876) could be done for NixOS?
+
+Since I don't use NixOS, please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>If you're using the auto-cpufreq flake, it should use nixpkgs-unstable as its nixpkg input. Make sure you aren't passing in a different nixpkg input and it should have no issue building</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Svenum:</strong></p>
+                    <p>Reverting https://github.com/AdnanHodzic/auto-cpufreq/commit/9f86acc38dca4299b70ea55ae6c52902da5c903c and using my closed PR (https://github.com/AdnanHodzic/auto-cpufreq/pull/881) would prevent this problem</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>There is no need for that because this isn't a problem, it's a result of them passing in a stable version of nixpkgs, which there is no reason to do. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Svenum:</strong></p>
+                    <p>Ok now I understand. You are absolutely right!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Is there anything else that needs to be done, or this issue can be closed again?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Should be good to be reclosed</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>JuliusFreudenberger:</strong></p>
+                    <p>> which there is no reason to do
+
+There is one: I run my system completely on nixos-25.05 with the configuration based on a flake.
+My inputs are as follows:
+```nix
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
+    auto-cpufreq = {
+      url = "github:AdnanHodzic/auto-cpufreq?ref=c2ff712325dd919b3ee7c7e5354d67fb841618d0";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+  };
+```
+
+As I do not have a `nixpkgs-unstable` (or `nixos-unstable`) input, auto-cpufreq gets the stable nixpkgs as input.
+Of course, I could add an unstable import, but I would love to be able to not do it. The system closure size is much higher having both.
+
+This problem will persist only until the end of the year, as 25.11 will be released with urwid version 3.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>I guess the easiest fix for you is probably pinning to c2ff712 (looks like you have already done that for the time being) until urwid v3 makes it into the next stable release.
+Alternatively, you could make an override for auto-cpufreq to use urwid v2, or override urwid to use v3, or you could remove `inputs.nixpkgs.follows` for auto-cpufreq, but I understand you want the system closure to be as small as possible</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

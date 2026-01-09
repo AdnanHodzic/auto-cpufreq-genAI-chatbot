@@ -1,0 +1,37 @@
+
+        <html>
+        <head>
+            <title>Issue #879: [FR] Allow 2 different governors (without power supply & with power supply) & automatically switch between them</title>
+        </head>
+        <body>
+            <h1>[FR] Allow 2 different governors (without power supply & with power supply) & automatically switch between them</h1>
+            <p><strong>Issue #879</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Hi,
+One generally needs to use 2 different governors:
+1) **with power supply** connected one e.g. likely needs `Balanced` or `Performance`.
+2) **Without power supply** connected one likely needs `Powersave`.
+So basically **every time power supply connected & disconnected** one  has to manually switch the governor.
+
+It would be great if auto-cpufreq could detect if a power supply is connected and automatically switch between these modes.
+Thanks.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> It would be great if auto-cpufreq could detect if a power supply is connected and automatically switch between these modes.
+
+auto-cpufreq already automatically switches between these modes and this is [shown in this part of auto-cpufreq Youtube video](https://youtu.be/QkYRpVEEIlg?t=365), few seconds before I also show how governors will change automatically if auto-cpufreq detects load or CPU usage is increasing. 
+
+You can configure this with [auto-cpufreq config file](https://github.com/AdnanHodzic/auto-cpufreq/?tab=readme-ov-file#4-auto-cpufreq-config-file).
+
+Hence closing this issue as described functionality should already be there.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

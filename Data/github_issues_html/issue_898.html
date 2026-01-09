@@ -1,0 +1,244 @@
+
+        <html>
+        <head>
+            <title>Issue #898: "balance_power" in energy_performance_preference file when powersave governor set (verified in terminal)</title>
+        </head>
+        <body>
+            <h1>"balance_power" in energy_performance_preference file when powersave governor set (verified in terminal)</h1>
+            <p><strong>Issue #898</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+#### Before submitting an issue, it is strongly recommended to use the **[auto-cpufreq-genAI-chatbot](https://foolcontrol.org/?p=4903)** to get an immediate answer to your question.
+
+### Have you tried? Yes
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? Yes
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)? 
+N/A
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+Yes
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+Yes
+
+### Error output:
+```
+cat /sys/devices/system/cpu/cpu*/cpufreq/energy_performance_preference
+balance_power
+balance_power
+balance_power
+balance_power
+balance_power
+balance_power
+balance_power
+balance_power
+balance_power
+balance_power
+balance_power
+balance_power
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+conservation mode is on                
+                                                                                                                       
+-------------------------------------------------------------------------------
+                             
+Linux distro: Ubuntu 24.04 Noble Numbat
+Linux kernel: 6.14.0-35-generic
+Processor: AMD Ryzen 5 7535HS with Radeon Graphics
+Cores: 12              
+Architecture: x86_64
+Driver: amd-pstate-epp
+
+------------------------------ Current CPU stats ------------------------------
+                             
+CPU max frequency: 3301 MHz
+CPU min frequency: 400 MHz                                 
+                             
+Core    Usage   Temperature     Frequency
+CPU0      2.1%        45 °C      2390 MHz
+CPU1      2.0%        45 °C      2393 MHz
+CPU2      4.0%        45 °C      2394 MHz
+CPU3      1.0%        45 °C      1516 MHz
+CPU4      7.1%        45 °C      2391 MHz
+CPU5      6.1%        45 °C      2394 MHz
+CPU6      4.0%        45 °C      2392 MHz
+CPU7      1.0%        45 °C      2393 MHz
+CPU8      5.2%        45 °C      2394 MHz                                                                              
+CPU9      0.0%        45 °C      2395 MHz
+CPU10      3.1%        45 °C      2387 MHz
+CPU11      2.0%        45 °C      2393 MHz
+
+CPU fan speed: 0 RPM
+auto-cpufreq version: 2.6.0
+
+Python: 3.12.3
+psutil package: 6.0.0
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.29 %
+
+Total CPU usage: 3.5 %
+Total system load: 1.22
+Average temp. of all cores: 32.00 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: off
+```
+
+I think `/sys/devices/system/cpu/cpu*/cpufreq/energy_performance_preference` should not contain `balance_power` when `powersave` governor is used.
+Let me know if I'm wrong.
+Have "Extreme performance" setting in BIOS, not sure if its relevant.
+Kernel 6.14.
+
+```
+cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_driver
+amd-pstate-epp
+```
+
+Thank you.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Heavygrass:</strong></p>
+                    <p>Also scaling_max_freq for each core is **way higher** than base 3.3Ghz frequency with powersave governor.
+
+```
+cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_max_freq
+4604000
+4604000
+4604000
+4604000
+4604000
+4604000
+4604000
+4604000
+4604000
+4604000
+4604000
+4604000
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Have you tried explicitly defining this as part of [configuration file](https://github.com/AdnanHodzic/auto-cpufreq#4-auto-cpufreq-config-file), if yes what happens then?
+
+>Also scaling_max_freq for each core is way higher than base 3.3Ghz frequency with powersave governor.
+
+#899 was just merged which might help with this ...</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Heavygrass:</strong></p>
+                    <p>> Have you tried explicitly defining this as part of [configuration file](https://github.com/AdnanHodzic/auto-cpufreq#4-auto-cpufreq-config-file), if yes what happens then?
+
+I haven't used a configuration file at all yet, so its a bit of a learning curve for me. Will update if I do.
+BTW one might need to apply some load to reproduce 4604000 frequency described above, not exactly sure yet.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Heavygrass:</strong></p>
+                    <p>Added config file from the above link. The only change is `turbo = never`.
+```
+[charger]
+# see available governors by running: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+# preferred governor
+governor = performance
+
+# EPP: see available preferences by running: cat /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_available_pre>
+ energy_performance_preference = performance
+```
+
+and restarted service, but with **charger connected** `--debug` shows  
+`Currently using: powersave governor` and 
+`Battery is: charging`.
+This may be related to battery charging limits I set manually a while ago (don't remember exactly how sorry).
+
+```
+cat /sys/devices/system/cpu/cpu*/cpufreq/energy_performance_preference
+power
+power
+power
+power
+power
+power
+power
+power
+power
+power
+power
+power
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@CasperVM since you created #899, out of sheer curiosity do you have any ideas regarding this?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Heavygrass:</strong></p>
+                    <p>This is how I set battery charging limit:
+```
+sudo modprobe thinkpad_acpi force_load=true
+echo 85 > /sys/class/power_supply/BAT0/charge_control_end_threshold
+```
+Let me know if more info needed.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>CasperVM:</strong></p>
+                    <p>Hmm that's odd, I do know there's different `energy_performance_preference` available when using the pstate driver. For me there's only `performance` on my machine. It might have to do with the `scaling_govenor` being set to performance for me as well?..
+
+@Heavygrass auto_cpufreq uses two things for determining whether on battery: whether AC power is connected, and if the battery is charging. You could run `sudo auto-cpufreq --monitor` to see what it's doing. If `AC plugged: yes` it should apply the more performant profiles/or the `[charger]` section in the config.
+
+Could you for debugging purposes show us what happens under load and `cat` all cpufreq settings?;
+
+(for first cpu core `cpu0`):
+```shell
+for f in /sys/devices/system/cpu/cpu0/cpufreq/*; do echo "$f"; cat "$f"; echo; done
+```
+
+Also the `scaling_govenor` and `energy_performance_preference` are totally different settings. 
+- `scaling_govenor` -> default cpufreq setting for linux used by `acpi-cpufreq` driver.
+- `energy_performance_preference` -> used by the pstate drivers, nudges the cpu in a certain direction via firmware.
+
+Correct me if I'm wrong here, but when using pstate drivers, I don't think it's always entirely possible to enforce CPU behavior like with regular old `acpi-cpufreq`, because you're essentially telling firmware to take over. `scaling_govenor` in these cases is more of a mode select exposing underlying `energy_performance_preference`'s?
+
+Additionally, when there's no config, `default` get applied to `energy_performance_preference`, which might just be `balance_power`, so this could be correct behavior. Would we want to change this?
+
+[kernel docs amd pstate](https://docs.kernel.org/admin-guide/pm/amd-pstate.html)
+
+@AdnanHodzic </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Heavygrass:</strong></p>
+                    <p>@CasperVM
+> Could you for debugging purposes show us what happens under load and `cat` all cpufreq settings?;
+
+Sure, but I just noticed that even with config file (or with with config file only?) and AC connected GUI can manually change governor to both `Currently using: performance governor` and `Currently using: powersave governor`, so I'm not sure what GUI/governor setting should I run the above command with?
+Does GUI or config file have priority for setting the current governor?
+Should I use config file?</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

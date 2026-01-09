@@ -1,1296 +1,1 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-	<title></title>
-	<meta name="generator" content="LibreOffice 24.2.7.2 (Linux)"/>
-	<meta name="created" content="00:00:00"/>
-	<meta name="changed" content="2025-04-02T19:25:35.875860681"/>
-	<style type="text/css">
-		@page { size: 8.27in 11.69in; margin-left: 0.79in; margin-right: 0.39in; margin-top: 0.39in; margin-bottom: 0.39in }
-		p { line-height: 115%; margin-bottom: 0.1in; background: transparent }
-		h1 { margin-bottom: 0.08in; background: transparent; page-break-after: avoid }
-		h1.western { font-family: "Liberation Serif", serif; font-size: 24pt; font-weight: bold }
-		h1.cjk { font-family: "Noto Serif CJK SC"; font-size: 24pt; font-weight: bold }
-		h1.ctl { font-family: "Noto Sans Devanagari"; font-size: 24pt; font-weight: bold }
-		h2 { margin-top: 0.14in; margin-bottom: 0.08in; background: transparent; page-break-after: avoid }
-		h2.western { font-family: "Liberation Serif", serif; font-size: 18pt; font-weight: bold }
-		h2.cjk { font-family: "Noto Serif CJK SC"; font-size: 18pt; font-weight: bold }
-		h2.ctl { font-family: "Noto Sans Devanagari"; font-size: 18pt; font-weight: bold }
-		strong { font-weight: bold }
-		a:link { color: #000080; text-decoration: underline }
-	</style>
-</head>
-<body lang="en-US" link="#000080" vlink="#800000" dir="ltr"><h1 class="western">
-Releases</h1>
-<h1 class="western">v2.5.0 (v2.5.0)</h1>
-<p><strong>Published on:</strong> 2025-01-10T07:44:09Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li style="display: block"><p>Features: 
-	</p></li>
-	<li><p>Add EPB (Energy Performance Bias) settings support #771 |
-	Closes: #522</p>
-	<p>Bug fixes and improvements: 
-	</p></li>
-	<li><p style="margin-bottom: 0in">Fixed wrong sensor being monitored
-	(AMD) #772</p></li>
-	<li><p style="margin-bottom: 0in">Added notes to the documentation
-	about the default `energy_perf_bias` settings #774</p></li>
-	<li><p style="margin-bottom: 0in">Add support for Fedora 41 (TuneD)
-	#786 (Closes: #779)</p></li>
-	<li><p style="margin-bottom: 0in">Fix nix CI: fix
-	prevent-install-and-copy.patch #787</p></li>
-	<li><p style="margin-bottom: 0in">Fix Nix Build CI (Closes: #798)</p></li>
-	<li><p style="margin-bottom: 0in">Improve TuneD detection mechanism
-	#788</p></li>
-	<li><p style="margin-bottom: 0in">Improve systemd service management
-	#789</p></li>
-	<li><p>Resolve permission errors for --install, --remove, and
-	cpufreqctl.auto-cpufreq #762 (Closes #797)</p>
-	<p>Thanks to all contributors who made this release possible: 
-	</p>
-	<p>@snyypi 
-	</p>
-	<p>@johanssonvincent 
-	</p>
-	<p>@geragio 
-	</p>
-	<p>@aucub 
-	</p>
-	<p>@Uyonoh 
-	</p>
-	<p>@shadeyg56 
-	</p>
-	<p>Please note, as always
-	https://github.com/AdnanHodzic/auto-cpufreq/discussions/312#discussioncomment-9557496
-	to help shape future of the project, and join us on [auto-cpufreq
-	Discord community](https://discord.gg/Sjauxtj6kH).</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v2.5.0">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v2.4.0 (v2.4.0)</h2>
-<p><strong>Published on:</strong> 2024-09-05T05:47:54Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li><p>Features**:</p></li>
-	<li><p style="margin-bottom: 0in">Add support for setting &quot;Platform
-	Profile&quot; #752</p></li>
-	<li><p style="margin-bottom: 0in">Adding Gentoo Install section #764</p></li>
-	<li><p style="margin-bottom: 0in">Add dinit (Artix) init system
-	support | Closes: #689</p></li>
-	<li><p>Prevent Xbox controller's battery switch to battery profile
-	#753</p></li>
-	<li><p>Bug fixes and improvements:**</p></li>
-	<li><p style="margin-bottom: 0in">Use `performance` EPP in AMD CPUs
-	when using `performance` governor #725 | Closes: #724</p></li>
-	<li><p style="margin-bottom: 0in">Use Repology badge for automatic
-	AUR version updating #692</p></li>
-	<li><p style="margin-bottom: 0in">Improve compatible for Arch based
-	distributions #691</p></li>
-	<li><p style="margin-bottom: 0in">Critical name error in
-	auto-cpufreq --stats #696</p></li>
-	<li><p style="margin-bottom: 0in">Minor refactor: code clean-up &amp;
-	make it more readable #695</p></li>
-	<li><p style="margin-bottom: 0in">Bump requests from 2.31.0 to
-	2.32.0 #705</p></li>
-	<li><p style="margin-bottom: 0in">Nix: fix duplicated package #701</p></li>
-	<li><p style="margin-bottom: 0in">Refactor charging function #702</p></li>
-	<li><p style="margin-bottom: 0in">Update nix requests version #708 |
-	Closes #708</p></li>
-	<li><p style="margin-bottom: 0in">Fix: Cannot install the daemon on
-	Artix Linux (runit) #706</p></li>
-	<li><p style="margin-bottom: 0in">Fix: [Ideapad] --stats gives error
-	as BAT0 can't be found #700</p></li>
-	<li><p style="margin-bottom: 0in">Fix: [ NixOS ] /bin/sh: line 1:
-	getent: command not found #704</p></li>
-	<li><p style="margin-bottom: 0in">Fix issue where epp cannot be set
-	in powersave governor #738</p></li>
-	<li><p style="margin-bottom: 0in">Fix/Close #715, #713, #634 issues
-	#716</p></li>
-	<li><p style="margin-bottom: 0in">nix: add overlay; use best
-	practices #718</p></li>
-	<li><p style="margin-bottom: 0in">[ Nix / NixOS ] PR #718 breaks
-	flake #720</p></li>
-	<li><p style="margin-bottom: 0in">Bump urllib3 from 2.0.7 to 2.2.2
-	#723</p></li>
-	<li><p style="margin-bottom: 0in">Bump certifi from 2023.7.22 to
-	2024.7.4 #732</p></li>
-	<li><p style="margin-bottom: 0in">Bump zipp from 3.17.0 to 3.19.1
-	#735</p></li>
-	<li><p style="margin-bottom: 0in">Code refactoring, more readable
-	and easier to modify #736</p></li>
-	<li><p style="margin-bottom: 0in">Fix `AVAILABLE_GOVERNORS` #744</p></li>
-	<li><p style="margin-bottom: 0in">Show error message if threshold
-	file doesn't exist #742</p></li>
-	<li><p style="margin-bottom: 0in">Update flake + Remove patch from
-	newer pyinotify version in nixpkgs #747 | Closes: #746</p></li>
-	<li><p style="margin-bottom: 0in">Fix unsafe access to PATH #756 |
-	Closes #755</p></li>
-	<li><p style="margin-bottom: 0in">Unpin psutil and requests #759</p></li>
-	<li><p style="margin-bottom: 0in">Remove network-online.target as a
-	systemd-service dependency (increase boot time speed) | Closes: #739</p></li>
-	<li><p style="margin-bottom: 0in">Fix check_conservation_mode()
-	function in ideapad_laptop.py #766 | Closes #750</p></li>
-	<li><p style="margin-bottom: 0in">Ignoring power supplies FIX #760|
-	Closes #753</p></li>
-	<li><p>Bump cryptography from 42.0.4 to 43.0.1 #768</p>
-	<p>Thanks to all contributors who made this release possible: 
-	</p>
-	<p>@BOOTMGR 
-	</p>
-	<p>@shadeyg56 
-	</p>
-	<p>@Angel-Karasu 
-	</p>
-	<p>@MusicalArtist12 
-	</p>
-	<p>@yezarniko 
-	</p>
-	<p>@dementive 
-	</p>
-	<p>@Svenum 
-	</p>
-	<p>@TheChilledBuffalo 
-	</p>
-	<p>@rivenirvana 
-	</p>
-	<p>@Svenum 
-	</p>
-	<p>@BowDown097 
-	</p>
-	<p>@S41G0N 
-	</p>
-	<p>@Geffo029 
-	</p>
-	<p>Please note, as always [auto-cpufreq is looking for
-	co-maintainers &amp; open source
-	developers](https://github.com/AdnanHodzic/auto-cpufreq/discussions/312#discussioncomment-9557496)
-	to help shape future of the project, and join us on [auto-cpufreq
-	Discord community](https://discord.gg/Sjauxtj6kH).</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v2.4.0">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v2.3.0 (v2.3.0)</h2>
-<p><strong>Published on:</strong> 2024-05-09T10:02:31Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li><p>Features**:</p></li>
-	<li><p style="margin-bottom: 0in">Add conservation mode to Lenovo
-	laptops #652</p></li>
-	<li><p style="margin-bottom: 0in">Rework config and reload config on
-	file change/creation/deletion #663</p></li>
-	<li><p>Create workflows for Linux builds and Nix flake builds #659</p></li>
-	<li><p>Bug fixes and improvements:**</p></li>
-	<li><p style="margin-bottom: 0in">Updated error handling to provide
-	specific message for rate limit exceeded issues #657</p></li>
-	<li><p style="margin-bottom: 0in">Modify message when using
-	amd-pstate-epp #674 | Closes: #667</p></li>
-	<li><p style="margin-bottom: 0in">Update psutil to patched Git
-	version | Closes #654</p></li>
-	<li><p style="margin-bottom: 0in">Fix SyntaxWarning in objects.py
-	#651</p></li>
-	<li><p style="margin-bottom: 0in">Update maintainer list for AUR
-	package in readme #662</p></li>
-	<li><p style="margin-bottom: 0in">Fix spam error message when
-	setting energy_performance_preference #680</p></li>
-	<li><p style="margin-bottom: 0in">Add warnings for charge thresholds
-	#679</p></li>
-	<li><p style="margin-bottom: 0in">Bump cryptography from 42.0.0 to
-	42.0.2 #648</p></li>
-	<li><p style="margin-bottom: 0in">Bump cryptography from 42.0.2 to
-	42.0.4 #653</p></li>
-	<li><p>Bump idna from 3.4 to 3.7 #678</p>
-	<p>Thanks to all contributors who made this release possible: 
-	</p>
-	<p>@shadeyg56 
-	</p>
-	<p>@PurpleWazard 
-	</p>
-	<p>@meator 
-	</p>
-	<p>@monarxxjain 
-	</p>
-	<p>@meator 
-	</p>
-	<p>@monarxxjain 
-	</p>
-	<p>@parmjotsinghrobot 
-	</p>
-	<p>@corona10 
-	</p>
-	<p>@FosRexx</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v2.3.0">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v2.2.0 (v2.2.0)</h2>
-<p><strong>Published on:</strong> 2024-02-14T17:01:35Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li><p>Features**:</p></li>
-	<li><p style="margin-bottom: 0in">Add support for
-	configuring/overriding &quot;Energy Performance Preference (EPP)&quot;
-	#619</p></li>
-	<li><p>Add battery charge thresholds limit #637</p></li>
-	<li><p>Bug fixes and improvements:**</p></li>
-	<li><p style="margin-bottom: 0in">Fix dynamic boosting being
-	incorrectly diagnosed #631| Closes: #622</p></li>
-	<li><p style="margin-bottom: 0in">Add ability to build snap packages
-	for both amd64 &amp; arm64 architectures</p></li>
-	<li><p style="margin-bottom: 0in">Bump cryptography from 41.0.6 to
-	42.0.0 #638</p></li>
-	<li><p style="margin-bottom: 0in">nix: bump version to 2.1.0 and
-	update lock file #609</p></li>
-	<li><p style="margin-bottom: 0in">Change update checking to return
-	&quot;no update&quot; instead of exiting process on server
-	connection error #629</p></li>
-	<li><p style="margin-bottom: 0in">Update README: troubleshoot turbo
-	mode not available #611</p></li>
-	<li><p style="margin-bottom: 0in">Update README: add instruction for
-	failing buildings in case of missing git directory #630</p></li>
-	<li><p style="margin-bottom: 0in">Fix typo in dialog box #618</p></li>
-	<li><p style="margin-bottom: 0in">Enable_tresholds config file
-	improvements #642 | Closes: #641</p></li>
-	<li><p style="margin-bottom: 0in">Rebuilt battery scripts #645</p></li>
-	<li><p style="margin-bottom: 0in">Add battery functions to --live
-	#646</p></li>
-	<li><p>Update README with new battery thresholds feature #644</p>
-	<p>Thanks to all contributors who made this release possible: 
-	</p>
-	<p>@shadeyg56 
-	</p>
-	<p>@natewu 
-	</p>
-	<p>@murbot 
-	</p>
-	<p>@hingen 
-	</p>
-	<p>@rootCircle 
-	</p>
-	<p>@PhoenixCausesOof 
-	</p>
-	<p>@PurpleWazard 
-	</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v2.2.0">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v2.1.0 (v2.1.0)</h2>
-<p><strong>Published on:</strong> 2023-11-21T07:42:58Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li><p>Features**:</p></li>
-	<li><p style="margin-bottom: 0in">Allow GUI to detect available
-	update and install it #587</p></li>
-	<li><p style="margin-bottom: 0in">Support for pyproject.toml #576</p></li>
-	<li><p>Add support for shell completion #580</p></li>
-	<li><p>Bug fixes and improvements:**</p></li>
-	<li><p style="margin-bottom: 0in">auto-cpufreq-installer: removed
-	dependence on record files for removal #581</p></li>
-	<li><p style="margin-bottom: 0in">wrapper: switch sh to bash (Void
-	fix) #578 | Closes #577</p></li>
-	<li><p style="margin-bottom: 0in">nix: replace local derivation with
-	nixpkgs derivation #572</p></li>
-	<li><p style="margin-bottom: 0in">Refactor(flake): improve usage
-	#582</p></li>
-	<li><p style="margin-bottom: 0in">Bump urllib3 from 2.0.6 to 2.0.7
-	#585</p></li>
-	<li><p style="margin-bottom: 0in">Skip temp sensor that report as 0
-	#586 (Closes: #583)</p></li>
-	<li><p style="margin-bottom: 0in">Fix img link and adjust text #584</p></li>
-	<li><p style="margin-bottom: 0in">Add zenpower for AMD CPU temps
-	#590</p></li>
-	<li><p style="margin-bottom: 0in">Add Syntax Highlighting to the
-	Configuration File Example #591</p></li>
-	<li><p style="margin-bottom: 0in">Fix dubious ownership error in
-	auto-cpufreq-installer #597 (Closes: #595)</p></li>
-	<li><p style="margin-bottom: 0in">v2.1.0 tag update fix #605</p></li>
-	<li><p>Update README to match changes to the AUR package #606</p>
-	<p>@shadeyg56 
-	</p>
-	<p>@rootCircle 
-	</p>
-	<p>@isabelroses 
-	</p>
-	<p>@theDrake 
-	</p>
-	<p>@fredinj 
-	</p>
-	<p>@blackpill0w 
-	</p>
-	<p>@amogus07 
-	</p>
-	<p>@MusicalArtist12 
-	</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v2.1.0">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v2.0.0 (v2.0.0)</h2>
-<p><strong>Published on:</strong> 2023-09-30T10:37:40Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li style="display: block"><p>YouTube video: [auto-cpufreq v2.0
-	release &amp; demo of all available features and
-	options](https://www.youtube.com/watch?v=SPGpkZ0AZVU) 
-	</p></li>
-	<li><p>Features**:</p></li>
-	<li><p style="margin-bottom: 0in">Gtk Application for auto-cpufreq
-	#486 #554 | Closes: #87</p></li>
-	<li><p>Add Nix flake and better Nix support #553</p></li>
-	<li><p>Bug fixes and improvements:**</p></li>
-	<li><p style="margin-bottom: 0in">Add optional path in --update #559
-	#538</p></li>
-	<li><p style="margin-bottom: 0in">Add systemd-boot instructions #543</p></li>
-	<li><p style="margin-bottom: 0in">Add missing dependencies #546 |
-	Closes: #544</p></li>
-	<li><p style="margin-bottom: 0in">sysinfo: check for additional
-	sensors and no longer default to first sensor #548 | Closes: #545</p></li>
-	<li><p style="margin-bottom: 0in">Fix auto-cpufreq --update for Arch
-	based distros for non AUR installations #550</p></li>
-	<li><p style="margin-bottom: 0in">Replace #!/bin/bash with
-	#!/usr/bin/env bash #551</p></li>
-	<li><p>Bump version from 2.0 to 2.0.0 and improved error catching
-	#558</p>
-	<p>@shadeyg56 
-	</p>
-	<p>@cosmos1721 
-	</p>
-	<p>@Aikufurr 
-	</p>
-	<p>@rootCircle 
-	</p>
-	<p>@robertosw</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v2.0.0">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v1.9.9 (v1.9.9)</h2>
-<p><strong>Published on:</strong> 2023-08-11T10:13:42Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li style="display: block"><p>Features: 
-	</p></li>
-	<li><p>Add `auto-cpufreq --update` feature #535 | closes: #341</p>
-	<p>Bug fixes and improvements: 
-	</p></li>
-	<li><p style="margin-bottom: 0in">Fixed bug related to recurring
-	sudo prompt for functions that even don't require it #531 | closes:
-	#530</p></li>
-	<li><p style="margin-bottom: 0in">Adding root_check before
-	set_override method execution #524</p></li>
-	<li><p style="margin-bottom: 0in">cpufreqctl: don't try writing to
-	non-existent files #533</p></li>
-	<li><p style="margin-bottom: 0in">Fix Links in the README</p></li>
-	<li><p style="margin-bottom: 0in">Make Self Referencing Links in the
-	README.md Relative #534</p></li>
-	<li><p>Fix README typos #536</p>
-	<p>@cosmos1721 
-	</p>
-	<p>@rootCircle 
-	</p>
-	<p>@cmm 
-	</p>
-	<p>@blackpill0w 
-	</p>
-	<p>@kianmeng 
-	</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.9.9">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v1.9.8 (v1.9.8)</h2>
-<p><strong>Published on:</strong> 2023-05-29T11:35:15Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li style="display: block"><p>Features: 
-	</p></li>
-	<li><p style="margin-bottom: 0in">Ability to force use of
-	`powersave` or `performance` governors #476 | closes: #467</p></li>
-	<li><p>Snap package support for ARM64 architecture, including &gt;=
-	Raspberry Pi 4 or Apple Silicon (M1/2) devices | closes: #457</p>
-	<p>Bug fixes and improvements: 
-	</p></li>
-	<li><p style="margin-bottom: 0in">Ensure all core indices are
-	handled, RPI 4 support | closes: #457</p></li>
-	<li><p style="margin-bottom: 0in">Check for CPU label if no coretemp
-	#513 | closes: #498</p></li>
-	<li><p style="margin-bottom: 0in">Update Readme for issue of
-	auto-cpufreq not autostarting on AUR #485 | closes: #463</p></li>
-	<li><p style="margin-bottom: 0in">Update README for fedora (noob
-	friendly) grub instructions #505</p></li>
-	<li><p style="margin-bottom: 0in">fixup(runit): allow daemon to
-	search for the executable in /usr/local/bin #508 | closes: #460</p></li>
-	<li><p style="margin-bottom: 0in">Update Readme Troubleshooting with
-	How to Disable AMD-Pstate #466</p></li>
-	<li><p>Re-align how usage, temp, and freq are displayed</p>
-	<p>Thanks to our contributors for this release! 
-	</p></li>
-	<li><p style="margin-bottom: 0in">@marchwicki</p></li>
-	<li><p style="margin-bottom: 0in">@shadeyg56</p></li>
-	<li><p style="margin-bottom: 0in">@siddharthkumarjha</p></li>
-	<li><p style="margin-bottom: 0in">@AlbertSolomon</p></li>
-	<li><p style="margin-bottom: 0in">@Animeshz</p></li>
-	<li><p>@biggus-dickus</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.9.8">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v1.9.7 (v1.9.7)</h2>
-<p><strong>Published on:</strong> 2022-12-05T05:44:12Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li style="display: block"><p>Bug fixes and improvements: 
-	</p></li>
-	<li><p style="margin-bottom: 0in">Add functionality to display
-	system load average</p></li>
-	<li><p style="margin-bottom: 0in">Removed battery percentage</p></li>
-	<li><p style="margin-bottom: 0in">Use `usr/local/bin` instead of
-	`usr/bin` for Silverblue and other immutable OSs #460 #449</p></li>
-	<li><p style="margin-bottom: 0in">Add wheel to dependencies (speed
-	up install) #447</p></li>
-	<li><p style="margin-bottom: 0in">Fixed bug where turbo boost will
-	always be on in performance mode #455</p></li>
-	<li><p style="margin-bottom: 0in">Documentation update/revamp #458</p></li>
-	<li><p style="margin-bottom: 0in">Fix for auto-cpufreq-installer
-	regression in #460 (#462)</p></li>
-	<li><p>Improve auto-cpufreq installer (#459)</p>
-	<p>Thanks to our contributors for this release! 
-	</p></li>
-	<li><p style="margin-bottom: 0in">@BowDown097</p></li>
-	<li><p style="margin-bottom: 0in">@johnseekins</p></li>
-	<li><p style="margin-bottom: 0in">@R1D3R175</p></li>
-	<li><p style="margin-bottom: 0in">@gimbles</p></li>
-	<li><p>@abvee</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.9.7">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v1.9.6 (v1.9.6)</h2>
-<p><strong>Published on:</strong> 2022-09-11T13:06:36Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li style="display: block"><p>Bug fixes and improvements: 
-	</p></li>
-	<li><p style="margin-bottom: 0in">Don't overwrite
-	/usr/bin/cpufreqctl.auto-cpufreq excessively
-	[#420](https://github.com/AdnanHodzic/auto-cpufreq/pull/420)</p></li>
-	<li><p style="margin-bottom: 0in">Add s6 script for auto-cpufreq
-	install [#421](https://github.com/AdnanHodzic/auto-cpufreq/pull/421)</p></li>
-	<li><p style="margin-bottom: 0in">Omit the --all flag from calling
-	`nproc` to get actual number of cores
-	[#423](https://github.com/AdnanHodzic/auto-cpufreq/pull/423)</p></li>
-	<li><p style="margin-bottom: 0in">CPU fan speed display patch
-	[#431](https://github.com/AdnanHodzic/auto-cpufreq/pull/431)</p></li>
-	<li><p style="margin-bottom: 0in">Replaced obsolete &quot;egrep&quot;
-	calls with &quot;grep -E&quot;
-	[#435](https://github.com/AdnanHodzic/auto-cpufreq/pull/435)</p></li>
-	<li><p style="margin-bottom: 0in">Code optimization &amp; addition
-	of battery percentage
-	[#432](https://github.com/AdnanHodzic/auto-cpufreq/pull/432)</p></li>
-	<li><p>Switch to the properly maintained AUR package
-	[#433](https://github.com/AdnanHodzic/auto-cpufreq/pull/433)</p>
-	<p>Thanks to our contributors for this release! 
-	</p></li>
-	<li><p style="margin-bottom: 0in">@zoitrok</p></li>
-	<li><p style="margin-bottom: 0in">@AnasR7</p></li>
-	<li><p style="margin-bottom: 0in">@SunkenHero</p></li>
-	<li><p style="margin-bottom: 0in">@hingen</p></li>
-	<li><p>@xd003</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.9.6">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v1.9.5 (v1.9.5)</h2>
-<p><strong>Published on:</strong> 2022-08-10T15:04:39Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li style="display: block"><p>Bug fixes and improvements: 
-	</p></li>
-	<li><p style="margin-bottom: 0in">Upgrade to Snap Core 22</p></li>
-	<li><p style="margin-bottom: 0in">Catch exception in call to psutil
-	.cmdline() (#413)</p></li>
-	<li><p style="margin-bottom: 0in">Fix multiple typos as reported by
-	typos #410</p></li>
-	<li><p style="margin-bottom: 0in">Fix daemon typo #409</p></li>
-	<li><p>Running &quot;auto-cpufreq&quot; itself returns an error
-	(#408)</p>
-	<p>Thanks to our contributors for this release! 
-	</p></li>
-	<li><p style="margin-bottom: 0in">@m-GDEV</p></li>
-	<li><p style="margin-bottom: 0in">@tacheometry</p></li>
-	<li><p style="margin-bottom: 0in">@ishaanbhimwal</p></li>
-	<li><p>@zoitrok</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.9.5">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v1.9.4 (v1.9.4)</h2>
-<p><strong>Published on:</strong> 2022-06-06T13:55:27Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li style="display: block"><p>Bug fixes and improvements: 
-	</p></li>
-	<li><p style="margin-bottom: 0in">auto-cpufreq now refreshes CPU
-	frequencies in (near) real time #132</p></li>
-	<li><p style="margin-bottom: 0in">Revamped mechanism how log file is
-	emptied (optimize &amp; increase execution speed)</p></li>
-	<li><p>Fixed &quot;Average all core temp/Total system load&quot;
-	fields being displayed with too many decimals #392</p>
-	<p>Thanks to our contributors for this release! 
-	</p></li>
-	<li><p>@Jeroenvb3</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.9.4">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v1.9.3 (v1.9.3)</h2>
-<p><strong>Published on:</strong> 2022-03-10T06:08:40Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li style="display: block"><p>Bug fixes and improvements: 
-	</p></li>
-	<li><p>Improved Snap package detection (#368, #372)</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.9.3">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v1.9.2 (v1.9.2)</h2>
-<p><strong>Published on:</strong> 2022-02-20T08:05:20Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li style="display: block"><p>Features, bug fixes and improvements: 
-	</p></li>
-	<li><p>Add ability to change power governor used by default with
-	auto-cpufreq from `balanced` to `performance` [using power_helper.py
-	script](https://github.com/AdnanHodzic/auto-cpufreq/#1-power_helperpy-script).
-	Described as part of updated [Configuring
-	auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)
-	section.</p>
-	<p>Related issues: Not reaching maximum frequencies #361</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.9.2">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v1.9.1 (v1.9.1)</h2>
-<p><strong>Published on:</strong> 2022-01-09T13:09:18Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li style="display: block"><p>Bug fixes and improvements: 
-	</p></li>
-	<li><p style="margin-bottom: 0in">Fixed the --version command when
-	installed from source #347 (#344)</p></li>
-	<li><p style="margin-bottom: 0in">Deploy cpufreqctl on --debug and
-	remove via installer #351</p></li>
-	<li><p style="margin-bottom: 0in">Stop power-profiles-daemon in live
-	mode #350</p></li>
-	<li><p style="margin-bottom: 0in">Set Balanced mode on
-	power-profiles-daemon #349</p></li>
-	<li><p>Ability to reset scaling frequencies to default #338 (#324)</p>
-	<p>Thanks to our contributors for this release! 
-	</p></li>
-	<li><p style="margin-bottom: 0in">@bobslept</p></li>
-	<li><p style="margin-bottom: 0in">@varaki</p></li>
-	<li><p>@ariasmn</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.9.1">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v1.9.0 (v1.9.0)</h2>
-<p><strong>Published on:</strong> 2021-12-26T10:34:01Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li style="display: block"><p>Features: 
-	</p></li>
-	<li><p style="margin-bottom: 0in">Add min/max allowed frequencies
-	option #309 (#324)</p></li>
-	<li><p>Implement Python virtual environment #326 (#263, #196)</p>
-	<p>Bug fixes and improvements: 
-	</p></li>
-	<li><p style="margin-bottom: 0in">Improve charging detection #332
-	(#331)</p></li>
-	<li><p style="margin-bottom: 0in">Started the solution to Snap and
-	PopOS not working #329 (#323)</p></li>
-	<li><p style="margin-bottom: 0in">Add missing package Debian based
-	venv #330</p></li>
-	<li><p style="margin-bottom: 0in">Reformatted codebase #325</p></li>
-	<li><p style="margin-bottom: 0in">Skip hid devices with battery #322
-	(#328, #321)</p></li>
-	<li><p style="margin-bottom: 0in">Fix removal of `shared_dir` on
-	`--remove` #319</p></li>
-	<li><p>Rename various init scripts #317</p>
-	<p>Thanks to our contributors for this release! 
-	</p></li>
-	<li><p style="margin-bottom: 0in">@bobslept</p></li>
-	<li><p style="margin-bottom: 0in">@varaki</p></li>
-	<li><p style="margin-bottom: 0in">@tyleraharrison</p></li>
-	<li><p>@aroundthfur</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.9.0">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v1.8.2 (v1.8.2)</h2>
-<p><strong>Published on:</strong> 2021-12-19T08:26:20Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li style="display: block"><p>Bug fixes and improvements: 
-	</p></li>
-	<li><p style="margin-bottom: 0in">Fix for PopOS `os_release` problem
-	#311</p></li>
-	<li><p style="margin-bottom: 0in">Support for openrc #314</p></li>
-	<li><p>Change the way of checking the charging state #308</p>
-	<p>Thanks to our contributors for this release! 
-	</p></li>
-	<li><p style="margin-bottom: 0in">@tyleraharrison</p></li>
-	<li><p style="margin-bottom: 0in">@AdwaitAdk</p></li>
-	<li><p>@bobslept</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.8.2">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v1.8.1 (v1.8.1)</h2>
-<p><strong>Published on:</strong> 2021-12-11T13:11:00Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li style="display: block"><p>Bug fixes and improvements: 
-	</p></li>
-	<li><p style="margin-bottom: 0in">Add a warning when using TLP #305</p></li>
-	<li><p style="margin-bottom: 0in">Remove package options from
-	cpufreqctl.sh #304</p></li>
-	<li><p style="margin-bottom: 0in">Verify the use of supported init
-	systems. #303</p></li>
-	<li><p style="margin-bottom: 0in">Check if lsb_release exists before
-	using it #302</p></li>
-	<li><p>Improve init system detection along with support for runit as
-	part of Void, Artix Linux #300, #301</p>
-	<p>Thanks to our contributors for this release! 
-	</p></li>
-	<li><p>@bobslept</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.8.1">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v1.8.0 (v1.8.0)</h2>
-<p><strong>Published on:</strong> 2021-12-05T12:15:38Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li style="display: block"><p>Features: 
-	</p></li>
-	<li><p style="margin-bottom: 0in">Detect if GNOME Power profiles
-	service is running and disable it automatically on install.
-	Otherwise warn user during `live` or `monitor` mode and `stats`
-	output of Snap package, along with instructions how to disable it
-	using `auto-cpufreq: power_helper` #277, #296</p></li>
-	<li><p style="margin-bottom: 0in">Created auto-cpufreq: power_helper
-	which allows user to manually `enable/disable` above mentioned
-	daemon and see its `status`.</p></li>
-	<li><p>Due to Snap package restrictions on host environment,
-	`power_helper` also allows user to `enable/disable` bluetooth on
-	boot.</p>
-	<p>Bug fixes and improvements: 
-	</p></li>
-	<li><p style="margin-bottom: 0in">Fix instances where charging is
-	not recognized #281, #285</p></li>
-	<li><p>Correcting charge status in multi-battery setup #294</p>
-	<p>Thanks to our contributors for this release! 
-	</p></li>
-	<li><p style="margin-bottom: 0in">@AmitGolden</p></li>
-	<li><p style="margin-bottom: 0in">@jdhonea</p></li>
-	<li><p>@bobslept</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.8.0">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v1.7.2 (v1.7.2)</h2>
-<p><strong>Published on:</strong> 2021-11-14T08:47:15Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li style="display: block"><p>Bug fixes and improvements: 
-	</p></li>
-	<li><p style="margin-bottom: 0in">Remove quotes from youtube link
-	#264</p></li>
-	<li><p style="margin-bottom: 0in">Turning Bluetooth off/on &amp;
-	Void Linux improvements #269</p></li>
-	<li><p style="margin-bottom: 0in">Fix auto-cpufreq-installer steps
-	order #273</p></li>
-	<li><p>On laptops/notebooks, check if charging via BAT* status #274</p>
-	<p>Thanks to our contributors for this release! 
-	</p></li>
-	<li><p style="margin-bottom: 0in">@PabloCastellano</p></li>
-	<li><p style="margin-bottom: 0in">@Animeshz</p></li>
-	<li><p style="margin-bottom: 0in">@4JX</p></li>
-	<li><p>@AmitGolden</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.7.2">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v1.7.1 (v1.7.1)</h2>
-<p><strong>Published on:</strong> 2021-10-17T16:04:42Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li style="display: block"><p>Bug fixes and improvements: 
-	</p></li>
-	<li><p style="margin-bottom: 0in">Disable turbo when config is
-	&quot;never&quot; #255</p></li>
-	<li><p style="margin-bottom: 0in">Remove redundant conditionals in
-	set_performance #253</p></li>
-	<li><p>Daemon running msg was wrong #262</p>
-	<p>Thanks to our contributors for this release! 
-	</p></li>
-	<li><p style="margin-bottom: 0in">@fpoli</p></li>
-	<li><p style="margin-bottom: 0in">@Yustynn</p></li>
-	<li><p>@aroundthfur</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.7.1">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v1.7.0 (v1.7.0)</h2>
-<p><strong>Published on:</strong> 2021-10-16T18:37:30Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li style="display: block"><p>Features: 
-	</p></li>
-	<li><p>Add config file for preferred governor and turbo boost
-	behavior #250 | reference: [Configuring
-	auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/README.md#configuring-auto-cpufreq)</p>
-	<p>Bug fixes and improvements: 
-	</p></li>
-	<li><p style="margin-bottom: 0in">Add temperature readings in
-	thinkpad #252</p></li>
-	<li><p style="margin-bottom: 0in">Add Snap `system-files` interface
-	to read `/etc/auto-cpufreq.conf`</p></li>
-	<li><p style="margin-bottom: 0in">Add donate menu item</p></li>
-	<li><p>Various other improvements in regards to menu options</p>
-	<p>Thanks to our contributors for this release! 
-	</p></li>
-	<li><p style="margin-bottom: 0in">@zoitrok</p></li>
-	<li><p>@alexmak23</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.7.0">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v1.6.9 (v1.6.9)</h2>
-<p><strong>Published on:</strong> 2021-09-19T15:25:14Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li style="display: block"><p>Bug fixes and improvements: 
-	</p></li>
-	<li><p style="margin-bottom: 0in">Use LZO algorithm compression for
-	Snap package</p></li>
-	<li><p style="margin-bottom: 0in">Added Void Linux support (runit)
-	#235</p></li>
-	<li><p style="margin-bottom: 0in">Artix runnit support #237</p></li>
-	<li><p style="margin-bottom: 0in">Code refactor (improved
-	readability) of auto-cpufreq-installer #238</p></li>
-	<li><p style="margin-bottom: 0in">Added EndeavourOS support to
-	auto-cpufreq-installer #211</p></li>
-	<li><p style="margin-bottom: 0in">Update for ArchLinux's pacman #205</p></li>
-	<li><p>Fixed typo for &quot;auto-cpufeq&quot; #198</p>
-	<p>Thanks to our contributors for this release! 
-	</p></li>
-	<li><p style="margin-bottom: 0in">@InfoseccGurung</p></li>
-	<li><p style="margin-bottom: 0in">@ShyanJMC</p></li>
-	<li><p style="margin-bottom: 0in">@adam4nj</p></li>
-	<li><p style="margin-bottom: 0in">@jpnt</p></li>
-	<li><p>@explosion-mental</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.6.9">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v1.6.4 (v1.6.4)</h2>
-<p><strong>Published on:</strong> 2021-03-14T18:37:12Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li style="display: block"><p>Bug fixes and improvements: 
-	</p></li>
-	<li><p>Fix service unit file on Arch Linux. #190</p>
-	<p>Thanks to our contributors for this release! 
-	</p></li>
-	<li><p>@marc0der</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.6.4">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v1.6.3 (v1.6.3)</h2>
-<p><strong>Published on:</strong> 2021-03-11T18:31:51Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li style="display: block"><p>Bug fixes and improvements: 
-	</p></li>
-	<li><p style="margin-bottom: 0in">Fix location of auto-cpufreq in
-	service descriptor. #187</p></li>
-	<li><p>Change the default behaviour of set_performance to OFF. #188</p>
-	<p>Thanks to our contributors for this release! 
-	</p></li>
-	<li><p style="margin-bottom: 0in">@marc0der</p></li>
-	<li><p>@frankiexyz</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.6.3">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v1.6.2 (v1.6.2)</h2>
-<p><strong>Published on:</strong> 2021-02-21T09:50:51Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li style="display: block"><p>Features: 
-	</p></li>
-	<li><p>Add --version flag to CLI #177</p>
-	<p>Thanks to our contributors for this release! 
-	</p></li>
-	<li><p>@marc0der</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.6.2">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v1.6.1 (v1.6.1)</h2>
-<p><strong>Published on:</strong> 2021-02-07T18:36:18Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li style="display: block"><p>Features: 
-	</p>
-	<p>Bug fixes and improvements: 
-	</p></li>
-	<li><p style="margin-bottom: 0in">Remove pacman wildcard #172</p></li>
-	<li><p>Only query pacman when on arch and not a snap install. #173</p>
-	<p>Thanks to our contributors for this release! 
-	</p></li>
-	<li><p style="margin-bottom: 0in">@yochananmarqos</p></li>
-	<li><p>@marc0der</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.6.1">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v1.6.0 (v1.6.0)</h2>
-<p><strong>Published on:</strong> 2021-02-06T21:04:26Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li style="display: block"><p>Features: 
-	</p></li>
-	<li><p>Implemented mechanism to display auto-cpufreq/package version
-	as part of `--debug` flag</p>
-	<p>Related: #74, #137 
-	</p>
-	<p>Bug fixes and improvements: 
-	</p></li>
-	<li><p style="margin-bottom: 0in">Use `psutil` in conjuction with
-	`dmidecode` to determine `ac_state` #168</p></li>
-	<li><p style="margin-bottom: 0in">Add note/instructions on how to
-	exit &quot;auto-cpufreq --live/monitor/stats&quot; #57</p></li>
-	<li><p style="margin-bottom: 0in">Improved computer_type</p></li>
-	<li><p>Add execution timestamp for to `--stats` | Related: #156</p>
-	<p>Thanks to our contributors for this release! 
-	</p></li>
-	<li><p style="margin-bottom: 0in">@librewish</p></li>
-	<li><p>Everyone who participated in [auto-cpufreq feedback
-	Tweet](https://twitter.com/fooctrl/status/1357230198857564160)
-	:partying_face:</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.6.0">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v1.5.5 (v1.5.5)</h2>
-<p><strong>Published on:</strong> 2021-02-04T07:11:44Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li style="display: block"><p>Bug fixes and improvements: 
-	</p></li>
-	<li><p>Hot-fix for laptops reporting wrong charging status (Close:
-	#164)</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.5.5">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v1.5.4 (v1.5.4)</h2>
-<p><strong>Published on:</strong> 2021-02-03T15:51:44Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li style="display: block"><p>Bug fixes and improvements: 
-	</p></li>
-	<li><p style="margin-bottom: 0in">Improve domain language around
-	logging and stats #160</p></li>
-	<li><p style="margin-bottom: 0in">Unable to remove via `--remove`
-	option for Snap package #161</p></li>
-	<li><p style="margin-bottom: 0in">Adjust CPU frequency scaling on
-	desktop to run in &quot;performance&quot; governor #162</p></li>
-	<li><p>Use `dmidecode` instead of `hostnamectl` #163</p>
-	<p>Thanks to our contributors for this release! 
-	</p></li>
-	<li><p style="margin-bottom: 0in">@marc0der</p></li>
-	<li><p style="margin-bottom: 0in">@ThePoorPilot</p></li>
-	<li><p>@librewish</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.5.4">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v1.5.3 (v1.5.3)</h2>
-<p><strong>Published on:</strong> 2021-01-24T13:04:09Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li style="display: block"><p>Bug fixes and improvements: 
-	</p></li>
-	<li><p style="margin-bottom: 0in">Improve logging &amp; prevent log
-	size growth #148</p></li>
-	<li><p style="margin-bottom: 0in">Deliver custom parallel version of
-	cpufreqctl #150</p></li>
-	<li><p style="margin-bottom: 0in">Fix Ryzen 4750U temperature output
-	with zenpower #151</p></li>
-	<li><p style="margin-bottom: 0in">Add Arch-based Linux to
-	auto-cpufreq-installer script #152</p></li>
-	<li><p>Improved Python file structure (rename source &gt;
-	auto_cpufreq) #153</p>
-	<p>Thanks to our contributors for this release! 
-	</p></li>
-	<li><p style="margin-bottom: 0in">@Technical27</p></li>
-	<li><p style="margin-bottom: 0in">@Red-Eyed</p></li>
-	<li><p style="margin-bottom: 0in">@marc0der</p></li>
-	<li><p>@yochananmarqos</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.5.3">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v1.5.2 (v1.5.2)</h2>
-<p><strong>Published on:</strong> 2021-01-17T09:24:26Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li style="display: block"><p>Bug fixes and improvements: 
-	</p></li>
-	<li><p style="margin-bottom: 0in">Disable setting EPP if HWP is
-	active and governor is set to &quot;performance&quot; (#138)</p></li>
-	<li><p>Improved OpenSUSE detection (#135 )</p>
-	<p>Thanks to our contributors for this release! 
-	</p></li>
-	<li><p style="margin-bottom: 0in">@NJOYSoftware</p></li>
-	<li><p>@freshgiammi</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.5.2">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v1.5.1 (v1.5.1)</h2>
-<p><strong>Published on:</strong> 2020-12-06T23:49:03Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li style="display: block"><p>Bug fixes and improvements: 
-	</p></li>
-	<li><p style="margin-bottom: 0in">Re-calibrated
-	performance/powersave triggers (fixed turbo always on on powersave)
-	(#109 )</p></li>
-	<li><p>Resolved `cpufreqctl` conflict as part of [AUR
-	package](https://github.com/AdnanHodzic/auto-cpufreq/issues/87#issuecomment-739549066)
-	(#87, #133)</p>
-	<p>Thanks to our contributors for this release! 
-	</p></li>
-	<li><p style="margin-bottom: 0in">@crian</p></li>
-	<li><p>@yochananmarqos</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.5.1">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v1.5.0 (v1.5.0)</h2>
-<p><strong>Published on:</strong> 2020-12-06T17:22:43Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li style="display: block"><p>Features: 
-	</p></li>
-	<li><p>Implemented mechanism to set turbo based on CPU temperature
-	in combination with CPU utilization/load (prevent overheating).</p>
-	<p>Related: #109 
-	</p>
-	<p>Bug fixes and improvements: 
-	</p></li>
-	<li><p style="margin-bottom: 0in">Fixed bug in performance boost
-	logic (#131)</p></li>
-	<li><p style="margin-bottom: 0in">Added support for OpenSUSE
-	Tumbleweed as part of `auto-cpufreq-installer` (#134)</p></li>
-	<li><p>Set to consistently use correct data across functions with
-	`cpuload` &amp; `load1m`</p>
-	<p>Thanks to our contributors for this release! 
-	</p></li>
-	<li><p style="margin-bottom: 0in">@dfuehrer</p></li>
-	<li><p>@NJOYSoftware</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.5.0">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v1.3.4 (v1.3.4)</h2>
-<p><strong>Published on:</strong> 2020-09-28T09:02:20Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li style="display: block"><p>Bug fixes and improvements: 
-	</p></li>
-	<li><p>Revamp of charging check function #85 #108</p>
-	<p>Thanks to our contributors for this release! 
-	</p></li>
-	<li><p>@Haptein</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.3.4">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v1.3.3 (v1.3.3)</h2>
-<p><strong>Published on:</strong> 2020-09-24T05:56:24Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li style="display: block"><p>Bug fixes and improvements: 
-	</p></li>
-	<li><p style="margin-bottom: 0in">Improved support for system info
-	on CPU hotplug (on/offline CPU's) #119</p></li>
-	<li><p>Added support for Solus #122</p>
-	<p>Thanks to our contributors for this release! 
-	</p></li>
-	<li><p style="margin-bottom: 0in">@Haptein</p></li>
-	<li><p>@natri23</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.3.3">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v1.3.2 (v1.3.2)</h2>
-<p><strong>Published on:</strong> 2020-09-22T15:14:38Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li style="display: block"><p>Bug fixes and improvements: 
-	</p></li>
-	<li><p style="margin-bottom: 0in">Report core states as a table
-	(#116)</p></li>
-	<li><p style="margin-bottom: 0in">Turbo trigger revamp, use more
-	conservative settings (#109, #118)</p></li>
-	<li><p style="margin-bottom: 0in">Re-enable `app_version` func + add
-	missing `footer` to daemon log</p></li>
-	<li><p>Updated dependencies for source installer (#121)</p>
-	<p>Thanks to our contributors for this release! 
-	</p></li>
-	<li><p>@Haptein</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.3.2">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v1.3.1 (v1.3.1)</h2>
-<p><strong>Published on:</strong> 2020-09-13T19:37:38Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li style="display: block"><p>Features: 
-	</p></li>
-	<li><p>Display CPU usage per each core</p>
-	<p>Bug fixes and improvements: 
-	</p></li>
-	<li><p style="margin-bottom: 0in">fixed `display_load` function not
-	being executed each iteration</p></li>
-	<li><p style="margin-bottom: 0in">handle `app_version` function for
-	source install using try/except (#111)</p></li>
-	<li><p>properly print out daemon check message on SNAP</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.3.1">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v1.3 (v1.3)</h2>
-<p><strong>Published on:</strong> 2020-09-11T20:08:10Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li style="display: block"><p>Features: 
-	</p></li>
-	<li><p style="margin-bottom: 0in">Revamped `--debug` functionality</p></li>
-	<li><p style="margin-bottom: 0in">* to exclude use of `inxi` tool
-	and rely solely on Python</p></li>
-	<li><p>* include additional info about environment and auto-cpufreq
-	system resource consumption</p>
-	<p>Bug fixes and improvements: 
-	</p></li>
-	<li><p style="margin-bottom: 0in">Code/functions refactoring</p></li>
-	<li><p style="margin-bottom: 0in">Resolved &quot;error: invalid
-	command 'bdist_wheel'&quot; during snap package build</p></li>
-	<li><p style="margin-bottom: 0in">Add distro info, kernel, driver,
-	snap to debug</p></li>
-	<li><p>Don't run `--remove` if daemon is not installed</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.3">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v1.2.4 (v1.2.4)</h2>
-<p><strong>Published on:</strong> 2020-09-05T12:18:22Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li style="display: block"><p>Bug fixes and improvements: 
-	</p></li>
-	<li><p style="margin-bottom: 0in">Snap package migration to core20
-	(Ubuntu 20.04 with Python 3.8.2)</p></li>
-	<li><p style="margin-bottom: 0in">Revamp of writing daemon service
-	logs for snap environments (Close: #53, #82)</p></li>
-	<li><p>Improved turbo trigger on 1 core 100% load and on load
-	average (PR: #105)</p>
-	<p>Thanks to our contributors for this release! 
-	</p></li>
-	<li><p>@rrodriguez81</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.2.4">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v1.2.2 (v1.2.2)</h2>
-<p><strong>Published on:</strong> 2020-09-01T18:52:45Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li style="display: block"><p>Bug fixes and improvements: 
-	</p></li>
-	<li><p style="margin-bottom: 0in">Modified fixed CPU usage
-	percentage (Close: #98)</p></li>
-	<li><p>Implemented environment agnostic way to install pip packages
-	(Close: #94)</p>
-	<p>Thanks to our contributors for this release! 
-	</p></li>
-	<li><p style="margin-bottom: 0in">@Red-Eyed</p></li>
-	<li><p>@rrodriguez81</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.2.2">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v1.2.1 (v1.2.1)</h2>
-<p><strong>Published on:</strong> 2020-08-09T20:27:22Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li style="display: block"><p>Features: 
-	</p></li>
-	<li><p>ARM CPU support #33</p>
-	<p>Bug fixes: 
-	</p></li>
-	<li><p style="margin-bottom: 0in">add license to snap package #86</p></li>
-	<li><p style="margin-bottom: 0in">Fix for unsupported turbo #89</p></li>
-	<li><p>Workaround for Fedora [`cgroups v2` snap
-	issue](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/README.md#snap-store)</p>
-	<p>Thanks to @Red-Eyed for being contributor of this release!</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.2.1">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v1.2 (1.2)</h2>
-<p><strong>Published on:</strong> 2020-08-06T20:10:50Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li style="display: block"><p>Features: 
-	</p></li>
-	<li><p style="margin-bottom: 0in">AMD support -
-	https://github.com/AdnanHodzic/auto-cpufreq/pull/63</p></li>
-	<li><p style="margin-bottom: 0in">Display temperature for each
-	physical core</p></li>
-	<li><p style="margin-bottom: 0in">Implemented `--debug` option (#70)</p></li>
-	<li><p>Implemented issue template</p>
-	<p>Bug fixes: 
-	</p></li>
-	<li><p style="margin-bottom: 0in">Various `auto-cpufreq-installer`
-	bug fixes</p></li>
-	<li><p style="margin-bottom: 0in">Properly get CPU temperature for
-	AMD Ryzen using `k10temp` #62 (Closes: #14)</p></li>
-	<li><p style="margin-bottom: 0in">Added ability to use
-	`auto-cpufreq-installer` from any path #65</p></li>
-	<li><p style="margin-bottom: 0in">Switching to `psutil` in order to
-	monitor charger state #68</p></li>
-	<li><p>Added missing build dependencies for snap package</p>
-	<p>Thanks to @Red-Eyed for being a big contributor of this release!</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/1.2">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v1.1.2 (1.1.2)</h2>
-<p><strong>Published on:</strong> 2020-03-27T11:31:44Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li><p>Fixed systemd &quot;executable path is not absolute error&quot;
-	(close: #42)</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/1.1.2">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v1.1.1 (1.1.1)</h2>
-<p><strong>Published on:</strong> 2020-03-24T21:42:12Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li><p style="margin-bottom: 0in">Disable EPP (Intel Speed Shift)
-	support on older CPU's which don't support it</p></li>
-	<li><p>Various bug fixes and improvements</p>
-	<p>Thanks to @validatedev for being a big contributor of this
-	release!</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/1.1.1">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v1.1 (1.1)</h2>
-<p><strong>Published on:</strong> 2020-03-21T15:26:07Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li><p style="margin-bottom: 0in">Implemented mechanism for
-	adjustable EPP (Intel Speed Shift) values</p></li>
-	<li><p>Various bug fixes and improvements</p>
-	<p>Thanks to @validatedev for being a big contributor of this
-	release</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/1.1">Release
-Link</a></p>
-<hr/>
-
-<h2 class="western">v1.0 (1.0)</h2>
-<p><strong>Published on:</strong> 2020-03-19T21:29:10Z</p>
-<p><strong>Description:</strong></p>
-<ul>
-	<li><p style="margin-bottom: 0in">Creation of auto-cpufreq Python
-	package using `setup.py` build script</p></li>
-	<li><p style="margin-bottom: 0in">Creation and release of
-	[auto-cpufreq snap package](https://snapcraft.io/auto-cpufreq)</p></li>
-	<li><p style="margin-bottom: 0in">Creation of source code based
-	installer
-	[auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq#installing-auto-cpufreq)</p></li>
-	<li><p style="margin-bottom: 0in">Deactivate turbo boost in
-	performance if system load/CPU usage is low</p></li>
-	<li><p style="margin-bottom: 0in">Refined conditions when turbo
-	boost is activated/deactivated</p></li>
-	<li><p>Numerous other bugs fixes and improvements</p></li>
-</ul>
-<p><strong>URL:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/1.0">Release
-Link</a></p>
-<hr/>
-
-</body>
-</html>
+<h1>Releases</h1><h2>v2.7.0 ()</h2><p><strong>Published on:</strong> None</p><p><strong>Description:</strong></p><ul><p>Features:</p><p></p><li>Allow for overriding the CPU turbo setting via CLI and GUI #859 | Closes: #604</li><li>Allow users to specify battery device in config #895</li><p></p><p>Bug fixes and improvements:</p><p></p><li>Fix: cpuinfo and scaling min/max freqs not being used properly #899 | Closes: #866 #737</li><li>Fix `auto-cpufreq --monitor` reporting the "CPU frequency scaling" section wrong. #855</li><li>Fix `requests` nix flake #858</li><li>Fix the error linked to the path of the battery and generalize the solution (improve battery path detection) #847 | Closes: #848</li><li>Replace magic-nix-cache-action #843</li><li>Fix: rectify window icon under Wayland #841</li><li>Bump urllib3 from 2.3.0 to 2.5.0 #854</li><li>Bump urllib3 from 2.5.0 to 2.6.0 #907</li><li>Bump urllib3 from 2.6.0 to 2.6.3 #909</li><li>Docs: remove --completions flag README documentation #862</li><li>Fix: use scaling_max_freq for accurate max CPU clock detection #866 | Closes: #737, #800</li><li>ASUS laptop to battery thresholds #875 | Closes #794</li><li>Add example configuration for Nixos | #878</li><li>poetry: Migrate to urwid v3 | Closes #881</li><li>Fx for asus_expertBook_charging_threshold #883</li><li>Add fallback battery threshold file paths #884</li><li>Fix PyGObject installation on Pop!_OS #892 | Closes #833</li><li>Add workaround for exit code 1 (auto-cpufreq-gtk) to README.md #896 | Closes: #893</li><li>Fix variable name for virtual environment removal #902</li><li>Improve pkexec error handling for GUI #903</li><li>*Fix: NixOS `awk: command not found` #910 | Closes #908</li><p></p><p> </p><p>Thanks to all contributors who made this release possible:</p><p></p><p>@CasperVM</p><p>@JuanR4140 </p><p>@Integral-Tech</p><p>@Hasnep </p><p>@baldeuniversel </p><p>@Svenum </p><p>@PhoenixCausesOof </p><p>@pranaovs </p><p>@LDrawe</p><p>@PurpleWazard </p><p>@chakibchemso</p><p>@shadeyg56 </p><p>@sgimres </p><p>@Karthiktiwari </p><p>@sacredeanne</p><p>@cayubweeums</p><p>@developpeur-php</p><p>@AndreiCravtov</p><p></p><p>Please note, as always https://github.com/AdnanHodzic/auto-cpufreq/discussions/312#discussioncomment-9557496 to help shape future of the project, and join us on [auto-cpufreq Discord community](https://discord.gg/Sjauxtj6kH).</p></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/untagged-bd87aa800fe4b2f770d9'>Release Link</a></p><hr><h2>v2.6.0 (v2.6.0)</h2><p><strong>Published on:</strong> 2025-04-23T10:15:06Z</p><p><strong>Description:</strong></p><ul><p>Features:</p><p></p><li>Implement dedicated functionality to turn Bluetooth on/off at boot #836 | Closes #92, #451, #673</li><li>Enhance CLI System Monitoring with a TUI #810</li><li>Update auto-cpufreq-installer to update Suse support #808 | Closes #805</li><p></p><p>Bug fixes and improvements:</p><p></p><li>A Fix for GUI not launching in some cases and dependency management #826 | Closes #824, #825, #813</li><li>Added pyasyncore to pyprojec #822 | Closes #601</li><li>Bump virtualenv from 20.24.5 to 20.26.6 #806</li><li>nix: fail evaluation if power-profiles-daemon is enabled #809</li><li>Fix `Dependency 'girepository-2.0' is required but not found` #813</li><li>Fix deps: allow psutil 7.x #821 | Closes #817</li><li>nix: fixed typo #823</li><li>fix: fix eval on NixOS #830</li><li>Update battery threshold limit on Ideapad based on manufacturer settings | #838</li><p> </p><p>Thanks to all contributors who made this release possible:</p><p></p><p>@LAITH343 </p><p>@CaffineAddic </p><p>@shadeyg56 </p><p>@LordGrimmauld</p><p>@devinmcanelly </p><p>@pfaj</p><p>@kirmola</p><p>@Svenum</p><p>@Genius-19</p><p></p><p>Please note, as always https://github.com/AdnanHodzic/auto-cpufreq/discussions/312#discussioncomment-9557496 to help shape future of the project, and join us on [auto-cpufreq Discord community](https://discord.gg/Sjauxtj6kH).</p></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v2.6.0'>Release Link</a></p><hr><h2>v2.5.0 (v2.5.0)</h2><p><strong>Published on:</strong> 2025-01-10T07:44:09Z</p><p><strong>Description:</strong></p><ul><p>Features:</p><p></p><li>Add EPB (Energy Performance Bias) settings support #771 | Closes: #522</li><p></p><p>Bug fixes and improvements:</p><p></p><li>Fixed wrong sensor being monitored (AMD) #772</li><li>Added notes to the documentation about the default `energy_perf_bias` settings #774</li><li>Add support for Fedora 41 (TuneD) #786 (Closes: #779)</li><li>Fix nix CI: fix prevent-install-and-copy.patch #787</li><li>Fix Nix Build CI (Closes: #798)</li><li>Improve TuneD detection mechanism #788</li><li>Improve systemd service management #789</li><li>Resolve permission errors for --install, --remove, and cpufreqctl.auto-cpufreq #762 (Closes #797)</li><p></p><p>Thanks to all contributors who made this release possible:</p><p></p><p>@snyypi </p><p>@johanssonvincent </p><p>@geragio </p><p>@aucub </p><p>@Uyonoh </p><p>@shadeyg56 </p><p></p><p>Please note, as always https://github.com/AdnanHodzic/auto-cpufreq/discussions/312#discussioncomment-9557496 to help shape future of the project, and join us on [auto-cpufreq Discord community](https://discord.gg/Sjauxtj6kH).</p></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v2.5.0'>Release Link</a></p><hr><h2>v2.4.0 (v2.4.0)</h2><p><strong>Published on:</strong> 2024-09-05T05:47:54Z</p><p><strong>Description:</strong></p><ul><li>Features**:</li><p></p><li>Add support for setting "Platform Profile" #752</li><li>Adding Gentoo Install section #764</li><li>Add dinit (Artix) init system support | Closes: #689</li><li>Prevent Xbox controller's battery switch to battery profile #753</li><p></p><li>Bug fixes and improvements:**</li><p></p><li>Use `performance` EPP in AMD CPUs when using `performance` governor #725 | Closes: #724</li><li>Use Repology badge for automatic AUR version updating #692</li><li>Improve compatible for Arch based distributions #691</li><li>Critical name error in auto-cpufreq --stats #696</li><li>Minor refactor: code clean-up & make it more readable #695</li><li>Bump requests from 2.31.0 to 2.32.0 #705</li><li>Nix: fix duplicated package #701</li><li>Refactor charging function #702</li><li>Update nix requests version #708 | Closes #708</li><li>Fix: Cannot install the daemon on Artix Linux (runit) #706</li><li>Fix: [Ideapad] --stats gives error as BAT0 can't be found #700</li><li>Fix: [ NixOS ] /bin/sh: line 1: getent: command not found #704</li><li>Fix issue where epp cannot be set in powersave governor #738</li><li>Fix/Close #715, #713, #634 issues #716</li><li>nix: add overlay; use best practices #718</li><li>[ Nix / NixOS ] PR #718 breaks flake #720</li><li>Bump urllib3 from 2.0.7 to 2.2.2 #723</li><li>Bump certifi from 2023.7.22 to 2024.7.4 #732</li><li>Bump zipp from 3.17.0 to 3.19.1 #735</li><li>Code refactoring, more readable and easier to modify #736</li><li>Fix `AVAILABLE_GOVERNORS` #744</li><li>Show error message if threshold file doesn't exist #742</li><li>Update flake + Remove patch from newer pyinotify version in nixpkgs #747 | Closes: #746</li><li>Fix unsafe access to PATH #756 | Closes #755</li><li>Unpin psutil and requests #759</li><li>Remove network-online.target as a systemd-service dependency (increase boot time speed) | Closes: #739</li><li>Fix check_conservation_mode() function in ideapad_laptop.py #766 | Closes #750</li><li>Ignoring power supplies FIX #760| Closes #753</li><li>Bump cryptography from 42.0.4 to 43.0.1 #768</li><p></p><p>Thanks to all contributors who made this release possible:</p><p></p><p>@BOOTMGR</p><p>@shadeyg56 </p><p>@Angel-Karasu</p><p>@MusicalArtist12 </p><p>@yezarniko </p><p>@dementive </p><p>@Svenum  </p><p>@TheChilledBuffalo </p><p>@rivenirvana</p><p>@Svenum </p><p>@BowDown097</p><p>@S41G0N </p><p>@Geffo029</p><p></p><p>Please note, as always [auto-cpufreq is looking for co-maintainers & open source developers](https://github.com/AdnanHodzic/auto-cpufreq/discussions/312#discussioncomment-9557496)  to help shape future of the project, and join us on [auto-cpufreq Discord community](https://discord.gg/Sjauxtj6kH).</p></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v2.4.0'>Release Link</a></p><hr><h2>v2.3.0 (v2.3.0)</h2><p><strong>Published on:</strong> 2024-05-09T10:02:31Z</p><p><strong>Description:</strong></p><ul><li>Features**:</li><p></p><li>Add conservation mode to Lenovo laptops #652</li><li>Rework config and reload config on file change/creation/deletion #663</li><li>Create workflows for Linux builds and Nix flake builds #659</li><p></p><li>Bug fixes and improvements:**</li><p></p><li>Updated error handling to provide specific message for rate limit exceeded issues #657</li><li>Modify message when using amd-pstate-epp #674 | Closes: #667</li><li>Update psutil to patched Git version | Closes #654</li><li>Fix SyntaxWarning in objects.py #651</li><li>Update maintainer list for AUR package in readme #662</li><li>Fix spam error message when setting energy_performance_preference #680</li><li>Add warnings for charge thresholds #679</li><li>Bump cryptography from 42.0.0 to 42.0.2 #648</li><li>Bump cryptography from 42.0.2 to 42.0.4 #653</li><li>Bump idna from 3.4 to 3.7 #678</li><p></p><p>Thanks to all contributors who made this release possible:</p><p></p><p>@shadeyg56 </p><p>@PurpleWazard </p><p>@meator</p><p>@monarxxjain </p><p>@meator </p><p>@monarxxjain</p><p>@parmjotsinghrobot  </p><p>@corona10 </p><p>@FosRexx</p></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v2.3.0'>Release Link</a></p><hr><h2>v2.2.0 (v2.2.0)</h2><p><strong>Published on:</strong> 2024-02-14T17:01:35Z</p><p><strong>Description:</strong></p><ul><li>Features**:</li><p></p><li>Add support for configuring/overriding "Energy Performance Preference (EPP)" #619</li><li>Add battery charge thresholds limit #637</li><p></p><li>Bug fixes and improvements:**</li><p></p><li>Fix dynamic boosting being incorrectly diagnosed #631| Closes: #622</li><li>Add ability to build snap packages for both amd64 & arm64 architectures</li><li>Bump cryptography from 41.0.6 to 42.0.0 #638</li><li>nix: bump version to 2.1.0 and update lock file #609</li><li>Change update checking to return "no update" instead of exiting process on server connection error #629</li><li>Update README: troubleshoot turbo mode not available #611</li><li>Update README: add instruction for failing buildings in case of missing git directory #630</li><li>Fix typo in dialog box #618</li><li>Enable_tresholds config file improvements #642 | Closes: #641</li><li>Rebuilt battery scripts #645</li><li>Add battery functions to --live #646</li><li>Update README with new battery thresholds feature  #644</li><p></p><p>Thanks to all contributors who made this release possible:</p><p></p><p>@shadeyg56</p><p>@natewu </p><p>@murbot </p><p>@hingen </p><p>@rootCircle</p><p>@PhoenixCausesOof</p><p>@PurpleWazard </p></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v2.2.0'>Release Link</a></p><hr><h2>v2.1.0 (v2.1.0)</h2><p><strong>Published on:</strong> 2023-11-21T07:42:58Z</p><p><strong>Description:</strong></p><ul><li>Features**:</li><p></p><li>Allow GUI to detect available update and install it #587</li><li>Support for pyproject.toml #576</li><li>Add support for shell completion #580</li><p></p><li>Bug fixes and improvements:**</li><p></p><li>auto-cpufreq-installer: removed dependence on record files for removal  #581</li><li>wrapper: switch sh to bash (Void fix) #578 | Closes #577</li><li>nix: replace local derivation with nixpkgs derivation #572</li><li>Refactor(flake): improve usage #582</li><li>Bump urllib3 from 2.0.6 to 2.0.7 #585</li><li>Skip temp sensor that report as 0 #586 (Closes: #583)</li><li>Fix img link and adjust text #584</li><li>Add zenpower for AMD CPU temps #590</li><li>Add Syntax Highlighting to the Configuration File Example #591</li><li>Fix dubious ownership error in auto-cpufreq-installer #597 (Closes: #595)</li><li>v2.1.0 tag update fix #605</li><li>Update README to match changes to the AUR package #606</li><p></p><p></p><p>@shadeyg56</p><p>@rootCircle </p><p>@isabelroses </p><p>@theDrake</p><p>@fredinj </p><p>@blackpill0w</p><p>@amogus07 </p><p>@MusicalArtist12 </p></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v2.1.0'>Release Link</a></p><hr><h2>v2.0.0 (v2.0.0)</h2><p><strong>Published on:</strong> 2023-09-30T10:37:40Z</p><p><strong>Description:</strong></p><ul><p>YouTube video: [auto-cpufreq v2.0 release & demo of all available features and options](https://www.youtube.com/watch?v=SPGpkZ0AZVU)</p><p></p><li>Features**:</li><p></p><li>Gtk Application for auto-cpufreq #486 #554 | Closes: #87</li><li>Add Nix flake and better Nix support #553</li><p></p><li>Bug fixes and improvements:**</li><p></p><li>Add optional path in --update #559 #538</li><li>Add systemd-boot instructions #543</li><li>Add missing dependencies #546 | Closes: #544</li><li>sysinfo: check for additional sensors and no longer default to first sensor #548 | Closes: #545</li><li>Fix auto-cpufreq --update for Arch based distros for non AUR installations #550</li><li>Replace #!/bin/bash with #!/usr/bin/env bash #551</li><li>Bump version from 2.0 to 2.0.0 and improved error catching #558</li><p></p><p>@shadeyg56</p><p>@cosmos1721</p><p>@Aikufurr</p><p>@rootCircle </p><p>@robertosw</p></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v2.0.0'>Release Link</a></p><hr><h2>v1.9.9 (v1.9.9)</h2><p><strong>Published on:</strong> 2023-08-11T10:13:42Z</p><p><strong>Description:</strong></p><ul><p>Features:</p><p></p><li>Add `auto-cpufreq --update` feature #535 | closes: #341</li><p></p><p>Bug fixes and improvements:</p><p></p><li>Fixed bug related to recurring sudo prompt for functions that even don't require it #531 | closes: #530</li><li>Adding root_check before set_override method execution #524</li><li>cpufreqctl: don't try writing to non-existent files #533</li><li>Fix Links in the README</li><li>Make Self Referencing Links in the README.md Relative #534</li><li>Fix README typos #536</li><p></p><p>@cosmos1721 </p><p>@rootCircle </p><p>@cmm</p><p>@blackpill0w </p><p>@kianmeng </p></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.9.9'>Release Link</a></p><hr><h2>v1.9.8 (v1.9.8)</h2><p><strong>Published on:</strong> 2023-05-29T11:35:15Z</p><p><strong>Description:</strong></p><ul><p>Features:</p><p></p><li>Ability to force use of `powersave` or `performance` governors #476 | closes: #467</li><li>Snap package support for ARM64 architecture, including >= Raspberry Pi 4 or Apple Silicon (M1/2) devices | closes: #457</li><p></p><p>Bug fixes and improvements:</p><p></p><li>Ensure all core indices are handled, RPI 4 support | closes: #457</li><li>Check for CPU label if no coretemp #513 | closes: #498</li><li>Update Readme for issue of auto-cpufreq not autostarting on AUR #485 | closes: #463</li><li>Update README for fedora (noob friendly) grub instructions #505</li><li>fixup(runit): allow daemon to search for the executable in /usr/local/bin #508 | closes: #460</li><li>Update Readme Troubleshooting with How to Disable AMD-Pstate #466</li><li>Re-align how usage, temp, and freq are displayed</li><p></p><p>Thanks to our contributors for this release!</p><p></p><li>@marchwicki</li><li>@shadeyg56</li><li>@siddharthkumarjha</li><li>@AlbertSolomon</li><li>@Animeshz</li><li>@biggus-dickus</li></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.9.8'>Release Link</a></p><hr><h2>v1.9.7 (v1.9.7)</h2><p><strong>Published on:</strong> 2022-12-05T05:44:12Z</p><p><strong>Description:</strong></p><ul><p>Bug fixes and improvements:</p><p></p><li>Add functionality to display system load average</li><li>Removed battery percentage</li><li>Use `usr/local/bin` instead of `usr/bin` for Silverblue and other immutable OSs #460 #449</li><li>Add wheel to dependencies (speed up install) #447</li><li>Fixed bug where turbo boost will always be on in performance mode #455</li><li>Documentation update/revamp #458</li><li>Fix for auto-cpufreq-installer regression in #460 (#462)</li><li>Improve auto-cpufreq installer (#459)</li><p></p><p>Thanks to our contributors for this release!</p><p></p><li>@BowDown097</li><li>@johnseekins</li><li>@R1D3R175</li><li>@gimbles</li><li>@abvee</li></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.9.7'>Release Link</a></p><hr><h2>v1.9.6 (v1.9.6)</h2><p><strong>Published on:</strong> 2022-09-11T13:06:36Z</p><p><strong>Description:</strong></p><ul><p>Bug fixes and improvements:</p><p></p><li>Don't overwrite /usr/bin/cpufreqctl.auto-cpufreq excessively [#420](https://github.com/AdnanHodzic/auto-cpufreq/pull/420)</li><li>Add s6 script for auto-cpufreq install [#421](https://github.com/AdnanHodzic/auto-cpufreq/pull/421)</li><li>Omit the --all flag from calling `nproc` to get actual number of cores [#423](https://github.com/AdnanHodzic/auto-cpufreq/pull/423)</li><li>CPU fan speed display patch [#431](https://github.com/AdnanHodzic/auto-cpufreq/pull/431)</li><li>Replaced obsolete "egrep" calls with "grep -E" [#435](https://github.com/AdnanHodzic/auto-cpufreq/pull/435)</li><li>Code optimization & addition of battery percentage [#432](https://github.com/AdnanHodzic/auto-cpufreq/pull/432)</li><li>Switch to the properly maintained AUR package [#433](https://github.com/AdnanHodzic/auto-cpufreq/pull/433)</li><p></p><p>Thanks to our contributors for this release!</p><p></p><li>@zoitrok</li><li>@AnasR7</li><li>@SunkenHero</li><li>@hingen</li><li>@xd003</li></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.9.6'>Release Link</a></p><hr><h2>v1.9.5 (v1.9.5)</h2><p><strong>Published on:</strong> 2022-08-10T15:04:39Z</p><p><strong>Description:</strong></p><ul><p>Bug fixes and improvements:</p><p></p><li>Upgrade to Snap Core 22</li><li>Catch exception in call to psutil .cmdline() (#413)</li><li>Fix multiple typos as reported by typos #410</li><li>Fix daemon typo #409</li><li>Running "auto-cpufreq" itself returns an error (#408)</li><p></p><p>Thanks to our contributors for this release!</p><p></p><li>@m-GDEV</li><li>@tacheometry</li><li>@ishaanbhimwal</li><li>@zoitrok</li></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.9.5'>Release Link</a></p><hr><h2>v1.9.4 (v1.9.4)</h2><p><strong>Published on:</strong> 2022-06-06T13:55:27Z</p><p><strong>Description:</strong></p><ul><p>Bug fixes and improvements:</p><p></p><li>auto-cpufreq now refreshes CPU frequencies in (near) real time #132</li><li>Revamped mechanism how log file is emptied (optimize & increase execution speed)</li><li>Fixed "Average all core temp/Total system load"  fields being displayed with too many decimals #392</li><p></p><p>Thanks to our contributors for this release!</p><p></p><li>@Jeroenvb3</li></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.9.4'>Release Link</a></p><hr><h2>v1.9.3 (v1.9.3)</h2><p><strong>Published on:</strong> 2022-03-10T06:08:40Z</p><p><strong>Description:</strong></p><ul><p>Bug fixes and improvements:</p><p></p><li>Improved Snap package detection (#368, #372)</li><p></p></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.9.3'>Release Link</a></p><hr><h2>v1.9.2 (v1.9.2)</h2><p><strong>Published on:</strong> 2022-02-20T08:05:20Z</p><p><strong>Description:</strong></p><ul><p>Features, bug fixes and improvements:</p><p></p><li>Add ability to change power governor used by default with auto-cpufreq from `balanced` to `performance` [using power_helper.py script](https://github.com/AdnanHodzic/auto-cpufreq/#1-power_helperpy-script). Described as part of updated [Configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq) section.</li><p></p><p>Related issues: Not reaching maximum frequencies #361</p></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.9.2'>Release Link</a></p><hr><h2>v1.9.1 (v1.9.1)</h2><p><strong>Published on:</strong> 2022-01-09T13:09:18Z</p><p><strong>Description:</strong></p><ul><p>Bug fixes and improvements:</p><p></p><li>Fixed the --version command when installed from source #347 (#344)</li><li>Deploy cpufreqctl on --debug and remove via installer #351</li><li>Stop power-profiles-daemon in live mode #350</li><li>Set Balanced mode on power-profiles-daemon #349</li><li>Ability to reset scaling frequencies to default #338 (#324)</li><p></p><p>Thanks to our contributors for this release!</p><p></p><li>@bobslept</li><li>@varaki</li><li>@ariasmn</li></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.9.1'>Release Link</a></p><hr><h2>v1.9.0 (v1.9.0)</h2><p><strong>Published on:</strong> 2021-12-26T10:34:01Z</p><p><strong>Description:</strong></p><ul><p>Features:</p><p></p><li>Add min/max allowed frequencies option #309 (#324)</li><li>Implement Python virtual environment #326 (#263, #196)</li><p></p><p>Bug fixes and improvements:</p><p></p><li>Improve charging detection #332 (#331)</li><li>Started the solution to Snap and PopOS not working #329 (#323)</li><li>Add missing package Debian based venv #330</li><li>Reformatted codebase #325</li><li>Skip hid devices with battery #322 (#328, #321)</li><li>Fix removal of `shared_dir` on `--remove` #319</li><li>Rename various init scripts #317</li><p></p><p>Thanks to our contributors for this release!</p><p></p><li>@bobslept</li><li>@varaki</li><li>@tyleraharrison</li><li>@aroundthfur</li></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.9.0'>Release Link</a></p><hr><h2>v1.8.2 (v1.8.2)</h2><p><strong>Published on:</strong> 2021-12-19T08:26:20Z</p><p><strong>Description:</strong></p><ul><p>Bug fixes and improvements:</p><p></p><li>Fix for PopOS `os_release` problem #311</li><li>Support for openrc #314</li><li>Change the way of checking the charging state #308</li><p></p><p>Thanks to our contributors for this release!</p><p></p><li>@tyleraharrison</li><li>@AdwaitAdk</li><li>@bobslept</li></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.8.2'>Release Link</a></p><hr><h2>v1.8.1 (v1.8.1)</h2><p><strong>Published on:</strong> 2021-12-11T13:11:00Z</p><p><strong>Description:</strong></p><ul><p>Bug fixes and improvements:</p><p></p><li>Add a warning when using TLP #305</li><li>Remove package options from cpufreqctl.sh #304</li><li>Verify the use of supported init systems. #303</li><li>Check if lsb_release exists before using it #302</li><li>Improve init system detection along with support for runit as part of Void, Artix Linux #300, #301</li><p></p><p>Thanks to our contributors for this release!</p><p></p><li>@bobslept</li></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.8.1'>Release Link</a></p><hr><h2>v1.8.0 (v1.8.0)</h2><p><strong>Published on:</strong> 2021-12-05T12:15:38Z</p><p><strong>Description:</strong></p><ul><p>Features:</p><p></p><li>Detect if GNOME Power profiles service is running and disable it automatically on install. Otherwise warn user during `live` or `monitor`  mode and  `stats` output of Snap package, along with instructions how to disable it using `auto-cpufreq: power_helper` #277, #296</li><li>Created auto-cpufreq: power_helper which allows user to manually `enable/disable` above mentioned daemon and see its `status`.</li><li>Due to Snap package restrictions on host environment,  `power_helper` also allows user to `enable/disable` bluetooth on boot.</li><p></p><p>Bug fixes and improvements:</p><p></p><li>Fix instances where charging is not recognized #281, #285</li><li>Correcting charge status in multi-battery setup #294</li><p></p><p>Thanks to our contributors for this release!</p><p></p><li>@AmitGolden</li><li>@jdhonea</li><li>@bobslept</li></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.8.0'>Release Link</a></p><hr><h2>v1.7.2 (v1.7.2)</h2><p><strong>Published on:</strong> 2021-11-14T08:47:15Z</p><p><strong>Description:</strong></p><ul><p>Bug fixes and improvements:</p><p></p><li>Remove quotes from youtube link #264</li><li>Turning Bluetooth off/on & Void Linux improvements #269</li><li>Fix auto-cpufreq-installer steps order #273</li><li>On laptops/notebooks, check if charging via BAT* status #274</li><p></p><p>Thanks to our contributors for this release!</p><p></p><li>@PabloCastellano</li><li>@Animeshz</li><li>@4JX</li><li>@AmitGolden</li></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.7.2'>Release Link</a></p><hr><h2>v1.7.1 (v1.7.1)</h2><p><strong>Published on:</strong> 2021-10-17T16:04:42Z</p><p><strong>Description:</strong></p><ul><p>Bug fixes and improvements:</p><p></p><li>Disable turbo when config is "never" #255</li><li>Remove redundant conditionals in set_performance #253</li><li>Daemon running msg was wrong #262</li><p></p><p>Thanks to our contributors for this release!</p><p></p><li>@fpoli</li><li>@Yustynn</li><li>@aroundthfur</li></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.7.1'>Release Link</a></p><hr><h2>v1.7.0 (v1.7.0)</h2><p><strong>Published on:</strong> 2021-10-16T18:37:30Z</p><p><strong>Description:</strong></p><ul><p>Features:</p><p></p><li>Add config file for preferred governor and turbo boost behavior #250 | reference: [Configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/README.md#configuring-auto-cpufreq)</li><p></p><p>Bug fixes and improvements:</p><p></p><li>Add temperature readings in thinkpad #252</li><li>Add Snap `system-files` interface to read `/etc/auto-cpufreq.conf`</li><li>Add donate menu item</li><li>Various other improvements in regards to menu options</li><p></p><p>Thanks to our contributors for this release!</p><p></p><li>@zoitrok</li><li>@alexmak23</li></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.7.0'>Release Link</a></p><hr><h2>v1.6.9 (v1.6.9)</h2><p><strong>Published on:</strong> 2021-09-19T15:25:14Z</p><p><strong>Description:</strong></p><ul><p>Bug fixes and improvements:</p><p></p><li>Use LZO algorithm compression for Snap package</li><li>Added Void Linux support (runit) #235</li><li>Artix runnit support #237</li><li>Code refactor (improved readability) of auto-cpufreq-installer #238</li><li>Added EndeavourOS support to auto-cpufreq-installer #211</li><li>Update for ArchLinux's pacman #205</li><li>Fixed typo for "auto-cpufeq" #198</li><p></p><p>Thanks to our contributors for this release!</p><p></p><li>@InfoseccGurung</li><li>@ShyanJMC</li><li>@adam4nj</li><li>@jpnt</li><li>@explosion-mental</li></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.6.9'>Release Link</a></p><hr><h2>v1.6.4 (v1.6.4)</h2><p><strong>Published on:</strong> 2021-03-14T18:37:12Z</p><p><strong>Description:</strong></p><ul><p>Bug fixes and improvements:</p><p></p><li>Fix service unit file on Arch Linux. #190</li><p></p><p>Thanks to our contributors for this release!</p><p></p><li>@marc0der</li></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.6.4'>Release Link</a></p><hr><h2>v1.6.3 (v1.6.3)</h2><p><strong>Published on:</strong> 2021-03-11T18:31:51Z</p><p><strong>Description:</strong></p><ul><p>Bug fixes and improvements:</p><p></p><li>Fix location of auto-cpufreq in service descriptor. #187</li><li>Change the default behaviour of set_performance to OFF. #188</li><p></p><p>Thanks to our contributors for this release!</p><p></p><li>@marc0der</li><li>@frankiexyz</li></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.6.3'>Release Link</a></p><hr><h2>v1.6.2 (v1.6.2)</h2><p><strong>Published on:</strong> 2021-02-21T09:50:51Z</p><p><strong>Description:</strong></p><ul><p>Features:</p><p></p><li>Add --version flag to CLI #177</li><p></p><p>Thanks to our contributors for this release!</p><p></p><li>@marc0der</li></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.6.2'>Release Link</a></p><hr><h2>v1.6.1 (v1.6.1)</h2><p><strong>Published on:</strong> 2021-02-07T18:36:18Z</p><p><strong>Description:</strong></p><ul><p>Features:</p><p></p><p>Bug fixes and improvements:</p><p></p><li>Remove pacman wildcard #172</li><li>Only query pacman when on arch and not a snap install. #173</li><p></p><p>Thanks to our contributors for this release!</p><p></p><li>@yochananmarqos</li><li>@marc0der</li></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.6.1'>Release Link</a></p><hr><h2>v1.6.0 (v1.6.0)</h2><p><strong>Published on:</strong> 2021-02-06T21:04:26Z</p><p><strong>Description:</strong></p><ul><p>Features:</p><p></p><li>Implemented mechanism to display auto-cpufreq/package version as part of `--debug` flag</li><p>Related: #74, #137</p><p></p><p>Bug fixes and improvements:</p><p></p><li>Use `psutil` in conjuction with `dmidecode` to determine `ac_state` #168</li><li>Add note/instructions on how to exit "auto-cpufreq --live/monitor/stats" #57</li><li>Improved computer_type</li><li>Add execution timestamp for to `--stats` | Related: #156</li><p></p><p>Thanks to our contributors for this release!</p><p></p><li>@librewish</li><li>Everyone who participated in [auto-cpufreq feedback Tweet](https://twitter.com/fooctrl/status/1357230198857564160) :partying_face:</li></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.6.0'>Release Link</a></p><hr><h2>v1.5.5 (v1.5.5)</h2><p><strong>Published on:</strong> 2021-02-04T07:11:44Z</p><p><strong>Description:</strong></p><ul><p>Bug fixes and improvements:</p><p></p><li>Hot-fix for laptops reporting wrong charging status (Close: #164)</li></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.5.5'>Release Link</a></p><hr><h2>v1.5.4 (v1.5.4)</h2><p><strong>Published on:</strong> 2021-02-03T15:51:44Z</p><p><strong>Description:</strong></p><ul><p>Bug fixes and improvements:</p><p></p><li>Improve domain language around logging and stats #160</li><li>Unable to remove via `--remove` option for Snap package #161</li><li>Adjust CPU frequency scaling on desktop to run in "performance" governor #162</li><li>Use `dmidecode` instead of `hostnamectl` #163</li><p></p><p>Thanks to our contributors for this release!</p><p></p><li>@marc0der</li><li>@ThePoorPilot</li><li>@librewish</li></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.5.4'>Release Link</a></p><hr><h2>v1.5.3 (v1.5.3)</h2><p><strong>Published on:</strong> 2021-01-24T13:04:09Z</p><p><strong>Description:</strong></p><ul><p>Bug fixes and improvements:</p><p></p><li>Improve logging & prevent log size growth #148</li><li>Deliver custom parallel version of cpufreqctl #150</li><li>Fix Ryzen 4750U temperature output with zenpower #151</li><li>Add Arch-based Linux to auto-cpufreq-installer script #152</li><li>Improved Python file structure (rename source > auto_cpufreq) #153</li><p></p><p>Thanks to our contributors for this release!</p><p></p><li>@Technical27</li><li>@Red-Eyed</li><li>@marc0der</li><li>@yochananmarqos</li></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.5.3'>Release Link</a></p><hr><h2>v1.5.2 (v1.5.2)</h2><p><strong>Published on:</strong> 2021-01-17T09:24:26Z</p><p><strong>Description:</strong></p><ul><p>Bug fixes and improvements:</p><p></p><li>Disable setting EPP if HWP is active and governor is set to "performance" (#138)</li><li>Improved OpenSUSE detection (#135 )</li><p></p><p>Thanks to our contributors for this release!</p><p></p><li>@NJOYSoftware</li><li>@freshgiammi</li></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.5.2'>Release Link</a></p><hr><h2>v1.5.1 (v1.5.1)</h2><p><strong>Published on:</strong> 2020-12-06T23:49:03Z</p><p><strong>Description:</strong></p><ul><p>Bug fixes and improvements:</p><p></p><li>Re-calibrated performance/powersave triggers (fixed turbo always on on powersave) (#109 )</li><li>Resolved `cpufreqctl` conflict as part of [AUR package](https://github.com/AdnanHodzic/auto-cpufreq/issues/87#issuecomment-739549066) (#87, #133)</li><p></p><p>Thanks to our contributors for this release!</p><p></p><li>@crian</li><li>@yochananmarqos</li></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.5.1'>Release Link</a></p><hr><h2>v1.5.0 (v1.5.0)</h2><p><strong>Published on:</strong> 2020-12-06T17:22:43Z</p><p><strong>Description:</strong></p><ul><p>Features:</p><p></p><li>Implemented mechanism to set turbo based on CPU temperature in combination with CPU utilization/load (prevent overheating).</li><p>Related: #109 </p><p></p><p>Bug fixes and improvements:</p><p></p><li>Fixed bug in performance boost logic (#131)</li><li>Added support for OpenSUSE Tumbleweed as part of `auto-cpufreq-installer` (#134)</li><li>Set to consistently use correct data across functions with `cpuload` & `load1m`</li><p></p><p>Thanks to our contributors for this release!</p><p></p><li>@dfuehrer</li><li>@NJOYSoftware</li></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.5.0'>Release Link</a></p><hr><h2>v1.3.4 (v1.3.4)</h2><p><strong>Published on:</strong> 2020-09-28T09:02:20Z</p><p><strong>Description:</strong></p><ul><p>Bug fixes and improvements:</p><p></p><li>Revamp of charging check function #85 #108</li><p></p><p>Thanks to our contributors for this release!</p><p></p><li>@Haptein</li></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.3.4'>Release Link</a></p><hr><h2>v1.3.3 (v1.3.3)</h2><p><strong>Published on:</strong> 2020-09-24T05:56:24Z</p><p><strong>Description:</strong></p><ul><p>Bug fixes and improvements:</p><p></p><li>Improved support for system info on CPU hotplug (on/offline CPU's) #119</li><li>Added support for Solus #122</li><p></p><p>Thanks to our contributors for this release!</p><p></p><li>@Haptein</li><li>@natri23</li></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.3.3'>Release Link</a></p><hr><h2>v1.3.2 (v1.3.2)</h2><p><strong>Published on:</strong> 2020-09-22T15:14:38Z</p><p><strong>Description:</strong></p><ul><p>Bug fixes and improvements:</p><p></p><li>Report core states as a table (#116)</li><li>Turbo trigger revamp, use more conservative settings (#109, #118)</li><li>Re-enable `app_version` func + add missing `footer` to daemon log</li><li>Updated dependencies for source installer (#121)</li><p></p><p>Thanks to our contributors for this release!</p><p></p><li>@Haptein</li></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.3.2'>Release Link</a></p><hr><h2>v1.3.1 (v1.3.1)</h2><p><strong>Published on:</strong> 2020-09-13T19:37:38Z</p><p><strong>Description:</strong></p><ul><p>Features:</p><p></p><li>Display CPU usage per each core</li><p></p><p>Bug fixes and improvements:</p><p></p><li>fixed `display_load` function not being executed each iteration</li><li>handle `app_version` function for source install using try/except (#111)</li><li>properly print out daemon check message on SNAP</li></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.3.1'>Release Link</a></p><hr><h2>v1.3 (v1.3)</h2><p><strong>Published on:</strong> 2020-09-11T20:08:10Z</p><p><strong>Description:</strong></p><ul><p>Features:</p><p></p><li>Revamped `--debug` functionality</li><li>* to exclude use of `inxi` tool and rely solely on Python</li><li>* include additional info about environment and auto-cpufreq system resource consumption</li><p></p><p>Bug fixes and improvements:</p><p></p><li>Code/functions refactoring</li><li>Resolved "error: invalid command 'bdist_wheel'" during snap package build</li><li>Add distro info, kernel, driver, snap to debug</li><li>Don't run `--remove` if daemon is not installed</li></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.3'>Release Link</a></p><hr><h2>v1.2.4 (v1.2.4)</h2><p><strong>Published on:</strong> 2020-09-05T12:18:22Z</p><p><strong>Description:</strong></p><ul><p>Bug fixes and improvements:</p><p></p><li>Snap package migration to core20 (Ubuntu 20.04 with Python 3.8.2)</li><li>Revamp of writing daemon service logs for snap environments (Close: #53, #82)</li><li>Improved turbo trigger on 1 core 100% load and on load average (PR: #105)</li><p></p><p>Thanks to our contributors for this release!</p><p></p><li>@rrodriguez81</li></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.2.4'>Release Link</a></p><hr><h2>v1.2.2 (v1.2.2)</h2><p><strong>Published on:</strong> 2020-09-01T18:52:45Z</p><p><strong>Description:</strong></p><ul><p>Bug fixes and improvements:</p><p></p><li>Modified fixed CPU usage percentage (Close: #98)</li><li>Implemented environment agnostic way to install pip packages (Close: #94)</li><p></p><p>Thanks to our contributors for this release!</p><p></p><li>@Red-Eyed</li><li>@rrodriguez81</li></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.2.2'>Release Link</a></p><hr><h2>v1.2.1 (v1.2.1)</h2><p><strong>Published on:</strong> 2020-08-09T20:27:22Z</p><p><strong>Description:</strong></p><ul><p>Features:</p><p></p><li>ARM CPU support #33</li><p></p><p>Bug fixes:</p><p></p><li>add license to snap package #86</li><li>Fix for unsupported turbo #89</li><li>Workaround for Fedora [`cgroups v2` snap issue](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/README.md#snap-store)</li><p></p><p>Thanks to @Red-Eyed for being contributor of this release!</p></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v1.2.1'>Release Link</a></p><hr><h2>v1.2 (1.2)</h2><p><strong>Published on:</strong> 2020-08-06T20:10:50Z</p><p><strong>Description:</strong></p><ul><p>Features:</p><li>AMD support - https://github.com/AdnanHodzic/auto-cpufreq/pull/63</li><li>Display temperature for each physical core</li><li>Implemented `--debug` option (#70)</li><li>Implemented issue template</li><p></p><p>Bug fixes:</p><li>Various `auto-cpufreq-installer` bug fixes</li><li>Properly get CPU temperature for AMD Ryzen using `k10temp` #62 (Closes: #14)</li><li>Added ability to use `auto-cpufreq-installer` from any path #65</li><li>Switching to `psutil` in order to monitor charger state #68</li><li>Added missing build dependencies for snap package</li><p></p><p>Thanks to @Red-Eyed for being a big contributor of this release!</p></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/1.2'>Release Link</a></p><hr><h2>v1.1.2 (1.1.2)</h2><p><strong>Published on:</strong> 2020-03-27T11:31:44Z</p><p><strong>Description:</strong></p><ul><li>Fixed systemd "executable path is not absolute error" (close: #42)</li></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/1.1.2'>Release Link</a></p><hr><h2>v1.1.1 (1.1.1)</h2><p><strong>Published on:</strong> 2020-03-24T21:42:12Z</p><p><strong>Description:</strong></p><ul><li>Disable EPP (Intel Speed Shift) support on older CPU's which don't support it</li><li>Various bug fixes and improvements</li><p></p><p>Thanks to @validatedev for being a big contributor of this release!</p></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/1.1.1'>Release Link</a></p><hr><h2>v1.1 (1.1)</h2><p><strong>Published on:</strong> 2020-03-21T15:26:07Z</p><p><strong>Description:</strong></p><ul><li>Implemented mechanism for adjustable EPP (Intel Speed Shift) values</li><li>Various bug fixes and improvements</li><p></p><p>Thanks to @validatedev for being a big contributor of this release</p></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/1.1'>Release Link</a></p><hr><h2>v1.0 (1.0)</h2><p><strong>Published on:</strong> 2020-03-19T21:29:10Z</p><p><strong>Description:</strong></p><ul><li>Creation of auto-cpufreq Python package using `setup.py` build script</li><li>Creation and release of [auto-cpufreq snap package](https://snapcraft.io/auto-cpufreq)</li><li>Creation of source code based installer [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq#installing-auto-cpufreq)</li><li>Deactivate turbo boost in performance if system load/CPU usage is low</li><li>Refined conditions when turbo boost is activated/deactivated</li><li>Numerous other bugs fixes and improvements</li></ul><p><strong>URL:</strong> <a href='https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/1.0'>Release Link</a></p><hr>

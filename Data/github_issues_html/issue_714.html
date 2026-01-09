@@ -242,6 +242,58 @@ All I know is that power-profile-daemon trigger it correctly.</p>
 Hello, I am having the same issue on my Lenovo Yoga Pro 7 with RTX3050, is there any solution to this other than this manual intervention?</p>
                 </div>
             
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bsrmdn:</strong></p>
+                    <p>
+> Hello, I am having the same issue on my Lenovo Yoga Pro 7 with RTX3050, is there any solution to this other than this manual intervention?
+
++1 
+
+i have same laptop
+edit: ah sorry nevermind, changed the driver to `acpi-cpufreq` working fine to me</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>newcharhuso:</strong></p>
+                    <p>> > Hello, I am having the same issue on my Lenovo Yoga Pro 7 with RTX3050, is there any solution to this other than this manual intervention?
+> 
+> +1
+> 
+> i have same laptop edit: ah sorry nevermind, changed the driver to `acpi-cpufreq` working fine to me
+
+You don't need that, this section from the config file can change the power setting of the GPU, it is nice to have it on low-power when on battery: 
+```
+# Platform Profiles
+# https://www.kernel.org/doc/html/latest/userspace-api/sysfs-platform_profile.html
+# See available options by running:
+# cat /sys/firmware/acpi/platform_profile_choices
+# platform_profile = performance
+```
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>bsrmdn:</strong></p>
+                    <p>> > > Hello, I am having the same issue on my Lenovo Yoga Pro 7 with RTX3050, is there any solution to this other than this manual intervention?
+> > 
+> > 
+> > +1
+> > i have same laptop edit: ah sorry nevermind, changed the driver to `acpi-cpufreq` working fine to me
+> 
+> You don't need that, this section from the config file can change the power setting of the GPU, it is nice to have it on low-power when on battery:
+> 
+> ```
+> # Platform Profiles
+> # https://www.kernel.org/doc/html/latest/userspace-api/sysfs-platform_profile.html
+> # See available options by running:
+> # cat /sys/firmware/acpi/platform_profile_choices
+> # platform_profile = performance
+> ```
+
+TYSM! it also solve the problem why my fan so quite than usual even tho my CPU at 90+ °C</p>
+                </div>
+            
             </div>
         </body>
         </html>

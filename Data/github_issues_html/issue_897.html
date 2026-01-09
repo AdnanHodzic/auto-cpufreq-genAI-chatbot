@@ -1,0 +1,59 @@
+
+        <html>
+        <head>
+            <title>Issue #897: GUI shows "auto-cpufreq daemon is not running" even when the daemon is active</title>
+        </head>
+        <body>
+            <h1>GUI shows "auto-cpufreq daemon is not running" even when the daemon is active</h1>
+            <p><strong>Issue #897</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>
+
+**System Info:**
+- OS: Debian 13 (Trixie) x86_64
+- Installed auto-cpufreq from GitHub (not Snap)
+- Daemon is active and running (`systemctl status auto-cpufreq` confirms)
+- Terminal command `sudo auto-cpufreq --live` works perfectly
+- GUI launched via `./start_app` from the cloned repo
+
+**Problem:**
+The graphical interface (`auto-cpufreq-gtk`) always shows the message "auto-cpufreq daemon is not running" and prompts to install it, even though the daemon is already installed and running.
+
+**What I tried:**
+- Removed Snap version
+- Reinstalled from GitHub
+- Verified daemon is active
+- Tried launching GUI with and without `sudo`
+- No logs found in `~/.cache/auto-cpufreq/`
+- No errors in `journalctl -u auto-cpufreq`
+
+**Expected behavior:**
+The GUI should detect the running daemon and display live data or status.
+
+Thanks in advance!
+
+Antonio Morales
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>If you want me or any of the other maintainers to help you, do not  ignore issue template when opening a new issue! Which you did, hence making this issue invalid, closing. Feel free to re-open this issue once you properly filled out requested fields.
+
+Without `--debug` output, I can't tell what exactly is happening.
+
+Also:
+
+> GUI launched via ./start_app from the cloned repo
+
+Why are you doing this? After you install the daemon, you can simply run the auto-cpufreq from the installed apps? Please check this part of [auto-cpufreq v2 release Youtube video showcasing how to install auto-cpufreq using GTK.](https://youtu.be/SPGpkZ0AZVU?t=362)</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        
