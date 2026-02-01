@@ -1,0 +1,76 @@
+<html><head><title>From 10 Day Vacation Project to 100k Users: auto‑cpufreq v3 Story</title></head><body><h1>From 10 Day Vacation Project to 100k Users: auto‑cpufreq v3 Story</h1><p><em>Posted by u/ahodzic</em> on 2026-01-25 18:31:41</p><div><strong>Score:</strong> 21</div><div><strong>Content:</strong><br><!-- SC_OFF --><div class="md"><p>What happens when your open-source project (now at ⭐ 7300+ GitHub stars &amp; 👥 116 contributors!) grows beyond your wildest expectations?</p>
+
+<p>I share how the open source community, and yes, even AI helped shape the journey to v3</p>
+
+<ul>
+<li>Youtube video: <a href="https://www.youtube.com/watch?v=VKqNjczvI88">https://www.youtube.com/watch?v=VKqNjczvI88</a></li>
+<li>Blog post: <a href="https://foolcontrol.org/?p=5114">https://foolcontrol.org/?p=5114</a></li>
+</ul>
+</div><!-- SC_ON --></div><hr><h2>Comments</h2><ul><li><strong>u/SalaciousSubaru:</strong> <div class="md"><p>Using it on Ubuntu 26.04 which isn’t even released yet and auto-cpufreq v3 even on a dev release of a distro works smooth as butter</p>
+</div><br><small>Score: 2 | Posted on 2026-01-26 06:49:29</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Great to hear and thanks for sharing!</p>
+</div><br><small>Score: 2 | Posted on 2026-01-26 06:50:56</small></li><ul></ul></ul><li><strong>u/pppjurac:</strong> <div class="md"><p>cool </p>
+
+<p>Will try this on proxmox host today.</p>
+</div><br><small>Score: 2 | Posted on 2026-01-26 11:36:10</small></li><ul></ul><li><strong>u/Ok-Anywhere-9416:</strong> <div class="md"><p>Honestly, I&#39;m appreciating auto-cpufreq. I managed to install it on Solus a few days ago (version 3) with the recommended steps (I also had to take the steps meant for the snap version) and used a manual config file instead of using the automatic one - which was 99,99% great, I just wanted to tweak a little - and suddenly my laptop is both snappy and doesn&#39;t want to auto-shutdown when temperatures are too high.</p>
+
+<p>I was already using GPU acceleration in browsers and video players, but games where killing the laptop and Windows wasn&#39;t behaving this bad. It doesn&#39;t happen anymore since auto-cpufreq. The GUI is also very easy to see and use.</p>
+
+<p>The power profiles in GNOME and Plasma are useless now and of course automatically removed. Power settings are automatically enabled and still saving power.</p>
+</div><br><small>Score: 2 | Posted on 2026-01-27 18:07:10</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Awesome to hear, thanks for sharing and enjoy!</p>
+</div><br><small>Score: 1 | Posted on 2026-01-27 18:18:08</small></li><ul></ul></ul><li><strong>u/YKS_Gaming:</strong> <div class="md"><p>why not just use the control in DE through <code>tuned</code> and <code>tuned-ppd</code>?</p>
+</div><br><small>Score: 1 | Posted on 2026-01-26 10:34:37</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Because <strong>auto-cpufreq</strong> acts like an &quot;autopilot&quot; that constantly shifts CPU speeds based on your real-time activity, <strong>TuneD</strong> acts like a &quot;gearbox&quot; that stays in one specific mode (like Performance or Powersave) until you manually shift it. </p>
+
+<p>I literally mention this in <a href="https://www.youtube.com/watch?v=VKqNjczvI88&amp;t=194s">3:14</a> - Why do you need auto-cpufreq? (<a href="https://www.youtube.com/watch?v=VKqNjczvI88&amp;t=194s">https://www.youtube.com/watch?v=VKqNjczvI88&amp;t=194s</a>) as part of above video.</p>
+</div><br><small>Score: 2 | Posted on 2026-01-26 10:54:10</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/YKS_Gaming:</strong> <div class="md"><p>It is possible to set power profiles to change automatically in the DE.</p>
+</div><br><small>Score: 1 | Posted on 2026-01-26 12:23:42</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>As mentioned on Readme (<a href="https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#1-power%5C_helperpy-script-snap-package-install-only):">https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#1-power\_helperpy-script-snap-package-install-only):</a> </p>
+
+<p>&gt; When installing auto-cpufreq via <a href="https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#auto-cpufreq-installer">auto-cpufreq-installer</a>, if it detects the <a href="https://twitter.com/fooctrl/status/1467469508373884933">GNOME Power Profiles service</a> is running, it will automatically disable it. Otherwise, that daemon will cause conflicts and various other performance issues.</p>
+
+<p>But, as I also explained in above video: <a href="https://www.youtube.com/watch?v=VKqNjczvI88&amp;t=319s">5:19</a> - auto-cpufreq custom configuration options (<a href="https://www.youtube.com/watch?v=VKqNjczvI88&amp;t=319s">https://www.youtube.com/watch?v=VKqNjczvI88&amp;t=319s</a>). Instead of auto-cpufreq automatically setting it for you based on various factors, you can easily set preferred power profile yourself in the CLI or GUI interfaces.</p>
+</div><br><small>Score: 1 | Posted on 2026-01-26 12:36:42</small></li><ul></ul></ul></ul></ul><li><strong>u/dell_hellper:</strong> <div class="md"><p>Is that a low level system tool written in Python?</p>
+</div><br><small>Score: 1 | Posted on 2026-01-27 16:39:49</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Yes, just as I explained in the video. What started as a Python script quickly grew to an actual Linux app.   </p>
+
+<p>Once it really took off, I thought about re-writing it in another programming language ... but it seems like to much effort at this point.</p>
+</div><br><small>Score: 1 | Posted on 2026-01-27 17:39:57</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/dell_hellper:</strong> <div class="md"><p>It depends how much resources it needs. I run Linux on systems with 64MB or RAM (not a typo!).</p>
+</div><br><small>Score: 1 | Posted on 2026-01-27 18:44:20</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>It&#39;s very light, auto-cpufreq daemon consumes  only ~27MB of RAM, and if you use auto-cpufreq GUI it&#39;s 39MB.</p>
+
+<p>Less then any of the Chrome tabs I have open :)</p>
+</div><br><small>Score: 1 | Posted on 2026-01-27 20:00:03</small></li><ul></ul></ul></ul></ul><li><strong>u/ekufi:</strong> <div class="md"><p>It&#39;s what now?</p>
+</div><br><small>Score: 1 | Posted on 2026-01-26 08:25:20</small></li><ul></ul><li><strong>u/ekufi:</strong> <div class="md"><p>It&#39;s what now?</p>
+</div><br><small>Score: 1 | Posted on 2026-01-26 08:25:32</small></li><ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>Great to hear and thanks for sharing!</p>
+</div><br><small>Score: 2 | Posted on 2026-01-26 06:50:56</small></li><ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>Awesome to hear, thanks for sharing and enjoy!</p>
+</div><br><small>Score: 1 | Posted on 2026-01-27 18:18:08</small></li><ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>Because <strong>auto-cpufreq</strong> acts like an &quot;autopilot&quot; that constantly shifts CPU speeds based on your real-time activity, <strong>TuneD</strong> acts like a &quot;gearbox&quot; that stays in one specific mode (like Performance or Powersave) until you manually shift it. </p>
+
+<p>I literally mention this in <a href="https://www.youtube.com/watch?v=VKqNjczvI88&amp;t=194s">3:14</a> - Why do you need auto-cpufreq? (<a href="https://www.youtube.com/watch?v=VKqNjczvI88&amp;t=194s">https://www.youtube.com/watch?v=VKqNjczvI88&amp;t=194s</a>) as part of above video.</p>
+</div><br><small>Score: 2 | Posted on 2026-01-26 10:54:10</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/YKS_Gaming:</strong> <div class="md"><p>It is possible to set power profiles to change automatically in the DE.</p>
+</div><br><small>Score: 1 | Posted on 2026-01-26 12:23:42</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>As mentioned on Readme (<a href="https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#1-power%5C_helperpy-script-snap-package-install-only):">https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#1-power\_helperpy-script-snap-package-install-only):</a> </p>
+
+<p>&gt; When installing auto-cpufreq via <a href="https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#auto-cpufreq-installer">auto-cpufreq-installer</a>, if it detects the <a href="https://twitter.com/fooctrl/status/1467469508373884933">GNOME Power Profiles service</a> is running, it will automatically disable it. Otherwise, that daemon will cause conflicts and various other performance issues.</p>
+
+<p>But, as I also explained in above video: <a href="https://www.youtube.com/watch?v=VKqNjczvI88&amp;t=319s">5:19</a> - auto-cpufreq custom configuration options (<a href="https://www.youtube.com/watch?v=VKqNjczvI88&amp;t=319s">https://www.youtube.com/watch?v=VKqNjczvI88&amp;t=319s</a>). Instead of auto-cpufreq automatically setting it for you based on various factors, you can easily set preferred power profile yourself in the CLI or GUI interfaces.</p>
+</div><br><small>Score: 1 | Posted on 2026-01-26 12:36:42</small></li><ul></ul></ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>Yes, just as I explained in the video. What started as a Python script quickly grew to an actual Linux app.   </p>
+
+<p>Once it really took off, I thought about re-writing it in another programming language ... but it seems like to much effort at this point.</p>
+</div><br><small>Score: 1 | Posted on 2026-01-27 17:39:57</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/dell_hellper:</strong> <div class="md"><p>It depends how much resources it needs. I run Linux on systems with 64MB or RAM (not a typo!).</p>
+</div><br><small>Score: 1 | Posted on 2026-01-27 18:44:20</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>It&#39;s very light, auto-cpufreq daemon consumes  only ~27MB of RAM, and if you use auto-cpufreq GUI it&#39;s 39MB.</p>
+
+<p>Less then any of the Chrome tabs I have open :)</p>
+</div><br><small>Score: 1 | Posted on 2026-01-27 20:00:03</small></li><ul></ul></ul></ul><li><strong>u/YKS_Gaming:</strong> <div class="md"><p>It is possible to set power profiles to change automatically in the DE.</p>
+</div><br><small>Score: 1 | Posted on 2026-01-26 12:23:42</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>As mentioned on Readme (<a href="https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#1-power%5C_helperpy-script-snap-package-install-only):">https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#1-power\_helperpy-script-snap-package-install-only):</a> </p>
+
+<p>&gt; When installing auto-cpufreq via <a href="https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#auto-cpufreq-installer">auto-cpufreq-installer</a>, if it detects the <a href="https://twitter.com/fooctrl/status/1467469508373884933">GNOME Power Profiles service</a> is running, it will automatically disable it. Otherwise, that daemon will cause conflicts and various other performance issues.</p>
+
+<p>But, as I also explained in above video: <a href="https://www.youtube.com/watch?v=VKqNjczvI88&amp;t=319s">5:19</a> - auto-cpufreq custom configuration options (<a href="https://www.youtube.com/watch?v=VKqNjczvI88&amp;t=319s">https://www.youtube.com/watch?v=VKqNjczvI88&amp;t=319s</a>). Instead of auto-cpufreq automatically setting it for you based on various factors, you can easily set preferred power profile yourself in the CLI or GUI interfaces.</p>
+</div><br><small>Score: 1 | Posted on 2026-01-26 12:36:42</small></li><ul></ul></ul><li><strong>u/dell_hellper:</strong> <div class="md"><p>It depends how much resources it needs. I run Linux on systems with 64MB or RAM (not a typo!).</p>
+</div><br><small>Score: 1 | Posted on 2026-01-27 18:44:20</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>It&#39;s very light, auto-cpufreq daemon consumes  only ~27MB of RAM, and if you use auto-cpufreq GUI it&#39;s 39MB.</p>
+
+<p>Less then any of the Chrome tabs I have open :)</p>
+</div><br><small>Score: 1 | Posted on 2026-01-27 20:00:03</small></li><ul></ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>As mentioned on Readme (<a href="https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#1-power%5C_helperpy-script-snap-package-install-only):">https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#1-power\_helperpy-script-snap-package-install-only):</a> </p>
+
+<p>&gt; When installing auto-cpufreq via <a href="https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#auto-cpufreq-installer">auto-cpufreq-installer</a>, if it detects the <a href="https://twitter.com/fooctrl/status/1467469508373884933">GNOME Power Profiles service</a> is running, it will automatically disable it. Otherwise, that daemon will cause conflicts and various other performance issues.</p>
+
+<p>But, as I also explained in above video: <a href="https://www.youtube.com/watch?v=VKqNjczvI88&amp;t=319s">5:19</a> - auto-cpufreq custom configuration options (<a href="https://www.youtube.com/watch?v=VKqNjczvI88&amp;t=319s">https://www.youtube.com/watch?v=VKqNjczvI88&amp;t=319s</a>). Instead of auto-cpufreq automatically setting it for you based on various factors, you can easily set preferred power profile yourself in the CLI or GUI interfaces.</p>
+</div><br><small>Score: 1 | Posted on 2026-01-26 12:36:42</small></li><ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>It&#39;s very light, auto-cpufreq daemon consumes  only ~27MB of RAM, and if you use auto-cpufreq GUI it&#39;s 39MB.</p>
+
+<p>Less then any of the Chrome tabs I have open :)</p>
+</div><br><small>Score: 1 | Posted on 2026-01-27 20:00:03</small></li><ul></ul></ul></body></html>
