@@ -7,11 +7,25 @@
 
 <p>For tl;dr folks:</p>
 
-<p><a href="https://www.youtube.com/watch?v=SPGpkZ0AZVU">Youtube: auto-cpufreq v2.0 release &amp; demo of all available features and options</a></p>
+<ul>
+<li>Youtube: 
+<a href="https://www.youtube.com/watch?v=VKqNjczvI88">From 10 day vacation project to 100k users: auto-cpufreq v3 story</a></li>
+<li>Blog post: <a href="https://foolcontrol.org/?p=5114">From 10 day vacation project to 100k users: auto-cpufreq v3 story</a></li>
+</ul>
+
+<p><a href="https://www.youtube.com/watch?v=VKqNjczvI88"><img src="https://img.youtube.com/vi/VKqNjczvI88/0.jpg" alt="" /></a></p>
+
+<ul>
+<li>Youtube: <a href="https://www.youtube.com/watch?v=SPGpkZ0AZVU">auto-cpufreq v2.0 release &amp; demo of all available features and options</a></li>
+<li>Blog post: <a href="https://foolcontrol.org/?p=4603">auto-cpufreq v2.0</a></li>
+</ul>
 
 <p><a href="https://www.youtube.com/watch?v=QkYRpVEEIlg"><img src="https://img.youtube.com/vi/SPGpkZ0AZVU/0.jpg" alt="" /></a></p>
 
-<p><a href="https://www.youtube.com/watch?v=QkYRpVEEIlg">Youtube: auto-cpufreq - tool demo</a></p>
+<ul>
+<li>Youtube: <a href="https://www.youtube.com/watch?v=QkYRpVEEIlg">auto-cpufreq - tool demo</a></li>
+<li>Blog post: <a href="https://foolcontrol.org/?p=3124">auto-cpufreq – Automatic CPU speed &amp; power optimizer for Linux</a></li>
+</ul>
 
 <p><a href="https://www.youtube.com/watch?v=QkYRpVEEIlg"><img src="https://img.youtube.com/vi/QkYRpVEEIlg/0.jpg" alt="" /></a></p>
 
@@ -21,11 +35,11 @@
 
 <p>Example of auto-cpufreq GUI (available &gt;= v2.0)</p>
 
-<p><img src="https://github.com/user-attachments/assets/4b83b67c-8c1e-4ef0-ad2d-ffc1b9dc16de" width="480" alt="Example of auto-cpufreq GUI (available &gt;= v2.0)" /></p>
+<p><img src="https://github.com/user-attachments/assets/3e33bd92-964c-48f0-9825-4a66f9039261" width="480" alt="Example of auto-cpufreq GUI (available &gt;= v2.0)" /></p>
 
 <p>Example of <code>auto-cpufreq --stats</code> CLI output</p>
 
-<p><img src="https://github.com/user-attachments/assets/9c7715c4-16b7-4a5c-86be-4c390276d9e8" width="480" alt="Example of auto-cpufreq CLI output"/></p>
+<p><img src="https://github.com/user-attachments/assets/1114e937-35bd-4943-8a74-a932c04c367e" width="480" alt="Example of auto-cpufreq CLI output"/></p>
 
 <h2>Looking for developers and co-maintainers</h2>
 
@@ -319,6 +333,11 @@ git clone https://github.com/AdnanHodzic/auto-cpufreq.git
 cd auto-cpufreq
 poetry install
 poetry run auto-cpufreq --help
+</code></p></li>
+<li><p>To install with GUI support:
+<code>bash
+poetry install --extras gui
+poetry run auto-cpufreq-gtk
 </code></p></li>
 <li><p>Alternatively, we can use an editable pip install for development purposes:
 ```bash
