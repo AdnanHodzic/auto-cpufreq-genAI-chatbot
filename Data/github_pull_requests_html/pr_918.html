@@ -1,0 +1,35 @@
+
+        <html>
+        <head>
+            <title>Pull Request #918: Add Dbus support</title>
+        </head>
+        <body>
+            <h1>Add Dbus support</h1>
+            <p><strong>Pull Request #918</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Very initial work done here, using the existing DBUS interface used by KDE and GNOME following `org.freedesktop.UPower.PowerProfiles` this is meant to be a drop-in replacement for power-profiles-daemon. I have done some initial testing with the KDE systemsettings application and it is working there for the few settings I tested.  Will need to do significantly more testing, especially with the Gnome settings.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>What exactly would be the benefit of adding Dbus support? To make it with the power sliders (and other elements, e.g: system tray) in GNOME, KDE, etc and have auto-cpufreq serve as backend provider?
+
+Please note that auto-cpufreq will [disable power-profiles-daemon when daemon is installed](https://github.com/AdnanHodzic/auto-cpufreq/blob/5b3b82fcf9a3eb5b290617d154d7fc1e80b701c2/auto_cpufreq/power_helper.py#L219) as also indicated in [Readme](https://github.com/AdnanHodzic/auto-cpufreq#:~:text=When%20installing%20auto%2Dcpufreq%20via%20auto%2Dcpufreq%2Dinstaller%2C%20if%20it%20detects%20the%20GNOME%20Power%20Profiles%20service%20is%20running%2C%20it%20will%20automatically%20disable%20it.%20Otherwise%2C%20that%20daemon%20will%20cause%20conflicts%20and%20various%20other%20performance%20issues.). Of course, it'll restore it in case auto-cpufreq is removed.
+
+Since [GNOME Power Profiles service](https://twitter.com/fooctrl/status/1467469508373884933) was developed much later after auto-cpufreq and such is deemed redundant, as if it runs in parallel with auto-cpufreq it'll cause issues and they'll keep conflicting with each other in decision making process.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>cypherpower:</strong></p>
+                    <p>> What exactly would be the benefit of adding Dbus support? To make it with the power sliders (and other elements, e.g: system tray) in GNOME, KDE, etc and have auto-cpufreq serve as backend provider?
+> 
+Benefit would be just as you said, a backend service for the GUI tools like Gnome Settings and KDE System settings, making a Desktop Environment's native features be able to utilize auto-cpufreq as a drop-in replacement for the power-profiles-daemon.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

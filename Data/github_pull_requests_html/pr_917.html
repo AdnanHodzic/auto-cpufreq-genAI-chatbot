@@ -1,0 +1,98 @@
+
+        <html>
+        <head>
+            <title>Pull Request #917: Add bluetooth controls to the GUI, and fix bluetooth conf updates for commented lines</title>
+        </head>
+        <body>
+            <h1>Add bluetooth controls to the GUI, and fix bluetooth conf updates for commented lines</h1>
+            <p><strong>Pull Request #917</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>This adds a new radio dialog for in the GUI for setting the bluetooth modes similar to the CLI. I noticed when testing it was not working, the previous impelementation was using a find and replace string to update the main.conf file for bluetooth configurations, which for me on arch linux was just updating a commented line in the configuration file which is the how the file is setup by default.
+```bash
+# AutoEnable defines option to enable all controllers when they are found.
+# This includes adapters present on start as well as adapters that are plugged
+# in later on. Defaults to 'true'.
+#AutoEnable=false
+```
+
+I added more robust parsing to determine current bluetooth settings and updated the replacement mechanism to deal with commented lines in addition to proper location placement under the [Policy] section in the bluetooth config file.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>This is amazing and great to see auto-cpufreq GUI is getting so much needed love.
+
+However, now with "Bluetooth on boot" option being added, the interface feels bit cluttered:
+<img width="933" height="642" alt="auto-cpufreq GUI cluttered" src="https://github.com/user-attachments/assets/964db940-a9b9-454f-9133-e8222611c216" />
+
+Might be a good idea to replace these (this area) with a button just like you did with Monitor mode in #916, and name the button as "Advanced & manual settings ⚙️"? I'm open to suggestions and looking forward to hear what you think about this.
+
+If you agree to doing this, if it's too much to make changes as part of this PR, I could merge current changes, and then you create a separate PR where the button is implemented and interface is cleared up?
+
+Btw, another thing that I noticed is missing from "informational" part of GUI, if auto-cpufreq.conf file is used, it will not be noted it's used anywhere in GUI like it is in CLI.
+
+CLI clearly indicating it's used:
+<img width="1126" height="771" alt="auto-cpufreq --stats using config file" src="https://github.com/user-attachments/assets/e4b21875-24a2-4e6b-88da-9a3acec50312" />
+
+Yet nothing on GUI even if file is used:
+<img width="925" height="606" alt="auto-cpufreq GUI" src="https://github.com/user-attachments/assets/fae4e0b8-2b5e-4ec7-aea1-07aad09688ac" />
+
+More things that are not shown/reflected in GUI but are displayed in CLI and would also be great in GUI and could affect interface layout:
+
+* Discharge level in watts (W) - when on battery power
+* Battery status: charging - when charging
+* AC plugged: yes/no
+* Battery percentage
+* Charging start threshold
+* Charging stop threshold
+
+ </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>cypherpower:</strong></p>
+                    <p>> Might be a good idea to replace these (this area) with a button just like you did with Monitor mode in #916, and name the button as "Advanced & manual settings ⚙️"? I'm open to suggestions and looking forward to hear what you think about this.
+> 
+I agree it is a bit cluttered.
+Added a line on the GUI to show the config file in use and moved bluetooth options to an advanced settings menu
+<img width="1129" height="571" alt="image" src="https://github.com/user-attachments/assets/e94e031b-14cc-44b0-81f3-d872021826f9" />
+
+> More things that are not shown/reflected in GUI but are displayed in CLI and would also be great in GUI and could affect interface layout:
+> 
+> * Discharge level in watts (W) - when on battery power
+> * Battery status: charging - when charging
+> * AC plugged: yes/no
+> * Battery percentage
+> * Charging start threshold
+> * Charging stop threshold
+
+Also added these details to match the CLI.
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>cypherpower:</strong></p>
+                    <p>Still don't really like how the GUI looks but plan to work on this later once I get all of the features added. Please let me know if you think anything else could use a quick visual update though.  I wanted to get your thoughts on a potential upgrade to GTK4?  It would make it easier for me to work on the UI layout, not sure if we need this to remain in GTK3 though for compatibility reasons? From the quick research I did it looks like all of the major linux distributions support GTK4 now including mint which looked like it was a holdout for a bit?  So it doesn't seem like there should be problems there, you may have more knowledge in this regard though.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Still don't really like how the GUI looks but plan to work on this later once I get all of the features added.
+
+Solid plan, even with interface bit cluttered it looks much better with all the information showing up. I would maybe even move "Governor Override" and "CPU Turbo Override" under "Advanced Settings". So initial screen would only show information and could look cleaner that way.
+
+>  I wanted to get your thoughts on a potential upgrade to GTK4? It would make it easier for me to work on the UI layout, not sure if we need this to remain in GTK3 though for compatibility reasons? From the quick research I did it looks like all of the major linux distributions support GTK4 now including mint which looked like it was a holdout for a bit? So it doesn't seem like there should be problems there, you may have more knowledge in this regard though.
+
+I think this would be a good idea. Every distro has been moving to GTK4 for some time now, with upcoming release of Ubuntu 26.04 in April which is making big shift to GTK4, and then think rest of distros like Mint will have to follow along since they are based on it anyways. 
+
+Regardless, great changes in this PR, as always thank you for your contribution and will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases). </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        
