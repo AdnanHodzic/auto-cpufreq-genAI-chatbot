@@ -1,0 +1,230 @@
+
+        <html>
+        <head>
+            <title>Issue #914: Higher clock speeds directly results in worse FPS - must keep turbo boost OFF or governer in POWERSAVE for games to be playable</title>
+        </head>
+        <body>
+            <h1>Higher clock speeds directly results in worse FPS - must keep turbo boost OFF or governer in POWERSAVE for games to be playable</h1>
+            <p><strong>Issue #914</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+#### Before submitting an issue, it is strongly recommended to use the **[auto-cpufreq-genAI-chatbot](https://foolcontrol.org/?p=4903)** to get an immediate answer to your question.
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted?  Yes
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)? n/a
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)? yes
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)? yes
+
+### Error output:
+```text
+n/a
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+aUsing settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------- Battery Info ---------------------------------
+
+battery count = 1
+BAT0 start threshold = b'80\n'
+BAT0 stop threshold = b'85\n'
+
+-------------------------------------------------------------------------------
+
+Linux distro: Fedora Linux 43 KDE Plasma Desktop Edition
+Linux kernel: 6.18.4-200.fc43.x86_64
+Processor: Intel(R) Core(TM) Ultra 7 258V
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2200 MHz
+CPU min frequency: 400 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0      2.0%        39 °C      2200 MHz
+CPU1      2.0%        39 °C       691 MHz
+CPU2      1.0%        38 °C      2022 MHz
+CPU3      3.0%        39 °C       400 MHz
+CPU4      1.0%        37 °C      2200 MHz
+CPU5      0.0%        37 °C      2201 MHz
+CPU6      3.0%        37 °C      1862 MHz
+CPU7      1.0%        37 °C       400 MHz
+
+CPU fan speed: 0 RPM
+
+CPU fan speed: 0 RPM
+
+auto-cpufreq version: 3.0.0
+
+Python: 3.14.2
+psutil package: 7.0.0
+platform package: 1.0.9
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: Convertible
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.14 %
+
+Total CPU usage: 2.4 %
+Total system load: 0.43
+Average temp. of all cores: 37.00 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+-----------------------------------------------------------------------------
+```
+
+When governer is set to "performance," either via .conf file or override, FPS in games is half what it is in "powersave" governer mode.
+
+I.e. Battlefront 2 runs at 40-50fps in "powersave," but only 14-17 in "powerformance."
+
+Effect is similar across all intense games, roughly a 50% reduction.
+
+This happens regardless of EPP and EPB settings. SEE COMMENT BELOW FOR UPDATE.
+
+The system seems plenty fast otherwise in either mode.
+
+Contents of my auto-cpufreq.conf file:
+
+```text
+# settings for when connected to a power source
+[charger]
+# see available governors by running: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+# preferred governor
+governor = powersave
+
+# EPP: see available preferences by running: cat /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_available_preferences
+energy_performance_preference = performance
+
+# EPB (Energy Performance Bias) for the intel_pstate driver
+# see conversion info: https://www.kernel.org/doc/html/latest/admin-guide/pm/intel_epb.html
+# available EPB options include a numeric value between 0-15
+# (where 0 = maximum performance and 15 = maximum power saving),
+# or one of the following strings:
+# performance (0), balance_performance (4), default (6), balance_power (8), or power (15)
+# if the parameter is missing in the config and the hardware supports this setting, the default value will be used
+# the default value is `balance_performance` (for charger)
+energy_perf_bias = performance
+
+# Platform Profiles
+# https://www.kernel.org/doc/html/latest/userspace-api/sysfs-platform_profile.html
+# See available options by running:
+# cat /sys/firmware/acpi/platform_profile_choices
+# platform_profile = balanced
+
+# minimum cpu frequency (in kHz)
+# example: for 800 MHz = 800000 kHz --> scaling_min_freq = 800000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly
+# scaling_min_freq = 800000
+
+# maximum cpu frequency (in kHz)
+# example: for 1GHz = 1000 MHz = 1000000 kHz -> scaling_max_freq = 1000000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly
+# scaling_max_freq = 1000000
+
+# turbo boost setting. possible values: always, auto, never
+turbo = auto
+
+# settings for when using battery power
+[battery]
+# see available governors by running: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+# preferred governor
+governor = powersave
+
+# EPP: see available preferences by running: cat /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_available_preferences
+energy_performance_preference = power
+
+# EPB (Energy Performance Bias) for the intel_pstate driver
+# see conversion info: https://www.kernel.org/doc/html/latest/admin-guide/pm/intel_epb.html
+# available EPB options include a numeric value between 0-15
+# (where 0 = maximum performance and 15 = maximum power saving),
+# or one of the following strings:
+# performance (0), balance_performance (4), default (6), balance_power (8), or power (15)
+# if the parameter is missing in the config and the hardware supports this setting, the default value will be used
+# the default value is `balance_power` (for battery)
+energy_perf_bias = power
+
+# Platform Profiles
+# https://www.kernel.org/doc/html/latest/userspace-api/sysfs-platform_profile.html
+# See available options by running:
+# cat /sys/firmware/acpi/platform_profile_choices
+# platform_profile = low-power
+
+# minimum cpu frequency (in kHz)
+# example: for 800 MHz = 800000 kHz --> scaling_min_freq = 800000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly
+# scaling_min_freq = 800000
+
+# maximum cpu frequency (in kHz)
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# example: for 1GHz = 1000 MHz = 1000000 kHz -> scaling_max_freq = 1000000
+# to use this feature, uncomment the following line and set the value accordingly
+# scaling_max_freq = 1000000
+
+# turbo boost setting (always, auto, or never)
+turbo = auto
+
+# battery charging threshold
+# reference: https://github.com/AdnanHodzic/auto-cpufreq/#battery-charging-thresholds
+enable_thresholds = true
+start_threshold = 80
+stop_threshold = 85
+```
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>DarthZiplock:</strong></p>
+                    <p>UPDATE: Further testing the issues is related to Turbo boost. In Performance governer with turbo boost set to Always or Auto, I get 14-20fps. With Turbo set to Never, I get 30-40fps.
+
+Most interestingly, with governer set to Powersave and Turbo boost set to Never, then I get nearly 60fps.
+
+It's acting exactly backwards of what it should.
+
+This is happening in every game I have on my system. Some are native Linux builds, some are run through Proton/Steam. Higher clock speeds directly results in terrible fps.
+
+This did not occur with the stock tuned power profiles. More performant profiles improved fps.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Any changes when you use a [config file](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#4-auto-cpufreq-config-file) and configure it to your own liking? </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>DarthZiplock:</strong></p>
+                    <p>> Any changes when you use a [config file](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#4-auto-cpufreq-config-file) and configure it to your own liking?
+
+Config file behaves exactly the same. I can reproduce the results in realtime by minimizing my game, editing the config file, hitting save, and watching my fps respond inversely.
+
+Side note, it's cool that the config file is read life instead of requiring a reboot. Very handy.
+
+EDIT: I can grab a video if that's at all helpful.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

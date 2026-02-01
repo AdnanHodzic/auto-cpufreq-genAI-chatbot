@@ -114,6 +114,33 @@ Thank you.
                     <p>Happens here as well. </p>
                 </div>
             
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>cypherpower:</strong></p>
+                    <p>Trying to replicate this bug on a VM right now. Are you guys still having this problem? If so is it immediately after launching the GUI that the CPU core uses 100% or is it a gradual process? I am having some trouble replicating it right now.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Trying to replicate this bug on a VM right now. Are you guys still having this problem? If so is it immediately after launching the GUI that the CPU core uses 100% or is it a gradual process? I am having some trouble replicating it right now.
+
+You'll have a hard time replicating and debugging auto-cpufreq issues on a VM.
+
+auto-cpufreq cannot be used on a virtual machine (VM) because the kernel will not load CPU scaling drivers in a VM. It needs to be installed on the host system instead.  
+
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>cypherpower:</strong></p>
+                    <p>> 
+> You'll have a hard time replicating and debugging auto-cpufreq issues on a VM.
+> 
+> auto-cpufreq cannot be used on a virtual machine (VM) because the kernel will not load CPU scaling drivers in a VM. It needs to be installed on the host system instead.
+
+Sounds good, I can probably install mint on an old computer I have available.  I was able to get it on the VM by manually hardcoding power profiles so I could get past some installation problems.  I also have host CPU configuration pass-through enabled but I did notice it was missing a few things like temperature.  Will see if I can replicate this on a physical device later</p>
+                </div>
+            
             </div>
         </body>
         </html>

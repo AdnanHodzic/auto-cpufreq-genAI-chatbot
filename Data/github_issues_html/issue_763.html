@@ -99,6 +99,48 @@ BTW "Cores: 12" is incorrect also (unless one means hyperthreading here).
 It should be 6 cores.</p>
                 </div>
             
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>etoimene:</strong></p>
+                    <p>I think this might be related to ASUS. Do you have ASUS computer? 
+I have
+```
+Machine:
+  Type: Laptop System: ASUSTeK product: Zenbook UM3402YAR_UM3402YA v: 1.0
+```
+I keep hearing fan(s) in the background. Also, laptop seems quite warm which is OK now in the winter but when warmer days come ... :(
+Interestingly, when just on battery, seems a lot cooler and fan noise stops.
+
+I hope to achieve something by using auto-cpufreq.
+
+With the latest version of auto-cpufreq, fan speed is not even reported.
+
+```
+Linux distro: Linux Mint 22.2 Zara
+Linux kernel: 6.14.0-37-generic
+Processor: AMD Ryzen 7 7730U with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: amd-pstate-epp
+
+auto-cpufreq version: 3.0.0
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Heavygrass:</strong></p>
+                    <p>> Do you have ASUS computer?
+
+None of my laptops from ASUS.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>etoimene:</strong></p>
+                    <p>For my laptop I found https://wiki.archlinux.org/title/ASUS_Zenbook_UM3402YAR
+Section 5 Fan control is very interesting. Maybe that is Ryzen thing. I also see fan RPM=0.
+
+_The UM3402YA laptop series do not have kernel modules to control fan profiles. EC registers are the way to control the fan level, where it also affects CPU performance and thermal throttling prevention_</p>
+                </div>
+            
             </div>
         </body>
         </html>

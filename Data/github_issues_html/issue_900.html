@@ -371,6 +371,60 @@ Especially since I wan't to make a big new release in next couple of weeks.
 If anyone would like to further test these changes or new ones are made, and is in working state again I'm also willing to test it again. But right now I'm facing these 3 major issues.</p>
                 </div>
             
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>be-west:</strong></p>
+                    <p>Hi @AdnanHodzic,
+
+I would be willing to contribute to this PR. I own a ThinkPad, so I could run a few tests.
+After taking a look at the current code, I identified a couple of potential issues:
+
+1. The main problem you're having, as mentioned in your first point, seems to be a type error while parsing the config, which makes the daemon crash.
+
+2. The `--monitor` option enables the configured battery thresholds. I think this should be fixed, considering the README mentions `No changes are made to the system.`
+
+3. Instead of the `charge_ {start/end}_threshold`, maybe the `charge_control_{start,end}_threshold` VFS files should be used if they exist. I had a very quick look at how TLP does this, and they use the former only if the latter wasn't found. Plus, I could only find official documentation about the `charge_control_*` attributes.
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>CasperVM:</strong></p>
+                    <p>> Hi @AdnanHodzic,
+> 
+> I would be willing to contribute to this PR. I own a ThinkPad, so I could run a few tests. After taking a look at the current code, I identified a couple of potential issues:
+> 
+>     1. The main problem you're having, as mentioned in your first point, seems to be a type error while parsing the config, which makes the daemon crash.
+> 
+>     2. The `--monitor` option enables the configured battery thresholds. I think this should be fixed, considering the README mentions `No changes are made to the system.`
+> 
+>     3. Instead of the `charge_ {start/end}_threshold`, maybe the `charge_control_{start,end}_threshold` VFS files should be used if they exist. I had a very quick look at how TLP does this, and they use the former only if the latter wasn't found. Plus, I could only find official documentation about the `charge_control_*` attributes.
+
+@be-west  I wouldn't mind to collaborate. I'd be completely fine if you finish it up, as I don't have the hardware to test this change. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@be-west and @CasperVM please give it a try, especially since @CasperVM is already an existing contributor, if you need to sync you can use [auto-cpufreq Discord community](https://discord.gg/Sjauxtj6kH).
+
+As always, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases) :) </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>be-west:</strong></p>
+                    <p>@CasperVM 
+Hi. I've made some changes, and now the thresholds are working as expected on my ThinkPad.
+Main changes:
+
+- The `--monitor` flag no longer makes changes to the thresholds
+- The type errors are fixed.
+- Moved some code around for easier test writing (I wrote some unit tests for myself)
+- The `charge_control_{start,end}_threshold` files are now preferred over the `charge_{start,stop}_threshold` files
+
+Should I commit this to your branch, or should I create my own fork?
+
+Edit: you can also reach me on the Discord: `bene_w`</p>
+                </div>
+            
             </div>
         </body>
         </html>

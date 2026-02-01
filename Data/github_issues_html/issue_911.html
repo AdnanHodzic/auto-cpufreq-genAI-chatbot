@@ -1,0 +1,136 @@
+
+        <html>
+        <head>
+            <title>Issue #911: auto-cpufreq fails on desktop with not-a-distro-kernel</title>
+        </head>
+        <body>
+            <h1>auto-cpufreq fails on desktop with not-a-distro-kernel</h1>
+            <p><strong>Issue #911</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+#### Before submitting an issue, it is strongly recommended to use the **[auto-cpufreq-genAI-chatbot](https://foolcontrol.org/?p=4903)** to get an immediate answer to your question.
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? Yes
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)? No
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)? No
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)? No
+
+### Error output:
+```
+FileNotFoundError: [Errno 2] No such file or directory: '/sys/class/power_supply/'
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+(Note: the following output is generated /after/ patching auto-cpufreq/core.py as shown below)
+auto-cpufreq --debug
+
+-------------------------------------------------------------------------------
+
+Linux distro: Gentoo 2.18 n/a
+Linux kernel: 6.18.5
+Processor: Intel(R) Core(TM) i7-6700 CPU @ 3.40GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3400 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      0.0%        28 °C      3361 MHz
+CPU1      1.0%        28 °C       800 MHz
+CPU2      1.0%        28 °C      3400 MHz
+CPU3      0.0%        28 °C      3400 MHz
+CPU4      1.0%        28 °C      2749 MHz
+CPU5      1.1%        28 °C      3400 MHz
+CPU6      0.0%        28 °C      3309 MHz
+CPU7      0.0%        28 °C       800 MHz
+
+auto-cpufreq version: 2.6.0
+
+Python: 3.13.11
+psutil package: 7.1.3
+platform package: 1.0.8
+click package: 8.3.1
+distro package: 1.9.0
+
+Computer type: /bin/sh: line 1: dmidecode: command not found
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.26 %
+
+Total CPU usage: 0.1 %
+Total system load: 0.10
+Average temp. of all cores: 28.00 °C
+
+Currently using: performance governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+I installed cpu-autofreq through the gentoo guru repo. It will fail on everything I tried because the directory 
+/sys/class/power_supply does not exist on my system at all. (Yes, I could reconfigure the kernel, but.)
+
+I got auto-cpufreq --debug to work with this patch:
+
+```
+--- core.py	2026-01-13 14:55:24.668955630 +0100
++++ core-modded.py	2026-01-13 15:04:03.433182461 +0100
+@@ -238,7 +238,11 @@
+     get charge state: is battery charging or discharging
+     """
+     # sort it so AC is 'always' first
+-    power_supplies = sorted(os.listdir(Path(POWER_SUPPLY_DIR)))
++    if not os.path.exists(Path(POWER_SUPPLY_DIR)):
++        power_supplies = ''
++    else:
++        power_supplies = sorted(os.listdir(Path(POWER_SUPPLY_DIR)))
+     POWER_SUPPLY_IGNORELIST = get_power_supply_ignore_list()
+
+     # check if we found power supplies. on a desktop these are not found and we assume we are on a powercable.
+```
+
+There are more places in the code where this'd have to be handled to fully work.
+Before doing so, though: this could be done with try/except or some other way as well, so knowing your preference would be nice. I landed on this one by skimming the code.
+Also, you might find this out of scope. I found that desktops would be in-scope at least, so a confirmation would be nice.
+
+I'll be happy to try and provide a full patch when it's welcome.
+
+Thanks!
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Since you already created patch for this, could you please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+It would be great to have these changes upstream, thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>GabiBaumann:</strong></p>
+                    <p>Thanks! I provided a pull request (#920) with the patch. I have tested this on a 3.0.0 build. (Had the 2.6.0 build before, which needed more fixes, but those didn't apply to 3.0.0 any more.) </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        
