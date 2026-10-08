@@ -1,0 +1,482 @@
+
+        <html>
+        <head>
+            <title>Pull Request #951: debian: add initial Debian packaging (.deb build)</title>
+        </head>
+        <body>
+            <h1>debian: add initial Debian packaging (.deb build)</h1>
+            <p><strong>Pull Request #951</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>This PR adds a `debian/` directory for building auto-cpufreq as a proper `.deb` package on Debian/Ubuntu systems.
+
+## Approach
+- Minimal, self-contained `debian/` directory — zero changes to existing code
+- Python package installed to system site-packages via dh_install (no venv)
+- Depends on system Python packages (python3-psutil, python3-click, etc.)
+- Wrapper scripts at /usr/bin/auto-cpufreq and /usr/bin/auto-cpufreq-gtk
+- Systemd service, polkit policy, desktop file all shipped with the package
+- Scripts also installed to /usr/local/share/auto-cpufreq/scripts/ for
+  compatibility with auto-cpufreq --install (SCRIPTS_DIR in core.py)
+
+## Tested
+- `dpkg-buildpackage --no-sign -b -d` produces a working .deb (102 KB)
+- Installed and tested on Debian unstable (forky)
+- Service starts, binary runs, GUI launches via auto-cpufreq-gtk
+
+## Files
+| File | Purpose |
+|------|---------|
+| debian/control | Package metadata and dependencies |
+| debian/copyright | LGPL-3.0+ licensing |
+| debian/changelog | Initial version (3.1.0-1) |
+| debian/rules | dh with manual wrapper install |
+| debian/install | File mapping |
+| debian/postinst, postrm | Systemd service lifecycle |
+| debian/auto-cpufreq.service | Systemd unit |
+| debian/auto-cpufreq.sh, auto-cpufreq-gtk.sh | Python wrappers |
+| debian/source/format | 3.0 (quilt) |
+| debian/.gitignore | Excludes build artifacts |
+
+## Maintainer
+Happy to maintain the Debian packaging going forward. Existing installer, Snap, Nix, AUR, and other packaging methods are untouched.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>Copilot left some comments worth addressing. I commented on the issues I was able to reproduce. I do not know anything about Debian packaging, so I can't comment on the remaining issues. I'm sure @AdnanHodzic can answer as he is the in-house Debian expert.
+
+Other than that, I was able to build the .deb file and install it using a container. I wasn't able to test the service install and load since it was a distrobox container, but I did run the daemon on my underlying OS and did confirm I could read stats from the daemon, so apart from the small issues found I think this looks good. At some point the README file will need to be updated, but that might be best done after the package has been submitted.
+
+One thing to consider adding would be an additional CI workflow to build the Debian package for new commits/PR. You can reference the existing workflows in the [.github/workflows](https://github.com/AdnanHodzic/auto-cpufreq/tree/master/.github/workflows) folder. It might even be convenient to have the workflow upload the resulting .deb file as an artifact that people could download if they are interested in running auto-cpufreq from latest commit as a .deb package without having to build it themselves. This is quite easy to do using the artifact action. 
+
+Finally, if you plan on being the official maintainer for Debian, I recommend joining the [Discord](https://discord.gg/Sjauxtj6kH) server and making yourself known if you haven't already in case any discussions need to be had regarding the submission of the package and whatnot. We even have a fancy Package Maintainer role :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>filhocf:</strong></p>
+                    <p>I've added a CI workflow (`.github/workflows/build-deb.yml`) that builds the `.deb` package on every push and PR, and uploads it as a downloadable artifact. This follows the same pattern as the existing `build-linux.yml` workflow.
+
+Users can now download the latest `.deb` build from the Actions tab without building locally.
+
+The three issues you flagged have also been fixed:
+- `After=multi-user.target` removed (ordering cycle)
+- `deb-systemd-helper start/stop` → `deb-systemd-invoke start/stop`
+- `--version` now works (added `dist-info` metadata to the package)
+
+Let me know if there's anything else to adjust.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>I tested it on native Debian this time and got the following issue with systemd service 
+When installing the .deb file I got 
+```Failed to preset unit: Unit auto-cpufreq.service does not exist
+/usr/bin/deb-systemd-helper: error: systemctl preset failed on auto-cpufreq.service: No such file or directory
+auto-cpufreq.service is a disabled or a static unit, not starting it
+```
+
+Then if I ran `sudo auto-cpufreq --install`, I see 
+```
+Starting auto-cpufreq daemon (systemd) service
+Failed to start auto-cpufreq.service: Unit auto-cpufreq.service not found.
+
+Enabling auto-cpufreq daemon (systemd) at boot
+Failed to enable unit: Unit auto-cpufreq.service does not exist
+```
+
+Other than that I didn't see any issues.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>filhocf:</strong></p>
+                    <p>**Fix: systemd service unit was missing from the .deb package.**
+
+The previous build shipped no `auto-cpufreq.service` to `/usr/lib/systemd/system/`, which caused `deb-systemd-helper` to fail with *"No such file or directory"* during install.
+
+**Changes:**
+
+| What | Why |
+|------|-----|
+| `debian/auto-cpufreq.service` (new) | Proper systemd unit pointing to `/usr/bin/auto-cpufreq --daemon` — the upstream `scripts/auto-cpufreq.service` references `/opt/auto-cpufreq/venv/` (installer path), which is wrong for the .deb |
+| `postinst`/`postrm` simplified | Removed hardcoded `deb-systemd-helper` commands — `#DEBHELPER#` now auto-generates the correct lifecycle code via `dh_installsystemd` |
+| `debian/rules` updated | The upstream service in `scripts/` is now overridden with the .deb-correct version, so running `auto-cpufreq --install` won`'t overwrite the proper service |
+
+**Tested:** install, purge, reinstall — service active and running, unit found at `/usr/lib/systemd/system/auto-cpufreq.service`, properly enabled and started.
+
+@shadeyg56 this should resolve both issues you reported.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>LGTM now. Will wait for @AdnanHodzic to merge</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> LGTM now. Will wait for @AdnanHodzic to merge
+
+Thanks for taking a look at this @shadeyg56! Much appreciated.
+
+@filhocf apologizes for such a delay from my side, been a crazy week and didn't get a chance to look into this before. 
+
+On first glimpse, I don't see anything wrong with package structure & code, I have some suggestions regarding dependencies and minor improvements, but we can figure this part later on, as my idea would be to push this into official Debian repos, and/or I can also setup a Debian repo people could use until it was part of official repos.
+
+But first things first, after I built the package and installed it ... I ran:
+
+```
+sudo auto-cpufreq --install
+
+--------------------- Deploying auto-cpufreq as a daemon ----------------------
+
+* Turn off Bluetooth on boot (only)!
+  If you want bluetooth enabled on boot run: auto-cpufreq --bluetooth_boot_on
+
+* Deploy auto-cpufreq install script
+
+* Deploy auto-cpufreq remove script
+auto-cpufreq snap package not installed
+GNOME Power Profiles Daemon should be enabled. run:
+
+sudo python3 -m auto_cpufreq.power_helper --gnome_power_enable
+
+───────────────────────────────────────────────────────────────────────────────────────────────────────── Running auto-cpufreq daemon install script ─────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+Deploying auto-cpufreq systemd unit file
+
+* Reloading systemd manager configuration
+
+* Starting auto-cpufreq daemon (systemd) service
+
+* Enabling auto-cpufreq daemon (systemd) at boot
+
+----------------- auto-cpufreq daemon installed and running -----------------
+
+To view live stats, run:
+auto-cpufreq --stats
+
+auto-cpufreq makes all decisions automatically, if you would like to
+configure certain setting to your own liking, please refer to:
+https://github.com/AdnanHodzic/auto-cpufreq#configuring-auto-cpufreq
+
+To disable and remove auto-cpufreq daemon, run:
+sudo auto-cpufreq --remove
+```
+
+and all went well, but then after I ran: 
+
+```
+auto-cpufreq --stats
+
+------------------------ auto-cpufreq not running ------------------------------
+
+ERROR: auto-cpufreq is not running in daemon mode.
+
+Make sure to run "sudo auto-cpufreq --install" first
+
+-------------------------------------------------------------------------------
+```
+
+If I run: 
+
+```
+systemctl status auto-cpufreq           
+● auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux
+     Loaded: loaded (/etc/systemd/system/auto-cpufreq.service; enabled; preset: enabled)
+     Active: active (running) since Fri 2026-08-14 18:24:25 CEST; 1min 9s ago
+ Invocation: 240085882a1e48a9821203532137e8a6
+       Docs: https://github.com/AdnanHodzic/auto-cpufreq
+   Main PID: 3895941 (python3)
+      Tasks: 3 (limit: 18071)
+     Memory: 32.7M (peak: 38.6M)
+        CPU: 3.475s
+     CGroup: /system.slice/auto-cpufreq.service
+             └─3895941 /usr/bin/python3 -m auto_cpufreq.bin.auto_cpufreq --daemon
+
+Aug 14 18:24:25 carbon7 systemd[1]: Started auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux.
+```
+
+As evident, daemon is running behind a process and it all seems to be working fine. 
+
+Even, restarting auto-cpufreq systemd service: `sudo systemctl restart auto-cpufreq.service` ran successfully and spawned a new process:
+
+```
+systemctl status auto-cpufreq                             
+● auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux
+     Loaded: loaded (/etc/systemd/system/auto-cpufreq.service; enabled; preset: enabled)
+     Active: active (running) since Fri 2026-08-14 18:27:53 CEST; 4s ago
+ Invocation: a841e7232f824a7f96f999fbf1288221
+       Docs: https://github.com/AdnanHodzic/auto-cpufreq
+   Main PID: 3901087 (python3)
+      Tasks: 3 (limit: 18071)
+     Memory: 32.6M (peak: 38.5M)
+        CPU: 591ms
+     CGroup: /system.slice/auto-cpufreq.service
+             └─3901087 /usr/bin/python3 -m auto_cpufreq.bin.auto_cpufreq --daemon
+
+Aug 14 18:27:53 carbon7 systemd[1]: Stopping auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux...
+Aug 14 18:27:53 carbon7 systemd[1]: auto-cpufreq.service: Deactivated successfully.
+Aug 14 18:27:53 carbon7 systemd[1]: Stopped auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux.
+Aug 14 18:27:53 carbon7 systemd[1]: auto-cpufreq.service: Consumed 10.348s CPU time over 3min 28.292s wall clock time, 39.1M memory peak.
+Aug 14 18:27:53 carbon7 systemd[1]: Started auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux.
+ ahodzic@carbon7  ~/code/auto-cpufreq   deb-951  auto-cpufreq --stats       
+ ```
+
+Also running  `sudo auto-cpufreq --live` works great and as expected. 
+
+Hence, it just seems like --status is not linked to correct output in this case.
+
+Can you please look into this? Thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>filhocf:</strong></p>
+                    <p>Thanks for the detailed report — I've fixed it. The root cause: `is_running()` in `core.py` only matched the hyphenated binary name `auto-cpufreq` in the process cmdline. The .deb wrapper starts the daemon via `python3 -m auto_cpufreq.bin.auto_cpufreq --daemon`, so the cmdline contains the module name `auto_cpufreq` (underscore), and the check missed it — even though systemd shows the service active. In the official install the daemon runs as `/opt/.../bin/auto-cpufreq --daemon`, which is why it only broke in the .deb.
+
+The fix makes `is_running()` also match the Python module name (`auto_cpufreq`), so detection works regardless of install method. I verified both launch paths (hyphenated binary and `python3 -m`) plus negative cases — all pass. `--stats` now correctly reports the running daemon.
+
+Commit `36dd266`.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@filhocf okay, I can confirm I can install the package with latest changes and auto-cpufreq daemon will be running. However there are few things that will need to be changed before this can be merged, as it introduces quite some breaking changes.
+
+**1. auto-cpufreq daemon should not be automatically installed as soon as .deb package is installed**
+
+Right now after I install e.g `auto-cpufreq_3.1.0-1_all.deb` file, `dh_installsystemd` will find and install the systemd unit file `/usr/lib/systemd/system/auto-cpufreq.service` and it'll enable and start service auto-cpufreq systemd service automatically and `sudo auto-cpufreq --stats` will be available.
+
+But this is not the intended flow and will interefere and break things. After auto-cpufreq is installed with e.g: [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq#auto-cpufreq-installer), `auto-cpufreq` becomes available as a binary, and user has all options listed with [auto-cpufreq --help](https://github.com/AdnanHodzic/auto-cpufreq#auto-cpufreq-modes-and-options) at their disposal. Maybe they want to run --monitor or --live first before they run --install.
+
+Currently, after installing .deb and running `--remove` will also misinform the user:
+
+```
+sudo auto-cpufreq --remove                      
+
+auto-cpufreq daemon is not installed.
+```
+
+and even worse, if user runs `auto-cpufreq --install`, it'll proceed and re-do whole install, although it's already running in background, e.g:
+
+```
+sudo auto-cpufreq --install
+
+--------------------- Deploying auto-cpufreq as a daemon ----------------------
+
+* Turn off Bluetooth on boot (only)!
+  If you want bluetooth enabled on boot run: auto-cpufreq --bluetooth_boot_on
+
+* Deploy auto-cpufreq install script
+
+* Deploy auto-cpufreq remove script
+
+----------------------------------- Warning -----------------------------------
+
+Detected running GNOME Power Profiles daemon service!
+
+This daemon might interfere with auto-cpufreq and has been disabled.
+
+This daemon is not automatically disabled in "monitor" mode and
+will be enabled after auto-cpufreq daemon is removed.
+auto-cpufreq snap package installed, GNOME Power Profiles Daemon should be disabled.
+
+Using profile:  balanced
+
+* Disabling GNOME power profiles
+Removed '/etc/systemd/system/graphical.target.wants/power-profiles-daemon.service'.
+Created symlink '/etc/systemd/system/power-profiles-daemon.service' → '/dev/null'.
+
+──────────────────────────────── Running auto-cpufreq daemon install script ────────────────────────────────
+
+Deploying auto-cpufreq systemd unit file
+
+* Reloading systemd manager configuration
+
+* Starting auto-cpufreq daemon (systemd) service
+
+* Enabling auto-cpufreq daemon (systemd) at boot
+
+----------------- auto-cpufreq daemon installed and running -----------------
+
+To view live stats, run:
+auto-cpufreq --stats
+
+auto-cpufreq makes all decisions automatically, if you would like to
+configure certain setting to your own liking, please refer to:
+https://github.com/AdnanHodzic/auto-cpufreq#configuring-auto-cpufreq
+
+To disable and remove auto-cpufreq daemon, run:
+sudo auto-cpufreq --remove
+
+-------------------------------------------------------------------------------
+```
+
+Now, if I run --remove, it'll perform an actual uninstall:
+
+```
+sudo auto-cpufreq --remove 
+
+--------------------- Removing auto-cpufreq daemon ----------------------
+
+* Turn on bluetooth on boot
+
+----------------------------------- Warning -----------------------------------
+
+Detected GNOME Power Profiles daemon service is stopped!
+This service will now be enabled and started again.
+
+* Enabling GNOME power profiles
+
+Removed '/etc/systemd/system/power-profiles-daemon.service'.
+Created symlink '/etc/systemd/system/graphical.target.wants/power-profiles-daemon.service' → '/usr/lib/systemd/system/power-profiles-daemon.service'.
+
+──────────────────────────────── Running auto-cpufreq daemon removal script ────────────────────────────────
+
+
+* Stopping auto-cpufreq daemon (systemd) service
+
+* Disabling auto-cpufreq daemon (systemd) at boot
+Removed '/etc/systemd/system/multi-user.target.wants/auto-cpufreq.service'.
+
+* Removing auto-cpufreq daemon (systemd) unit file
+
+* Reloading systemd manager configuration
+reset failed
+
+------------------------- auto-cpufreq daemon removed -------------------------
+
+auto-cpufreq successfully removed.
+
+-------------------------------------------------------------------------------
+```
+
+This will result in broken systemd service:
+
+```
+systemctl status auto-cpufreq                   
+○ auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux
+     Loaded: loaded (/usr/lib/systemd/system/auto-cpufreq.service; disabled; preset: enabled)
+     Active: inactive (dead) since Sun 2026-08-23 18:39:02 CEST; 1min 14s ago
+   Duration: 2min 24.477s
+ Invocation: 9448aee3daae4673add2b3caa13b9465
+       Docs: https://github.com/AdnanHodzic/auto-cpufreq
+   Main PID: 529527 (code=killed, signal=TERM)
+   Mem peak: 37.8M
+        CPU: 23.810s
+
+Aug 23 18:36:37 carbon7 systemd[1]: Started auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux.
+Aug 23 18:39:02 carbon7 systemd[1]: Stopping auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux...
+Aug 23 18:39:02 carbon7 systemd[1]: auto-cpufreq.service: Deactivated successfully.
+Aug 23 18:39:02 carbon7 systemd[1]: Stopped auto-cpufreq.service - auto-cpufreq - Automatic CPU speed & power optimizer for Linux.
+Aug 23 18:39:02 carbon7 systemd[1]: auto-cpufreq.service: Consumed 23.810s CPU time over 2min 24.484s wall clock time, 37.8M memory
+```
+
+**2. Don't enable & start auto-cpufreq daemon (option 1)**
+
+To have intended behavior we should have empty override for dh_installsystemd, and debian/rules could be as simple as:
+
+```
+override_dh_installsystemd:
+	# Do nothing: let auto-cpufreq --install handle service registration
+```
+
+This way, dpkg -i installs the wrapper binaries and files (including auto-cpufreq.service into `.../share/auto-cpufreq/scripts/`) but no systemd services are enabled or started during package installation.
+
+The user must manually run: `sudo auto-cpufreq --install` which executes auto-cpufreq-install.sh to copy the unit to `/etc/systemd/system/` and run `systemctl enable --now auto-cpufreq.service` and e.g `sudo auto-cpufreq --remove` will remove and disable it.
+
+**3. Don't enable & start auto-cpufreq daemon (option 2)**
+
+Install the systemd unit into system directories without starting or enabling it and let Debian package manager to the heavy lifting, e.g  register the unit file in `/usr/lib/systemd/system/auto-cpufreq.service`, but not enable or start it automatically:
+
+In debian/rules, pass `--no-enable --no-start`, e.g:
+
+```
+override_dh_installsystemd:
+	dh_installsystemd --no-enable --no-start
+```
+
+In this case after user runs `sudo auto-cpufreq --install` then service would be enabled and started. 
+
+In both cases, I think it's useful for user to see output that's displayed when you run e.g `sudo auto-cpufreq --install` as shown above, as it gives user a lot of useful info, on what happened and etc ...
+
+**4. GNOME Power Profiles should be stopped, which is not the case with .deb right now**
+
+As you can see in output from --install above, this service will be disabled, as [mentioned in README](https://github.com/AdnanHodzic/auto-cpufreq):
+
+> When installing auto-cpufreq via [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq#auto-cpufreq-installer), if it detects the [GNOME Power Profiles service](https://twitter.com/fooctrl/status/1467469508373884933) is running, it will automatically disable it. Otherwise, that daemon will cause conflicts and various other performance issues.
+
+You can check its status by running auto_cpufreq.power_helper script, e.g: `sudo python3 -m auto_cpufreq.power_helper --gnome_power_status` from auto-cpufreq, and you can even disable it by running: `sudo python3 -m auto_cpufreq.power_helper --gnome_power_disable`
+
+For full list of options run: `sudo python3 -m auto_cpufreq.power_helper --help`
+
+Also it shouldn't be possible to run  `--live` after `--install` as then you have 2 duplicated processes doing the same thing, #953 is working on fixing this issue, as it seems [this feature got lost along the way](https://github.com/AdnanHodzic/auto-cpufreq/pull/953#issuecomment-5300994829).
+
+**5. auto-cpufreq source code should not be in /debian**
+
+Finally, auto-cpufreq source code should not be in /debian, but other way around, debian/ should simply be a dir under, e.g: `auto-cpufreq/debian`
+
+Excellent guide for this which I also followed when I created my first Debian packages is [Debian New Maintainers' Guide](https://www.debian.org/doc/manuals/maint-guide/) and it clearly outlines [Required files under the debian directory](https://www.debian.org/doc/manuals/maint-guide/dreq.en.html).
+
+Hope this clarifies some things and helps you make the changes the right way, looking forward to any updates you may have!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Hey everyone,
+
+as I discovered in #157 @emfox has closed [Debian Bug #1053294 ITP: auto-cpufreq -- Automatic CPU speed & power optimizer](https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1053294&pow_referer=https%3A%2F%2Fgithub.com%2F) and auto-cpufeq 3.1.0 is already present in [Debian unstable & testing repositories](https://packages.debian.org/search?keywords=auto-cpufreq&searchon=names&suite=all&section=all).
+
+Hence this issue can now be closed.
+
+Since code wise we're ready for 3.2.0 release, it would be great to have this reflected as part of auto-cpufreq README under [Installating auto-cpufreq ](https://github.com/AdnanHodzic/auto-cpufreq)section as a new option. As Debian package maintainer, would you be interested in making these changes @emfox and creating a PR, otherwise I can also do this part.
+
+If 3.2.0 is released in next few days, we might still have a chance of it getting picked up by upcoming Ubuntu 26.10 release which would be great.
+
+Please let me know, thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>filhocf:</strong></p>
+                    <p>Thanks @AdnanHodzic and @shadeyg56 for the thorough reviews and testing throughout this PR.
+
+Fully agree this is the right outcome: having auto-cpufreq packaged through the official Debian process — with @emfox as Debian maintainer and 3.1.0 already in unstable/testing — is a better path than carrying the `debian/` directory in-tree. The official route gets the dependency handling, lifecycle, and release cadence right by design, and keeps that maintenance where it belongs.
+
+Your review points (especially not auto-enabling the daemon on `dpkg -i`, leaving service registration to `auto-cpufreq --install`, and the `debian/` layout) were spot-on and I learned a lot from them.
+
+Glad the end goal — `apt install auto-cpufreq` — is now a reality, and congrats on it being in line for Ubuntu 26.10. Happy to help if anything `.deb`-related comes up down the road.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>emfox:</strong></p>
+                    <p>> Hey everyone,
+> 
+> as I discovered in #157 @emfox has closed [Debian Bug #1053294 ITP: auto-cpufreq -- Automatic CPU speed & power optimizer](https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1053294&pow_referer=https%3A%2F%2Fgithub.com%2F) and auto-cpufeq 3.1.0 is already present in [Debian unstable & testing repositories](https://packages.debian.org/search?keywords=auto-cpufreq&searchon=names&suite=all&section=all).
+> 
+> Hence this issue can now be closed.
+> 
+> Since code wise we're ready for 3.2.0 release, it would be great to have this reflected as part of auto-cpufreq README under [Installating auto-cpufreq ](https://github.com/AdnanHodzic/auto-cpufreq)section as a new option. As Debian package maintainer, would you be interested in making these changes @emfox and creating a PR, otherwise I can also do this part.
+> 
+> If 3.2.0 is released in next few days, we might still have a chance of it getting picked up by upcoming Ubuntu 26.10 release which would be great.
+> 
+> Please let me know, thanks!
+
+Hello, as I'm not good at documentation works, so please maintain the README part whatever as you wish, and I'll package 3.2.0 into debian once it's out.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@filhocf thanks, agreed and you're most welcome!
+
+> Hello, as I'm not good at documentation works, so please maintain the README part whatever as you wish, and I'll package 3.2.0 into debian once it's out.
+
+@emfox no worries, I've just updated README with [Debian repositories (.deb package)](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/README.md#debian-repositories-deb-package) section.
+
+Along with making [auto-cpufreq 3.2.0 release](https://github.com/AdnanHodzic/auto-cpufreq/releases) and adding you as one of the contributors, as direct or indirectly you made a much needed change and thank you for your contribution. </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

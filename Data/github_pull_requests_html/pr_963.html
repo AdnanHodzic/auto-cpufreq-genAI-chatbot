@@ -1,0 +1,126 @@
+
+        <html>
+        <head>
+            <title>Pull Request #963: Fix battery detection on multi-interface power supply systems</title>
+        </head>
+        <body>
+            <h1>Fix battery detection on multi-interface power supply systems</h1>
+            <p><strong>Pull Request #963</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>## Summary
+
+Fix battery and external-power detection on laptops that expose multiple
+entries under `/sys/class/power_supply`, such as a system battery,
+peripheral HID batteries, a barrel-jack AC source, and USB-C/USB-PD sources.
+
+This addresses the topology reported in #949 without hardcoding device
+names such as `BAT0`.
+
+## Problem
+
+`SystemInfo.get_battery_path()` currently returns the first entry whose
+`type` is `Battery`. On systems that also expose a peripheral battery,
+that can select the wrong device and report its capacity (for example
+`0%`) instead of the laptop battery.
+
+External-power detection also only considers `type = Mains`, and each
+matching entry overwrites the previous state. This can miss USB-C/USB-PD
+power sources and can report the wrong result on systems with multiple
+power inputs.
+
+## Changes
+
+- Preserve an explicitly configured `battery_device` as the highest priority.
+- Reuse the existing `power_supply_ignore_list` during automatic detection.
+- Make fallback battery selection deterministic.
+- Prefer `scope = System` batteries over other non-Device batteries and exclude
+  `scope = Device` peripherals from automatic battery selection.
+- Detect external power from non-battery power-supply entries exposing a
+  valid `online` state, including USB/USB-PD and `online = 2` programmable
+  supplies.
+- Ignore `scope = Device` sources when determining system external power.
+- Aggregate multiple sources so an offline source cannot overwrite one
+  that is online.
+- Fall back to the selected battery status when no usable external source
+  exposes an `online` state.
+- Keep external-power detection separate from full battery telemetry so
+  `core.charging()` and governor selection avoid unnecessary sysfs reads.
+- Treat an undetermined power state consistently for profile decisions while
+  preserving `Unknown` for reporting.
+  
+## Validation
+
+Validated with synthetic `/sys/class/power_supply` topologies covering:
+
+- `BAT0`: `Battery`, `scope=System`, capacity `83%`
+- HID/peripheral batteries with `scope=Device`
+- `AC0`: `Mains`, offline/online states
+- USB-C/USB-PD sources, including `online=2`
+- Multiple external sources with mixed online states
+- Missing and `Unknown` battery status
+- Systems without a usable system battery
+- Explicit `battery_device` configuration precedence
+
+The system battery is selected correctly, peripheral batteries are excluded
+from autodetection, external-power state is aggregated consistently, and the
+daemon profile path no longer collects full battery telemetry.
+
+
+Fixes #949</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lucasleocs:</strong></p>
+                    <p>This fix is also included in the larger integration work in #964, but this PR is intentionally standalone and can be reviewed/merged independently. If this lands first, I can update #964 afterwards to remove the overlapping changes and resolve any merge conflicts that result from the different merge order.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> This fix is also included in the larger integration work in #964, but this PR is intentionally standalone and can be reviewed/merged independently. If this lands first, I can update #964 afterwards to remove the overlapping changes and resolve any merge conflicts that result from the different merge order.
+
+Instead of doing multiple PR's in parallel, I'll start reviewing and merging them one by one. While I truly appreciate your eagerness and effort to make auto-cpufreq a better solution. There are some merge conflicts with previous PR's and I would like to first address [a comment](https://github.com/AdnanHodzic/auto-cpufreq/pull/962#issuecomment-5365358892)  I made in #962 as it introduces a serious and unmentioned change.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lucasleocs:</strong></p>
+                    <p>> > This fix is also included in the larger integration work in #964, but this PR is intentionally standalone and can be reviewed/merged independently. If this lands first, I can update #964 afterwards to remove the overlapping changes and resolve any merge conflicts that result from the different merge order.
+> 
+> Instead of doing multiple PR's in parallel, I'll start reviewing and merging them one by one. While I truly appreciate your eagerness and effort to make auto-cpufreq a better solution. There are some merge conflicts with previous PR's and I would like to first address [a comment](https://github.com/AdnanHodzic/auto-cpufreq/pull/962#issuecomment-5365358892) I made in #962 as it introduces a serious and unmentioned change.
+
+Understood, thanks. I'll keep the additional work in draft for now and avoid opening or marking more PRs as ready while you review the current ones one by one.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lucasleocs:</strong></p>
+                    <p>While continuing to review some of the legacy power-related paths, I found another piece of logic that affects the same battery/external-power decision addressed by this PR, so I thought it made more sense to include the correction here rather than create a separate PR.
+
+`core.charging()` still had its own legacy power-source detection instead of using the updated `SystemInfo` result. That path only recognized `Mains` as external power and could also treat any `Battery` entry as the system battery, so daemon profile selection could still disagree with the detection fixed in this PR on systems using USB/USB-PD or exposing `scope=Device `peripheral batteries.
+
+I updated `core.charging()` to reuse `SystemInfo.battery_info().is_ac_plugged`, while preserving the previous fallback of assuming external power when the state cannot be determined.
+
+I also validated the change against USB-PD, peripheral-battery and unknown-state cases. The updated branch passes the local validation, Linux Build and Nix Flake.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@lucasleocs let's address the Copilot suggestions and think this can be merged, thanks</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lucasleocs:</strong></p>
+                    <p>Done, thanks. I addressed both Copilot suggestions and replied to the review threads with the details.
+I also checked the behavior against the Linux power-supply implementation sysfs ABI, updated the related documentation. I think this should be ready for another look.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>LGTM! Tthank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

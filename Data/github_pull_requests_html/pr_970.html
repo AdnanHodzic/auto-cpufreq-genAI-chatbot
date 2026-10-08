@@ -1,0 +1,340 @@
+
+        <html>
+        <head>
+            <title>Pull Request #970: Fix native power-profiles-daemon handling</title>
+        </head>
+        <body>
+            <h1>Fix native power-profiles-daemon handling</h1>
+            <p><strong>Pull Request #970</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>## Summary
+
+Fixes the native `power-profiles-daemon` handling issue pointed out by the maintainer in #962.
+
+The native path previously tried to infer a Snap installation with a malformed `snap list | grep` subprocess call. This PR removes that inference and keeps Snap handling on the dedicated Snap path, including the fixes now present on `master` from #971.
+
+## Changes
+
+* Removes the broken Snap inference from the native PPD helper path.
+* Separates install and `--live` messaging so each describes the action actually being performed.
+* Disables and masks PPD during native daemon installation even when the service is inactive-but-enabled.
+* Avoids creating a systemd mask when `power-profiles-daemon.service` is not installed (`LoadState=not-found`).
+* Treats `powerprofilesctl set balanced` as optional, so an unavailable or failing `powerprofilesctl` does not prevent PPD from being disabled.
+* In `--live`, only stops PPD when it was active before entering live mode, and only restores it in that case.
+* Stops PPD only after the live-mode confirmation, so cancelling at the prompt does not leave it stopped.
+
+## Verification
+
+The PPD lifecycle was checked across active, inactive, missing, masked and detection-failure states, including systems without `powerprofilesctl`.
+
+The branch was also updated against the current `master` so the Snap behavior fixed in #971 remains separate from the native PPD handling.
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Minor thing, but in following output:
+
+```
+---------------------------------- Warning -----------------------------------
+
+Detected running GNOME Power Profiles daemon service!
+
+This daemon might interfere with auto-cpufreq and will be disabled.
+
+This daemon is not automatically disabled in "monitor" mode and
+will be enabled after auto-cpufreq daemon is removed.
+Using profile:  balanced
+
+* Disabling GNOME power profiles
+Removed '/etc/systemd/system/graphical.target.wants/power-profiles-daemon.service'.
+Created symlink '/etc/systemd/system/power-profiles-daemon.service' → '/dev/null'.
+```
+
+Let's move `Using profile:  balanced` to its own new line, as now it's in same paragraph as mention above, but is unrelated.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lucasleocs:</strong></p>
+                    <p>> Minor thing, but in following output:
+> 
+> ```
+> ---------------------------------- Warning -----------------------------------
+> 
+> Detected running GNOME Power Profiles daemon service!
+> 
+> This daemon might interfere with auto-cpufreq and will be disabled.
+> 
+> This daemon is not automatically disabled in "monitor" mode and
+> will be enabled after auto-cpufreq daemon is removed.
+> Using profile:  balanced
+> 
+> * Disabling GNOME power profiles
+> Removed '/etc/systemd/system/graphical.target.wants/power-profiles-daemon.service'.
+> Created symlink '/etc/systemd/system/power-profiles-daemon.service' → '/dev/null'.
+> ```
+> 
+> Let's move `Using profile: balanced` to its own new line, as now it's in same paragraph as mention above, but is unrelated.
+
+Fixed. `Using profile: balanced` is now on its own line, and I removed the extra space as well.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Actually, I built a .snap, and it seems to be completely broken:
+
+```
+sudo auto-cpufreq --install
+
+----------------------------------- Warning -----------------------------------
+
+Due to Snap package confinement limitations please consider installing auto-cpufreq using
+auto-cpufreq-installer: https://github.com/AdnanHodzic/auto-cpufreq#auto-cpufreq-installer
+
+Unable to detect state of GNOME Power Profiles daemon service!
+This daemon might interfere with auto-cpufreq and should be disabled!
+
+Steps to perform this action using auto-cpufreq: power_helper script:
+git clone https://github.com/AdnanHodzic/auto-cpufreq.git
+python3 -m auto_cpufreq.power_helper --gnome_power_disable
+
+Reference: https://github.com/AdnanHodzic/auto-cpufreq#configuring-auto-cpufreq
+
+----------------------------------- Warning -----------------------------------
+
+Unable to detect if you are using a TLP service!
+This daemon might interfere with auto-cpufreq which can lead to unexpected results.
+We strongly encourage you not to use TLP unless you really know what you are doing.
+
+* Unable to turn off bluetooth on boot due to Snap package restrictions!
+
+Steps to perform this action using auto-cpufreq: power_helper script:
+python3 -m auto_cpufreq.power_helper --bluetooth_boot_off
+
+For help see: https://github.com/AdnanHodzic/auto-cpufreq/#1-power_helperpy-script-snap-package-install-only
+
+----------------- auto-cpufreq daemon installed and running -----------------
+
+To view live stats, run:
+auto-cpufreq --stats
+
+auto-cpufreq makes all decisions automatically, if you would like to
+configure certain setting to your own liking, please refer to:
+https://github.com/AdnanHodzic/auto-cpufreq#configuring-auto-cpufreq
+
+To disable and remove auto-cpufreq daemon, run:
+sudo auto-cpufreq --remove
+
+-------------------------------------------------------------------------------
+
+ ahodzic@carbon7  ~/code/auto-cpufreq   970-power-profiles  sudo auto-cpufreq --stats  
+
+------------------------ auto-cpufreq not running ------------------------------
+
+ERROR: auto-cpufreq is not running in daemon mode.
+
+Make sure to run "sudo auto-cpufreq --install" first
+
+-------------------------------------------------------------------------------
+```
+
+Same with `--live` 
+
+```
+sudo auto-cpufreq --live             
+Traceback (most recent call last):
+  File "/snap/auto-cpufreq/168/bin/auto-cpufreq", line 8, in <module>
+    sys.exit(main())
+  File "/snap/auto-cpufreq/168/lib/python3.10/site-packages/click/core.py", line 1631, in __call__
+    return self.main(*args, **kwargs)
+  File "/snap/auto-cpufreq/168/lib/python3.10/site-packages/click/core.py", line 1552, in main
+    rv = self.invoke(ctx)
+  File "/snap/auto-cpufreq/168/lib/python3.10/site-packages/click/core.py", line 1415, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/snap/auto-cpufreq/168/lib/python3.10/site-packages/click/core.py", line 910, in invoke
+    return callback(*args, **kwargs)
+  File "/snap/auto-cpufreq/168/lib/python3.10/site-packages/auto_cpufreq/bin/auto_cpufreq.py", line 90, in main
+    start_battery_daemon()
+  File "/snap/auto-cpufreq/168/lib/python3.10/site-packages/auto_cpufreq/battery_scripts/battery.py", line 27, in start_battery_daemon
+    dev = get_battery_device()
+  File "/snap/auto-cpufreq/168/lib/python3.10/site-packages/auto_cpufreq/battery_scripts/battery.py", line 48, in get_battery_device
+    if lsmod("ideapad_acpi"):
+  File "/snap/auto-cpufreq/168/lib/python3.10/site-packages/auto_cpufreq/battery_scripts/battery.py", line 15, in lsmod
+    module in run(["lsmod"], stdout=PIPE, stderr=PIPE, text=True).stdout
+  File "/usr/lib/python3.10/subprocess.py", line 503, in run
+    with Popen(*popenargs, **kwargs) as process:
+  File "/usr/lib/python3.10/subprocess.py", line 971, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/usr/lib/python3.10/subprocess.py", line 1863, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+PermissionError: [Errno 13] Permission denied: 'lsmod'
+```
+
+But same changes are present on `master` branch. Ideally I would like to completely make .snap package obsolete and was hoping to replace it with .deb package in #951, however there's lot more work that needs be done in that PR.
+
+Regardless, I fixed all of this and merged changes as part of #971
+
+But now if I install auto-cpufreq with snap built with these changes, I'll get following error:
+
+```
+sudo auto-cpufreq --stats
+
+------------------------ auto-cpufreq not running ------------------------------
+
+ERROR: auto-cpufreq is not running in daemon mode.
+
+Make sure to run "sudo auto-cpufreq --install" first
+
+-------------------------------------------------------------------------------
+
+ ✘  ahodzic@carbon7  ~/code/auto-cpufreq   970-power-profiles  sudo auto-cpufreq --install
+
+----------------------------------- Warning -----------------------------------
+
+Due to Snap package confinement limitations please consider installing auto-cpufreq using
+auto-cpufreq-installer: https://github.com/AdnanHodzic/auto-cpufreq#auto-cpufreq-installer
+
+Unable to detect state of GNOME Power Profiles daemon service!
+This daemon might interfere with auto-cpufreq and should be disabled!
+
+Steps to perform this action using auto-cpufreq: power_helper script:
+git clone https://github.com/AdnanHodzic/auto-cpufreq.git
+python3 -m auto_cpufreq.power_helper --gnome_power_disable
+
+Reference: https://github.com/AdnanHodzic/auto-cpufreq#configuring-auto-cpufreq
+
+----------------------------------- Warning -----------------------------------
+
+Unable to detect if you are using a TLP service!
+This daemon might interfere with auto-cpufreq which can lead to unexpected results.
+We strongly encourage you not to use TLP unless you really know what you are doing.
+
+* Unable to turn off bluetooth on boot due to Snap package restrictions!
+
+Steps to perform this action using auto-cpufreq: power_helper script:
+python3 -m auto_cpufreq.power_helper --bluetooth_boot_off
+
+For help see: https://github.com/AdnanHodzic/auto-cpufreq/#1-power_helperpy-script-snap-package-install-only
+
+----------------- auto-cpufreq daemon installed and running -----------------
+
+To view live stats, run:
+auto-cpufreq --stats
+
+auto-cpufreq makes all decisions automatically, if you would like to
+configure certain setting to your own liking, please refer to:
+https://github.com/AdnanHodzic/auto-cpufreq#configuring-auto-cpufreq
+
+To disable and remove auto-cpufreq daemon, run:
+sudo auto-cpufreq --remove
+
+-------------------------------------------------------------------------------
+
+ ahodzic@carbon7  ~/code/auto-cpufreq   970-power-profiles  sudo auto-cpufreq --stats  
+
+------------------------ auto-cpufreq not running ------------------------------
+
+ERROR: auto-cpufreq is not running in daemon mode.
+
+Make sure to run "sudo auto-cpufreq --install" first
+
+-------------------------------------------------------------------------------
+```
+
+Because as mentioned in #971 daemon is installed automatically upon install there. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lucasleocs:</strong></p>
+                    <p>Thanks for testing the actual Snap package and for fixing those issues in #971. I've now updated #970 against the latest `master`, so it includes the Snap changes from #971 while keeping this PR focused on native `power-profiles-daemon` handling.
+
+While rechecking the combined flow, I found a few edge cases in the native PPD lifecycle and fixed them as well:
+* an active PPD is still stopped if `powerprofilesctl` is unavailable or fails;
+* an initially inactive PPD is no longer started when `--live` exits;
+* PPD is only stopped after the live-mode confirmation, so cancelling there does not leave it stopped;
+* an inactive-but-enabled PPD is still disabled during installation;
+* a machine where `power-profiles-daemon.service` is not installed no longer gets a new systemd mask created for it.
+
+I also changed the running-service checks to require an actual active state instead of treating an unknown state as active.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>One final thing, Now in all 3 modes:
+
+```
+ ahodzic@carbon7  ~/code/auto-cpufreq   970-power-profiles  sudo auto-cpufreq --monitor
+
+------------------------ auto-cpufreq running ------------------------------
+
+ERROR: auto-cpufreq is running in daemon mode.
+
+Make sure to stop the daemon before running with --live or --monitor mode
+
+-------------------------------------------------------------------------------
+
+ ✘  ahodzic@carbon7  ~/code/auto-cpufreq   970-power-profiles  sudo auto-cpufreq --live   
+
+------------------------ auto-cpufreq running ------------------------------
+
+ERROR: auto-cpufreq is running in daemon mode.
+
+Make sure to stop the daemon before running with --live or --monitor mode
+
+-------------------------------------------------------------------------------
+
+ ✘  ahodzic@carbon7  ~/code/auto-cpufreq   970-power-profiles  sudo auto-cpufreq --install
+
+------------------------ auto-cpufreq running ------------------------------
+
+ERROR: auto-cpufreq is running in daemon mode.
+
+Make sure to stop the daemon before running with --live or --monitor mode
+
+-------------------------------------------------------------------------------
+```
+
+We lost:
+```
+Live stats of CPU/system load monitoring and optimization can be seen by running:
+auto-cpufreq --stats
+```
+
+part which was displayed in case of Snap package.
+
+Hence message should be something:
+
+```
+------------------------ auto-cpufreq running ------------------------------
+
+ERROR: auto-cpufreq is running in daemon mode.
+
+Live stats of CPU/system load monitoring and optimization can be seen by running:
+auto-cpufreq --stats
+
+Otherwise make sure to stop the daemon before running with --live or --monitor mode
+
+-------------------------------------------------------------------------------
+```
+
+after which we can merge these changes.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lucasleocs:</strong></p>
+                    <p>Just pushed a fix for this. Added the `--stats` tip back to the daemon-running message across `--monitor,` `--live`, and `--install`. Verified all three with the daemon running and everything looks good.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Great, thank you! As always, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases)</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

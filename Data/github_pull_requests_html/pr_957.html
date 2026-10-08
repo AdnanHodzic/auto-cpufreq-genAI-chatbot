@@ -1,0 +1,59 @@
+
+        <html>
+        <head>
+            <title>Pull Request #957: Fix GTK config initialization</title>
+        </head>
+        <body>
+            <h1>Fix GTK config initialization</h1>
+            <p><strong>Pull Request #957</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>## Summary
+
+Fix the GTK frontend so it loads the auto-cpufreq configuration before
+constructing the window.
+
+The GUI currently creates `ToolWindow()` without first calling the same
+`find_config_file()` / `config.set_path()` initialization used by the CLI.
+As a result, `SystemInfo.current_epp()` and `current_epb()` read from an
+empty `ConfigParser` and can display the AC/battery fallback values instead
+of values from the user's configuration.
+
+This change initializes the config in the GTK entrypoint before creating
+the window.
+
+## Validation
+
+Tested on Linux Mint 22.3 with an Intel Core i3-1315U.
+
+Validation covered:
+
+- GTK initialization order: config resolution and `set_path()` happen before
+  `ToolWindow()` creation;
+- user config precedence through `$XDG_CONFIG_HOME`;
+- fallback to `/etc/auto-cpufreq.conf` when no user config exists;
+- `SystemInfo.current_epp()` / `current_epb()` returning non-default values
+  from a temporary config;
+- real GTK rendering showing `EPP setting: performance` and
+  `Setting to use: "power" EPB` from that temporary config;
+- `py_compile` and `git diff --check`.
+
+The change is limited to two added lines in the GTK entrypoint and does not
+alter EPP/EPB application logic or sysfs writes.
+
+Fixes #934</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Love seeing auto-cpufreq GTK getting some much needed love, LGTM!
+
+Thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases)</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

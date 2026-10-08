@@ -1,0 +1,60 @@
+
+        <html>
+        <head>
+            <title>Pull Request #967: fix: Align project licensing with GPL-3.0-or-later</title>
+        </head>
+        <body>
+            <h1>fix: Align project licensing with GPL-3.0-or-later</h1>
+            <p><strong>Pull Request #967</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>## Summary
+
+Align the repository's license declarations with the project's intended GPLv3 licensing.
+
+The repository had accumulated inconsistent license information over time:
+
+* `pyproject.toml` already declared `GPL-3.0-or-later`;
+* the root `LICENSE` contained the GNU LGPL v3 text;
+* Nix declared an LGPL license;
+* Snap declared an LGPL license;
+* the GTK About view displayed `LGPL3`.
+
+As clarified in the discussion below, auto-cpufreq was originally released under GPL 3 and `pyproject.toml` reflects the intended `GPL-3.0-or-later` semantics.
+
+## Changes
+
+* Replace the root LGPLv3 license text with the GNU GPLv3 license text.
+* Change Nix metadata to `lib.licenses.gpl3Plus`.
+* Change Snap metadata to `GPL-3.0+`, the corresponding GPLv3-or-later form supported there.
+* Update the GTK About view to display `GNU GPL v3 or later`.
+* Keep the existing `GPL-3.0-or-later` declaration in `pyproject.toml` unchanged.
+
+No README license section is added; the root `LICENSE` remains the canonical license document.
+
+## Validation
+
+* Verified that no LGPL metadata remains outside the GPL license text itself.
+* `python3 -m compileall -q auto_cpufreq`: PASS
+* `git diff --check`: PASS
+* Linux Build: PASS
+* Nix Flake: PASS</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Good catch, auto-cpufreq was originally released under GPL 3 license and then no one paid attention as other things were added. We should go with what's in `pyproject.toml` which is `GPL-3.0-or-later`, maybe even better simply stick to just GPL 3.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>LGTM! Tthank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases)</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,36 @@
+
+        <html>
+        <head>
+            <title>Pull Request #925: fix: wrong EPP and EBP fallback profiles in auto-cpufreq --stats</title>
+        </head>
+        <body>
+            <h1>fix: wrong EPP and EBP fallback profiles in auto-cpufreq --stats</h1>
+            <p><strong>Pull Request #925</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>When running the interactive auto-cpufreq --stats and EPP and EBP are not configured in the config file, the wrong fallback was sometimes used, as it did not depend on the ac status. Please check if the fallback is now correct.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Are these chnages a fix for #924?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>gilcu3:</strong></p>
+                    <p>> Are these chnages a fix for #924?
+
+I wish, but no, that issue was the original problem I was trying to solve, when I noticed the one I am trying to solve in this PR</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>LGTM! Thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases). </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,82 @@
+
+        <html>
+        <head>
+            <title>Pull Request #959: Fix: skip EPP writes when intel_pstate performance governor controls EPP</title>
+        </head>
+        <body>
+            <h1>Fix: skip EPP writes when intel_pstate performance governor controls EPP</h1>
+            <p><strong>Pull Request #959</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>## Summary
+
+When `intel_pstate` is running in active mode with EPP available and the `performance` governor selected, the kernel controls EPP as `performance` and rejects incompatible EPP values.
+
+auto-cpufreq currently performs an additional EPP write after selecting the governor. This PR skips that write and lets `intel_pstate` keep control of EPP in this specific state.
+
+## Problem
+
+With active `intel_pstate`, selecting the `performance` governor causes the driver to force EPP to `performance`.
+
+Trying to set another EPP value afterwards is rejected by the kernel. Writing `performance` again succeeds but is unnecessary, since the driver has already selected it.
+
+This means auto-cpufreq is trying to manage a value that is already
+controlled by `intel_pstate` while the performance governor is active.
+
+## Changes
+
+Detect whether `intel_pstate` is in `active` mode.
+
+When the `performance` governor is successfully selected, skip the additional EPP write and report:
+
+    Not setting EPP (intel_pstate performance governor controls EPP as "performance")
+
+Governor changes are now checked before making subsequent EPP decisions. If the governor write fails, profile application stops instead of continuing under the assumption that the requested governor was successfully applied.
+
+Aside from this governor failure handling, all other paths keep their current behavior:
+
+- `powersave` continues to apply the configured EPP
+- passive/non-active `intel_pstate` continues to use the existing EPP logic
+- AMD handling is unchanged
+- unsupported systems are unchanged
+- HWP Dynamic Boost handling is unchanged
+
+## Validation
+
+Tested on an Intel Core i3-1315U with `intel_pstate` active and EPP available.
+
+The relevant behavior was reproduced on hardware: after selecting the `performance` governor, the driver reported EPP as `performance` without requiring a separate EPP write.
+
+The standalone change was also tested with a command-capture harness that performs no sysfs writes:
+
+```
+PASS: active intel_pstate + performance skips EPP write
+PASS: powersave still writes configured EPP
+PASS: non-active intel_pstate preserves EPP handling
+PASS: battery governor failure stops profile application
+PASS: charger governor failure stops profile application
+PASS: successful governor writes continue profile application
+```
+
+Additional checks:
+
+```
+py_compile: PASS
+diff-check: PASS
+```
+
+Related: #958
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>LGTM! Thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases)</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

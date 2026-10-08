@@ -1,0 +1,104 @@
+
+        <html>
+        <head>
+            <title>Pull Request #969: Preserve zero RPM fan readings and stabilize GTK CPU columns</title>
+        </head>
+        <body>
+            <h1>Preserve zero RPM fan readings and stabilize GTK CPU columns</h1>
+            <p><strong>Pull Request #969</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>## Summary
+
+Small follow-up fixes found while validating the reporting and GTK changes merged in #964.
+
+This preserves a valid stopped-fan reading of `0 RPM` throughout the reporting frontends and prevents the GTK CPU table from shifting horizontally when CPU usage reaches `100.0%`.
+
+## Fan speed reporting
+
+The post-merge review of #964 pointed out that `cpu_fan_speed()` treated `0 RPM` as unavailable.
+
+While checking the full data path, I found that preserving zero in the collector alone was not enough: several report views also used truthiness checks and would still hide the value.
+
+The reporting semantics are now kept distinct:
+
+- `None` → fan speed unavailable
+- `0` → valid reading, fan stopped
+- positive value → fan running
+
+The explicit `None` check is used consistently in the shared GTK view, textual report, terminal/Urwid view, and the remaining `SystemReport` GTK consumer.
+
+Invalid and negative readings continue to be ignored.
+
+## GTK CPU table
+
+While testing the merged #964 dashboard from the installed upstream `master`, I also noticed that the CPU table shifted horizontally whenever a core changed between values below `100%` and `100.0%`.
+
+The cause was the `Usage` column sizing itself from the current label contents:
+
+- `4.2%`
+- `88.2%`
+- `100.0%`
+
+The usage cells now reserve enough character width for `100.0%`, keeping the later Temperature and Frequency columns stable without introducing fixed pixel widths or changing the overall layout.
+
+## Validation
+
+The fan fix was tested with temporary focused checks covering:
+
+- missing/empty fan sensors
+- unsupported fan sensors
+- invalid values
+- negative values
+- `0 RPM`
+- positive RPM
+- multiple readings
+- shared textual report
+- GTK report view
+- Urwid terminal view
+- remaining `SystemReport` GTK consumer
+
+The GTK width issue was reproduced against the exact #964 merge commit (`999cb58`):
+
+```text
+  4.2% ... grid=(minimum_width=285, natural_width=285)
+ 88.2% ... grid=(minimum_width=285, natural_width=285)
+100.0% ... grid=(minimum_width=293, natural_width=293)
+
+VARIABLE: grid preferred width changes with CPU usage
+```
+
+With this change:
+
+```text
+  4.2% ... grid=(minimum_width=293, natural_width=293)
+ 88.2% ... grid=(minimum_width=293, natural_width=293)
+100.0% ... grid=(minimum_width=293, natural_width=293)
+
+STABLE: grid preferred width does not change
+```
+
+The issue was also reproduced manually using an installed build of upstream master, and the fix was visually verified with live CPU usage and fan readings.
+
+Additional checks:
+
+- `python -m py_compile` on affected modules
+- `python -m compileall -q auto_cpufreq`
+- `git diff --check`
+
+The focused regression scripts were temporary and are not included in the PR.
+
+Follow-up to #964.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>LGTM! Thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases)</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

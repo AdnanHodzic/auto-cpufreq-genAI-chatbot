@@ -1,0 +1,26 @@
+
+        <html>
+        <head>
+            <title>Pull Request #965: Fix native power-profiles-daemon handling during installation</title>
+        </head>
+        <body>
+            <h1>Fix native power-profiles-daemon handling during installation</h1>
+            <p><strong>Pull Request #965</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>## Summary
+
+Fixes the `power-profiles-daemon` handling [issue](https://github.com/AdnanHodzic/auto-cpufreq/pull/962#issuecomment-5365358892) pointed out.
+
+The native install path could incorrectly infer that auto-cpufreq was installed via Snap and recommend re-enabling `power-profiles-daemon`.
+
+This change removes that incorrect Snap inference from the native path and uses the actual `power-profiles-daemon` service state instead.
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+            </div>
+        </body>
+        </html>
+        

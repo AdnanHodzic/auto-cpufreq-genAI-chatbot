@@ -1,0 +1,36 @@
+
+        <html>
+        <head>
+            <title>Pull Request #976: fix: report HWP Dynamic Boost in debug output</title>
+        </head>
+        <body>
+            <h1>fix: report HWP Dynamic Boost in debug output</h1>
+            <p><strong>Pull Request #976</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>## Summary
+
+Report the current Intel HWP Dynamic Boost state in `--debug` when the kernel exposes the control.
+
+This reuses the existing read-only `get_hwp_dynamic_boost()` helper and does not change power-management policy.
+
+## Behavior
+
+- `True` → `HWP Dynamic Boost: On`
+- `False` → `HWP Dynamic Boost: Off`
+- unavailable or unsupported → no additional line
+
+This makes `--debug` more useful when investigating Intel P-State power behavior while preserving the existing output on systems without HWP Dynamic Boost support.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>LGTM! Thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

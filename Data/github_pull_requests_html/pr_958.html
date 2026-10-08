@@ -1,0 +1,119 @@
+
+        <html>
+        <head>
+            <title>Pull Request #958: Fix cpufreqctl reporting success after write failures</title>
+        </head>
+        <body>
+            <h1>Fix cpufreqctl reporting success after write failures</h1>
+            <p><strong>Pull Request #958</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>## Summary
+
+Fix `cpufreqctl` reporting successful execution when a sysfs write was rejected by the kernel.
+
+Currently, a write can fail with a real kernel error while`cpufreqctl` still exits with status `0`. This prevents callers from distinguishing a successfully applied setting from a failed or partially applied one.
+
+This PR preserves the existing best-effort behavior for multi-CPU operations, but makes the final exit status correctly report whether any attempted write failed.
+
+## Problem
+
+`cpufreqctl` currently does not reliably propagate sysfs write failures.
+
+For example, a write rejected by the kernel can produce:
+
+```text
+echo: write error: Device or resource busy
+return code: 0
+```
+
+The command therefore reports success even though the requested operation was not successfully completed.
+
+The same incorrect success status can be reproduced independently of CPU hardware by using `/dev/full` as the write target, confirming that the issue is in `cpufreqctl`'s status handling rather than a specific CPU driver.
+
+There are two cases where the failure status is lost:
+
+1. Multi-CPU setters continue iterating after a failed write, so the status of a later successful operation can hide an earlier failure.
+2. The unconditional `exit 0` at the end of the script masks failures from direct write operations.
+
+For multi-CPU operations this can also result in a partially applied configuration being reported as fully successful.
+
+Besides being misleading when `cpufreqctl` is used directly, this prevents callers from reliably detecting and handling write failures.
+
+## Changes
+
+- Track failed writes during multi-CPU operations while continuing to attempt the remaining CPUs.
+- Apply the same handling to the multi-CPU EPB path.
+- Preserve the command status of direct write operations.
+- Return non-zero if at least one attempted write failed.
+- Preserve the existing exit behavior of read-only commands.
+- Preserve the original kernel error on stderr.
+
+Existing auto-cpufreq callers that do not inspect the return code continue running as before. Callers that do inspect it can now correctly detect failed writes.
+
+## Validation
+
+I tested the change with 9 synthetic cases covering:
+
+* successful multi-CPU EPP writes
+* partial multi-CPU failures while continuing to later CPUs
+* single-core EPP failures
+* governor write failures
+* direct boost write failures
+* multi-CPU EPB failures
+* successful normal commands
+* preservation of existing read-command exit behavior
+* `--off` write failures
+
+All 9 synthetic cases passed.
+
+I also tested the patch on an Intel i3-1315U with `intel_pstate` active.
+
+Before the patch:
+
+```text
+rejected EPP write:
+Device or resource busy
+return code: 0
+```
+
+With the patch:
+
+```text
+rejected single-core EPP write:
+return code: 1
+
+rejected multi-CPU EPP writes:
+8 x Device or resource busy
+return code: 1
+
+compatible EPP=performance write:
+return code: 0
+```
+
+The original governor/EPP state was restored after testing and the auto-cpufreq service was restarted successfully.
+
+## Relation to #927
+
+This does not attempt to fix the underlying `EBUSY` behavior reported in #927.
+
+The specific Core Ultra behavior did not reproduce on my system. This patch fixes an independent issue discovered during that investigation: when the kernel rejects a sysfs write, `cpufreqctl` should not report the operation as successful.
+
+Correct exit status propagation may also make failures such as #927 easier for callers to detect and handle.
+
+Related: #741, #927</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>This is a great one to tackle as it's a long standing issue and this problem has been mentioned in 6 different issues: #927, #891, #842, #750, #741, #602. I'll update each one of them and let's see if these and/or other numerous changes made in meantime addressed it.
+
+Amazing stuff, as always thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases)</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

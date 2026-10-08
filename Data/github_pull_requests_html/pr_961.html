@@ -1,0 +1,116 @@
+
+        <html>
+        <head>
+            <title>Pull Request #961: Avoid shell expansion for configured power settings</title>
+        </head>
+        <body>
+            <h1>Avoid shell expansion for configured power settings</h1>
+            <p><strong>Pull Request #961</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>## Summary
+
+Avoid passing configuration-derived power settings through `shell=True`.
+
+Platform Profile, Energy Performance Bias (EPB), and EPP values can be provided through `auto-cpufreq.conf`. These values were previously interpolated directly into shell command strings before being passed to `cpufreqctl.auto-cpufreq`.
+
+This change passes the configuration-derived values as separate `argv` elements instead, ensuring they are treated as literal arguments rather than shell syntax.
+
+## Problem
+
+Some power settings were being read directly from the configuration file and passed to shell commands like:
+
+```
+run(f"cpufreqctl.auto-cpufreq --epp --set={epp}", shell=True)
+```
+If a configuration value contained shell metacharacters, the shell could interpret part of that value as shell syntax instead of treating it as a literal configuration value.
+
+This is particularly relevant because `auto-cpufreq` commonly runs with elevated privileges.
+
+## Changes
+
+Convert the remaining configuration-derived writes in `auto_cpufreq/core.py` to `argv`-based subprocess calls:
+
+* Platform Profile
+* Energy Performance Bias (EPB)
+* Battery EPP
+* Intel charger EPP
+* AMD charger EPP
+
+For example:
+
+```python
+run([
+    "cpufreqctl.auto-cpufreq",
+    "--epp",
+    f"--set={epp}",
+])
+```
+
+instead of constructing a command string and passing it with `shell=True`.
+
+Static commands and values that are not derived from user configuration are intentionally left unchanged to keep this PR narrowly scoped.
+
+Governor handling is also intentionally not duplicated here. The same issue for the configured governor is already addressed in #959, where the governor write also requires return-code handling before subsequent EPP/HWP decisions.
+
+## Validation
+
+Each affected configuration-derived path was tested with values containing shell syntax, such as:
+
+```text
+; touch /tmp/...
+```
+
+In every case, the configured value remained a single `argv` element and no shell payload was executed.
+
+Tested paths:
+
+* [x] Platform Profile cannot be interpreted as shell syntax
+* [x] Energy Performance Bias cannot be interpreted as shell syntax
+* [x] Battery EPP cannot be interpreted as shell syntax
+* [x] Intel charger EPP cannot be interpreted as shell syntax
+* [x] AMD charger EPP cannot be interpreted as shell syntax
+
+I also verified on real hardware that `cpufreqctl.auto-cpufreq` accepts `argv`-based invocation for the corresponding options.
+
+
+Additional checks:
+
+* `compileall`: PASS
+* `diff-check`: PASS
+
+The change was also tested together with #959 and #960, including real governor/EPP/HWP transitions.
+
+The original CPU state was restored after testing, and the `auto-cpufreq` service restarted successfully.
+
+Related: #959
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Let's resolve merge conflicts please, thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lucasleocs:</strong></p>
+                    <p>Thanks. I checked the conflict after #962 was merged. This PR only addressed five possible issues that Copilot pointed out during one of our reviews, and it ended up being the basis for part of #962. If you want, I can slightly update the #962 title/description to mention that #961 was incorporated into it.
+
+Could I close #961 as superseded by #962?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Thanks. I checked the conflict after #962 was merged. This PR only addressed five possible issues that Copilot pointed out during one of our reviews, and it ended up being the basis for part of #962. If you want, I can slightly update the #962 title/description to mention that #961 was incorporated into it.
+> 
+> Could I close #961 as superseded by #962?
+
+Yes, probably a good idea, so I'll close it myself then :) </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

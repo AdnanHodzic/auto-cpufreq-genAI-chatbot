@@ -1,0 +1,62 @@
+
+        <html>
+        <head>
+            <title>Pull Request #945: feat: add `enforce_platform_profile` configuration</title>
+        </head>
+        <body>
+            <h1>feat: add `enforce_platform_profile` configuration</h1>
+            <p><strong>Pull Request #945</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>## Problem
+Users with certain laptops (e.g., Lenovo Legion) can manually override the platform profile using hardware shortcuts (Fn+Q). Currently, auto-cpufreq re-enforces the configured platform profile on every daemon loop (every 2 seconds), immediately reverting any manual overrides. This prevents users from having fine-grained, temporary control over their system's power profile.
+
+## Solution
+Introduce a new configurable boolean option `enforce_platform_profile` (defaults to `true` to keep the current behavior) that controls whether auto-cpufreq continuously re-applies the platform profile or only sets it during power-state transitions (`AC <-> battery`).
+
+**Behavior:**
+- `enforce_platform_profile = true` (default): Preserves current behavior; platform profile is enforced on every daemon loop.
+- `enforce_platform_profile = false`: Platform profile is applied only when the power state changes (`battery <-> charger`). Manual overrides persist until the next transition.
+
+This is a per-profile setting, so battery and charger sections can be configured independently.
+
+## Configuration Example
+```conf
+[charger]
+platform_profile = performance
+enforce_platform_profile = true
+
+[battery]
+platform_profile = low-power
+# Set to false to allow manual overrides (e.g., Legion Fn+Q) to persist
+enforce_platform_profile = false</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@tuasananh it already looks great, please take a look at couple of comments I added. Let's address those and we're good to merge this.
+
+Just let me know once you're done, thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>tuasananh:</strong></p>
+                    <p>@AdnanHodzic I made the changes, mind you take a look?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> @AdnanHodzic I made the changes, mind you take a look?
+
+I made one commit suggestion myself, other then that tested changes and they LGMT.
+
+Thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases)
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

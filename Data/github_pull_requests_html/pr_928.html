@@ -1,0 +1,33 @@
+
+        <html>
+        <head>
+            <title>Pull Request #928: Change auto-cpufreq from programs to services</title>
+        </head>
+        <body>
+            <h1>Change auto-cpufreq from programs to services</h1>
+            <p><strong>Pull Request #928</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>for me it only works when it is exactly like it is in nixpkgs, idk if only for me or not; or anything changed, but if it did change i think this should be updated. Hope i am not stupid 🫣</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Since it concerns NixOS will leave this one for you @shadeyg56 </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>The correct setting if you are using the flake is `programs.auto-cpufreq`. This is different from the setting declared in nixpkgs which is `services.auto-cpufreq`. 
+
+The [README](lhttps://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#nixos) contains different instructions for installing via the flake or from the nixpkgs repo, so the current version has the correct instructions.
+
+If you are installing via the flake and having issues with `programs.auto-cpufreq` not being recognized, its most likely that something is wrong with your nix config. If that's the case and you'd like some help feel free to join the [Discord](https://discord.com/invite/Sjauxtj6kH) and I can help you with that!</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

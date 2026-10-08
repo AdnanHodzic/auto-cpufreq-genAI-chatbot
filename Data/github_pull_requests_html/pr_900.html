@@ -425,6 +425,163 @@ Should I commit this to your branch, or should I create my own fork?
 Edit: you can also reach me on the Discord: `bene_w`</p>
                 </div>
             
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>CasperVM:</strong></p>
+                    <p>> @CasperVM Hi. I've made some changes, and now the thresholds are working as expected on my ThinkPad. Main changes:
+> 
+>     * The `--monitor` flag no longer makes changes to the thresholds
+> 
+>     * The type errors are fixed.
+> 
+>     * Moved some code around for easier test writing (I wrote some unit tests for myself)
+> 
+>     * The `charge_control_{start,end}_threshold` files are now preferred over the `charge_{start,stop}_threshold` files
+> 
+> 
+> Should I commit this to your branch, or should I create my own fork?
+> 
+> Edit: you can also reach me on the Discord: `bene_w`
+
+Hi! Sorry I've been quite busy with life. You can commit it to my branch if you like, I'll add you as a collaborator on my fork. Please commit it somewhere at least so we can look at the changes so far :).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>CasperVM:</strong></p>
+                    <p>@be-west </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>be-west:</strong></p>
+                    <p>@CasperVM I committed the preliminary changes.
+In the meantime, I had a look at the various vendor-specific settings in the great [TLP documentation](https://linrunner.de/tlp/settings/bc-vendors.html)
+
+It seems that Asus only uses the `charge_control_end_threshold` file. The code did not/does not reflect that.
+Maybe we could fix that in another PR and also add other vendors according to the TLP docs?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>CasperVM:</strong></p>
+                    <p>@be-west Yes we should perhaps take a closer look in these vendor specific settings in another PR. Right now I think this should be finished on its own, since these changes were more for a general refactoring and fixing the core functionality.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>CasperVM:</strong></p>
+                    <p>Would you also be able to quickly explain why the thresholds were not applying in my version? This is still somewhat confusing for me. What did you change to make that part work?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>be-west:</strong></p>
+                    <p>> @be-west Yes we should perhaps take a closer look in these vendor specific settings in another PR. Right now I think this should be finished on its own, since these changes were more for a general refactoring and fixing the core functionality.
+
+I think so too. Just wanted to mention it after I looked through the TLP documentation.
+
+> Would you also be able to quickly explain why the thresholds were not applying in my version? This is still somewhat confusing for me. What did you change to make that part work?
+
+If you are referencing the issue @AdnanHodzic had, that was a type error. The config values for the start and stop thresholds were never cast to integers, and so the sanity check failed.
+
+Can you run your tests again @AdnanHodzic, and tell us if it now works?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Can you run your tests again @AdnanHodzic, and tell us if it now works?
+
+Still doesn't work and it failed on first test on my ThinkPad Carbon, after setting:
+
+```
+enable_thresholds = true
+start_threshold = 20
+stop_threshold = 80   
+```
+
+as part of /etc/auto-cpufreq.conf
+
+While threshold start/stop was recognized at 20 & 80 and AC plugged was reported as "yes". My battery status was not charging and battery percentage kept dropping, although I tried charging at 62%
+
+<img width="1920" height="1080" alt="threshold - not charging" src="https://github.com/user-attachments/assets/c0f67851-f5e2-4279-9b50-0923b4b7edad" />
+
+I also still had to manually revert changes made to `/sys/class/power_supply/BAT0/charge_control_end_threshold` and `/sys/class/power_supply/BAT0/charge_control_start_threshold` after I commented these fieds in auto-cpufreq.conf and even after auto-cpufreq daemon removal.
+
+P.S: Although there are no detected conflicts, I would also suggest pulling and rebasing this PR on latest changes from amster, since I get a popup there's update for 3.0.0 and that I'm running on 2.6.0</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>be-west:</strong></p>
+                    <p>@AdnanHodzic 
+I rebased to master.
+Thanks for running the tests. That's weird that the thresholds are correctly written/read, but your battery is losing charge. On my L16, the charge stays on the same level when I plug in AC while the level is above the start value. That means the `Not Charging` output is actually correct in that case.
+
+This is a screenshot from my system where the thresholds were correctly applied, and AC was plugged at 54%:
+<img width="373" height="210" alt="image" src="https://github.com/user-attachments/assets/083f9954-cae7-4038-b604-1bba0971017e" />
+
+Did you test if your ThinkPad starts charging when you set the start threshold above your current charge level?
+Also, can you give the output of these files (if present) while applying the thresholds?
+```
+/sys/class/power_supply/BAT0/charge_behaviour
+/sys/devices/platform/smapi/BAT0/force_discharge
+```
+
+> I also still had to manually revert changes made to `/sys/class/power_supply/BAT0/charge_control_end_threshold` and `/sys/class/power_supply/BAT0/charge_control_start_threshold` after I commented these fieds in auto-cpufreq.conf and even after auto-cpufreq daemon removal.
+
+Yeah, I guess the thresholds should be set to the vendor default when `enable_thresholds = false`. Do you want this to be part of this PR?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Ran these before applying threshold:
+
+```
+cat /sys/class/power_supply/BAT0/charge_behaviour
+[auto] inhibit-charge force-discharge
+```
+
+But this might be the problem, because: 
+
+```
+cat /sys/devices/platform/smapi/BAT0/force_discharge
+cat: /sys/devices/platform/smapi/BAT0/force_discharge: No such file or directory (os error 2)
+```
+
+Even `/sys/devices/platform/smapi` doesn't exist:
+
+```
+ll /sys/devices/platform/     
+total 0
+drwxr-xr-x 3 root root    0 Feb 10 18:55 ACPI000C:00
+drwxr-xr-x 4 root root    0 Feb 10 18:55 ACPI000E:00
+drwxr-xr-x 3 root root    0 Feb 10 18:55 INT0E0C:00
+drwxr-xr-x 4 root root    0 Feb 10 18:55 INT3400:00
+drwxr-xr-x 3 root root    0 Feb 10 18:55 PNP0C0D:00
+drwxr-xr-x 3 root root    0 Feb 10 18:55 PNP0C0E:00
+drwxr-xr-x 4 root root    0 Feb 10 18:55 PNP0C14:00
+drwxr-xr-x 4 root root    0 Feb 10 18:55 PNP0C14:01
+drwxr-xr-x 4 root root    0 Feb 10 18:55 PNP0C14:02
+drwxr-xr-x 4 root root    0 Feb 10 18:55 PNP0C14:03
+drwxr-xr-x 4 root root    0 Feb 10 18:55 PNP0C14:04
+drwxr-xr-x 4 root root    0 Feb 10 18:55 PNP0C14:05
+drwxr-xr-x 4 root root    0 Feb 10 18:55 PNP0C14:06
+drwxr-xr-x 5 root root    0 Feb 10 18:55 STM7364:00
+drwxr-xr-x 6 root root    0 Feb 10 18:55 USBC000:00
+drwxr-xr-x 3 root root    0 Feb 10 18:55 acpi-cpufreq
+drwxr-xr-x 4 root root    0 Feb 10 18:55 coretemp.0
+drwxr-xr-x 3 root root    0 Feb 10 18:55 efivars.0
+drwxr-xr-x 5 root root    0 Feb 10 18:55 i8042
+drwxr-xr-x 3 root root    0 Feb 10 18:55 intel_pmc_core.0
+drwxr-xr-x 3 root root    0 Feb 10 18:55 intel_rapl_msr.0
+drwxr-xr-x 3 root root    0 Feb 10 18:55 kgdboc
+drwxr-xr-x 3 root root    0 Feb 10 18:55 pcspkr
+drwxr-xr-x 2 root root    0 Feb 10 18:55 power
+drwxr-xr-x 3 root root    0 Feb 10 18:55 rtc-efi.0
+drwxr-xr-x 6 root root    0 Feb 10 18:55 rtc_cmos
+drwxr-xr-x 4 root root    0 Feb 10 18:55 serial8250
+drwxr-xr-x 4 root root    0 Feb 10 18:55 snd_aloop.0
+drwxr-xr-x 7 root root    0 Feb 10 18:55 thinkpad_acpi
+drwxr-xr-x 4 root root    0 Feb 10 18:55 thinkpad_hwmon
+-rw-r--r-- 1 root root 4.0K Feb 10 18:55 uevent
+```
+</p>
+                </div>
+            
             </div>
         </body>
         </html>

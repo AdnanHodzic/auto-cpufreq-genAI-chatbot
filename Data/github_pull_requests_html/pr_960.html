@@ -1,0 +1,265 @@
+
+        <html>
+        <head>
+            <title>Pull Request #960: Enable Intel HWP Dynamic Boost by default on AC power</title>
+        </head>
+        <body>
+            <h1>Enable Intel HWP Dynamic Boost by default on AC power</h1>
+            <p><strong>Pull Request #960</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>## Summary
+
+On typical non-server systems, the upstream `intel_pstate` driver starts HWP Dynamic Boost disabled while exposing the feature for userspace control. When enabled, Dynamic Boost can temporarily raise the minimum P-state for tasks waking after I/O, a mechanism intended by the kernel to improve performance during those short bursts.
+
+This follow-up makes auto-cpufreq use that capability by default on supported systems when no explicit configuration is provided:
+
+- AC power: enabled
+- Battery: disabled
+
+Explicit `hwp_dynamic_boost` configuration continues to take precedence.
+
+This is a follow-up to #954, which added explicit configuration support for Intel HWP Dynamic Boost while intentionally preserving the existing default behavior.
+
+## Behavior
+
+When the system exposes Intel HWP Dynamic Boost and the user has not configured it explicitly, auto-cpufreq now applies the following default policy:
+
+- AC power: `hwp_dynamic_boost = true`
+- Battery: `hwp_dynamic_boost = false`
+
+Explicit configuration always takes precedence.
+
+For example:
+
+```ini
+[charger]
+hwp_dynamic_boost = false
+
+[battery]
+hwp_dynamic_boost = true
+```
+
+continues to override the automatic defaults.
+
+If an explicit value is invalid, auto-cpufreq warns about it and leaves HWP Dynamic Boost unmanaged rather than silently falling back to the automatic policy.
+
+Systems that do not expose the HWP Dynamic Boost sysfs attribute remain unchanged.
+
+Systems without a battery continue to follow auto-cpufreq's AC/charger profile, so HWP Dynamic Boost defaults to enabled when the feature is supported.
+
+## Motivation
+
+During the review of #954, enabling HWP Dynamic Boost by default on supported hardware was suggested as a follow-up, particularly while the system is on AC power.
+
+#954 intentionally kept the existing default behavior unchanged and added only explicit configuration support. This follow-up introduces the default policy separately, keeping the configuration mechanism and the policy change as independent changes.
+
+On typical non-server systems, the upstream `intel_pstate` driver starts HWP Dynamic Boost disabled. Current upstream kernels enable it automatically for ACPI Enterprise Server and Performance Server profiles, but it otherwise remains disabled unless userspace enables it.
+
+When enabled, HWP Dynamic Boost allows `intel_pstate` to temporarily raise the minimum P-state when a task wakes after waiting on I/O. The kernel documentation describes this mechanism as intended to improve performance, making it useful for responsiveness during short I/O-driven bursts.
+
+Using power-source defaults gives auto-cpufreq a predictable policy without requiring users to configure the feature manually:
+
+- AC power enables Dynamic Boost by default.
+- Battery disables the additional dynamic minimum-P-state boost by default.
+
+Users who prefer different behavior can override either profile through the configuration introduced in #954.
+
+## Implementation
+
+The existing HWP Dynamic Boost support from #954 is reused.
+
+A small policy helper determines the target state:
+
+- explicit valid config -> use the configured value
+- explicit invalid config -> leave unmanaged
+- no config + supported system + AC power -> enable
+- no config + supported system + battery -> disable
+- unsupported system -> leave unmanaged
+
+Support continues to be detected through the kernel's `hwp_dynamic_boost` sysfs attribute rather than CPU model-specific checks.
+
+The existing EPP ordering is preserved:
+
+- Dynamic Boost is disabled before applying EPP when the target is `false`
+- EPP is applied before Dynamic Boost is enabled when the target is `true`
+
+This also makes AC/battery transitions deterministic: a Dynamic Boost state enabled automatically on AC power is disabled again when switching to the battery profile unless the user explicitly configured otherwise.
+
+## Validation
+
+Tested on an Intel Core i3-1315U with `intel_pstate` active and HWP Dynamic Boost available.
+
+Policy tests:
+
+```text
+PASS: no config + AC power + supported -> True
+PASS: no config + battery + supported -> False
+PASS: explicit charger=false -> False
+PASS: explicit battery=true -> True
+PASS: explicit config + unsupported system -> warning + unmanaged
+PASS: invalid explicit value remains unmanaged -> None
+PASS: unsupported system remains unmanaged -> None
+
+```
+
+Integration/order tests:
+
+```text
+PASS: AC power default enables HWP after EPP
+PASS: battery default disables HWP before EPP
+PASS: explicit charger=false overrides default
+PASS: explicit battery=true overrides default
+```
+
+Real hardware transition test:
+
+```text
+AC power -> HWP Dynamic Boost True
+battery -> HWP Dynamic Boost False
+AC power -> HWP Dynamic Boost True
+```
+
+The original HWP Dynamic Boost state was restored after testing and the auto-cpufreq service was restarted successfully.
+
+Additional checks:
+
+```text
+py_compile: PASS
+diff-check: PASS
+```
+
+Follow-up to #954.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lucasleocs:</strong></p>
+                    <p>Hi @AdnanHodzic! Just a small merge-order note: #960 is intended as a follow-up to #954, so #954 should be merged first.
+I’ve also tested the combined behavior of my other open PRs (#957, #958, and #959), and they are compatible with these changes. The only merge-order dependency is #954 before #960.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Hi @AdnanHodzic! Just a small merge-order note: #960 is intended as a follow-up to #954, so #954 should be merged first. I’ve also tested the combined behavior of my other open PRs (#957, #958, and #959), and they are compatible with these changes. The only merge-order dependency is #954 before #960.
+
+Clear, just merged #954 
+
+Also please take a look at [comment I made](https://github.com/AdnanHodzic/auto-cpufreq/pull/954#issuecomment-5337882767) after #954 was merged, it could either be a new PR or it could also be taken care of this PR, up to you.
+
+Please take a look at the comments after which you make those changes we should be good to merge. Thanks!
+
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lucasleocs:</strong></p>
+                    <p>I went with this approach.
+
+I moved the explanation into a dedicated Intel HWP Dynamic Boost section in the README instead of repeating the same default-policy notes in each config example. I also tried to make the distinction between the kernel behavior and the new auto-cpufreq policy clearer: on typical non-server Intel systems, intel_pstate starts HWP Dynamic Boost disabled, so on battery auto-cpufreq keeps that usual disabled state. The new behavior introduced here is mainly that auto-cpufreq enables Dynamic Boost automatically on AC/charger power when the user hasn't configured it explicitly.
+
+I also mentioned the upstream server-profile exception, since current kernels may enable Dynamic Boost automatically on systems using the ACPI Enterprise Server or Performance Server profiles.
+
+The section also explains the EPP ordering and links back to the config-file section for users who want to override either default.
+
+I think this makes it clearer which behavior comes from the kernel and which part is auto-cpufreq's policy.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Perfect, can you also look at [other comments copilot made](https://github.com/AdnanHodzic/auto-cpufreq/pull/960#pullrequestreview-4984841800)? Also let's resolve the merge conflict with core.py and this should be ready to be merged.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@lucasleocs please let me know if all changes have been made for to be ready for review again.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lucasleocs:</strong></p>
+                    <p>Yes, all requested changes are now addressed and the PR is ready for review again. Thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Yes, all requested changes are now addressed and the PR is ready for review again. Thanks!
+
+Unfortunately now we have merge conflicts, please resolve this and let's merge this. Thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lucasleocs:</strong></p>
+                    <p>Resolved the conflicts against current `master` and rebuilt the branch as a single clean commit. I also kept the changes from #962 intact.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@lucasleocs let's please address above suggestion mention by Copilot.
+
+Btw, I also noticed when automatically set that "Intel HWP Dynamic Boost" will be "on" while laptop is charging and while it's on battery. I think this is good, as I was proposed this if it wasn't the case (as in [config file we're suggesting it to be off](https://github.com/AdnanHodzic/auto-cpufreq#example-config-file-contents:~:text=%23%20hwp_dynamic_boost%20%3D%20false)).
+
+But I'm looking at code, I'm missing what are the conditions "Intel HWP Dynamic Boost" will be "off" if ever while on e.g battery? As if it's supported it'll just be on "on" all the time unless in config file it was specified to have it off?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lucasleocs:</strong></p>
+                    <p>I’m going to temporarily move this PR back to draft and do another validation pass before asking for review again.
+
+I haven’t reproduced HWP Dynamic Boost staying enabled on battery on my system, and the current #960 logic does target `false` for the battery profile when the setting is not explicitly configured. Since #963 changes the power-source detection used to decide between the charger and battery profiles, I want to test #960 together with those changes and rule out any profile-selection issue before changing the HWP Dynamic Boost policy itself.
+So I’d like to verify first that the system is actually entering the battery profile and not being treated as plugged in because of the older power-supply detection path.
+
+I’ll also address the Copilot suggestion about warning when an explicit `hwp_dynamic_boost` setting is used on unsupported hardware while doing this pass.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I’m going to temporarily move this PR back to draft and do another validation pass before asking for review again.
+> 
+> I haven’t reproduced HWP Dynamic Boost staying enabled on battery on my system, and the current #960 logic does target `false` for the battery profile when the setting is not explicitly configured. Since #963 changes the power-source detection used to decide between the charger and battery profiles, I want to test #960 together with those changes and rule out any profile-selection issue before changing the HWP Dynamic Boost policy itself. So I’d like to verify first that the system is actually entering the battery profile and not being treated as plugged in because of the older power-supply detection path.
+> 
+> I’ll also address the Copilot suggestion about warning when an explicit `hwp_dynamic_boost` setting is used on unsupported hardware while doing this pass.
+
+Sounds good, let me know once it's ready for review once agian.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lucasleocs:</strong></p>
+                    <p>Thanks. I looked at this a bit more closely, and I think the current AC/battery policy may actually be the simpler and more predictable option.
+
+On typical non-server systems, HWP Dynamic Boost starts disabled in `intel_pstate`. However, `hwp_dynamic_boost` is a global driver state: once userspace enables it on AC, simply leaving it unmanaged after switching to battery would not restore the default value — it would remain enabled until something explicitly changes it again.
+
+So the current #960 behavior avoids having to track and restore previous state:
+
+* AC → HWP Dynamic Boost `on`
+* battery → HWP Dynamic Boost `off`
+
+I validated this with the full set_autofreq() path on top of #963:
+
+* AC → charger profile → HWP `1`
+* battery → battery profile → HWP `0`
+* AC again → charger profile → HWP `1`
+
+The battery `off` condition is the default battery target in `get_hwp_dynamic_boost_target()`, which is applied by `set_powersave()`.
+
+This also keeps battery behavior close to the normal kernel default without adding state tracking, while still enabling Dynamic Boost automatically on AC. Users who want it enabled on battery as well can explicitly set hwp_dynamic_boost = true in the battery profile.
+
+If you prefer the always-on default, I can still change it, but after checking the transition behavior I think the current AC=`on`, battery=`off` policy is simpler and more deterministic.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> If you prefer the always-on default, I can still change it, but after checking the transition behavior I think the current AC=on, battery=off policy is simpler and more deterministic. 
+
+Sounds good, let's leave it like this for now. I'll do some testing in meantime to see how it behaves like this in "real life". Otherwise we can also set HWP 1 on battery as well. 
+
+I also noticed "Setting to use: "balance_power" EPB" is displayed in CLI, but not in GUI, but this could be addressed as part of #964? Maybe as part of same PR on supported systems, once "performance" button is checked in GUI/GTK then HWP would also be turned to true. As otherwise it's bit silly just to have button to enable it on its own.
+
+For now, LGTM let's merge it. As always thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases)</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        
