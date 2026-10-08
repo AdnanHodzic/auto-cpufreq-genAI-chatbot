@@ -33,13 +33,13 @@
 
 <p><a href="https://www.youtube.com/watch?v=a-UcwAAXOoc"><img src="https://img.youtube.com/vi/a-UcwAAXOoc/0.jpg" alt="" /></a></p>
 
-<p>Example of auto-cpufreq GUI (available &gt;= v2.0)</p>
+<p>Example of auto-cpufreq GUI (v3.2.0)</p>
 
-<p><img src="https://github.com/user-attachments/assets/3e33bd92-964c-48f0-9825-4a66f9039261" width="480" alt="Example of auto-cpufreq GUI (available &gt;= v2.0)" /></p>
+<p><img src="https://github.com/user-attachments/assets/739beb37-4026-4d53-962d-a6b42a8efd0d" width="480" alt="Example of auto-cpufreq GUI (v3.2.0)" /></p>
 
-<p>Example of <code>auto-cpufreq --stats</code> CLI output</p>
+<p>Example of <code>auto-cpufreq --stats</code> CLI output (v3.2.0)</p>
 
-<p><img src="https://github.com/user-attachments/assets/1114e937-35bd-4943-8a74-a932c04c367e" width="480" alt="Example of auto-cpufreq CLI output"/></p>
+<p><img src="https://github.com/user-attachments/assets/92c2e935-2e2b-4b6d-b90b-2136730ec704" width="480" alt="Example of auto-cpufreq v3.2.0 CLI output"/></p>
 
 <h2>Looking for developers and co-maintainers</h2>
 
@@ -59,6 +59,7 @@
 <li><a href="#installing-auto-cpufreq">Installing auto-cpufreq</a>
 <ul>
 <li><a href="#auto-cpufreq-installer">auto-cpufreq-installer</a></li>
+<li><a href="#debian-repositories-deb-package">Debian repositories (.deb package)</a></li>
 <li><a href="#snap-store">Snap Store</a></li>
 <li><a href="#aur-package-arch-based-distributions">AUR package (Arch based distributions)</a></li>
 <li><a href="#nixos">NixOS</a></li>
@@ -80,6 +81,7 @@
 <ul>
 <li><a href="#monitor">monitor</a></li>
 <li><a href="#live">live</a></li>
+<li><a href="#gui">GUI</a></li>
 <li><a href="#overriding-governor">overriding governor</a></li>
 <li><a href="#overriding-turbo-mode">overriding turbo mode</a></li>
 <li><a href="#install---auto-cpufreq-daemon">Install - auto-cpufreq daemon</a></li>
@@ -89,6 +91,8 @@
 <li><a href="#bluetooth_boot_off">bluetooth<em>boot</em>off</a></li>
 <li><a href="#bluetooth_boot_on">bluetooth<em>boot</em>on</a></li>
 </ul></li>
+<li><a href="#intel-hwp-dynamic-boost">Intel HWP Dynamic Boost</a></li>
+<li><a href="#platform-profiles">Platform Profiles</a></li>
 <li><a href="#battery-charging-thresholds">Battery charging thresholds</a>
 <ul>
 <li><a href="#supported-devices">Supported Devices</a></li>
@@ -104,8 +108,10 @@
 <ul>
 <li><a href="#financial-donation">Financial donation</a>
 <ul>
-<li><a href="#paypal">Paypal</a></li>
+<li><a href="https://github.com/AdnanHodzic/auto-cpufreq/blob/master/README.md#become-github-sponsor">Become Github Sponsor</a></li>
+<li><a href="https://github.com/AdnanHodzic/auto-cpufreq/blob/master/README.md#pumpfun">pump.fun</a></li>
 <li><a href="#bitcoin">BitCoin</a></li>
+<li><a href="#paypal">Paypal</a></li>
 </ul></li>
 <li><a href="#code-contribution">Code contribution</a></li>
 </ul></li>
@@ -149,6 +155,13 @@
 <li>System load</li>
 </ul></li>
 <li>Automatic CPU &amp; power optimization (temporary and persistent)</li>
+<li>Platform Profile monitoring and configuration, when exposed by the Linux platform driver
+<ul>
+<li>Current platform profile</li>
+<li>Available profiles</li>
+<li>Platform Profile provider(s)</li>
+<li>Separate charger and battery configuration</li>
+</ul></li>
 <li>Settings battery charging thresholds (limited support)</li>
 </ul>
 
@@ -156,20 +169,44 @@
 
 <h3>auto-cpufreq-installer</h3>
 
-<blockquote>
-  <p>As auto-cpufreq relies on git based versioning, users are advised to install <code>auto-cpufreq</code>  using <code>git clone</code> method only. Downloading source code as a zip/from release will emit build error like <a href="https://github.com/AdnanHodzic/auto-cpufreq/issues/623">these</a>.</p>
-</blockquote>
+<p>The source installer automatically handles several major Linux distribution families, including Debian/Ubuntu (and derivatives such as Linux Mint), Fedora/RHEL, Arch-based distributions, openSUSE, Void Linux, and Solus. Other recognized derivatives can use the installation path of their declared base distribution.</p>
 
-<p>Get source code, run installer, and follow on-screen instructions:</p>
+<p>Source installation requires a distribution-provided Python 3.9 or newer. Enterprise Linux 8 uses its Python 3.9 stream; newer Enterprise Linux releases use the distribution's default Python 3.</p>
 
-<p><code>
+<p>The installer automatically installs system dependencies and creates each source installation in a dedicated virtual environment under <code>/opt/auto-cpufreq/releases</code>. It verifies a new installation before atomically selecting it through <code>/opt/auto-cpufreq/current</code>; an incomplete installation does not replace the working one.</p>
+
+<p>NixOS uses the native Nix integration described below instead of the source installer.</p>
+
+<p>For a stable source installation, download the <code>.zip</code> or <code>.tar.gz</code> source archive for the desired version from <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases">GitHub Releases</a>, extract it, enter the extracted directory, and run:</p>
+
+<p><code>bash
+sudo bash ./auto-cpufreq-installer
+</code></p>
+
+<p>Release archives published before this archive metadata support was added are not changed retroactively and may still require a Git checkout.</p>
+
+<p>For the current development version, clone the Git repository instead:</p>
+
+<p><code>bash
 git clone https://github.com/AdnanHodzic/auto-cpufreq.git
 cd auto-cpufreq &amp;&amp; sudo ./auto-cpufreq-installer
 </code></p>
 
+<p>When replacing an existing source installation, remove its auto-cpufreq daemon first if the installer asks you to do so. Earlier versioned generations are retained until the source installation is removed.</p>
+
+<h3>Debian repositories (.deb package)</h3>
+
+<p>auto-cpufreq has been added to <a href="https://packages.debian.org/search?keywords=auto-cpufreq&searchon=names&suite=all&section=all">official Debian repositories</a>, and will soon make its way to other derivatives like <a href="https://packages.ubuntu.com/search?keywords=auto-cpufreq&searchon=names&suite=all&section=all">Ubuntu</a>, Mint and et cetera. </p>
+
+<p><code>
+sudo apt install auto-cpufreq
+</code></p>
+
+<p>The Debian package is currently being maintained by <a href="https://github.com/emfox">emfox</a>.</p>
+
 <h3>Snap Store</h3>
 
-<p><em>Please note: while all <a href="https://www.youtube.com/watch?v=SPGpkZ0AZVU&t=295s">auto-cpufreq &gt;= v2.0 CLI functionality</a> will work as intended, <a href="http://foolcontrol.org/wp-content/uploads/2023/10/auto-cpufreq-v2-snap-deprecation-notice.png">the GUI won't be available on Snap package installs</a> due to <a href="https://forum.snapcraft.io/t/pkexec-not-found-python-gtk-gnome-app/36579">Snap package confinement limitations</a>. Hence, please consider installing auto-cpufreq using <a href="#auto-cpufreq-installer">auto-cpufreq-installer</a></em>.</p>
+<p><em>Please note: while all <a href="https://www.youtube.com/watch?v=SPGpkZ0AZVU&t=295s">auto-cpufreq &gt;= v2.0 CLI functionality</a> will work as intended, <a href="https://storage.googleapis.com/foolcontrol-media/2023/10/auto-cpufreq-v2-snap-deprecation-notice.png">the GUI won't be available on Snap package installs</a> due to <a href="https://forum.snapcraft.io/t/pkexec-not-found-python-gtk-gnome-app/36579">Snap package confinement limitations</a>. Hence, please consider installing auto-cpufreq using <a href="#auto-cpufreq-installer">auto-cpufreq-installer</a></em>.</p>
 
 <p>auto-cpufreq is available on the <a href="https://snapcraft.io/auto-cpufreq">Snap Store</a> or via CLI:</p>
 
@@ -420,6 +457,8 @@ the repository:</p>
 
 <h4>Example config file contents</h4>
 
+<p>Configured to run in full performance mode when connected to a power source (charger) and never drop below 2 GHz. When running on battery, all settings will be configured automatically by auto-cpufreq based on all above mentioned criteria.</p>
+
 <p>```python</p>
 
 <h1>settings for when connected to a power source</h1>
@@ -434,7 +473,17 @@ the repository:</p>
 
 <h1>EPP: see available preferences by running: cat /sys/devices/system/cpu/cpu0/cpufreq/energy<em>performance</em>available_preferences</h1>
 
-<p>energy<em>performance</em>preference = performance</p>
+<p>energy<em>performance</em>preference = balance_performance</p>
+
+<h1>Intel HWP Dynamic Boost.</h1>
+
+<h1>Only available with intel_pstate in active mode and HWP enabled.</h1>
+
+<h1>Alters value in: /sys/devices/system/cpu/intel<em>pstate/hwp</em>dynamic_boost</h1>
+
+<h1>Accepted values: true/false, yes/no, on/off, 1/0.</h1>
+
+<h1>hwp<em>dynamic</em>boost = true</h1>
 
 <h1>EPB (Energy Performance Bias) for the intel_pstate driver</h1>
 
@@ -452,17 +501,33 @@ the repository:</p>
 
 <h1>the default value is <code>balance_performance</code> (for charger)</h1>
 
-<h1>energy<em>perf</em>bias = balance_performance</h1>
+<p>energy<em>perf</em>bias = performance</p>
 
 <h1>Platform Profiles</h1>
 
 <h1>https://www.kernel.org/doc/html/latest/userspace-api/sysfs-platform_profile.html</h1>
 
-<h1>See available options by running:</h1>
+<h1>auto-cpufreq prefers the per-handler /sys/class/platform-profile interface</h1>
 
-<h1>cat /sys/firmware/acpi/platform<em>profile</em>choices</h1>
+<h1>when available and retains /sys/firmware/acpi/platform_profile for</h1>
 
-<h1>platform_profile = performance</h1>
+<h1>compatibility and safe global control.</h1>
+
+<h1>Available values depend on the hardware and kernel. Run <code>auto-cpufreq --stats</code></h1>
+
+<h1>or <code>auto-cpufreq --pp</code> to see the exact accepted names.</h1>
+
+<p>platform_profile = performance</p>
+
+<h1>Controls strict enforcement of the platform profile.</h1>
+
+<h1>- true: Continuously restores the configured platform profile.</h1>
+
+<h1>- false: Applies it on AC/Battery policy changes while allowing manual</h1>
+
+<h1>firmware or hotkey profile changes in between.</h1>
+
+<p>enforce<em>platform</em>profile = true</p>
 
 <h1>minimum cpu frequency (in kHz)</h1>
 
@@ -472,7 +537,7 @@ the repository:</p>
 
 <h1>to use this feature, uncomment the following line and set the value accordingly</h1>
 
-<h1>scaling<em>min</em>freq = 800000</h1>
+<p>scaling<em>min</em>freq = 2000000</p>
 
 <h1>maximum cpu frequency (in kHz)</h1>
 
@@ -486,7 +551,7 @@ the repository:</p>
 
 <h1>turbo boost setting. possible values: always, auto, never</h1>
 
-<p>turbo = auto</p>
+<p>turbo = always</p>
 
 <h1>settings for when using battery power</h1>
 
@@ -496,11 +561,21 @@ the repository:</p>
 
 <h1>preferred governor</h1>
 
-<p>governor = powersave</p>
+<h1>governor = powersave</h1>
 
 <h1>EPP: see available preferences by running: cat /sys/devices/system/cpu/cpu0/cpufreq/energy<em>performance</em>available_preferences</h1>
 
-<p>energy<em>performance</em>preference = power</p>
+<h1>energy<em>performance</em>preference = balance_power</h1>
+
+<h1>Intel HWP Dynamic Boost.</h1>
+
+<h1>Only available with intel_pstate in active mode and HWP enabled.</h1>
+
+<h1>Alters value in: /sys/devices/system/cpu/intel<em>pstate/hwp</em>dynamic_boost</h1>
+
+<h1>Accepted values: true/false, yes/no, on/off, 1/0.</h1>
+
+<h1>hwp<em>dynamic</em>boost = false</h1>
 
 <h1>EPB (Energy Performance Bias) for the intel_pstate driver</h1>
 
@@ -524,11 +599,27 @@ the repository:</p>
 
 <h1>https://www.kernel.org/doc/html/latest/userspace-api/sysfs-platform_profile.html</h1>
 
-<h1>See available options by running:</h1>
+<h1>auto-cpufreq prefers the per-handler /sys/class/platform-profile interface</h1>
 
-<h1>cat /sys/firmware/acpi/platform<em>profile</em>choices</h1>
+<h1>when available and retains /sys/firmware/acpi/platform_profile for</h1>
+
+<h1>compatibility and safe global control.</h1>
+
+<h1>Available values depend on the hardware and kernel. Run <code>auto-cpufreq --stats</code></h1>
+
+<h1>or <code>auto-cpufreq --pp</code> to see the exact accepted names.</h1>
 
 <h1>platform_profile = low-power</h1>
+
+<h1>Controls strict enforcement of the platform profile.</h1>
+
+<h1>- true: Continuously restores the configured platform profile.</h1>
+
+<h1>- false: Applies it on AC/Battery policy changes while allowing manual</h1>
+
+<h1>firmware or hotkey profile changes in between.</h1>
+
+<h1>enforce<em>platform</em>profile = true</h1>
 
 <h1>minimum cpu frequency (in kHz)</h1>
 
@@ -552,7 +643,7 @@ the repository:</p>
 
 <h1>turbo boost setting (always, auto, or never)</h1>
 
-<p>turbo = auto</p>
+<h1>turbo = auto</h1>
 
 <h1>battery charging threshold</h1>
 
@@ -560,7 +651,7 @@ the repository:</p>
 
 <h1>enable_thresholds = true</h1>
 
-<h1>start_threshold = 20</h1>
+<h1>start<em>threshold = end</em>threshold-1</h1>
 
 <h1>stop_threshold = 80</h1>
 
@@ -568,7 +659,7 @@ the repository:</p>
 
 <h2>How to run auto-cpufreq</h2>
 
-<p>auto-cpufreq should be run with with one of the following options:</p>
+<p>auto-cpufreq can be used through the following CLI modes and the GTK interface:</p>
 
 <ul>
 <li><p><a href="#monitor">monitor</a></p>
@@ -586,10 +677,10 @@ the repository:</p>
 <ul>
 <li>Install/remove daemon for (permanent) automatic CPU optimizations</li>
 </ul></li>
-<li><p><a href="#install---auto-cpufreq-daemon">install (GUI)</a></p>
+<li><p><a href="#gui">GUI</a></p>
 
 <ul>
-<li>Install daemon via GUI for (permanent) automatic CPU optimizations</li>
+<li>View live system and power state, manage supported controls, or preview recommendations</li>
 </ul></li>
 <li><p><a href="#update---auto-cpufreq-update">update</a></p>
 
@@ -649,11 +740,11 @@ the repository:</p>
 <li><p>help</p>
 
 <ul>
-<li>Shows all of the above options</li>
+<li>Shows the available CLI options</li>
 </ul></li>
 </ul>
 
-<p>Running <code>auto-cpufreq --help</code> will print the same list of options as above. Read <a href="#auto-cpufreq-modes-and-options">auto-cpufreq modes and options</a> for more details.</p>
+<p>Running <code>auto-cpufreq --help</code> will list the available CLI options. Read <a href="#auto-cpufreq-modes-and-options">auto-cpufreq modes and options</a> for more details.</p>
 
 <h2>auto-cpufreq modes and options</h2>
 
@@ -663,18 +754,33 @@ the repository:</p>
 
 <p>No changes are made to the system. This is solely to demonstrate what auto-cpufreq could do for your system.</p>
 
+<p>This is the terminal Monitor mode. A read-only Monitor Mode is also available from the GUI when the daemon is not running.</p>
+
 <h3>Live</h3>
 
 <p><code>sudo auto-cpufreq --live</code></p>
 
 <p>Necessary changes are temporarily made to the system over time, but this process and its changes are lost at system reboot. This mode is provided to evaluate how the system would behave with auto-cpufreq permanently running on the system.</p>
 
+<h3>GUI</h3>
+
+<p>The GTK interface can be opened from the auto-cpufreq desktop entry.</p>
+
+<p>When the daemon is running, the GUI provides a live overview of system, CPU, battery and power state, together with controls for supported auto-cpufreq overrides and settings.</p>
+
+<p>The dashboard refresh interval can be changed from the menu between 1, 2 and 5 seconds.</p>
+
+<p>If the daemon is not running, the GUI allows you to either install it for persistent automatic optimization or open Monitor Mode to preview system state and auto-cpufreq recommendations without applying changes.</p>
+
 <h3>Overriding governor</h3>
 
 <p><code>sudo auto-cpufreq --force=governor</code></p>
 
-<p>Force use of either the "powersave" or "performance" governor, or set to "reset" to go back to normal mode.
-Please note that any set override will persist even after reboot.</p>
+<p>Force use of either the "powersave" or "performance" governor, or set to "reset" to go back to normal mode.</p>
+
+<p>This overrides only the CPU governor. Other charger/battery profile settings continue to follow the detected power source.</p>
+
+<p>Please note that any set override will persist even after reboot.</p>
 
 <h3>Overriding Turbo mode</h3>
 
@@ -695,23 +801,7 @@ Please note that any set override will persist even after reboot.</p>
 
 <p>After the daemon is installed, <code>auto-cpufreq</code> is available as a binary and runs in the background. Its stats can be viewed by running: <code>auto-cpufreq --stats</code></p>
 
-<p><em>Please note:</em> if the daemon is installed within a desktop environment, then its stats and options can be accessed via CLI or GUI. See "Install the daemon using GUI" below for more details.</p>
-
-<p><strong>Install the daemon using GUI</strong></p>
-
-<p>Starting with &gt;= v2.0 <a href="#installing-auto-cpufreq">after installing auto-cpufreq</a>, an auto-cpufreq desktop entry (icon) is available, i.e.:</p>
-
-<p><img src="https://github.com/user-attachments/assets/f426d62b-00b0-4fa5-a72e-b352016ed448" width="640" alt="Example of auto-cpufreq desktop entry (icon)"/></p>
-
-<p>After selecting it to open the GUI, the auto-cpufreq daemon can be installed by clicking the "Install" button:</p>
-
-<p><img src="https://github.com/user-attachments/assets/5af47e5e-8b9e-4ff6-9ffc-e78acb623ce4" width="480" alt="The auto-cpufreq GUI's 'Install' button"/></p>
-
-<p>After that, the full auto-cpufreq GUI is available:</p>
-
-<p><img src="https://github.com/user-attachments/assets/9c7715c4-16b7-4a5c-86be-4c390276d9e8" width="640" alt="The full auto-cpufreq GUI"/></p>
-
-<p><em>Please note:</em> after the daemon is installed (by any method), its stats and options are accessible via both CLI and GUI.</p>
+<p>The daemon can also be installed from the GTK interface. See <a href="#gui">GUI</a>.</p>
 
 <p><strong>auto-cpufreq daemon service</strong></p>
 
@@ -727,27 +817,37 @@ Please note that any set override will persist even after reboot.</p>
 
 <h3>Update - auto-cpufreq update</h3>
 
-<p>Update functionality works by cloning the auto-cpufreq repo, installing it via <a href="#auto-cpufreq-installer">auto-cpufreq-installer</a>, and performing a fresh <a href="#install---auto-cpufreq-daemon">auto-cpufreq daemon install</a> to provide the <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases">latest version's</a> changes.</p>
+<p>For source installations, the updater checks the <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases">latest published release</a>, clones that exact release tag, and installs it through <a href="#auto-cpufreq-installer">auto-cpufreq-installer</a>. If the <a href="#install---auto-cpufreq-daemon">auto-cpufreq daemon</a> was installed, the updater removes and reinstalls it; otherwise the daemon remains uninstalled. The updater does not install the development <code>master</code> branch.</p>
 
-<p>Update auto-cpufreq by running: <code>sudo auto-cpufreq --update</code>. By default, the latest revision is cloned to <code>/opt/auto-cpufreq/source</code>, thus maintaining existing directory structure.</p>
+<p>The installer builds and verifies the new release as a separate generation before selecting it through <code>/opt/auto-cpufreq/current</code>. Download, daemon removal, installation, and final command failures stop the updater without reporting success; a candidate that fails before activation does not replace the active generation.</p>
 
-<p>Update and clone to a custom directory by running: <code>sudo auto-cpufreq --update=/path/to/directory</code></p>
+<p>Update auto-cpufreq by running: <code>sudo auto-cpufreq --update</code>. By default, the selected release tag is cloned to a uniquely named staging directory under <code>/opt/auto-cpufreq/source</code>; the updater removes that staging directory after the attempt finishes.</p>
+
+<p>Update and create the staging directory under a custom parent by running: <code>sudo auto-cpufreq --update=/path/to/directory</code></p>
+
+<p>Development checkouts are not advanced by <code>--update</code>. To replace a development installation while its daemon is installed, run <code>sudo auto-cpufreq --remove</code>, install the desired Git revision with <code>sudo ./auto-cpufreq-installer --install</code>, and then run <code>sudo auto-cpufreq --install</code> to deploy the daemon from the new generation.</p>
 
 <h3>Remove - auto-cpufreq daemon</h3>
 
-<p>The auto-cpufreq daemon, its systemd service, and all its persistent changes can be removed by running:</p>
+<p>The auto-cpufreq daemon and its service can be removed by running:</p>
 
 <p><code>sudo auto-cpufreq --remove</code></p>
 
 <p>This does, in part, the equivalent of <code>systemctl stop auto-cpufreq &amp;&amp; systemctl disable auto-cpufreq</code>, but the above command should be used instead of using <code>systemctl</code>.</p>
 
-<p><em>Please note:</em> after the daemon is removed, the auto-cpufreq GUI and desktop entry (icon) are also removed.</p>
+<p>Removing the daemon does not uninstall the source-installed CLI or GUI. To remove the complete source installation, run <code>sudo bash ./auto-cpufreq-installer --remove</code> from an auto-cpufreq source directory.</p>
+
+<p>If removal fails, address the reported error and retry the same command. On s6, an unfinished removal must complete before reinstalling the daemon. If the error identifies unrecognized source-install remnants or a preserved s6 removal directory, inspect and preserve any custom files before removing those remnants; they are not treated as successful cleanup.</p>
 
 <h3>Stats</h3>
 
-<p>If the daemon has been installed, live stats of CPU/system load monitoring and optimization can be seen by running:</p>
+<p>If the daemon has been installed, live system information and the current optimization state can be viewed with:</p>
 
-<p><code>auto-cpufreq --stats</code></p>
+<p><code>bash
+auto-cpufreq --stats
+</code></p>
+
+<p>In addition to CPU and battery telemetry, the stats interface reports the current <strong>Platform Profile</strong>, detected interface, control availability, available platform profiles, and provider information. CPU power controls such as the governor, EPP, EPB, HWP Dynamic Boost, and Turbo Boost are grouped separately under <strong>CPU Power State</strong>.</p>
 
 <h3>bluetooth<em>boot</em>off</h3>
 
@@ -759,9 +859,97 @@ Please note that any set override will persist even after reboot.</p>
 
 <p>Useful if you prefer Bluetooth to be enabled at boot time, especially after installing the auto-cpufreq daemon, which will disable it by default.</p>
 
+<h2>Intel HWP Dynamic Boost</h2>
+
+<p>On typical non-server Intel systems, the Linux <code>intel_pstate</code> driver starts HWP Dynamic Boost disabled. When <code>hwp_dynamic_boost</code> is not explicitly configured, auto-cpufreq keeps it disabled on battery power and enables it on AC/charger power on supported systems. Current upstream kernels may enable Dynamic Boost automatically on systems using the ACPI Enterprise Server or Performance Server profiles.</p>
+
+<p>Dynamic Boost is detected through <code>/sys/devices/system/cpu/intel_pstate/hwp_dynamic_boost</code>; systems that do not expose this interface are left unchanged.</p>
+
+<p>When disabling Dynamic Boost, auto-cpufreq applies that state before changing EPP. When enabling Dynamic Boost, EPP is applied first. To override the default policy, configure <code>hwp_dynamic_boost</code> in the charger and/or battery profiles; see <a href="#4-auto-cpufreq-config-file">4: auto-cpufreq config file</a>.</p>
+
+<h2>Platform Profiles</h2>
+
+<p>Linux Platform Profiles provide a standardized interface for selecting platform-wide power and performance policies exposed by the system firmware or platform driver. Unlike the CPU governor, EPP, or EPB, a platform profile may affect more than the CPU, including thermal behavior, fan policy, power limits, and other platform-specific components.</p>
+
+<p>Platform Profile support depends on the hardware, firmware, kernel, and available platform driver. It can be present on laptops, desktops, mini PCs, and other systems. If no Platform Profile interface is detected, auto-cpufreq reports that state without attempting to configure it.</p>
+
+<p>auto-cpufreq prefers the modern Linux Platform Profile class interface:</p>
+
+<p><code>text
+/sys/class/platform-profile/
+</code></p>
+
+<p>The aggregate interface remains supported for compatibility and safe global control:</p>
+
+<p><code>text
+/sys/firmware/acpi/platform_profile
+</code></p>
+
+<p>When only the aggregate interface is available, auto-cpufreq can still read and configure Platform Profiles. The aggregate interface reports the current profile and the available choices, but it does not expose a generic provider name. The normal reporting interfaces therefore identify the interface as <code>Legacy</code> and report that the provider name is not available from that ABI.</p>
+
+<p>auto-cpufreq also reports whether Platform Profile control is available. If the current state can be observed but the available choices cannot be determined reliably, the profile remains visible but control is disabled. auto-cpufreq does not write an unvalidated profile value. This distinguishes a detected-but-not-safely-controllable interface from a system where no Platform Profile interface was detected at all.</p>
+
+<p>The profile names are defined by the Linux Platform Profile ABI, but <strong>not every system supports every profile</strong>. The kernel reports the exact profiles available for the current machine, so users should not assume that values such as <code>balanced</code>, <code>quiet</code>, or <code>performance</code> are always available.</p>
+
+<p>To see the profiles available on the current system, use:</p>
+
+<p><code>bash
+auto-cpufreq --stats
+</code></p>
+
+<p>or:</p>
+
+<p><code>bash
+auto-cpufreq --pp
+</code></p>
+
+<p>For example:</p>
+
+<p><code>text
+Platform Profile
+Interface: Modern · Control: Available
+Current profile: balanced
+Available profiles (4): low-power, quiet, balanced, performance
+Provider: example-platform-driver
+</code></p>
+
+<p>The GTK interface displays the same information in its <strong>Platform Profile</strong> section. These reporting interfaces are informational; profile selection remains an advanced configuration option in <code>auto-cpufreq.conf</code>.</p>
+
+<p>Platform Profiles can be configured independently for charger and battery operation:</p>
+
+<p>```ini
+[charger]
+platform_profile = balanced</p>
+
+<p>[battery]
+platform_profile = quiet
+```</p>
+
+<p>Always choose a value reported in <strong>Available profiles</strong> on the target system. auto-cpufreq validates the requested profile against the profiles reported by the kernel before attempting to apply it.</p>
+
+<p>By default, auto-cpufreq continuously restores the configured Platform Profile. This keeps the selected charger or battery policy authoritative even if the profile is changed manually.</p>
+
+<p>This default behavior is equivalent to:</p>
+
+<p><code>ini
+enforce_platform_profile = true
+</code></p>
+
+<p>With:</p>
+
+<p><code>ini
+enforce_platform_profile = false
+</code></p>
+
+<p>auto-cpufreq applies the configured profile when switching between charger and battery policies, but does not continuously overwrite a manual profile change.</p>
+
+<p>Modern kernels may expose more than one Platform Profile provider. auto-cpufreq reports each provider and its current profile. For global configuration, only profiles that can be safely applied across the platform are offered. If providers are currently using different profiles, the aggregate state may be reported as <code>custom</code>. auto-cpufreq does not arbitrarily modify only one provider when a safe global control path is unavailable.</p>
+
+<p><code>custom</code> can have different semantics depending on the kernel interface. With multiple providers, it may describe an aggregate state where providers are using different profiles rather than a profile that can be selected globally. auto-cpufreq therefore relies on the kernel-reported writable choices instead of maintaining its own fixed list of profile names.</p>
+
 <h2>Battery charging thresholds</h2>
 
-<p><strong><em>Please note:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/pull/637">Original implementor</a> is looking for user input &amp; testing to further improve this functionality. If you would like to help in this process, please refer to <a href="https://github.com/AdnanHodzic/auto-cpufreq/#looking-for-developers-and-co-maintainers">Looking for developers and co-maintainers</a></em>.</p>
+<p><em><strong>Please note:</strong> <a href="https://github.com/AdnanHodzic/auto-cpufreq/pull/637">Original implementor</a> is looking for user input &amp; testing to further improve this functionality. If you would like to help in this process, please refer to <a href="https://github.com/AdnanHodzic/auto-cpufreq/#looking-for-developers-and-co-maintainers">Looking for developers and co-maintainers</a></em>.</p>
 
 <p>As of <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v2.2.0">v2.2.0</a>, battery charging thresholds can be set in the config file. This enforces your battery to start and stop charging at defined values.</p>
 
@@ -770,10 +958,14 @@ Please note that any set override will persist even after reboot.</p>
 <ul>
 <li><strong>Lenovo ThinkPad</strong> (thinkpad_acpi)*</li>
 <li><strong>Lenovo IdeaPad</strong> (ideapad_acpi)*</li>
+<li><strong>Lenovo Laptop</strong> (ideapad_laptop)*</li>
+<li><strong>Lenovo Legion</strong> (ideapad_laptop)*</li>
 <li><strong>ASUS :Laptops</strong> (asus_wmi)*</li>
 </ul>
 
-<p><strong>*Please note, your laptop must have an installed ACPI kernel driver specific to the manufacturer.</strong> To check if you have the correct module installed and loaded run <code>lsmod [module]</code></p>
+<p><strong>Please note, your laptop must have an installed ACPI kernel driver specific to the manufacturer.</strong> To check if you have the correct module installed and loaded run <code>lsmod [module]</code></p>
+
+<p>Additionally, <strong>you should make sure that you have no other software running that may conflict with auto-cpufreq's battery threshold management</strong> (e.g., GNOME's <em>Preserve Battery Health</em> option). Using both at the same time will lead to conflicts and to your battery potentially never charging.</p>
 
 <p><strong>To request that your device be supported, please open an <a href="https://github.com/AdnanHodzic/auto-cpufreq/issues/new">issue</a>. In your issue, make us aware of the driver that works with your laptop</strong></p>
 
@@ -781,65 +973,70 @@ Please note that any set override will persist even after reboot.</p>
 
 <p>Edit the config at <code>/etc/auto-cpufreq.conf</code></p>
 
-<p>Example config for battery (<a href="https://github.com/AdnanHodzic/auto-cpufreq/#example-config-file-contents">already part of example config file</a>)
-<code>
+<p>Example config for battery (<a href="https://github.com/AdnanHodzic/auto-cpufreq/#example-config-file-contents">already part of example config file</a>)</p>
+
+<p><code>ini
 [battery]
 enable_thresholds = true
 start_threshold = 20
 stop_threshold = 80
 </code></p>
 
-<h3>Lenovo_laptop conservation mode</h3>
+<p>You will need to specify both <code>start_threshold</code> AND <code>stop_threshold</code> in most cases.
+For these changes to have an effect, you will need to restart the daemon:</p>
 
-<p>this works only with <code>lenovo_laptop</code> kernel module compatable laptops.  </p>
+<p><code>shell
+systemctl restart auto-cpufreq.service
+</code></p>
+
+<p>See more here on the kernel doc pages: <a href="https://docs.kernel.org/admin-guide/laptops/thinkpad-acpi.html#battery-charge-control">docs.kernel.org</a></p>
+
+<h3>A few notes about these battery config options</h3>
+
+<p>When you remove/uninstall the auto-cpufreq daemon, the last applied settings for battery thresholds will still apply. You might need to manually set these yourself to whatever default they were before. E.g. (as sudo):</p>
+
+<p><code>shell
+echo 0 &gt; /sys/class/power_supply/BAT0/charge_start_threshold
+echo 100 &gt; /sys/class/power_supply/BAT0/charge_stop_threshold
+</code></p>
+
+<h3>Ideapad conservation mode</h3>
+
+<p>This works only with laptops that have the <code>ideapad_laptop</code> kernel module.  </p>
 
 <p>add <code>ideapad_laptop_conservation_mode = true</code> to your <code>auto-cpufreq.conf</code> file</p>
 
-<h3>Special cases of Lenovo_ideapad (or some other models with fixed threshold)</h3>
-
-<p>As you may know, for some laptop models you can only decide to limit battery charging but can not set the limit value. The limit value is set by the manufacturer in the system (generally 60% and sometimes 80%). Also, you can not set the value of start charging.</p>
-
-<p>This limit value is not always accessible for users to avoid changing it, but you can try looking in some of these paths : </p>
-
-<p><code>
-cat /sys/bus/platform/drivers/ideapad_acpi/VPC2004:00/charge_control_end_threshold
-cat /sys/class/power_supply/BAT0/charge_control_end_threshold
-cat /sys/class/power_supply/BAT0/charge_control_start_threshold
+<p><code>ini
+[battery]
+ideapad_laptop_conservation_mode = true
 </code></p>
 
-<p>This is the config to apply at /etc/auto-cpufreq.conf in order to stop battery charging at 60% or 80% depending on the value set in the system by the manufacturer.</p>
-
-<p>```
-[battery]
-enable<em>thresholds = true
-start</em>threshold = 20
-stop_threshold = 1</p>
-
-<p>```
-start_threshold = 20 (should be present with a valid number but it's ignored)</p>
-
-<p>stop_threshold = 1 (to stop charging the battery at the limit value 60% or 80%)</p>
+<p>This is a special mode which limits the maximum charge level of the battery to around 60-80% depending on the model.</p>
 
 <h3>Ignoring power supplies</h3>
 
-<p>you may have a controler or headphones and when ever they may be on battery they might cause auto-cpufreq
-to limit preformence to ignore them add to you config file the name of the power supply, under <code>[power_supply_ignore_list]</code></p>
+<p>During automatic detection, auto-cpufreq ignores power supplies marked with
+<code>scope = Device</code> when selecting the system battery or determining whether
+the system is externally powered. This prevents peripherals such as controllers
+or headphones from affecting power-profile decisions when the kernel exposes
+their scope correctly.</p>
 
-<p>the name of the power supply can be found with  <code>ls /sys/class/power_supply/</code></p>
+<p>If a power supply that should be ignored does not expose <code>scope = Device</code>, or
+if you want to exclude it explicitly, add its name under
+<code>[power_supply_ignore_list]</code>.</p>
 
-<p>```
-[power<em>supply</em>ignore_list]</p>
+<p>Available power supplies can be listed with:</p>
 
-<p>name1 = this
-name2 = is 
-name3 = an
-name4 = example</p>
+<p><code>shell
+ls /sys/class/power_supply/
+</code></p>
 
-<h1>like this</h1>
+<p>For example:</p>
 
-<p>xboxctrl = {the xbox controler power supply name}</p>
-
-<p>```</p>
+<p><code>ini
+[power_supply_ignore_list]
+peripheral = power_supply_name
+</code></p>
 
 <h2>Troubleshooting</h2>
 
@@ -853,7 +1050,7 @@ name4 = example</p>
 
 <p>This can be done by editing the <code>GRUB_CMDLINE_LINUX_DEFAULT</code> params in <code>/etc/default/grub</code>. For instance:</p>
 
-<p><code>
+<p><code>shell
     sudo nano /etc/default/grub
     # make sure you have nano installed, or you can use your favorite text editor
 </code></p>
@@ -872,35 +1069,35 @@ GRUB_CMDLINE_LINUX_DEFAULT="quiet splash initcall_blacklist=amd_pstate_init amd_
 
 <p>Once you have made the necessary changes to the GRUB configuration file, you can update GRUB by running <code>sudo update-grub</code> on Debian/Ubuntu, <code>sudo grub-mkconfig -o /boot/grub/grub.cfg</code> on Arch Linux, or one of the following on Fedora:</p>
 
-<p><code>
+<p><code>shell
     sudo grub2-mkconfig -o /etc/grub2.cfg
 </code></p>
 
-<p><code>
+<p><code>shell
     sudo grub2-mkconfig -o /etc/grub2-efi.cfg
 </code></p>
 
-<p><code>
+<p><code>shell
     sudo grub2-mkconfig -o /boot/grub2/grub.cfg
     # legacy boot method
 </code></p>
 
 <p>For systemd-boot users:</p>
 
-<p><code>
+<p><code>shell
     sudo nano /etc/kernel/cmdline
     # make sure you have nano installed, or you can use your favorite text editor
 </code></p>
 
 <p>For Intel users:</p>
 
-<p><code>
+<p><code>shell
 quiet splash intel_pstate=disable
 </code></p>
 
 <p>For AMD users:</p>
 
-<p><code>
+<p><code>shell
 quiet splash initcall_blacklist=amd_pstate_init amd_pstate.enable=0
 </code></p>
 
@@ -935,19 +1132,25 @@ quiet splash initcall_blacklist=amd_pstate_init amd_pstate.enable=0
 
 <p>If auto-cpufreq helped you out and you find it useful, show your appreciation by donating (any amount) to the project!</p>
 
-<h5>Become Github Sponsor</h5>
+<h4>Become Github Sponsor</h4>
 
 <p><a href="https://github.com/sponsors/AdnanHodzic">Become a sponsor to Adnan Hodzic on Github</a> to acknowledge my efforts and help project's further open source development.</p>
 
-<h5>PayPal</h5>
+<h4>pump.fun</h4>
+
+<p><a href="https://pump.fun/coin/6Bo3JHdnsiuJcDmHeApaUhTgtE1NNtBdZ3uyaL4ypump">Auto-cpufreq ($CPUFREQ) on pump.fun</a></p>
+
+<p>Pump.fun Solana address: <code>6Bo3JHdnsiuJcDmHeApaUhTgtE1NNtBdZ3uyaL4ypump</code></p>
+
+<p><strong>Please note:</strong> <em>This token was created independently by third-party community members. <code>auto-cpufreq</code> and its maintainers are not involved in its creation, management, or price activity. This listing strictly allows the maintainer to collect GitHub protocol-allocated trading rewards as open-source sponsorship. This is not financial advice or an endorsement, please be aware of the high risks involved in meme coin trading and always do your own research.</em></p>
+
+<h4>BitCoin</h4>
+
+<p>Bitcoin address: <code>bc1qlncmgdjyqy8pe4gad4k2s6xtyr8f2r3ehrnl87</code></p>
+
+<h4>PayPal</h4>
 
 <p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=7AHCP5PU95S4Y&item_name=Contribution+for+work+on+auto-cpufreq&currency_code=EUR&source=url"><img src="https://www.paypalobjects.com/en_US/NL/i/btn/btn_donateCC_LG.gif" alt="paypal" /></a></p>
-
-<h5>BitCoin</h5>
-
-<p><a href="bitcoin:bc1qlncmgdjyqy8pe4gad4k2s6xtyr8f2r3ehrnl87">bc1qlncmgdjyqy8pe4gad4k2s6xtyr8f2r3ehrnl87</a></p>
-
-<p><a href="bitcoin:bc1qlncmgdjyqy8pe4gad4k2s6xtyr8f2r3ehrnl87"><img src="https://foolcontrol.org/wp-content/uploads/2019/08/btc-donate-displaylink-debian.png" alt="bitcoin" /></a></p>
 
 <h3>Code contribution</h3>
 
