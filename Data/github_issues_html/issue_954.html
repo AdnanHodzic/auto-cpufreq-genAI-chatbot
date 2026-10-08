@@ -1,0 +1,136 @@
+
+        <html>
+        <head>
+            <title>Issue #954: Add configurable Intel HWP dynamic boost</title>
+        </head>
+        <body>
+            <h1>Add configurable Intel HWP dynamic boost</h1>
+            <p><strong>Issue #954</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>## Summary
+
+Adds optional configuration support for Intel HWP Dynamic Boost through
+`hwp_dynamic_boost` in the `[charger]` and `[battery]` sections.
+
+Example:
+
+```ini
+[charger]
+hwp_dynamic_boost = true
+
+[battery]
+hwp_dynamic_boost = false
+```
+
+## Behavior
+
+* If `hwp_dynamic_boost` is not configured, the existing behavior is preserved.
+* If explicitly configured, auto-cpufreq manages
+  `/sys/devices/system/cpu/intel_pstate/hwp_dynamic_boost`.
+* When disabling Dynamic Boost, it is disabled before applying EPP.
+* When enabling Dynamic Boost, EPP is applied first and Dynamic Boost is enabled afterwards.
+* The sysfs value is only written when a state change is required.
+* Invalid boolean values produce a warning and the setting is ignored.
+* If the sysfs attribute is unavailable, the setting is ignored.
+* On supported hardware, the current HWP Dynamic Boost state is shown in
+  `--stats`, `--live`, and `--monitor`.
+
+When Dynamic Boost is explicitly configured, auto-cpufreq also applies the
+configured EPP instead of skipping EPP solely because Dynamic Boost is
+currently enabled.
+
+## Configuration
+
+Accepted boolean values are those supported by Python's ConfigParser:
+
+* `true` / `false`
+* `yes` / `no`
+* `on` / `off`
+* `1` / `0`
+
+The standard configuration example, README example, and Nix configuration
+example have been updated accordingly.
+
+## Testing
+
+Tested on an Intel Core i3-1315U with `intel_pstate` in active/HWP mode.
+
+Verified:
+
+* Python syntax with `py_compile`
+* clean `git diff --check`
+* daemon startup
+* charger → battery → charger transitions
+* configured EPP applied correctly across power-source changes
+* configured HWP Dynamic Boost state applied correctly across power-source changes
+* existing configured Turbo behavior remained unchanged
+* invalid boolean values fall back without terminating the process
+* all documented boolean forms are parsed correctly
+* HWP Dynamic Boost status display in charger and battery states
+
+The feature is opt-in and does not change the current default behavior.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Hey @lucasleocs, this looks great!
+
+Can you please take a look at couple of comments Copilot made, and comment I made in regards to config file contents.
+
+One final thing to add, it would be great if during `auto-cpufreq --stats` or `auto-cpufreq --live` or `auto-cpufreq --monitor` there was another line under e.g `CPU Frequency Scaling` which would say something like: `Intel HWP Dynamic boost: on/off` in case user has hardware that supports it.
+
+Another thing to consider, it might worth keeping `hwp_dynamic_boost = true ` by default in auto-cpufreq for supported hardware (even if you're not using config file), especially when laptop is charging or in performance mode. I even see value in setting it to `true` on powersave/balanced, as then it kicks in when IO is high, finishes what it needs to do and goes back to powersave.
+
+Regardless, this could be a a separate PR if you're interested, think for beginning it's great to have it as part of config file. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lucasleocs:</strong></p>
+                    <p>Thanks, @AdnanHodzic! I addressed the review comments in 81c22e0.
+
+I also added the current Intel HWP Dynamic Boost state under CPU Frequency Scaling, so it is shown as on/off in --stats, --live, and --monitor on supported hardware.
+
+I kept the default behavior unchanged in this PR. I agree that enabling HWP Dynamic Boost by default is worth exploring in a follow-up PR.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lucasleocs:</strong></p>
+                    <p>Hi @AdnanHodzic! I got a bit carried away today and ended up working on a few more improvements.
+
+I also implemented your suggestion of enabling HWP Dynamic Boost by default on supported hardware while charging. I kept it as a separate follow-up as suggested and opened #960 for it.
+
+I also submitted a few independent fixes/improvements (#957, #958, and #959), and tested the combined behavior to make sure the changes are compatible.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Hi @AdnanHodzic! I got a bit carried away today and ended up working on a few more improvements.
+
+Love it! :) 
+
+> I also implemented your suggestion of enabling HWP Dynamic Boost by default on supported hardware while charging. I kept it as a separate follow-up as suggested and opened #960 for it.
+
+Changes LGTM, and this will be a great new feature for next release. 
+
+
+> I also submitted a few independent fixes/improvements (#957, #958, and #959), and tested the combined behavior to make sure the changes are compatible.
+
+Please give me some time to take a look at all of them.
+
+In meantime, thank you for your contribution, you will be credited for your work as part of [future releases](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@lucasleocs btw, now that these changes have been merged, and related to #957 I noticed a bug with GTK where "Intel HWP Dynamic Boost" is not being reported under "CPU Frequency Scaling" in auto-cpufreq GTK.
+
+Can you please address this as part of a separate PR? Thanks!</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

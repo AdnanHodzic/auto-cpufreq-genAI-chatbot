@@ -1,0 +1,249 @@
+
+        <html>
+        <head>
+            <title>Issue #964: Unify system reporting and GTK runtime state</title>
+        </head>
+        <body>
+            <h1>Unify system reporting and GTK runtime state</h1>
+            <p><strong>Issue #964</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>## Summary
+
+Consolidate system reporting around `SystemReport` and make the GTK frontend show a consistent view of the state actually observed from the system.
+
+## System reporting
+
+The GTK dashboard, GTK Monitor mode, terminal monitor, and legacy status output previously collected overlapping system information through different paths.
+
+The shared report now handles several cases that those paths could not represent reliably:
+
+- Snap reads the host distribution instead of reporting the confined environment as `UNKNOWN`.
+- CPU frequency limits reported as `0.0` by psutil are treated as unavailable rather than real limits.
+- Linux `present` and `online` CPU lists are used so offline or hotplugged logical CPUs do not shift per-CPU data onto the wrong CPU.
+- Current per-CPU frequency is read through each online CPU's CPUFreq sysfs link instead of assuming psutil returns one entry per logical CPU. This keeps shared CPUFreq policies and non-contiguous CPU IDs mapped correctly.
+- `cpuinfo_cur_freq` is preferred for current frequency when available, with `scaling_cur_freq` as a fallback.
+- The logical CPU count is derived from the current online CPU mask so runtime hotplug changes do not leave a stale startup value in the report.
+- `coretemp` readings are matched through CPU topology when possible, while generic CPU/Tctl and known platform sensor fallbacks remain available.
+- Missing optional fan, frequency, or temperature data does not make the whole report fail.
+- Existing battery charge-threshold information remains available when the platform exposes it.
+- The already resolved configuration path is reused by the textual report instead of rediscovering it on every refresh.
+
+`SystemReport` only describes observed state. The daemon still selects the charger/battery profile and performs power-policy writes.
+
+## Runtime controls
+
+Governor and Turbo overrides remain configuration requests rather than substitutes for observed system state.
+
+`--force` now overrides only the governor inside the profile selected from the detected power source. Reading Turbo state no longer consults the configured Turbo override; the override is used only when a value is actually written.
+
+Privileged GTK actions continue to use the existing `pkexec auto-cpufreq ...` backend, but they no longer block the GTK main loop. Every non-zero command status is treated as a failure, including authorization cancellation and other command errors.
+
+Daemon detection can also fall back to the systemd service state when process inspection cannot see the running daemon.
+
+## Monitor refresh lifecycle
+
+GTK Monitor mode and the Urwid monitor collect system information outside their UI loops.
+
+If a refresh is already running, another worker is not started on top of it. Timers and watch pipes are cleaned up when their views exit, and GTK Monitor recommendations reuse the `SystemReport` already collected for that refresh instead of immediately collecting the same information again.
+
+## GTK dashboard
+
+The main GTK window groups the report into:
+
+- System Information
+- CPU Statistics
+- System Statistics
+- Controls
+- CPU Power State
+- Battery
+
+The window is resizable and vertically scrollable. The dashboard can refresh every 1, 2, or 5 seconds, with 2 seconds as the default.
+
+The dashboard layout was adjusted during review to keep the normal 920×680 window more useful without removing scrolling as a fallback for systems with many logical CPUs:
+
+- `System Statistics` is placed below `CPU Statistics` in the left column.
+- `Advanced Settings` is placed next to the hamburger menu at the top-right of `Controls`.
+- Expanding `Advanced Settings` reveals the Bluetooth-on-boot control inside `Controls`.
+- The configuration path stays at the bottom of `Controls`, below the advanced setting when it is expanded.
+- When a configuration file is active, the dashboard displays `Using configuration file: <path>`.
+- When no file is currently active, it still shows the resolved default path as `Configuration file: <path>`.
+
+The normal dashboard and GTK Monitor Mode share the same read-only `SystemReportView` renderer. Monitor Mode adds only its own header, navigation, and Governor/Turbo suggestions, while the normal dashboard adds the interactive controls.
+
+On supported Intel systems, CPU Power State also reports HWP Dynamic Boost, addressing the GTK reporting gap noted after #954.
+
+This keeps system information, CPU statistics, power state, battery information, and system statistics consistent between both views and avoids maintaining a second GTK renderer for the same data.
+
+If the next refresh interval arrives while system information is still being collected, the GUI waits for the current collection instead of starting another worker.
+
+Governor and Turbo changes have a separate transition state. A successful privileged command means that the requested override has been stored; it does not mean that the daemon has already reached its next control cycle and changed the hardware state.
+
+During that interval, the affected CPU Power State row shows `Applying…` instead of immediately restoring an older observed value. A later fresh report returns the row to the governor or Turbo state actually observed from the system.
+
+### Screenshots
+
+**GTK dashboard**
+<img width="924" height="715" alt="GTK dashboard" src="https://github.com/user-attachments/assets/c118a233-5b8b-4ad6-9470-5255f9ef3b58" />
+
+**GTK Monitor Mode**
+<img width="923" height="716" alt="GTK Monitor Mode" src="https://github.com/user-attachments/assets/3ad30ddb-cbef-49ad-8919-e22ef279674d" />
+
+## Legacy status output
+
+The existing live/daemon debug paths now use `print_system_report()` instead of independently calling `distro_info()` and `sysinfo()`.
+
+This removes a second reporting path without changing the surrounding control loop or CLI mode behavior.
+
+## Documentation
+
+The README now documents the GTK dashboard, refresh options, Monitor Mode, and daemon installation path.
+
+The existing README screenshot is intentionally left unchanged so it can be updated separately if the UI changes during review.
+
+## Intentionally unchanged
+
+- The daemon remains responsible for profile selection and kernel writes.
+- `SystemReport` remains a reporting snapshot, not a control engine.
+- `--monitor`, `--live`, and `--stats` remain terminal modes.
+- Missing optional system data is reported as unavailable rather than invented.
+- Governor and Turbo changes still go through the existing auto-cpufreq backend instead of writing sysfs directly from GTK.
+- The separate `--live` / running-daemon guard being handled in #953 is not changed here.
+
+## Validation
+
+Validation performed on this code includes:
+
+- `git diff --check`
+- compilation of the affected Python modules
+- GTK imports with `PyGIWarning` promoted to an error
+- focused synthetic checks for reporting fallbacks, refresh scheduling, monitor cleanup, privileged-command failures, Governor/Turbo transition handling, shared GTK report rendering, shared CPUFreq policies, non-contiguous CPU IDs, and CPU hotplug reporting
+- manual GTK testing of the normal dashboard and Monitor Mode, including shared report rendering, live refresh, scrolling, navigation, and the 1 / 2 / 5 second refresh options
+- manual GTK testing of the review-requested layout, including Advanced Settings closed/open and configuration placement
+- manual Governor and Turbo tests on real hardware, including the `Applying…` state
+- Linux Build and Nix Flake GitHub Actions
+
+No temporary regression-test files are included in the PR history.
+
+## Review structure
+
+The #964-specific work is kept in seven commits:
+
+1. `Harden shared system reporting`
+2. `Align runtime controls and monitor lifecycle`
+3. `Polish GTK dashboard and refresh behavior`
+4. `Share SystemReport with legacy status output`
+5. `Address review findings in runtime reporting`
+6. `Fix CPU reporting across shared policies and hotplug`
+7. `Adjust GTK dashboard layout from review feedback`
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Note to myself: make sure [comment mentioned](https://github.com/AdnanHodzic/auto-cpufreq/pull/954#issuecomment-5337882767) in #962 & #954 is addressed.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Note to myself: #963 merge is required first before reviewing this one.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Note to myself: make sure EBP is [displayed in GUI as mentioned](https://github.com/AdnanHodzic/auto-cpufreq/pull/960#issuecomment-5391138875) in #960</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lucasleocs:</strong></p>
+                    <p>Hi @AdnanHodzic! Regarding EPB, do you want me to keep the same wording as before, like `Setting to use: "balance_power" EPB`?
+
+In #964 I changed it to a simpler `EPB` row with the observed value because I thought it looked cleaner and less confusing in the GTK dashboard, but I can keep the previous wording if you prefer.
+
+Also, if there’s anything else in #964 you’d prefer changed just let me know.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>This looks absolutely great! Thank you for giving GTK/GUI its much needed revamp!
+
+Please take a look at 3 mentioned Copilot suggestions, especially since one of them is "high".
+
+Other then that, I would suggest to make it look like something like this:
+
+<img width="944" height="733" alt="auto-cpufreq gtk revamp" src="https://github.com/user-attachments/assets/20d95e2d-adc9-4b9e-88b1-3c7de017a53f" />
+
+1. Move "Advanced Settings" button next to the "Burger Menu" button.
+2. Move "configuration: /etc/auto-cpufreq.conf" in Controls pane/box in button under CPU Turbo Override. Let's also rename it back to "Using configuration file: /etc/auto-cpufreq.conf" in case it's being used. Alternatively it can also be moved out of "Controls" to its own under "Battery" box.
+3. Move "System Statistics" under "CPU Statistics", the way window won't show scrollbar and it will fit perfectly and "Advanced Settings" button is clicked it'll have more space eto extend below.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lucasleocs:</strong></p>
+                    <p>Updated. I moved Advanced Settings next to the hamburger menu, placed System Statistics below CPU Statistics, and kept the configuration path at the bottom of Controls so it moves down when Advanced Settings is expanded. I tested both the collapsed and expanded layouts locally.
+
+*Updated description with new screenshots.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Perfect, although it's mainly improvements I'll add this to be one of the features of upcoming releases, as it gave GTK a much needed revamp and could be considered as auto-cpufreq GUI v2. I also think it could close some of the exiting GUI related issues.
+
+Regardless, as always, thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> ### 🔵 Needs a closer look
+> Fan-speed handling currently treats valid `0` RPM readings as “missing” due to truthiness/`> 0` checks, which can cause incorrect reporting in both the textual report and GTK view.
+> 
+> Review details
+> ### Suppressed comments (3)
+> **Previously missed (2)** — in code that hasn't changed since the last review.
+> 
+> **auto_cpufreq/modules/system_info.py:433**
+> 
+> * `cpu_fan_speed()` currently ignores a reported fan speed of `0` RPM (because of `if current > 0`). On systems where `0` is a valid reading (fan stopped), this will incorrectly be treated as “no data” and the UI/text report will hide the fan row.
+> 
+> This issue also appears on line 906 of the same file.
+> 
+> ```
+>                 try:
+>                     current = float(fan.current)
+>                 except (AttributeError, TypeError, ValueError):
+>                     continue
+>                 if current > 0:
+>                     return int(current)
+> ```
+> 
+> **auto_cpufreq/gui/app.py:322**
+> 
+> * The GTK report view hides the fan-speed label when the value is `0` because it checks `if report.cpu_fan_speed:`. Use an explicit `is not None` check so `0` RPM (fan stopped) can still be displayed when reported.
+> 
+> ```
+>         if report.cpu_fan_speed:
+> ```
+> 
+> **auto_cpufreq/modules/system_info.py:907**
+> 
+> * The textual system report hides fan speed when it is `0` because it checks `if report.cpu_fan_speed:`. If `cpu_fan_speed` can legitimately be `0`, this should check explicitly for `None` instead of truthiness.
+> 
+> ```
+>     if report.cpu_fan_speed:
+>         lines.extend(["", f"CPU fan speed: {report.cpu_fan_speed} RPM"])
+> ```
+> 
+> * **Files reviewed:** 6/7 changed files
+> * **Comments generated:** 0 new
+> * **Review effort level:** Lite
+
+@lucasleocs nothing major, this is now already merged, but probably a good idea to look into these in of the future PR's.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,287 @@
+
+        <html>
+        <head>
+            <title>Issue #962: Verify and report effective power and frequency settings</title>
+        </head>
+        <body>
+            <h1>Verify and report effective power and frequency settings</h1>
+            <p><strong>Issue #962</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>## Summary
+
+Make auto-cpufreq verify and report the state that the kernel actually accepted after power and CPU frequency writes, instead of assuming that the requested value was applied.
+
+This also makes the user-facing output more explicit about what happened. Settings that are already effective are reported as no-ops rather than being presented as newly applied, successful changes are confirmed from the resulting state, and failed or unverifiable writes include the effective/current state when available.
+
+For example:
+
+```text
+EPP already set to "balance_performance" (no change)
+
+Platform Profile already set to "balanced" (no change)
+
+Maximum CPU frequency request 4500 MHz already in effect
+(effective: 3300-4500 MHz across CPU policies, no change)
+```
+
+This started as follow-up testing after #958. While testing write-failure propagation on real hardware, I found several cases where the helper or Python layer could still report success, show the requested value as if it were current, or misinterpret legitimate CPUFreq clamping across heterogeneous policies.
+
+## Findings
+
+* Some rejected `cpufreqctl.auto-cpufreq` operations could still return success, including invalid EPB values and `--on` / `--off` without a core.
+* EPP, EPB and Platform Profile paths could print the requested value even when the kernel rejected the write or the resulting state did not match it.
+* EPP/EPB reporting sometimes reflected configured intent rather than the actual sysfs state.
+* A single global frequency request can legitimately resolve to different effective values across CPUFreq policies. On the test system, the same 4500 MHz maximum request resulted in 4500 MHz on some policies and 3300 MHz on others because of their different hardware limits.
+* Comparing only one CPU or expecting one global frequency value can therefore report a valid write as failed and can cause unnecessary repeated writes.
+* Partial sysfs reads should not be treated as a verified global state.
+* The main GUI repeated the current governor in two adjacent places, while EPP/EPB labels did not clearly distinguish current state from configured intent.
+
+## What this PR changes
+
+### cpufreqctl helper
+
+* Return non-zero for rejected operations that previously fell through as success.
+* Preserve failure status across multi-CPU writes while continuing to attempt the remaining CPUs.
+* Report the first repeated kernel write error per helper invocation while still returning failure.
+* Validate EPB named and numeric values consistently.
+
+### Effective state verification
+
+* Read back EPP, EPB and Platform Profile after writes before reporting success.
+* Distinguish between settings that were already in effect, settings that were applied, and settings that failed.
+* Report `mixed` when per-CPU EPP/EPB values differ.
+* Treat an unreadable member of a multi-CPU state as unverified instead of silently ignoring it.
+* Keep EPP `default` handling compatible with the kernel exposing a concrete resulting preference.
+
+### CPU frequency limits
+
+* Verify frequency limits per CPUFreq policy instead of assuming every policy has the same hardware ceiling.
+* Account for policy-specific clamping against `cpuinfo_min_freq` / `cpuinfo_max_freq`.
+* Preserve maximum-before-minimum write ordering so transitions remain valid when the kernel clamps one limit against the other.
+* Reject configurations where `scaling_min_freq > scaling_max_freq` before writing anything.
+* Report the effective range when heterogeneous policies resolve the same request differently.
+* Suppress normal frequency no-op messages from daemon stats while keeping interactive output informative.
+* Use argv-based invocation for frequency writes.
+
+### Reporting / GUI
+
+* Read current EPP and EPB from sysfs for system reports.
+* Show `Current EPP` and `Current EPB` in the GUI.
+* Remove the duplicate governor line from the main CPU Frequency Scaling box because the current governor is already shown directly above it.
+
+## Validation
+
+Tested on an Intel Core i3-1315U system with `intel_pstate` active, EPP available, and separate CPUFreq policies for all 8 logical CPUs.
+
+Real hardware tests covered:
+
+* EPP already set / changed / rejected / `default`
+* EPB already set / changed / rejected
+* Platform Profile already set / changed / restored / rejected
+* heterogeneous CPU frequency limits
+* minimum/maximum kernel clamping in both directions
+* rejection of configured `min > max`
+* `intel_pstate/no_turbo=1`
+* daemon execution through the installed project venv
+* GUI reporting after the state-reading changes
+
+The daemon smoke test showed no repeated frequency no-op messages and no failed writes in the normal profile:
+
+```text
+frequency no-op: 0
+frequency apply: 0
+failed:          0
+write errors:    0
+```
+
+Synthetic tests also covered helper failure status, effective-state verification, heterogeneous policy clamping, helper failure with a final correct state, and partial sysfs reads.
+
+Static checks:
+
+```text
+git diff --check: PASS
+python3 -m compileall -q auto_cpufreq: PASS
+bash -n scripts/cpufreqctl.sh: PASS
+```
+
+CI passes both `Linux Build` and `Nix Flake`.
+
+## Related work
+
+This PR is based directly on the current `master`. Potential overlap with #959, #960 and #961 is documented in the follow-up PR comment so that any of them can merge first and this branch can be rebased without changing the intended behavior.
+
+Related: #958, #959, #960, #961.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lucasleocs:</strong></p>
+                    <p>### Interaction with other open PRs
+
+This PR is based directly on the current master and does not include the commits below, but there is overlap in `auto_cpufreq/core.py`:
+
+- #959 (`76920c2`) changes governor/EPP handling for active `intel_pstate` performance mode. If it merges first, its skip-EPP behavior should be preserved together with the write/readback reporting here.
+- #960 (`cfc9331`) changes HWP Dynamic Boost defaults and EPP ordering. If it merges first, the ordering can be reconciled during rebase without changing the reporting semantics here.
+- #961 (`f875711`) converts several configuration-derived power-setting calls from `shell=True` to argv. This PR independently uses argv in overlapping paths because it also needs reliable return codes and readback verification.
+
+If any of these merge first, I can rebase this branch and resolve the overlap while preserving the intended behavior.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Another great optimization attempt and it all looks good, **but one very serious** thing could my attention:
+
+```
+sudo auto-cpufreq --install
+
+--------------------- Deploying auto-cpufreq as a daemon ----------------------
+
+* Turn off Bluetooth on boot (only)!
+  If you want bluetooth enabled on boot run: auto-cpufreq --bluetooth_boot_on
+
+* Deploy auto-cpufreq install script
+
+* Deploy auto-cpufreq remove script
+auto-cpufreq snap package not installed
+GNOME Power Profiles Daemon should be enabled. run:
+
+sudo python3 -m auto_cpufreq.power_helper --gnome_power_enable
+...
+```
+
+This is a serious breaking change that wasn't mentioned anywhere, which I'm surprised by as everything else is described in such high detail above.
+
+```
+GNOME Power Profiles Daemon should be enabled. run:
+
+sudo python3 -m auto_cpufreq.power_helper --gnome_power_enable
+```
+
+This is absolutely not true, as [mentioned in ReadMe](https://github.com/AdnanHodzic/auto-cpufreq#:~:text=The%20GNOME%20Power%20Profiles%20daemon%20is) and [here](https://github.com/AdnanHodzic/auto-cpufreq#1-power_helperpy-script-snap-package-install-only).
+
+Even currently on `master` branch, it'll say this:
+
+```
+sudo auto-cpufreq --install
+
+--------------------- Deploying auto-cpufreq as a daemon ----------------------
+
+* Turn off Bluetooth on boot (only)!
+  If you want bluetooth enabled on boot run: auto-cpufreq --bluetooth_boot_on
+
+* Deploy auto-cpufreq install script
+
+* Deploy auto-cpufreq remove script
+
+----------------------------------- Warning -----------------------------------
+
+Detected running GNOME Power Profiles daemon service!
+
+This daemon might interfere with auto-cpufreq and has been disabled.
+
+This daemon is not automatically disabled in "monitor" mode and
+will be enabled after auto-cpufreq daemon is removed.
+auto-cpufreq snap package installed, GNOME Power Profiles Daemon should be disabled.
+
+Using profile:  balanced
+
+* Disabling GNOME power profiles
+Removed '/etc/systemd/system/graphical.target.wants/power-profiles-daemon.service'.
+Created symlink '/etc/systemd/system/power-profiles-daemon.service' → '/dev/null'.
+```
+
+Hence were you aware of this change/behavior, or did you use AI to create/test this PR? I'm truly puzzled.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lucasleocs:</strong></p>
+                    <p>Hi @AdnanHodzic, thanks for pointing this out. Your comment concerned me, so I went back and carefully traced both the install path and the history of this code.
+
+However, this behavior was not introduced by [#962](https://github.com/AdnanHodzic/auto-cpufreq/pull/962).
+
+`auto_cpufreq/power_helper.py`, which contains the message you quoted and the `gnome_power_svc_disable()` implementation, is not modified by this PR.
+
+[#962](https://github.com/AdnanHodzic/auto-cpufreq/pull/962) only changes:
+
+```text
+auto_cpufreq/core.py
+auto_cpufreq/gui/objects.py
+auto_cpufreq/modules/system_info.py
+scripts/cpufreqctl.sh
+```
+
+I also checked the indirect install path because `core.py` is modified by this PR. `deploy_daemon()` is unchanged between the PR base and #962, including:
+
+```python
+gnome_power_detect_install()
+gnome_power_svc_disable()
+```
+
+I then traced the history of the code that produces the message.
+
+The exact `sudo python3 -m auto_cpufreq.power_helper --gnome_power_enable` wording was introduced in #836 in April 2025 and released in [v2.6.0](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v2.6.0). That PR changed the existing `python3 power_helper.py` instructions to use module invocation, while the underlying code path and message predate that change.
+
+The same code path is still present in the current [master](https://github.com/AdnanHodzic/auto-cpufreq/blame/master/auto_cpufreq/power_helper.py).
+I do use AI assistance as part of development and review, but the hardware tests described in this PR were actually run by me. In this case, the behavior you found comes from unchanged upstream code rather than from the changes introduced by #962.
+
+I'm also working on the larger #964  draft, where I had already replaced this legacy detection path with a direct service-state check, which also removes this behavior.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@lucasleocs thank you for your thorough reply and my apologizes! It seems I had some leftover changes or something else interfering, especially since I was the one who made changes in #836. After I removed this branch and re-fetched it's all reporting as it should:
+
+```
+sudo auto-cpufreq --install
+
+--------------------- Deploying auto-cpufreq as a daemon ----------------------
+
+* Turn off Bluetooth on boot (only)!
+  If you want bluetooth enabled on boot run: auto-cpufreq --bluetooth_boot_on
+
+* Deploy auto-cpufreq install script
+
+* Deploy auto-cpufreq remove script
+
+----------------------------------- Warning -----------------------------------
+
+Detected running GNOME Power Profiles daemon service!
+
+This daemon might interfere with auto-cpufreq and has been disabled.
+
+This daemon is not automatically disabled in "monitor" mode and
+will be enabled after auto-cpufreq daemon is removed.
+auto-cpufreq snap package installed, GNOME Power Profiles Daemon should be disabled.
+
+Using profile:  balanced
+
+* Disabling GNOME power profiles
+Removed '/etc/systemd/system/graphical.target.wants/power-profiles-daemon.service'.
+Created symlink '/etc/systemd/system/power-profiles-daemon.service' → '/dev/null'.
+```
+
+Nothing more to add related to changes made to code.
+
+Only other comment I have is [the same one ](https://github.com/AdnanHodzic/auto-cpufreq/pull/954#issuecomment-5337882767) I made in #954 
+
+As compared to CLI output, in "CPU Frequency Scaling" section in GTK/GUI doesn't output Intel HWP Dynamic Boost status or even which governor it's using. 
+
+But I saw you made more PR's and some related specifically to GTK/GUI and we can pick this discussion there.
+
+Otherwise, thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lucasleocs:</strong></p>
+                    <p>@AdnanHodzic No problem at all! Thanks for taking the time to double-check it. I really like your project. My laptop used to sound like a hair dryer, and now it's so much quieter, so I'm glad to contribute at least a little.
+
+And thank you again for the careful review and for helping the community!
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

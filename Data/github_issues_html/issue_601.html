@@ -185,14 +185,14 @@ It's also very possible with our current design with [poetry](https://python-poe
                 </div>
             
                 <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
-                    <p><strong>CanglanXYA:</strong></p>
+                    <p><strong>Meeks233:</strong></p>
                     <p>Fedora 39 workstation is also suffering from similar install failure while generating the package metadata.
 
 When "raise RuntimeError", it replys that "This does not appear to be a Git project"</p>
                 </div>
             
                 <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
-                    <p><strong>CanglanXYA:</strong></p>
+                    <p><strong>Meeks233:</strong></p>
                     <p>> > A more permanent fix would be to separare the two packages and let the user decide if it actually wants the GTK interface.
 > 
 > I kind-of agree with this. In future, can we go on with opt-in based design, handling GUI and CLI separately? This may in a way solve the dependency loophole for multiple users at once and might also decrease installation time (building wheels for PyGObject takes a while).
@@ -488,6 +488,16 @@ format = "v{base}+{commit}"
                 <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
                     <p><strong>AdnanHodzic:</strong></p>
                     <p>Closed as part of #822 </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>drasch:</strong></p>
+                    <p>Original error still occurs for me on Silverblue 43:
+
+```
+cp: cannot create regular file '/usr/share/pixmaps/auto-cpufreq.png': Read-only file system
+cp: cannot create regular file '/usr/share/polkit-1/actions/org.auto-cpufreq.pkexec.policy': Read-only file system
+```</p>
                 </div>
             
             </div>

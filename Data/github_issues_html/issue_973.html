@@ -1,0 +1,246 @@
+
+        <html>
+        <head>
+            <title>Issue #973: Unable to install auto-cpufreq daemon due to missing activation file</title>
+        </head>
+        <body>
+            <h1>Unable to install auto-cpufreq daemon due to missing activation file</h1>
+            <p><strong>Issue #973</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+Yes
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+No
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+No
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+No
+
+### Error output:
+sudo ./auto-cpufreq-installer --install
+───────────────────────────────── Detected Debian based distribution ─────────────────────────────────
+
+
+──────────────────────────────────── Setting up Python environment ────────────────────────────────────
+Hit:1 https://brave-browser-apt-release.s3.brave.com stable InRelease
+Hit:2 https://packages.microsoft.com/repos/vscode stable InRelease                                     
+Hit:3 https://packages.microsoft.com/repos/code stable InRelease                                       
+Hit:4 http://archive.ubuntu.com/ubuntu jammy InRelease                                                 
+Get:5 https://mega.nz/linux/repo/xUbuntu_22.04 ./ InRelease [2,967 B]                                  
+Hit:6 https://ppa.launchpadcontent.net/yannubuntu/boot-repair/ubuntu jammy InRelease                   
+Hit:7 http://archive.ubuntu.com/ubuntu jammy-updates InRelease                                       
+Ign:8 https://www.scootersoftware.com/debian bcompare5 InRelease              
+Hit:9 https://www.scootersoftware.com/debian bcompare5 Release
+Fetched 2,967 B in 1s (2,807 B/s)
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+3 packages can be upgraded. Run 'apt list --upgradable' to see them.
+N: Skipping acquire of configured file 'main/binary-i386/Packages' as repository 'https://brave-browser-apt-release.s3.brave.com stable InRelease' doesn't support architecture 'i386'
+W: https://packages.microsoft.com/repos/vscode/dists/stable/InRelease: Key is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details.
+PyGObject version updated to 3.50.0 in pyproject.toml
+Installing libgirepository1.0-dev for Debian version bookworm/sid...
+
+---- 
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+gcc is already the newest version (4:11.2.0-1ubuntu1).
+libgirepository1.0-dev is already the newest version (1.72.0-1).
+dmidecode is already the newest version (3.3-3ubuntu0.2).
+dmidecode set to manually installed.
+libcairo2-dev is already the newest version (1.16.0-5ubuntu2.1).
+libgtk-3-dev is already the newest version (3.24.33-1ubuntu2.2).
+python3-dev is already the newest version (3.10.6-1~22.04.1).
+python3-gi is already the newest version (3.42.1-0ubuntu1).
+python3-gi set to manually installed.
+python3-setuptools is already the newest version (59.6.0-1.2ubuntu0.22.04.3).
+python3-setuptools set to manually installed.
+python3-pip is already the newest version (22.0.2+dfsg-1ubuntu0.3).
+Some packages could not be installed. This may mean that you have
+requested an impossible situation or if you are using the unstable
+distribution that some required packages have not yet been created
+or been moved out of Incoming.
+The following information may help to resolve the situation:
+
+The following packages have unmet dependencies:
+ python3-venv : Depends: python3.10-venv (>= 3.10.4-1~) but it is not going to be installed
+                Depends: python3 (= 3.10.4-0ubuntu2) but 3.10.6-1~22.04.1 is to be installed
+E: Unable to correct problems, you have held broken packages.
+
+──────────────────────────────── Installing necessary Python packages ────────────────────────────────
+
+The virtual environment was not created successfully because ensurepip is not
+available.  On Debian/Ubuntu systems, you need to install the python3-venv
+package using the following command.
+
+    apt install python3.10-venv
+
+You may need to use sudo with that command.  After installing the python3-venv
+package, recreate your virtual environment.
+
+Failing command: /opt/auto-cpufreq/venv/bin/python3
+
+./auto-cpufreq-installer: line 165: /opt/auto-cpufreq/venv/bin/activate: No such file or directory
+Requirement already satisfied: pip in /usr/local/lib/python3.10/dist-packages (26.2.1)
+Requirement already satisfied: wheel in /usr/local/lib/python3.10/dist-packages (0.48.0)
+Requirement already satisfied: packaging>=24.0 in /usr/local/lib/python3.10/dist-packages (from wheel) (26.3)
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+Requirement already satisfied: PyGObject==3.50.0 in /usr/local/lib/python3.10/dist-packages (3.50.0)
+Requirement already satisfied: pycairo>=1.16 in /usr/lib/python3/dist-packages (from PyGObject==3.50.0) (1.20.1)
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+
+──────────────────────────────────── Installing auto-cpufreq tool ────────────────────────────────────
+
+Processing ./.
+  Installing build dependencies ... done
+  Getting requirements to build wheel ... done
+  Preparing metadata (pyproject.toml) ... done
+Requirement already satisfied: click<9.0.0,>=8.1.0 in /usr/local/lib/python3.10/dist-packages (from auto-cpufreq==3.1.0+b3bf104) (8.5.0)
+Requirement already satisfied: distro<2.0.0,>=1.8.0 in /usr/local/lib/python3.10/dist-packages (from auto-cpufreq==3.1.0+b3bf104) (1.9.0)
+Requirement already satisfied: psutil<8.0.0,>=6.0.0 in /usr/local/lib/python3.10/dist-packages (from auto-cpufreq==3.1.0+b3bf104) (7.2.2)
+Requirement already satisfied: pyasyncore<2.0.0,>=1.0.4 in /usr/local/lib/python3.10/dist-packages (from auto-cpufreq==3.1.0+b3bf104) (1.0.5)
+Collecting pyinotify @ git+https://github.com/shadeyg56/pyinotify-3.12 (from auto-cpufreq==3.1.0+b3bf104)
+  Cloning https://github.com/shadeyg56/pyinotify-3.12 to /tmp/pip-install-f7n0qn3l/pyinotify_be42896bfba542f68ce38ea90401fd59
+  Running command git clone --filter=blob:none --quiet https://github.com/shadeyg56/pyinotify-3.12 /tmp/pip-install-f7n0qn3l/pyinotify_be42896bfba542f68ce38ea90401fd59
+  Resolved https://github.com/shadeyg56/pyinotify-3.12 to commit 271b7aba3269116b6c3870355393f47c79bce146
+  Installing build dependencies ... done
+  Getting requirements to build wheel ... done
+  Preparing metadata (pyproject.toml) ... done
+Requirement already satisfied: requests<3.0.0,>=2.32.4 in /usr/local/lib/python3.10/dist-packages (from auto-cpufreq==3.1.0+b3bf104) (2.34.2)
+Requirement already satisfied: urwid<4.0.0,>=3.0.2 in /usr/local/lib/python3.10/dist-packages (from auto-cpufreq==3.1.0+b3bf104) (3.0.5)
+Requirement already satisfied: charset_normalizer<4,>=2 in /usr/local/lib/python3.10/dist-packages (from requests<3.0.0,>=2.32.4->auto-cpufreq==3.1.0+b3bf104) (3.5.1)
+Requirement already satisfied: idna<4,>=2.5 in /usr/lib/python3/dist-packages (from requests<3.0.0,>=2.32.4->auto-cpufreq==3.1.0+b3bf104) (3.3)
+Requirement already satisfied: urllib3<3,>=1.26 in /usr/lib/python3/dist-packages (from requests<3.0.0,>=2.32.4->auto-cpufreq==3.1.0+b3bf104) (1.26.5)
+Requirement already satisfied: certifi>=2023.5.7 in /usr/local/lib/python3.10/dist-packages (from requests<3.0.0,>=2.32.4->auto-cpufreq==3.1.0+b3bf104) (2026.7.22)
+Requirement already satisfied: wcwidth>=0.4 in /usr/local/lib/python3.10/dist-packages (from urwid<4.0.0,>=3.0.2->auto-cpufreq==3.1.0+b3bf104) (0.8.3)
+Building wheels for collected packages: auto-cpufreq
+  Building wheel for auto-cpufreq (pyproject.toml) ... done
+  Created wheel for auto-cpufreq: filename=auto_cpufreq-3.1.0+b3bf104-py3-none-any.whl size=84957 sha256=cc6da827443a0dfb8a81c6306a2016b45e886fc342184e8775c88521577057ba
+  Stored in directory: /tmp/pip-ephem-wheel-cache-covx1ndh/wheels/3e/6d/6e/402eaaab85b99006a1142fabbb65e54b4d666fa0c01122c916
+Successfully built auto-cpufreq
+Installing collected packages: auto-cpufreq
+  Attempting uninstall: auto-cpufreq
+    Found existing installation: auto-cpufreq 3.1.0+b3bf104
+    Uninstalling auto-cpufreq-3.1.0+b3bf104:
+      Successfully uninstalled auto-cpufreq-3.1.0+b3bf104
+Successfully installed auto-cpufreq-3.1.0+b3bf104
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+
+────────────────────────────── auto-cpufreq tool successfully installed ──────────────────────────────
+
+For list of options, run:
+auto-cpufreq --help
+
+sudo auto-cpufreq --install
+/usr/local/bin/auto-cpufreq: line 15: /opt/auto-cpufreq/venv/bin/activate: No such file or directory
+```
+---
+
+### System information:
+sudo auto-cpufreq --debug
+/usr/local/bin/auto-cpufreq: line 15: /opt/auto-cpufreq/venv/bin/activate: No such file or directory
+```
+
+Context:
+After running the installer script, I am unable to find the 'activate' script. Hence the tool GUI works in Monitor mode but I am unable to install its daemon. Rebooting my machine doesn't work. I have also attached screenshots for your reference. Do you recommend me to use the Snap installation instead?
+
+Thanks a lot for trying to help me out!
+
+<img width="913" height="614" alt="Image" src="https://github.com/user-attachments/assets/5489b0eb-4e35-4424-8f82-5228265e0fa6" />
+
+<img width="920" height="468" alt="Image" src="https://github.com/user-attachments/assets/8fd9e28e-42d5-406f-95ea-7b2e34eb8640" />
+
+<img width="599" height="193" alt="Image" src="https://github.com/user-attachments/assets/8535d373-5403-4843-8ff8-8e2dae7b964d" />
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@lucasleocs I was about to ask if this be related to what was merged as part of #972 ...
+
+But then I see error seems to occurs due to a broken/mismatched APT package dependency on Ubuntu 22.04 (Jammy), which triggers a chain reaction preventing the Python virtual environment from being created.
+
+```
+The following packages have unmet dependencies:
+python3-venv : Depends: python3.10-venv (>= 3.10.4-1~) but it is not going to be installed
+               Depends: python3 (= 3.10.4-0ubuntu2) but 3.10.6-1~22.04.1 is to be installed
+E: Unable to correct problems, you have held broken packages.
+```
+
+The user's system has an upgraded python3 package (3.10.6-1~22.04.1), but APT is either holding packages or trying to resolve python3-venv against the base release version (3.10.4-0ubuntu2). Because of this conflict, python3-venv fails to install. On Debian/Ubuntu, Python requires python3-venv / python3.10-venv (specifically `ensurepip`) to initialize virtual environments. Because step 1 failed, Python aborts without creating the venv.
+
+`activate` script is missing: Because the virtual environment was never created, `/opt/auto-cpufreq/venv/bin/activate` does not exist. When the user subsequently executes auto-cpufreq (which is a wrapper script `scripts/auto-cpufreq-venv-wrapper`), line 15 fails immediately:
+
+```
+. "$venv_bin_dir/activate"  # -> /opt/auto-cpufreq/venv/bin/activate: No such file or directory
+```
+
+This error doesn't have to do anything with auto-cpufreq. Instead you need to fix the system APT dependencies and reinstall:
+
+```
+# Update package indices and upgrade packages to resolve version mismatches
+sudo apt update
+sudo apt --fix-broken install
+sudo apt upgrade -y
+
+# Explicitly install the python3 venv package for Python 3.10
+sudo apt install -y python3.10-venv python3-venv
+
+# Re-run the auto-cpufreq installer
+sudo ./auto-cpufreq-installer --install
+```
+
+Alternatively, you can always [install using Snap](https://github.com/AdnanHodzic/auto-cpufreq#snap-store), but then you won't have the GUI due to its restrictions. 
+
+@Alen-Issac-Cherian  before anything, make sure you have latest git changes, that GUI doesn't look up2date ...</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lucasleocs:</strong></p>
+                    <p>Thanks for pointing this out. I opened #975 to address the auto-cpufreq side of this failure mode.
+
+It does not try to repair the broken or mismatched APT state itself, but the source installer now stops immediately if dependency installation or virtual-environment creation fails. This prevents it from continuing past a failed step and eventually reporting a successful installation while` /opt/auto-cpufreq/venv `does not exist.
+
+#975 also adds version metadata to GitHub source archives. If merged, future releases containing these changes can be installed from an extracted `.zip` or `.tar.gz` archive without requiring Git history (`sudo ./auto-cpufreq-installer`).
+
+I validated these fixes on Linux Mint 22.3 using both a normal Git checkout and a GitHub-generated source archive without `.git`.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Thanks for pointing this out. I opened [#975](https://github.com/AdnanHodzic/auto-cpufreq/pull/975) to address the auto-cpufreq side of this failure mode.
+> 
+> It does not try to repair the broken or mismatched APT state itself, but the source installer now stops immediately if dependency installation or virtual-environment creation fails. This prevents it from continuing past a failed step and eventually reporting a successful installation while`/opt/auto-cpufreq/venv`does not exist.
+> 
+> [#975](https://github.com/AdnanHodzic/auto-cpufreq/pull/975) also adds version metadata to GitHub source archives. If merged, future releases containing these changes can be installed from an extracted `.zip` or `.tar.gz` archive without requiring Git history (`sudo ./auto-cpufreq-installer`).
+> 
+> I validated these fixes on Linux Mint 22.3 using both a normal Git checkout and a GitHub-generated source archive without `.git`.
+
+Great stuff @lucasleocs! In this case I'll set to close this issue with merge #975, as broken APT state has nothing to do with auto-cpufreq.
+
+@Alen-Issac-Cherian I recommend you try upgrading to 26.04, hoping APT issues will be fixed in process after which you can try installing auto-cpufreq again.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Closed as part of work in #975</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Alen-Issac-Cherian:</strong></p>
+                    <p>@AdnanHodzic,
+Thanks a lot for addressing this issue. I am currently using Ubuntu 24.04 LTS. I have decided to use auto-cpufreq sometime later. </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

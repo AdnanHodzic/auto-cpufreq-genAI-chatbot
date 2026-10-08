@@ -1,0 +1,394 @@
+
+        <html>
+        <head>
+            <title>Issue #936: Preparing metadata (pyproject.toml) did not run successfully.│exit code: 1 (note: This error originates from a subprocess, and is likely not a problem with pip. error: metadata-generation-failed)</title>
+        </head>
+        <body>
+            <h1>Preparing metadata (pyproject.toml) did not run successfully.│exit code: 1 (note: This error originates from a subprocess, and is likely not a problem with pip. error: metadata-generation-failed)</h1>
+            <p><strong>Issue #936</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+#### Before submitting an issue, it is strongly recommended to use the **[auto-cpufreq-genAI-chatbot](https://foolcontrol.org/?p=4903)** to get an immediate answer to your question.
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+### Error output:
+cl@clthinkpad:~/.local/share/Trash/files/auto-cpufreq-3.0.0$ sudo /home/cl/Downloads/auto-cpufreq-3.0.0/auto-cpufreq-installer
+[sudo] password for cl: 
+
+────────────────────────────────── auto-cpufreq installer ──────────────────────────────────
+
+Welcome to auto-cpufreq tool installer.
+
+Select a key [I]nstall/[R]emove or press ctrl+c to quit: i
+
+
+──────────────────────────── Detected Debian based distribution ────────────────────────────
+
+
+─────────────────────────────── Setting up Python environment ───────────────────────────────
+
+Réception de :1 file:/var/lib/preinstalled-pool noble InRelease
+Ign :1 file:/var/lib/preinstalled-pool noble InRelease
+Réception de :2 file:/var/lib/preinstalled-pool noble Release [3 949 B]
+Réception de :2 file:/var/lib/preinstalled-pool noble Release [3 949 B]
+Réception de :3 http://archive.neon.kde.org/user noble InRelease [203 kB]                     
+Atteint :4 http://archive.ubuntu.com/ubuntu noble InRelease                                   
+Atteint :5 http://security.ubuntu.com/ubuntu noble-security InRelease                         
+Réception de :6 https://repo.steampowered.com/steam stable InRelease [3 622 B]                
+Atteint :8 http://archive.ubuntu.com/ubuntu noble-updates InRelease                           
+Atteint :9 https://ppa.launchpadcontent.net/cappelikan/ppa/ubuntu noble InRelease             
+Atteint :10 https://dl.jami.net/stable/ubuntu_24.04 jami InRelease                            
+Atteint :11 https://ppa.launchpadcontent.net/danielrichter2007/grub-customizer/ubuntu noble InRelease
+Atteint :12 https://ppa.launchpadcontent.net/kisak/kisak-mesa/ubuntu noble InRelease          
+Atteint :13 https://ppa.launchpadcontent.net/savoury1/pipewire/ubuntu noble InRelease  
+Atteint :14 https://packages.mozilla.org/apt mozilla InRelease                         
+Atteint :15 https://pkgs.zabbly.com/kernel/stable noble InRelease                      
+Err :9 https://ppa.launchpadcontent.net/cappelikan/ppa/ubuntu noble InRelease
+  Les signatures suivantes n'ont pas pu être vérifiées car la clé publique n'est pas disponible : NO_PUBKEY A89D7C1B2F76304D
+Err :11 https://ppa.launchpadcontent.net/danielrichter2007/grub-customizer/ubuntu noble InRelease
+  Les signatures suivantes n'ont pas pu être vérifiées car la clé publique n'est pas disponible : NO_PUBKEY 14BEBC7363BDC51E NO_PUBKEY A8AA1FAA3F055C03
+Err :12 https://ppa.launchpadcontent.net/kisak/kisak-mesa/ubuntu noble InRelease
+  Les signatures suivantes n'ont pas pu être vérifiées car la clé publique n'est pas disponible : NO_PUBKEY F63F0F2B90935439
+Err :13 https://ppa.launchpadcontent.net/savoury1/pipewire/ubuntu noble InRelease
+  Les signatures suivantes n'ont pas pu être vérifiées car la clé publique n'est pas disponible : NO_PUBKEY 374C7797FB006459
+207 ko réceptionnés en 2s (105 ko/s)
+Updating KDE neon pins... Done
+Lecture des listes de paquets... Fait
+Construction de l'arbre des dépendances... Fait
+Lecture des informations d'état... Fait      
+Tous les paquets sont à jour.
+W: Le fichier configuré « main/binary-i386/Packages » ne sera pas pris en compte car le dépôt « file:/var/lib/preinstalled-pool noble InRelease » ne semble pas capable de le fournir (erreur de saisie dans sources.list ?)
+W: Le fichier configuré « restricted/binary-i386/Packages » ne sera pas pris en compte car le dépôt « file:/var/lib/preinstalled-pool noble InRelease » ne semble pas capable de le fournir (erreur de saisie dans sources.list ?)
+W: Le fichier configuré « universe/binary-i386/Packages » ne sera pas pris en compte car le dépôt « file:/var/lib/preinstalled-pool noble InRelease » ne semble pas capable de le fournir (erreur de saisie dans sources.list ?)
+W: Le fichier configuré « multiverse/binary-i386/Packages » ne sera pas pris en compte car le dépôt « file:/var/lib/preinstalled-pool noble InRelease » ne semble pas capable de le fournir (erreur de saisie dans sources.list ?)
+W: Une erreur s'est produite lors du contrôle de la signature. Le dépôt n'est pas mis à jour et les fichiers d'index précédents seront utilisés. Erreur de GPG : https://ppa.launchpadcontent.net/cappelikan/ppa/ubuntu noble InRelease : Les signatures suivantes n'ont pas pu être vérifiées car la clé publique n'est pas disponible : NO_PUBKEY A89D7C1B2F76304D
+W: Une erreur s'est produite lors du contrôle de la signature. Le dépôt n'est pas mis à jour et les fichiers d'index précédents seront utilisés. Erreur de GPG : https://ppa.launchpadcontent.net/danielrichter2007/grub-customizer/ubuntu noble InRelease : Les signatures suivantes n'ont pas pu être vérifiées car la clé publique n'est pas disponible : NO_PUBKEY 14BEBC7363BDC51E NO_PUBKEY A8AA1FAA3F055C03
+W: Une erreur s'est produite lors du contrôle de la signature. Le dépôt n'est pas mis à jour et les fichiers d'index précédents seront utilisés. Erreur de GPG : https://ppa.launchpadcontent.net/kisak/kisak-mesa/ubuntu noble InRelease : Les signatures suivantes n'ont pas pu être vérifiées car la clé publique n'est pas disponible : NO_PUBKEY F63F0F2B90935439
+W: Une erreur s'est produite lors du contrôle de la signature. Le dépôt n'est pas mis à jour et les fichiers d'index précédents seront utilisés. Erreur de GPG : https://ppa.launchpadcontent.net/savoury1/pipewire/ubuntu noble InRelease : Les signatures suivantes n'ont pas pu être vérifiées car la clé publique n'est pas disponible : NO_PUBKEY 374C7797FB006459
+W: Impossible de récupérer https://ppa.launchpadcontent.net/cappelikan/ppa/ubuntu/dists/noble/InRelease  Les signatures suivantes n'ont pas pu être vérifiées car la clé publique n'est pas disponible : NO_PUBKEY A89D7C1B2F76304D
+W: Impossible de récupérer https://ppa.launchpadcontent.net/danielrichter2007/grub-customizer/ubuntu/dists/noble/InRelease  Les signatures suivantes n'ont pas pu être vérifiées car la clé publique n'est pas disponible : NO_PUBKEY 14BEBC7363BDC51E NO_PUBKEY A8AA1FAA3F055C03
+W: Impossible de récupérer https://ppa.launchpadcontent.net/kisak/kisak-mesa/ubuntu/dists/noble/InRelease  Les signatures suivantes n'ont pas pu être vérifiées car la clé publique n'est pas disponible : NO_PUBKEY F63F0F2B90935439
+W: Impossible de récupérer https://ppa.launchpadcontent.net/savoury1/pipewire/ubuntu/dists/noble/InRelease  Les signatures suivantes n'ont pas pu être vérifiées car la clé publique n'est pas disponible : NO_PUBKEY 374C7797FB006459
+W: Le téléchargement de quelques fichiers d'index a échoué, ils ont été ignorés, ou les anciens ont été utilisés à la place.
+N: Missing Signed-By in the sources.list(5) entry for 'https://ppa.launchpadcontent.net/kisak/kisak-mesa/ubuntu'
+PyGObject version updated to ^3.50.0 in pyproject.toml
+libgirepository-2.0-dev needs to be installed for version trixie/sid
+---- 
+Lecture des listes de paquets... Fait
+Construction de l'arbre des dépendances... Fait
+Lecture des informations d'état... Fait      
+python3-dev est déjà la version la plus récente (3.12.3-0ubuntu2.1).
+python3-pip est déjà la version la plus récente (24.0+dfsg-1ubuntu1.3).
+python3-venv est déjà la version la plus récente (3.12.3-0ubuntu2.1).
+python3-setuptools est déjà la version la plus récente (78.1.1-0.1+24.04+noble+release+build2).
+dmidecode est déjà la version la plus récente (3.5-3ubuntu0.1).
+libgirepository-2.0-dev est déjà la version la plus récente (2.80.0-6ubuntu3.8).
+libcairo2-dev est déjà la version la plus récente (1.18.0-3build1).
+libgtk-3-dev est déjà la version la plus récente (3.24.41-4ubuntu1.3).
+gcc est déjà la version la plus récente (4:13.2.0-7ubuntu1).
+python3-gi est déjà la version la plus récente (3.48.2-1).
+Starting pkgProblemResolver with broken count: 0
+Starting 2 pkgProblemResolver with broken count: 0
+Done
+0 mis à jour, 0 nouvellement installés, 0 à enlever et 0 non mis à jour.
+
+─────────────────────────── Installing necessary Python packages ───────────────────────────
+
+Requirement already satisfied: pip in /opt/auto-cpufreq/venv/lib/python3.12/site-packages (24.0)
+Collecting pip
+  Using cached pip-26.0.1-py3-none-any.whl.metadata (4.7 kB)
+Requirement already satisfied: wheel in /usr/lib/python3/dist-packages (0.42.0)
+Collecting wheel
+  Using cached wheel-0.46.3-py3-none-any.whl.metadata (2.4 kB)
+Requirement already satisfied: packaging>=24.0 in /usr/lib/python3/dist-packages (from wheel) (24.2)
+Using cached pip-26.0.1-py3-none-any.whl (1.8 MB)
+Using cached wheel-0.46.3-py3-none-any.whl (30 kB)
+Installing collected packages: wheel, pip
+  Attempting uninstall: wheel
+    Found existing installation: wheel 0.42.0
+    Not uninstalling wheel at /usr/lib/python3/dist-packages, outside environment /opt/auto-cpufreq/venv
+    Can't uninstall 'wheel'. No files were found to uninstall.
+  Attempting uninstall: pip
+    Found existing installation: pip 24.0
+    Uninstalling pip-24.0:
+      Successfully uninstalled pip-24.0
+Successfully installed pip-26.0.1 wheel-0.46.3
+Requirement already satisfied: PyGObject in /usr/lib/python3/dist-packages (3.48.2)
+
+─────────────────────────────── Installing auto-cpufreq tool ───────────────────────────────
+
+Processing ./.
+  Installing build dependencies ... done
+  Getting requirements to build wheel ... done
+  Preparing metadata (pyproject.toml) ... error
+  error: subprocess-exited-with-error
+  
+  × Preparing metadata (pyproject.toml) did not run successfully.
+  │ exit code: 1
+  ╰─> [35 lines of output]
+      Traceback (most recent call last):
+        File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 389, in <module>
+          main()
+        File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 373, in main
+          json_out["return_val"] = hook(**hook_input["kwargs"])
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        File "/opt/auto-cpufreq/venv/lib/python3.12/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 175, in prepare_metadata_for_build_wheel
+          return hook(metadata_directory, config_settings)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        File "/tmp/pip-build-env-msziy402/overlay/lib/python3.12/site-packages/poetry/core/masonry/api.py", line 42, in prepare_metadata_for_build_wheel
+          poetry = Factory().create_poetry(Path().resolve(), with_groups=False)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        File "/tmp/pip-build-env-msziy402/overlay/lib/python3.12/site-packages/poetry_dynamic_versioning/patch.py", line 26, in alt_poetry_create
+          name = _get_and_apply_version(
+                 ^^^^^^^^^^^^^^^^^^^^^^^
+        File "/tmp/pip-build-env-msziy402/overlay/lib/python3.12/site-packages/poetry_dynamic_versioning/__init__.py", line 744, in _get_and_apply_version
+          version, instance = _get_version(config, name)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+        File "/tmp/pip-build-env-msziy402/overlay/lib/python3.12/site-packages/poetry_dynamic_versioning/__init__.py", line 551, in _get_version
+          version = _get_version_from_dunamai(vcs, pattern, config)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        File "/tmp/pip-build-env-msziy402/overlay/lib/python3.12/site-packages/poetry_dynamic_versioning/__init__.py", line 510, in _get_version_from_dunamai
+          return Version.from_vcs(
+                 ^^^^^^^^^^^^^^^^^
+        File "/tmp/pip-build-env-msziy402/overlay/lib/python3.12/site-packages/dunamai/__init__.py", line 2185, in from_vcs
+          return cls._do_vcs_callback(
+                 ^^^^^^^^^^^^^^^^^^^^^
+        File "/tmp/pip-build-env-msziy402/overlay/lib/python3.12/site-packages/dunamai/__init__.py", line 2243, in _do_vcs_callback
+          return callback(**kwargs)
+                 ^^^^^^^^^^^^^^^^^^
+        File "/tmp/pip-build-env-msziy402/overlay/lib/python3.12/site-packages/dunamai/__init__.py", line 1172, in from_git
+          _detect_vcs(vcs, path)
+        File "/tmp/pip-build-env-msziy402/overlay/lib/python3.12/site-packages/dunamai/__init__.py", line 392, in _detect_vcs
+          raise RuntimeError("This does not appear to be a {} project".format(expected_vcs.value.title()))
+      RuntimeError: This does not appear to be a Git project
+      [end of output]
+  
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+error: metadata-generation-failed
+
+× Encountered error while generating package metadata.
+╰─> from file:///home/cl/Downloads/auto-cpufreq-3.0.0
+
+note: This is an issue with the package mentioned above, not pip.
+hint: See above for details.
+
+───────────────────────── auto-cpufreq tool successfully installed ─────────────────────────
+
+For list of options, run:
+auto-cpufreq --help
+
+
+
+### System information:
+
+Operating System: KDE neon User Edition
+KDE Plasma Version: 6.6.3
+KDE Frameworks Version: 6.24.0
+Qt Version: 6.10.2
+Kernel Version: 6.19.11-zabbly+ (64-bit)
+Graphics Platform: Wayland
+Processors: 8 × Intel® Core™ i5-8250U CPU @ 1.60GHz
+Memory: 16 Gio of RAM (15.5 Gio usable)
+Graphics Processor: Intel® UHD Graphics 620
+Manufacturer: LENOVO
+Product Name: 20LXS45K00
+System Version: ThinkPad L580
+
+cl@clthinkpad:~$ auto-cpufreq --debug
+/opt/auto-cpufreq/venv/bin/python: can't open file '/opt/auto-cpufreq/venv/bin/auto-cpufreq': [Errno 2] No such file or directory
+
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+i just expected it to work but it didn't worked as planned... this may be a only me problem but it's unlikely it...
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>FrostKnight:</strong></p>
+                    <p>I have the same exact bug
+
+T480s thinkpad
+same graphics processor
+using devuan 6, excalibur
+same manufacturer 
+xlibre graphics platform
+32GB of ram
+jwm window manager with jwmkit menubar, etc...
+linux-libre-lts 6.18.37
+
+not sure what qt version and not sure what product name
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>clem691:</strong></p>
+                    <p>> I have the same exact bug
+> 
+> T480s thinkpad same graphics processor using devuan 6, excalibur same manufacturer xlibre graphics platform 32GB of ram jwm window manager with jwmkit menubar, etc... linux-libre-lts 6.18.37
+> 
+> not sure what qt version and not sure what product name
+
+yeah it's strange and the dev of the app are not active as much, strange...</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>
+> yeah it's strange and the dev of the app are not active as much, strange...
+
+I'm still active, and for a matter of a fact I'm planning to make a new auto-cpufreq release in upcoming few days. 
+
+You just need to remember there are [125 contributors](https://github.com/AdnanHodzic/auto-cpufreq/graphs/contributors) to this project, that made a lot of its additional features. Many of whom are no longer active after their changes were merged.
+
+Your problem is related to this single line:
+
+```
+libgirepository-2.0-dev needs to be installed for version trixie/sid
+```
+
+Your distro is not properly detected (on the list) and it seems like it fails to install that package, [I made changes for this as part of 2.6 release](https://github.com/AdnanHodzic/auto-cpufreq/releases) as part of #826. I was very verbose in changes I made there, so if you look at what I did there you can easily make changes for your distro. 
+
+As I've been saying same thing for years now :) 
+
+Since I'm limited with available time to do this myself and [project is looking for contributors](https://github.com/AdnanHodzic/auto-cpufreq#looking-for-developers-and-co-maintainers) if you or anyone else wants to give it a try [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>FrostKnight:</strong></p>
+                    <p>> > yeah it's strange and the dev of the app are not active as much, strange...
+> 
+> I'm still active, and for a matter of a fact I'm planning to make a new auto-cpufreq release in upcoming few days.
+> 
+> You just need to remember there are [125 contributors](https://github.com/AdnanHodzic/auto-cpufreq/graphs/contributors) to this project, that made a lot of its additional features. Many of whom are no longer active after their changes were merged.
+> 
+> Your problem is related to this single line:
+> 
+> ```
+> libgirepository-2.0-dev needs to be installed for version trixie/sid
+> ```
+> 
+> Your distro is not properly detected (on the list) and it seems like it fails to install that package, [I made changes for this as part of 2.6 release](https://github.com/AdnanHodzic/auto-cpufreq/releases) as part of [#826](https://github.com/AdnanHodzic/auto-cpufreq/pull/826). I was very verbose in changes I made there, so if you look at what I did there you can easily make changes for your distro.
+> 
+> As I've been saying same thing for years now :)
+> 
+> Since I'm limited with available time to do this myself and [project is looking for contributors](https://github.com/AdnanHodzic/auto-cpufreq#looking-for-developers-and-co-maintainers) if you or anyone else wants to give it a try [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+i checked and I have that package... very odd.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>FlRENADO:</strong></p>
+                    <p>I have just run into this issue too, 
+in the install output I have `libgirepository-2.0-dev needs to be installed for version 13.6` as well. However, when I go to install it:
+ `~/Downloads/auto-cpufreq-3.0.0$ sudo apt install libgirepository-2.0-dev`
+`libgirepository-2.0-dev is already the newest version (2.84.4-3~deb13u3).`
+
+The package is already installed however the version is 2.84 instead of 13.6. I assume by 13.6 you mean 0.13.6? as I can't find any mention of a version as new as 13.6. My OS is a fork of debian which is known to have slow updates but I would intuit that packages wouldn't fall 11 full versions out of date. I may be wrong, I don't entirely know what I am looking for or at.
+
+some MISC. information about my laptop if its useful:
+OS: Devuan GNU/Linux 6 (excalibur) x86_64
+Kernel: 6.12.96+deb13-amd64
+CPU: Intel i5-9400 (desktop chip in a laptop, not a typo)
+Memory: 3852MiB / 7701MiB
+
+Hope this is of some use to you guys</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@clem691 @FrostKnight @FlRENADO can you please try install with changes I just pushed to [936 branch](https://github.com/AdnanHodzic/auto-cpufreq/commit/c97822866f5af5711fc3b645db05f93ec148315e)?
+
+```
+git clone https://github.com/AdnanHodzic/auto-cpufreq.git
+cd auto-cpufreq
+git checkout 936
+sudo ./auto-cpufreq-installer --install
+
+```
+
+Please confirm ASAP, as I would like to make a new release and would love to have these changes there as well. Thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>FlRENADO:</strong></p>
+                    <p>> [@clem691](https://github.com/clem691) [@FrostKnight](https://github.com/FrostKnight) [@FlRENADO](https://github.com/FlRENADO) can you please try install with changes I just pushed to [936 branch](https://github.com/AdnanHodzic/auto-cpufreq/commit/c97822866f5af5711fc3b645db05f93ec148315e)?
+> 
+> ```
+> git clone https://github.com/AdnanHodzic/auto-cpufreq.git
+> cd auto-cpufreq
+> git checkout 936
+> sudo ./auto-cpufreq-installer --install
+> ```
+> 
+> Please confirm ASAP, as I would like to make a new release and would love to have these changes there as well. Thanks!
+
+That seems to have fixed it, there are no errors during the installation and commands run as expected. My distro uses sysvinit instead of openrc or systemd  which daemon mode doesn't like but that is an issue on my end. As for this bug It seems to be fully fixed on my end. 
+
+Cheers :)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Awesome, thanks for confirming. I'll wait for others to confirm and will most likely merge the changes with `master` branch tomorrow.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>FlRENADO:</strong></p>
+                    <p>> Awesome, thanks for confirming. I'll wait for others to confirm and will most likely merge the changes with `master` branch tomorrow.
+
+Nice, happy to help out at least XD
+
+I know this isn't the place to ask, but while I'm here; do you have any recommendations or can point me in the direction of some info for getting daemon mode to work with the sysvinit system I have or should I just do a fresh install using openrc?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>FrostKnight:</strong></p>
+                    <p>> Awesome, thanks for confirming. I'll wait for others to confirm and will most likely merge the changes with `master` branch tomorrow.
+
+That works, but I am curious, would it be possible to add a method in the future for openrc users?
+
+To start it with openrc.
+
+But anyways good stuff.
+
+EDIT: nvm my bad I forgot something is all.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I know this isn't the place to ask, but while I'm here; do you have any recommendations or can point me in the direction of some info for getting daemon mode to work with the sysvinit system I have or should I just do a fresh install using openrc?
+
+@FlRENADO I would recommend fresh install in this case
+
+> That works, but I am curious, would it be possible to add a method in the future for openrc users?
+>
+>To start it with openrc.
+>
+>But anyways good stuff.
+
+@FrostKnight thanks, openrc has been [supported since 1.8.2](https://github.com/AdnanHodzic/auto-cpufreq/releases?page=2) and was implemented with #314. It's also mentioned on [auto-cpufreq ReadMe](https://github.com/AdnanHodzic/auto-cpufreq#:~:text=The%20build%20works%20on%20both%20systemd/OpenRC%20systems%20(both%20systemd%20and%20OpenRC%20will%20have%20a%20service%20called%20auto%2Dcpufreq%20which%20can%20be%20started%20automatically)).
+
+Although I think it would be ideal if all [openrc install scripts](https://github.com/search?q=repo%3AAdnanHodzic%2Fauto-cpufreq%20openrc&type=code) would be merged with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto-cpufreq-installer) and work based on detecting which init system user is using.
+
+However, since I use systemd and don't use either systemv or openrc, and since I'm limited with available time to do this myself and [project is looking for contributors](https://github.com/AdnanHodzic/auto-cpufreq#looking-for-developers-and-co-maintainers) if you or anyone else wants to give it a try [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+In meantime closing the issue, since problem was addressed and changes have been merged with `master` branch.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

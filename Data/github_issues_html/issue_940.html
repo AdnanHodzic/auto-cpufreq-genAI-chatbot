@@ -1,0 +1,163 @@
+
+        <html>
+        <head>
+            <title>Issue #940: Kernel Panic when starting auto-cpufreq & changing governor with Ubuntu's 6.17 HWE kernel</title>
+        </head>
+        <body>
+            <h1>Kernel Panic when starting auto-cpufreq & changing governor with Ubuntu's 6.17 HWE kernel</h1>
+            <p><strong>Issue #940</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>#### Before submitting an issue, it is strongly recommended to use the **[auto-cpufreq-genAI-chatbot](https://foolcontrol.org/?p=4903)** to get an immediate answer to your question.
+
+### Have you tried?
+Yes
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+Yes
+
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+N/A
+
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+N/A
+
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+Yes
+
+### Error output:
+
+<img width="4000" height="3000" alt="Image" src="https://github.com/user-attachments/assets/67384594-6365-48f2-ab1a-236c33b77a8d" />
+
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+
+Using settings defined in /etc/auto-cpufreq.conf file
+conservation mode is on
+
+-------------------------------------------------------------------------------
+
+Linux distro: Ubuntu 24.04 Noble Numbat
+Linux kernel: 6.17.0-19-generic
+Processor: AMD Ryzen 5 7535HS with Radeon Graphics
+Cores: 12
+Architecture: x86_64
+Driver: amd-pstate-epp
+
+Using settings defined in /etc/auto-cpufreq.conf
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 3301 MHz
+CPU min frequency: 416 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      2.0%        48 °C      3267 MHz
+CPU1      1.0%        48 °C       416 MHz
+CPU2      1.0%        48 °C       416 MHz
+CPU3      1.0%        48 °C      3268 MHz
+CPU4      4.0%        48 °C      3269 MHz
+CPU5      5.0%        48 °C      3265 MHz
+CPU6      5.1%        48 °C       416 MHz
+CPU7      0.0%        48 °C       416 MHz
+CPU8     13.3%        48 °C      3267 MHz
+CPU9      5.1%        48 °C      3266 MHz
+CPU10      2.0%        48 °C      3269 MHz
+CPU11      0.0%        48 °C      3267 MHz
+
+auto-cpufreq version: 3.0.0
+
+Python: 3.12.3
+psutil package: 6.0.0
+platform package: 1.0.8
+click package: 8.1.7
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.31 %
+
+Total CPU usage: 1.6 %
+Total system load: 0.46
+Average temp. of all cores: 36.00 °C 
+
+Currently using: performance governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+---
+The kernel panic (when starting auto-cpufreq & changing governor) usually happens with Ubuntu's HWE kernel 6.17.0-20-generic (latest for Ubuntu Cinnamon 24.04 at present).
+It doesn't happen every single time, and exact conditions still need to be determined, but sometimes e.g. when I click auto-cpufreq icon on Cinnamon panel - Kernel panic happens IMMEDIATELY auto-cpufreq icon click.
+Therefore I believe its directly auto-cpufreq related.
+
+Another time Kernel panic happened immediately after clicking to change governor in the GUI.
+I know approximate time of the latest kernel panic, there doesn't seem to be anything relevant going on around that time in any log.
+
+I **never** observed Kernel panic unless I do smth with auto-cpufreq.
+
+Currently trying previous kernel 6.17.0-19 (don't know yet whether kernel panic is reproducible or not with it).
+
+FS: BTRFS+LUKS/NVME.
+Ubuntu Cinnamon 24.04.4.
+Thank you.
+
+================================
+HWE installed packages:
+```
+linux-generic-hwe-24.04/now 6.17.0-20.20~24.04.1 amd64 [installed,upgradable to: 6.17.0-22.22~24.04.1]
+linux-headers-generic-hwe-24.04/now 6.17.0-20.20~24.04.1 amd64 [installed,upgradable to: 6.17.0-22.22~24.04.1]
+linux-hwe-6.14-headers-6.14.0-36/noble-updates,noble-updates,noble-security,noble-security,now 6.14.0-36.36~24.04.1 all [installed,automatic]
+linux-hwe-6.14-headers-6.14.0-37/noble-updates,noble-updates,noble-security,noble-security,now 6.14.0-37.37~24.04.1 all [installed,automatic]
+linux-hwe-6.17-headers-6.17.0-19/noble-updates,noble-updates,noble-security,noble-security,now 6.17.0-19.19~24.04.2 all [installed,automatic]
+linux-hwe-6.17-headers-6.17.0-20/noble-updates,noble-updates,noble-security,noble-security,now 6.17.0-20.20~24.04.1 all [installed,automatic]
+linux-hwe-6.17-tools-6.17.0-19/noble-updates,noble-security,now 6.17.0-19.19~24.04.2 amd64 [installed,automatic]
+linux-hwe-6.17-tools-6.17.0-20/noble-updates,noble-security,now 6.17.0-20.20~24.04.1 amd64 [installed,automatic]
+linux-image-generic-hwe-24.04/now 6.17.0-20.20~24.04.1 amd64 [installed,upgradable to: 6.17.0-22.22~24.04.1]
+systemd-hwe-hwdb/noble-updates,noble-updates,now 255.1.7 all [installed]
+```</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>auto-cpufreq doesn't do anything that should or even could be related to causing a kernel panic.
+
+Seems to be something related to the GUI component, please make sure you have the latest changes and perform full removed and install auto-cpufreq back, e.g: ` sudo ./auto-cpufreq-installer --remove && sudo ./auto-cpufreq-installer --install"</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Heavygrass:</strong></p>
+                    <p>> auto-cpufreq doesn't do anything that should or even could be related to causing a kernel panic.
+
+Thanks. I'm not really claiming that, but do you have any advise how to narrow down the issue so that I could report it to the distro?
+Is there a doc page that lists the low-level commands or low-level API calls that auto-cpufreq executes?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>You can refer to most commands auto-cpufreq GUI invokes as part of [auto-cpufreq/gui](https://github.com/AdnanHodzic/auto-cpufreq/tree/master/auto_cpufreq/gui)
+
+Which is just invoking different [auto-cpufreq mode and options](https://github.com/AdnanHodzic/auto-cpufreq#auto-cpufreq-modes-and-options).
+
+And you can find these in core.py, [example how it set/changes turbo](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/auto_cpufreq/core.py#L200).
+
+Think problem is with GUI since it's not very well maintained, altough there were 2 changes (#859 & #903) to it as part of [v3.0.0 release](https://github.com/AdnanHodzic/auto-cpufreq/releases)</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,26 @@
+
+        <html>
+        <head>
+            <title>Issue #926: Fix power consumption calculation for systems missing power_now file</title>
+        </head>
+        <body>
+            <h1>Fix power consumption calculation for systems missing power_now file</h1>
+            <p><strong>Issue #926</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Wattage values were being incorrectly calculated if the `power_now` file was not found in the battery directory. Before it was just reading from the path `current_now` if `power_now` wasn't found, which just returned the current in Amps.
+
+This should fix it so if `power_now` is not found, it will calculate the power draw using current and voltage instead, if possible.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Great, thank you!</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

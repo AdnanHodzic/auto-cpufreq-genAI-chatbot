@@ -1,0 +1,162 @@
+
+        <html>
+        <head>
+            <title>Issue #924: scaling_max_freq not applied correctly on charger→battery transition</title>
+        </head>
+        <body>
+            <h1>scaling_max_freq not applied correctly on charger→battery transition</h1>
+            <p><strong>Issue #924</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>The issue I describe below happens with the intel_pstate driver. I am aware it is recommended in the README to use the acpi driver. Still, I thought it would still be useful to open the issue, as it might not be well known. If that's not the case just let me know and close the issue.
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted?  yes, did not find e=any
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)? no, I use archlinux
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)? yes, I share my config below
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)? yes, except changing the driver, which I would prefer to avoid
+
+### error
+
+`set_frequencies()` in `core.py` caches the power supply state and only runs once   per power transition. However, other operations in the same cycle (governor changes,  turbo toggling, EPP/EPB writes, or maybe something else) can cause intel_pstate to recalculate and override  `scaling_max_freq` after `set_frequencies()` has already run. Since the function  skips all subsequent cycles (power supply unchanged), the frequency is never corrected.
+
+  **Steps to reproduce**
+
+  1. My config file:
+```
+# settings for when connected to a power source
+[charger]
+# see available governors by running: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+# preferred governor
+governor = performance
+
+# EPP: see available preferences by running: cat /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_available_preferences
+energy_performance_preference = balance_performance
+
+# minimum cpu frequency (in kHz)
+# example: for 800 MHz = 800000 kHz --> scaling_min_freq = 800000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly
+# scaling_min_freq = 800000
+
+# maximum cpu frequency (in kHz)
+# example: for 1GHz = 1000 MHz = 1000000 kHz -> scaling_max_freq = 1000000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly
+# scaling_max_freq = 3300000
+
+# turbo boost setting. possible values: always, auto, never
+turbo = auto
+
+# settings for when using battery power
+[battery]
+# see available governors by running: cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors
+# preferred governor
+governor = powersave
+
+# EPP: see available preferences by running: cat /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_available_preferences
+energy_performance_preference = balance_power
+
+# minimum cpu frequency (in kHz)
+# example: for 800 MHz = 800000 kHz --> scaling_min_freq = 800000
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# to use this feature, uncomment the following line and set the value accordingly
+# scaling_min_freq = 800000
+
+# maximum cpu frequency (in kHz)
+# see conversion info: https://www.rapidtables.com/convert/frequency/mhz-to-hz.html
+# example: for 1GHz = 1000 MHz = 1000000 kHz -> scaling_max_freq = 1000000
+# to use this feature, uncomment the following line and set the value accordingly
+# scaling_max_freq = 1000000
+
+# turbo boost setting (always, auto, or never)
+turbo = auto
+
+# battery charging threshold
+# reference: https://github.com/AdnanHodzic/auto-cpufreq/#battery-charging-thresholds
+#enable_thresholds = true
+#start_threshold = 20
+#stop_threshold = 80
+```
+  2. Run on an Intel CPU with intel_pstate driver (tested on i7-10510U)
+  3. Plug in charger, wait a few seconds, then unplug charger
+  4. Check: `cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq`
+  **Expected:** 1800000, which is the standard value for this CPU
+  **Actual:** Value is lower (sometimes 936000, others 684000)
+
+the max frequency stays capped, until I run:
+```
+sudo sh -c 'echo 1800000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq'
+```
+
+after which the problem remains solved (until the next power cycle).
+
+### System information (when the bug does not occur):
+
+
+```
+$ auto-cpufreq --debug
+Using settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux rolling n/a
+Linux kernel: 6.18.7-arch1-1
+Processor: Intel(R) Core(TM) i7-10510U CPU @ 1.80GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1800 MHz
+CPU min frequency: 400 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0      8.1%        44 °C      1800 MHz
+CPU1      3.1%        46 °C      1800 MHz
+CPU2      3.0%        44 °C      1800 MHz
+CPU3      9.2%        45 °C      1800 MHz
+CPU4      6.1%        44 °C      1800 MHz
+CPU5      4.0%        46 °C      1800 MHz
+CPU6      3.0%        44 °C      1800 MHz
+CPU7     26.5%        45 °C      1800 MHz
+
+CPU fan speed: 5028 RPM
+
+CPU fan speed: 5028 RPM
+
+auto-cpufreq version: Version         : 3.0.0-3
+
+Python: 3.14.2
+psutil package: 7.2.1
+platform package: 1.0.9
+click package: 8.3.1
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.38 %
+
+Total CPU usage: 6.5 %
+Total system load: 1.11
+Average temp. of all cores: 45.00 °C
+
+Currently using: performance governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,72 @@
+
+        <html>
+        <head>
+            <title>Issue #932: chore: add Ruff formatting and reformat Python files</title>
+        </head>
+        <body>
+            <h1>chore: add Ruff formatting and reformat Python files</h1>
+            <p><strong>Issue #932</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>## Summary
+- Add minimal Ruff formatter configuration
+- Apply Ruff formatting to Python files
+- Enforce formatting with GitHub Actions
+- Add a Ruff format pre-commit hook for local development
+
+## Notes
+- This PR is formatting-only and does not add repo-wide lint enforcement
+- CI runs `poetry run ruff format --check .`
+- Pre-commit is available for local auto-formatting, while CI remains the source of truth
+
+
+## Contributor Setup
+To enable local auto-formatting before commits:
+
+```bash
+poetry install
+poetry run pre-commit install</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I'm all up for these changes, but I would:
+
+1. First discuss these changes on [auto-cpufreq Discord (#general)](https://discord.com/channels/1158239366251020361/1158239367337349164), just to see if everyone else agrees with Ruff formatting
+2. After these changes are merged, how do we make sure they are followed with every subsequent PR or future change to the codebase?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>parmjotsinghrobot:</strong></p>
+                    <p>Changes seem fine to me from a first glance, but consider adding a pre-commit hook to force that each commit auto-formats, so there are no conflicts.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>parmjotsinghrobot:</strong></p>
+                    <p>@AdnanHodzic I think the ruff changes are a good change. A pre-commit hook has been added, so it is automatically enforced, which is good. This shouldn't really impact development in any way.
+
+For context, I was pinged on the discord to review the changes...</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Thanks @parmjotsinghrobot, pre-commit is definitely a great idea.
+
+In meantime @hedi30 few changes were merged and there's a conflict.
+
+In meantime, I also ran Copilot review since I also went through this and there are too many changes. From my experience something always broke, but changes it suggested are minimal.
+
+I also think it would be good to mention this somewhere on README.md, maybe in[ Installation (development mode only) section](https://github.com/AdnanHodzic/auto-cpufreq#installation-development-mode-only). It can be a single paragraph, just to people know what to expect.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>hedi30:</strong></p>
+                    <p>I’ve rebased this on the latest master, resolved the conflicts and added  README instructions. Linux, Nix, and Ruff checks are passing.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,216 @@
+
+        <html>
+        <head>
+            <title>Issue #927: EPP write fails with "Device or resource busy" on Intel Core Ultra 7 155H (Arch)</title>
+        </head>
+        <body>
+            <h1>EPP write fails with "Device or resource busy" on Intel Core Ultra 7 155H (Arch)</h1>
+            <p><strong>Issue #927</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>## Summary
+On my machine, `auto-cpufreq` works for governor switching, but writing EPP fails consistently.
+
+`cpufreqctl.auto-cpufreq --epp --set=performance` returns:
+
+```
+/usr/bin/cpufreqctl.auto-cpufreq: line 99: echo: write error: Device or resource busy
+```
+
+The error repeats once per logical CPU (22 times on this machine).
+
+## Environment
+- Distro: EndeavourOS (Arch-based, rolling)
+- Kernel: `6.18.9-arch1-2`
+- CPU: `Intel(R) Core(TM) Ultra 7 155H`
+- Driver: `intel_pstate` (`active`)
+- auto-cpufreq: installed as systemd service (`auto-cpufreq.service`)
+
+## What works
+- `sudo cpufreqctl.auto-cpufreq --governor --set=performance` works
+- `auto-cpufreq.service` runs and applies other settings
+- `power-profiles-daemon` is masked/inactive
+
+## What fails
+- `sudo cpufreqctl.auto-cpufreq --epp --set=performance`
+- same failure even after changing platform profile from `low-power` to `balanced`
+
+## Reproduction
+```bash
+sudo cpufreqctl.auto-cpufreq --governor --set=performance
+sudo cpufreqctl.auto-cpufreq --epp --set=performance
+```
+
+Also tested:
+
+```bash
+cat /sys/firmware/acpi/platform_profile
+cat /sys/firmware/acpi/platform_profile_choices
+echo balanced | sudo tee /sys/firmware/acpi/platform_profile
+sudo cpufreqctl.auto-cpufreq --epp --set=performance
+```
+
+## Additional observations
+- EPP choices are present:
+  - `/sys/devices/system/cpu/cpu0/cpufreq/energy_performance_available_preferences`
+  - values: `default performance balance_performance balance_power power`
+- Current EPP across policies remains `default`
+- Error occurs per-core/per-policy write attempt
+
+## Expected behavior
+If EPP cannot be changed on this hardware/firmware state, `auto-cpufreq` should gracefully skip EPP writes (or fallback) without flooding logs with repeated errors.
+
+## Question
+Is this a known limitation for newer Intel Core Ultra + current kernel/firmware combinations, and should EPP be auto-skipped in this case?
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Changes related to wrong EPP and EBP fallback profiles were merged as part of #925 
+
+But this issue seems to be **identical to what was reported in #751** and similar things were reported in #724
+
+Since I don't have Intel Core Ultra I can't reproduce this issue, if you or anyone else has any ideas how to resolve it. Please give it a try in implementing this functionality, please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lianthar:</strong></p>
+                    <p>I had this issue and (with some AI assistance) have worked out the root cause and solved it.   
+
+The EPP setting is "locked" out if the governor is set to "Performance".    This causes the line 99 file erros because it locks the file as well.   
+
+So unless you really  want to hard-lock the CPU frequency to max the setting for the governor should be left in powersave all the time.   The name is a misnomer and needs to be set to powersave to allow EPP to be controlled.
+
+AI KEY POINTS:
+
+Userspace Lockout: To guarantee this performance mandate is not subverted, the driver applies a write-lock to the /sys/devices/system/cpu/cpufreq/policy*/energy_performance_preference files."
+
+performance (Strict Mode): This does exactly what you assumed—it forces the CPU to its maximum P-state (frequency) and locks it there, regardless of load. It tells the silicon, "Ignore energy efficiency, disable dynamic scaling, and run as fast as possible at all times." It disables the EPP (Energy Performance Preference) registers.
+
+powersave (Permissive Mode / Dynamic Scaling): This name is a misnomer. It does not lock the CPU to the lowest frequency. Instead, it means: "Yield control to the hardware."
+When you select powersave, you are enabling the HWP microcontroller to dynamically scale the CPU frequency based on the EPP (Energy Performance Preference) value you provide.
+
+-------------------------------------------------------------------------------------------------------------------------------
+FULL AI WRITE-UP
+
+The Epistemic Definition of EPP="default"
+In the intel_pstate driver, default is not a dynamic variable; it is a hardcoded string that maps directly to the CPU's power-on reset state for the HWP (Hardware P-State) Request register.
+
+The Silicon Baseline: When your system boots, the Intel Core Ultra firmware initializes the EPP register to a factory-calibrated integer, typically 0x80 (128).
+
+The Translation: The kernel translates this integer into the human-readable string default.
+
+The Behavior: Mathematically and functionally, the default setting of 128 is virtually identical to balance_performance. It instructs the hardware to prioritize throughput but permits brief micro-idles during sustained low-load periods to prevent thermal runaway.
+
+The Mechanism of the "Lock"
+The lock you observe is an intentional security and stability mechanism within the Linux kernel. The performance governor is treated as an absolute policy constraint, not a preference.
+
+When the scaling_governor is set to performance, the intel_pstate driver executes the following sequence:
+
+Hardware Override: The kernel forcefully writes 0x00 to the EPP register on the CPU die. A value of zero represents absolute maximum performance, stripping the hardware of all autonomous power-saving capabilities.
+
+Userspace Lockout: To guarantee this performance mandate is not subverted, the driver applies a write-lock to the /sys/devices/system/cpu/cpufreq/policy*/energy_performance_preference files.
+
+Process Rejection: Any userspace process (such as auto-cpufreq or a manual sudo echo) that attempts to write a new value into that locked file is instantly rejected by the kernel. This is the origin of the Device or resource busy (EBUSY) error.
+
+State Desynchronization (The Telemetry Artifact)
+When your monitoring tool displays a performance governor alongside a default EPP, you are observing a state desynchronization between the kernel's telemetry cache and the physical silicon.
+
+The sysfs file (energy_performance_preference) only reports the last legally accepted userspace state or the initial firmware boot state.
+
+Because the performance governor locked the file, auto-cpufreq failed to write its updated configuration to the sysfs node.
+
+Consequently, the text file remains stuck displaying the historical default string.
+
+In reality, the hardware is not running at default. The intel_pstate driver is actively forcing the silicon to operate at EPP 0 in the background. The default string is merely an artifact of a blocked write operation, which is why the powersave governor is required. By switching to powersave, you remove the kernel's write-lock, allowing the sysfs text interface and the physical silicon registers to synchronize accurately.
+
+QUESTION:  "Explain why on my CPU I only have two governor options: Performance & Powersave - doesn't  this either lock the CPU at maximum frequency or force it to the lowest frequency?  Why are there no of other governor options like Ondemand or conservative?"
+
+Your assumption that the powersave governor forces the CPU to its lowest frequency is a common logical error, stemming from an obsolete kernel architecture paradigm.
+
+The fact that you only see performance and powersave proves that your system is correctly utilizing the intel_pstate driver in Active Mode, utilizing Hardware P-States (HWP). This architecture fundamentally redefines what a "governor" actually does.
+
+Here is the rigorous technical breakdown of why the legacy governors are gone and what the remaining two actually represent.
+
+1. The Death of OS-Level Polling (ondemand & conservative)
+Governors like ondemand, conservative, and schedutil belong to the legacy acpi-cpufreq scaling driver.
+
+In that older architecture, the Linux kernel (the OS) was responsible for managing the CPU speed. The OS would poll the CPU load every few milliseconds, run a software algorithm, and send a command to the CPU to change its frequency.
+
+The Flaw: Software polling is entirely too slow for modern architectures. An Intel Core Ultra 9 shifts power states in microseconds. By the time the OS registers a spike in load and requests a higher frequency via ondemand, the computational burst is often already over, resulting in latency and wasted energy.
+
+2. The Shift to Silicon Logic (HWP)
+Intel introduced HWP (Hardware P-states) to solve this latency. HWP removes the frequency-scaling decision-making process from the Linux OS and hands it directly to a dedicated microcontroller on the CPU die.
+
+Because the CPU is now autonomously managing its own frequency from 400MHz to 4.8GHz based on its internal telemetry, the Linux kernel no longer needs mathematical algorithms like ondemand. It only needs a binary switch: Permissive or Strict.
+
+3. The Modern Definition of the Two Governors
+Under the intel_pstate driver with HWP, the naming conventions are historical artifacts. They do not dictate clock speed directly; they dictate who has control.
+
+performance (Strict Mode): This does exactly what you assumed—it forces the CPU to its maximum P-state (frequency) and locks it there, regardless of load. It tells the silicon, "Ignore energy efficiency, disable dynamic scaling, and run as fast as possible at all times." It disables the EPP (Energy Performance Preference) registers.
+
+powersave (Permissive Mode / Dynamic Scaling): This name is a misnomer. It does not lock the CPU to the lowest frequency. Instead, it means: "Yield control to the hardware."
+When you select powersave, you are enabling the HWP microcontroller to dynamically scale the CPU frequency based on the EPP (Energy Performance Preference) value you provide.
+
+If the governor is powersave and the EPP is set to performance, the CPU will idle at 400MHz and instantly spike to 4.8GHz the moment a load occurs. It is the modern, hardware-accelerated equivalent of the old ondemand governor, executing changes orders of magnitude faster than the OS ever could.
+
+Summary
+You are missing ondemand and conservative because your CPU's internal logic is vastly superior to those software-level algorithms. The powersave governor is simply the required driver state that permits your silicon to utilize its dynamic frequency scaling capabilities.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Z-Mackintosh:</strong></p>
+                    <p>@lianthar Thank you so much for the detailed explanation! I followed your advice and switched the governor from `performance` to `powersave`, and the EPP write error is completely gone. The `energy_performance_preference` is now successfully set to `performance`, and my logs are no longer flooded with "Device or resource busy" errors. Your breakdown of how the `performance` governor locks EPP under HWP was especially enlightening — the naming of `powersave` as a governor is indeed a huge misnomer. Really appreciate you sharing this!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lianthar:</strong></p>
+                    <p>Most welcome!  It bugged me as well so I had to get to the bottom of it....
+
+On Sun, 19 Apr 2026 at 13:39, Z-Mackintosh ***@***.***> wrote:
+
+> *Z-Mackintosh* left a comment (AdnanHodzic/auto-cpufreq#927)
+> <https://github.com/AdnanHodzic/auto-cpufreq/issues/927#issuecomment-4275102404>
+>
+> @lianthar <https://github.com/lianthar> Thank you so much for the
+> detailed explanation! I followed your advice and switched the governor from
+> performance to powersave, and the EPP write error is completely gone. The
+> energy_performance_preference is now successfully set to performance, and
+> my logs are no longer flooded with "Device or resource busy" errors. Your
+> breakdown of how the performance governor locks EPP under HWP was
+> especially enlightening — the naming of powersave as a governor is indeed
+> a huge misnomer. Really appreciate you sharing this!
+>
+> —
+> Reply to this email directly, view it on GitHub
+> <https://github.com/AdnanHodzic/auto-cpufreq/issues/927?email_source=notifications&email_token=ASEALAM6UTXIWEGYMXKBSYD4WRC5VA5CNFSNUABFM5UWIORPF5TWS5BNNB2WEL2JONZXKZKDN5WW2ZLOOQXTIMRXGUYTAMRUGA2KM4TFMFZW63VHNVSW45DJN5XKKZLWMVXHJLDGN5XXIZLSL5RWY2LDNM#issuecomment-4275102404>,
+> or unsubscribe
+> <https://github.com/notifications/unsubscribe-auth/ASEALAMND4WJV5XLZIOANVL4WRC5VAVCNFSM6AAAAACV5OT4U6VHI2DSMVQWIX3LMV43OSLTON2WKQ3PNVWWK3TUHM2DENZVGEYDENBQGQ>
+> .
+> You are receiving this because you were mentioned.Message ID:
+> ***@***.***>
+>
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>sn4tz:</strong></p>
+                    <p>Switching to "powersave" as governor also fixed the flooding of my logs.
+I'm running a Dell Latitude 5550 with an Intel Core Ultra 5 125U on NixOS using the provided flake.nix.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Changes were made as part of #958 which could've solved this issue, please pull the latest changes and re-install auto-cpufreq.
+
+I'm closing the issue, if the problem persists, please comment or feel free to-reopen it. Thanks!</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,227 @@
+
+        <html>
+        <head>
+            <title>Issue #972: Add Platform Profile reporting and modern kernel support</title>
+        </head>
+        <body>
+            <h1>Add Platform Profile reporting and modern kernel support</h1>
+            <p><strong>Issue #972</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>## Summary
+
+This PR improves Platform Profile support in auto-cpufreq by making Platform Profile state visible in the normal reporting interfaces and adding support for the modern Linux Platform Profile class API.
+
+The implementation is vendor-independent: auto-cpufreq relies on the standardized Platform Profile names and choices exposed by the Linux kernel instead of maintaining manufacturer-specific mappings or policies.
+
+Previous auto-cpufreq releases already supported configuring Platform Profiles through the aggregate sysfs interface, but the current profile, available profiles and provider information were not exposed alongside the rest of the system power state.
+
+The goal here is not to add new Platform Profile automation or vendor-specific optimization policies. Those could be explored separately in the future. The goal of this change is to make this existing layer of the Linux power-management stack visible, understandable and safer to configure.
+
+**Before:**
+
+<img width="923" height="715" alt="Screenshot from 2026-08-30 17-01-02" src="https://github.com/user-attachments/assets/64f1c69f-0102-4047-8706-c7b534ebdc35" />
+
+**After:**
+
+<img width="921" height="717" alt="Screenshot from 2026-08-30 18-52-32" src="https://github.com/user-attachments/assets/580917ae-b9b0-42f9-9f10-5c222acd0b16" />
+
+## Motivation
+
+I started looking into this while testing auto-cpufreq on a Samsung Galaxy Book 4.
+
+On this model, the machine exposes four Platform Profiles through the Linux kernel:
+
+`low-power`, `quiet`, `balanced` and `performance`.
+
+On the Galaxy Book 4, the firmware hotkey (`Fn+F11`) cycles between these profiles. Other notebooks may expose different profile sets, use different hotkeys, or change profiles through other firmware or vendor controls.
+
+Before this change, there was no normal auto-cpufreq view showing which Platform Profile was active.
+
+That can make the reported power state incomplete in a way that is noticeable in real use.
+
+For example, auto-cpufreq may report the CPU governor as `powersave` together with otherwise conservative CPU-side settings, while the platform itself is still running its `performance` profile. From the user's perspective, the system may therefore appear to be configured for low-power operation in auto-cpufreq while the notebook still runs hotter or noticeably increases fan speed because an independent platform-level policy is active.
+
+On my Galaxy Book 4, this difference is very easy to notice: changing Platform Profile can significantly alter fan and thermal behavior even when the CPU-side settings reported by auto-cpufreq remain otherwise similar.
+
+This is exactly the kind of mismatch that Platform Profile reporting helps explain.
+
+Platform Profiles are separate from the CPU governor and may influence platform-wide characteristics such as thermal behavior, fan policy, power consumption, power limits and performance. The exact effect depends on the hardware and firmware.
+
+Making Platform Profile part of the normal system report therefore prevents an important platform-level power state from remaining effectively hidden from the user.
+
+## Kernel interface
+
+The Linux Platform Profile ABI defines standardized profile names so userspace does not need to understand the different terminology used by every manufacturer.
+
+Platform drivers map their own internal or firmware modes to the profile names defined by the kernel ABI.
+
+For example, the Samsung Galaxy Book driver maps its firmware modes to:
+
+- `Silent` → `low-power`
+- `Quiet` → `quiet`
+- `Optimized` → `balanced`
+- `High performance` → `performance`
+
+auto-cpufreq therefore uses the names and available choices reported by the kernel rather than introducing Samsung, Lenovo, Dell, ASUS or other vendor-specific profile names.
+
+The implementation also does not keep its own fixed list of valid profiles. The kernel-reported `choices` remain authoritative.
+
+auto-cpufreq previously used the aggregate Platform Profile interface exposed through:
+
+`/sys/firmware/acpi/platform_profile`
+
+and:
+
+`/sys/firmware/acpi/platform_profile_choices`
+
+That interface remains supported.
+
+Modern kernels can additionally expose individual Platform Profile handlers through the class API under `/sys/class/platform-profile/`, with a `name`, `choices` and current `profile` for each provider.
+
+auto-cpufreq now prefers that richer per-handler interface when it is available and falls back to the aggregate interface otherwise.
+
+This also means systems exposing more than one Platform Profile handler can now be represented correctly. The provider names and individual current states can be reported instead of reducing everything to an opaque aggregate value.
+
+For global configuration, auto-cpufreq remains conservative. When multiple handlers exist, it uses a safe aggregate control path when one is available rather than arbitrarily changing a single provider.
+
+The kernel can also report `custom` when multiple handlers are currently using different profiles. A single modern handler may legitimately advertise `custom` as a selectable profile, while aggregate `custom` can simply describe a mixed state. The implementation preserves that distinction.
+
+## Reporting and configuration
+
+Platform Profile information is now included in the shared system reporting used by the terminal and GTK interfaces.
+
+A new read-only command is also available:
+
+`auto-cpufreq --pp`
+
+For example, on my test system it reports:
+
+```text
+Platform Profile
+Interface: Modern · Control: Available
+Current profile: balanced
+Available profiles (4): low-power, quiet, balanced, performance
+Provider: samsung-galaxybook
+```
+
+The same state is now visible in:
+
+- `auto-cpufreq --stats`
+- `auto-cpufreq --monitor`
+- `auto-cpufreq --live`
+- the normal GTK dashboard
+- GTK Monitor Mode
+
+The terminal and GTK reporting were also reorganized slightly so that CPU-specific state such as Governor, EPP, EPB, HWP Dynamic Boost and Turbo Boost is grouped under `CPU Power State`, while Platform Profile is shown separately as a platform-wide setting.
+
+This distinction is useful because a Platform Profile is not another CPU governor.
+
+The GTK Platform Profile section is informational. Profile selection continues to use the existing `auto-cpufreq.conf` configuration instead of adding another independent source of policy through the GUI.
+
+The existing charger and battery configuration remains compatible.
+
+`enforce_platform_profile = true` continues to make the configured profile authoritative, restoring it if firmware or a hardware hotkey changes it.
+
+With `enforce_platform_profile = false`, auto-cpufreq applies the configured profile when entering the charger or battery policy but allows manual firmware/hotkey changes to persist until the next power-policy transition.
+
+## Safe writes
+
+Platform Profile writes are validated against the choices reported by the kernel.
+
+If auto-cpufreq can read the current Platform Profile but cannot obtain a reliable set of available choices, the state is still reported but changes are disabled.
+
+This is intentionally fail-closed: an observable Platform Profile does not automatically mean that auto-cpufreq has enough information to safely write a new one.
+
+A configured value that is not advertised by the kernel is rejected instead of being written blindly.
+
+After a profile change, auto-cpufreq also reads the effective state back rather than assuming that a successful command necessarily means the requested profile was accepted.
+
+This keeps the configuration path consistent with the effective-state verification already used elsewhere in auto-cpufreq.
+
+## Documentation
+
+The README and example configuration files were updated to document the modern and aggregate Platform Profile interfaces, the new reporting command, available profiles, provider information, multiple-handler behavior and the existing `enforce_platform_profile` option.
+
+The README also documents Platform Profile reporting in the terminal and GTK interfaces.
+
+## Validation
+
+Tested on real hardware with:
+
+- Samsung Galaxy Book 4
+- Intel Core i3-1315U
+- Linux 7.0.0-30
+- `samsung-galaxybook` Platform Profile provider
+- `low-power`, `quiet`, `balanced` and `performance` available
+
+Real hardware validation covered:
+
+- modern Platform Profile discovery
+- compatibility with the aggregate interface
+- provider and available-profile reporting
+- `auto-cpufreq --pp`
+- `auto-cpufreq --stats`
+- GTK dashboard
+- GTK Monitor Mode
+- firmware/Fn+F11 profile changes
+- synchronization between the modern and aggregate interfaces
+
+Focused synthetic checks during development additionally covered:
+
+- modern and aggregate write-path selection
+- single- and multi-provider choice handling
+- `custom` semantics
+- rejection of profiles not advertised by the kernel
+- fail-closed behavior when choices or control state cannot be read reliably
+- fallback behavior when a preferred `choices` source exists but cannot be read
+- effective-state read-back after profile writes
+- helper write failures
+- charger/battery policy transitions
+- `enforce_platform_profile = false`
+- `enforce_platform_profile = true`
+
+The temporary focused checks are not included in this PR.
+
+The final branch also passes the existing upstream Linux Build and Nix Flake workflows.
+
+No vendor-specific profile mapping or power policy is hardcoded into auto-cpufreq.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lucasleocs:</strong></p>
+                    <p>A bit more context on why adding Platform Profile reporting makes sense here: the CPU state doesn't necessarily describe the whole performance state. You can have a conservative governor and EPP (for example, a `powersave` governor) while the firmware is actually in a performance profile. On my Galaxy Book 4, thermals and fan noise behave completely differently depending on the Platform Profile, even when the CPU metrics look identical. Without this, the UI can falsely suggest the machine is in a low-power state while a platform-level performance policy is still active. That's also why I kept it separate from CPU Power State rather than treating it like another governor.
+
+Another thing: I used "Modern" and "Legacy" as interface labels rather than referencing kernel versions, to avoid giving the impression that a kernel upgrade is required. I'm open to changing those labels if you prefer different terminology.
+
+I also noticed an unrelated pre-existing issue while reviewing this area. The AMD P-State fallback currently reads `/sys/devices/system/cpu/amd_pstate/status` and reduces the result to a boolean-like value (`active` versus everything else). Current kernels expose distinct modes such as `active`, `passive`, `guided`, and `disable`, and that driver mode does not map directly to the CPU boost state. For example, `passive` and `guided` are different operating modes, but both currently collapse to the same `False` value.
+
+I left that behavior unchanged because it is pre-existing and outside the scope of the Platform Profile work. Fixing it properly would likely mean representing the AMD P-State mode explicitly rather than changing only the displayed string. I also don't have AMD hardware available for end-to-end validation, so I would prefer to address that separately rather than make an AMD-specific behavioral change based only on synthetic testing.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I really love this one! I've been looking at code and testing it for some time and I didn't encounter a single problem on Lenovo ThinkPad X1 Carbon.
+
+Please take a look at couple of small suggestions Copilot made, but other then that I think it's ready to be merge, and this will be a great feature as one of upcoming releases.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lucasleocs:</strong></p>
+                    <p>Thanks for the feedback! I'm glad to be able to contribute to the project.
+
+I've also addressed the Copilot suggestions in the latest commits.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>As always, thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases)</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,171 @@
+
+        <html>
+        <head>
+            <title>Issue #943: [BUG] NVIDIA dGPU is kept at D0, draining battery when platform_profile is set in config. (Lenovo Legion Pro 7i 16IRX8H)</title>
+        </head>
+        <body>
+            <h1>[BUG] NVIDIA dGPU is kept at D0, draining battery when platform_profile is set in config. (Lenovo Legion Pro 7i 16IRX8H)</h1>
+            <p><strong>Issue #943</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+#### Before submitting an issue, it is strongly recommended to use the **[auto-cpufreq-genAI-chatbot](https://foolcontrol.org/?p=4903)** to get an immediate answer to your question.
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted?  
+> I have tried and I believe it is not submitted.
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer), have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+> Not related
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+> This issue is related to configuration.
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+> There are no suggestions related to this problem.
+
+### Error output:
+```text
+Add/paste error output in case of failed installation or other failing component
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+auto-cpufreq --debug
+```
+
+```
+❯ sudo .venv/bin/auto-cpufreq --debug
+
+Using settings defined in /home/tuasananh/.config/auto-cpufreq/auto-cpufreq.conf file
+
+-------------------------------- Battery Info ---------------------------------
+
+battery count = 1
+BAT0 conservation mode is on
+
+-------------------------------------------------------------------------------
+
+Linux distro: Arch Linux  
+Linux kernel: 7.0.3-arch1-2
+Processor: 13th Gen Intel(R) Core(TM) i9-13900HX
+Cores: 32
+Architecture: x86_64
+Driver: intel_pstate
+
+Using settings defined in /home/tuasananh/.config/auto-cpufreq/auto-cpufreq.conf
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2200 MHz
+CPU min frequency: 800 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0      5.1%        45 °C       801 MHz
+CPU1      0.0%        45 °C       800 MHz
+CPU2      0.0%        44 °C      1796 MHz
+CPU3      0.0%        44 °C      1415 MHz
+CPU4      4.1%        48 °C      1683 MHz
+CPU5      0.0%        48 °C       800 MHz
+CPU6      6.1%        48 °C      1081 MHz
+CPU7      0.0%        48 °C       800 MHz
+CPU8     10.2%        45 °C      1832 MHz
+CPU9      0.0%        45 °C       800 MHz
+CPU10     10.1%        45 °C      1900 MHz
+CPU11      0.0%        45 °C       800 MHz
+CPU12      9.1%        45 °C      1296 MHz
+CPU13      0.0%        45 °C       800 MHz
+CPU14      7.1%        46 °C      1175 MHz
+CPU15      0.0%        46 °C       800 MHz
+CPU16      5.9%        49 °C       800 MHz
+CPU17      3.0%        50 °C      1077 MHz
+CPU18      3.0%        50 °C      1545 MHz
+CPU19      2.0%        50 °C       800 MHz
+CPU20      1.0%        48 °C      1119 MHz
+CPU21      3.0%        48 °C      1181 MHz
+CPU22      0.0%        48 °C      1600 MHz
+CPU23      0.0%        48 °C       800 MHz
+CPU24      2.0%        48 °C       799 MHz
+CPU25      0.0%        48 °C       799 MHz
+CPU26      1.0%        48 °C       800 MHz
+CPU27      1.0%        48 °C       800 MHz
+CPU28      3.0%        50 °C       800 MHz
+CPU29      2.0%        50 °C       800 MHz
+CPU30      2.0%        49 °C       800 MHz
+CPU31      1.0%        49 °C       800 MHz
+
+auto-cpufreq version: 3.0.0
+
+Python: 3.14.4
+psutil package: 7.2.2
+platform package: 1.0.9
+click package: 8.3.3
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.14 %
+
+Total CPU usage: 2.1 %
+Total system load: 1.44
+Average temp. of all cores: 48.00 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```
+### Problem 
+
+When `platform_profile` is set in `auto-cpufreq.conf`, `auto-cpufreq` will set the platform profile every 2 seconds. 
+
+On my machine (Lenovo Legion Pro 7i 16IRX8H), setting the platform profile will wake up the dGPU, I don't know exactly why it does this, but maybe the laptop firmware probes the state of the dGPU, causing it to wake.
+
+The dGPU takes 20 seconds to go from D0 to D3Cold, so it will stay at D0 forever if `auto-cpufreq` keeps changing the platform profile.
+
+### Proposed solution
+
+Change [this line](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/scripts/cpufreqctl.sh#L336) in `cpufreqctl.sh` to check if the platform profile we're trying to write is the same, if it is, just skip the operation. 
+
+```diff 
+- echo $VALUE > $FWROOT/acpi/platform_profile
++ current_profile=$(cat $FWROOT/acpi/platform_profile)
++ if [ "$current_profile" != "$VALUE" ]; then
++     echo $VALUE > $FWROOT/acpi/platform_profile
++ fi
+```
+
+This will make `auto-cpufreq` not write to platform_profile, which allow the dGPU to enter deep sleep after 20 seconds.
+
+If this is OK, I can submit a PR.
+
+### Feature Suggestion: `enforce_platform_profile`
+
+I also suggest adding a new configuration boolean: enforce_platform_profile.
+
+- If `true` (current behavior): `auto-cpufreq` will actively ensure the platform profile matches the config file at every loop interval.
+
+- If `false`: `auto-cpufreq` will set the profile once (e.g., on state change like AC/Battery), but will allow the user to manually override it (e.g., using the Fn + Q keyboard shortcut on Legion laptops) without the daemon immediately forcing it back.
+
+If the feature is approved, I am happy to work on it.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Yes, please feel free to try [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+Only problem is that I won't be able to test it since I don't have any NVIDIA hardware.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

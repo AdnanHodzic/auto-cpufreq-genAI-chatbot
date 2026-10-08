@@ -1,0 +1,314 @@
+
+        <html>
+        <head>
+            <title>Issue #974: auto-cpufreq doubles power draw (from 25W to 50W) at identical 3.80GHz clock speed</title>
+        </head>
+        <body>
+            <h1>auto-cpufreq doubles power draw (from 25W to 50W) at identical 3.80GHz clock speed</h1>
+            <p><strong>Issue #974</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+#### Before submitting an issue, it is strongly recommended to use the **[auto-cpufreq-genAI-chatbot](https://foolcontrol.org/?p=4903)** to get an immediate answer to your question.
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted?     yes
+
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?   yes (it didnt work in snap store for me anyway)
+
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?    yes
+
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?   no
+
+### Error output:
+```text
+Add/paste error output in case of failed installation or other failing component
+```
+---
+
+### System information:
+
+Add/paste output of:
+
+```
+auto-cpufreq --debug
+
+battery count = 1
+BAT1 conservation mode is off
+
+-------------------------------------------------------------------------------
+
+Linux distro: Zorin OS 18
+Linux kernel: 7.0.0-31-generic
+Processor: 13th Gen Intel(R) Core(TM) i7-13650HX
+Cores: 20
+Architecture: x86_64
+Driver: intel_pstate
+Platform profile status: Available
+Platform profile: balanced
+Available platform profiles (5): low-power, balanced, performance, max-power, custom
+Platform profile provider: lenovo-wmi-gamezone
+
+Using settings defined in /etc/auto-cpufreq.conf
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 4900 MHz
+CPU min frequency: 800 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      4.1%        55 °C      1145 MHz
+CPU1      0.0%        55 °C       800 MHz
+CPU2      3.9%        54 °C      1769 MHz
+CPU3      0.0%        54 °C       800 MHz
+CPU4      4.1%        55 °C      1168 MHz
+CPU5      0.0%        55 °C      1828 MHz
+CPU6      7.8%        55 °C      2343 MHz
+CPU7     30.0%        55 °C      2141 MHz
+CPU8      6.0%        52 °C       877 MHz
+CPU9      0.0%        52 °C      1131 MHz
+CPU10      0.0%        54 °C      1539 MHz
+CPU11      0.0%        54 °C       800 MHz
+CPU12      2.0%        56 °C      1061 MHz
+CPU13      0.0%        56 °C      1029 MHz
+CPU14      2.0%        56 °C      1038 MHz
+CPU15      0.0%        56 °C       955 MHz
+CPU16      0.0%        57 °C       970 MHz
+CPU17      0.0%        57 °C      1345 MHz
+CPU18      2.0%        57 °C      1801 MHz
+CPU19      0.0%        57 °C       800 MHz
+
+auto-cpufreq version: 3.1.0
+
+Python: 3.12.3
+psutil package: 7.2.2
+platform package: 1.0.8
+click package: 8.1.6
+distro package: 1.9.0
+
+Computer type: Notebook
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.3 %
+
+Total CPU usage: 3.5 %
+Total system load: 1.07
+Average temp. of all cores: 53.00 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: on
+```
+
+Also please be descriptive about the issue you're reporting, i.e: what you tried & what's the expected behaviour.
+
+---
+
+
+Hi
+so as the title says i noticed that my CPU was very hot (like 85+ degree) when its speed was 3.80hz and power drawn was around 50W+
+but when I removed the daemon and tried again (without the app) my temps were around 70-73 degree with same speed and power drawn around 20W+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lucasleocs:</strong></p>
+                    <p>This may be related to Intel HWP Dynamic Boost, which `auto-cpufreq` currently enables by default on AC power when the feature is supported and no explicit setting is provided.
+
+I think it would be useful to rule it in or out with a controlled comparison before assuming it is responsible for the higher power draw.
+
+@ryee123123, could you try explicitly disabling it in `/etc/auto-cpufreq.conf` and see whether the power draw and temperatures change under the same workload?
+
+```ini
+[charger]
+hwp_dynamic_boost = false
+```
+
+Then restart the daemon:
+
+```bash
+sudo systemctl restart auto-cpufreq
+```
+
+If possible, please compare power draw, temperature, and performance under conditions as similar as possible to your previous test. If disabling it brings the power consumption back down, it would also be useful to repeat the test with:
+
+```ini
+[charger]
+hwp_dynamic_boost = true
+```
+
+That would give us a much better indication of whether the difference actually follows HWP Dynamic Boost on this hardware.
+
+@AdnanHodzic, if this turns out to be reproducible on some hardware, it might be worth revisiting the AC default or checking whether certain platforms behave poorly with Dynamic Boost enabled.
+
+On a related note, I noticed `--debug` doesn't expose the HWP Dynamic Boost state even though it's already collected elsewhere. I opened a small standalone PR just to add `HWP Dynamic Boost: On/Off` without touching any power-management logic: **[#976](https://github.com/AdnanHodzic/auto-cpufreq/pull/976)**
+I’m also looking into broader `--debug` improvements for later. For instance, source builds currently just display `3.1.0`, making it hard to tell which master commit generated the report. It would also be useful to show whether the daemon is actually active, and to report more of the effective configuration state while the daemon is running.
+
+I’ve started working on this, but it’s still a work in progress. Since it builds on the version handling changes in #975 anyway, I’ll wait for that to be reviewed before wrapping this up and opening another PR.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ryee123123:</strong></p>
+                    <p>@lucasleocs 
+hi
+well i uninstalled the app but i took a copy of the last config i used and i tried it before with "hwp_dynamic_boost = false"
+
+also sometimes when i enabled/disabled something like the turbo boost (in the gui) sometimes it applies without restarting the service and sometimes not
+same with the governor </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lucasleocs:</strong></p>
+                    <p>Thanks @ryee123123 , that's useful information. If hwp_dynamic_boost = false was active during the high-power test, that makes HWP Dynamic Boost a less likely explanation.
+
+@AdnanHodzic, maybe you have other ideas about what could explain the much higher package power at similar clock speeds on this system. I also noticed that --debug currently doesn't show the effective EPP or EPB state. Those could be useful here as well, especially when comparing power behavior at similar reported frequencies. </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> Thanks [@ryee123123](https://github.com/ryee123123) , that's useful information. If hwp_dynamic_boost = false was active during the high-power test, that makes HWP Dynamic Boost a less likely explanation.
+> 
+> [@AdnanHodzic](https://github.com/AdnanHodzic), maybe you have other ideas about what could explain the much higher package power at similar clock speeds on this system. I also noticed that --debug currently doesn't show the effective EPP or EPB state. Those could be useful here as well, especially when comparing power behavior at similar reported frequencies.
+
+I merged changes in #976.
+
+Not sure what's happening here, as auto-cpufreq usually does the opposite and lowers CPU temperatures in most cases.
+
+One thing that might be worth trying that I noticed significantly increases CPU temp is if in auto-cpufreq.conf file I set this line to: `performance`:
+
+```
+# EPP: see available preferences by running: cat /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_available_preferences
+energy_performance_preference = balance_performance
+```
+
+But with `balance_performance` I get max speed I need when charging and lot lower temperature. But your mileage might vary.
+
+With --debug I also don't see at what speed are your fans spinning (available when daemon is installed with --stats), as you might have clogged fans?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ryee123123:</strong></p>
+                    <p>@AdnanHodzic 
+in my config i also tried "energy_performance_preference = balance_performance"
+and i'm sure i tried the lower one called efficiency i guess and still
+also my laptop lenovo loq doesn't expose fans as i know
+
+note: i am not 100% sure about this but i think changing powerplans/governor didnt limit the speed/frequency
+while the powerplan/powermode built in my os limit that frequency</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> my laptop lenovo loq doesn't expose fans as i know
+
+It should, Lenovo X1 Carbon is my main driver and it displays fan speed just fine:
+
+<img width="938" height="732" alt="Image" src="https://github.com/user-attachments/assets/798d74f7-18e3-480a-b3a4-9316abf1c913" />
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ryee123123:</strong></p>
+                    <p>@AdnanHodzic 
+
+<img width="1606" height="421" alt="Image" src="https://github.com/user-attachments/assets/a8ac1386-6b4b-44f2-ba1f-ebbc2708ae30" />
+
+take a look in this photo maybe it could help
+note: the speed was limited because i was using "energy_performance_preference = balance_performance"</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Now that I see your screenshot, maybe it's a conflict in GUI being set to use "powersave" and then it using different (conflicting) settings in /etc/auto-cpufreq.conf</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ryee123123:</strong></p>
+                    <p>@AdnanHodzic 
+i started using the config because of the issue as i remember so i dont think its because of the conflicing (maybe am not sure)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> [@AdnanHodzic](https://github.com/AdnanHodzic) i started using the config because of the issue as i remember so i dont think its because of the conflicing (maybe am not sure)
+
+@ryee123123 can you try using only settings automatically set by auto-cpufreq, or adjusting them in GUI without /etc/auto-cpufreq.conf or vice versa? Curious to see if you'll see different results, as if this is the case then we have some kind of conflict @lucasleocs 
+
+To be sure, make sure to restart auto-cpufreq systemd service between changes to make sure it's all picked up properly: `sudo systemctl restart auto-cpufreq` or alternatively: `sudo auto-cpufreq --remove && sudo auto-cpufreq --install`</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>ryee123123:</strong></p>
+                    <p>@AdnanHodzic 
+the settings where automatically as the beginning the only thing i see changes is the turbo boost
+i never saw any diff in changing the governor
+
+note: i dont know if this is normal but the powerplan/powermode in my OS dissapeared when using auto-cpufreq</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lucasleocs:</strong></p>
+                    <p>@AdnanHodzic I took a closer look at this because there seem to be a few separate things happening here.
+
+The Zorin Power Mode disappearing while auto-cpufreq is installed is actually explainable: when the daemon is installed, auto-cpufreq disables and masks `power-profiles-daemon` to avoid having two power managers controlling the same settings. Since the desktop Power Mode UI depends on PPD, the selector disappearing is expected in that state.
+
+However, I noticed that the current removal path does not really restore the previous host state. It mostly re-enables PPD/TuneD using a fixed policy instead of remembering exactly how they were configured before auto-cpufreq was installed. This is one of the things #975 changes: it snapshots the original PPD/TuneD service state and active power profile before making persistent changes, and restores that state only after the auto-cpufreq daemon has been successfully removed. It also keeps the recovery state if restoration fails.
+
+That probably does not explain the ~50 W consumption while auto-cpufreq is running, but it means that comparing "auto-cpufreq installed" with "auto-cpufreq removed" on current master can change more than just auto-cpufreq itself, so the comparison is not completely controlled.
+
+There are still a couple of things here that I don't think the current code explains yet. In particular, the report that changing the governor seems to have little effect while the OS power mode does is worth investigating separately. With `intel_pstate`/HWP, `powersave` is not simply a low-frequency cap, and governor, EPP, EPB, turbo and platform profile are separate parts of the effective policy, so seeing the actual values together would help a lot.
+
+The missing fan RPM is also interesting. This machine is already on kernel 7.0 and Lenovo's newer WMI Gamezone/Other driver stack has HWMON fan reporting support for compatible gaming systems. That does not guarantee this particular LOQ firmware exposes the required capability data, but I would have expected us to at least be able to distinguish whether the kernel exposes a fan sensor and `psutil` misses it, or whether the kernel exposes no RPM at all.
+
+I'm working on expanding `--debug` for exactly this reason. Ideally one debug report should give us the effective governor/EPP/EPB/HWP/turbo state, CPUFreq policies, platform profile/provider, daemon and PPD/TuneD state, exact source revision, and enough HWMON information to tell why a fan reading is missing, instead of asking the reporter to run several additional commands.
+
+So at this point I think the issue is real, but I would not attribute the power difference to HWP Dynamic Boost or to a single auto-cpufreq setting yet. There are several policy layers changing at once, plus a few unusual observations on this particular system.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> > my laptop lenovo loq doesn't expose fans as i know
+> 
+> It should, Lenovo X1 Carbon is my main driver and it displays fan speed just fine:
+> 
+> <img alt="Image" width="938" height="732" src="https://private-user-images.githubusercontent.com/1041579/650698107-798d74f7-18e3-480a-b3a4-9316abf1c913.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3ODkyOTI2NzAsIm5iZiI6MTc4OTI5MjM3MCwicGF0aCI6Ii8xMDQxNTc5LzY1MDY5ODEwNy03OThkNzRmNy0xOGUzLTQ4MGEtYjNhNC05MzE2YWJmMWM5MTMucG5nP1gtQW16LUFsZ29yaXRobT1BV1M0LUhNQUMtU0hBMjU2JlgtQW16LUNyZWRlbnRpYWw9QUtJQVZDT0RZTFNBNTNQUUs0WkElMkYyMDI2MDkxMyUyRnVzLWVhc3QtMSUyRnMzJTJGYXdzNF9yZXF1ZXN0JlgtQW16LURhdGU9MjAyNjA5MTNUMDkzOTMwWiZYLUFtei1FeHBpcmVzPTMwMCZYLUFtei1TaWduYXR1cmU9OGI4Mjg3NDU5ZWY0NmU3N2JiYzlkOTMyZTEyNjM2YzU0MGNjMDZhOTJkOTk3MDMwYWFhNzg4OGEzNmJjY2EwMCZYLUFtei1TaWduZWRIZWFkZXJzPWhvc3QmcmVzcG9uc2UtY29udGVudC10eXBlPWltYWdlJTJGcG5nIn0.9BQEdvr_MFNcLy05ZoOHhlvBIkNXDvmS2EPG8_-FtmU">
+
+I just noticed that, although in this original screenshot my laptop is charging, it's displaying "Power draw". But in meantime I re-installed everything from `master` branch as I was testing changes in #975 and now it's displaying it as: "Power draw: 0.00W" 
+
+<img width="939" height="738" alt="Image" src="https://github.com/user-attachments/assets/10b9b736-903e-4338-9e0f-5bb165c39d3d" />
+
+As soon as I plugged the charger out "Power draw" was displayed correctly:
+
+<img width="937" height="730" alt="Image" src="https://github.com/user-attachments/assets/9960b831-5f82-48b3-88f9-abe92e03a5d9" />
+
+So there are definitely some inconsistencies.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lucasleocs:</strong></p>
+                    <p>@AdnanHodzic I looked into the `Power draw: 0.00 W` behavior more closely, and I found the source. It isn't caused by the changes in #975. However, I realized the misleading `Power draw` display was introduced by my earlier #964 changes.
+
+The underlying value comes from the battery's `power_now` sysfs attribute, so it represents power flow through the battery rather than total system power consumption. When the laptop is running on AC and the battery isn't supplying power, `power_now` can legitimately be 0. Once AC is disconnected and the battery starts discharging, the value becomes non-zero again, which matches what you observed.
+
+Before #964, the GUI didn't display this value. In #964 I added it unconditionally under the label `Power draw`, which makes it look like system power consumption when it actually isn't.
+
+So #975 doesn't appear to have introduced the behavior, but your testing exposed a reporting issue from #964 that I should fix separately.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> When the laptop is running on AC and the battery isn't supplying power, power_now can legitimately be 0. Once AC is disconnected and the battery starts discharging, the value becomes non-zero again, which matches what you observed.
+
+Thanks for confirming, during last few days I also realized that it won't stuck on 0.00W forever and it'll change.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

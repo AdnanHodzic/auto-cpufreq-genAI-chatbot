@@ -1,0 +1,60 @@
+
+        <html>
+        <head>
+            <title>Issue #923: Snap package can't write to sys/devices/system/cpu/cpu${i}/power/energy_perf_bias: Permission denied</title>
+        </head>
+        <body>
+            <h1>Snap package can't write to sys/devices/system/cpu/cpu${i}/power/energy_perf_bias: Permission denied</h1>
+            <p><strong>Issue #923</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>Description:
+The error while writing to `sys/devices/system/cpu/cpu${i}/power/energy_perf_bias` arises only if I use the Snap package.
+
+LLM says:
+A “strict” snap runs in a sandbox and cannot freely read/write arbitrary system paths like /sys, /etc, /usr.
+
+It suggests the following code as an alternative to line 288.  Due to snap confinement,  I was not able to edit the file ` /snap/auto-cpufreq/164/usr/bin/cpufreqctl.auto-cpufreq`.
+
+```bash
+ echo "$EPB_VALUE" | sudo tee "$FLROOT/cpu$CORE/power/energy_perf_bias" > /dev/null
+```
+
+Finally solved the issue by following the first installation method, which involves cloning the repo.
+
+### Error output:
+```text
+/snap/auto-cpufreq/164/usr/bin/cpufreqctl.auto-cpufreq: line 288: /sys/devices/system/cpu/cpu${i}/power/energy_perf_bias: Permission denied
+```
+
+<img width="1833" height="953" alt="Image" src="https://github.com/user-attachments/assets/ea2bbb43-b13d-4434-84eb-73bb7ebd52e3" />
+
+<img width="1908" height="669" alt="Image" src="https://github.com/user-attachments/assets/a72f43ea-05b6-4ef9-8b49-e3768e93ac50" />
+
+---
+
+### System information:
+
+Linux distro: Ubuntu 24.04 Noble Numbat
+Linux kernel: 6.14.0-1020-oem
+Processor: Intel(R) Core(TM) Ultra 7 265H
+Cores: 16
+Architecture: x86_64
+Driver: intel_pstate
+
+
+---
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Please use recommended way to install using [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq#auto-cpufreq-installer), since Snap package comes with its own set of restrictions.</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

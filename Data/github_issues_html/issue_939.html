@@ -1,0 +1,148 @@
+
+        <html>
+        <head>
+            <title>Issue #939: No Battery info when mouse connected</title>
+        </head>
+        <body>
+            <h1>No Battery info when mouse connected</h1>
+            <p><strong>Issue #939</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Fill out information requested in this template, without doing so issue will be ignored & closed!
+
+#### Before submitting an issue, it is strongly recommended to use the **[auto-cpufreq-genAI-chatbot](https://foolcontrol.org/?p=4903)** to get an immediate answer to your question.
+
+### Have you tried?
+
+- [Searching through existing/closed issues](https://github.com/AdnanHodzic/auto-cpufreq/issues) to see if your bug has already been already submitted? 
+- If installation failed with [auto-cpufreq-installer](https://github.com/AdnanHodzic/auto-cpufreq/#auto-cpufreq-installer),have you tried installing auto-cpufreq using [Snap package](https://github.com/AdnanHodzic/auto-cpufreq/#snap-store)?
+- Have you tried [configuring auto-cpufreq](https://github.com/AdnanHodzic/auto-cpufreq/#configuring-auto-cpufreq)?
+- Have you tried suggestions in [troubleshooting section](https://github.com/AdnanHodzic/auto-cpufreq#troubleshooting)?
+
+### System information:
+
+Add/paste output of:
+
+```
+Using settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------------------------------------------------------
+
+Linux distro: EndeavourOS rolling rolling
+Linux kernel: 6.19.11-zen1-1-zen
+Processor: AMD Ryzen 7 5700U with Radeon Graphics
+Cores: 16
+Architecture: x86_64
+Driver: acpi-cpufreq
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1800 MHz
+CPU min frequency: 1400 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0      0.0%        56 °C      1800 MHz
+CPU1      0.0%        56 °C      1800 MHz
+CPU2      0.0%        56 °C      1598 MHz
+CPU3      1.0%        56 °C      1800 MHz
+CPU4      1.0%        56 °C      4327 MHz
+CPU5      1.0%        56 °C      1800 MHz
+CPU6      1.0%        56 °C      1800 MHz
+CPU7      0.0%        56 °C      4326 MHz
+CPU8      3.0%        56 °C      1800 MHz
+CPU9      0.0%        56 °C      1800 MHz
+CPU10      2.0%        56 °C      1800 MHz
+CPU11      1.0%        56 °C      1609 MHz
+CPU12      0.0%        56 °C      1800 MHz
+CPU13      0.0%        56 °C      1800 MHz
+CPU14      0.0%        56 °C      1800 MHz
+CPU15      0.0%        56 °C      1800 MHz
+
+auto-cpufreq version: Version         : 3.0.0-3
+
+Python: 3.14.4
+psutil package: 7.2.2
+platform package: 1.0.9
+click package: 8.3.2
+distro package: 1.9.0
+
+Computer type: Convertible
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.33 %
+
+Total CPU usage: 1.9 %
+Total system load: 0.59
+Average temp. of all cores: 43.00 °C 
+
+Currently using: performance governor
+Currently turbo boost is: on
+
+-------------------------------------------------------------------------------
+
+[ender@DESKTOP-5TUR25H ~]$ 
+
+```
+
+Hello! I recently installed auto-cpufreq over the AUR (yay -S auto-cpufreq) and noticed that when my wireless Logitech mouse is connected it always defaults to that battery and therefore says following in auto-cpufreq --monitor:
+
+Battery status: Not Charging
+Battery percentage: Unkown
+
+Once I unplug the dongle it will show the battery state correctly. I already tried:
+
+```
+[power_supply_ignore_list]
+device1 = hidpp_battery_0
+device2 = hidpp_battery_1
+device3 = hidpp_battery_2
+device4 = hidpp_battery_3
+device5 = hidpp_battery_4
+device6 = hidpp_battery_5
+device7 = hidpp_battery_6
+```
+
+Even with ignore rules it seems to grab the hidpp_battery_* which it shouldn't do because there is clearly a BAT0 device present.
+```
+[ender@DESKTOP-5TUR25H ~]$ ls /sys/class/power_supply/
+ADP1  BAT0  hidpp_battery_2  ucsi-source-psy-USBC000:001
+[ender@DESKTOP-5TUR25H ~]$ ls /sys/class/power_supply/
+ADP1  BAT0  ucsi-source-psy-USBC000:001
+[ender@DESKTOP-5TUR25H ~]$ ls /sys/class/power_supply/
+ADP1  BAT0  hidpp_battery_3  ucsi-source-psy-USBC000:001
+[ender@DESKTOP-5TUR25H ~]$ ls /sys/class/power_supply/
+ADP1  BAT0  hidpp_battery_4  ucsi-source-psy-USBC000:001
+[ender@DESKTOP-5TUR25H ~]$ cat /sys/class/power_supply/BAT0/capacity
+100
+```
+
+The AC adapter though is detected correctly.
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Will tag some people who made changes related to [battery with v3.0.0 release](https://github.com/AdnanHodzic/auto-cpufreq/releases/tag/v3.0.0) and hopefully someone can help more.
+
+@cayubweeums since you made ability to specify battery device in config with #895 do you have any idea about this one? 
+
+Or @baldeuniversel with #847 and @sgimres with #884 
+
+Thanks</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>EnderBow:</strong></p>
+                    <p>Hi, thanks for the quick response and for the tagging! I ended up doing a OS reinstall yesterday for other reasons and the issue surprisingly went away. My battery is now getting detected correctly i don't know what exactly fixed it but its good now.
+
+I'm sorry for the inconvenience but appreciate this tool it gives me much more time at Uni without plugging in!</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

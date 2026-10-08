@@ -224,6 +224,58 @@ Side note, it's cool that the config file is read life instead of requiring a re
 EDIT: I can grab a video if that's at all helpful.</p>
                 </div>
             
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>CasperGamingOne:</strong></p>
+                    <p>I can confirm this behaviour also, side note it's nixos, but it still goes to the maximum frequency and power when turbo is auto or always and i reach 100 C way to easily :((</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I can confirm this behaviour also, side note it's nixos, but it still goes to the maximum frequency and power when turbo is auto or always and i reach 100 C way to easily :((
+
+@shadeyg56 can you confirm?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>CasperGamingOne:</strong></p>
+                    <p>i managed to find a resolution at me by using [throttled](https://github.com/erpalma/throttled) service, now it changes the frequencies again so it doesn't exceed 95/96 C hotspot
+
+Update: So at least for me thermald doesn't do anything, as i tested with throttled and thermald + auto-cpufreq and just throttled + auto-cpufreq. Just throttled should be enough for this issue. If i am stupid and did smth wrong, than stupid me 🫣</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> i managed to find a resolution at me by using [throttled](https://github.com/erpalma/throttled) service, now it changes the frequencies again so it doesn't exceed 95/96 C hotspot
+> 
+> Update: So at least for me thermald doesn't do anything, as i tested with throttled and thermald + auto-cpufreq and just throttled + auto-cpufreq. Just throttled should be enough for this issue. If i am stupid and did smth wrong, than stupid me 🫣
+
+@DarthZiplock can you confirm if this work for you as well?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>DarthZiplock:</strong></p>
+                    <p>> > i managed to find a resolution at me by using [throttled](https://github.com/erpalma/throttled) service, now it changes the frequencies again so it doesn't exceed 95/96 C hotspot
+> > Update: So at least for me thermald doesn't do anything, as i tested with throttled and thermald + auto-cpufreq and just throttled + auto-cpufreq. Just throttled should be enough for this issue. If i am stupid and did smth wrong, than stupid me 🫣
+> 
+> [@DarthZiplock](https://github.com/DarthZiplock) can you confirm if this work for you as well?
+
+I ended up having to remove auto-cpufreq entirely due to another problem: my system would slow down drastically after 24 hours. Emulators and games would run at only about 60% of their normal fps unless I rebooted first. Since removing auto-cpufreq, that problem has disappeared.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>That should def not be caused by auto-cpufreq, but that would require a new issue to figure out what happened exactly.
+
+Regardless, closing the issue.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>It sounds like the CPU is probably hitting TJMax and throttling. When the CPU boosts, that is not going to help with temps. Have you done gaming on Windows before and experienced a similar thing? You might need to improve your cooling setup
+
+Regardless, I agree this isn't an issue with the `auto-cpufreq` software</p>
+                </div>
+            
             </div>
         </body>
         </html>

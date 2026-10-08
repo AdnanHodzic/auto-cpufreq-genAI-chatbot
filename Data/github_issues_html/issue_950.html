@@ -1,0 +1,77 @@
+
+        <html>
+        <head>
+            <title>Issue #950: Debian/Ubuntu packaging: offer to contribute debian/ directory for .deb builds</title>
+        </head>
+        <body>
+            <h1>Debian/Ubuntu packaging: offer to contribute debian/ directory for .deb builds</h1>
+            <p><strong>Issue #950</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>**Is your feature request related to a problem? Please describe.**
+
+auto-cpufreq has excellent packaging for Snap, Nix, AUR, Gentoo, OpenRC, runit, s6, and dinit — but not for Debian/Ubuntu via .deb packages. Users on Debian-based distros currently rely on the installer script (creates a venv in /opt/) or the Snap package (limited: no GUI, confinement issues).
+
+The existing request #157 (2020) asked for this but it was never implemented.
+
+**Describe the solution you'd like**
+
+A minimal `debian/` directory that produces a proper .deb package. The approach is surgical:
+
+1. A self-contained `debian/` directory (zero changes to existing code)
+2. Uses `dh_virtualenv` to keep the existing venv isolation (no need to port from Poetry to setuptools)
+3. Installs the systemd service to the standard `/lib/systemd/system/` path
+4. Handles polkit policy, desktop file, and icon via debhelper
+5. Existing installer + Snap continue working unchanged — the .deb is purely additive
+
+I'm willing to create a PR for this. Would that be welcome?
+
+**Describe alternatives you've considered**
+
+- Snap package already exists but has confinement issues (no GUI, no battery threshold control)
+- Installer script works but doesn't integrate with dpkg/apt (no dependency resolution, no clean removal tracking)
+- Asking a Debian maintainer to package it upstream would take longer
+
+**Additional context**
+
+I use this tool on multiple Debian machines and having a .deb would make deployment and updates much smoother. Happy to maintain the packaging going forward.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@filhocf 
+
+> I'm willing to create a PR for this. Would that be welcome?
+
+Absolutely! 
+
+> I use this tool on multiple Debian machines and having a .deb would make deployment and updates much smoother. Happy to >maintain the packaging going forward.
+
+That would be amazing and .deb could be added as part of each release. Being an ex Debian package maintainer I could also help you/guide how to submit to add it to Debian repos (especially since [I already created RFP).](https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1053294)
+
+Think this is an excellent moment for this, as auto-cpufreq has reached significant level of maturity and  releases as made as often as before, so new versions wouldn't have to be backported to stable. It would be great to see auto-cpufreq .deb package in future Debian and all of its derivative distro releases like Ubuntu, Mint and etc ...</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>emfox:</strong></p>
+                    <p>Please don't.
+Debian package maintaince is different procedure compare to upstream softwares. They should be in different git repositories, one for software itself, another one include debian/ for packaging, unless the upstream author maintain, package and upload the debian package by himself.
+Here's the example of debian packaging: https://salsa.debian.org/debian/auto-cpufreq, note that debian/* tag is packaging related, and upstream/* is the imported upstream files.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Issue closed by @emfox, and further discussion can be found on #951 </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Changes mentioned as part of [auto-cpufreq v3.2.0 release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

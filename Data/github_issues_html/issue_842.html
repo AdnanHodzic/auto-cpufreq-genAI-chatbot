@@ -223,6 +223,27 @@ https://github.com/AdnanHodzic/auto-cpufreq/tree/log-spam-fix</p>
                     <p>That fixed it for me. Thanks</p>
                 </div>
             
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lianthar:</strong></p>
+                    <p>This issue is caused by setting the Governor to Performance which causes the system to lock the EPP settings (and corresponding) file.   Powersave is the best setting for the governor - the name is a misnomer it just allows the EPP settings to work where the Performance governor mode hard-locks / over-rides the EPP settings.  NO downside to leaving governor on Powersave mode all the time.  See my response to this issue where I shared some of the AI explanatory notes on this one: EPP write fails with "Device or resource busy" on Intel Core Ultra 7 155H (Arch) #927</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> This issue is caused by setting the Governor to Performance which causes the system to lock the EPP settings (and corresponding) file. Powersave is the best setting for the governor - the name is a misnomer it just allows the EPP settings to work where the Performance governor mode hard-locks / over-rides the EPP settings. NO downside to leaving governor on Powersave mode all the time. See my response to this issue where I shared some of the AI explanatory notes on this one: EPP write fails with "Device or resource busy" on Intel Core Ultra 7 155H (Arch) [#927](https://github.com/AdnanHodzic/auto-cpufreq/issues/927)
+
+@lianthar since [in comments](https://github.com/AdnanHodzic/auto-cpufreq/issues/927#issuecomment-4275102404) I see your suggestion is helping folks in #927. 
+
+If you have ideas how to fix this issue, please give it a try and [contribute to the project](https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution) and you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Changes were made as part of #958 which could've solved this issue, please pull the latest changes and re-install auto-cpufreq.
+
+I'm closing the issue, if the problem persists, please comment or feel free to-reopen it. Thanks!</p>
+                </div>
+            
             </div>
         </body>
         </html>

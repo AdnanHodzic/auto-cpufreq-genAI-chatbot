@@ -128,6 +128,110 @@ I tried switching from nixpkgs' auto-cpufreq service (2.6.0) to this flake becau
             <div>
                 <h2>Comments</h2>
         
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>satr14washere:</strong></p>
+                    <p>same issue, bump!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>IIRC @shadeyg56 is the maintainer for Nix flake, hence could you please take a look at what's happening here?
+
+Alternatively I would advise you to simply install auto-cpufreq using [auto-cpufreq-installer ](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#auto-cpufreq-installer)(preferred method) and Nix is also supported.
+
+Another alternative is until this is resolved I would advise you to use [auto-cpufreq.conf file](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#4-auto-cpufreq-config-file) with [turbo = never](https://github.com/AdnanHodzic/auto-cpufreq?tab=readme-ov-file#4-auto-cpufreq-config-file:~:text=%23%20turbo%20boost%20setting.%20possible%20values%3A%20always%2C%20auto%2C%20never%0Aturbo%20%3D%20auto).</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>shadeyg56:</strong></p>
+                    <p>I'm unable to reproduce this on the latest commit a11a98c46bf6a77d0c2e0ea8d87acef78507cae5
+
+@SX-9 if you're still having this issue, can you ensure you're on the latest commit and also send your output of `sudo auto-cpufreq --debug`?</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@SX-9 please make sure you pull the latest changes, re-install auto-cpufreq and please confirm if #926 fixes this problem
+
+Thanks</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>satr14washere:</strong></p>
+                    <p>okay so yesterday it wasnt working even after updating but just now it works after a rebuild. i never updated my flake lockfile so idk what fixed it.
+
+on nixos unstable </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>satr14washere:</strong></p>
+                    <p>> sudo auto-cpufreq --debug
+
+```
+-------------------------------- Battery Info ---------------------------------
+
+battery count = 1
+BAT1 start threshold = b'80\n'
+BAT1 stop threshold = b'85\n'
+
+-------------------------------------------------------------------------------
+
+Linux distro: NixOS 26.05 Yarara
+Linux kernel: 6.18.10
+Processor: Intel(R) Core(TM) i5-8350U CPU @ 1.70GHz
+Cores: 8
+Architecture: x86_64
+Driver: intel_pstate
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 1700 MHz
+CPU min frequency: 400 MHz
+
+Core	Usage	Temperature	Frequency
+CPU0      8.9%        50 °C      1700 MHz
+CPU1      8.0%        52 °C      1700 MHz
+CPU2      9.0%        51 °C      1700 MHz
+CPU3      6.1%        50 °C      1701 MHz
+CPU4      5.1%        50 °C      1700 MHz
+CPU5      4.1%        52 °C      1701 MHz
+CPU6      2.0%        51 °C      1700 MHz
+CPU7      8.9%        50 °C      1701 MHz
+
+CPU fan speed: 0 RPM
+
+auto-cpufreq version: 3.0.0
+Git commit: v3.0.0
+
+Python: 3.13.11
+psutil package: 7.1.3
+platform package: 1.0.8
+click package: 8.3.1
+distro package: 1.9.0
+
+Computer type: /nix/store/f15k3dpilmiyv6zgpib289rnjykgr1r4-bash-5.3p9/bin/sh: line 1: dmidecode: command not found
+Battery is: charging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.24 %
+
+Total CPU usage: 9.9 %
+Total system load: 1.63
+Average temp. of all cores: 51.00 °C 
+
+Currently using: performance governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+```</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Ok, great to hear, closing the issue and @shadeyg56 please feel free to add any additional comments if any.</p>
+                </div>
+            
             </div>
         </body>
         </html>

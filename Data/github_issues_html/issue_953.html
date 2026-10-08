@@ -1,0 +1,207 @@
+
+        <html>
+        <head>
+            <title>Issue #953: fix: prevent live mode conflict with daemon</title>
+        </head>
+        <body>
+            <h1>fix: prevent live mode conflict with daemon</h1>
+            <p><strong>Issue #953</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>## Problem
+
+Running `auto-cpufreq --live` while the auto-cpufreq daemon is active allows both modes to run concurrently.
+
+When live mode exits, `cpufreqctl_restore()` removes `/usr/local/bin/cpufreqctl.auto-cpufreq`, even though the running daemon still depends on that helper. On its next optimization cycle, the daemon fails with:
+
+```text
+ValueError: invalid literal for int() with base 10: '/bin/sh: 1: cpufreqctl.auto-cpufreq: not found'
+```
+<img width="1328" height="344" alt="image" src="https://github.com/user-attachments/assets/c8f9ed5b-0019-4b91-9bcc-14b606937635" />
+
+The service can continue to appear active even though its optimization loop has stopped, so automatic CPU regulation is no longer reliable.
+
+## Change
+
+Call the existing `running_daemon_check()` before entering `--live` mode. The warning is specific to live mode and includes the service stop command guide when systemd is detected.
+
+This prevents live mode and the daemon from changing CPU settings concurrently. It also prevents live-mode cleanup from removing a helper that the daemon still needs. 
+<img width="927" height="241" alt="image" src="https://github.com/user-attachments/assets/165df021-527b-494b-8939-c8acd37eb001" />
+
+Stopping and starting the service would clearly recreate the helper file and the problem goes away until live is mistakingly run. This might not be obvious or users might not be aware the CPU management is working incorrectly at that time.
+
+Blocking --live while the daemon runs is therefore the safer design.
+
+## Tested environment
+
+- Distribution: Pop!_OS (Debian-based)
+- Init system: systemd
+- Installation method: `auto-cpufreq-installer`
+
+## Reproduction
+
+1. Install and start the daemon:
+
+   ```bash
+   sudo auto-cpufreq --install
+   ```
+
+2. Confirm the systemd service is running:
+
+   ```bash
+   sudo systemctl status auto-cpufreq
+   ```
+
+3. Start live mode while the daemon is running:
+
+   ```bash
+   sudo auto-cpufreq --live
+   ```
+
+4. Exit live mode.
+
+5. Check the service again:
+
+   ```bash
+   sudo systemctl status auto-cpufreq
+   ```
+
+Before this change, the service output contains `cpufreqctl.auto-cpufreq: not found`, followed by a `ValueError` as shown above while parsing the command output as an integer.
+
+## Verification
+
+1. Install and start the daemon, then confirm it is active:
+
+   ```bash
+   sudo auto-cpufreq --install
+   sudo systemctl status auto-cpufreq
+   ```
+
+2. Attempt to start live mode:
+
+   ```bash
+   sudo auto-cpufreq --live
+   ```
+
+3. Confirm live mode exits with a red warning that auto-cpufreq is running in daemon mode. On systemd systems, the message also shows:
+
+   ```bash
+   sudo systemctl stop auto-cpufreq
+   ```
+
+4. Confirm the helper remains executable and the daemon remains active:
+
+   ```bash
+   test -x /usr/local/bin/cpufreqctl.auto-cpufreq
+   sudo systemctl status auto-cpufreq
+   ```
+
+5. Confirm monitor mode can still run alongside the daemon without affecting it:
+
+   ```bash
+   sudo auto-cpufreq --monitor
+   ```
+
+6. Stop the daemon and confirm live mode still works normally:
+
+   ```bash
+   sudo systemctl stop auto-cpufreq
+   sudo auto-cpufreq --live
+   ```
+
+7. Exit live mode, restart the daemon, and confirm that the helper is recreated and the service is active:
+
+   ```bash
+   sudo systemctl start auto-cpufreq
+   test -x /usr/local/bin/cpufreqctl.auto-cpufreq
+   sudo systemctl status auto-cpufreq
+   ```
+
+## Validation
+
+- Python source compilation completed successfully.
+- `git diff --check` completed successfully.
+- A focused CLI check confirmed that `--live` invokes the daemon-running guard.
+- Live mode worked normally while the systemd service was stopped. After exiting live mode, restarting the daemon recreated the helper and the service remained healthy.
+- Monitor mode ran alongside the daemon for multiple refresh cycles without deleting the helper or interrupting the service.
+ 
+PS: Was just looking for a way to manage my CPU temperature and bumped into your project. I noticed there is no default conf file added after install. I guess this was deliberate or should I give that a shot?
+
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Hey @tiwiex, this an excellent find! There used to be a functionality that would prevent --live from running if daemon was installed, but probably gotten lost in one of the refactors. 
+
+Few remarks, let's update this message to say:
+
+```
+------------------------ auto-cpufreq running ------------------------------
+
+WARNING: auto-cpufreq is running in daemon mode.
+
+To see view live stats of CPU optimizations made by daemon, run:
+
+auto-cpufreq --stats
+
+------
+
+Alternatively, you have to stop the daemon before running --live mode.
+
+You can do this by removing the daemon:
+
+sudo auto-cpufreq --remove
+
+Or by temporary stopping the daemon by stopping its systemd service:
+
+sudo systemctl stop auto-cpufreq
+
+-------------------------------------------------------------------------------
+```
+
+Since auto-cpufreq support other init system besides systemd, this part of message and procedure:
+
+```
+Or by temporary stopping the daemon by stopping its systemd service:
+
+sudo systemctl stop auto-cpufreq
+```
+
+Could be different, but we can also leave like this for now, and once maintainers who are behind those can alter it, or I can tag you if raised.
+
+Also, I think it would be a good idea besides --live to also link --monitor to output a same/similar message. Where by user running: `sudo auto-cpufreq --monitor` if daemon is already installed they would get:
+
+```
+------------------------ auto-cpufreq running ------------------------------
+
+WARNING: auto-cpufreq is running in daemon mode.
+
+To see view live stats of CPU optimizations made by daemon, run:
+
+auto-cpufreq --stats
+
+------
+
+Alternatively, you have to stop the daemon before running --monitor mode.
+
+You can do this by removing the daemon:
+
+sudo auto-cpufreq --remove
+
+Or by temporary stopping the daemon by stopping its systemd service:
+
+sudo systemctl stop auto-cpufreq
+
+-------------------------------------------------------------------------------
+```
+
+After that I think these changes are ready to be merged!</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

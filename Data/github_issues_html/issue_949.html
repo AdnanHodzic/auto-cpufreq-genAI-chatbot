@@ -1,0 +1,124 @@
+
+        <html>
+        <head>
+            <title>Issue #949: Battery percentage reads 0% on systems with multiple power supply interfaces (barrel jack + USB-C charging)</title>
+        </head>
+        <body>
+            <h1>Battery percentage reads 0% on systems with multiple power supply interfaces (barrel jack + USB-C charging)</h1>
+            <p><strong>Issue #949</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>### Have you tried?
+- [x] Searched existing/closed issues — no matching bug found
+- N/A — installed via CachyOS package manager, not auto-cpufreq-installer
+- [x] Yes — created `/etc/auto-cpufreq.conf` with explicit battery/charger sections including `turbo = auto`, settings are read but turbo remains off
+- [x] Yes — reviewed troubleshooting section, no relevant guidance for this issue
+
+### Error output:
+```text
+ERROR: failed to read battery BAT0 thresholds: CalledProcessError(1, ['cat', '/sys/class/power_supply/BAT0/charge_control_end_threshold'])
+```
+
+### System information:
+
+Using settings defined in /etc/auto-cpufreq.conf file
+
+-------------------------------- Battery Info ---------------------------------
+
+battery count = 1
+WARNING: battery BAT0 has no threshold attributes
+ERROR: failed to read battery BAT0 thresholds
+
+-------------------------------------------------------------------------------
+
+Linux distro: CachyOS Linux rolling n/a
+Linux kernel: 7.1.2-3-cachyos
+Processor: 12th Gen Intel(R) Core(TM) i7-12700H
+Cores: 20
+Architecture: x86_64
+Driver: intel_pstate
+
+Using settings defined in /etc/auto-cpufreq.conf
+
+------------------------------ Current CPU stats ------------------------------
+
+CPU max frequency: 2300 MHz
+CPU min frequency: 400 MHz
+
+Core    Usage   Temperature     Frequency
+CPU0      8.1%        39 °C       772 MHz
+CPU1      2.0%        39 °C       707 MHz
+CPU2      6.0%        36 °C      1393 MHz
+CPU3      0.0%        36 °C       400 MHz
+CPU4      4.1%        38 °C      1347 MHz
+CPU5      3.0%        38 °C       400 MHz
+CPU6      5.1%        39 °C      1373 MHz
+CPU7      0.0%        39 °C       400 MHz
+CPU8      4.0%        37 °C       400 MHz
+CPU9      0.0%        37 °C       400 MHz
+CPU10      5.1%        40 °C      1237 MHz
+CPU11      1.0%        40 °C       400 MHz
+CPU12     17.3%        40 °C       926 MHz
+CPU13      4.0%        40 °C      1108 MHz
+CPU14      1.0%        38 °C       400 MHz
+CPU15      3.0%        38 °C       400 MHz
+CPU16      6.1%        40 °C      1034 MHz
+CPU17      3.0%        42 °C       525 MHz
+CPU18      4.0%        42 °C       400 MHz
+CPU19      3.0%        42 °C       400 MHz
+
+CPU fan speed: 2000 RPM
+
+auto-cpufreq version: Version         : 3.0.0.r15.gf325b2a-1
+
+Python: 3.14.6
+psutil package: 7.2.2
+platform package: 1.0.9
+click package: 8.3.3
+distro package: 1.9.0
+
+Computer type: Convertible
+Battery is: discharging
+
+auto-cpufreq system resource consumption:
+cpu usage: 0.0 %
+memory use: 0.34 %
+
+Total CPU usage: 6.7 %
+Total system load: 1.91
+Average temp. of all cores: 41.00 °C 
+
+Currently using: powersave governor
+Currently turbo boost is: off
+
+-------------------------------------------------------------------------------
+
+**Issue description:**
+
+This laptop (Asus Zenbook Q529Z) supports both barrel jack and USB-C charging, which exposes multiple power supply interfaces in `/sys/class/power_supply/`:
+AC0
+BAT0
+hid-0018:04F3:2F09.0002-battery-7  (touchpad)
+ucsi-source-psy-USBC000:001
+ucsi-source-psy-USBC000:002
+
+auto-cpufreq reports battery percentage as 0% despite BAT0 correctly reporting the actual charge level via `cat /sys/class/power_supply/BAT0/capacity`. This causes auto-cpufreq to permanently set turbo boost off and apply maximum power saving regardless of actual battery state.
+
+The threshold read failure on BAT0 (`charge_control_end_threshold` not present) appears to cascade into incorrect battery percentage reporting. The ucsi USB-C power delivery interfaces likely lack the expected battery files, causing auto-cpufreq to misidentify the active battery.
+
+**Expected behaviour:** auto-cpufreq correctly identifies BAT0 as the primary battery and reads capacity from it, enabling dynamic turbo management based on actual charge level.
+
+**Reproduced on a laptop with both barrel jack and USB-C charging. Other laptops with USB-C power delivery interfaces may be affected.**</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Issue fixed as part of merged changes in #963</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

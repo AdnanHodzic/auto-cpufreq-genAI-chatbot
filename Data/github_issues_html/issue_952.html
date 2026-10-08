@@ -1,0 +1,21 @@
+
+        <html>
+        <head>
+            <title>Issue #952: Fix unsafe stat checks</title>
+        </head>
+        <body>
+            <h1>Fix unsafe stat checks</h1>
+            <p><strong>Issue #952</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I noticed when testing the Debian packaging PR that my stats and daemon were crashing. Turns out the system I was testing on reported core usage for each CPU core, but only returned 1 frequency. We assumed that the two always matched, but apparently that's not always the case.
+
+So, this is just a simple fix to ensure that doesn't happen. I also went ahead and added a guard against a potential (but of course unlikely) division by zero and added a couple of try/except blocks, that again, probably aren't really needed, but are nice to have.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+            </div>
+        </body>
+        </html>
+        

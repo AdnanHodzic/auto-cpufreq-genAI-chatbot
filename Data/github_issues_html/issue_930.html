@@ -1,0 +1,38 @@
+
+        <html>
+        <head>
+            <title>Issue #930: fix: apply frequency limits after turbo updates</title>
+        </head>
+        <body>
+            <h1>fix: apply frequency limits after turbo updates</h1>
+            <p><strong>Issue #930</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>## Summary
+- stop short-circuiting `set_frequencies()` based only on power-supply state
+- read current CPU min/max frequency values on each `set_frequencies()` call
+- only reapply frequency limits when the live values differ from the desired values
+## Why
+On Intel systems, `scaling_max_freq` can remain stuck at a stale non-turbo cap even after turbo has been enabled. Refreshing limits on turbo changes helped, but it was still possible for the live policy max frequency to drift out of sync while the system stayed on the same power source.
+## Result
+`set_frequencies()` now validates the live frequency values each run and repairs them when needed, so stale low `scaling_max_freq` caps are corrected even without a charger-state transition.</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>I apologize for delayed during review, LGTM! 
+
+Thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>hedi30:</strong></p>
+                    <p>Btw, I tested it thoroughly on my Arch Linux system. I've been monitoring the frequencies, and it works great. Maybe next week I'll look into Copilot’s suggestion about “set_autofreq() running every ~2s.” @AdnanHodzic </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

@@ -1,0 +1,135 @@
+
+        <html>
+        <head>
+            <title>Issue #937: fix(atomic): make auto-cpufreq work with atomic distros like silverblue, bluefin, etc</title>
+        </head>
+        <body>
+            <h1>fix(atomic): make auto-cpufreq work with atomic distros like silverblue, bluefin, etc</h1>
+            <p><strong>Issue #937</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>I fully expect this PR to be closed and not merged, but it would have been super helpful for me to find this when trying to get auto-cpufreq to work on an atomic Fedora distro, so it'd be nice if there were a record folks could find! 
+
+Thanks for all your hard work on this great tool!</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> I fully expect this PR to be closed and not merged
+
+As long as the PR makes sense, improves things or adds new features it will be merged.
+
+However, at this point and in its current state, this PR is unmergable as it has breaking changes.
+
+> but it would have been super helpful for me to find this when trying to get auto-cpufreq to work on an atomic Fedora distro, so it'd be nice if there were a record folks could find!
+
+There's an open issue regarding this in #677 and I even see another one that was closed with you adding the last comment #601.
+
+My biggest concern was whether changing the paths will break this for rest of the distros (especially immutable ones), but you address it with: 
+
+```
+    if [ -f /etc/os-release ]; then
+      . /etc/os-release
+      if [ "$VARIANT_ID" = "silverblue" ] || [ "$VARIANT_ID" = "kinoite" ] || [ "$VARIANT_ID" = "sericea" ] || [ "$VARIANT_ID" = "onyx" ]; then
+        detected_distro "Fedora Atomic ($VARIANT_ID)"
+```
+
+auto-cpufreq-installer goes through with some warnings, which I don't see normally:
+
+```
+Warning: /etc/polkit-1/polkit-agent is read-only. Skipping polkit policy installation.
+GUI might require 'sudo' to run if polkit is not available.
+```
+
+However, when I try to install auto-cpufreq daemon with your changes I get following error:
+
+```
+sudo auto-cpufreq --install
+
+--------------------- Deploying auto-cpufreq as a daemon ----------------------
+
+Traceback (most recent call last):
+  File "/opt/auto-cpufreq/venv/bin/auto-cpufreq", line 6, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/usr/lib/python3/dist-packages/click/core.py", line 1161, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/click/core.py", line 1082, in main
+    rv = self.invoke(ctx)
+  File "/usr/lib/python3/dist-packages/click/core.py", line 1443, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/click/core.py", line 788, in invoke
+    return __callback(*args, **kwargs)
+  File "/opt/auto-cpufreq/venv/lib/python3.13/site-packages/auto_cpufreq/bin/auto_cpufreq.py", line 169, in main
+    deploy_daemon()
+    ~~~~~~~~~~~~~^^
+  File "/opt/auto-cpufreq/venv/lib/python3.13/site-packages/auto_cpufreq/core.py", line 340, in deploy_daemon
+    cpufreqctl() # deploy cpufreqctl script func call
+    ~~~~~~~~~~^^
+  File "/opt/auto-cpufreq/venv/lib/python3.13/site-packages/auto_cpufreq/core.py", line 312, in cpufreqctl
+    copy(SCRIPTS_DIR / "cpufreqctl.sh", "/usr/local/bin/cpufreqctl.auto-cpufreq")
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/shutil.py", line 428, in copy
+    copyfile(src, dst, follow_symlinks=follow_symlinks)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/shutil.py", line 260, in copyfile
+    with open(src, 'rb') as fsrc:
+         ~~~~^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/usr/local/share/auto-cpufreq/scripts/cpufreqctl.sh'
+```
+
+Furthermore, after I run `auto-cpufreq-installer --install` from master branch after having it previously installed with your changes, it breaks things in terms of symlinks:
+
+```
+Successfully installed auto-cpufreq-3.0.0+a620b99 charset_normalizer-3.4.7 pyasyncore-1.0.5 requests-2.33.1 urwid-3.0.5 wcwidth-0.6.0
+cp: not writing through dangling symlink '/usr/local/bin/auto-cpufreq'
+chmod: cannot operate on dangling symlink '/usr/local/bin/auto-cpufreq'
+cp: not writing through dangling symlink '/usr/local/bin/auto-cpufreq-gtk'
+chmod: cannot operate on dangling symlink '/usr/local/bin/auto-cpufreq-gtk'
+```
+
+and removal will also be broken:
+
+```
+sudo ./auto-cpufreq-installer --remove 
+
+Couldn't remove the auto-cpufreq daemon, /usr/local/bin/auto-cpufreq-remove do not exist.
+
+auto-cpufreq tool and all its supporting files successfully removed
+```
+
+Copilot made a [good remark about this](https://github.com/AdnanHodzic/auto-cpufreq/pull/937#discussion_r3106456640).
+
+Once changes are fixed on regular distros, only problem is that I can't test them since I'm not running on Silverblue, and if some issues pop up regarding this I'll tag you. 
+
+> Thanks for all your hard work on this great tool!
+
+Most welcome! 
+
+I ran Copilot review also and it made some good comments, please take a look at them and make changes where it makes sense, otherwise just leave a comment on each of them why it doesn't make sense.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>drasch:</strong></p>
+                    <p>I was able to use `auto-cpufreq`, but I uninstalled because it was just looping on/off with turbo boost on my cpu causing high-fan/no-fan. Is this the desired behavior? If it is, I can reinstall and make progress on the PR based on all this feedback.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>>  I uninstalled because it was just looping on/off with turbo boost on my cpu causing high-fan/no-fan. Is this the desired behavior? 
+
+If you're not happy with configuration and decision auto-cpufreq makes automatically, you can [configure them to your own liking](https://github.com/AdnanHodzic/auto-cpufreq#configuring-auto-cpufreq).
+
+> If it is, I can reinstall and make progress on the PR based on all this feedback.
+
+Please feel free to do so :) </p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

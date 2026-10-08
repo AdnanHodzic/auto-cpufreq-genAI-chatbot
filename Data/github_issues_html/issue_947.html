@@ -1,0 +1,39 @@
+
+        <html>
+        <head>
+            <title>Issue #947: Fix: replace assert with explicit check + narrow bare excepts</title>
+        </head>
+        <body>
+            <h1>Fix: replace assert with explicit check + narrow bare excepts</h1>
+            <p><strong>Issue #947</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>fix: replace assert with explicit check + narrow bare excepts
+
+- gui/objects.py: Replace `assert ... Exception(...)` with explicit
+  if/raise RuntimeError. Using assert for control flow is dangerous
+  because `python -O` removes all assert statements, silently skipping
+  the authorization check.
+- power_helper.py: Narrow 6 bare `except:` to `except (OSError, FileNotFoundError)`
+  for subprocess and systemctl calls
+- core.py: Narrow bare `except:` to `except (psutil.AccessDenied, psutil.NoSuchProcess, OSError)`
+- bin/auto_cpufreq.py: Re-raise KeyboardInterrupt, catch only Exception
+- modules/system_info.py: Narrow bare `except:` to `except OSError`</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Can you please take a look into 2 minor things Copilot raised, other then that LGTM and could be merged. Please let me know once you pushed these changes, thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>LGTM! Thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases)</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

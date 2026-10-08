@@ -1,0 +1,68 @@
+
+        <html>
+        <head>
+            <title>Issue #977: Fix battery power reporting</title>
+        </head>
+        <body>
+            <h1>Fix battery power reporting</h1>
+            <p><strong>Issue #977</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>## Summary
+
+Fix battery power reporting from Linux power supply telemetry and clarify what the reported value represents.
+
+- preserve `0 W` as a valid battery power reading instead of treating it as unavailable;
+- calculate fallback power directly from `current_now × voltage_now` using the correct sysfs units;
+- keep missing or invalid telemetry reported as unavailable;
+- represent the value internally as battery power in watts rather than generic power consumption;
+- distinguish `Charging power`, `Discharge power`, and `Battery power` according to the battery state;
+- use the same battery power semantics in the GTK interface and terminal monitor views.
+
+The reported value is battery-side power telemetry. It does not represent total system power draw.
+
+## Background
+
+The GTK interface previously displayed the battery telemetry under the generic `Power draw` label.
+
+That was misleading because the value comes from the selected battery's Linux power supply telemetry. Depending on battery state, the same magnitude can represent power flowing into the battery while charging or out of it while discharging.
+
+The internal `power_consumption` name had the same ambiguity: a charging battery can report a non-zero value even though that value is not system power consumption.
+
+This change keeps the measurement associated with the battery and makes its meaning explicit in both the data model and presentation.
+
+## Validation
+
+Validated with targeted regression checks covering:
+
+- direct `power_now`;
+- zero `power_now`;
+- `current_now × voltage_now` fallback;
+- zero-current fallback;
+- missing telemetry;
+- charging, discharging, and non-charging presentation states;
+- real battery telemetry on hardware without `power_now`.
+
+On real hardware, the GTK view was verified to update dynamically from:
+
+```text
+Status           Charging
+AC power         Connected
+Charging power   27.59 W</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>There was a good [Copilot suggestion](https://github.com/AdnanHodzic/auto-cpufreq/pull/977#discussion_r4162297064), but this can also be resolved as one of future changes/PR's.
+
+As code wise it all LGTM and works great on my side!
+
+As always, thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        

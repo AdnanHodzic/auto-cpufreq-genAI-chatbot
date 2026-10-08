@@ -141,6 +141,51 @@ auto-cpufreq cannot be used on a virtual machine (VM) because the kernel will no
 Sounds good, I can probably install mint on an old computer I have available.  I was able to get it on the VM by manually hardcoding power profiles so I could get past some installation problems.  I also have host CPU configuration pass-through enabled but I did notice it was missing a few things like temperature.  Will see if I can replicate this on a physical device later</p>
                 </div>
             
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Heavygrass:</strong></p>
+                    <p>I still see a bit over 100% 1 full core load by GUI sometimes in Cinnamon 6.0.4 (actually experiencing this right now).
+Its more rare than a year ago.
+There's a separate window showing up  saying "auto-cpufreq is not responding".
+Don't know if its related, I've been putting machine to sleep/wake up quite a few times.
+auto-cpufreq v3.0.0.
+Kernel 6.17.0-14-generic.
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> There's a separate window showing up saying "auto-cpufreq is not responding".
+
+Unfortunately this is a long standing issue which was reported in #685 (there might be more  cases), and which I also have to do this date on e.g Ubuntu 26.04.
+
+However, no one really had time to look into why this is happening, if anyone is interested it's all in [auto-cpufreq/gui](https://github.com/AdnanHodzic/auto-cpufreq/tree/master/auto_cpufreq/gui)
+
+I have a feeling it could be related to [this particular line, which is using a forked version of pyinotify-3.12](https://github.com/AdnanHodzic/auto-cpufreq/blob/master/pyproject.toml#L33C50-L33C64)
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Heavygrass:</strong></p>
+                    <p>We need **logging** for GUI part. It would be much easier to report/troubleshoot.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> We need **logging** for GUI part. It would be much easier to report/troubleshoot.
+
+Absolutely, this was mentioned in couple of other discussions, unfortunately last time anything was done regarding this was in #160 </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>Bendi06:</strong></p>
+                    <p>I have noticed a similar bug with closing the terminal window you started `sudo auto-cpufreq --stats` from. After you close the window it immediately jumps to use 100% of the CPU thread in the background. I don't know if it is the same issue / root cause or not, as well as if I should open a separate issue for this.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@lucasleocs since you did a big revamp in #964 and couple of others, did you experience this?</p>
+                </div>
+            
             </div>
         </body>
         </html>

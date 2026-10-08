@@ -1,0 +1,399 @@
+
+        <html>
+        <head>
+            <title>Issue #975: Add verified versioned source installs and release updates</title>
+        </head>
+        <body>
+            <h1>Add verified versioned source installs and release updates</h1>
+            <p><strong>Issue #975</strong></p>
+            <div>
+                <h2>Description</h2>
+                <p>## Summary
+
+This PR makes source installations versioned and verifiable, and changes the built-in source updater to install published release tags instead of the development `master` branch.
+
+It also makes prerequisite, installer, updater, and service-manager failures explicit so a failed operation is not reported as a successful installation.
+
+This supersedes the broader recovery-snapshot implementation previously published in this PR. The current design is intentionally narrower: it protects the installed source tree through separate release generations and keeps the existing daemon behavior, with only the lifecycle changes needed to propagate failures and make install/remove retries safer. Earlier inline review threads that refer to files no longer present in the diff describe the previous implementation.
+
+Related to #973: the package-manager problem reported there is external to auto-cpufreq, but it exposed that installer failures could be ignored and leave wrappers pointing to an unusable environment.
+
+## Source installation
+
+The source installer now:
+
+- stops immediately when distribution dependencies, Python, venv creation, pip, PyGObject/GTK, or package installation fail;
+- consistently selects the distribution Python associated with system PyGObject packages;
+- handles Debian/Ubuntu derivatives, Fedora/RHEL, Arch-based distributions, openSUSE, Void, and Solus, while keeping unsupported distributions on an explicit manual path;
+- uses command-scoped Git `safe.directory` handling instead of leaving a persistent trust exception;
+- supports Git checkouts and source archives carrying Git archival metadata;
+- rejects builds whose exact source revision or version metadata cannot be established.
+
+GitHub-generated source archives can therefore be used by releases published after this change is included. Existing release archives are not modified retroactively.
+
+## Versioned installation layout
+
+Each candidate is built directly in a new directory under:
+
+```text
+/opt/auto-cpufreq/releases/<revision>.<unique-suffix>
+```
+
+The candidate receives its own virtual environment and version-specific resources. Before activation, the installer verifies its Python environment, dependencies, CLI entry points, package version, and completion marker, and records the exact source revision.
+
+Only a complete candidate can become active. Activation atomically replaces:
+
+```text
+/opt/auto-cpufreq/current
+```
+
+The public wrappers and service files refer to `current`, so an incomplete candidate does not replace the working generation. If the final public-command verification fails, the installer attempts to restore the previous active generation and wrapper. Previous complete generations are retained until the source installation is removed.
+
+The source installer also refuses to replace the source tree while the auto-cpufreq daemon marker is present. This keeps daemon removal tied to the generation whose lifecycle helper installed it.
+
+## Stable source updater
+
+For source installations, `auto-cpufreq --update` now:
+
+1. reads the latest published release tag;
+2. fetches that exact fully qualified tag into a unique staging directory;
+3. installs it through the versioned source installer;
+4. reinstalls the daemon only when it was installed before the update;
+5. verifies that the public command reports the selected release.
+
+It does not update from `master`. Snap and AUR installations remain owned by their package managers.
+
+If daemon removal, download, installation, daemon reinstallation, or final version verification fails, the updater returns a failure instead of announcing success. When installation fails after removing an existing daemon, it attempts to reinstall that daemon from the active source generation.
+
+## Daemon lifecycle changes
+
+The daemon install/remove scripts remain close to the existing project structure, with focused safeguards required by the updater and versioned layout:
+
+- service-manager command failures propagate to the CLI;
+- repeated removal can continue after already-completed steps;
+- required legacy s6 commands are checked before service files are deployed;
+- systemd removal verifies that the unit still matches the managed unit before deleting it;
+- systemd removal remains successful when disabling the service unloads the unit;
+- service and PolicyKit paths resolve through `/opt/auto-cpufreq/current`.
+
+This PR does not add a persistent host-state snapshot system or a new daemon-lifecycle framework.
+
+## Documentation and packaging
+
+The README now distinguishes:
+
+- stable installation from a release source archive;
+- development installation from a Git checkout;
+- stable release updates through `auto-cpufreq --update`;
+- complete source removal versus daemon-only removal.
+
+Git archive metadata, strict dynamic versioning, Nix's explicit version bypass, and full Git history in the Linux build workflow keep version resolution consistent across Git, release archives, CI, and Nix builds.
+
+## Validation
+
+The final tree was validated with:
+
+- a complete legacy-to-versioned source installation on Linux Mint 22.3 with systemd and Python 3.12;
+- daemon install, remove, and reinstall cycles;
+- restoration of `power-profiles-daemon` and Bluetooth boot behavior during the tested daemon round trip;
+- preservation of `/etc/auto-cpufreq.conf` during source installation and daemon lifecycle tests;
+- correct installed release and Git revision reporting;
+- an up-to-date updater no-op that preserved the active generation and daemon PID;
+- targeted failure, retry, wrapper rollback, version-selection, and service-manager regression harnesses used during development;
+- syntax/compile checks for every commit in the consolidated series;
+- `git diff --check`;
+- `bash -n` for the installer and daemon lifecycle scripts;
+- `python3 -m py_compile` for the changed Python modules;
+- `patch --dry-run --fuzz=0` for the Nix patch;
+- GitHub Actions Linux Build and Nix Flake workflows.
+
+No temporary regression harness or permanent test infrastructure is included in the PR.
+
+## Commit guide
+
+1. `feat: bootstrap portable source installations`
+2. `feat: activate verified versioned source releases`
+3. `feat: update source installs from verified release tags`
+4. `fix: make daemon-aware updates fail safely`
+5. `fix: make activation and daemon cleanup retryable`
+6. `fix: preserve updater lifecycle and staging state`
+7. `fix: preserve daemon manager state during lifecycle changes`
+8. `fix: enforce reproducible versions across source builds`
+9. `fix: report derivative distribution versions correctly`
+
+## Scope
+
+This PR does not add a new installer frontend, modify Snap/AUR update ownership, introduce a permanent test framework, or refactor unrelated power-management policy.
+</p>
+            </div>
+            <div>
+                <h2>Comments</h2>
+        
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Great stuff @lucasleocs! Can you please look at the Copilot suggestions above as they are mostly high and mediums and make great sense to take care of. Thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@lucasleocs since I see you've been pushing changes. Please let me know once it's all ready for review again, thanks!</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lucasleocs:</strong></p>
+                    <p>@AdnanHodzic, It's ready for review again now. I finished the remaining changes and did a final review of the branch.
+
+While going through the lifecycle code, I also ran into a few legacy paths that made some parts harder to trace than expected. One example is the old `install_performance` flow: the CLI flag was removed a few years ago, but there are still leftover references in the documentation and the `deploy_daemon_performance()` implementation remains in `core.py`, even though it is no longer wired into the current CLI.
+
+I left that kind of legacy cleanup out of this PR to keep its scope focused, but I can take a closer look at those paths separately afterwards.
+
+Thanks!
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> @AdnanHodzic, It's ready for review again now. I finished the remaining changes and did a final review of the branch.
+> 
+> While going through the lifecycle code, I also ran into a few legacy paths that made some parts harder to trace than expected. One example is the old `install_performance` flow: the CLI flag was removed a few years ago, but there are still leftover references in the documentation and the `deploy_daemon_performance()` implementation remains in `core.py`, even though it is no longer wired into the current CLI.
+> 
+> I left that kind of legacy cleanup out of this PR to keep its scope focused, but I can take a closer look at those paths separately afterwards.
+> 
+> Thanks!
+
+@lucasleocs it's a lot of changes so it's not as easy to review it all. Ran another Copilot review and it left few "High" and one "Medium" finding can you please address those?
+
+Besides that, even on my side with latest changes I was not able to install auto-cpufreq daemon:
+
+```
+sudo ./auto-cpufreq-installer --install
+
+
+──────────────────────────────────────────────── Detected Debian based distribution ────────────────────────────────────────────────
+
+
+─────────────────────────────────────────────────── Setting up Python environment ───────────────────────────────────────────────────
+
+Hit:1 http://nl.archive.ubuntu.com/ubuntu resolute InRelease
+Get:2 http://nl.archive.ubuntu.com/ubuntu resolute-updates InRelease [137 kB]                                                         
+Get:3 https://dl.google.com/linux/chrome-stable/deb stable InRelease [2,548 B]                                                        
+Get:4 http://security.ubuntu.com/ubuntu resolute-security InRelease [137 kB]                                                          
+Get:5 http://nl.archive.ubuntu.com/ubuntu resolute-backports InRelease [137 kB]                                                       
+Get:6 https://brave-browser-apt-release.s3.brave.com stable InRelease [7,547 B]                                                       
+Get:7 https://dl.google.com/linux/chrome-stable/deb stable/main amd64 Packages [1,409 B]                                   
+Hit:8 https://ppa.launchpadcontent.net/openshot.developers/ppa/ubuntu resolute InRelease                                              
+Get:9 http://nl.archive.ubuntu.com/ubuntu resolute-updates/main amd64 Packages [603 kB]              
+Get:10 https://brave-browser-apt-release.s3.brave.com stable/main arm64 Packages [37.5 kB]                    
+Get:11 https://brave-browser-apt-release.s3.brave.com stable/main amd64 Packages [37.6 kB]                               
+Get:12 http://security.ubuntu.com/ubuntu resolute-security/main amd64 Packages [471 kB]                                               
+Get:13 http://nl.archive.ubuntu.com/ubuntu resolute-updates/main Translation-en [143 kB]             
+Get:14 http://nl.archive.ubuntu.com/ubuntu resolute-updates/main amd64 Components [97.9 kB]                                           
+Get:15 http://nl.archive.ubuntu.com/ubuntu resolute-updates/restricted amd64 Packages [409 kB]                                        
+Get:16 http://security.ubuntu.com/ubuntu resolute-security/main Translation-en [110 kB]                       
+Get:17 http://security.ubuntu.com/ubuntu resolute-security/main amd64 Components [46.6 kB]                                     
+Get:18 http://security.ubuntu.com/ubuntu resolute-security/restricted amd64 Packages [399 kB]                                        
+Get:19 https://downloads.cursor.com/aptrepo stable InRelease [2,672 B]                                                                
+Get:20 http://nl.archive.ubuntu.com/ubuntu resolute-updates/restricted Translation-en [79.5 kB]                                       
+Get:21 http://nl.archive.ubuntu.com/ubuntu resolute-updates/universe amd64 Packages [285 kB]
+Get:22 http://security.ubuntu.com/ubuntu resolute-security/restricted Translation-en [77.7 kB]
+Get:23 http://security.ubuntu.com/ubuntu resolute-security/universe amd64 Packages [171 kB] 
+Get:24 http://security.ubuntu.com/ubuntu resolute-security/universe amd64 Components [43.4 kB]
+Get:25 http://security.ubuntu.com/ubuntu resolute-security/multiverse amd64 Packages [10.8 kB]
+Get:26 http://security.ubuntu.com/ubuntu resolute-security/multiverse Translation-en [2,844 B]
+Get:27 http://nl.archive.ubuntu.com/ubuntu resolute-updates/universe Translation-en [91.0 kB]
+Get:28 http://nl.archive.ubuntu.com/ubuntu resolute-updates/universe amd64 Components [188 kB]                
+Get:29 https://downloads.cursor.com/aptrepo stable/main arm64 Packages [1,462 B]         
+Get:30 https://downloads.cursor.com/aptrepo stable/main amd64 Packages [1,448 B]                      
+Get:31 http://nl.archive.ubuntu.com/ubuntu resolute-updates/multiverse amd64 Packages [11.6 kB]
+Get:32 http://nl.archive.ubuntu.com/ubuntu resolute-updates/multiverse Translation-en [3,036 B]
+Get:33 http://nl.archive.ubuntu.com/ubuntu resolute-backports/universe amd64 Components [1,056 B]
+Fetched 3,748 kB in 2s (2,198 kB/s)                        
+Reading package lists... Done
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+Installing Debian/Ubuntu dependencies for version forky/sid...
+---- 
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+python3-dev is already the newest version (3.14.3-0ubuntu2).
+python3-venv is already the newest version (3.14.3-0ubuntu2).
+python3-setuptools is already the newest version (78.1.1-0.1build1).
+gcc is already the newest version (4:15.2.0-5ubuntu1).
+git is already the newest version (1:2.53.0-1ubuntu1).
+python3-gi is already the newest version (3.56.2-1).
+gir1.2-gtk-3.0 is already the newest version (3.24.52-0ubuntu1).
+gir1.2-gtk-3.0 set to manually installed.
+Solving dependencies... Done
+The following packages will be upgraded:
+  dmidecode
+1 upgraded, 0 newly installed, 0 to remove and 48 not upgraded.
+Need to get 72.8 kB of archives.
+After this operation, 1,024 B disk space will be freed.
+Get:1 http://nl.archive.ubuntu.com/ubuntu resolute-updates/main amd64 dmidecode amd64 3.6-2ubuntu1 [72.8 kB]
+Fetched 72.8 kB in 0s (916 kB/s)   
+(Reading database… 358583 files and directories currently installed.)
+Preparing to unpack …/dmidecode_3.6-2ubuntu1_amd64.deb…
+Unpacking dmidecode (3.6-2ubuntu1) over (3.6-2build1)…
+Setting up dmidecode (3.6-2ubuntu1)…
+Processing triggers for man-db (2.13.1-1build1)…
+
+─────────────────────────────────────────────── Installing necessary Python packages ───────────────────────────────────────────────
+
+Requirement already satisfied: pip in /opt/auto-cpufreq/venv/lib/python3.14/site-packages (25.1.1)
+Collecting pip
+  Using cached pip-26.2.1-py3-none-any.whl.metadata (4.6 kB)
+Requirement already satisfied: wheel in /usr/lib/python3/dist-packages (0.46.3)
+Collecting wheel
+  Using cached wheel-0.48.0-py3-none-any.whl.metadata (2.3 kB)
+Requirement already satisfied: packaging>=24.0 in /usr/lib/python3/dist-packages (from wheel) (26.0)
+Using cached pip-26.2.1-py3-none-any.whl (1.8 MB)
+Using cached wheel-0.48.0-py3-none-any.whl (33 kB)
+Installing collected packages: wheel, pip
+  Attempting uninstall: wheel
+    Found existing installation: wheel 0.46.3
+    Not uninstalling wheel at /usr/lib/python3/dist-packages, outside environment /opt/auto-cpufreq/venv
+    Can't uninstall 'wheel'. No files were found to uninstall.
+  Attempting uninstall: pip
+    Found existing installation: pip 25.1.1
+    Uninstalling pip-25.1.1:
+      Successfully uninstalled pip-25.1.1
+Successfully installed pip-26.2.1 wheel-0.48.0
+
+─────────────────────────────────────────────────── Installing auto-cpufreq tool ───────────────────────────────────────────────────
+
+Processing ./.
+  Installing build dependencies ... done
+  Getting requirements to build wheel ... done
+  Preparing metadata (pyproject.toml) ... done
+Requirement already satisfied: click<9.0.0,>=8.1.0 in /usr/lib/python3/dist-packages (from auto-cpufreq==3.1.0+779dc241745f8bf602019d6f9a6116870539f346) (8.1.8)
+Requirement already satisfied: distro<2.0.0,>=1.8.0 in /usr/lib/python3/dist-packages (from auto-cpufreq==3.1.0+779dc241745f8bf602019d6f9a6116870539f346) (1.9.0)
+Requirement already satisfied: psutil<8.0.0,>=6.0.0 in /usr/lib/python3/dist-packages (from auto-cpufreq==3.1.0+779dc241745f8bf602019d6f9a6116870539f346) (7.1.0)
+Collecting pyasyncore<2.0.0,>=1.0.4 (from auto-cpufreq==3.1.0+779dc241745f8bf602019d6f9a6116870539f346)
+  Using cached pyasyncore-1.0.5-py3-none-any.whl.metadata (4.3 kB)
+Collecting pyinotify @ git+https://github.com/shadeyg56/pyinotify-3.12 (from auto-cpufreq==3.1.0+779dc241745f8bf602019d6f9a6116870539f346)
+  Cloning https://github.com/shadeyg56/pyinotify-3.12 to /tmp/pip-install-uilt2o3q/pyinotify_40e8c92edce0478d951d69098f425537
+  Running command git clone --filter=blob:none --quiet https://github.com/shadeyg56/pyinotify-3.12 /tmp/pip-install-uilt2o3q/pyinotify_40e8c92edce0478d951d69098f425537
+  Resolved https://github.com/shadeyg56/pyinotify-3.12 to commit 271b7aba3269116b6c3870355393f47c79bce146
+  Installing build dependencies ... done
+  Getting requirements to build wheel ... done
+  Preparing metadata (pyproject.toml) ... done
+Requirement already satisfied: requests<3.0.0,>=2.32.4 in /usr/lib/python3/dist-packages (from auto-cpufreq==3.1.0+779dc241745f8bf602019d6f9a6116870539f346) (2.32.5)
+Collecting urwid<4.0.0,>=3.0.2 (from auto-cpufreq==3.1.0+779dc241745f8bf602019d6f9a6116870539f346)
+  Using cached urwid-3.0.5-py3-none-any.whl.metadata (11 kB)
+Requirement already satisfied: chardet>=3.0.2 in /usr/lib/python3/dist-packages (from requests<3.0.0,>=2.32.4->auto-cpufreq==3.1.0+779dc241745f8bf602019d6f9a6116870539f346) (5.2.0)
+Requirement already satisfied: idna<4,>=2.5 in /usr/lib/python3/dist-packages (from requests<3.0.0,>=2.32.4->auto-cpufreq==3.1.0+779dc241745f8bf602019d6f9a6116870539f346) (3.11)
+Requirement already satisfied: urllib3<3,>=1.21.1 in /usr/lib/python3/dist-packages (from requests<3.0.0,>=2.32.4->auto-cpufreq==3.1.0+779dc241745f8bf602019d6f9a6116870539f346) (2.6.3)
+Requirement already satisfied: certifi>=2017.4.17 in /usr/lib/python3/dist-packages (from requests<3.0.0,>=2.32.4->auto-cpufreq==3.1.0+779dc241745f8bf602019d6f9a6116870539f346) (2026.1.4)
+Collecting wcwidth>=0.4 (from urwid<4.0.0,>=3.0.2->auto-cpufreq==3.1.0+779dc241745f8bf602019d6f9a6116870539f346)
+  Using cached wcwidth-0.8.3-py3-none-any.whl.metadata (43 kB)
+Using cached pyasyncore-1.0.5-py3-none-any.whl (10 kB)
+Using cached urwid-3.0.5-py3-none-any.whl (296 kB)
+Using cached wcwidth-0.8.3-py3-none-any.whl (331 kB)
+Building wheels for collected packages: auto-cpufreq
+  Building wheel for auto-cpufreq (pyproject.toml) ... done
+  Created wheel for auto-cpufreq: filename=auto_cpufreq-3.1.0+779dc241745f8bf602019d6f9a6116870539f346-py3-none-any.whl size=104111 sha256=4f5b0ed518d3655889f3702200a23f7961e5c0ac2710559e1d34b5c9ca12b966
+  Stored in directory: /tmp/pip-ephem-wheel-cache-rnaszyoq/wheels/f6/ee/46/7812cc5f9fbb689569007387ec6ebbcfb6b781f2f84a42c23c
+Successfully built auto-cpufreq
+Installing collected packages: pyasyncore, wcwidth, urwid, auto-cpufreq
+  Attempting uninstall: pyasyncore
+    Found existing installation: pyasyncore 1.0.2
+    Not uninstalling pyasyncore at /usr/lib/python3/dist-packages, outside environment /opt/auto-cpufreq/venv
+    Can't uninstall 'pyasyncore'. No files were found to uninstall.
+Successfully installed auto-cpufreq-3.1.0+779dc241745f8bf602019d6f9a6116870539f346 pyasyncore-1.0.5 urwid-3.0.5 wcwidth-0.8.3
+
+───────────────────────────────────────────── auto-cpufreq tool successfully installed ─────────────────────────────────────────────
+
+For list of options, run:
+auto-cpufreq --help
+
+ ahodzic@carbon7  ~/code/auto-cpufreq   975-improve-source-installer  sudo auto-cpufreq --install
+Error: Unable to inspect existing systemd service definitions.
+```
+
+I had running daemon with changes from `master` branch, then I switch to branch with your changes ran `sudo ./auto-cpufreq-installer --remove` and rest is included above.
+
+At the moment these are breaking changes.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lucasleocs:</strong></p>
+                    <p>Hi @AdnanHodzic, I reworked the implementation rather than continuing to extend the previous recovery-snapshot design. The review findings, together with reproducing several failure paths locally, showed that the earlier approach was becoming broader than necessary for the source installer and updater problems this PR is intended to solve.
+
+The PR is now down to 9 commits and 18 changed files. The persistent recovery-snapshot modules and related lifecycle abstractions have been removed from the diff.
+
+The replacement design keeps source-install safety at the installation boundary: each source installation is built as a separate verified generation, and `/opt/auto-cpufreq/current` is switched only after the candidate has passed verification. Source updates now install exact published release tags rather than `master`. Daemon changes are limited to the failure propagation, retry behavior, and managed-service ownership checks needed to support that flow.
+
+Because a substantial part of the previous implementation no longer exists, GitHub now marks the corresponding inline review threads as outdated. I reviewed the underlying failure modes against the replacement implementation and addressed those that remain applicable to the current design.
+
+I also rewrote the PR description to document the current implementation and its narrower guarantees. The final tree was tested on Linux Mint 22.3, including migration to the versioned source layout, daemon install/remove/reinstall cycles, and the updater’s up-to-date path.
+
+The PR is ready for review. Thanks again for the feedback.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>@lucasleocs changes now work fine for me and I don't have issues. However, since there's too many changes to review by myself, I ran [Copilot that's again reporting 6 **new** findings, out of which 1 is high and rest medium.](https://github.com/AdnanHodzic/auto-cpufreq/pull/975#pullrequestreview-5261127679)</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lucasleocs:</strong></p>
+                    <p>Thanks, @AdnanHodzic. I've addressed the latest review findings, and the PR is ready for review again.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>All looking good, thank you for your perseverance to fix all issues with this PR :) 
+
+Can you please take a look at one (hopefully) final [high Copilot finding and let's merge this.](https://github.com/AdnanHodzic/auto-cpufreq/pull/975#pullrequestreview-5263217942)
+
+</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>> All looking good, thank you for your perseverance to fix all issues with this PR :)
+> 
+> Can you please take a look at one (hopefully) final [high Copilot finding and let's merge this.](https://github.com/AdnanHodzic/auto-cpufreq/pull/975#pullrequestreview-5263217942)
+
+In meantime I found another inconsistency, if auto-cpufreq was already installed (along with daemon), and if I ran:
+
+```
+sudo ./auto-cpufreq-installer --install
+
+Error: Remove the installed auto-cpufreq daemon before replacing the source installation.
+Run 'sudo auto-cpufreq --remove', then run this installer again.
+```
+
+It says that it uninstalled it for some  illogical reason, when in fact didn't do any of those things, auto-cpufreq binary was still present and I could even run --stats just fine.
+ 
+ </p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>lucasleocs:</strong></p>
+                    <p>Thanks, @AdnanHodzic! I've pushed three follow-up commits addressing the review findings and improving partial-failure and retry handling. The PR is ready for another review.
+
+Regarding your last comment: the installer output you quoted means installation was refused because the daemon was still installed; that command did not uninstall anything. Separately, `sudo auto-cpufreq --remove` removes only the daemon, so the CLI and `--stats` remain available. Full source uninstallation uses `sudo ./auto-cpufreq-installer --remove`.
+
+The previous wording did not make this distinction clear enough. I've updated the messages and documentation to clarify it. Thanks again.</p>
+                </div>
+            
+                <div style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
+                    <p><strong>AdnanHodzic:</strong></p>
+                    <p>Hi @lucasleocs, thanks. Copilot keeps reporting [new findings](https://github.com/AdnanHodzic/auto-cpufreq/pull/975#pullrequestreview-5375278195), so this time around I just tried to fix them myself on spot with Copilot as part of merge process but I ended up getting following error: `Failed to Fix with Copilot. Please try again. (422)`. I'll give it a try again, and if see this in meantime please feel free to fix these yourself.
+
+As everything else seems fine and seems to work for me, so this is ready to be merged.
+
+Please note if in upcoming period I see issues related to auto-cpufreq-installer I might tag you.
+
+As always, thank you for your contribution, you will be credited for your work as part of [future release](https://github.com/AdnanHodzic/auto-cpufreq/releases).
+
+</p>
+                </div>
+            
+            </div>
+        </body>
+        </html>
+        
