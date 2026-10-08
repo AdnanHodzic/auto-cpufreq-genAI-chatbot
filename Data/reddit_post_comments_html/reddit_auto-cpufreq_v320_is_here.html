@@ -1,0 +1,144 @@
+<html><head><title>auto-cpufreq v3.2.0 is here!</title></head><body><h1>auto-cpufreq v3.2.0 is here!</h1><p><em>Posted by u/ahodzic</em> on 2026-10-05 17:08:56</p><div><strong>Score:</strong> 114</div><div><strong>Content:</strong><br><!-- SC_OFF --><div class="md"><p>Release notes: <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases">https://github.com/AdnanHodzic/auto-cpufreq/releases</a></p>
+
+<p>auto-cpufreq is now available in the official Debian Linux repositories (unstable &amp; testing), and it will soon propagate to future Ubuntu releases and hundreds of other derivatives.</p>
+
+<p>This release also brings new features, bug fixes, and other improvements to help Linux users optimize CPU speed and battery life automatically.</p>
+
+<p>Project status:</p>
+
+<p>⭐ 7800+ GitHub stars<br/>
+👥 126 contributors<br/>
+💻 100k+ users<br/>
+🛠️ 51 releases</p>
+
+<p>Huge thanks to everyone who contributed to making this release possible! ❤️</p>
+</div><!-- SC_ON --></div><hr><h2>Comments</h2><ul><li><strong>u/0riginal-Syn:</strong> <div class="md"><p>Congrats on the release!</p>
+
+<p>So nice to <strong>not</strong> see &quot;I created...&quot; in the title and instead have a legit project update.</p>
+</div><br><small>Score: 48 | Posted on 2026-10-05 17:13:05</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Thanks!</p>
+</div><br><small>Score: 13 | Posted on 2026-10-05 17:16:03</small></li><ul></ul></ul><li><strong>u/ExaHamza:</strong> <div class="md"><p>One of the few projects outside the shadow of companies that has endured for years, congratulations Adnan. </p>
+</div><br><small>Score: 18 | Posted on 2026-10-05 18:29:11</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Thanks! It hasn&#39;t been easy, but here we are still going strong 🙂</p>
+</div><br><small>Score: 12 | Posted on 2026-10-05 18:32:53</small></li><ul></ul></ul><li><strong>u/Sharp-Debate-523:</strong> <div class="md"><p>OP, can you explain how it works?  Does it monitor to see how busy a laptop is then slow down the frequency if its not working too hard?  Does look at your daily schedule, etc.</p>
+</div><br><small>Score: 7 | Posted on 2026-10-05 21:29:23</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>That&#39;s exactly how it works, based on various factors, battery state, CPU usage, CPU temperature, and system load it changes governors and lowers or increases speed. Along with other things like EPB (Energy Performance Bias), and EPP (Energy Performance Preference).</p>
+
+<p>It&#39;s an old video when it all started as a python script (now it&#39;s a full app) where I explain everything and concept is the same:</p>
+
+<ul>
+<li><a href="https://www.youtube.com/watch?v=QkYRpVEEIlg">auto-cpufreq - tool demo</a></li>
+</ul>
+
+<p>And there are 2 more Youtube videos you might be interested in:</p>
+
+<ul>
+<li><a href="https://foolcontrol.org/?p=4603">auto-cpufreq v2.0</a></li>
+<li><a href="https://www.youtube.com/watch?v=VKqNjczvI88">From 10 day vacation project to 100k users: auto-cpufreq v3 story</a></li>
+</ul>
+</div><br><small>Score: 5 | Posted on 2026-10-06 06:37:37</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/Indolent_Bard:</strong> <div class="md"><p>I wonder why this isn&#39;t default Linux behavior.</p>
+</div><br><small>Score: 1 | Posted on 2026-10-06 19:23:54</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>There are couple of distros that include by default, but other then there&#39;s bit of corporate politics and ego involved. In early days I had contacts regarding potential collaboration with some big distros, but then they ended up working on their solution instead.</p>
+
+<p>For example auto-cpufreq had certain features which did same functionality automatically (5 years ago!), before GNOME Power Profiles introduced how to e.g manually switch between governors: <a href="https://x.com/fooctrl/status/1467469508373884933">https://x.com/fooctrl/status/1467469508373884933</a></p>
+</div><br><small>Score: 2 | Posted on 2026-10-07 09:01:47</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/Indolent_Bard:</strong> <div class="md"><p>I don&#39;t know much about gnome, but I know they won&#39;t introduce a feature unless it&#39;s perfect. Something that works consistently and predictably every single time. Meaning there was either an edge case that they didn&#39;t like in your implementation, or they just wanted everything done in-house.</p>
+</div><br><small>Score: 0 | Posted on 2026-10-07 13:57:48</small></li><ul></ul></ul></ul></ul></ul><li><strong>u/WhichCarry749:</strong> <div class="md"><p>Getting it into the official Debian repos is a massive milestone for a project like this. Congrats to everyone who worked on it!</p>
+</div><br><small>Score: 3 | Posted on 2026-10-06 11:55:37</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Agreed and thanks!</p>
+</div><br><small>Score: 1 | Posted on 2026-10-06 12:13:23</small></li><ul></ul></ul><li><strong>u/power10010:</strong> <div class="md"><p>What about cpu temp? Does it support it ?</p>
+</div><br><small>Score: 2 | Posted on 2026-10-05 22:45:42</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Absolutely, explained in comment above: <a href="https://www.reddit.com/r/linux/comments/1wyazph/comment/pe5qux1/">https://www.reddit.com/r/linux/comments/1wyazph/comment/pe5qux1/</a></p>
+</div><br><small>Score: 2 | Posted on 2026-10-06 06:38:03</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/power10010:</strong> <div class="md"><p>cool! I didn&#39;t find any temperature threshold or max allowed before stepping down the clock to keep max temp. Is it done in any way ? I forked and modified a bit cputemp: <a href="https://github.com/dx616b/cputemp">https://github.com/dx616b/cputemp</a> which might be a good additional feature to your solution. </p>
+</div><br><small>Score: 1 | Posted on 2026-10-06 19:31:52</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>auto-cpufreq does this automatically, and temperature threshold is mentioned in multiple place, for example this line: <a href="https://github.com/AdnanHodzic/auto-cpufreq/blob/35d8015afc1bc2c4b30526828dddde4c53925976/auto_cpufreq/core.py#L1198">https://github.com/AdnanHodzic/auto-cpufreq/blob/35d8015afc1bc2c4b30526828dddde4c53925976/auto_cpufreq/core.py#L1198</a></p>
+
+<p>Ideally user would be able to configure this to their own liking as part of auto-cpufreq config file: <a href="https://github.com/AdnanHodzic/auto-cpufreq#4-auto-cpufreq-config-file">https://github.com/AdnanHodzic/auto-cpufreq#4-auto-cpufreq-config-file</a></p>
+
+<p>If you or anyone else wants to give it a try in improving this functionality, please give it a try and <a href="https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution">contribute to the project</a> and you will be credited for your work as part of <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases">future release</a>.</p>
+</div><br><small>Score: 1 | Posted on 2026-10-07 09:51:23</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/power10010:</strong> <div class="md"><p>I will have a look at it</p>
+</div><br><small>Score: 1 | Posted on 2026-10-07 11:06:01</small></li><ul></ul></ul></ul></ul></ul><li><strong>u/TheQuantumZero:</strong> <div class="md"><p>Apologies for this stupid question.</p>
+
+<p>How does this work with the predefined power setting modes like &quot;power save/balanced/performance&quot; in the desktop environments.</p>
+</div><br><small>Score: 2 | Posted on 2026-10-06 10:01:45</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Had same question in a comment above: <a href="https://www.reddit.com/r/linux/comments/1wyazph/comment/pe24itt/">https://www.reddit.com/r/linux/comments/1wyazph/comment/pe24itt/</a></p>
+</div><br><small>Score: 3 | Posted on 2026-10-06 10:17:39</small></li><ul></ul></ul><li><strong>u/retiredwindowcleaner:</strong> <div class="md"><p>this is explicitly not useful on desktops when i have max. performance in mind, correct?</p>
+</div><br><small>Score: 2 | Posted on 2026-10-05 19:52:08</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>While auto-cpufreq is primarily designed for laptops, it can be used on desktops, and there are even arguments for its use on servers. </p>
+
+<p>It can help lower electricity consumption, run CPU at lower tenperature and extend lifespan of components, as well increase performance.</p>
+</div><br><small>Score: 15 | Posted on 2026-10-05 20:14:30</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/Indolent_Bard:</strong> <div class="md"><p>Tell me more</p>
+</div><br><small>Score: 1 | Posted on 2026-10-05 23:14:54</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Think it&#39;s all explained as part of above mentioned comment, please take a look: <a href="https://www.reddit.com/r/linux/comments/1wyazph/comment/pe5qux1/">https://www.reddit.com/r/linux/comments/1wyazph/comment/pe5qux1/</a></p>
+</div><br><small>Score: 3 | Posted on 2026-10-06 07:04:24</small></li><ul></ul></ul></ul></ul><li><strong>u/dinklebeeeerg:</strong> <div class="md"><p>Great project! Are there advantages to using this over tuned on a laptop? Also should it be used with intel-lpmd? Thanks!</p>
+</div><br><small>Score: 1 | Posted on 2026-10-08 00:46:37</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Thanks!   </p>
+
+<p>auto-cpufreq is basically an autopilot that adjusts CPU power/performance settings based on real-time load, battery state, temperature, etc. TuneD is more of a broader system-wide tuning framework built around profiles, although it can also do dynamic tuning.</p>
+
+<p>The advantage of auto-cpufreq is that it&#39;s specifically focused on laptops and CPU/power management, while TuneD can tune a much broader set of things (ALPM, PCIe ASPM, USB, networking, etc.).</p>
+
+<p>I wouldn&#39;t run both for the same CPU/power-management settings, since they can fight over things like the governor/EPP. thermald works fine alongside auto-cpufreq and is actually recommended.   </p>
+
+<p>intel-lpmd is a different layer and can be used alongside them where supported (particularly useful on Meteor Lake and newer).</p>
+</div><br><small>Score: 1 | Posted on 2026-10-08 06:05:30</small></li><ul></ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>Thanks!</p>
+</div><br><small>Score: 13 | Posted on 2026-10-05 17:16:03</small></li><ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>Thanks! It hasn&#39;t been easy, but here we are still going strong 🙂</p>
+</div><br><small>Score: 12 | Posted on 2026-10-05 18:32:53</small></li><ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>That&#39;s exactly how it works, based on various factors, battery state, CPU usage, CPU temperature, and system load it changes governors and lowers or increases speed. Along with other things like EPB (Energy Performance Bias), and EPP (Energy Performance Preference).</p>
+
+<p>It&#39;s an old video when it all started as a python script (now it&#39;s a full app) where I explain everything and concept is the same:</p>
+
+<ul>
+<li><a href="https://www.youtube.com/watch?v=QkYRpVEEIlg">auto-cpufreq - tool demo</a></li>
+</ul>
+
+<p>And there are 2 more Youtube videos you might be interested in:</p>
+
+<ul>
+<li><a href="https://foolcontrol.org/?p=4603">auto-cpufreq v2.0</a></li>
+<li><a href="https://www.youtube.com/watch?v=VKqNjczvI88">From 10 day vacation project to 100k users: auto-cpufreq v3 story</a></li>
+</ul>
+</div><br><small>Score: 5 | Posted on 2026-10-06 06:37:37</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/Indolent_Bard:</strong> <div class="md"><p>I wonder why this isn&#39;t default Linux behavior.</p>
+</div><br><small>Score: 1 | Posted on 2026-10-06 19:23:54</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>There are couple of distros that include by default, but other then there&#39;s bit of corporate politics and ego involved. In early days I had contacts regarding potential collaboration with some big distros, but then they ended up working on their solution instead.</p>
+
+<p>For example auto-cpufreq had certain features which did same functionality automatically (5 years ago!), before GNOME Power Profiles introduced how to e.g manually switch between governors: <a href="https://x.com/fooctrl/status/1467469508373884933">https://x.com/fooctrl/status/1467469508373884933</a></p>
+</div><br><small>Score: 2 | Posted on 2026-10-07 09:01:47</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/Indolent_Bard:</strong> <div class="md"><p>I don&#39;t know much about gnome, but I know they won&#39;t introduce a feature unless it&#39;s perfect. Something that works consistently and predictably every single time. Meaning there was either an edge case that they didn&#39;t like in your implementation, or they just wanted everything done in-house.</p>
+</div><br><small>Score: 0 | Posted on 2026-10-07 13:57:48</small></li><ul></ul></ul></ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>Agreed and thanks!</p>
+</div><br><small>Score: 1 | Posted on 2026-10-06 12:13:23</small></li><ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>Absolutely, explained in comment above: <a href="https://www.reddit.com/r/linux/comments/1wyazph/comment/pe5qux1/">https://www.reddit.com/r/linux/comments/1wyazph/comment/pe5qux1/</a></p>
+</div><br><small>Score: 2 | Posted on 2026-10-06 06:38:03</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/power10010:</strong> <div class="md"><p>cool! I didn&#39;t find any temperature threshold or max allowed before stepping down the clock to keep max temp. Is it done in any way ? I forked and modified a bit cputemp: <a href="https://github.com/dx616b/cputemp">https://github.com/dx616b/cputemp</a> which might be a good additional feature to your solution. </p>
+</div><br><small>Score: 1 | Posted on 2026-10-06 19:31:52</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>auto-cpufreq does this automatically, and temperature threshold is mentioned in multiple place, for example this line: <a href="https://github.com/AdnanHodzic/auto-cpufreq/blob/35d8015afc1bc2c4b30526828dddde4c53925976/auto_cpufreq/core.py#L1198">https://github.com/AdnanHodzic/auto-cpufreq/blob/35d8015afc1bc2c4b30526828dddde4c53925976/auto_cpufreq/core.py#L1198</a></p>
+
+<p>Ideally user would be able to configure this to their own liking as part of auto-cpufreq config file: <a href="https://github.com/AdnanHodzic/auto-cpufreq#4-auto-cpufreq-config-file">https://github.com/AdnanHodzic/auto-cpufreq#4-auto-cpufreq-config-file</a></p>
+
+<p>If you or anyone else wants to give it a try in improving this functionality, please give it a try and <a href="https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution">contribute to the project</a> and you will be credited for your work as part of <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases">future release</a>.</p>
+</div><br><small>Score: 1 | Posted on 2026-10-07 09:51:23</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/power10010:</strong> <div class="md"><p>I will have a look at it</p>
+</div><br><small>Score: 1 | Posted on 2026-10-07 11:06:01</small></li><ul></ul></ul></ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>Had same question in a comment above: <a href="https://www.reddit.com/r/linux/comments/1wyazph/comment/pe24itt/">https://www.reddit.com/r/linux/comments/1wyazph/comment/pe24itt/</a></p>
+</div><br><small>Score: 3 | Posted on 2026-10-06 10:17:39</small></li><ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>While auto-cpufreq is primarily designed for laptops, it can be used on desktops, and there are even arguments for its use on servers. </p>
+
+<p>It can help lower electricity consumption, run CPU at lower tenperature and extend lifespan of components, as well increase performance.</p>
+</div><br><small>Score: 15 | Posted on 2026-10-05 20:14:30</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/Indolent_Bard:</strong> <div class="md"><p>Tell me more</p>
+</div><br><small>Score: 1 | Posted on 2026-10-05 23:14:54</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Think it&#39;s all explained as part of above mentioned comment, please take a look: <a href="https://www.reddit.com/r/linux/comments/1wyazph/comment/pe5qux1/">https://www.reddit.com/r/linux/comments/1wyazph/comment/pe5qux1/</a></p>
+</div><br><small>Score: 3 | Posted on 2026-10-06 07:04:24</small></li><ul></ul></ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>Thanks!   </p>
+
+<p>auto-cpufreq is basically an autopilot that adjusts CPU power/performance settings based on real-time load, battery state, temperature, etc. TuneD is more of a broader system-wide tuning framework built around profiles, although it can also do dynamic tuning.</p>
+
+<p>The advantage of auto-cpufreq is that it&#39;s specifically focused on laptops and CPU/power management, while TuneD can tune a much broader set of things (ALPM, PCIe ASPM, USB, networking, etc.).</p>
+
+<p>I wouldn&#39;t run both for the same CPU/power-management settings, since they can fight over things like the governor/EPP. thermald works fine alongside auto-cpufreq and is actually recommended.   </p>
+
+<p>intel-lpmd is a different layer and can be used alongside them where supported (particularly useful on Meteor Lake and newer).</p>
+</div><br><small>Score: 1 | Posted on 2026-10-08 06:05:30</small></li><ul></ul><li><strong>u/Indolent_Bard:</strong> <div class="md"><p>I wonder why this isn&#39;t default Linux behavior.</p>
+</div><br><small>Score: 1 | Posted on 2026-10-06 19:23:54</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>There are couple of distros that include by default, but other then there&#39;s bit of corporate politics and ego involved. In early days I had contacts regarding potential collaboration with some big distros, but then they ended up working on their solution instead.</p>
+
+<p>For example auto-cpufreq had certain features which did same functionality automatically (5 years ago!), before GNOME Power Profiles introduced how to e.g manually switch between governors: <a href="https://x.com/fooctrl/status/1467469508373884933">https://x.com/fooctrl/status/1467469508373884933</a></p>
+</div><br><small>Score: 2 | Posted on 2026-10-07 09:01:47</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/Indolent_Bard:</strong> <div class="md"><p>I don&#39;t know much about gnome, but I know they won&#39;t introduce a feature unless it&#39;s perfect. Something that works consistently and predictably every single time. Meaning there was either an edge case that they didn&#39;t like in your implementation, or they just wanted everything done in-house.</p>
+</div><br><small>Score: 0 | Posted on 2026-10-07 13:57:48</small></li><ul></ul></ul></ul><li><strong>u/power10010:</strong> <div class="md"><p>cool! I didn&#39;t find any temperature threshold or max allowed before stepping down the clock to keep max temp. Is it done in any way ? I forked and modified a bit cputemp: <a href="https://github.com/dx616b/cputemp">https://github.com/dx616b/cputemp</a> which might be a good additional feature to your solution. </p>
+</div><br><small>Score: 1 | Posted on 2026-10-06 19:31:52</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>auto-cpufreq does this automatically, and temperature threshold is mentioned in multiple place, for example this line: <a href="https://github.com/AdnanHodzic/auto-cpufreq/blob/35d8015afc1bc2c4b30526828dddde4c53925976/auto_cpufreq/core.py#L1198">https://github.com/AdnanHodzic/auto-cpufreq/blob/35d8015afc1bc2c4b30526828dddde4c53925976/auto_cpufreq/core.py#L1198</a></p>
+
+<p>Ideally user would be able to configure this to their own liking as part of auto-cpufreq config file: <a href="https://github.com/AdnanHodzic/auto-cpufreq#4-auto-cpufreq-config-file">https://github.com/AdnanHodzic/auto-cpufreq#4-auto-cpufreq-config-file</a></p>
+
+<p>If you or anyone else wants to give it a try in improving this functionality, please give it a try and <a href="https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution">contribute to the project</a> and you will be credited for your work as part of <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases">future release</a>.</p>
+</div><br><small>Score: 1 | Posted on 2026-10-07 09:51:23</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/power10010:</strong> <div class="md"><p>I will have a look at it</p>
+</div><br><small>Score: 1 | Posted on 2026-10-07 11:06:01</small></li><ul></ul></ul></ul><li><strong>u/Indolent_Bard:</strong> <div class="md"><p>Tell me more</p>
+</div><br><small>Score: 1 | Posted on 2026-10-05 23:14:54</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Think it&#39;s all explained as part of above mentioned comment, please take a look: <a href="https://www.reddit.com/r/linux/comments/1wyazph/comment/pe5qux1/">https://www.reddit.com/r/linux/comments/1wyazph/comment/pe5qux1/</a></p>
+</div><br><small>Score: 3 | Posted on 2026-10-06 07:04:24</small></li><ul></ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>There are couple of distros that include by default, but other then there&#39;s bit of corporate politics and ego involved. In early days I had contacts regarding potential collaboration with some big distros, but then they ended up working on their solution instead.</p>
+
+<p>For example auto-cpufreq had certain features which did same functionality automatically (5 years ago!), before GNOME Power Profiles introduced how to e.g manually switch between governors: <a href="https://x.com/fooctrl/status/1467469508373884933">https://x.com/fooctrl/status/1467469508373884933</a></p>
+</div><br><small>Score: 2 | Posted on 2026-10-07 09:01:47</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/Indolent_Bard:</strong> <div class="md"><p>I don&#39;t know much about gnome, but I know they won&#39;t introduce a feature unless it&#39;s perfect. Something that works consistently and predictably every single time. Meaning there was either an edge case that they didn&#39;t like in your implementation, or they just wanted everything done in-house.</p>
+</div><br><small>Score: 0 | Posted on 2026-10-07 13:57:48</small></li><ul></ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>auto-cpufreq does this automatically, and temperature threshold is mentioned in multiple place, for example this line: <a href="https://github.com/AdnanHodzic/auto-cpufreq/blob/35d8015afc1bc2c4b30526828dddde4c53925976/auto_cpufreq/core.py#L1198">https://github.com/AdnanHodzic/auto-cpufreq/blob/35d8015afc1bc2c4b30526828dddde4c53925976/auto_cpufreq/core.py#L1198</a></p>
+
+<p>Ideally user would be able to configure this to their own liking as part of auto-cpufreq config file: <a href="https://github.com/AdnanHodzic/auto-cpufreq#4-auto-cpufreq-config-file">https://github.com/AdnanHodzic/auto-cpufreq#4-auto-cpufreq-config-file</a></p>
+
+<p>If you or anyone else wants to give it a try in improving this functionality, please give it a try and <a href="https://github.com/AdnanHodzic/auto-cpufreq/#code-contribution">contribute to the project</a> and you will be credited for your work as part of <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases">future release</a>.</p>
+</div><br><small>Score: 1 | Posted on 2026-10-07 09:51:23</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/power10010:</strong> <div class="md"><p>I will have a look at it</p>
+</div><br><small>Score: 1 | Posted on 2026-10-07 11:06:01</small></li><ul></ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>Think it&#39;s all explained as part of above mentioned comment, please take a look: <a href="https://www.reddit.com/r/linux/comments/1wyazph/comment/pe5qux1/">https://www.reddit.com/r/linux/comments/1wyazph/comment/pe5qux1/</a></p>
+</div><br><small>Score: 3 | Posted on 2026-10-06 07:04:24</small></li><ul></ul><li><strong>u/Indolent_Bard:</strong> <div class="md"><p>I don&#39;t know much about gnome, but I know they won&#39;t introduce a feature unless it&#39;s perfect. Something that works consistently and predictably every single time. Meaning there was either an edge case that they didn&#39;t like in your implementation, or they just wanted everything done in-house.</p>
+</div><br><small>Score: 0 | Posted on 2026-10-07 13:57:48</small></li><ul></ul><li><strong>u/power10010:</strong> <div class="md"><p>I will have a look at it</p>
+</div><br><small>Score: 1 | Posted on 2026-10-07 11:06:01</small></li><ul></ul></ul></body></html>

@@ -1,0 +1,99 @@
+<html><head><title>auto-cpufreq v3.1.0 is here</title></head><body><h1>auto-cpufreq v3.1.0 is here</h1><p><em>Posted by u/ahodzic</em> on 2026-07-26 10:23:06</p><div><strong>Score:</strong> 94</div><div><strong>Content:</strong><br><!-- SC_OFF --><div class="md"><p>This release brings new features, bug fixes, and other improvements to help Linux users optimize CPU speed and battery life automatically.</p>
+
+<p>📦 Release notes: <a href="https://github.com/AdnanHodzic/auto-cpufreq/releases">https://github.com/AdnanHodzic/auto-cpufreq/releases</a>  </p>
+
+<p>Another milestone for a project that began as a vacation project and has now grown into:</p>
+
+<p>⭐ 7636 GitHub stars<br/>
+👥 125 contributors<br/>
+💻 100k+ users<br/>
+🛠️ 50 releases</p>
+
+<p>Huge thanks to everyone who contributed to making this release possible! ❤️</p>
+</div><!-- SC_ON --></div><hr><h2>Comments</h2><ul><li><strong>u/Difficult-Lab-2121:</strong> <div class="md"><p>been running this on my old thinkpad for months, battery life went from terrible to almost usable. 3.1 smoothed out some weird frequency jumping i was getting on fedora 40. good stuff</p>
+</div><br><small>Score: 17 | Posted on 2026-07-26 10:30:58</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Awesome, great to hear and thanks for sharing! :) </p>
+</div><br><small>Score: 2 | Posted on 2026-07-26 10:35:22</small></li><ul></ul></ul><li><strong>u/Semiramis67:</strong> <div class="md"><p>nice to see the nvidia gpu wake fix. this has been annoying on a lot of laptops. thanks for fixing it</p>
+</div><br><small>Score: 7 | Posted on 2026-07-26 11:15:32</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Most welcome!</p>
+</div><br><small>Score: 1 | Posted on 2026-07-26 11:58:40</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/Semiramis67:</strong> <div class="md"><p>thanks bro</p>
+</div><br><small>Score: 2 | Posted on 2026-07-26 12:06:32</small></li><ul></ul></ul></ul><li><strong>u/Puzzleheaded-Cut1753:</strong> <div class="md"><p>I’ve used in while on fedora. Great tool.<br/>
+Now I use CachyOS so my question is if I should install it or CachyOS has already cpu performance tweaks ? </p>
+</div><br><small>Score: 4 | Posted on 2026-07-26 12:45:16</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>FWIK CachyOS doesn&#39;t come with any tools like auto-cpufreq pre-installed.   </p>
+
+<p>I recommend you install it, and for full performance benefits and to set it to your own liking use the config file: <a href="https://github.com/AdnanHodzic/auto-cpufreq#4-auto-cpufreq-config-file">https://github.com/AdnanHodzic/auto-cpufreq#4-auto-cpufreq-config-file</a></p>
+
+<p>Set to always use performance mode, never go below 2GHz when plugin and etc ...</p>
+</div><br><small>Score: 4 | Posted on 2026-07-26 17:22:02</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/Kirito_Kiri:</strong> <div class="md"><p>The cachyos wiki mentions use of power-profiles-daemon</p>
+</div><br><small>Score: 3 | Posted on 2026-07-27 07:36:09</small></li><ul></ul></ul></ul><li><strong>u/ntropia64:</strong> <div class="md"><p>I&#39;m curious, is it still recommended/necessary for architectures like Lunar Lake?</p>
+</div><br><small>Score: 2 | Posted on 2026-07-26 16:33:15</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Absolutely, it&#39;s not architecture that&#39;s the problem here, it&#39;s how Linux management was designed and that by default it works in performance governor, I illustrated this problem in very first auto-cpufreq release video: <a href="https://youtu.be/QkYRpVEEIlg?t=56">https://youtu.be/QkYRpVEEIlg?t=56</a>  </p>
+
+<p>I also talk about it in latest video: <a href="https://www.youtube.com/watch?v=SPGpkZ0AZVU">https://www.youtube.com/watch?v=SPGpkZ0AZVU</a></p>
+
+<p>Everything I described as part of a blog post when I released auto-cpufreq 6 years ago, is still the case today: <a href="https://foolcontrol.org/?p=3124">https://foolcontrol.org/?p=3124</a></p>
+</div><br><small>Score: 3 | Posted on 2026-07-26 17:33:32</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ntropia64:</strong> <div class="md"><p>Thank you for the very exhaustive reply! A lot to learn!</p>
+
+<p>And kudos for auto-cpufreq, I&#39;ve been addicted to it since I discovered it.</p>
+</div><br><small>Score: 2 | Posted on 2026-07-26 17:46:03</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Thanks and most welcome!</p>
+</div><br><small>Score: 1 | Posted on 2026-07-26 17:56:46</small></li><ul></ul></ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/Barafu:</strong> <div class="md"><p>How does this interact with power profiles that are now available in any distro? I&#39;d assume the energy saving power profile does the same?  </p>
+</div><br><small>Score: 1 | Posted on 2026-07-27 08:40:24</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Since auto-cpufreq does all of these things automatically for you, it&#39;ll disable GNOME power profiles since it&#39;s redundant: <a href="https://x.com/fooctrl/status/1467469508373884933">https://x.com/fooctrl/status/1467469508373884933</a></p>
+
+<p>This is also mentioned on auto-cpufreq Github ReadMe: auto-cpufreq-installer will detect it and disable it: <a href="https://github.com/AdnanHodzic/auto-cpufreq#1-power_helperpy-script-snap-package-install-only:%7E:text=When%20installing%20auto%2Dcpufreq%20via%20auto%2Dcpufreq%2Dinstaller%2C%20if%20it%20detects%20the%20GNOME%20Power%20Profiles%20service%20is%20running%2C%20it%20will%20automatically%20disable%20it.%20Otherwise%2C%20that%20daemon%20will%20cause%20conflicts%20and%20various%20other%20performance%20issues">https://github.com/AdnanHodzic/auto-cpufreq#1-power_helperpy-script-snap-package-install-only:~:text=When%20installing%20auto%2Dcpufreq%20via%20auto%2Dcpufreq%2Dinstaller%2C%20if%20it%20detects%20the%20GNOME%20Power%20Profiles%20service%20is%20running%2C%20it%20will%20automatically%20disable%20it.%20Otherwise%2C%20that%20daemon%20will%20cause%20conflicts%20and%20various%20other%20performance%20issues</a>.</p>
+
+<p>In case auto-cpufreq (daemon) is uninstalled, it&#39;ll be enabled back.</p>
+</div><br><small>Score: 1 | Posted on 2026-07-27 08:44:35</small></li><ul></ul></ul></ul></ul><li><strong>u/endperform:</strong> <div class="md"><p>I&#39;ll definitely give this a go on my Thinkpad, looks good!</p>
+</div><br><small>Score: 2 | Posted on 2026-07-27 01:58:48</small></li><ul></ul><li><strong>u/o_Zion_o:</strong> <div class="md"><p>This looks great! I can&#39;t believe that I haven&#39;t heard of this before.</p>
+
+<p>Going to give this a try when I&#39;m on my laptop next. </p>
+
+<p>Thank you :)</p>
+</div><br><small>Score: 2 | Posted on 2026-07-27 18:41:35</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Most welcome and have fun :)</p>
+</div><br><small>Score: 2 | Posted on 2026-07-27 19:00:27</small></li><ul></ul></ul><li><strong>u/Famous-Ad609:</strong> <div class="md"><p>This tool is practically unbeatable; no more setting everything manually. Since discovering this battery manager, I&#39;ve never used another one; it gets better every time. Brazil sends its regards to this developer.</p>
+</div><br><small>Score: 2 | Posted on 2026-07-27 21:44:55</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Thanks, always love to read comments like this one!</p>
+</div><br><small>Score: 1 | Posted on 2026-07-27 21:54:55</small></li><ul></ul></ul><li><strong>u/gamba11:</strong> <div class="md"><p>Is this relevant for servers?</p>
+</div><br><small>Score: 1 | Posted on 2026-07-27 17:59:07</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Absolutely! I&#39;ve been arguing (and I&#39;ve mentioned this in one of my videos: <a href="https://youtu.be/SPGpkZ0AZVU?t=151">https://youtu.be/SPGpkZ0AZVU?t=151</a> few years ago) that&#39;s where you could see most benefits with this tool, since it could seriously reduce the electricity costs by minimizing the amount of power that&#39;s used without making any performance compromises.</p>
+</div><br><small>Score: 1 | Posted on 2026-07-27 19:06:15</small></li><ul></ul></ul><li><strong>u/Manusia_Biasa2:</strong> <div class="md"><p>Woahhh,i need this,i use debian on my old toshiba satellite l735 and yeah dual boot with windows,the thing that i always see when i run linux is the linux usually set the performance mode default</p>
+</div><br><small>Score: 1 | Posted on 2026-08-25 16:48:58</small></li><ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>Awesome, great to hear and thanks for sharing! :) </p>
+</div><br><small>Score: 2 | Posted on 2026-07-26 10:35:22</small></li><ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>Most welcome!</p>
+</div><br><small>Score: 1 | Posted on 2026-07-26 11:58:40</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/Semiramis67:</strong> <div class="md"><p>thanks bro</p>
+</div><br><small>Score: 2 | Posted on 2026-07-26 12:06:32</small></li><ul></ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>FWIK CachyOS doesn&#39;t come with any tools like auto-cpufreq pre-installed.   </p>
+
+<p>I recommend you install it, and for full performance benefits and to set it to your own liking use the config file: <a href="https://github.com/AdnanHodzic/auto-cpufreq#4-auto-cpufreq-config-file">https://github.com/AdnanHodzic/auto-cpufreq#4-auto-cpufreq-config-file</a></p>
+
+<p>Set to always use performance mode, never go below 2GHz when plugin and etc ...</p>
+</div><br><small>Score: 4 | Posted on 2026-07-26 17:22:02</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/Kirito_Kiri:</strong> <div class="md"><p>The cachyos wiki mentions use of power-profiles-daemon</p>
+</div><br><small>Score: 3 | Posted on 2026-07-27 07:36:09</small></li><ul></ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>Absolutely, it&#39;s not architecture that&#39;s the problem here, it&#39;s how Linux management was designed and that by default it works in performance governor, I illustrated this problem in very first auto-cpufreq release video: <a href="https://youtu.be/QkYRpVEEIlg?t=56">https://youtu.be/QkYRpVEEIlg?t=56</a>  </p>
+
+<p>I also talk about it in latest video: <a href="https://www.youtube.com/watch?v=SPGpkZ0AZVU">https://www.youtube.com/watch?v=SPGpkZ0AZVU</a></p>
+
+<p>Everything I described as part of a blog post when I released auto-cpufreq 6 years ago, is still the case today: <a href="https://foolcontrol.org/?p=3124">https://foolcontrol.org/?p=3124</a></p>
+</div><br><small>Score: 3 | Posted on 2026-07-26 17:33:32</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ntropia64:</strong> <div class="md"><p>Thank you for the very exhaustive reply! A lot to learn!</p>
+
+<p>And kudos for auto-cpufreq, I&#39;ve been addicted to it since I discovered it.</p>
+</div><br><small>Score: 2 | Posted on 2026-07-26 17:46:03</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Thanks and most welcome!</p>
+</div><br><small>Score: 1 | Posted on 2026-07-26 17:56:46</small></li><ul></ul></ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/Barafu:</strong> <div class="md"><p>How does this interact with power profiles that are now available in any distro? I&#39;d assume the energy saving power profile does the same?  </p>
+</div><br><small>Score: 1 | Posted on 2026-07-27 08:40:24</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Since auto-cpufreq does all of these things automatically for you, it&#39;ll disable GNOME power profiles since it&#39;s redundant: <a href="https://x.com/fooctrl/status/1467469508373884933">https://x.com/fooctrl/status/1467469508373884933</a></p>
+
+<p>This is also mentioned on auto-cpufreq Github ReadMe: auto-cpufreq-installer will detect it and disable it: <a href="https://github.com/AdnanHodzic/auto-cpufreq#1-power_helperpy-script-snap-package-install-only:%7E:text=When%20installing%20auto%2Dcpufreq%20via%20auto%2Dcpufreq%2Dinstaller%2C%20if%20it%20detects%20the%20GNOME%20Power%20Profiles%20service%20is%20running%2C%20it%20will%20automatically%20disable%20it.%20Otherwise%2C%20that%20daemon%20will%20cause%20conflicts%20and%20various%20other%20performance%20issues">https://github.com/AdnanHodzic/auto-cpufreq#1-power_helperpy-script-snap-package-install-only:~:text=When%20installing%20auto%2Dcpufreq%20via%20auto%2Dcpufreq%2Dinstaller%2C%20if%20it%20detects%20the%20GNOME%20Power%20Profiles%20service%20is%20running%2C%20it%20will%20automatically%20disable%20it.%20Otherwise%2C%20that%20daemon%20will%20cause%20conflicts%20and%20various%20other%20performance%20issues</a>.</p>
+
+<p>In case auto-cpufreq (daemon) is uninstalled, it&#39;ll be enabled back.</p>
+</div><br><small>Score: 1 | Posted on 2026-07-27 08:44:35</small></li><ul></ul></ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>Most welcome and have fun :)</p>
+</div><br><small>Score: 2 | Posted on 2026-07-27 19:00:27</small></li><ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>Thanks, always love to read comments like this one!</p>
+</div><br><small>Score: 1 | Posted on 2026-07-27 21:54:55</small></li><ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>Absolutely! I&#39;ve been arguing (and I&#39;ve mentioned this in one of my videos: <a href="https://youtu.be/SPGpkZ0AZVU?t=151">https://youtu.be/SPGpkZ0AZVU?t=151</a> few years ago) that&#39;s where you could see most benefits with this tool, since it could seriously reduce the electricity costs by minimizing the amount of power that&#39;s used without making any performance compromises.</p>
+</div><br><small>Score: 1 | Posted on 2026-07-27 19:06:15</small></li><ul></ul><li><strong>u/Semiramis67:</strong> <div class="md"><p>thanks bro</p>
+</div><br><small>Score: 2 | Posted on 2026-07-26 12:06:32</small></li><ul></ul><li><strong>u/Kirito_Kiri:</strong> <div class="md"><p>The cachyos wiki mentions use of power-profiles-daemon</p>
+</div><br><small>Score: 3 | Posted on 2026-07-27 07:36:09</small></li><ul></ul><li><strong>u/ntropia64:</strong> <div class="md"><p>Thank you for the very exhaustive reply! A lot to learn!</p>
+
+<p>And kudos for auto-cpufreq, I&#39;ve been addicted to it since I discovered it.</p>
+</div><br><small>Score: 2 | Posted on 2026-07-26 17:46:03</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Thanks and most welcome!</p>
+</div><br><small>Score: 1 | Posted on 2026-07-26 17:56:46</small></li><ul></ul></ul><li><strong>u/Barafu:</strong> <div class="md"><p>How does this interact with power profiles that are now available in any distro? I&#39;d assume the energy saving power profile does the same?  </p>
+</div><br><small>Score: 1 | Posted on 2026-07-27 08:40:24</small></li><ul><li>&nbsp;&nbsp;&nbsp;&nbsp;<strong>u/ahodzic:</strong> <div class="md"><p>Since auto-cpufreq does all of these things automatically for you, it&#39;ll disable GNOME power profiles since it&#39;s redundant: <a href="https://x.com/fooctrl/status/1467469508373884933">https://x.com/fooctrl/status/1467469508373884933</a></p>
+
+<p>This is also mentioned on auto-cpufreq Github ReadMe: auto-cpufreq-installer will detect it and disable it: <a href="https://github.com/AdnanHodzic/auto-cpufreq#1-power_helperpy-script-snap-package-install-only:%7E:text=When%20installing%20auto%2Dcpufreq%20via%20auto%2Dcpufreq%2Dinstaller%2C%20if%20it%20detects%20the%20GNOME%20Power%20Profiles%20service%20is%20running%2C%20it%20will%20automatically%20disable%20it.%20Otherwise%2C%20that%20daemon%20will%20cause%20conflicts%20and%20various%20other%20performance%20issues">https://github.com/AdnanHodzic/auto-cpufreq#1-power_helperpy-script-snap-package-install-only:~:text=When%20installing%20auto%2Dcpufreq%20via%20auto%2Dcpufreq%2Dinstaller%2C%20if%20it%20detects%20the%20GNOME%20Power%20Profiles%20service%20is%20running%2C%20it%20will%20automatically%20disable%20it.%20Otherwise%2C%20that%20daemon%20will%20cause%20conflicts%20and%20various%20other%20performance%20issues</a>.</p>
+
+<p>In case auto-cpufreq (daemon) is uninstalled, it&#39;ll be enabled back.</p>
+</div><br><small>Score: 1 | Posted on 2026-07-27 08:44:35</small></li><ul></ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>Thanks and most welcome!</p>
+</div><br><small>Score: 1 | Posted on 2026-07-26 17:56:46</small></li><ul></ul><li><strong>u/ahodzic:</strong> <div class="md"><p>Since auto-cpufreq does all of these things automatically for you, it&#39;ll disable GNOME power profiles since it&#39;s redundant: <a href="https://x.com/fooctrl/status/1467469508373884933">https://x.com/fooctrl/status/1467469508373884933</a></p>
+
+<p>This is also mentioned on auto-cpufreq Github ReadMe: auto-cpufreq-installer will detect it and disable it: <a href="https://github.com/AdnanHodzic/auto-cpufreq#1-power_helperpy-script-snap-package-install-only:%7E:text=When%20installing%20auto%2Dcpufreq%20via%20auto%2Dcpufreq%2Dinstaller%2C%20if%20it%20detects%20the%20GNOME%20Power%20Profiles%20service%20is%20running%2C%20it%20will%20automatically%20disable%20it.%20Otherwise%2C%20that%20daemon%20will%20cause%20conflicts%20and%20various%20other%20performance%20issues">https://github.com/AdnanHodzic/auto-cpufreq#1-power_helperpy-script-snap-package-install-only:~:text=When%20installing%20auto%2Dcpufreq%20via%20auto%2Dcpufreq%2Dinstaller%2C%20if%20it%20detects%20the%20GNOME%20Power%20Profiles%20service%20is%20running%2C%20it%20will%20automatically%20disable%20it.%20Otherwise%2C%20that%20daemon%20will%20cause%20conflicts%20and%20various%20other%20performance%20issues</a>.</p>
+
+<p>In case auto-cpufreq (daemon) is uninstalled, it&#39;ll be enabled back.</p>
+</div><br><small>Score: 1 | Posted on 2026-07-27 08:44:35</small></li><ul></ul></ul></body></html>
